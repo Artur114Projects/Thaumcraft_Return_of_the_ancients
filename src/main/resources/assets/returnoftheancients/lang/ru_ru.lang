@@ -1,0 +1,29 @@
+item.gavno.name=Предмет отладки
+tile.boss_trigger_block.name=Босс триггер блок
+itemGroup.returnoftheancients_tab=Thaumcraft: Return of the ancients
+item.itemprimalblade.name=Певородный клинок
+tile.tp_to_home_block.name=Портал в верхний мир
+tile.taint_ancient_stone.name=Заражённый древний камень
+tile.tp_to_ancient_world_block.name=Портал в древний мир
+# Any
+returnoftheancients.portal.message=Нельзя использовать:
+item.itemprimalblade.text=Оружие богов
+# Config any
+returnoftheancients.cfg.sub.any.primalbladespeed=Скорость атаки первородного клинка
+returnoftheancients.cfg.sub.any.primalbladedamage=Урон первородного клинка
+returnoftheancients.cfg.sub.any=Разное
+# Config Portal gen settings
+returnoftheancients.cfg.sub.portal=Настройки генерации древнего портала
+returnoftheancients.cfg.sub.portal.isgen=Генерировать?
+returnoftheancients.cfg.sub.portal.x=X
+returnoftheancients.cfg.sub.portal.z=Z
+returnoftheancients.cfg.sub.portal.y=Y
+returnoftheancients.cfg.sub.portal.tobedrock=Генерировать до бедрока?
+returnoftheancients.cfg.sub.portal.modId=ID Модов
+# Config Ancient world settings
+returnoftheancients.cfg.sub.aws=Настройки древнего мира
+returnoftheancients.cfg.sub.aws.og=Использовать старый генетратор
+returnoftheancients.cfg.sub.aws.fc=Шанс генерации развилки
+returnoftheancients.cfg.sub.aws.tc=Шанс генерации поворота
+# Config Mob gen settings
+returnoftheancients.cfg.sub.mgs=Настройки генерации мобов (Не работает)

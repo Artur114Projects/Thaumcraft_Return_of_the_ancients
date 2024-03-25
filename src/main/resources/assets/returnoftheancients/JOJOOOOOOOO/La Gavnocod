@@ -1,0 +1,133 @@
+private static void genDownUpWay() {
+    for (byte y = 0; y != SIZE; y++) {
+        for (byte x = 0; x != SIZE; x++) {
+            byte unoYStructure = 0;
+            byte unoYStructureRotate = 0;
+            if (y > 0) {
+                unoYStructure = ANCIENT_LABYRINTH_STRUCTURES[y - 1][x];
+                unoYStructureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y - 1][x];
+            }
+            byte structure = ANCIENT_LABYRINTH_STRUCTURES[y][x];
+            byte structureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x];
+            // Generate to Y
+            if (unoYStructure == CROSSROADS_ID || unoYStructure == ENTRY_ID || unoYStructure == WAY_ID || unoYStructure == BOSS_ID) {
+                if (unoYStructure == WAY_ID && unoYStructureRotate == 2) {
+                    if (structure == 0) {
+                        ANCIENT_LABYRINTH_STRUCTURES[y][x] = WAY_ID;
+                        ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x] = 2;
+                    }
+                    if (structure == WAY_ID && structureRotate == 1) {
+                        ANCIENT_LABYRINTH_STRUCTURES[y][x] = CROSSROADS_ID;
+                        ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x] = 1;
+                    }
+                }
+                if (unoYStructure != WAY_ID) {
+                    if (structure == 0) {
+                        ANCIENT_LABYRINTH_STRUCTURES[y][x] = WAY_ID;
+                        ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x] = 2;
+                    }
+                    if (structure == WAY_ID && structureRotate == 1) {
+                        ANCIENT_LABYRINTH_STRUCTURES[y][x] = CROSSROADS_ID;
+                        ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x] = 1;
+                    }
+                }
+            }
+        }
+    } // Gen Down Way
+    for (byte y = SIZE - 1; y != -1; y--) {
+        for (byte x = SIZE - 1; x != -1; x--) {
+            byte unoYStructure = 0;
+            byte unoYStructureRotate = 0;
+            if (y < SIZE - 1) {
+                unoYStructure = ANCIENT_LABYRINTH_STRUCTURES[y + 1][x];
+                unoYStructureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y + 1][x];
+            }
+            byte structure = ANCIENT_LABYRINTH_STRUCTURES[y][x];
+            byte structureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x];
+            // Generate to Y
+            if (unoYStructure == CROSSROADS_ID || unoYStructure == ENTRY_ID || unoYStructure == WAY_ID || unoYStructure == BOSS_ID) {
+                if (unoYStructure == WAY_ID && unoYStructureRotate == 2) {
+                    if (structure == 0) {
+                        ANCIENT_LABYRINTH_STRUCTURES[y][x] = WAY_ID;
+                        ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x] = 2;
+                    }
+                    if (structure == WAY_ID && structureRotate == 1) {
+                        ANCIENT_LABYRINTH_STRUCTURES[y][x] = CROSSROADS_ID;
+                        ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x] = 1;
+                    }
+                }
+                if (unoYStructure != WAY_ID) {
+                    if (structure == 0) {
+                        ANCIENT_LABYRINTH_STRUCTURES[y][x] = WAY_ID;
+                        ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x] = 2;
+                    }
+                    if (structure == WAY_ID && structureRotate == 1) {
+                        ANCIENT_LABYRINTH_STRUCTURES[y][x] = CROSSROADS_ID;
+                        ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x] = 1;
+                    }
+                }
+            }
+        }
+    } // Gen Up Way
+}
+
+private static void genRightLeftWay() {
+    for (byte y = 0; y != SIZE; y++) {
+        for (byte x = 0; x != SIZE; x++) {
+            byte unoStructure = 0;
+            byte unoStructureRotate = 0;
+            byte structure = ANCIENT_LABYRINTH_STRUCTURES[y][x];
+            byte structureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x];
+            if (x > 0) {
+                unoStructure = ANCIENT_LABYRINTH_STRUCTURES[y][x - 1];
+                unoStructureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x - 1];
+            }
+            // Generate to X
+            if (unoStructure == CROSSROADS_ID || unoStructure == ENTRY_ID || unoStructure == WAY_ID || unoStructure == BOSS_ID) {
+                if (structure == 0 && unoStructure != WAY_ID) {
+                    ANCIENT_LABYRINTH_STRUCTURES[y][x] = WAY_ID;
+                    ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x] = 1;
+                }
+                if (unoStructure == WAY_ID && unoStructureRotate == 1) {
+                    if (structure == 0) {
+                        ANCIENT_LABYRINTH_STRUCTURES[y][x] = WAY_ID;
+                        ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x] = 1;
+                    }
+                    if (structure == WAY_ID && structureRotate == 2) {
+                        ANCIENT_LABYRINTH_STRUCTURES[y][x] = CROSSROADS_ID;
+                        ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x] = 1;
+                    }
+                }
+            }
+        }
+    } // Gen Right Way
+    for (byte y = SIZE - 1; y != -1; y--) {
+        for (byte x = SIZE - 1; x != -1; x--) {
+            byte unoStructure = 0;
+            byte unoStructureRotate = 0;
+            byte structure = ANCIENT_LABYRINTH_STRUCTURES[y][x];
+            byte structureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x];
+            if (x < SIZE - 1) {
+                unoStructure = ANCIENT_LABYRINTH_STRUCTURES[y][x + 1];
+                unoStructureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x + 1];
+            }
+            // Generate to X
+            if (unoStructure == CROSSROADS_ID || unoStructure == ENTRY_ID || unoStructure == WAY_ID || unoStructure == BOSS_ID) {
+                if (structure == 0 && unoStructure != WAY_ID) {
+                    ANCIENT_LABYRINTH_STRUCTURES[y][x] = WAY_ID;
+                    ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x] = 1;
+                }
+                if (unoStructure == WAY_ID && unoStructureRotate == 1) {
+                    if (structure == 0) {
+                        ANCIENT_LABYRINTH_STRUCTURES[y][x] = WAY_ID;
+                        ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x] = 1;
+                    }
+                    if (structure == WAY_ID && structureRotate == 2) {
+                        ANCIENT_LABYRINTH_STRUCTURES[y][x] = CROSSROADS_ID;
+                        ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x] = 1;
+                    }
+                }
+            }
+        }
+    } // Gen Left Way
+}

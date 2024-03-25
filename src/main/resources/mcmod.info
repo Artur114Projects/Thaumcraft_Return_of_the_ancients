@@ -1,0 +1,16 @@
+[
+{
+  "modid": "returnoftheancients",
+  "name": "Thaumcraft: Return of the ancients",
+  "description": "Addon for Thaumcraft",
+  "version": "1.0.0",
+  "mcversion": "1.12.2, 1.12.1",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Artur114"],
+  "credits": "",
+  "logoFile": "Logo.png",
+  "screenshots": [],
+  "dependencies": ["thaumcraft"]
+}
+]

@@ -1,0 +1,29 @@
+item.gavno.name=The subject of debugging
+tile.boss_trigger_block.name=Boss trigger block
+itemGroup.returnoftheancients_tab=Thaumcraft: Return of the ancients
+item.itemprimalblade.name=Primal Blade
+tile.tp_to_home_block.name=Portal to overworld
+tile.taint_ancient_stone.name=Taint ancient stone
+tile.tp_to_ancient_world_block.name=Portal to Ancient World
+# Any
+returnoftheancients.portal.message=Cant use:
+item.itemprimalblade.text=Weapons of the gods
+# Config any
+returnoftheancients.cfg.sub.any.primalbladespeed=The attack speed of the Primordial Blade
+returnoftheancients.cfg.sub.any.primalbladedamage=The damage of the Primordial Blade
+returnoftheancients.cfg.sub.any=Different
+# Config Portal gen settings
+returnoftheancients.cfg.sub.portal=Ancient Portal Generation Settings
+returnoftheancients.cfg.sub.portal.isgen=generate?
+returnoftheancients.cfg.sub.portal.x=X
+returnoftheancients.cfg.sub.portal.z=Z
+returnoftheancients.cfg.sub.portal.y=Y
+returnoftheancients.cfg.sub.portal.tobedrock=Generate to bedrock?
+returnoftheancients.cfg.sub.portal.modId=Mod ID
+# Config Ancient world settings
+returnoftheancients.cfg.sub.aws=Ancient world settings
+returnoftheancients.cfg.sub.aws.og=Use old generator
+returnoftheancients.cfg.sub.aws.fc=Chance of generating a fork
+returnoftheancients.cfg.sub.aws.tc=Chance of generating a turn
+# Config Mob gen settings
+returnoftheancients.cfg.sub.mgs=Mob gen settings (Don`t work)

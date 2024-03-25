@@ -1,0 +1,33 @@
+package com.artur.returnoftheancients.blocks;
+
+import com.artur.returnoftheancients.init.InitBlocks;
+import com.artur.returnoftheancients.init.InitItems;
+import com.artur.returnoftheancients.main.Main;
+import com.artur.returnoftheancients.utils.interfaces.IHasModel;
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+
+public abstract class BaseBlock extends Block implements IHasModel {
+    private final Item item;
+    protected BaseBlock(String name, Material material, float hardness, float resistance, SoundType soundType) {
+        super(material);
+
+        this.setRegistryName(name);
+        this.setUnlocalizedName(name);
+        this.setHardness(hardness);
+        this.setResistance(resistance);
+        this.setSoundType(soundType);
+
+        InitBlocks.BLOCKS.add(this);
+        item = new ItemBlock(this).setRegistryName(this.getRegistryName());
+        InitItems.ITEMS.add(item);
+    }
+
+    @Override
+    public void registerModels() {
+        Main.proxy.registerItemRenderer(item, 0, "inventory");
+    }
+}

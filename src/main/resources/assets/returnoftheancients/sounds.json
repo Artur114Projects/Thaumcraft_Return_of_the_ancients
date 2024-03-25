@@ -1,0 +1,32 @@
+{
+  "tpSound": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "returnoftheancients:tpsound",
+        "stream": true,
+        "volume": 1
+      }
+    ]
+  },
+  "mus_zz_megalovania": {
+    "category": "mob",
+    "sounds": [
+      {
+        "name": "returnoftheancients:mus_zz_megalovania",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  },
+  "bum": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "returnoftheancients:bum",
+        "stream": true,
+        "volume": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+package com.artur.returnoftheancients.handlers;
+
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.Teleporter;
+import net.minecraft.world.WorldServer;
+import org.jetbrains.annotations.NotNull;
+
+public class FreeTeleporter extends Teleporter
+{
+    public boolean makePortal(Entity p_85188_1_)
+    {
+        return true;
+    }
+
+    @Override
+    public void placeInPortal(@NotNull Entity player, float rotationYaw)
+    {
+        int x = MathHelper.floor(player.posX);
+        int y = MathHelper.floor(player.posY) - 1;
+        int z = MathHelper.floor(player.posZ);
+        player.setLocationAndAngles((double) x, (double) y, (double) z, player.rotationYaw, 0.0F);
+        player.motionX = player.motionY = player.motionZ = 0.0D;
+    }
+
+    public FreeTeleporter(WorldServer world, double x, double y, double z) {
+        super(world);
+        this.worldServer = world;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    private final WorldServer worldServer;
+    private double x;
+    private double y;
+    private double z;
+
+
+    public static void teleportToDimension(EntityPlayer player, int dimension, double x, double y, double z) {
+        int oldDimension = player.world.provider.getDimension();
+        EntityPlayerMP entityPlayerMP = (EntityPlayerMP) player;
+        MinecraftServer server = ((EntityPlayerMP) player).world.getMinecraftServer();
+        WorldServer worldServer = server.getWorld(dimension);
+        player.addExperienceLevel(0);
+
+        if (worldServer == null) {
+            throw new IllegalArgumentException("Dimension: " + dimension + " doesn't exist!");
+        }
+
+        worldServer.getMinecraftServer().getPlayerList().transferPlayerToDimension(entityPlayerMP, dimension, new FreeTeleporter(worldServer, x, y, z));
+        player.setPositionAndUpdate(x, y, z);
+        if (oldDimension == 1) {
+            // For some reason teleporting out of the end does weird things. Compensate for that
+            player.setPositionAndUpdate(x, y, z);
+            worldServer.spawnEntity(player);
+            worldServer.updateEntityWithOptionalForce(player, false);
+        }
+    }
+}

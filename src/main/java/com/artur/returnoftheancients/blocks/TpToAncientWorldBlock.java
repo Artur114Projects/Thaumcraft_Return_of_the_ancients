@@ -20,6 +20,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -93,7 +94,7 @@ public class TpToAncientWorldBlock extends BaseBlock{
                         ID.add(itemStack.getItem().getUnlocalizedName());
                     }
                 }
-                if (ID.isEmpty()) {
+                if (ID.isEmpty() && EventsHandler.getDifficultyId() != 0) {
                     FMLCommonHandler.instance().showGuiScreen(new LoadingGui());
                     AncientLabyrinthGenerator.genAncientLabyrinth(player);
                     Minecraft.getMinecraft().displayGuiScreen(null);
@@ -103,10 +104,13 @@ public class TpToAncientWorldBlock extends BaseBlock{
                         FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 253, 8);
                     }
                 } else {
-                    player.sendMessage(new TextComponentTranslation(Referense.MODID + ".portal.message"));
-
-                    player.sendMessage(new TextComponentString(ID.toString()));
-                    ID.clear();
+                    if (!ID.isEmpty()) {
+                        player.sendMessage(new TextComponentTranslation(Referense.MODID + ".portal.message"));
+                        player.sendMessage(new TextComponentString(ID.toString()));
+                        ID.clear();
+                    } else {
+                        player.sendMessage(new TextComponentString("PEACEFUL DIFFICULTY ???"));
+                    }
                     EventsHandler.tpToHome = true;
                     noCollision = true;
                     if (Minecraft.getMinecraft().player != null)

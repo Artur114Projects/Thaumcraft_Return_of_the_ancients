@@ -8,6 +8,7 @@ import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.sounds.ModSounds;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,6 +22,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -47,22 +49,33 @@ public class EventsHandler {
 
     private boolean capIsSet = true;
     private boolean startUp = false;
+    private static boolean yse = false;
+    private static byte pT = 0;
     private static boolean isAncientWorldLoad = false;
+    private static byte difficultyId = -1;
 
 
     public static boolean isAncientWorldLoad() {return isAncientWorldLoad;}
-
     public static void setAncientWorldLoad(boolean ancientWorldLoad) {isAncientWorldLoad = ancientWorldLoad;}
+    public static byte getDifficultyId() {return difficultyId;}
 
     public static void tpToHome(EntityPlayer player, int dimension, int x, int y, int z) {
         TpToAncientWorldBlock.noCollision = true;
         FreeTeleporter.teleportToDimension(player, dimension, x, y, z);
-        System.out.println(player);
-        System.out.println(dimension);
-        System.out.println(x);
-        System.out.println(y);
-        System.out.println(z);
         tpToHome = true;
+    }
+
+    public static void tpToHome(EntityPlayer player) {
+        TpToAncientWorldBlock.noCollision = true;
+        FreeTeleporter.teleportToDimension(player, 0, 8, 3, 8);
+        tpToHome = true;
+    }
+
+    @SubscribeEvent
+    public void DifficultyEvent(DifficultyChangeEvent e) {
+        EnumDifficulty d = e.getDifficulty();
+        difficultyId = d == EnumDifficulty.PEACEFUL ? 0 : d == EnumDifficulty.EASY ? 1 : d == EnumDifficulty.NORMAL ? 2 : d == EnumDifficulty.HARD ? 3 : (byte) -1;
+        System.out.println(difficultyId);
     }
 
     @SubscribeEvent
@@ -151,24 +164,32 @@ public class EventsHandler {
     @SubscribeEvent
     public void PlayerTickEvent(TickEvent.PlayerTickEvent e) {
         int playerDimension = e.player.dimension;
-
         if (startUp) {
             if (playerDimension != ancient_world_dim_id) {
-                EntityPlayer player = Minecraft.getMinecraft().player;
                 BlockPos pos = e.player.getPosition();
-                if (player.motionY < 2) {
-                    player.motionY = player.motionY + 0.1;
+                if (e.player instanceof EntityPlayerSP) {
+                    EntityPlayerSP playerSP = (EntityPlayerSP) e.player;
+                    if (playerSP.motionY < 2) {
+                        playerSP.motionY = playerSP.motionY + 0.1;
+                    }
+                    if (pos.getY() > WorldData.get().saveData.getInteger(IALGS.AncientPortalYPosKey)) {
+                        playerSP.motionY = playerSP.motionY + 1;
+                        yse = true;
+                        TpToAncientWorldBlock.noCollision = false;
+                        System.out.println("yse");
+                        System.out.println(pos.getY());
+                    }
+                    playerSP.motionX = 0;
+                    playerSP.motionZ = 0;
                 }
-                if (pos.getY() > WorldData.get().saveData.getInteger(IALGS.AncientPortalYPosKey)) {
-                    player.motionY = player.motionY + 1;
-                    startUp = false;
-                    TpToAncientWorldBlock.noCollision = false;
-                    e.player.removePotionEffect(Potion.getPotionById(15));
-                    System.out.println("yse");
-                    System.out.println(pos.getY());
+                if (e.player instanceof EntityPlayerMP) {
+                    EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
+                    if (yse) {
+                        playerMP.removePotionEffect(Potion.getPotionById(15));
+                        yse = false;
+                        startUp = false;
+                    }
                 }
-                player.motionX = 0;
-                player.motionZ = 0;
             }
         }
 
@@ -202,6 +223,7 @@ public class EventsHandler {
         }
 
         if (playerDimension == ancient_world_dim_id) {
+            pT++;
             IPlayerWarp playerWarp = ThaumcraftCapabilities.getWarp(e.player);
             GameSettings Settings = Minecraft.getMinecraft().gameSettings;
             BlockPos pos = e.player.getPosition();
@@ -209,48 +231,49 @@ public class EventsHandler {
                 e.player.fallDistance = 0;
                 e.player.motionY = e.player.motionY + 0.1;
             }
-            if (e.player.getActivePotionEffect(MobEffects.NIGHT_VISION) != null && !e.player.capabilities.isCreativeMode) {
-                e.player.removePotionEffect(MobEffects.NIGHT_VISION);
-                e.player.sendMessage(new TextComponentString("Only darkness"));
-            }
-            if (Settings.gammaSetting != 0 && !e.player.isCreative()) {
-                if (0.00001f == e.player.getEntityData().getFloat("gammaSetting"))
-                    e.player.getEntityData().setFloat("gammaSetting", Settings.gammaSetting);
-                Settings.gammaSetting = 0;
-                e.player.sendMessage(new TextComponentString("Only darkness"));
-            }
-            if (Settings.renderDistanceChunks != 4 && !e.player.isCreative()) {
-                if (0 == e.player.getEntityData().getInteger("renderDistanceChunks"))
-                    e.player.getEntityData().setInteger("renderDistanceChunks", Settings.renderDistanceChunks);
-                Settings.renderDistanceChunks = 4;
-                e.player.sendMessage(new TextComponentString("Only darkness"));
-            }
-            if (Settings.difficulty == EnumDifficulty.PEACEFUL && !e.player.isCreative()) {
-                Settings.difficulty = EnumDifficulty.HARD;
-                e.player.sendMessage(new TextComponentString("Peaceful???"));
-            }
-            if (!(e.player.getEntityData().getBoolean("isWarpSet") && e.player instanceof EntityPlayerMP && e.player.getServer() != null)) {
-                if (e.player instanceof EntityPlayerMP) {
-                    e.player.getEntityData().setInteger("PERMANENT", playerWarp.get(IPlayerWarp.EnumWarpType.PERMANENT));
-                    e.player.getEntityData().setInteger("TEMPORARY", playerWarp.get(IPlayerWarp.EnumWarpType.TEMPORARY));
-                    e.player.getEntityData().setInteger("NORMAL", playerWarp.get(IPlayerWarp.EnumWarpType.NORMAL));
-                    e.player.getEntityData().setBoolean("isWarpSet", true);
-                    playerWarp.set(IPlayerWarp.EnumWarpType.PERMANENT, 100);
-                    EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
-                    playerWarp.sync(playerMP);
-                }
-            }
             if (!capIsSet) {
                 if (pos.getY() == 81 && pos.getX() <= 9 && pos.getX() >= 6 && pos.getZ() <= 9 && pos.getZ() >= 6) {
                     Handler.playSound(ModSounds.TP_SOUND);
-                    if (e.player.isCreative()) {
-                        e.player.move(MoverType.SHULKER_BOX, 8, 125, -10);
-                    }
                     GenStructure.generateStructure(e.player.world, 6, 85, 6, "ancient_cap");
                     capIsSet = true;
                 }
             }
-
+            if (pT >= 8) {
+                pT = 0;
+                if (e.player.getActivePotionEffect(MobEffects.NIGHT_VISION) != null && !e.player.isCreative()) {
+                    e.player.removePotionEffect(MobEffects.NIGHT_VISION);
+                    e.player.sendMessage(new TextComponentString("Only darkness"));
+                }
+                if (!e.player.getEntityData().getBoolean("isWarpSet") && e.player.getServer() != null) {
+                    if (e.player instanceof EntityPlayerMP) {
+                        e.player.getEntityData().setInteger("PERMANENT", playerWarp.get(IPlayerWarp.EnumWarpType.PERMANENT));
+                        e.player.getEntityData().setInteger("TEMPORARY", playerWarp.get(IPlayerWarp.EnumWarpType.TEMPORARY));
+                        e.player.getEntityData().setInteger("NORMAL", playerWarp.get(IPlayerWarp.EnumWarpType.NORMAL));
+                        e.player.getEntityData().setBoolean("isWarpSet", true);
+                        playerWarp.set(IPlayerWarp.EnumWarpType.PERMANENT, 100);
+                        EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
+                        playerWarp.sync(playerMP);
+                    }
+                }
+                if (Settings.gammaSetting != 0 && !e.player.isCreative()) {
+                    if (0.00001f == e.player.getEntityData().getFloat("gammaSetting"))
+                        e.player.getEntityData().setFloat("gammaSetting", Settings.gammaSetting);
+                    Settings.gammaSetting = 0;
+                    e.player.sendMessage(new TextComponentString("Only darkness"));
+                }
+                if (Settings.renderDistanceChunks != 4 && !e.player.isCreative()) {
+                    if (0 == e.player.getEntityData().getInteger("renderDistanceChunks"))
+                        e.player.getEntityData().setInteger("renderDistanceChunks", Settings.renderDistanceChunks);
+                    Settings.renderDistanceChunks = 4;
+                    e.player.sendMessage(new TextComponentString("Only darkness"));
+                }
+                if (difficultyId == 0) {
+                    if (e.player instanceof EntityPlayerMP) {
+                        e.player.sendMessage(new TextComponentString("PEACEFUL DIFFICULTY ???"));
+                        tpToHome(e.player);
+                    }
+                }
+            }
         }
     }
 

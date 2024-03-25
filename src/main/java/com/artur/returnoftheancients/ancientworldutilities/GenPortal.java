@@ -1,14 +1,12 @@
 package com.artur.returnoftheancients.ancientworldutilities;
 
 import com.artur.returnoftheancients.generation.generators.GenStructure;
-import com.artur.returnoftheancients.handlers.Handler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import thaumcraft.api.blocks.BlocksTC;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +22,7 @@ public class GenPortal {
     static boolean back = false;
     static boolean runBack = false;
     static short backTime = 0;
-    static List<IBlockState[][]> blocks = new ArrayList<IBlockState[][]>();
+    static List<IBlockState[][]> blocks = new ArrayList<>();
 
     public static void start(int dimension, int x, int y, int z) {
         GenPortal.dimension = dimension;

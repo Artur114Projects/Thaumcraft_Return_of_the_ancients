@@ -51,8 +51,8 @@ public class GenPortal {
             if (e.world.provider.getDimension() == dimension) {
                 if (gen) {
                     int y = GenPortal.y - genTime;
-                    if (y == -1) {
-                        GenStructure.generateStructure(e.world, x - 3, y + 1, z - 3, "ancient_portal_floor");
+                    if (y == 0) {
+                        GenStructure.generateStructure(e.world, x - 3, 0, z - 3, "ancient_portal_floor");
                         gen = false;
                         back = true;
                         genTime = 0;
@@ -64,12 +64,12 @@ public class GenPortal {
                         IBlockState[][] blockStates = new IBlockState[6][6];
                         for (int i = x + 2; i >= x - 3; i--) {
                             for (int j = z + 2; j >= z - 3; j--) {
-                                blockStates[j - (z - 3)][i - (x - 3)] = e.world.getBlockState(new BlockPos(i, y, j));
+                                blockStates[j - (z - 3)][i - (x - 3)] = e.world.getBlockState(new BlockPos(i, y - 1, j));
                             }
                         }
                         blocks.add(GenPortal.y - (y), blockStates);
                         System.out.println(blocks.size());
-                        GenStructure.generateStructure(e.world, x - 3, y, z - 3, "ancient_kusok_portal");
+                        GenStructure.generateStructure(e.world, x - 3, y - 1, z - 3, "ancient_kusok_portal");
                     }
                     EntityPlayerSP playerSP = Minecraft.getMinecraft().player;
                     if (playerSP.motionY > 0 && !playerSP.isCreative()) {

@@ -94,7 +94,7 @@ public class TpToAncientWorldBlock extends BaseBlock{
                         ID.add(itemStack.getItem().getUnlocalizedName());
                     }
                 }
-                if (ID.isEmpty() && EventsHandler.getDifficultyId() != 0) {
+                if (ID.isEmpty() && (EventsHandler.getDifficultyId() != 0 || !Configs.AncientWorldSettings.noPeaceful)) {
                     FMLCommonHandler.instance().showGuiScreen(new LoadingGui());
                     AncientLabyrinthGenerator.genAncientLabyrinth(player);
                     Minecraft.getMinecraft().displayGuiScreen(null);

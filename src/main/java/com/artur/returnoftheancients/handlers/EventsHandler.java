@@ -118,16 +118,18 @@ public class EventsHandler {
 
     @SubscribeEvent
     public void LivingHurtEvent(LivingHurtEvent e) {
-        if (e.getEntity() instanceof EntityPlayerMP) {
-            if (e.getEntity().dimension == ancient_world_dim_id) {
-                EntityPlayer player = (EntityPlayer) e.getEntity();
-                if (player.getHealth() - e.getAmount() <= 0) {
-                    e.setCanceled(true);
-                    player.setHealth(20);
-                    player.removePotionEffect(Potion.getPotionById(19));
-                    player.removePotionEffect(Potion.getPotionById(20));
-                    tpToHome(player, 0, 8, 3, 8);
-                    System.out.println("You dead");
+        if (!Configs.AncientWorldSettings.isDeadToAncientWorld) {
+            if (e.getEntity() instanceof EntityPlayerMP) {
+                if (e.getEntity().dimension == ancient_world_dim_id) {
+                    EntityPlayer player = (EntityPlayer) e.getEntity();
+                    if (player.getHealth() - e.getAmount() <= 0) {
+                        e.setCanceled(true);
+                        player.setHealth(20);
+                        player.removePotionEffect(Potion.getPotionById(19));
+                        player.removePotionEffect(Potion.getPotionById(20));
+                        tpToHome(player, 0, 8, 3, 8);
+                        System.out.println("You dead");
+                    }
                 }
             }
         }
@@ -238,39 +240,49 @@ public class EventsHandler {
                     capIsSet = true;
                 }
             }
-            if (pT >= 8) {
+            if (pT >= 4) {
                 pT = 0;
-                if (e.player.getActivePotionEffect(MobEffects.NIGHT_VISION) != null && !e.player.isCreative()) {
-                    e.player.removePotionEffect(MobEffects.NIGHT_VISION);
-                    e.player.sendMessage(new TextComponentString("Only darkness"));
-                }
-                if (!e.player.getEntityData().getBoolean("isWarpSet") && e.player.getServer() != null) {
-                    if (e.player instanceof EntityPlayerMP) {
-                        e.player.getEntityData().setInteger("PERMANENT", playerWarp.get(IPlayerWarp.EnumWarpType.PERMANENT));
-                        e.player.getEntityData().setInteger("TEMPORARY", playerWarp.get(IPlayerWarp.EnumWarpType.TEMPORARY));
-                        e.player.getEntityData().setInteger("NORMAL", playerWarp.get(IPlayerWarp.EnumWarpType.NORMAL));
-                        e.player.getEntityData().setBoolean("isWarpSet", true);
-                        playerWarp.set(IPlayerWarp.EnumWarpType.PERMANENT, 100);
-                        EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
-                        playerWarp.sync(playerMP);
+                if (Configs.AncientWorldSettings.noNightVision) {
+                    if (e.player.getActivePotionEffect(MobEffects.NIGHT_VISION) != null && !e.player.isCreative()) {
+                        e.player.removePotionEffect(MobEffects.NIGHT_VISION);
+                        e.player.sendMessage(new TextComponentString("Only darkness"));
                     }
                 }
-                if (Settings.gammaSetting != 0 && !e.player.isCreative()) {
-                    if (0.00001f == e.player.getEntityData().getFloat("gammaSetting"))
-                        e.player.getEntityData().setFloat("gammaSetting", Settings.gammaSetting);
-                    Settings.gammaSetting = 0;
-                    e.player.sendMessage(new TextComponentString("Only darkness"));
+                if (Configs.AncientWorldSettings.isSetWarp) {
+                    if (!e.player.getEntityData().getBoolean("isWarpSet") && e.player.getServer() != null) {
+                        if (e.player instanceof EntityPlayerMP) {
+                            e.player.getEntityData().setInteger("PERMANENT", playerWarp.get(IPlayerWarp.EnumWarpType.PERMANENT));
+                            e.player.getEntityData().setInteger("TEMPORARY", playerWarp.get(IPlayerWarp.EnumWarpType.TEMPORARY));
+                            e.player.getEntityData().setInteger("NORMAL", playerWarp.get(IPlayerWarp.EnumWarpType.NORMAL));
+                            e.player.getEntityData().setBoolean("isWarpSet", true);
+                            playerWarp.set(IPlayerWarp.EnumWarpType.TEMPORARY, 100);
+                            EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
+                            playerWarp.sync(playerMP);
+                        }
+                    }
                 }
-                if (Settings.renderDistanceChunks != 4 && !e.player.isCreative()) {
-                    if (0 == e.player.getEntityData().getInteger("renderDistanceChunks"))
-                        e.player.getEntityData().setInteger("renderDistanceChunks", Settings.renderDistanceChunks);
-                    Settings.renderDistanceChunks = 4;
-                    e.player.sendMessage(new TextComponentString("Only darkness"));
+                if (Configs.AncientWorldSettings.cantChangeGammaSetting) {
+                    if (Settings.gammaSetting != 0 && !e.player.isCreative()) {
+                        if (0.00001f == e.player.getEntityData().getFloat("gammaSetting"))
+                            e.player.getEntityData().setFloat("gammaSetting", Settings.gammaSetting);
+                        Settings.gammaSetting = 0;
+                        e.player.sendMessage(new TextComponentString("Only darkness"));
+                    }
                 }
-                if (difficultyId == 0) {
-                    if (e.player instanceof EntityPlayerMP) {
-                        e.player.sendMessage(new TextComponentString("PEACEFUL DIFFICULTY ???"));
-                        tpToHome(e.player);
+                if (Configs.AncientWorldSettings.cantChangeRenderDistanceChunks) {
+                    if (Settings.renderDistanceChunks != 4 && !e.player.isCreative()) {
+                        if (0 == e.player.getEntityData().getInteger("renderDistanceChunks"))
+                            e.player.getEntityData().setInteger("renderDistanceChunks", Settings.renderDistanceChunks);
+                        Settings.renderDistanceChunks = 4;
+                        e.player.sendMessage(new TextComponentString("Only darkness"));
+                    }
+                }
+                if (Configs.AncientWorldSettings.noPeaceful) {
+                    if (difficultyId == 0) {
+                        if (e.player instanceof EntityPlayerMP) {
+                            e.player.sendMessage(new TextComponentString("PEACEFUL DIFFICULTY ???"));
+                            tpToHome(e.player);
+                        }
                     }
                 }
             }

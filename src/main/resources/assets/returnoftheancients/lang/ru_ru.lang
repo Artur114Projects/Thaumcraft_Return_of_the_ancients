@@ -27,3 +27,4 @@ returnoftheancients.cfg.sub.aws.fc=Шанс генерации развилки
 returnoftheancients.cfg.sub.aws.tc=Шанс генерации поворота
 # Config Mob gen settings
 returnoftheancients.cfg.sub.mgs=Настройки генерации мобов (Не работает)
+returnoftheancients.cfg.sub.mgs.umg=Использовать новую генерацию мобов

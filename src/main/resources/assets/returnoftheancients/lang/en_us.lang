@@ -27,3 +27,4 @@ returnoftheancients.cfg.sub.aws.fc=Chance of generating a fork
 returnoftheancients.cfg.sub.aws.tc=Chance of generating a turn
 # Config Mob gen settings
 returnoftheancients.cfg.sub.mgs=Mob gen settings (Don`t work)
+returnoftheancients.cfg.sub.mgs.umg=Use new mob generation

@@ -60,20 +60,48 @@ public class Configs {
     }
 
     public static class AncientWorldSettings {
-        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.tc")
-        @Config.Comment("the higher the number, the lower the chance")
-        public int turnChance = 8;
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.fc")
-        @Config.Comment("the higher the number, the lower the chance")
-        public int forkChance = 8;
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs")
+        @Config.Comment("Here you can change ancient world generation settings")
+        public AncientWorldGenerationSettings AncientWorldGenerationSettings = new AncientWorldGenerationSettings();
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.og")
         @Config.Comment("Should I use an old generator?")
         public boolean isOldGenerator = true;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.crd")
+        public boolean cantChangeRenderDistanceChunks = true;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.ccg")
+        public boolean cantChangeGammaSetting = true;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.np")
+        public boolean noPeaceful = true;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.isw")
+        public boolean isSetWarp = true;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.nnv")
+        public boolean noNightVision = true;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.nnv")
+        public boolean isDeadToAncientWorld = false;
     }
 
-    public static class MobGenSettings {
+    public static class AncientWorldGenerationSettings {
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs")
+        @Config.Comment("the higher the number, the lower the chance")
+        public int turnChance = 8;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs")
+        @Config.Comment("the higher the number, the lower the chance")
+        public int forkChance = 8;
+
+    }
+
+
+        public static class MobGenSettings {
         @Config.LangKey(Referense.MODID + ".cfg.sub.mgs.c_c")
         @Config.Comment({"EntityInhabitedZombie = 1", "EntityEldritchGuardian = 2", "EntityMindSpider = 3"})
         public int[] CROSSROADS_CHANGE = new int[] {0, 0, 0};
@@ -105,6 +133,10 @@ public class Configs {
         @Config.LangKey(Referense.MODID + ".cfg.sub.mgs.t_g")
         @Config.Comment({"EntityInhabitedZombie: 1 = min, 2 = max", "EntityEldritchGuardian: 3 = min, 4 = max", "EntityMindSpider: 5 = min, 6 = max"})
         public int[] TURN_GROUP = new int[] {0, 0, 0, 0, 0, 0};
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.mgs.umg")
+        @Config.Comment("(false)")
+        public boolean useNewMobGeneration = false;
     }
 
 

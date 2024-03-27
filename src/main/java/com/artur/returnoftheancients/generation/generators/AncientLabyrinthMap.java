@@ -32,7 +32,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
         // belowYStructure Z+
         // upYStructure Z-
 
-        if (genRandomIntRange(0, Configs.AncientWorldSettings.turnChance) == 0) {
+        if (genRandomIntRange(0, Configs.AncientWorldSettings.AncientWorldGenerationSettings.turnChance) == 0) {
             if (index == f_index) {
                 if (y == 0 || y == 16) {
                     if (y == 0) {
@@ -90,7 +90,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
                 }
             }
         } // TURN
-        if (genRandomIntRange(0, Configs.AncientWorldSettings.forkChance) == 0) {
+        if (genRandomIntRange(0, Configs.AncientWorldSettings.AncientWorldGenerationSettings.forkChance) == 0) {
             if (index == f_index) {
                 if (y == 0 || y == 16) {
                     if (y == 0) {

@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.handlers;
 
 import com.artur.returnoftheancients.ancientworldutilities.Configs;
+import com.artur.returnoftheancients.ancientworldutilities.RemoveUnresolvedItems;
 import com.artur.returnoftheancients.ancientworldutilities.WorldData;
 import com.artur.returnoftheancients.blocks.TpToAncientWorldBlock;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
@@ -96,6 +97,9 @@ public class EventsHandler {
             worldData.markDirty();
         }
         System.out.println("World: " + e.getWorld().provider.getDimension() + " is load");
+        for (EntityPlayer player : e.getWorld().playerEntities) {
+            player.getEntityData().setBoolean("isUUI", false);
+        }
         if (e.getWorld().provider.getDimension() == ancient_world_dim_id) {
             isAncientWorldLoad = true;
         }
@@ -122,13 +126,17 @@ public class EventsHandler {
             if (e.getEntity() instanceof EntityPlayerMP) {
                 if (e.getEntity().dimension == ancient_world_dim_id) {
                     EntityPlayer player = (EntityPlayer) e.getEntity();
-                    if (player.getHealth() - e.getAmount() <= 0) {
-                        e.setCanceled(true);
-                        player.setHealth(20);
-                        player.removePotionEffect(Potion.getPotionById(19));
-                        player.removePotionEffect(Potion.getPotionById(20));
-                        tpToHome(player, 0, 8, 3, 8);
-                        System.out.println("You dead");
+                    if (!player.getEntityData().getBoolean(RemoveUnresolvedItems.dead)) {
+                        if (player.getHealth() - e.getAmount() <= 0) {
+                            e.setCanceled(true);
+                            player.setHealth(20);
+                            player.removePotionEffect(Potion.getPotionById(19));
+                            player.removePotionEffect(Potion.getPotionById(20));
+                            tpToHome(player, 0, 8, 3, 8);
+                            System.out.println("You dead");
+                        }
+                    } else {
+                        player.getEntityData().setBoolean(RemoveUnresolvedItems.dead, false);
                     }
                 }
             }
@@ -225,7 +233,6 @@ public class EventsHandler {
         }
 
         if (playerDimension == ancient_world_dim_id) {
-            pT++;
             IPlayerWarp playerWarp = ThaumcraftCapabilities.getWarp(e.player);
             GameSettings Settings = Minecraft.getMinecraft().gameSettings;
             BlockPos pos = e.player.getPosition();
@@ -235,7 +242,6 @@ public class EventsHandler {
             }
             if (!capIsSet) {
                 if (pos.getY() == 81 && pos.getX() <= 9 && pos.getX() >= 6 && pos.getZ() <= 9 && pos.getZ() >= 6) {
-                    Handler.playSound(ModSounds.TP_SOUND);
                     GenStructure.generateStructure(e.player.world, 6, 85, 6, "ancient_cap");
                     capIsSet = true;
                 }
@@ -286,6 +292,7 @@ public class EventsHandler {
                     }
                 }
             }
+            pT++;
         }
     }
 

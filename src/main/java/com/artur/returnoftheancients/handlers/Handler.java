@@ -2,16 +2,21 @@ package com.artur.returnoftheancients.handlers;
 
 import com.artur.returnoftheancients.ancientworldutilities.Configs;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
+import ibxm.Player;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 
 public class Handler {
@@ -63,5 +68,36 @@ public class Handler {
             GenStructure.generateStructure(world, x, CalculateGenerationHeight(world, x + 3, z + 3) + y, z, "ancient_portal");
         }
         GenStructure.generateStructure(world, x, 0, z, "ancient_portal_floor");
+    }
+
+    public static ArrayList<String> isPlayerUseUnresolvedItems(EntityPlayer player) {
+        ArrayList<String> ID = new ArrayList<>();
+        String[] modId = Configs.PortalSettings.modId;
+        boolean is = true;
+
+        for (ItemStack itemStack : player.inventory.mainInventory) {
+            for (byte i = 0; i != modId.length; i++) {
+                is = Objects.equals(itemStack.getItem().getCreatorModId(itemStack), modId[i]);
+                if (is) {
+                    break;
+                }
+            }
+            if (!is) {
+                ID.add(itemStack.getItem().getCreatorModId(itemStack) + ":" + itemStack.getItem().getUnlocalizedName().replaceAll("item.", ""));
+            }
+        }
+        for (ItemStack itemStack : player.inventory.armorInventory) {
+            for (byte i = 0; i != modId.length; i++) {
+                is = Objects.equals(itemStack.getItem().getCreatorModId(itemStack), modId[i]);
+                if (is) {
+                    break;
+                }
+            }
+            if (!is) {
+                ID.add(itemStack.getItem().getUnlocalizedName());
+            }
+        }
+
+        return ID;
     }
 }

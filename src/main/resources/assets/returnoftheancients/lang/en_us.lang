@@ -8,6 +8,9 @@ tile.tp_to_ancient_world_block.name=Portal to Ancient World
 # Any
 returnoftheancients.portal.message=Cant use:
 item.itemprimalblade.text=Weapons of the gods
+returnoftheancients.rui.o=откуда ты это достал
+returnoftheancients.rui.t=верни это туда от куда достал
+returnoftheancients.rui.f=у тебя 30 секунд
 # Config any
 returnoftheancients.cfg.sub.any.primalbladespeed=The attack speed of the Primordial Blade
 returnoftheancients.cfg.sub.any.primalbladedamage=The damage of the Primordial Blade

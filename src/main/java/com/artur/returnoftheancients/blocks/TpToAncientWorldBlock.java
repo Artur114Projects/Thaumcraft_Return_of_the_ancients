@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.ancientworldutilities.LoadingGui;
 import com.artur.returnoftheancients.generation.generators.AncientLabyrinthGenerator;
 import com.artur.returnoftheancients.handlers.EventsHandler;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
+import com.artur.returnoftheancients.handlers.Handler;
 import com.artur.returnoftheancients.main.Main;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.block.SoundType;
@@ -35,7 +36,6 @@ import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_di
 
 public class TpToAncientWorldBlock extends BaseBlock{
 
-    private static final ArrayList<String> ID = new ArrayList<>();
     public static boolean noCollision = false;
     protected static final AxisAlignedBB HOME_PORTAL_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D);
     public TpToAncientWorldBlock(String name, Material material, float hardness, float resistance, SoundType soundType) {
@@ -68,32 +68,8 @@ public class TpToAncientWorldBlock extends BaseBlock{
     public void onEntityCollidedWithBlock(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull Entity entityIn) {
         if (!noCollision) {
             if (entityIn instanceof EntityPlayerMP) {
-                String[] modId = Configs.PortalSettings.modId;
                 EntityPlayer player = (EntityPlayer) entityIn;
-                boolean is = true;
-                for (ItemStack itemStack : player.inventory.mainInventory) {
-                    for (byte i = 0; i != modId.length; i++) {
-                        is = Objects.equals(itemStack.getItem().getCreatorModId(itemStack), modId[i]);
-                        if (is) {
-                            break;
-                        }
-                    }
-                    if (!is) {
-                        System.out.println(is);
-                        ID.add(itemStack.getItem().getCreatorModId(itemStack) + ":" + itemStack.getItem().getUnlocalizedName().replaceAll("item.", ""));
-                    }
-                }
-                for (ItemStack itemStack : player.inventory.armorInventory) {
-                    for (byte i = 0; i != modId.length; i++) {
-                        is = Objects.equals(itemStack.getItem().getCreatorModId(itemStack), modId[i]);
-                        if (is) {
-                            break;
-                        }
-                    }
-                    if (!is) {
-                        ID.add(itemStack.getItem().getUnlocalizedName());
-                    }
-                }
+                ArrayList<String> ID = Handler.isPlayerUseUnresolvedItems(player);
                 if (ID.isEmpty() && (EventsHandler.getDifficultyId() != 0 || !Configs.AncientWorldSettings.noPeaceful)) {
                     FMLCommonHandler.instance().showGuiScreen(new LoadingGui());
                     AncientLabyrinthGenerator.genAncientLabyrinth(player);

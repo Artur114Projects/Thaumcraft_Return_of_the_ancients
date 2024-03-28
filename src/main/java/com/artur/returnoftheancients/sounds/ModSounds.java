@@ -14,16 +14,12 @@ public class ModSounds {
 
 
     //Это наш звук, `test_sound` это название звука указанного в sounds.json
-    public static SoundEvent TP_SOUND = create("tpSound");
-    public static SoundEvent MEGALOVANIA = create("mus_zz_megalovania");
     public static SoundEvent BUM = create("bum");
 
 
     @SubscribeEvent
     public void registerSounds(RegistryEvent.Register<SoundEvent> e) {
         //Регистрация звука
-        ForgeRegistries.SOUND_EVENTS.register(TP_SOUND);
-        ForgeRegistries.SOUND_EVENTS.register(MEGALOVANIA);
         ForgeRegistries.SOUND_EVENTS.register(BUM);
     }
     private static SoundEvent create(String name) {

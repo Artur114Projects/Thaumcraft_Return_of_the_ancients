@@ -1,20 +1,20 @@
 {
-  "tpSound": {
+  "whisper": {
     "category": "ambient",
     "sounds": [
       {
-        "name": "returnoftheancients:tpsound",
+        "name": "returnoftheancients:whisper",
         "stream": true,
         "volume": 1
       }
     ]
   },
-  "mus_zz_megalovania": {
-    "category": "mob",
+  "HeartBeat": {
+    "category": "ambient",
     "sounds": [
       {
-        "name": "returnoftheancients:mus_zz_megalovania",
-        "stream": false,
+        "name": "returnoftheancients:HeartBeat",
+        "stream": true,
         "volume": 1
       }
     ]

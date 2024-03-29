@@ -15,12 +15,16 @@ public class ModSounds {
 
     //Это наш звук, `test_sound` это название звука указанного в sounds.json
     public static SoundEvent BUM = create("bum");
+    public static SoundEvent WHISPER = create("whisper");
+    public static SoundEvent HEARTBEAT = create("heartbeat");
 
 
     @SubscribeEvent
     public void registerSounds(RegistryEvent.Register<SoundEvent> e) {
         //Регистрация звука
         ForgeRegistries.SOUND_EVENTS.register(BUM);
+        ForgeRegistries.SOUND_EVENTS.register(WHISPER);
+        ForgeRegistries.SOUND_EVENTS.register(HEARTBEAT);
     }
     private static SoundEvent create(String name) {
         ResourceLocation rl = new ResourceLocation(Referense.MODID, name);

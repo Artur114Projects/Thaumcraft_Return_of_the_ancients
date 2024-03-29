@@ -11,6 +11,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -21,8 +22,6 @@ public class RemoveUnresolvedItems {
     public static final String PRI = Referense.MODID + "phaseRemoveItems";
     public static final String isRespawn = Referense.MODID + "isRespawn";
 
-    private static byte tick = 0;
-
 
     private static void resetNBT(EntityPlayer player) {
         player.getEntityData().setBoolean(isUUI, false);
@@ -32,23 +31,18 @@ public class RemoveUnresolvedItems {
     }
 
     @SubscribeEvent
+    public void isClone(PlayerEvent.Clone e) {
+        e.getEntityPlayer().isDead = false;
+    }
+
+    @SubscribeEvent
     public void Tick(TickEvent.PlayerTickEvent e) {
-        if (!e.player.getEntityData().getBoolean(isRespawn)) {
-            if (e.player.dimension != InitDimensions.ancient_world_dim_id) {
-                e.player.getEntityData().setBoolean(isRespawn, true);
+        if (e.player.dimension == InitDimensions.ancient_world_dim_id) {
+            if (!Handler.isPlayerUseUnresolvedItems(e.player).isEmpty() && (!e.player.getEntityData().getBoolean(isUUI) || !e.player.getEntityData().hasKey(isUUI)) && !e.player.isCreative() && !e.player.isDead) {
+                System.out.println("La ti krisa " + e.player.getName());
+                e.player.getEntityData().setBoolean(isUUI, true);
             }
         }
-        if (tick >= 4) {
-            if (e.player.dimension == InitDimensions.ancient_world_dim_id) {
-                if (!Handler.isPlayerUseUnresolvedItems(e.player).isEmpty() && (!e.player.getEntityData().getBoolean(isUUI) || !e.player.getEntityData().hasKey(isUUI)) && !e.player.isCreative() && e.player.getEntityData().getBoolean(isRespawn)) {
-                    System.out.println("La ti krisa " + e.player.getName());
-                    e.player.getEntityData().setBoolean(isUUI, true);
-                    tick = 0;
-                }
-            }
-        }
-        tick++;
-        boolean PlaySound = false;
         if (e.player.getEntityData().getBoolean(isUUI)) {
             int timeRemoveItems = e.player.getEntityData().getInteger(time);
             byte phaseRemoveItems = e.player.getEntityData().getByte(PRI);
@@ -59,19 +53,18 @@ public class RemoveUnresolvedItems {
                 return;
             }
             if (phaseRemoveItems == 0) {
-                PlaySound = true;
+                if (e.player instanceof EntityPlayerSP) {
+                    e.player.playSound(ModSounds.WHISPER, 1, 1);
+                }
                 e.player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 1200));
                 e.player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1200, 10));
                 phaseRemoveItems = 1;
             }
             if (phaseRemoveItems == 1 && timeRemoveItems >= 20) {
-                if (timeRemoveItems == 40 && e.player instanceof EntityPlayerMP) {
-                    e.player.sendMessage(new TextComponentTranslation(Referense.MODID + ".rui.o"));
-                }
                 if (timeRemoveItems == 100 && e.player instanceof EntityPlayerMP) {
                     e.player.sendMessage(new TextComponentTranslation(Referense.MODID + ".rui.t"));
                 }
-                if (timeRemoveItems == 150) {
+                if (timeRemoveItems == 160) {
                     if (e.player instanceof EntityPlayerMP) {
                         e.player.sendMessage(new TextComponentTranslation(Referense.MODID + ".rui.f"));
                         e.player.sendMessage(new TextComponentString(Handler.isPlayerUseUnresolvedItems(e.player).toString()));
@@ -79,11 +72,11 @@ public class RemoveUnresolvedItems {
                     phaseRemoveItems = 2;
                 }
             }
-            if (phaseRemoveItems == 2 && timeRemoveItems >= 750) {
+            if (phaseRemoveItems == 2 && timeRemoveItems >= 760) {
                 e.player.getEntityData().setBoolean(dead, true);
                 e.player.setHealth(-1);
-                e.player.getEntityData().setBoolean(isRespawn, false);
                 resetNBT(e.player);
+                e.player.isDead = true;
                 System.out.println("dead");
                 return;
             }
@@ -93,9 +86,17 @@ public class RemoveUnresolvedItems {
             if (e.player instanceof EntityPlayerSP) {
                 e.player.motionY = -0.1;
             }
-            if (PlaySound) {
-                if (e.player instanceof EntityPlayerSP) {
-                    e.player.playSound(ModSounds.BUM, 1, 1);
+            if (timeRemoveItems < 460) {
+                if ((timeRemoveItems % 40) == 0 && e.player instanceof EntityPlayerSP) {
+                    e.player.playSound(ModSounds.HEARTBEAT, 1, 1);
+                }
+            } else if (timeRemoveItems < 660) {
+                if ((timeRemoveItems % 20) == 0 && e.player instanceof EntityPlayerSP) {
+                    e.player.playSound(ModSounds.HEARTBEAT, 1, 1);
+                }
+            } else {
+                if ((timeRemoveItems % 10) == 0 && e.player instanceof EntityPlayerSP) {
+                    e.player.playSound(ModSounds.HEARTBEAT, 1, 1);
                 }
             }
         }

@@ -8,8 +8,7 @@ tile.tp_to_ancient_world_block.name=Портал в древний мир
 # Any
 returnoftheancients.portal.message=Нельзя использовать:
 item.itemprimalblade.text=Оружие богов
-returnoftheancients.rui.o=откуда ты это достал
-returnoftheancients.rui.t=верни это туда от куда достал
+returnoftheancients.rui.t=убери это
 returnoftheancients.rui.f=у тебя 30 секунд
 # Config any
 returnoftheancients.cfg.sub.any.primalbladespeed=Скорость атаки первородного клинка

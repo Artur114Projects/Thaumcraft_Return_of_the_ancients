@@ -18,7 +18,6 @@ public class ModSounds {
     public static SoundEvent WHISPER = create("whisper");
     public static SoundEvent HEARTBEAT = create("heartbeat");
 
-
     @SubscribeEvent
     public void registerSounds(RegistryEvent.Register<SoundEvent> e) {
         //Регистрация звука
@@ -26,6 +25,7 @@ public class ModSounds {
         ForgeRegistries.SOUND_EVENTS.register(WHISPER);
         ForgeRegistries.SOUND_EVENTS.register(HEARTBEAT);
     }
+
     private static SoundEvent create(String name) {
         ResourceLocation rl = new ResourceLocation(Referense.MODID, name);
         return (SoundEvent) (new SoundEvent(rl)).setRegistryName(rl);

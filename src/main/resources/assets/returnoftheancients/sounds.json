@@ -13,9 +13,9 @@
     "category": "ambient",
     "sounds": [
       {
-        "name": "returnoftheancients:HeartBeat",
+        "name": "returnoftheancients:heartbeat",
         "stream": true,
-        "volume": 1
+        "volume": 4
       }
     ]
   },

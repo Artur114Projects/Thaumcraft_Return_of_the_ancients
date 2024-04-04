@@ -104,6 +104,9 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                     case FORK_ID:
                         GenStructure.generateStructure(world, cx, 80, cz, FORK_STRING_ID);
                         break;
+                    case END_ID:
+                        GenStructure.generateStructure(world, cx, 80, cz, END_STRING_ID);
+                        break;
                     case BOSS_ID:
                         bossGen++;
                         if (bossGen == 4) {

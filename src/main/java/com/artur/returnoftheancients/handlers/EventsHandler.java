@@ -334,10 +334,10 @@ public class EventsHandler {
 
     @SubscribeEvent
     public void canDeSpawn(LivingSpawnEvent.AllowDespawn event) {
-        if (!(event.getEntityLiving() instanceof EntityEldritchGuardian)) {
-            return;
-        }
-        event.setResult(Event.Result.DENY);
+//        if (!(event.getEntityLiving() instanceof EntityEldritchGuardian)) {
+//            return;
+//        }
+//        event.setResult(Event.Result.DENY);
     }
 
     @SubscribeEvent

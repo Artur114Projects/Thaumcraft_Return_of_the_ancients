@@ -119,4 +119,4 @@ publishing {
 dependencies {
     implementation 'org.jetbrains:annotations:24.0.0'
 }
-//sourceSets { main { output.resourcesDir = output.classesDir } }
+sourceSets { main { output.resourcesDir = output.classesDir } }

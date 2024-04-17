@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.ancientworldutilities.Configs;
 import com.artur.returnoftheancients.ancientworldutilities.LoadingGui;
+import com.artur.returnoftheancients.ancientworldutilities.OldLoadingGui;
 import com.artur.returnoftheancients.generation.generators.AncientLabyrinthGenerator;
 import com.artur.returnoftheancients.handlers.EventsHandler;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
@@ -71,7 +72,11 @@ public class TpToAncientWorldBlock extends BaseBlock{
                 EntityPlayer player = (EntityPlayer) entityIn;
                 ArrayList<String> ID = Handler.isPlayerUseUnresolvedItems(player);
                 if (ID.isEmpty() && (EventsHandler.getDifficultyId() != 0 || !Configs.AncientWorldSettings.noPeaceful)) {
-                    FMLCommonHandler.instance().showGuiScreen(new LoadingGui());
+                    if (!Configs.Any.useOldLoadingGui) {
+                        FMLCommonHandler.instance().showGuiScreen(new LoadingGui());
+                    } else {
+                        FMLCommonHandler.instance().showGuiScreen(new OldLoadingGui());
+                    }
                     AncientLabyrinthGenerator.genAncientLabyrinth(player);
                     Minecraft.getMinecraft().displayGuiScreen(null);
                     if (player.isCreative()) {

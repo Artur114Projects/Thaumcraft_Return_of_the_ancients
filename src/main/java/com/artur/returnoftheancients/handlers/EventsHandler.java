@@ -68,7 +68,7 @@ public class EventsHandler {
 
     public static void tpToHome(EntityPlayer player) {
         TpToAncientWorldBlock.noCollision = true;
-        FreeTeleporter.teleportToDimension(player, 0, 8, 3, 8);
+        FreeTeleporter.teleportToDimension(player, 0, Configs.PortalSettings.x + 3, 3, Configs.PortalSettings.z + 3);
         tpToHome = true;
     }
 
@@ -132,7 +132,7 @@ public class EventsHandler {
                             player.setHealth(20);
                             player.removePotionEffect(Potion.getPotionById(19));
                             player.removePotionEffect(Potion.getPotionById(20));
-                            tpToHome(player, 0, 8, 3, 8);
+                            tpToHome(player);
                             System.out.println("You dead");
                         }
                     } else {
@@ -177,12 +177,14 @@ public class EventsHandler {
         if (startUp) {
             if (playerDimension != ancient_world_dim_id) {
                 BlockPos pos = e.player.getPosition();
+                boolean up = !yse;
                 if (e.player instanceof EntityPlayerSP) {
                     EntityPlayerSP playerSP = (EntityPlayerSP) e.player;
                     if (playerSP.motionY < 2) {
                         playerSP.motionY = playerSP.motionY + 0.1;
                     }
-                    if (pos.getY() > WorldData.get().saveData.getInteger(IALGS.AncientPortalYPosKey)) {
+
+                    if (pos.getY() > WorldData.get().saveData.getInteger(IALGS.AncientPortalYPosKey) && up) {
                         playerSP.motionY = playerSP.motionY + 1;
                         yse = true;
                         TpToAncientWorldBlock.noCollision = false;

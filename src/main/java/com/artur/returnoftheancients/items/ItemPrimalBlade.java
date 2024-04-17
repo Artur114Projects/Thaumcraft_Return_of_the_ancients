@@ -20,7 +20,7 @@ import java.util.List;
 public class ItemPrimalBlade extends ItemAxe implements IHasModel {
 
     public ItemPrimalBlade(String name, Item.ToolMaterial e) {
-        super(e, Configs.Any.primalBladeDamage - 1, Configs.Any.primalBladeSpeed);
+        super(e, Configs.Any.primalBladeDamage - 1, (float) Configs.Any.primalBladeSpeed);
         setRegistryName(name);
         setUnlocalizedName(name);
         setMaxStackSize(1);

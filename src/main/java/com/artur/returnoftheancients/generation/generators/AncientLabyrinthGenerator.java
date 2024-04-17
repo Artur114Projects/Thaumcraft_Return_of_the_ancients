@@ -243,21 +243,15 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
 
     public static void genAncientLabyrinth(EntityPlayer player) {
         isGen = false;
-        EventsHandler.setAncientWorldLoad(false);
-        Random r = new Random();
-        mobId = r.nextLong();
-        WorldData worldData = WorldData.get();
-        worldData.saveData.setLong("mobId", mobId);
-        worldData.markDirty();
         world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(ancient_world_dim_id);
+        EventsHandler.setAncientWorldLoad(false);
+//        Random r = new Random();
+//        mobId = r.nextLong();
+//        WorldData worldData = WorldData.get();
+//        worldData.saveData.setLong("mobId", mobId);
+//        worldData.markDirty();
         System.out.println("Generating ancient labyrinth start");
-//        genRandomStructures();
         PHASE = 0;
-//        System.out.println(Arrays.deepToString(ANCIENT_LABYRINTH_STRUCTURES));
-//        genRightLeftWay();
-        PHASE = 1;
-//        System.out.println(Arrays.deepToString(ANCIENT_LABYRINTH_STRUCTURES));
-//        genDownUpWay();
         byte[][][] a;
         if (AncientWorldSettings.isOldGenerator) {
             a = AncientLabyrinthOldMap.genStructuresMap();
@@ -266,21 +260,18 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         }
         ANCIENT_LABYRINTH_STRUCTURES = a[0];
         ANCIENT_LABYRINTH_STRUCTURES_ROTATE = a[1];
-        PHASE = 2;
-        System.out.println("Generating Ancient Entry Way");
-        PHASE = 3;
-        genAncientEntryWay();
+        PHASE = 1;
         System.out.println("Cleaning area");
-        PHASE = 4;
         clearArea();
+        genAncientEntryWay();
+        PHASE = 2;
         System.out.println("Generate structures");
-        PHASE = 5;
         genStructuresInWorld();
+        PHASE = 3;
         System.out.println("Reload light");
-        PHASE = 6;
         reloadLight();
         System.out.println("Generate ancient labyrinth finish!");
-        PHASE = 7;
+        PHASE = 4;
         isGen = true;
         try {
             TimeUnit.SECONDS.sleep(1);

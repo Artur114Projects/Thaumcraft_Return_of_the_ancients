@@ -46,7 +46,6 @@ public class BiomeAncientLabyrinth extends Biome implements IBiome {
         this.topBlock = Blocks.BEDROCK.getDefaultState();
         this.fillerBlock = Blocks.BEDROCK.getDefaultState();
         spawnListEntryList.add(new SpawnListEntry(EntityEldritchGuardian.class, 100, 4, 14));
-        spawnListEntryList.add(new SpawnListEntry(EntityEldritchCrab.class, 20, 10, 20));
         spawnListEntryList.add(new SpawnListEntry(EntityMindSpider.class, 30, 20, 100));
         spawnListEntryList.add(new SpawnListEntry(EntityInhabitedZombie.class, 50, 4, 8));
         this.spawnableCaveCreatureList = spawnListEntryList;

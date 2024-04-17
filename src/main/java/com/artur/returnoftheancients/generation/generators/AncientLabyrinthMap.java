@@ -14,7 +14,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE = new byte[17][17];
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_IN_WORK = new byte[17][17];
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE_IN_WORK = new byte[17][17];
-    private static Random random = new Random();
+    private static final Random random = new Random();
     private static final byte f_index = 0;
     private static final byte b_index = 1;
     private static final byte bl_index = 2;
@@ -86,6 +86,21 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
         // backStructure X-
         // belowYStructure Z+
         // upYStructure Z-
+
+        if (random.nextInt(Configs.AncientWorldSettings.AncientWorldGenerationSettings.crossroadsChance + 1) == 0) {
+            if (x < SIZE - 1 && x > 0 && y < SIZE - 1 && y > 0) {
+                if (wayRotate == 1) {
+                    if (upYStructure == 0 && belowYStructure == 0) {
+                        return new byte[] {CROSSROADS_ID, 1};
+                    }
+                }
+                if (wayRotate == 2) {
+                    if (backStructure == 0 && forwardStructure == 0) {
+                        return new byte[] {CROSSROADS_ID, 1};
+                    }
+                }
+            }
+        }
 
         if (random.nextInt(Configs.AncientWorldSettings.AncientWorldGenerationSettings.turnChance + 1) == 0) {
             if (index == f_index) {
@@ -246,7 +261,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
                     if (x == 0) {
                         return new byte[] {TURN_ID, 1};
                     } else {
-                        return new byte[]{TURN_ID, 3};
+                        return new byte[] {TURN_ID, 3};
                     }
                 }
                 if (genRandomIntRange(0, 1) == 0) {
@@ -280,26 +295,27 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
             if (is_b) {
                 if (backStructure != 0) {
                     if (random.nextInt(2) == 0) {
-                        if (is_bl && belowYStructure == 0){
-                            return new byte[] {TURN_ID, 2};
-                        } else if (is_u && upYStructure == 0) {
-                            return new byte[] {TURN_ID, 1};
+                        if (random.nextInt(Configs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && backStructure == WAY_ID) {
+                            if (is_bl && belowYStructure == 0) {
+                                return new byte[]{TURN_ID, 2};
+                            } else if (is_u && upYStructure == 0) {
+                                return new byte[]{TURN_ID, 1};
+                            } else {
+                                return new byte[]{END_ID, 4};
+                            }
                         } else {
-                            return new byte[] {END_ID, 4};
-                        }
-                    } else {
-                        if (is_u && upYStructure == 0){
-                            return new byte[]{TURN_ID, 1};
-                        } else if (is_bl && belowYStructure == 0) {
-                            return new byte[] {TURN_ID, 2};
-                        } else {
-                            return new byte[] {END_ID, 4};
+                            if (is_u && upYStructure == 0) {
+                                return new byte[]{TURN_ID, 1};
+                            } else if (is_bl && belowYStructure == 0) {
+                                return new byte[]{TURN_ID, 2};
+                            } else {
+                                return new byte[]{END_ID, 4};
+                            }
                         }
                     }
                 }
             }
         }
-
         if (index == b_index) {
             if (x == 16) {
                 if (random.nextInt(2) == 0) {
@@ -322,27 +338,28 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
             }
             if (is_f) {
                 if (forwardStructure != 0) {
-                    if (random.nextInt(2) == 0) {
-                        if (is_bl && belowYStructure == 0) {
-                            return new byte[] {TURN_ID, 4};
-                        } else if (is_u && upYStructure == 0) {
-                            return new byte[] {TURN_ID, 3};
+                    if (random.nextInt(Configs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && forwardStructure == WAY_ID) {
+                        if (random.nextInt(2) == 0) {
+                            if (is_bl && belowYStructure == 0) {
+                                return new byte[]{TURN_ID, 4};
+                            } else if (is_u && upYStructure == 0) {
+                                return new byte[]{TURN_ID, 3};
+                            } else {
+                                return new byte[]{END_ID, 1};
+                            }
                         } else {
-                            return new byte[] {END_ID, 1};
-                        }
-                    } else {
-                        if (is_u && upYStructure == 0) {
-                            return new byte[] {TURN_ID, 3};
-                        } else if (is_bl && belowYStructure == 0) {
-                            return new byte[] {TURN_ID, 4};
-                        } else {
-                            return new byte[] {END_ID, 1};
+                            if (is_u && upYStructure == 0) {
+                                return new byte[]{TURN_ID, 3};
+                            } else if (is_bl && belowYStructure == 0) {
+                                return new byte[]{TURN_ID, 4};
+                            } else {
+                                return new byte[]{END_ID, 1};
+                            }
                         }
                     }
                 }
             }
         }
-
         if (index == bl_index) {
             if (y == 0) {
                 if (random.nextInt(2) == 0) {
@@ -365,27 +382,28 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
             }
             if (is_u) {
                 if (upYStructure != 0) {
-                    if (random.nextInt(2) == 0) {
-                        if (is_f && forwardStructure == 0) {
-                            return new byte[] {TURN_ID, 2};
-                        } else if (is_b && backStructure == 0) {
-                            return new byte[] {TURN_ID, 4};
+                    if (random.nextInt(Configs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && upYStructure == WAY_ID) {
+                        if (random.nextInt(2) == 0) {
+                            if (is_f && forwardStructure == 0) {
+                                return new byte[]{TURN_ID, 2};
+                            } else if (is_b && backStructure == 0) {
+                                return new byte[]{TURN_ID, 4};
+                            } else {
+                                return new byte[]{END_ID, 3};
+                            }
                         } else {
-                            return new byte[] {END_ID, 3};
-                        }
-                    } else {
-                        if (is_b && backStructure == 0) {
-                            return new byte[] {TURN_ID, 4};
-                        } else if (is_f && forwardStructure == 0) {
-                            return new byte[] {TURN_ID, 2};
-                        } else {
-                            return new byte[] {END_ID, 3};
+                            if (is_b && backStructure == 0) {
+                                return new byte[]{TURN_ID, 4};
+                            } else if (is_f && forwardStructure == 0) {
+                                return new byte[]{TURN_ID, 2};
+                            } else {
+                                return new byte[]{END_ID, 3};
+                            }
                         }
                     }
                 }
             }
         }
-
         if (index == u_index) {
             if (y == 16) {
                 if (random.nextInt(2) == 0) {
@@ -408,21 +426,23 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
             }
             if (is_bl) {
                 if (belowYStructure != 0) {
-                    if (random.nextInt(2) == 0) {
-                        if (is_f && forwardStructure == 0) {
-                            return new byte[] {TURN_ID, 1};
-                        } else if (is_b && backStructure == 0) {
-                            return new byte[] {TURN_ID, 3};
+                    if (random.nextInt(Configs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && belowYStructure == WAY_ID) {
+                        if (random.nextInt(2) == 0) {
+                            if (is_f && forwardStructure == 0) {
+                                return new byte[]{TURN_ID, 1};
+                            } else if (is_b && backStructure == 0) {
+                                return new byte[]{TURN_ID, 3};
+                            } else {
+                                return new byte[]{END_ID, 2};
+                            }
                         } else {
-                            return new byte[] {END_ID, 2};
-                        }
-                    } else {
-                        if (is_b && backStructure == 0) {
-                            return new byte[] {TURN_ID, 1};
-                        } else if (is_f && forwardStructure == 0) {
-                            return new byte[] {TURN_ID, 3};
-                        } else {
-                            return new byte[] {END_ID, 2};
+                            if (is_b && backStructure == 0) {
+                                return new byte[]{TURN_ID, 3};
+                            } else if (is_f && forwardStructure == 0) {
+                                return new byte[]{TURN_ID, 1};
+                            } else {
+                                return new byte[]{END_ID, 2};
+                            }
                         }
                     }
                 }
@@ -452,22 +472,25 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
         byte x = 0;
         byte y = 0;
         while (!foundRandom) {
-            x = (byte) genRandomIntRange(0, 16);
-            y = (byte) genRandomIntRange(0, 16);
+            x = (byte) random.nextInt(17);
+            y = (byte) random.nextInt(17);
             if (x + 1 <= SIZE - 1 && y + 1 <= SIZE - 1) {
                 foundRandom =
                         ANCIENT_LABYRINTH_STRUCTURES[y][x] == 0 &&
                                 ANCIENT_LABYRINTH_STRUCTURES[y][x + 1] == 0 &&
                                 ANCIENT_LABYRINTH_STRUCTURES[y + 1][x] == 0 &&
                                 ANCIENT_LABYRINTH_STRUCTURES[y + 1][x + 1] == 0 &&
-                                x >= 12 || x <= 4 &&  y >= 12 || y <= 4;
+                                (x >= 12 || x <= 4) && (y >= 12 || y <= 4) && (y < 14 && y > 2) && (x < 14 && x > 2);
             }
         }
+        byte[] ns = new byte[] {BOSS_N_ID, BOSS_N_ID, BOSS_N_ID, BOSS_N_ID};
 
-        ANCIENT_LABYRINTH_STRUCTURES[y][x] = BOSS_ID;
-        ANCIENT_LABYRINTH_STRUCTURES[y][x + 1] = BOSS_ID;
-        ANCIENT_LABYRINTH_STRUCTURES[y + 1][x] = BOSS_ID;
-        ANCIENT_LABYRINTH_STRUCTURES[y + 1][x + 1] = BOSS_ID;
+        ns[random.nextInt(4)] = BOSS_ID;
+
+        ANCIENT_LABYRINTH_STRUCTURES[y][x] = ns[0];
+        ANCIENT_LABYRINTH_STRUCTURES[y][x + 1] = ns[1];
+        ANCIENT_LABYRINTH_STRUCTURES[y + 1][x] = ns[2];
+        ANCIENT_LABYRINTH_STRUCTURES[y + 1][x + 1] = ns[3];
 
         ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x] = 1;
         ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x + 1] = 1;
@@ -521,7 +544,21 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
             }
             if (e >= 4) {
                 System.out.println("is took " + exit + " passes to generate");
-                return new byte[][][] {ANCIENT_LABYRINTH_STRUCTURES, ANCIENT_LABYRINTH_STRUCTURES_ROTATE};
+                for (byte y = 0; y != SIZE; y++) {
+                    for (byte x = 0; x != SIZE; x++) {
+                        if (ANCIENT_LABYRINTH_STRUCTURES[y][x] == BOSS_N_ID) {
+                            ANCIENT_LABYRINTH_STRUCTURES[y][x] = BOSS_ID;
+                        }
+                    }
+                }
+                if (void0 < 145 || !Configs.AncientWorldSettings.AncientWorldGenerationSettings.isNeedMoreThan50Fill) {
+                    System.out.println("void structures: " + void0);
+                    return new byte[][][] {ANCIENT_LABYRINTH_STRUCTURES, ANCIENT_LABYRINTH_STRUCTURES_ROTATE};
+                } else {
+                    System.out.println("void structures: " + void0);
+                    System.out.println("regenerate");
+                    return genStructuresMap();
+                }
             }
             void1 = getVoidStructures(ANCIENT_LABYRINTH_STRUCTURES);
 
@@ -570,27 +607,62 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
                     boolean is_u = y > 0;
 
                     // gen
-                    if (structure == CROSSROADS_ID || structure == ENTRY_ID) {
-                        setForwardWay(y, f_x, is_f, true);
-                        setBackWay(y, b_x, is_b, true);
-                        setUpWay(u_y, x, is_u, true);
-                        setBelowWay(bl_y, x, is_bl, true);
+                    if (structure == CROSSROADS_ID || structure == ENTRY_ID || structure == BOSS_ID) {
+                        if (forwardStructure == 0) {
+                            setForwardWay(y, f_x, is_f, true);
+                        } else {
+                            setBackStructure(y, f_x, forwardStructure, forwardStructureRotate);
+                        }
+
+                        if (backStructure == 0) {
+                            setBackWay(y, b_x, is_b, true);
+                        } else {
+                            setForwardStructure(y, b_x, backStructure, backStructureRotate);
+                        }
+
+                        if (upYStructure == 0) {
+                            setUpWay(u_y, x, is_u, true);
+                        } else {
+                            setBelowStructure(u_y, x, upYStructure, upYStructureRotate);
+                        }
+
+                        if (belowYStructure == 0) {
+                            setBelowWay(bl_y, x, is_bl, true);
+                        } else {
+                            setUpStructure(bl_y, x, belowYStructure, belowYStructureRotate);
+                        }
                     }
 
                     if (upYStructure == WAY_ID && upYStructureRotate == 2) {
-                        setUpWay(y, x, is_u, false);
+                        if (structure == 0) {
+                            setUpWay(y, x, is_u, false);
+                        } else {
+                            setUpStructure(y, x, structure, structureRotate);
+                        }
                     }
 
                     if (belowYStructure == WAY_ID && belowYStructureRotate == 2) {
-                        setBelowWay(y, x, is_bl, false);
+                        if (structure == 0) {
+                            setBelowWay(y, x, is_bl, false);
+                        } else {
+                            setBelowStructure(y, x, structure, structureRotate);
+                        }
                     }
 
                     if (backStructure == WAY_ID && backStructureRotate == 1) {
-                        setBackWay(y, x, is_b, false);
+                        if (structure == 0) {
+                            setBackWay(y, x, is_b, false);
+                        } else {
+                            setBackStructure(y, x, structure, structureRotate);
+                        }
                     }
 
                     if (forwardStructure == WAY_ID && forwardStructureRotate == 1) {
-                        setForwardWay(y, x, is_f, false);
+                        if (structure == 0) {
+                            setForwardWay(y, x, is_f, false);
+                        } else {
+                            setForwardStructure(y, x, structure, structureRotate);
+                        }
                     }
 
                     // forwardStructure X+
@@ -600,20 +672,56 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
 
                     if (structure == TURN_ID) {
                         if (structureRotate == 1) {
-                            setForwardWay(y, f_x, is_f, true);
-                            setUpWay(u_y, x, is_u, true);
+                            if (forwardStructure == 0) {
+                                setForwardWay(y, f_x, is_f, true);
+                            } else {
+                                setBackStructure(y, f_x, forwardStructure, forwardStructureRotate);
+                            }
+
+                            if (upYStructure == 0) {
+                                setUpWay(u_y, x, is_u, true);
+                            } else {
+                                setBelowStructure(u_y, x, upYStructure, upYStructureRotate);
+                            }
                         }
                         if (structureRotate == 2) {
-                            setForwardWay(y, f_x, is_f, true);
-                            setBelowWay(bl_y, x, is_bl, true);
+                            if (forwardStructure == 0) {
+                                setForwardWay(y, f_x, is_f, true);
+                            } else {
+                                setBackStructure(y, f_x, forwardStructure, forwardStructureRotate);
+                            }
+
+                            if (belowYStructure == 0) {
+                                setBelowWay(bl_y, x, is_bl, true);
+                            } else {
+                                setUpStructure(bl_y, x, belowYStructure, belowYStructureRotate);
+                            }
                         }
                         if (structureRotate == 3) {
-                            setBackWay(y, b_x, is_b, true);
-                            setUpWay(u_y, x, is_u, true);
+                            if (backStructure == 0) {
+                                setBackWay(y, b_x, is_b, true);
+                            } else {
+                                setForwardStructure(y, b_x, backStructure, backStructureRotate);
+                            }
+
+                            if (upYStructure == 0) {
+                                setUpWay(u_y, x, is_u, true);
+                            } else {
+                                setBelowStructure(u_y, x, upYStructure, upYStructureRotate);
+                            }
                         }
                         if (structureRotate == 4) {
-                            setBackWay(y, b_x, is_b, true);
-                            setBelowWay(bl_y, x, is_bl, true);
+                            if (backStructure == 0) {
+                                setBackWay(y, b_x, is_b, true);
+                            } else {
+                                setForwardStructure(y, b_x, backStructure, backStructureRotate);
+                            }
+
+                            if (belowYStructure == 0) {
+                                setBelowWay(bl_y, x, is_bl, true);
+                            } else {
+                                setUpStructure(bl_y, x, belowYStructure, belowYStructureRotate);
+                            }
                         }
                     }
 
@@ -624,29 +732,145 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
 
                     if (structure == FORK_ID) {
                         if (structureRotate == 1) {
-                            setForwardWay(y, f_x, is_f, true);
-                            setBackWay(y, b_x, is_b, true);
-                            setUpWay(u_y, x, is_u, true);
+                            if (forwardStructure == 0) {
+                                setForwardWay(y, f_x, is_f, true);
+                            } else {
+                                setBackStructure(y, f_x, forwardStructure, forwardStructureRotate);
+                            }
+
+                            if (backStructure == 0) {
+                                setBackWay(y, b_x, is_b, true);
+                            } else {
+                                setForwardStructure(y, b_x, backStructure, backStructureRotate);
+                            }
+
+                            if (upYStructure == 0) {
+                                setUpWay(u_y, x, is_u, true);
+                            } else {
+                                setBelowStructure(u_y, x, upYStructure, upYStructureRotate);
+                            }
                         }
                         if (structureRotate == 2) {
-                            setBelowWay(bl_y, x, is_bl, true);
-                            setUpWay(u_y, x, is_u, true);
-                            setForwardWay(y, f_x, is_f, true);
+                            if (belowYStructure == 0) {
+                                setBelowWay(bl_y, x, is_bl, true);
+                            } else {
+                                setUpStructure(bl_y, x, belowYStructure, belowYStructureRotate);
+                            }
+
+                            if (upYStructure == 0) {
+                                setUpWay(u_y, x, is_u, true);
+                            } else {
+                                setBelowStructure(u_y, x, upYStructure, upYStructureRotate);
+                            }
+
+                            if (forwardStructure == 0) {
+                                setForwardWay(y, f_x, is_f, true);
+                            } else {
+                                setBackStructure(y, f_x, forwardStructure, forwardStructureRotate);
+                            }
                         }
                         if (structureRotate == 3) {
-                            setUpWay(u_y, x, is_u, true);
-                            setBelowWay(bl_y, x, is_bl, true);
-                            setBackWay(y, b_x, is_b, true);
+                            if (upYStructure == 0) {
+                                setUpWay(u_y, x, is_u, true);
+                            } else {
+                                setBelowStructure(u_y, x, upYStructure, upYStructureRotate);
+                            }
+
+                            if (belowYStructure == 0) {
+                                setBelowWay(bl_y, x, is_bl, true);
+                            } else {
+                                setUpStructure(bl_y, x, belowYStructure, belowYStructureRotate);
+                            }
+
+                            if (backStructure == 0) {
+                                setBackWay(y, b_x, is_b, true);
+                            } else {
+                                setForwardStructure(y, b_x, backStructure, backStructureRotate);
+                            }
                         }
                         if (structureRotate == 4) {
-                            setForwardWay(y, f_x, is_f, true);
-                            setBackWay(y, b_x, is_b, true);
-                            setBelowWay(bl_y, x, is_bl, true);
+                            if (forwardStructure == 0) {
+                                setForwardWay(y, f_x, is_f, true);
+                            } else {
+                                setBackStructure(y, f_x, forwardStructure, forwardStructureRotate);
+                            }
+
+                            if (backStructure == 0) {
+                                setBackWay(y, b_x, is_b, true);
+                            } else {
+                                setForwardStructure(y, b_x, backStructure, backStructureRotate);
+                            }
+
+                            if (belowYStructure == 0) {
+                                setBelowWay(bl_y, x, is_bl, true);
+                            } else {
+                                setUpStructure(bl_y, x, belowYStructure, belowYStructureRotate);
+                            }
                         }
                     }
 
                 }
             }
+        }
+    }
+
+    protected static void setForwardStructure(byte y, byte x, byte structure, byte structureRotate) {
+        if (structure == WAY_ID && structureRotate == 2) {
+            setFork(y, x, 2);
+        } else if (structure == TURN_ID) {
+            if (structureRotate == 3) {
+                setFork(y, x, 1);
+            }
+            if (structureRotate == 4) {
+                setFork(y, x, 4);
+            }
+        } else if (structure == FORK_ID && structureRotate == 3) {
+            setCrossroads(y, x);
+        }
+    }
+
+    protected static void setBackStructure(byte y, byte x, byte structure, byte structureRotate) {
+        if (structure == WAY_ID && structureRotate == 2) {
+            setFork(y, x, 3);
+        } else if (structure == TURN_ID) {
+            if (structureRotate == 1) {
+                setFork(y, x, 1);
+            }
+            if (structureRotate == 2) {
+                setFork(y, x, 4);
+            }
+        } else if (structure == FORK_ID && structureRotate == 2) {
+            setCrossroads(y, x);
+        }
+    }
+
+    protected static void setUpStructure(byte y, byte x, byte structure, byte structureRotate) {
+        if (structure == WAY_ID && structureRotate == 1) {
+            setFork(y, x, 1);
+        } else if (structure == TURN_ID) {
+            if (structureRotate == 2) {
+                setFork(y, x, 2);
+            }
+            if (structureRotate == 4) {
+                setFork(y, x, 3);
+            }
+        } else if (structure == FORK_ID && structureRotate == 4) {
+            setCrossroads(y, x);
+        }
+    }
+
+    protected static void setBelowStructure(byte y, byte x, byte structure, byte structureRotate) {
+        if (structure == WAY_ID && structureRotate == 1) {
+            setFork(y, x, 4);
+        } else if (structure == TURN_ID) {
+            if (structureRotate == 1) {
+                setFork(y, x, 2);
+            }
+            if (structureRotate == 3) {
+                setFork(y, x, 3);
+            }
+        } else if (structure == FORK_ID && structureRotate == 1) {
+            setCrossroads(y, x);
         }
     }
 
@@ -680,5 +904,15 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
             ANCIENT_LABYRINTH_STRUCTURES_IN_WORK[y][x] = m[0];
             ANCIENT_LABYRINTH_STRUCTURES_ROTATE_IN_WORK[y][x] = m[1];
         }
+    }
+
+    protected static void setFork(byte y, byte x, int rotate) {
+        ANCIENT_LABYRINTH_STRUCTURES_IN_WORK[y][x] = FORK_ID;
+        ANCIENT_LABYRINTH_STRUCTURES_ROTATE_IN_WORK[y][x] = (byte) rotate;
+    }
+
+    protected static void setCrossroads(byte y, byte x) {
+        ANCIENT_LABYRINTH_STRUCTURES_IN_WORK[y][x] = CROSSROADS_ID;
+        ANCIENT_LABYRINTH_STRUCTURES_ROTATE_IN_WORK[y][x] = (byte) 1;
     }
 }

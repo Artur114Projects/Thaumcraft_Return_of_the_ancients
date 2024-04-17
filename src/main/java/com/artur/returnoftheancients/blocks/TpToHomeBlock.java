@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.blocks;
 
+import com.artur.returnoftheancients.ancientworldutilities.Configs;
 import com.artur.returnoftheancients.ancientworldutilities.WorldData;
 import com.artur.returnoftheancients.handlers.EventsHandler;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
@@ -58,8 +59,8 @@ public class TpToHomeBlock extends BaseBlock {
         if (!entityIn.world.isRemote && entityIn instanceof EntityPlayerMP) {
             EntityPlayer player = (EntityPlayer) entityIn;
             if (player.getServer() != null && player.world != null) {
-                EventsHandler.tpToHome(player, 0, 8, 3, 8);
-                player.move(MoverType.PLAYER, 8, 3, 8);
+                EventsHandler.tpToHome(player);
+                player.move(MoverType.PLAYER, Configs.PortalSettings.x + 3, 3, Configs.PortalSettings.z + 3);
             }
         }
     }

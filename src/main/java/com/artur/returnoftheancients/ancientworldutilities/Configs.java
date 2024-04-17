@@ -28,13 +28,16 @@ public class Configs {
     public static MobGenSettings MobGenSettings = new MobGenSettings();
 
     public static class PortalSettings {
-        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.x") // Локализированное имя пункта (Если не будет указано, пункт будет именть название переменной)
+        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.x")
+        @Config.Comment("only affects new worlds")
         public int x = 5;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.portal.z")
+        @Config.Comment("only affects new worlds")
         public int z = 5;
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.y") // Локализированное имя пункта (Если не будет указано, пункт будет именть название переменной)
+        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.y")
+        @Config.Comment("only affects new worlds")
         public int y = -31;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.portal.isgen")
@@ -45,7 +48,7 @@ public class Configs {
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.portal.modId")
         @Config.Comment("Here you can specify with items from which mods you can get into the ancient world")
-        // baubles , "thaumicaugmentation", ""
+        // baubles , "thaumicaugmentation", "", "baubles"
         public String[] modId = new String[] {Referense.MODID, "minecraft", "thaumcraft"};
     }
 
@@ -56,7 +59,10 @@ public class Configs {
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.any.primalbladespeed")
         @Config.RequiresMcRestart
-        public float primalBladeSpeed = -3.2f;
+        public double primalBladeSpeed = -3.2D;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.any.uog")
+        public boolean useOldLoadingGui = false;
     }
 
     public static class AncientWorldSettings {
@@ -70,7 +76,7 @@ public class Configs {
         public boolean isOldGenerator = true;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.crd")
-        public boolean cantChangeRenderDistanceChunks = true;
+        public boolean cantChangeRenderDistanceChunks = false;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.ccg")
         public boolean cantChangeGammaSetting = true;
@@ -79,24 +85,34 @@ public class Configs {
         public boolean noPeaceful = true;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.isw")
-        public boolean isSetWarp = true;
+        public boolean isSetWarp = false;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.nnv")
         public boolean noNightVision = true;
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.nnv")
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.daw")
         public boolean isDeadToAncientWorld = false;
     }
 
     public static class AncientWorldGenerationSettings {
-
-        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs")
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.tc")
         @Config.Comment("the higher the number, the lower the chance")
-        public int turnChance = 8;
+        public int turnChance = 1;
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs")
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.fc")
         @Config.Comment("the higher the number, the lower the chance")
         public int forkChance = 8;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.ctr")
+        @Config.Comment("the higher the number, the lower the chance")
+        public int chanceToReplaceWayToFork = 1;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.cc")
+        @Config.Comment("the higher the number, the lower the chance")
+        public int crossroadsChance = 16;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.nt5")
+        public boolean isNeedMoreThan50Fill = true;
 
     }
 

@@ -40,7 +40,7 @@ public interface IALGS {
     String AIR_CUBE_STRING_ID = "air_cube";
 
     byte BOSS_ID = 7;
-    byte BOSS_CHANCE = 8;
+    byte BOSS_N_ID = -7;
     byte BOSS_ROTATE_MAX = 1;
     byte[] BOSS_MIXING = new byte[] {};
     String BOSS_STRING_ID = "ancient_boss";

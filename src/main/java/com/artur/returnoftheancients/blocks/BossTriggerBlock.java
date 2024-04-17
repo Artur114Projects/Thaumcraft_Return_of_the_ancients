@@ -57,19 +57,16 @@ public class BossTriggerBlock extends BaseBlock {
                 case 0:
                     EntityCultistPortalGreater p = new EntityCultistPortalGreater(worldIn);
                     p.setPositionAndUpdate(pos.getX(), pos.getY() + 2, pos.getZ() + 1);
-                    p.getEntityData().setLong("A_ID", worldData.saveData.getLong("mobId"));
                     worldIn.spawnEntity(p);
                     break;
                 case 1:
                     EntityEldritchGolem g = new EntityEldritchGolem(worldIn);
                     g.setPositionAndUpdate(pos.getX(), pos.getY() + 2, pos.getZ() + 1);
-                    g.getEntityData().setLong("A_ID", worldData.saveData.getLong("mobId"));
                     worldIn.spawnEntity(g);
                     break;
                 case 2:
                     EntityEldritchWarden w = new EntityEldritchWarden(worldIn);
                     w.setPositionAndUpdate(pos.getX(), pos.getY() + 2, pos.getZ() + 1);
-                    w.getEntityData().setLong("A_ID", worldData.saveData.getLong("mobId"));
                     w.setSwingingArms(true);
                     worldIn.spawnEntity(w);
                 break;

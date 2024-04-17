@@ -304,10 +304,10 @@ public class EventsHandler {
             if (e.player.isCreative()) {
                 e.player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 999999, 0));
             }
-            capIsSet = false;
             WorldData worldData = WorldData.get();
             worldData.saveData.setBoolean(IALGS.isBossSpawn, false);
             worldData.markDirty();
+            capIsSet = false;
         }
     }
 
@@ -324,6 +324,12 @@ public class EventsHandler {
 //                event.setCanceled(true);
 //            }
 //        }
+        if (!event.getEntity().isNonBoss() && event.getEntity().dimension == ancient_world_dim_id) {
+            if (!WorldData.get().saveData.getBoolean(IALGS.isBossSpawn)) {
+                event.getWorld().removeEntity(event.getEntity());
+                event.setCanceled(true);
+            }
+        }
     }
 
     @SubscribeEvent

@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.commads;
 
 import com.artur.returnoftheancients.ancientworldutilities.WorldData;
 
+import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -32,6 +33,10 @@ public class DataManager extends CommandBase {
         EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
         WorldData worldData = WorldData.get();
         if (args[0].equals("set") && args.length == 4) {
+            if (args[1].equals("setnodropprimalblade")) {
+                WorldData.get().saveData.setBoolean(IALGS.isPrimalBladeDropKey, false);
+                return;
+            }
             boolean data = false;
             switch (args[3]) {
                 case "0":
@@ -63,8 +68,11 @@ public class DataManager extends CommandBase {
         } else if (args[0].equals("help") && args.length == 1){
             playerMP.sendMessage(new TextComponentString("data set dataType key value"));
             playerMP.sendMessage(new TextComponentString("data get dataType key"));
+            playerMP.sendMessage(new TextComponentString("data setnodropprimalblade"));
         } else {
-            playerMP.sendMessage(new TextComponentString("Gavno"));
+            playerMP.sendMessage(new TextComponentString("data set dataType key value"));
+            playerMP.sendMessage(new TextComponentString("data get dataType key"));
+            playerMP.sendMessage(new TextComponentString("data setnodropprimalblade"));
         }
     }
 }

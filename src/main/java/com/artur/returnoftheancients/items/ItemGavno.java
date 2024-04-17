@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.items;
 
 
-import com.artur.returnoftheancients.ancientworldutilities.LoadingGui;
 import com.artur.returnoftheancients.ancientworldutilities.SkalaGui;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,7 +29,7 @@ public class ItemGavno extends BaseItem{
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		FMLCommonHandler.instance().showGuiScreen(new LoadingGui());
+		FMLCommonHandler.instance().showGuiScreen(new SkalaGui());
 		return EnumActionResult.SUCCESS;
 	}
 

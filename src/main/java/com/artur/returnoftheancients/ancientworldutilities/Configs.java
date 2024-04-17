@@ -49,7 +49,7 @@ public class Configs {
         @Config.LangKey(Referense.MODID + ".cfg.sub.portal.modId")
         @Config.Comment("Here you can specify with items from which mods you can get into the ancient world")
         // baubles , "thaumicaugmentation", "", "baubles"
-        public String[] modId = new String[] {Referense.MODID, "minecraft", "thaumcraft"};
+        public String[] modId = new String[] {Referense.MODID, "minecraft", "thaumcraft", "baubles"};
     }
 
     public static class Any {
@@ -73,7 +73,7 @@ public class Configs {
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.og")
         @Config.Comment("Should I use an old generator?")
-        public boolean isOldGenerator = true;
+        public boolean isOldGenerator = false;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.crd")
         public boolean cantChangeRenderDistanceChunks = false;

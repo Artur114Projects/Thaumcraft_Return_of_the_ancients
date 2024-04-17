@@ -175,11 +175,22 @@
 }
 
 cainge log {
-    переработана механика выжода из портала 
+    переработана механика выхода из портала 
     добавлена проверка на наличие предметов из других модов
     изменен gui
     добавленны конфиги
     переписан процедурный генератор 
-    переписана часть кода
     множество правок и изменений
+}
+описание {
+    The portal is generated in the center of the world - the generation location can be changed in the configs.
+    you can also take items with you only from mods
+    Thaumcraft, baubles, minecraft, return of the ancients
+    The ancient world itself is empty, but there is an ancient labyrinth in which you will find yourself
+    The labyrinth is generated every time you enter the portal, the size of the labyrinth is 17 by 17 chunks.
+    In the labyrinth there is a room with a boss, defeating which is the passage of the labyrinth
+    The boss is 1 of 4 Thaumcraft bosses except the tentacle "it's too weak" the boss is chosen randomly
+    After defeating the boss, a portal to the normal world will appear and, once per world, a chest with a primordial blade “sword for 24 damage, damage can be changed in the configs”
+    When you die in the ancient world, you will not lose things and you will not even die; you will return to the ordinary world
+    also in the ancient world you cannot break blocks, place blocks, use a potion of night vision, set the brightness to more than 0. all this can be configured in the configs
 }

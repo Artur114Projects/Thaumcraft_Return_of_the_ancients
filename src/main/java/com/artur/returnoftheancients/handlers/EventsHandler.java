@@ -11,6 +11,7 @@ import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -134,9 +135,14 @@ public class EventsHandler {
                             player.removePotionEffect(Potion.getPotionById(20));
                             tpToHome(player);
                             System.out.println("You dead");
+                            return;
                         }
                     } else {
                         player.getEntityData().setBoolean(RemoveUnresolvedItems.dead, false);
+                        return;
+                    }
+                    if (Handler.genRandomIntRange(0, Configs.AncientWorldSettings.chanceIgnoringArmor) == 0) {
+                        player.setHealth(player.getHealth() - e.getAmount());
                     }
                 }
             }
@@ -324,10 +330,16 @@ public class EventsHandler {
 //                event.setCanceled(true);
 //            }
 //        }
-        if (!event.getEntity().isNonBoss() && event.getEntity().dimension == ancient_world_dim_id) {
-            if (!WorldData.get().saveData.getBoolean(IALGS.isBossSpawn)) {
-                event.getWorld().removeEntity(event.getEntity());
-                event.setCanceled(true);
+        if (event.getEntity().dimension == ancient_world_dim_id) {
+            if (!event.getEntity().isNonBoss()) {
+                if (!WorldData.get().saveData.getBoolean(IALGS.isBossSpawn)) {
+                    event.getWorld().removeEntity(event.getEntity());
+                    event.setCanceled(true);
+                }
+            }
+            if (event.getEntity() instanceof EntityLiving) {
+                EntityLiving living = (EntityLiving) event.getEntity();
+                living.addPotionEffect(new PotionEffect(MobEffects.SPEED, 999999999, Configs.AncientWorldSettings.speedAmplifier - 1));
             }
         }
     }

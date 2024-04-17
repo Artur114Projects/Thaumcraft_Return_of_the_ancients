@@ -92,6 +92,13 @@ public class Configs {
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.daw")
         public boolean isDeadToAncientWorld = false;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.cia")
+        @Config.Comment("the higher the number, the lower the chance")
+        public int chanceIgnoringArmor = 2;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.cia")
+        public int speedAmplifier = 2;
     }
 
     public static class AncientWorldGenerationSettings {

@@ -72,6 +72,7 @@ public class TpToAncientWorldBlock extends BaseBlock{
                 EntityPlayer player = (EntityPlayer) entityIn;
                 ArrayList<String> ID = Handler.isPlayerUseUnresolvedItems(player);
                 if (ID.isEmpty() && (EventsHandler.getDifficultyId() != 0 || !Configs.AncientWorldSettings.noPeaceful)) {
+                    player.fallDistance = 0;
                     if (!Configs.Any.useOldLoadingGui) {
                         FMLCommonHandler.instance().showGuiScreen(new LoadingGui());
                     } else {

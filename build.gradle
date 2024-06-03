@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.1.0 betta'
+version = 'v1.1.1-betta'
 group = 'com.artur.returnoftheancients' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Return of the ancients'
 
@@ -88,7 +88,7 @@ jar {
         attributes([
             "Specification-Title": "Thaumcraft: Return of the ancients",
             "Specification-Vendor": "returnoftheancients",
-            "Specification-Version": "1.1.0 betta", // We are version 1 of ourselves
+            "Specification-Version": "v1.1.1-betta", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"returnoftheancients",

@@ -1,8 +1,7 @@
-package com.artur.returnoftheancients.ancientworldutilities;
+package com.artur.returnoftheancients.misc;
 
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.fml.common.FMLCommonHandler;

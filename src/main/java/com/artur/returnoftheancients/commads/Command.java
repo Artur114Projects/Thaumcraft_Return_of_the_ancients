@@ -1,27 +1,13 @@
 package com.artur.returnoftheancients.commads;
 
-import baubles.api.cap.IBaublesItemHandler;
-import baubles.api.inv.BaublesInventoryWrapper;
-import baubles.common.container.ContainerPlayerExpanded;
-import com.artur.returnoftheancients.ancientworldutilities.Configs;
-import com.artur.returnoftheancients.ancientworldutilities.WorldData;
-import com.artur.returnoftheancients.generation.generators.AncientLabyrinthGenerator;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
-import com.artur.returnoftheancients.generation.worlds.WorldProviderAncientWorld;
 import com.artur.returnoftheancients.init.InitDimensions;
-import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.utils.interfaces.IStructure;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Rotation;
-import thaumcraft.common.entities.monster.EntityMindSpider;
-
-import java.awt.*;
-import java.util.Random;
 
 
 public class Command  extends CommandBase implements IStructure {

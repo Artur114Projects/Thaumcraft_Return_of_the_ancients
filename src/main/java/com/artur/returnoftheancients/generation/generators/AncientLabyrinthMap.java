@@ -1,12 +1,12 @@
 package com.artur.returnoftheancients.generation.generators;
 
-import com.artur.returnoftheancients.ancientworldutilities.Configs;
+import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 
 import java.util.Random;
 
 import static com.artur.returnoftheancients.generation.generators.AncientLabyrinthGeneratorHandler.getVoidStructures;
-import static com.artur.returnoftheancients.handlers.Handler.*;
+import static com.artur.returnoftheancients.handlers.HandlerR.*;
 
 public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IALGS {
 
@@ -87,7 +87,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
         // belowYStructure Z+
         // upYStructure Z-
 
-        if (random.nextInt(Configs.AncientWorldSettings.AncientWorldGenerationSettings.crossroadsChance + 1) == 0) {
+        if (random.nextInt(TRAConfigs.AncientWorldSettings.AncientWorldGenerationSettings.crossroadsChance + 1) == 0) {
             if (x < SIZE - 1 && x > 0 && y < SIZE - 1 && y > 0) {
                 if (wayRotate == 1) {
                     if (upYStructure == 0 && belowYStructure == 0) {
@@ -102,7 +102,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
             }
         }
 
-        if (random.nextInt(Configs.AncientWorldSettings.AncientWorldGenerationSettings.turnChance + 1) == 0) {
+        if (random.nextInt(TRAConfigs.AncientWorldSettings.AncientWorldGenerationSettings.turnChance + 1) == 0) {
             if (index == f_index) {
                 if (y == 0 || y == 16) {
                     if (y == 0) {
@@ -213,7 +213,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
             }
         } // TURN
 
-        if (genRandomIntRange(0, Configs.AncientWorldSettings.AncientWorldGenerationSettings.forkChance) == -9999999) {
+        if (genRandomIntRange(0, TRAConfigs.AncientWorldSettings.AncientWorldGenerationSettings.forkChance) == -9999999) {
             if (index == f_index) {
                 if (y == 0 || y == 16) {
                     if (y == 0) {
@@ -295,7 +295,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
             if (is_b) {
                 if (backStructure != 0) {
                     if (random.nextInt(2) == 0) {
-                        if (random.nextInt(Configs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && backStructure == WAY_ID) {
+                        if (random.nextInt(TRAConfigs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && backStructure == WAY_ID) {
                             if (is_bl && belowYStructure == 0) {
                                 return new byte[]{TURN_ID, 2};
                             } else if (is_u && upYStructure == 0) {
@@ -338,7 +338,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
             }
             if (is_f) {
                 if (forwardStructure != 0) {
-                    if (random.nextInt(Configs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && forwardStructure == WAY_ID) {
+                    if (random.nextInt(TRAConfigs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && forwardStructure == WAY_ID) {
                         if (random.nextInt(2) == 0) {
                             if (is_bl && belowYStructure == 0) {
                                 return new byte[]{TURN_ID, 4};
@@ -382,7 +382,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
             }
             if (is_u) {
                 if (upYStructure != 0) {
-                    if (random.nextInt(Configs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && upYStructure == WAY_ID) {
+                    if (random.nextInt(TRAConfigs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && upYStructure == WAY_ID) {
                         if (random.nextInt(2) == 0) {
                             if (is_f && forwardStructure == 0) {
                                 return new byte[]{TURN_ID, 2};
@@ -426,7 +426,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
             }
             if (is_bl) {
                 if (belowYStructure != 0) {
-                    if (random.nextInt(Configs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && belowYStructure == WAY_ID) {
+                    if (random.nextInt(TRAConfigs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && belowYStructure == WAY_ID) {
                         if (random.nextInt(2) == 0) {
                             if (is_f && forwardStructure == 0) {
                                 return new byte[]{TURN_ID, 1};
@@ -551,7 +551,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
                         }
                     }
                 }
-                if (void0 < 145 || !Configs.AncientWorldSettings.AncientWorldGenerationSettings.isNeedMoreThan50Fill) {
+                if (void0 < 145 || !TRAConfigs.AncientWorldSettings.AncientWorldGenerationSettings.isNeedMoreThan50Fill) {
                     System.out.println("void structures: " + void0);
                     return new byte[][][] {ANCIENT_LABYRINTH_STRUCTURES, ANCIENT_LABYRINTH_STRUCTURES_ROTATE};
                 } else {

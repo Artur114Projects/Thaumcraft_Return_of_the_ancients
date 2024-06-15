@@ -1,36 +1,29 @@
 package com.artur.returnoftheancients.generation.generators;
 
-import static com.artur.returnoftheancients.ancientworldutilities.Configs.AncientWorldSettings;
-import static com.artur.returnoftheancients.ancientworldutilities.Configs.MobGenSettings;
+import static com.artur.returnoftheancients.misc.TRAConfigs.AncientWorldSettings;
+import static com.artur.returnoftheancients.misc.TRAConfigs.MobGenSettings;
 
-import com.artur.returnoftheancients.ancientworldutilities.MCTimer;
-import com.artur.returnoftheancients.ancientworldutilities.WorldData;
-import static com.artur.returnoftheancients.handlers.Handler.*;
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
-import static com.artur.returnoftheancients.generation.generators.AncientLabyrinthGeneratorHandler.*;
 
+import com.artur.returnoftheancients.events.MCTimer;
 import com.artur.returnoftheancients.handlers.EventsHandler;
+import com.artur.returnoftheancients.handlers.FreeTeleporter;
+import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
-import com.artur.returnoftheancients.utils.interfaces.IMobsGen;
 import com.artur.returnoftheancients.utils.interfaces.IWorldTimer;
 import com.artur.returnoftheancients.utils.interfaces.IStructure;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import thaumcraft.api.items.ItemsTC;
-import thaumcraft.common.entities.monster.EntityEldritchGuardian;
-import thaumcraft.common.entities.monster.EntityInhabitedZombie;
-import thaumcraft.common.entities.monster.EntityMindSpider;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.util.Arrays;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
 
 public class AncientLabyrinthGenerator implements IStructure, IALGS{
     protected static byte[][] ANCIENT_LABYRINTH_STRUCTURES = new byte[17][17];
@@ -39,9 +32,11 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
     protected static WorldServer world;
     protected static final byte[] YX_states = new byte[2];
     protected static int bossGen = 0;
-
+    protected static ArrayList<EntityPlayer> players = new ArrayList<>();
+    protected static boolean isGenerateStart = false;
     public static boolean isGen = false;
     public static byte PHASE = -1;
+    @Deprecated
     public static long mobId;
 
     /*
@@ -59,6 +54,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
     public static byte[][] getAncientLabyrinthStructuresRotate() {return ANCIENT_LABYRINTH_STRUCTURES_ROTATE;}
 
     // размещение структур
+    @Deprecated
     protected static void genStructuresInWorld() {
         for (byte y = 0; y != SIZE; y++) {
             for (byte x = 0; x != SIZE; x++) {
@@ -128,6 +124,91 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         GenStructure.generateStructure(world, 4, 124, -14, "ancient_developer_platform");
     }
 
+    static byte xt = 0;
+    static byte yt = 0;
+    static boolean please = false;
+
+    @SubscribeEvent
+    public void Tick(TickEvent.WorldTickEvent e) {
+        if (please && !e.world.isRemote) {
+            System.out.println("please " + "x" + xt + " y" + yt);
+            if (xt == SIZE) {
+                yt++;
+                xt = 0;
+            }
+            if (yt == SIZE) {
+                yt = 0;
+                xt = 0;
+                settings.setRotation(Rotation.NONE);
+//                GenStructure.generateStructure(world, 4, 124, -14, "ancient_developer_platform");
+                gen1();
+                please = false;
+                return;
+            }
+            byte structure = ANCIENT_LABYRINTH_STRUCTURES[yt][xt];
+            byte structureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[yt][xt];
+            int cx = 128 - 16 * xt;
+            int cz = 128 - 16 * yt;
+            int dx = 0;
+            int dz = 0;
+            switch (structureRotate) {
+                case 1:
+                    settings.setRotation(Rotation.NONE);
+                    break;
+                case 2:
+                    settings.setRotation(Rotation.CLOCKWISE_90);
+                    dx = -15;
+                    break;
+                case 3:
+                    settings.setRotation(Rotation.COUNTERCLOCKWISE_90);
+                    dz = -15;
+                    break;
+                case 4:
+                    settings.setRotation(Rotation.CLOCKWISE_180);
+                    dz = -15;
+                    dx = -15;
+                    break;
+            }
+            cx = cx - dx;
+            cz = cz - dz;
+            switch (structure) {
+                case WAY_ID:
+                    GenStructure.generateStructure(world, cx, 80, cz, WAY_STRING_ID);
+                    break;
+                case CROSSROADS_ID:
+                    GenStructure.generateStructure(world, cx, 80, cz, CROSSROADS_STRING_ID);
+                    break;
+                case ENTRY_ID:
+                    GenStructure.generateStructure(world, cx, 80, cz, ENTRY_STRING_ID);
+                    break;
+                case TURN_ID:
+                    GenStructure.generateStructure(world, cx, 80, cz, TURN_STRING_ID);
+                    break;
+                case FORK_ID:
+                    GenStructure.generateStructure(world, cx, 80, cz, FORK_STRING_ID);
+                    break;
+                case END_ID:
+                    GenStructure.generateStructure(world, cx, 80, cz, END_STRING_ID);
+                    break;
+                case BOSS_ID:
+                    bossGen++;
+                    if (bossGen == 4) {
+                        GenStructure.generateStructure(world, cx, 79, cz, BOSS_STRING_ID);
+                        bossGen = 0;
+                    }
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("WTF????? " + structure);
+                    break;
+            }
+            YX_states[0] = yt;
+            YX_states[1] = xt;
+            xt++;
+        }
+    }
+
     protected static void clearArea() {
         for (byte y = 0; y != SIZE; y++) {
             for (byte x = 0; x != SIZE; x++) {
@@ -140,7 +221,9 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             }
         }
     }
+
     // EldritchGuardian MindSpider InhabitedZombie
+    @Deprecated
     public static void genMobs() {
 //        byte[][] ANCIENT_LABYRINTH_MOB_ELDRITCH_GUARDIAN = genMobsMap();
 //        byte[][] ANCIENT_LABYRINTH_MOB_MIND_SPIDER = genMobsMap();
@@ -193,7 +276,8 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
 //        Z.gen(ANCIENT_LABYRINTH_MOB_INHABITED_ZOMBIE);
     }
 
-    public static void startGenMobs() {
+    @Deprecated
+    protected static void startGenMobs() {
         world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(ancient_world_dim_id);
         IWorldTimer iWorldTimer = new IWorldTimer() {
             @Override
@@ -240,16 +324,49 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
 
     // разное
     public static float getPercentages() {return (float) (((16 * YX_states[0]) + (YX_states[1] + 1)) / 2.89);}
+    public static void tpToAncientWorld(EntityPlayer player) {
+        if (world == null) {
+            world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(ancient_world_dim_id);
+        }
+        if (!WorldData.get().saveData.getBoolean(isAncientWorldGenerateKey) || world.playerEntities.isEmpty()) {
+            if (!world.playerEntities.isEmpty() && !isGenerateStart) {
+                for (EntityPlayer player1 : world.playerEntities) {
+                    EventsHandler.tpToHome(player1);
+                }
+            }
+            players.add(player);
+            FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 126, -10);
+            HandlerR.setLoadingGuiState((EntityPlayerMP) player, true);
+            if (!isGenerateStart) {
+                genAncientLabyrinth();
+            } else if (world.playerEntities.isEmpty()) {
+                genAncientLabyrinth();
+            }
+        } else {
+            if (player.isCreative()) {
+                FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 126, -10);
+            } else {
+                FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 253, 8);
+            }
+        }
+    }
 
-    public static void genAncientLabyrinth(EntityPlayer player) {
+    protected static void genAncientLabyrinth() {
+        WorldData worldData = WorldData.get();
+        worldData.saveData.setBoolean(isAncientWorldGenerateKey, false);
+        worldData.saveData.setBoolean(isBossSpawn, false);
+        worldData.markDirty();
         isGen = false;
-        world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(ancient_world_dim_id);
+        isGenerateStart = true;
         EventsHandler.setAncientWorldLoad(false);
+        GenStructure.generateStructure(world, 4, 124, -14, "ancient_developer_platform");
+
 //        Random r = new Random();
 //        mobId = r.nextLong();
 //        WorldData worldData = WorldData.get();
 //        worldData.saveData.setLong("mobId", mobId);
 //        worldData.markDirty();
+
         System.out.println("Generating ancient labyrinth start");
         PHASE = 0;
         byte[][][] a;
@@ -260,23 +377,40 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         }
         ANCIENT_LABYRINTH_STRUCTURES = a[0];
         ANCIENT_LABYRINTH_STRUCTURES_ROTATE = a[1];
+
         PHASE = 1;
         System.out.println("Cleaning area");
         clearArea();
         genAncientEntryWay();
+
         PHASE = 2;
         System.out.println("Generate structures");
-        genStructuresInWorld();
+
+        please = true;
+//        genStructuresInWorld();
+    }
+    private static void gen1() {
         PHASE = 3;
         System.out.println("Reload light");
         reloadLight();
         System.out.println("Generate ancient labyrinth finish!");
         PHASE = 4;
         isGen = true;
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
+        for (EntityPlayer player : players) {
+            HandlerR.setLoadingGuiState((EntityPlayerMP) player, false);
+            if (player != null) {
+                player.setHealth(20);
+                if (player.isCreative()) {
+                    FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 126, -10);
+                } else {
+                    FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 253, 8);
+                }
+            }
         }
+        WorldData worldData = WorldData.get();
+        worldData.saveData.setBoolean(isAncientWorldGenerateKey, true);
+        worldData.markDirty();
+        players.clear();
+        isGenerateStart = false;
     }
 }

@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.generation.generators;
 
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 
-import static com.artur.returnoftheancients.handlers.Handler.genRandomIntRange;
+import static com.artur.returnoftheancients.handlers.HandlerR.genRandomIntRange;
 
 public class AncientLabyrinthOldMap extends AncientLabyrinthGeneratorHandler implements IALGS {
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES = new byte[17][17];

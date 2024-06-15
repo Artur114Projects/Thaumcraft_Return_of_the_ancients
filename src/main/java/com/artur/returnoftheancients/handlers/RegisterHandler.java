@@ -1,9 +1,7 @@
 package com.artur.returnoftheancients.handlers;
 
-import com.artur.returnoftheancients.ancientworldutilities.GenPortal;
-import com.artur.returnoftheancients.ancientworldutilities.MCTimer;
-import com.artur.returnoftheancients.ancientworldutilities.PortalEvent;
-import com.artur.returnoftheancients.ancientworldutilities.RemoveUnresolvedItems;
+import com.artur.returnoftheancients.events.RemoveUnresolvedItems;
+import com.artur.returnoftheancients.generation.generators.AncientLabyrinthGenerator;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.sounds.ModSounds;
@@ -34,10 +32,11 @@ public class RegisterHandler {
     {
 		MinecraftForge.EVENT_BUS.register(new EventsHandler());
 		MinecraftForge.EVENT_BUS.register(new ModSounds());
-		MinecraftForge.EVENT_BUS.register(new MCTimer());
+//		MinecraftForge.EVENT_BUS.register(new MCTimer());
 //		MinecraftForge.EVENT_BUS.register(new PortalEvent());
-		MinecraftForge.EVENT_BUS.register(new GenPortal());
+//		MinecraftForge.EVENT_BUS.register(new GenPortal());
 		MinecraftForge.EVENT_BUS.register(new RemoveUnresolvedItems());
+		MinecraftForge.EVENT_BUS.register(new AncientLabyrinthGenerator());
 	}
 
 	@SubscribeEvent

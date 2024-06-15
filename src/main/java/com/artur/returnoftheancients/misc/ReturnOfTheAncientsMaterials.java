@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.ancientworldutilities;
+package com.artur.returnoftheancients.misc;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.common.util.EnumHelper;

@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.ancientworldutilities;
+package com.artur.returnoftheancients.events;
 
 import com.artur.returnoftheancients.utils.interfaces.IWorldTimer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

@@ -1,11 +1,15 @@
 package com.artur.returnoftheancients.proxy;
 
+import com.artur.returnoftheancients.main.MainR;
+import com.artur.returnoftheancients.network.ClientPacketLoadingGui;
+import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 
 public class ClientProxy extends CommonProxy 
@@ -19,6 +23,8 @@ public class ClientProxy extends CommonProxy
     @Override
     public void preInit(FMLPreInitializationEvent event)
     {
+        MainR.NETWORK.registerMessage(new ClientPacketPlayerNBTData.HandlerPND(), ClientPacketPlayerNBTData.class, 0, Side.CLIENT);
+        MainR.NETWORK.registerMessage(new ClientPacketLoadingGui.HandlerLG(), ClientPacketLoadingGui.class, 1, Side.CLIENT);
         super.preInit(event);
     }
 

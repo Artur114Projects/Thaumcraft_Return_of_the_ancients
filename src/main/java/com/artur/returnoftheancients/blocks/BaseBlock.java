@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitItems;
-import com.artur.returnoftheancients.main.Main;
+import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.utils.interfaces.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -28,6 +28,6 @@ public abstract class BaseBlock extends Block implements IHasModel {
 
     @Override
     public void registerModels() {
-        Main.proxy.registerItemRenderer(item, 0, "inventory");
+        MainR.proxy.registerItemRenderer(item, 0, "inventory");
     }
 }

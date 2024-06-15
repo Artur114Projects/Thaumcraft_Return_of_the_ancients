@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.ancientworldutilities;
+package com.artur.returnoftheancients.misc;
 
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraftforge.common.config.Config;
@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Config(modid = Referense.MODID)
 @Mod.EventBusSubscriber(modid = Referense.MODID)
-public class Configs {
+public class TRAConfigs {
 
     @Config.LangKey(Referense.MODID + ".cfg.sub.portal")
     @Config.Comment("Here you can change item description")
@@ -79,7 +79,7 @@ public class Configs {
         public boolean cantChangeRenderDistanceChunks = false;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.ccg")
-        public boolean cantChangeGammaSetting = true;
+        public boolean cantChangeGammaSetting = false;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.np")
         public boolean noPeaceful = true;

@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.commads;
 
-import com.artur.returnoftheancients.ancientworldutilities.WorldData;
+import com.artur.returnoftheancients.misc.WorldData;
 
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import net.minecraft.command.CommandBase;

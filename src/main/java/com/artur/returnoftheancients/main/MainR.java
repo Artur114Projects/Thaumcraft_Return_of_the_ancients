@@ -6,7 +6,6 @@ import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.misc.ReturnOfTheAncientsTab;
 import com.artur.returnoftheancients.proxy.CommonProxy;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.utils.interfaces.IMobsGen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -16,13 +15,16 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 
 @Mod(modid = Referense.MODID, useMetadata = true, version = Referense.VERSION)
-public class Main {
-	
+public class MainR {
+
+	public static final SimpleNetworkWrapper NETWORK = new SimpleNetworkWrapper(Referense.MODID);
+
 	@Instance
-	public static Main instance;
+	public static MainR instance;
 	
 	@SidedProxy(clientSide = Referense.CLIENT, serverSide = Referense.COMMON)
 	public static CommonProxy proxy;
@@ -62,4 +64,6 @@ public class Main {
 
 	// Creative Tabs
 	public static final CreativeTabs ReturnOfTheAncientsTab = new ReturnOfTheAncientsTab("returnoftheancients_tab");
+
+
 }

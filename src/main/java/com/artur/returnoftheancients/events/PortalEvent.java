@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.ancientworldutilities;
+package com.artur.returnoftheancients.events;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;

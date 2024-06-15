@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.ancientworldutilities;
+package com.artur.returnoftheancients.gui;
 
 import com.artur.returnoftheancients.generation.generators.AncientLabyrinthGenerator;
 import com.artur.returnoftheancients.referense.Referense;
@@ -9,25 +9,27 @@ import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 
-public class OldLoadingGui extends GuiScreen {
+import static com.artur.returnoftheancients.generation.generators.AncientLabyrinthGenerator.PHASE;
+
+public class LoadingGui extends GuiScreen {
     private final int Green = 32768;
+    private final int Red = 16711680;
     private final int White = 16777215;
     private int MainStringColor = White;
     private static final int Y = 100;
     private static final int X = 427;
     private static ResourceLocation location;
     private int s = 0;
-    private byte i = 0;
+    private byte h = 0;
     private byte t = 0;
+//    private int xd = width + 40;
     private String ts = "";
-    private final String[] constantNames = new String[] {"Generating random structures", "Generating right left way", "Generating down up way",
-            "Generating ancient entry way", "Generating clear area", "Generate structures in world", "Reload light"};
-    private final String[] names = new String[] {"Generating random structures", "Generating right left way", "Generating down up way",
-            "Generating ancient entry way", "Generating clear area", "Generate structures in world", "Reload light"};
+    private final String[] constantNames = new String[] {"generating structures map", "cleaning area", "place structures in world", "reload light", "Finish!"};
+    private String name = "gui error";
     private final int[] colors = new int[7];
 
 
-    public OldLoadingGui() {
+    public LoadingGui() {
         location = new ResourceLocation( Referense.MODID + ":textures/gui/boba.png");
     }
 
@@ -37,20 +39,17 @@ public class OldLoadingGui extends GuiScreen {
 
     @Override
     public void initGui() {
-        for (byte i = 0; i != colors.length; i++) {
-            colors[i] = White;
-        }
         super.initGui();
     }
 
     @Override
     public void updateScreen() {
-        if (i == 20) {
+        if (h == 20) {
             if (!AncientLabyrinthGenerator.isGen)
                 s++;
-            i = 0;
+            h = 0;
         }
-        if (i == 10) {
+        if (h % 10 == 0) {
             t++;
         }
         switch (t) {
@@ -70,23 +69,14 @@ public class OldLoadingGui extends GuiScreen {
                 t = 0;
                 break;
         }
-        if (AncientLabyrinthGenerator.PHASE > -1) {
-            if (AncientLabyrinthGenerator.PHASE == 4 || AncientLabyrinthGenerator.PHASE == 5) {
-                names[AncientLabyrinthGenerator.PHASE] = constantNames[AncientLabyrinthGenerator.PHASE] + ts + " " + AncientLabyrinthGenerator.getPercentages() + "%";
-            } else if (AncientLabyrinthGenerator.PHASE < 7){
-                names[AncientLabyrinthGenerator.PHASE] = constantNames[AncientLabyrinthGenerator.PHASE] + ts;
-            }
-        }
         if (AncientLabyrinthGenerator.isGen) {
             MainStringColor = Green;
         }
-        for (byte i = 0; i != colors.length; i++) {
-            if (AncientLabyrinthGenerator.PHASE > i) {
-                colors[i] = Green;
-                names[i] = constantNames[i];
-            }
-        }
-        i++;
+        h++;
+//        if (xd <= -40) {
+//            xd = width + 40;
+//        }
+//        xd -= 4;
         super.updateScreen();
     }
 
@@ -96,17 +86,27 @@ public class OldLoadingGui extends GuiScreen {
         mc.getTextureManager().bindTexture(location);
         this.drawDefaultBackground();
         drawTexturedModalRect(0, 0, 0, 0, width, height);
-        fontRenderer.drawString("Generating ancient world (" + s + "s)", width / 2 - 80, height / 2 - 60, MainStringColor);
-        fontRenderer.drawString(names[0], width / 2 - 80, height / 2 - 40, colors[0]);
-        fontRenderer.drawString(names[1], width / 2 - 80, height / 2 - 30, colors[1]);
-        fontRenderer.drawString(names[2], width / 2 - 80, height / 2 - 20, colors[2]);
-        fontRenderer.drawString(names[3], width / 2 - 80, height / 2 - 10, colors[3]);
-        fontRenderer.drawString(names[4], width / 2 - 80, height / 2, colors[4]);
-        fontRenderer.drawString(names[5], width / 2 - 80, height / 2 + 10, colors[5]);
-        fontRenderer.drawString(names[6], width / 2 - 80, height / 2 + 20, colors[6]);
-        if (AncientLabyrinthGenerator.isGen) {
-            fontRenderer.drawString("Finish!", width / 2 - 80, height / 2 + 60, White);
+
+        fontRenderer.drawString("Generating ancient world (" + s + "s)", width / 2 - 80, height / 5, MainStringColor);
+
+        switch (PHASE) {
+            case 0: {
+                fontRenderer.drawString(constantNames[0] + ts, (width / 2) - (constantNames[0].length() * 7) / 2, height / 2 + 4, White);
+            }break;
+            case 1: {
+                fontRenderer.drawString(constantNames[1] + " " + Math.round(AncientLabyrinthGenerator.getPercentages()) + "%",((width / 2) - 50), height / 2 + 4, White);
+            }break;
+            case 2: {
+                fontRenderer.drawString(constantNames[2] + " " + Math.round(AncientLabyrinthGenerator.getPercentages()) + "%", width / 2 - 76, height / 2 + 4, White);
+            }break;
+            case 3: {
+                fontRenderer.drawString(constantNames[3] + ts, (width / 2) - (constantNames[3].length() * 7) / 2, height / 2 + 4, White);
+            }break;
+            case 4: {
+                fontRenderer.drawString(constantNames[4], (width / 2) - (constantNames[4].length() * 7) / 2, height / 2 + 4, White);
+            }
         }
+//        fontRenderer.drawString("Gavno", xd, (int) (height / 1.5), White);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -135,6 +135,6 @@ public class OldLoadingGui extends GuiScreen {
 
     @Override
     public boolean doesGuiPauseGame() {
-        return true;
+        return false;
     }
 }

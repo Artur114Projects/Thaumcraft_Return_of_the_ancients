@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.ancientworldutilities;
+package com.artur.returnoftheancients.events;
 
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import net.minecraft.block.state.IBlockState;
@@ -56,7 +56,7 @@ public class GenPortal {
                         genTime = 0;
                         return;
 //                        for (IBlockState[][] states : blocks) {
-//                            Handler.SOUT2DArray(states);
+//                            HandlerR.SOUT2DArray(states);
 //                        }
                     } else {
                         IBlockState[][] blockStates = new IBlockState[6][6];

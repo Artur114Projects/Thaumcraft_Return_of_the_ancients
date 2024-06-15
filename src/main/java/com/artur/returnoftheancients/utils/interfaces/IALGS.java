@@ -50,6 +50,6 @@ public interface IALGS {
     String isPrimalBladeDropKey = "IPBDK";
     String AncientPortalYPosKey = "APYPK";
     String isBossSpawn = "IBSK";
-
+    String isAncientWorldGenerateKey = "IAWGK";
 
 }

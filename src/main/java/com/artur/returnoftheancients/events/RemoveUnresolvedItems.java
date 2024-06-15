@@ -1,6 +1,6 @@
-package com.artur.returnoftheancients.ancientworldutilities;
+package com.artur.returnoftheancients.events;
 
-import com.artur.returnoftheancients.handlers.Handler;
+import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.sounds.ModSounds;
@@ -11,9 +11,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -40,7 +38,7 @@ public class RemoveUnresolvedItems {
     @SubscribeEvent
     public void Tick(TickEvent.PlayerTickEvent e) {
         if (e.player.dimension == InitDimensions.ancient_world_dim_id) {
-            if (!Handler.isPlayerUseUnresolvedItems(e.player).isEmpty() && (!e.player.getEntityData().getBoolean(isUUI) || !e.player.getEntityData().hasKey(isUUI)) && !e.player.isCreative() && !e.player.isDead) {
+            if (!HandlerR.isPlayerUseUnresolvedItems(e.player).isEmpty() && (!e.player.getEntityData().getBoolean(isUUI) || !e.player.getEntityData().hasKey(isUUI)) && !e.player.isCreative() && !e.player.isDead) {
                 System.out.println("La ti krisa " + e.player.getName());
                 e.player.getEntityData().setBoolean(isUUI, true);
             }
@@ -48,7 +46,7 @@ public class RemoveUnresolvedItems {
         if (e.player.getEntityData().getBoolean(isUUI)) {
             int timeRemoveItems = e.player.getEntityData().getInteger(time);
             byte phaseRemoveItems = e.player.getEntityData().getByte(PRI);
-            if (Handler.isPlayerUseUnresolvedItems(e.player).isEmpty()) {
+            if (HandlerR.isPlayerUseUnresolvedItems(e.player).isEmpty()) {
                 e.player.removePotionEffect(MobEffects.SLOWNESS);
                 e.player.removePotionEffect(MobEffects.BLINDNESS);
                 resetNBT(e.player);
@@ -69,7 +67,7 @@ public class RemoveUnresolvedItems {
                 if (timeRemoveItems == 160) {
                     if (e.player instanceof EntityPlayerMP) {
                         e.player.sendMessage(new TextComponentTranslation(Referense.MODID + ".rui.f"));
-                        e.player.sendMessage(new TextComponentString(Handler.isPlayerUseUnresolvedItems(e.player).toString()));
+                        e.player.sendMessage(new TextComponentString(HandlerR.isPlayerUseUnresolvedItems(e.player).toString()));
                     }
                     phaseRemoveItems = 2;
                 }

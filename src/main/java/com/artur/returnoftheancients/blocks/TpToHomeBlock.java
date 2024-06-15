@@ -1,21 +1,16 @@
 package com.artur.returnoftheancients.blocks;
 
-import com.artur.returnoftheancients.ancientworldutilities.Configs;
-import com.artur.returnoftheancients.ancientworldutilities.WorldData;
+import com.artur.returnoftheancients.misc.TRAConfigs;
+import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.handlers.EventsHandler;
-import com.artur.returnoftheancients.handlers.FreeTeleporter;
-import com.artur.returnoftheancients.handlers.Handler;
-import com.artur.returnoftheancients.main.Main;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -23,14 +18,11 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.BufferedReader;
-import java.io.Reader;
-
 public class TpToHomeBlock extends BaseBlock {
     protected static final AxisAlignedBB HOME_PORTAL_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D);
     public TpToHomeBlock(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
-        this.setCreativeTab(Main.ReturnOfTheAncientsTab);
+//        this.setCreativeTab(MainR.ReturnOfTheAncientsTab);
     }
 
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
@@ -60,7 +52,10 @@ public class TpToHomeBlock extends BaseBlock {
             EntityPlayer player = (EntityPlayer) entityIn;
             if (player.getServer() != null && player.world != null) {
                 EventsHandler.tpToHome(player);
-                player.move(MoverType.PLAYER, Configs.PortalSettings.x + 3, 3, Configs.PortalSettings.z + 3);
+                player.move(MoverType.PLAYER, TRAConfigs.PortalSettings.x + 3, 3, TRAConfigs.PortalSettings.z + 3);
+                WorldData worldData = WorldData.get();
+                worldData.saveData.setBoolean(IALGS.isAncientWorldGenerateKey, false);
+                worldData.markDirty();
             }
         }
     }

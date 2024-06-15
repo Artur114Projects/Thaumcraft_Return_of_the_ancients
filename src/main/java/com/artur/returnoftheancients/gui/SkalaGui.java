@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.ancientworldutilities;
+package com.artur.returnoftheancients.gui;
 
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.gui.GuiScreen;

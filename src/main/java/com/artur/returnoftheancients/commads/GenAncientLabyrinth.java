@@ -1,10 +1,8 @@
 package com.artur.returnoftheancients.commads;
 
-import com.artur.returnoftheancients.ancientworldutilities.GenPortal;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
 

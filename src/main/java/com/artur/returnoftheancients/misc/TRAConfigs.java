@@ -28,6 +28,10 @@ public class TRAConfigs {
     public static MobGenSettings MobGenSettings = new MobGenSettings();
 
     public static class PortalSettings {
+        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.slm")
+        @Config.Comment("is send ancient world load and finish message")
+        public boolean isSendWorldLoadMessage = true;
+
         @Config.LangKey(Referense.MODID + ".cfg.sub.portal.x")
         @Config.Comment("only affects new worlds")
         public int x = 5;

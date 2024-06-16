@@ -10,12 +10,15 @@ returnoftheancients.portal.message=Нельзя использовать:
 item.itemprimalblade.text=Оружие богов
 returnoftheancients.rui.t=убери это
 returnoftheancients.rui.f=у тебя 30 секунд
+returnoftheancients.message.ancientworldload.start=Началась генерация, мир может подтормаживать
+returnoftheancients.message.ancientworldload.finish=Генерация закончилась
 # Config any
 returnoftheancients.cfg.sub.any.primalbladespeed=Скорость атаки первородного клинка
 returnoftheancients.cfg.sub.any.primalbladedamage=Урон первородного клинка
 returnoftheancients.cfg.sub.any=Разное
 returnoftheancients.cfg.sub.any.uog=Использовать старый загрузочный экран
 # Config Portal gen settings
+returnoftheancients.cfg.sub.portal.slm=Отправлять сообщение о загрузке
 returnoftheancients.cfg.sub.portal=Настройки генерации древнего портала
 returnoftheancients.cfg.sub.portal.isgen=Генерировать? (Не работает)
 returnoftheancients.cfg.sub.portal.x=X

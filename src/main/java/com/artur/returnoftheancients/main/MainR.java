@@ -31,8 +31,6 @@ public class MainR {
 	
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
-//		System.out.println("preInit");
-//		for (int i = 0; i != 10; i++)
 		InitDimensions.registerDimensions();
 		InitBiome.initBiomes();
 		InitBlocks.registerTileEntity();
@@ -41,17 +39,11 @@ public class MainR {
 	
 	@EventHandler
 	public static void Init(FMLInitializationEvent event) {
-//		System.out.println("Init");
-//		for (int i = 0; i != 10; i++)
-//			System.out.println("!!!");
 		proxy.init(event);
 	}
 	
 	@EventHandler
 	public static void postInit(FMLPostInitializationEvent event) {
-//		System.out.println("postInit");
-//		for (int i = 0; i != 10; i++)
-//			System.out.println("!!!");
 		proxy.postInit(event);
 	}
 

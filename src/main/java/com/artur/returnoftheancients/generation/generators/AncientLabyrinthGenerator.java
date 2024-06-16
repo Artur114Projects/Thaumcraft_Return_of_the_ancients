@@ -9,7 +9,9 @@ import com.artur.returnoftheancients.events.MCTimer;
 import com.artur.returnoftheancients.handlers.EventsHandler;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
 import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
+import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import com.artur.returnoftheancients.utils.interfaces.IWorldTimer;
 import com.artur.returnoftheancients.utils.interfaces.IStructure;
@@ -17,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -356,6 +359,9 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         worldData.saveData.setBoolean(isAncientWorldGenerateKey, false);
         worldData.saveData.setBoolean(isBossSpawn, false);
         worldData.markDirty();
+        if (TRAConfigs.PortalSettings.isSendWorldLoadMessage) {
+            HandlerR.sendAllWorldLoadMessage(true);
+        }
         isGen = false;
         isGenerateStart = true;
         EventsHandler.setAncientWorldLoad(false);
@@ -411,6 +417,9 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         worldData.saveData.setBoolean(isAncientWorldGenerateKey, true);
         worldData.markDirty();
         players.clear();
+        if (TRAConfigs.PortalSettings.isSendWorldLoadMessage) {
+            HandlerR.sendAllWorldLoadMessage(false);
+        }
         isGenerateStart = false;
     }
 }

@@ -129,6 +129,9 @@ public class HandlerR {
     }
 
     private static boolean isGoodNBTTagBase(NBTTagCompound nbt, String[] Tag, boolean mustContainEverything) {
+        if (nbt.getKeySet().isEmpty()) {
+            return false;
+        }
         for (String d : nbt.getKeySet()) {
             boolean isGood = false;
             for (String gt : Tag) {
@@ -160,8 +163,8 @@ public class HandlerR {
     }
 
     public static boolean isGoodNBTTagLG(NBTTagCompound nbt) {
-        final String[] Tag = new String[] {"setGuiState"};
-        return isGoodNBTTagBase(nbt, Tag, true);
+        final String[] Tag = new String[] {"setGuiState", "sendAncientWorldLoadMessage", "sendMessage", "sendMessageTranslate"};
+        return isGoodNBTTagBase(nbt, Tag, false);
     }
 
     public static void setStartUpNBT(EntityPlayerMP playerMP, boolean data) {
@@ -173,5 +176,11 @@ public class HandlerR {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setBoolean("setGuiState", state);
         MainR.NETWORK.sendTo(new ClientPacketLoadingGui(nbt), playerMP);
+    }
+
+    public static void sendAllWorldLoadMessage(boolean state) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setBoolean("sendAncientWorldLoadMessage", state);
+        MainR.NETWORK.sendToAll(new ClientPacketLoadingGui(nbt));
     }
 }

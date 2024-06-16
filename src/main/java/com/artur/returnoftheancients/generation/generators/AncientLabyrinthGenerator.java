@@ -349,7 +349,12 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             if (player.isCreative()) {
                 FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 126, -10);
             } else {
-                FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 253, 8);
+                if (WorldData.get().saveData.getBoolean(isBossSpawn)) {
+                    int[] a = WorldData.get().saveData.getIntArray("bossTriggerBlockPos");
+                    FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, a[0], a[1] + 2, a[2] + 8);
+                } else {
+                    FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 253, 8);
+                }
             }
         }
     }

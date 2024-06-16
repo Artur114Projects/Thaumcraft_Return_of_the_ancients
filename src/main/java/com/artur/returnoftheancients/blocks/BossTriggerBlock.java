@@ -76,8 +76,10 @@ public class BossTriggerBlock extends BaseBlock {
                 GenStructure.generateStructure(worldIn, pos.getX() - 16, pos.getY() + 2, pos.getZ() - 10, "ancient_door");
                 IStructure.settings.setRotation(Rotation.NONE);
 
-                for (EntityPlayer player : worldIn.playerEntities) {
-                    ((EntityPlayerMP) player).connection.setPlayerLocation(pos.getX(), pos.getY() + 2, pos.getZ() + 8, -181, 0);
+                if (worldIn.playerEntities.size() > 1) {
+                    for (EntityPlayer player : worldIn.playerEntities) {
+                        ((EntityPlayerMP) player).connection.setPlayerLocation(pos.getX(), pos.getY() + 2, pos.getZ() + 8, -181, 0);
+                    }
                 }
             }
         }
@@ -90,6 +92,9 @@ public class BossTriggerBlock extends BaseBlock {
 
     @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        WorldData worldData = WorldData.get();
+        worldData.saveData.setIntArray("bossTriggerBlockPos", new int[] {pos.getX(), pos.getY(), pos.getZ()});
+        worldData.markDirty();
         worldIn.scheduleUpdate(pos, worldIn.getBlockState(pos).getBlock(), 4);
     }
 }

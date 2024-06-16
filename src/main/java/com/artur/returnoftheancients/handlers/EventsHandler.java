@@ -179,6 +179,7 @@ public class EventsHandler {
 
                         HandlerR.setStartUpNBT(playerMP, false);
                         playerMP.removePotionEffect(Potion.getPotionById(15));
+                        playerMP.fallDistance = 0;
 
                         e.player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, false);
                         e.player.getEntityData().setBoolean(startUpNBT, false);
@@ -231,12 +232,14 @@ public class EventsHandler {
             BlockPos pos = e.player.getPosition();
             if (pos.getY() > 82 && !e.player.isCreative()) {
                 e.player.fallDistance = 0;
-                Minecraft.getMinecraft().addScheduledTask(() -> {
-                    playerSP.motionY += -1 - playerSP.motionY;
-                });
-//                e.player.motionY = e.player.motionY + 0.1;
+                e.player.motionY += -1 - e.player.motionY;
+//                if (e.player.motionY < -1) {
+//                    e.player.motionY = e.player.motionY + 0.1;
+//                }
+//                if (e.player.motionY > 0) {
+//                    e.player.motionY += -1 - e.player.motionY;
+//                }
             }
-
 //            if (!capIsSet) {
 //                if (pos.getY() == 81 && pos.getX() <= 9 && pos.getX() >= 6 && pos.getZ() <= 9 && pos.getZ() >= 6) {
 //                    GenStructure.generateStructure(e.player.world, 6, 85, 6, "ancient_cap");

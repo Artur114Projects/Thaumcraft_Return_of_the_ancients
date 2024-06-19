@@ -233,12 +233,6 @@ public class EventsHandler {
             if (pos.getY() > 82 && !e.player.isCreative()) {
                 e.player.fallDistance = 0;
                 e.player.motionY += -1 - e.player.motionY;
-//                if (e.player.motionY < -1) {
-//                    e.player.motionY = e.player.motionY + 0.1;
-//                }
-//                if (e.player.motionY > 0) {
-//                    e.player.motionY += -1 - e.player.motionY;
-//                }
             }
 //            if (!capIsSet) {
 //                if (pos.getY() == 81 && pos.getX() <= 9 && pos.getX() >= 6 && pos.getZ() <= 9 && pos.getZ() >= 6) {

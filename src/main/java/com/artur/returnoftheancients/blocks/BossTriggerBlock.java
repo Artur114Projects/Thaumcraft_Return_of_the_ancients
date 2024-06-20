@@ -12,11 +12,16 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thaumcraft.api.items.ItemsTC;
 import thaumcraft.common.entities.monster.boss.*;
+import thaumcraft.common.items.curios.ItemPrimordialPearl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class BossTriggerBlock extends BaseBlock {
@@ -27,6 +32,8 @@ public class BossTriggerBlock extends BaseBlock {
 //        setCreativeTab(MainR.ReturnOfTheAncientsTab);
         setTickRandomly(false);
     }
+
+    public static List<EntityPlayer> playersR = new ArrayList<>();
 
     /*
     EntityCultistPortalGreater
@@ -86,6 +93,11 @@ public class BossTriggerBlock extends BaseBlock {
         if (!worldIn.isRemote && EventsHandler.bossIsDead && !worldIn.isAnyPlayerWithinRangeAt(pos.getX(), pos.getY(), pos.getZ(), 4)) {
             GenStructure.generateStructure(worldIn, pos.getX() - 3, pos.getY() - 30, pos.getZ() - 2, "ancient_exit");
             EventsHandler.bossIsDead = false;
+            System.out.println("Players " + playersR.size());
+            for (EntityPlayer player : playersR) {
+                player.addItemStackToInventory(new ItemStack(ItemsTC.primordialPearl, 1, 0));
+            }
+            playersR.clear();
         }
         worldIn.scheduleUpdate(pos, worldIn.getBlockState(pos).getBlock(), 4);
     }

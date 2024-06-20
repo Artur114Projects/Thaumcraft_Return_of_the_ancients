@@ -1,10 +1,12 @@
 package com.artur.returnoftheancients.generation.generators;
 
+import static com.artur.returnoftheancients.blocks.TpToAncientWorldBlock.noCollisionNBT;
 import static com.artur.returnoftheancients.misc.TRAConfigs.AncientWorldSettings;
 import static com.artur.returnoftheancients.misc.TRAConfigs.MobGenSettings;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
+import com.artur.returnoftheancients.blocks.BossTriggerBlock;
 import com.artur.returnoftheancients.events.MCTimer;
 import com.artur.returnoftheancients.handlers.EventsHandler;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
@@ -39,6 +41,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
     protected static boolean isGenerateStart = false;
     public static boolean isGen = false;
     public static byte PHASE = -1;
+    public static boolean waitPlayersOut = false;
     @Deprecated
     public static long mobId;
 
@@ -130,85 +133,91 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
     static byte xt = 0;
     static byte yt = 0;
     static boolean please = false;
+    static byte t = 0;
 
     @SubscribeEvent
     public void Tick(TickEvent.WorldTickEvent e) {
-        if (please && !e.world.isRemote) {
-            System.out.println("please " + "x" + xt + " y" + yt);
-            if (xt == SIZE) {
-                yt++;
-                xt = 0;
-            }
-            if (yt == SIZE) {
-                yt = 0;
-                xt = 0;
-                settings.setRotation(Rotation.NONE);
-//                GenStructure.generateStructure(world, 4, 124, -14, "ancient_developer_platform");
-                gen1();
-                please = false;
-                return;
-            }
-            byte structure = ANCIENT_LABYRINTH_STRUCTURES[yt][xt];
-            byte structureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[yt][xt];
-            int cx = 128 - 16 * xt;
-            int cz = 128 - 16 * yt;
-            int dx = 0;
-            int dz = 0;
-            switch (structureRotate) {
-                case 1:
-                    settings.setRotation(Rotation.NONE);
-                    break;
-                case 2:
-                    settings.setRotation(Rotation.CLOCKWISE_90);
-                    dx = -15;
-                    break;
-                case 3:
-                    settings.setRotation(Rotation.COUNTERCLOCKWISE_90);
-                    dz = -15;
-                    break;
-                case 4:
-                    settings.setRotation(Rotation.CLOCKWISE_180);
-                    dz = -15;
-                    dx = -15;
-                    break;
-            }
-            cx = cx - dx;
-            cz = cz - dz;
-            switch (structure) {
-                case WAY_ID:
-                    GenStructure.generateStructure(world, cx, 80, cz, WAY_STRING_ID);
-                    break;
-                case CROSSROADS_ID:
-                    GenStructure.generateStructure(world, cx, 80, cz, CROSSROADS_STRING_ID);
-                    break;
-                case ENTRY_ID:
-                    GenStructure.generateStructure(world, cx, 80, cz, ENTRY_STRING_ID);
-                    break;
-                case TURN_ID:
-                    GenStructure.generateStructure(world, cx, 80, cz, TURN_STRING_ID);
-                    break;
-                case FORK_ID:
-                    GenStructure.generateStructure(world, cx, 80, cz, FORK_STRING_ID);
-                    break;
-                case END_ID:
-                    GenStructure.generateStructure(world, cx, 80, cz, END_STRING_ID);
-                    break;
-                case BOSS_ID:
-                    bossGen++;
-                    if (bossGen == 4) {
-                        GenStructure.generateStructure(world, cx, 79, cz, BOSS_STRING_ID);
-                        bossGen = 0;
+        if (!e.world.isRemote) {
+            if (please) {
+                if (t == 3) {
+                    t = 0;
+                    System.out.println("please " + "x" + xt + " y" + yt);
+                    if (xt == SIZE) {
+                        yt++;
+                        xt = 0;
                     }
-                    break;
-                case 0:
-                    break;
-                default:
-                    System.out.println("WTF????? " + structure);
-                    break;
+                    if (yt == SIZE) {
+                        yt = 0;
+                        xt = 0;
+                        settings.setRotation(Rotation.NONE);
+                        gen1();
+                        please = false;
+                        return;
+                    }
+                    byte structure = ANCIENT_LABYRINTH_STRUCTURES[yt][xt];
+                    byte structureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[yt][xt];
+                    int cx = 128 - 16 * xt;
+                    int cz = 128 - 16 * yt;
+                    int dx = 0;
+                    int dz = 0;
+                    switch (structureRotate) {
+                        case 1:
+                            settings.setRotation(Rotation.NONE);
+                            break;
+                        case 2:
+                            settings.setRotation(Rotation.CLOCKWISE_90);
+                            dx = -15;
+                            break;
+                        case 3:
+                            settings.setRotation(Rotation.COUNTERCLOCKWISE_90);
+                            dz = -15;
+                            break;
+                        case 4:
+                            settings.setRotation(Rotation.CLOCKWISE_180);
+                            dz = -15;
+                            dx = -15;
+                            break;
+                    }
+                    cx = cx - dx;
+                    cz = cz - dz;
+                    switch (structure) {
+                        case WAY_ID:
+                            GenStructure.generateStructure(world, cx, 80, cz, WAY_STRING_ID);
+                            break;
+                        case CROSSROADS_ID:
+                            GenStructure.generateStructure(world, cx, 80, cz, CROSSROADS_STRING_ID);
+                            break;
+                        case ENTRY_ID:
+                            GenStructure.generateStructure(world, cx, 80, cz, ENTRY_STRING_ID);
+                            break;
+                        case TURN_ID:
+                            GenStructure.generateStructure(world, cx, 80, cz, TURN_STRING_ID);
+                            break;
+                        case FORK_ID:
+                            GenStructure.generateStructure(world, cx, 80, cz, FORK_STRING_ID);
+                            break;
+                        case END_ID:
+                            GenStructure.generateStructure(world, cx, 80, cz, END_STRING_ID);
+                            break;
+                        case BOSS_ID:
+                            bossGen++;
+                            if (bossGen == 4) {
+                                GenStructure.generateStructure(world, cx, 79, cz, BOSS_STRING_ID);
+                                bossGen = 0;
+                            }
+                            break;
+                        case 0:
+                            break;
+                        default:
+                            System.out.println("WTF????? " + structure);
+                            break;
+                    }
+                    YX_states[0] = yt;
+                    YX_states[1] = xt;
+                    xt++;
+                }
+                t++;
             }
-            YX_states[0] = yt;
-            YX_states[1] = xt;
-            xt++;
         }
     }
 
@@ -327,7 +336,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
 
     // разное
     public static float getPercentages() {return (float) (((16 * YX_states[0]) + (YX_states[1] + 1)) / 2.89);}
-    public static void tpToAncientWorld(EntityPlayer player) {
+    public static void tpToAncientWorld(EntityPlayerMP player) {
         if (world == null) {
             world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(ancient_world_dim_id);
         }
@@ -336,14 +345,20 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                 for (EntityPlayer player1 : world.playerEntities) {
                     EventsHandler.tpToHome(player1);
                 }
+                player.getEntityData().setBoolean(noCollisionNBT, true);
+                player.getEntityData().setBoolean(EventsHandler.tpToHomeNBT, true);
+                return;
             }
             players.add(player);
             FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 126, -10);
-            HandlerR.setLoadingGuiState((EntityPlayerMP) player, true);
+            HandlerR.setLoadingGuiState(player, true);
             if (!isGenerateStart) {
                 genAncientLabyrinth();
             } else if (world.playerEntities.isEmpty()) {
                 genAncientLabyrinth();
+            }
+            if (!BossTriggerBlock.playersR.contains(player)) {
+                BossTriggerBlock.playersR.add(player);
             }
         } else {
             if (player.isCreative()) {
@@ -353,6 +368,9 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                     int[] a = WorldData.get().saveData.getIntArray("bossTriggerBlockPos");
                     FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, a[0], a[1] + 2, a[2] + 8);
                 } else {
+                    if (!BossTriggerBlock.playersR.contains(player)) {
+                        BossTriggerBlock.playersR.add(player);
+                    }
                     FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 253, 8);
                 }
             }
@@ -364,6 +382,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         worldData.saveData.setBoolean(isAncientWorldGenerateKey, false);
         worldData.saveData.setBoolean(isBossSpawn, false);
         worldData.markDirty();
+        BossTriggerBlock.playersR.clear();
         if (TRAConfigs.PortalSettings.isSendWorldLoadMessage) {
             HandlerR.sendAllWorldLoadMessage(true);
         }

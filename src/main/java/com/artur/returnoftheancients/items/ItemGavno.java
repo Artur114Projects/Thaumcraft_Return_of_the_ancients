@@ -2,9 +2,8 @@ package com.artur.returnoftheancients.items;
 
 
 import com.artur.returnoftheancients.gui.SkalaGui;
-import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.main.MainR;
-import com.artur.returnoftheancients.network.ClientPacketLoadingGui;
+import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
@@ -20,7 +19,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +28,6 @@ import thaumcraft.common.lib.network.misc.PacketMiscEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.logging.Handler;
 
 public class ItemGavno extends BaseItem{
 
@@ -65,7 +62,7 @@ public class ItemGavno extends BaseItem{
 		if (!worldIn.isRemote) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setString("sendMessage", "gavno");
-			MainR.NETWORK.sendToAll(new ClientPacketLoadingGui(nbt));
+			MainR.NETWORK.sendToAll(new ClientPacketMisc(nbt));
 		}
 		return EnumActionResult.SUCCESS;
 	}

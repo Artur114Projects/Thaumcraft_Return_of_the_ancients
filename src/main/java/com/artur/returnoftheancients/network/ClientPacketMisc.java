@@ -10,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -18,13 +17,13 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class ClientPacketLoadingGui implements IMessage {
+public class ClientPacketMisc implements IMessage {
     private NBTTagCompound data;
 
-    public ClientPacketLoadingGui() {
+    public ClientPacketMisc() {
     }
 
-    public ClientPacketLoadingGui(NBTTagCompound data) {
+    public ClientPacketMisc(NBTTagCompound data) {
         this.data = data;
     }
 
@@ -44,10 +43,10 @@ public class ClientPacketLoadingGui implements IMessage {
         ByteBufUtils.writeTag(buf, data);
     }
 
-    public static class HandlerLG implements IMessageHandler<ClientPacketLoadingGui, IMessage> {
+    public static class HandlerLG implements IMessageHandler<ClientPacketMisc, IMessage> {
 
         @Override
-        public IMessage onMessage(ClientPacketLoadingGui message, MessageContext ctx) {
+        public IMessage onMessage(ClientPacketMisc message, MessageContext ctx) {
             Minecraft.getMinecraft().addScheduledTask(() -> {
                 if (HandlerR.isGoodNBTTagLG(message.data)) {
                     NBTTagCompound nbt = message.data;

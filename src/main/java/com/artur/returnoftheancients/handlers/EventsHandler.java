@@ -62,7 +62,6 @@ public class EventsHandler {
     public void DifficultyEvent(DifficultyChangeEvent e) {
         EnumDifficulty d = e.getDifficulty();
         difficultyId = d == EnumDifficulty.PEACEFUL ? 0 : d == EnumDifficulty.EASY ? 1 : d == EnumDifficulty.NORMAL ? 2 : d == EnumDifficulty.HARD ? 3 : (byte) -1;
-        System.out.println(difficultyId);
     }
 
 
@@ -170,8 +169,6 @@ public class EventsHandler {
                 if (e.player instanceof EntityPlayerSP) {
                     EntityPlayerSP playerSP = (EntityPlayerSP) e.player;
                     playerSP.motionY += 2 - playerSP.motionY;
-                    playerSP.motionX = 0;
-                    playerSP.motionZ = 0;
                 }
                 if (e.player instanceof EntityPlayerMP) {
                     if (e.player.posY > WorldData.get().saveData.getInteger(IALGS.AncientPortalYPosKey)) {

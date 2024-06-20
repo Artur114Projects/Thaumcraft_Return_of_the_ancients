@@ -1,9 +1,11 @@
 package com.artur.returnoftheancients.blocks;
 
+import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.generation.generators.AncientLabyrinthGenerator;
 import com.artur.returnoftheancients.handlers.EventsHandler;
 import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -11,10 +13,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -61,14 +65,16 @@ public class TpToAncientWorldBlock extends BaseBlock{
                 ArrayList<String> ID = HandlerR.isPlayerUseUnresolvedItems(player);
                 if (ID.isEmpty() && (EventsHandler.getDifficultyId() != 0 || !TRAConfigs.AncientWorldSettings.noPeaceful)) {
                     player.fallDistance = 0;
-                    AncientLabyrinthGenerator.tpToAncientWorld(player);
+                    AncientLabyrinthGenerator.tpToAncientWorld((EntityPlayerMP) player);
                 } else {
                     if (!ID.isEmpty()) {
-                        player.sendMessage(new TextComponentTranslation(Referense.MODID + ".portal.message"));
+                        NBTTagCompound nbt = new NBTTagCompound();
+                        nbt.setString("sendMessageTranslate", Referense.MODID + ".portal.message");
+                        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), (EntityPlayerMP) player);
                         player.sendMessage(new TextComponentString(ID.toString()));
                         ID.clear();
                     } else {
-                        player.sendMessage(new TextComponentString("PEACEFUL DIFFICULTY ???"));
+                        player.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + "<TC RETURN OF THE ANCIENTS> " + TextFormatting.RESET + "PEACEFUL DIFFICULTY ???"));
                     }
                     player.getEntityData().setBoolean(EventsHandler.tpToHomeNBT, true);
                     player.getEntityData().setBoolean(noCollisionNBT, true);

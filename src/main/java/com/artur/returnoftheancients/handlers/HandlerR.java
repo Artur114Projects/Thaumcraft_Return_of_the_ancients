@@ -3,7 +3,7 @@ package com.artur.returnoftheancients.handlers;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.main.MainR;
-import com.artur.returnoftheancients.network.ClientPacketLoadingGui;
+import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -175,12 +175,12 @@ public class HandlerR {
     public static void setLoadingGuiState(EntityPlayerMP playerMP, boolean state) {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setBoolean("setGuiState", state);
-        MainR.NETWORK.sendTo(new ClientPacketLoadingGui(nbt), playerMP);
+        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
     }
 
     public static void sendAllWorldLoadMessage(boolean state) {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setBoolean("sendAncientWorldLoadMessage", state);
-        MainR.NETWORK.sendToAll(new ClientPacketLoadingGui(nbt));
+        MainR.NETWORK.sendToAll(new ClientPacketMisc(nbt));
     }
 }

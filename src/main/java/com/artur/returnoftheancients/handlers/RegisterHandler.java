@@ -36,7 +36,7 @@ public class RegisterHandler {
 //		MinecraftForge.EVENT_BUS.register(new PortalEvent());
 //		MinecraftForge.EVENT_BUS.register(new GenPortal());
 		MinecraftForge.EVENT_BUS.register(new RemoveUnresolvedItems());
-		MinecraftForge.EVENT_BUS.register(new AncientLabyrinthGenerator());
+		MinecraftForge.EVENT_BUS.register(new AncientLabyrinthGenerator.AncientWorldBuildProcessor());
 	}
 
 	@SubscribeEvent

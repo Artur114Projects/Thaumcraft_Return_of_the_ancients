@@ -33,7 +33,6 @@ public class BossTriggerBlock extends BaseBlock {
         setTickRandomly(false);
     }
 
-    public static List<EntityPlayer> playersR = new ArrayList<>();
 
     /*
     EntityCultistPortalGreater
@@ -93,11 +92,14 @@ public class BossTriggerBlock extends BaseBlock {
         if (!worldIn.isRemote && EventsHandler.bossIsDead && !worldIn.isAnyPlayerWithinRangeAt(pos.getX(), pos.getY(), pos.getZ(), 4)) {
             GenStructure.generateStructure(worldIn, pos.getX() - 3, pos.getY() - 30, pos.getZ() - 2, "ancient_exit");
             EventsHandler.bossIsDead = false;
-            System.out.println("Players " + playersR.size());
-            for (EntityPlayer player : playersR) {
-                player.addItemStackToInventory(new ItemStack(ItemsTC.primordialPearl, 1, 0));
+            int players = 0;
+            for (EntityPlayer player : worldIn.playerEntities) {
+                if (player.getEntityData().getLong("getReward") == WorldData.get().saveData.getLong("getReward"))  {
+                    player.addItemStackToInventory(new ItemStack(ItemsTC.primordialPearl, 1, new Random().nextInt(8)));
+                    players++;
+                }
             }
-            playersR.clear();
+            System.out.println("Players " + players);
         }
         worldIn.scheduleUpdate(pos, worldIn.getBlockState(pos).getBlock(), 4);
     }

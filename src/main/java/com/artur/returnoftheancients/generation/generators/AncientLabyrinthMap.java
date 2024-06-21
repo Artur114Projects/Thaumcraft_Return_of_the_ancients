@@ -6,7 +6,6 @@ import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import java.util.Random;
 
 import static com.artur.returnoftheancients.generation.generators.AncientLabyrinthGeneratorHandler.getVoidStructures;
-import static com.artur.returnoftheancients.handlers.HandlerR.*;
 
 public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IALGS {
 
@@ -14,11 +13,15 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE = new byte[17][17];
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_IN_WORK = new byte[17][17];
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE_IN_WORK = new byte[17][17];
-    private static final Random random = new Random();
+    private static Random random = null;
     private static final byte f_index = 0;
     private static final byte b_index = 1;
     private static final byte bl_index = 2;
     private static final byte u_index = 3;
+
+    public static int genRandomIntRange(int min, int max) {
+        return random.nextInt((max - min) + 1) + min;
+    }
 
     protected static byte[] setWay(byte y, byte x, int wayRotate, int index, boolean back) {
         if (index == u_index && back) {
@@ -515,6 +518,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
 
 
     public static byte[][][] genStructuresMap() {
+        random = new Random(123);
         int void0 = 0;
         int void1 = 0;
         byte exit = 0;

@@ -33,10 +33,6 @@ public class LoadingGui extends GuiScreen {
         location = new ResourceLocation( Referense.MODID + ":textures/gui/boba.png");
     }
 
-    private String formatString(String s) {
-        return s.replaceAll("NL", "\n\n");
-    }
-
     @Override
     public void initGui() {
         super.initGui();
@@ -87,26 +83,36 @@ public class LoadingGui extends GuiScreen {
         this.drawDefaultBackground();
         drawTexturedModalRect(0, 0, 0, 0, width, height);
 
-        fontRenderer.drawString("Generating ancient world (" + s + "s)", width / 2 - 80, height / 5, MainStringColor);
+//        fontRenderer.drawString("Generating ancient world (" + s + "s)", (width / 2) - (fontRenderer.getStringWidth("Generating ancient world (" + s + "s)") / 2), height / 5, MainStringColor);
 
+        int hei = height / 2 + 4;
         switch (PHASE) {
             case 0: {
-                fontRenderer.drawString(constantNames[0] + ts, (width / 2) - (constantNames[0].length() * 7) / 2, height / 2 + 4, White);
+                String text = constantNames[0] + ts;
+                int wid = ((width / 2) - (fontRenderer.getStringWidth(text) / 2));
+                fontRenderer.drawString(text, wid, hei, White);
             }break;
             case 1: {
-                fontRenderer.drawString(constantNames[1] + " " + Math.round(AncientLabyrinthGenerator.getPercentages()) + "%",((width / 2) - 50), height / 2 + 4, White);
+                String text = constantNames[1] + " " + Math.round(AncientLabyrinthGenerator.getPercentages()) + "%";
+                int wid = ((width / 2) - (fontRenderer.getStringWidth(text) / 2));
+                fontRenderer.drawString(text, wid, hei, White);
             }break;
             case 2: {
-                fontRenderer.drawString(constantNames[2] + " " + Math.round(AncientLabyrinthGenerator.getPercentages()) + "%", width / 2 - 76, height / 2 + 4, White);
+                String text = constantNames[2] + " " + Math.round(AncientLabyrinthGenerator.getPercentages()) + "%";
+                int wid = ((width / 2) - (fontRenderer.getStringWidth(text) / 2));
+                fontRenderer.drawString(text, wid, hei, White);
             }break;
             case 3: {
-                fontRenderer.drawString(constantNames[3] + ts, (width / 2) - (constantNames[3].length() * 7) / 2, height / 2 + 4, White);
+                String text = constantNames[3] + ts;
+                int wid = ((width / 2) - (fontRenderer.getStringWidth(text) / 2));
+                fontRenderer.drawString(text, wid, hei, White);
             }break;
             case 4: {
-                fontRenderer.drawString(constantNames[4], (width / 2) - (constantNames[4].length() * 7) / 2, height / 2 + 4, White);
+                String text = constantNames[4];
+                int wid = ((width / 2) - (fontRenderer.getStringWidth(text) / 2));
+                fontRenderer.drawString(text, wid, hei, White);
             }
         }
-//        fontRenderer.drawString("Gavno", xd, (int) (height / 1.5), White);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

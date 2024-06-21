@@ -13,7 +13,6 @@ import com.artur.returnoftheancients.handlers.FreeTeleporter;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
-import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import com.artur.returnoftheancients.utils.interfaces.IWorldTimer;
 import com.artur.returnoftheancients.utils.interfaces.IStructure;
@@ -21,7 +20,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -29,6 +27,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class AncientLabyrinthGenerator implements IStructure, IALGS{
     protected static byte[][] ANCIENT_LABYRINTH_STRUCTURES = new byte[17][17];
@@ -130,97 +129,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         GenStructure.generateStructure(world, 4, 124, -14, "ancient_developer_platform");
     }
 
-    static byte xt = 0;
-    static byte yt = 0;
-    static boolean please = false;
-    static byte t = 0;
-
-    @SubscribeEvent
-    public void Tick(TickEvent.WorldTickEvent e) {
-        if (!e.world.isRemote) {
-            if (please) {
-                if (t == 3) {
-                    t = 0;
-                    System.out.println("please " + "x" + xt + " y" + yt);
-                    if (xt == SIZE) {
-                        yt++;
-                        xt = 0;
-                    }
-                    if (yt == SIZE) {
-                        yt = 0;
-                        xt = 0;
-                        settings.setRotation(Rotation.NONE);
-                        gen1();
-                        please = false;
-                        return;
-                    }
-                    byte structure = ANCIENT_LABYRINTH_STRUCTURES[yt][xt];
-                    byte structureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[yt][xt];
-                    int cx = 128 - 16 * xt;
-                    int cz = 128 - 16 * yt;
-                    int dx = 0;
-                    int dz = 0;
-                    switch (structureRotate) {
-                        case 1:
-                            settings.setRotation(Rotation.NONE);
-                            break;
-                        case 2:
-                            settings.setRotation(Rotation.CLOCKWISE_90);
-                            dx = -15;
-                            break;
-                        case 3:
-                            settings.setRotation(Rotation.COUNTERCLOCKWISE_90);
-                            dz = -15;
-                            break;
-                        case 4:
-                            settings.setRotation(Rotation.CLOCKWISE_180);
-                            dz = -15;
-                            dx = -15;
-                            break;
-                    }
-                    cx = cx - dx;
-                    cz = cz - dz;
-                    switch (structure) {
-                        case WAY_ID:
-                            GenStructure.generateStructure(world, cx, 80, cz, WAY_STRING_ID);
-                            break;
-                        case CROSSROADS_ID:
-                            GenStructure.generateStructure(world, cx, 80, cz, CROSSROADS_STRING_ID);
-                            break;
-                        case ENTRY_ID:
-                            GenStructure.generateStructure(world, cx, 80, cz, ENTRY_STRING_ID);
-                            break;
-                        case TURN_ID:
-                            GenStructure.generateStructure(world, cx, 80, cz, TURN_STRING_ID);
-                            break;
-                        case FORK_ID:
-                            GenStructure.generateStructure(world, cx, 80, cz, FORK_STRING_ID);
-                            break;
-                        case END_ID:
-                            GenStructure.generateStructure(world, cx, 80, cz, END_STRING_ID);
-                            break;
-                        case BOSS_ID:
-                            bossGen++;
-                            if (bossGen == 4) {
-                                GenStructure.generateStructure(world, cx, 79, cz, BOSS_STRING_ID);
-                                bossGen = 0;
-                            }
-                            break;
-                        case 0:
-                            break;
-                        default:
-                            System.out.println("WTF????? " + structure);
-                            break;
-                    }
-                    YX_states[0] = yt;
-                    YX_states[1] = xt;
-                    xt++;
-                }
-                t++;
-            }
-        }
-    }
-
+    @Deprecated
     protected static void clearArea() {
         for (byte y = 0; y != SIZE; y++) {
             for (byte x = 0; x != SIZE; x++) {
@@ -310,18 +219,11 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         };
         MCTimer.startWorldTimer(iWorldTimer);
     }
-
+    @Deprecated
     protected static void reloadLight() {
         for (int z = -128; z != 144; z++) {
             for (int x = -128; x != 144; x++) {
                 world.checkLight(new BlockPos(x, 84, z));
-            }
-        }
-        for (int z = 6; z != 10; z++) {
-            for (int x = 6; x != 10; x++) {
-                for (int y = 82; y != 255; y++) {
-                    world.checkLight(new BlockPos(x, y, z));
-                }
             }
         }
     }
@@ -353,12 +255,11 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 126, -10);
             HandlerR.setLoadingGuiState(player, true);
             if (!isGenerateStart) {
-                genAncientLabyrinth();
+                genAncientLabyrinth(player);
             } else if (world.playerEntities.isEmpty()) {
-                genAncientLabyrinth();
-            }
-            if (!BossTriggerBlock.playersR.contains(player)) {
-                BossTriggerBlock.playersR.add(player);
+                genAncientLabyrinth(player);
+            } else {
+                player.getEntityData().setLong("getReward", WorldData.get().saveData.getLong("getReward"));
             }
         } else {
             if (player.isCreative()) {
@@ -368,21 +269,20 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                     int[] a = WorldData.get().saveData.getIntArray("bossTriggerBlockPos");
                     FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, a[0], a[1] + 2, a[2] + 8);
                 } else {
-                    if (!BossTriggerBlock.playersR.contains(player)) {
-                        BossTriggerBlock.playersR.add(player);
-                    }
+                    player.getEntityData().setLong("getReward", WorldData.get().saveData.getLong("getReward"));
                     FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 253, 8);
                 }
             }
         }
     }
 
-    protected static void genAncientLabyrinth() {
+    protected static void genAncientLabyrinth(EntityPlayer player) {
         WorldData worldData = WorldData.get();
         worldData.saveData.setBoolean(isAncientWorldGenerateKey, false);
         worldData.saveData.setBoolean(isBossSpawn, false);
+        worldData.saveData.setLong("getReward", new Random().nextLong());
         worldData.markDirty();
-        BossTriggerBlock.playersR.clear();
+        player.getEntityData().setLong("getReward", WorldData.get().saveData.getLong("getReward"));
         if (TRAConfigs.PortalSettings.isSendWorldLoadMessage) {
             HandlerR.sendAllWorldLoadMessage(true);
         }
@@ -390,12 +290,6 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         isGenerateStart = true;
         EventsHandler.setAncientWorldLoad(false);
         GenStructure.generateStructure(world, 4, 124, -14, "ancient_developer_platform");
-
-//        Random r = new Random();
-//        mobId = r.nextLong();
-//        WorldData worldData = WorldData.get();
-//        worldData.saveData.setLong("mobId", mobId);
-//        worldData.markDirty();
 
         System.out.println("Generating ancient labyrinth start");
         PHASE = 0;
@@ -410,20 +304,10 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
 
         PHASE = 1;
         System.out.println("Cleaning area");
-        clearArea();
-        genAncientEntryWay();
-
-        PHASE = 2;
-        System.out.println("Generate structures");
-
-        please = true;
-//        genStructuresInWorld();
+        AncientWorldBuildProcessor.clearArea();
     }
-    private static void gen1() {
-        PHASE = 3;
-        System.out.println("Reload light");
-        reloadLight();
-        System.out.println("Generate ancient labyrinth finish!");
+    private static void genFinish() {
+        System.out.println("Generate ancient labyrinth finish");
         PHASE = 4;
         isGen = true;
         for (EntityPlayer player : players) {
@@ -445,5 +329,163 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             HandlerR.sendAllWorldLoadMessage(false);
         }
         isGenerateStart = false;
+    }
+
+    public static class AncientWorldBuildProcessor {
+        public static void clearArea() {
+            clear = true;
+        }
+
+        public static void genStructuresInWorld() {
+            please = true;
+        }
+
+        public static void reloadLight() {
+            reloadLight = true;
+        }
+
+        static byte xtp = 0;
+        static byte ytp = 0;
+        static byte xtc = 0;
+        static byte ytc = 0;
+        static int xtl = -128;
+        static int ytl = -128;
+
+        static boolean reloadLight = false;
+        static boolean please = false;
+        static boolean clear = false;
+
+        static byte t = 0;
+
+        @SubscribeEvent
+        public void Tick(TickEvent.WorldTickEvent e) {
+            if (!e.world.isRemote) {
+                if (please) {
+                    if (t == 8) {
+                        t = 0;
+//                        System.out.println("please " + "x" + xtp + " y" + ytp);
+                        if (xtp == SIZE) {
+                            ytp++;
+                            xtp = 0;
+                        }
+                        if (ytp == SIZE) {
+                            ytp = 0;
+                            xtp = 0;
+                            settings.setRotation(Rotation.NONE);
+                            please = false;
+                            PHASE = 3;
+                            System.out.println("Reload light");
+                            reloadLight();
+                            return;
+                        }
+                        byte structure = ANCIENT_LABYRINTH_STRUCTURES[ytp][xtp];
+                        byte structureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[ytp][xtp];
+                        int cx = 128 - 16 * xtp;
+                        int cz = 128 - 16 * ytp;
+                        int dx = 0;
+                        int dz = 0;
+                        switch (structureRotate) {
+                            case 1:
+                                settings.setRotation(Rotation.NONE);
+                                break;
+                            case 2:
+                                settings.setRotation(Rotation.CLOCKWISE_90);
+                                dx = -15;
+                                break;
+                            case 3:
+                                settings.setRotation(Rotation.COUNTERCLOCKWISE_90);
+                                dz = -15;
+                                break;
+                            case 4:
+                                settings.setRotation(Rotation.CLOCKWISE_180);
+                                dz = -15;
+                                dx = -15;
+                                break;
+                        }
+                        cx = cx - dx;
+                        cz = cz - dz;
+                        switch (structure) {
+                            case WAY_ID:
+                                GenStructure.generateStructure(world, cx, 80, cz, WAY_STRING_ID);
+                                break;
+                            case CROSSROADS_ID:
+                                GenStructure.generateStructure(world, cx, 80, cz, CROSSROADS_STRING_ID);
+                                break;
+                            case ENTRY_ID:
+                                GenStructure.generateStructure(world, cx, 80, cz, ENTRY_STRING_ID);
+                                break;
+                            case TURN_ID:
+                                GenStructure.generateStructure(world, cx, 80, cz, TURN_STRING_ID);
+                                break;
+                            case FORK_ID:
+                                GenStructure.generateStructure(world, cx, 80, cz, FORK_STRING_ID);
+                                break;
+                            case END_ID:
+                                GenStructure.generateStructure(world, cx, 80, cz, END_STRING_ID);
+                                break;
+                            case BOSS_ID:
+                                bossGen++;
+                                if (bossGen == 4) {
+                                    GenStructure.generateStructure(world, cx, 79, cz, BOSS_STRING_ID);
+                                    bossGen = 0;
+                                }
+                                break;
+                            case 0:
+                                break;
+                            default:
+                                System.out.println("WTF????? " + structure);
+                                break;
+                        }
+                        YX_states[0] = ytp;
+                        YX_states[1] = xtp;
+                        xtp++;
+                    }
+                    t++;
+                }
+                if (clear) {
+                    for (byte i = 0; i != 1; i++) {
+                        if (xtc == SIZE) {
+                            ytc++;
+                            xtc = 0;
+                        }
+                        if (ytc == SIZE) {
+                            ytc = 0;
+                            xtc = 0;
+                            clear = false;
+                            genAncientEntryWay();
+                            PHASE = 2;
+                            System.out.println("Generate structures");
+                            genStructuresInWorld();
+                            return;
+                        }
+                        int cx = 128 - 16 * xtc;
+                        int cz = 128 - 16 * ytc;
+                        GenStructure.generateStructure(world, cx, 80, cz, AIR_CUBE_STRING_ID);
+                        GenStructure.generateStructure(world, cx, 80 - 31, cz, AIR_CUBE_STRING_ID);
+//                        System.out.println("clear x:" + cx + " z:" + cz);
+                        YX_states[0] = ytc;
+                        YX_states[1] = xtc;
+                        xtc++;
+                    }
+                }
+                if (reloadLight) {
+                    for (int i = 0; i != 925; i++) {
+                        if (xtl == 144) {
+                            ytl++;
+                            xtl = -128;
+                        }
+                        if (ytl == 144) {
+                            ytl = -128;
+                            xtl = -128;
+                            reloadLight = false;
+                            genFinish();
+                            return;
+                        }
+                        world.checkLight(new BlockPos(xtl, 84, ytl));
+                        xtl++;
+                    }
+                }
+            }
+        }
     }
 }

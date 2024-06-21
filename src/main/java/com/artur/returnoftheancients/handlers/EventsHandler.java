@@ -24,6 +24,7 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -131,6 +132,13 @@ public class EventsHandler {
                     }
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void LivingDropsEvent(LivingDropsEvent e) {
+        if (e.getEntity().dimension == ancient_world_dim_id && !e.getEntity().isNonBoss()) {
+            e.setCanceled(true);
         }
     }
 

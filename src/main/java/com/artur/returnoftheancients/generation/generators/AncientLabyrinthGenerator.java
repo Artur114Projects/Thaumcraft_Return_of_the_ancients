@@ -34,6 +34,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
     protected static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE = new byte[17][17];
     protected static final byte SIZE = 17;
     protected static WorldServer world;
+    @Deprecated
     protected static final byte[] YX_states = new byte[2];
     protected static int bossGen = 0;
     protected static ArrayList<EntityPlayer> players = new ArrayList<>();
@@ -236,8 +237,8 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         GenStructure.generateStructure(world, 6, 255, 6, "ancient_border_cap");
     }
 
+
     // разное
-    public static float getPercentages() {return (float) (((16 * YX_states[0]) + (YX_states[1] + 1)) / 2.89);}
     public static void tpToAncientWorld(EntityPlayerMP player) {
         if (world == null) {
             world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(ancient_world_dim_id);
@@ -260,6 +261,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                 genAncientLabyrinth(player);
             } else {
                 player.getEntityData().setLong("getReward", WorldData.get().saveData.getLong("getReward"));
+                HandlerR.injectPhaseOnClient(player, PHASE);
             }
         } else {
             if (player.isCreative()) {
@@ -293,6 +295,9 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
 
         System.out.println("Generating ancient labyrinth start");
         PHASE = 0;
+        for (EntityPlayer player1 : players){
+            HandlerR.injectPhaseOnClient((EntityPlayerMP) player1, (byte) 0);
+        }
         byte[][][] a;
         if (AncientWorldSettings.isOldGenerator) {
             a = AncientLabyrinthOldMap.genStructuresMap();
@@ -303,12 +308,20 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         ANCIENT_LABYRINTH_STRUCTURES_ROTATE = a[1];
 
         PHASE = 1;
+        for (EntityPlayer player1 : players){
+            HandlerR.injectPhaseOnClient((EntityPlayerMP) player1, (byte) 1);
+        }
+
         System.out.println("Cleaning area");
         AncientWorldBuildProcessor.clearArea();
     }
     private static void genFinish() {
         System.out.println("Generate ancient labyrinth finish");
         PHASE = 4;
+        for (EntityPlayer player1 : players){
+            HandlerR.injectPhaseOnClient((EntityPlayerMP) player1, (byte) 4);
+        }
+
         isGen = true;
         for (EntityPlayer player : players) {
             HandlerR.setLoadingGuiState((EntityPlayerMP) player, false);
@@ -361,12 +374,15 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         public void Tick(TickEvent.WorldTickEvent e) {
             if (!e.world.isRemote) {
                 if (please) {
-                    if (t == 8) {
+                    if (t == AncientWorldSettings.AncientWorldGenerationSettings.structuresGenerationDelay) {
                         t = 0;
 //                        System.out.println("please " + "x" + xtp + " y" + ytp);
                         if (xtp == SIZE) {
                             ytp++;
                             xtp = 0;
+                            for (EntityPlayer player1 : players){
+                                HandlerR.injectPercentagesOnClient((EntityPlayerMP) player1, xtp, ytp);
+                            }
                         }
                         if (ytp == SIZE) {
                             ytp = 0;
@@ -374,6 +390,9 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                             settings.setRotation(Rotation.NONE);
                             please = false;
                             PHASE = 3;
+                            for (EntityPlayer player1 : players){
+                                HandlerR.injectPhaseOnClient((EntityPlayerMP) player1, (byte) 3);
+                            }
                             System.out.println("Reload light");
                             reloadLight();
                             return;
@@ -436,17 +455,19 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                                 System.out.println("WTF????? " + structure);
                                 break;
                         }
-                        YX_states[0] = ytp;
-                        YX_states[1] = xtp;
+
                         xtp++;
                     }
                     t++;
                 }
                 if (clear) {
-                    for (byte i = 0; i != 1; i++) {
+                    for (byte i = 0; i != AncientWorldSettings.AncientWorldGenerationSettings.numberSetClearPerTick; i++) {
                         if (xtc == SIZE) {
                             ytc++;
                             xtc = 0;
+                            for (EntityPlayer player1 : players){
+                                HandlerR.injectPercentagesOnClient((EntityPlayerMP) player1, xtc, ytc);
+                            }
                         }
                         if (ytc == SIZE) {
                             ytc = 0;
@@ -454,6 +475,10 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                             clear = false;
                             genAncientEntryWay();
                             PHASE = 2;
+                            for (EntityPlayer player1 : players){
+                                HandlerR.injectPhaseOnClient((EntityPlayerMP) player1, (byte) 2);
+                            }
+
                             System.out.println("Generate structures");
                             genStructuresInWorld();
                             return;
@@ -463,13 +488,12 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                         GenStructure.generateStructure(world, cx, 80, cz, AIR_CUBE_STRING_ID);
                         GenStructure.generateStructure(world, cx, 80 - 31, cz, AIR_CUBE_STRING_ID);
 //                        System.out.println("clear x:" + cx + " z:" + cz);
-                        YX_states[0] = ytc;
-                        YX_states[1] = xtc;
+
                         xtc++;
                     }
                 }
                 if (reloadLight) {
-                    for (int i = 0; i != 925; i++) {
+                    for (int i = 0; i != AncientWorldSettings.AncientWorldGenerationSettings.numberSetReloadLightPerTick; i++) {
                         if (xtl == 144) {
                             ytl++;
                             xtl = -128;

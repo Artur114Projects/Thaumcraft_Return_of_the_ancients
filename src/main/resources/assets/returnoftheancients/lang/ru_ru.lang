@@ -41,4 +41,7 @@ returnoftheancients.cfg.sub.aws.wgs.fc=Шанс генерации развил�
 returnoftheancients.cfg.sub.aws.wgs.tc=Шанс генерации поворота
 # Config Mob gen settings
 returnoftheancients.cfg.sub.mgs=Настройки генерации мобов (Не работает)
-returnoftheancients.cfg.sub.mgs.umg=Использовать новую генерацию мобов
+
+returnoftheancients.cfg.sub.aws.wgs.sgd=Structures generation delay
+returnoftheancients.cfg.sub.aws.wgs.nct=Number of cleaned structures per tick
+returnoftheancients.cfg.sub.aws.wgs.nrt=Number of reload light block per tickreturnoftheancients.cfg.sub.mgs.umg=Использовать новую генерацию мобов

@@ -125,6 +125,16 @@ public class TRAConfigs {
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.nt5")
         public boolean isNeedMoreThan50Fill = true;
 
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.sgd")
+        @Config.Comment("set the value more if the server lags during generation")
+        public int structuresGenerationDelay = 8;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.nct")
+        public int numberSetClearPerTick = 1;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.nrt")
+        public int numberSetReloadLightPerTick = 925;
+
     }
 
 

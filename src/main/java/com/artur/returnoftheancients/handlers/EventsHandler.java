@@ -35,6 +35,9 @@ import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 import thaumcraft.client.lib.events.RenderEventHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
 
@@ -316,6 +319,9 @@ public class EventsHandler {
         }
     }
 
+    static byte wt = 0;
+    List<PotionEffect> potionEffects = new ArrayList<>();
+
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 //        if (event.getWorld().provider.getDimension() == ancient_world_dim_id && !event.getWorld().isRemote && !(event.getEntity() instanceof EntityItem)) {
@@ -342,6 +348,16 @@ public class EventsHandler {
             }
         }
     }
+
+    @SubscribeEvent
+    public void WorldTick(TickEvent.WorldTickEvent e) {
+        if (wt == 8) {
+            wt = 0;
+
+        }
+        wt++;
+    }
+
 
 //    @SubscribeEvent
 //    public void canDeSpawn(LivingSpawnEvent.AllowDespawn event) {

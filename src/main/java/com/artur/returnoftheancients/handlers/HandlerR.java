@@ -162,8 +162,14 @@ public class HandlerR {
         return isGoodNBTTagBase(nbt, Tag, true);
     }
 
-    public static boolean isGoodNBTTagLG(NBTTagCompound nbt) {
-        final String[] Tag = new String[] {"setGuiState", "sendAncientWorldLoadMessage", "sendMessage", "sendMessageTranslate"};
+    public static boolean isGoodNBTTagMisc(NBTTagCompound nbt) {
+        final String[] Tag = new String[] {"setGuiState",
+                "sendAncientWorldLoadMessage",
+                "sendMessage",
+                "sendMessageTranslate",
+                "injectPhase",
+                "injectPercentages"
+        };
         return isGoodNBTTagBase(nbt, Tag, false);
     }
 
@@ -182,5 +188,17 @@ public class HandlerR {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setBoolean("sendAncientWorldLoadMessage", state);
         MainR.NETWORK.sendToAll(new ClientPacketMisc(nbt));
+    }
+
+    public static void injectPercentagesOnClient(EntityPlayerMP playerMP, int x, int y) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setByte("injectPercentages", (byte) Math.round(((16 * y) + (x + 1)) / 2.89D));
+        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
+    }
+
+    public static void injectPhaseOnClient(EntityPlayerMP playerMP, byte PHASE) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setByte("injectPhase", PHASE);
+        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
     }
 }

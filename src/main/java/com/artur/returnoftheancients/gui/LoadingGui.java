@@ -1,36 +1,43 @@
 package com.artur.returnoftheancients.gui;
 
-import com.artur.returnoftheancients.generation.generators.AncientLabyrinthGenerator;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 
-import static com.artur.returnoftheancients.generation.generators.AncientLabyrinthGenerator.PHASE;
 
 public class LoadingGui extends GuiScreen {
+    private static byte PHASE = -1;
+    private static byte percentages = 0;
     private final int Green = 32768;
     private final int Red = 16711680;
     private final int White = 16777215;
-    private int MainStringColor = White;
     private static final int Y = 100;
     private static final int X = 427;
     private static ResourceLocation location;
-    private int s = 0;
     private byte h = 0;
     private byte t = 0;
 //    private int xd = width + 40;
     private String ts = "";
     private final String[] constantNames = new String[] {"generating structures map", "cleaning area", "place structures in world", "reload light", "Finish!"};
-    private String name = "gui error";
+    private final String nameDefault = "ERROR";
     private final int[] colors = new int[7];
 
 
     public LoadingGui() {
         location = new ResourceLocation( Referense.MODID + ":textures/gui/boba.png");
+    }
+
+    public static void injectPhase(byte PHASE) {
+        LoadingGui.PHASE = PHASE;
+    }
+
+    public static void injectPercentages(byte percentages) {
+        LoadingGui.percentages = percentages;
     }
 
     @Override
@@ -41,8 +48,6 @@ public class LoadingGui extends GuiScreen {
     @Override
     public void updateScreen() {
         if (h == 20) {
-            if (!AncientLabyrinthGenerator.isGen)
-                s++;
             h = 0;
         }
         if (h % 10 == 0) {
@@ -65,14 +70,7 @@ public class LoadingGui extends GuiScreen {
                 t = 0;
                 break;
         }
-        if (AncientLabyrinthGenerator.isGen) {
-            MainStringColor = Green;
-        }
         h++;
-//        if (xd <= -40) {
-//            xd = width + 40;
-//        }
-//        xd -= 4;
         super.updateScreen();
     }
 
@@ -81,11 +79,10 @@ public class LoadingGui extends GuiScreen {
         GL11.glColor4f(1, 1, 1, 1);
         mc.getTextureManager().bindTexture(location);
         this.drawDefaultBackground();
+        ScaledResolution sr = new ScaledResolution(mc);
         drawTexturedModalRect(0, 0, 0, 0, width, height);
 
-//        fontRenderer.drawString("Generating ancient world (" + s + "s)", (width / 2) - (fontRenderer.getStringWidth("Generating ancient world (" + s + "s)") / 2), height / 5, MainStringColor);
-
-        int hei = height / 2 + 4;
+        int hei = height / 3;
         switch (PHASE) {
             case 0: {
                 String text = constantNames[0] + ts;
@@ -93,12 +90,12 @@ public class LoadingGui extends GuiScreen {
                 fontRenderer.drawString(text, wid, hei, White);
             }break;
             case 1: {
-                String text = constantNames[1] + " " + Math.round(AncientLabyrinthGenerator.getPercentages()) + "%";
+                String text = constantNames[1] + " " + percentages + "%";
                 int wid = ((width / 2) - (fontRenderer.getStringWidth(text) / 2));
                 fontRenderer.drawString(text, wid, hei, White);
             }break;
             case 2: {
-                String text = constantNames[2] + " " + Math.round(AncientLabyrinthGenerator.getPercentages()) + "%";
+                String text = constantNames[2] + " " + percentages + "%";
                 int wid = ((width / 2) - (fontRenderer.getStringWidth(text) / 2));
                 fontRenderer.drawString(text, wid, hei, White);
             }break;
@@ -111,7 +108,11 @@ public class LoadingGui extends GuiScreen {
                 String text = constantNames[4];
                 int wid = ((width / 2) - (fontRenderer.getStringWidth(text) / 2));
                 fontRenderer.drawString(text, wid, hei, White);
-            }
+            }break;
+            case -1:{
+                int wid = ((width / 2) - (fontRenderer.getStringWidth(nameDefault) / 2));
+                fontRenderer.drawString(nameDefault, wid, hei, Red);
+            }break;
         }
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

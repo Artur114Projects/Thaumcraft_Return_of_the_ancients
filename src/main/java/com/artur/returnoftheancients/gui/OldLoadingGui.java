@@ -72,7 +72,7 @@ public class OldLoadingGui extends GuiScreen {
         }
         if (AncientLabyrinthGenerator.PHASE > -1) {
             if (AncientLabyrinthGenerator.PHASE == 4 || AncientLabyrinthGenerator.PHASE == 5) {
-                names[AncientLabyrinthGenerator.PHASE] = constantNames[AncientLabyrinthGenerator.PHASE] + ts + " " + AncientLabyrinthGenerator.getPercentages() + "%";
+                names[AncientLabyrinthGenerator.PHASE] = constantNames[AncientLabyrinthGenerator.PHASE] + ts + " " + "12r32t43y54u65" + "%";
             } else if (AncientLabyrinthGenerator.PHASE < 7){
                 names[AncientLabyrinthGenerator.PHASE] = constantNames[AncientLabyrinthGenerator.PHASE] + ts;
             }

@@ -39,6 +39,9 @@ returnoftheancients.cfg.sub.aws.daw=Is dead in ancient world
 returnoftheancients.cfg.sub.aws.wgs=Ancient world generation settings
 returnoftheancients.cfg.sub.aws.wgs.fc=Chance of generating a fork
 returnoftheancients.cfg.sub.aws.wgs.tc=Chance of generating a turn
+returnoftheancients.cfg.sub.aws.wgs.sgd=Structures generation delay
+returnoftheancients.cfg.sub.aws.wgs.nct=Number of cleaned structures per tick
+returnoftheancients.cfg.sub.aws.wgs.nrt=Number of reload light block per tick
 # Config Mob gen settings
 returnoftheancients.cfg.sub.mgs=Mob gen settings (Don`t work)
-returnoftheancients.cfg.sub.mgs.umg=Use new mob generation
+returnoftheancients.cfg.sub.mgs.umg=Use new mob generation (Don`t work)

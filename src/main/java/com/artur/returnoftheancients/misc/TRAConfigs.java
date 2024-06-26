@@ -54,6 +54,9 @@ public class TRAConfigs {
         @Config.Comment("Here you can specify with items from which mods you can get into the ancient world")
         // baubles , "thaumicaugmentation", "", "baubles"
         public String[] modId = new String[] {Referense.MODID, "minecraft", "thaumcraft", "baubles"};
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.ci")
+        public boolean checkItems = true;
     }
 
     public static class Any {
@@ -67,6 +70,9 @@ public class TRAConfigs {
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.any.uog")
         public boolean useOldLoadingGui = false;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.any.mcn")
+        public String ModChatName = "TC RETURN OF THE ANCIENTS: ";
     }
 
     public static class AncientWorldSettings {

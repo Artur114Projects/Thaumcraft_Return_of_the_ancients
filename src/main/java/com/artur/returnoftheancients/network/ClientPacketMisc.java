@@ -51,6 +51,7 @@ public class ClientPacketMisc implements IMessage {
                 if (HandlerR.isGoodNBTTagMisc(message.data)) {
                     NBTTagCompound nbt = message.data;
                     EntityPlayerSP playerSP = Minecraft.getMinecraft().player;
+                    String TRA = TextFormatting.DARK_PURPLE + TRAConfigs.Any.ModChatName + TextFormatting.RESET;
                     if (nbt.hasKey("setGuiState")) {
                         if (nbt.getBoolean("setGuiState")) {
                             if (!TRAConfigs.Any.useOldLoadingGui) {
@@ -63,14 +64,14 @@ public class ClientPacketMisc implements IMessage {
                         }
                     } else if (nbt.hasKey("sendAncientWorldLoadMessage")) {
                         if (nbt.getBoolean("sendAncientWorldLoadMessage")) {
-                            playerSP.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + "<TC RETURN OF THE ANCIENTS> " + TextFormatting.RESET + I18n.translateToLocal(Referense.MODID + ".message.ancientworldload.start")));
+                            playerSP.sendMessage(new TextComponentString(TRA + I18n.translateToLocal(Referense.MODID + ".message.ancientworldload.start")));
                         } else {
-                            playerSP.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + "<TC RETURN OF THE ANCIENTS> " + TextFormatting.RESET + I18n.translateToLocal(Referense.MODID + ".message.ancientworldload.finish")));
+                            playerSP.sendMessage(new TextComponentString(TRA+ I18n.translateToLocal(Referense.MODID + ".message.ancientworldload.finish")));
                         }
                     } else if (nbt.hasKey("sendMessage")) {
-                        playerSP.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + "<TC RETURN OF THE ANCIENTS> " + TextFormatting.RESET + nbt.getString("sendMessage")));
+                        playerSP.sendMessage(new TextComponentString(TRA + nbt.getString("sendMessage")));
                     } else if (nbt.hasKey("sendMessageTranslate")) {
-                        playerSP.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + "<TC RETURN OF THE ANCIENTS> " + TextFormatting.RESET + I18n.translateToLocal(nbt.getString("sendMessageTranslate"))));
+                        playerSP.sendMessage(new TextComponentString(TRA + I18n.translateToLocal(nbt.getString("sendMessageTranslate"))));
                     }
                     if (nbt.hasKey("injectPhase")) {
                         LoadingGui.injectPhase(nbt.getByte("injectPhase"));

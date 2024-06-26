@@ -327,10 +327,8 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             HandlerR.setLoadingGuiState((EntityPlayerMP) player, false);
             if (player != null) {
                 player.setHealth(20);
-                if (player.isCreative()) {
-                    FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 126, -10);
-                } else {
-                    FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 253, 8);
+                if (!player.isCreative()) {
+                    ((EntityPlayerMP) player).connection.setPlayerLocation(8, 253, 8, -181, 0);
                 }
             }
         }

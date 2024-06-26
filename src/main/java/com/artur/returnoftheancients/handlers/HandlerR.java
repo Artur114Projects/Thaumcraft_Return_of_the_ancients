@@ -201,4 +201,16 @@ public class HandlerR {
         nbt.setByte("injectPhase", PHASE);
         MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
     }
+
+    public static void sendMessageString(EntityPlayerMP playerMP, String message) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setString("sendMessage", message);
+        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
+    }
+
+    public static void sendMessageTranslate(EntityPlayerMP playerMP, String key) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setString("sendMessageTranslate", key);
+        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
+    }
 }

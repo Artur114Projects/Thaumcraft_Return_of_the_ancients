@@ -19,7 +19,7 @@ returnoftheancients.cfg.sub.any=Any
 returnoftheancients.cfg.sub.any.uog=Use old loading gui
 # Config Portal gen settings
 returnoftheancients.cfg.sub.portal.slm=Is send load message
-returnoftheancients.cfg.sub.portal=Ancient Portal Generation Settings
+returnoftheancients.cfg.sub.portal=Ancient portal settings
 returnoftheancients.cfg.sub.portal.isgen=generate? (Don`t work)
 returnoftheancients.cfg.sub.portal.x=X
 returnoftheancients.cfg.sub.portal.z=Z

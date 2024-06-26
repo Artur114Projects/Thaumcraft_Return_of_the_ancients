@@ -17,9 +17,9 @@ returnoftheancients.cfg.sub.any.primalbladespeed=Скорость атаки п�
 returnoftheancients.cfg.sub.any.primalbladedamage=Урон первородного клинка
 returnoftheancients.cfg.sub.any=Разное
 returnoftheancients.cfg.sub.any.uog=Использовать старый загрузочный экран
-# Config Portal gen settings
+# Config Portal settings
 returnoftheancients.cfg.sub.portal.slm=Отправлять сообщение о загрузке
-returnoftheancients.cfg.sub.portal=Настройки генерации древнего портала
+returnoftheancients.cfg.sub.portal=Настройки древнего портала
 returnoftheancients.cfg.sub.portal.isgen=Генерировать? (Не работает)
 returnoftheancients.cfg.sub.portal.x=X
 returnoftheancients.cfg.sub.portal.z=Z
@@ -27,7 +27,7 @@ returnoftheancients.cfg.sub.portal.y=Y
 returnoftheancients.cfg.sub.portal.tobedrock=Генерировать до бедрока? (Не работает)
 returnoftheancients.cfg.sub.portal.modId=ID Модов
 # Config Ancient world settings
-returnoftheancients.cfg.sub.aws=Настройки древнего мира
+returnoftheancients.cfg.sub.aws=Настройки древнего ира
 returnoftheancients.cfg.sub.aws.og=Использовать старый генетратор
 returnoftheancients.cfg.sub.aws.ccg=Нельзя изменить яркость
 returnoftheancients.cfg.sub.aws.np=Нельзя использовать мирную сложность

@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.events;
 
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitDimensions;
+import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.sounds.ModSounds;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -20,7 +21,7 @@ public class RemoveUnresolvedItems {
     public static final String dead = Referense.MODID + "setDead";
     public static final String time = Referense.MODID + "RemoveItemsTime";
     public static final String PRI = Referense.MODID + "phaseRemoveItems";
-    public static final String isRespawn = Referense.MODID + "isRespawn";
+//    public static final String isRespawn = Referense.MODID + "isRespawn";
 
 
     private static void resetNBT(EntityPlayer player) {
@@ -37,7 +38,7 @@ public class RemoveUnresolvedItems {
 
     @SubscribeEvent
     public void Tick(TickEvent.PlayerTickEvent e) {
-        if (e.player.dimension == InitDimensions.ancient_world_dim_id) {
+        if (e.player.dimension == InitDimensions.ancient_world_dim_id && TRAConfigs.PortalSettings.checkItems) {
             if (!HandlerR.isPlayerUseUnresolvedItems(e.player).isEmpty() && (!e.player.getEntityData().getBoolean(isUUI) || !e.player.getEntityData().hasKey(isUUI)) && !e.player.isCreative() && !e.player.isDead) {
                 System.out.println("La ti krisa " + e.player.getName());
                 e.player.getEntityData().setBoolean(isUUI, true);
@@ -62,18 +63,17 @@ public class RemoveUnresolvedItems {
             }
             if (phaseRemoveItems == 1 && timeRemoveItems >= 20) {
                 if (timeRemoveItems == 100 && e.player instanceof EntityPlayerMP) {
-                    e.player.sendMessage(new TextComponentTranslation(Referense.MODID + ".rui.t"));
+                    HandlerR.sendMessageTranslate((EntityPlayerMP) e.player, Referense.MODID + ".rui.t");
                 }
                 if (timeRemoveItems == 160) {
                     if (e.player instanceof EntityPlayerMP) {
-                        e.player.sendMessage(new TextComponentTranslation(Referense.MODID + ".rui.f"));
+                        HandlerR.sendMessageTranslate((EntityPlayerMP) e.player, Referense.MODID + ".rui.f");
                         e.player.sendMessage(new TextComponentString(HandlerR.isPlayerUseUnresolvedItems(e.player).toString()));
                     }
                     phaseRemoveItems = 2;
                 }
             }
             if (phaseRemoveItems == 2 && timeRemoveItems >= 760) {
-                e.player.getEntityData().setBoolean(dead, true);
                 e.player.setHealth(-1);
                 resetNBT(e.player);
                 e.player.isDead = true;

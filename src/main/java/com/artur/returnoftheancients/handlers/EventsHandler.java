@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.handlers;
 
+import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.events.RemoveUnresolvedItems;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -16,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumDifficulty;
@@ -118,7 +120,6 @@ public class EventsHandler {
             if (e.getEntity() instanceof EntityPlayerMP) {
                 if (e.getEntity().dimension == ancient_world_dim_id) {
                     EntityPlayer player = (EntityPlayer) e.getEntity();
-                    if (!player.getEntityData().getBoolean(RemoveUnresolvedItems.dead)) {
                         if (player.getHealth() - e.getAmount() <= 0) {
                             e.setCanceled(true);
                             player.setHealth(20);
@@ -126,12 +127,9 @@ public class EventsHandler {
                             System.out.println("You dead");
                             return;
                         }
-                    } else {
-                        player.getEntityData().setBoolean(RemoveUnresolvedItems.dead, false);
-                        return;
-                    }
                     if (HandlerR.genRandomIntRange(0, TRAConfigs.AncientWorldSettings.chanceIgnoringArmor) == 0) {
                         player.setHealth(player.getHealth() - e.getAmount());
+                        e.setCanceled(true);
                     }
                 }
             }
@@ -242,22 +240,12 @@ public class EventsHandler {
                 e.player.fallDistance = 0;
                 e.player.motionY += -1 - e.player.motionY;
             }
-//            if (!capIsSet) {
-//                if (pos.getY() == 81 && pos.getX() <= 9 && pos.getX() >= 6 && pos.getZ() <= 9 && pos.getZ() >= 6) {
-//                    GenStructure.generateStructure(e.player.world, 6, 85, 6, "ancient_cap");
-//                    capIsSet = true;
-//                }
-//            }
             if (pT >= 4) {
                 pT = 0;
                 if (TRAConfigs.AncientWorldSettings.noNightVision) {
                     if (e.player.getActivePotionEffect(MobEffects.NIGHT_VISION) != null && !e.player.isCreative()) {
                         e.player.removePotionEffect(MobEffects.NIGHT_VISION);
-                        e.player.sendMessage(new TextComponentString("Only darkness"));
                     }
-                }
-                if (e.player.getActivePotionEffect(MobEffects.WITHER) != null) {
-                    e.player.removePotionEffect(MobEffects.WITHER);
                 }
                 if (TRAConfigs.AncientWorldSettings.isSetWarp) {
                     if (!e.player.getEntityData().getBoolean("isWarpSet") && e.player.getServer() != null) {
@@ -278,7 +266,6 @@ public class EventsHandler {
                             e.player.getEntityData().setFloat("gammaSetting", Settings.gammaSetting);
                         }
                         Settings.gammaSetting = 0;
-                        e.player.sendMessage(new TextComponentString("Only darkness"));
                     }
                 }
                 if (TRAConfigs.AncientWorldSettings.cantChangeRenderDistanceChunks && playerSP.dimension == ancient_world_dim_id) {
@@ -287,13 +274,12 @@ public class EventsHandler {
                             e.player.getEntityData().setInteger("renderDistanceChunks", Settings.renderDistanceChunks);
                         }
                         Settings.renderDistanceChunks = 4;
-                        e.player.sendMessage(new TextComponentString("Only darkness"));
                     }
                 }
                 if (TRAConfigs.AncientWorldSettings.noPeaceful) {
                     if (difficultyId == 0) {
                         if (e.player instanceof EntityPlayerMP) {
-                            e.player.sendMessage(new TextComponentString("PEACEFUL DIFFICULTY ???"));
+                            HandlerR.sendMessageString((EntityPlayerMP) e.player, "PEACEFUL DIFFICULTY ???");
                             tpToHome(e.player);
                         }
                     }
@@ -315,7 +301,6 @@ public class EventsHandler {
             if (e.player.isCreative()) {
                 e.player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 999999, 0));
             }
-//            capIsSet = false;
         }
     }
 
@@ -324,17 +309,6 @@ public class EventsHandler {
 
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
-//        if (event.getWorld().provider.getDimension() == ancient_world_dim_id && !event.getWorld().isRemote && !(event.getEntity() instanceof EntityItem)) {
-//            if (!event.getEntity().getEntityData().hasKey("A_ID")) {
-//                event.getWorld().getChunkFromBlockCoords(event.getEntity().getPosition()).removeEntity(event.getEntity());
-//                event.getWorld().removeEntity(event.getEntity());
-//                event.setCanceled(true);
-//            } else if (event.getEntity().getEntityData().getLong("A_ID") != WorldData.get().saveData.getLong("mobId")) {
-//                event.getWorld().getChunkFromBlockCoords(event.getEntity().getPosition()).removeEntity(event.getEntity());
-//                event.getWorld().removeEntity(event.getEntity());
-//                event.setCanceled(true);
-//            }
-//        }
         if (event.getEntity().dimension == ancient_world_dim_id && !event.getWorld().isRemote) {
             if (!event.getEntity().isNonBoss()) {
                 if (!WorldData.get().saveData.getBoolean(IALGS.isBossSpawn)) {
@@ -351,11 +325,11 @@ public class EventsHandler {
 
     @SubscribeEvent
     public void WorldTick(TickEvent.WorldTickEvent e) {
-        if (wt == 8) {
-            wt = 0;
-
-        }
-        wt++;
+//        if (wt == 8) {
+//            wt = 0;
+//
+//        }
+//        wt++;
     }
 
 

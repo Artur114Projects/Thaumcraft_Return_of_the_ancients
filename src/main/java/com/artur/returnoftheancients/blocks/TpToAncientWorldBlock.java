@@ -63,7 +63,7 @@ public class TpToAncientWorldBlock extends BaseBlock{
             if (entityIn instanceof EntityPlayerMP) {
                 EntityPlayer player = (EntityPlayer) entityIn;
                 ArrayList<String> ID = HandlerR.isPlayerUseUnresolvedItems(player);
-                if (ID.isEmpty() && (EventsHandler.getDifficultyId() != 0 || !TRAConfigs.AncientWorldSettings.noPeaceful)) {
+                if ((ID.isEmpty() || !TRAConfigs.PortalSettings.checkItems) && (EventsHandler.getDifficultyId() != 0 || !TRAConfigs.AncientWorldSettings.noPeaceful)) {
                     player.fallDistance = 0;
                     AncientLabyrinthGenerator.tpToAncientWorld((EntityPlayerMP) player);
                 } else {

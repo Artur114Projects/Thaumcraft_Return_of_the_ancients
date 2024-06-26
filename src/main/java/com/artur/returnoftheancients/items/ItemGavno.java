@@ -45,6 +45,8 @@ public class ItemGavno extends BaseItem{
 		if (player instanceof EntityPlayerMP) {
 			PacketHandler.INSTANCE.sendTo(new PacketMiscEvent((byte) 2), (EntityPlayerMP) player);
 		}
+		player.setHealth(player.getHealth() - 1);
+		player.performHurtAnimation();
 		System.out.println(Minecraft.getMinecraft().player.rotationYaw);
 		if (!worldIn.isRemote) {
 			ResourceLocation location = new ResourceLocation(Referense.MODID, "ancient_portal_no_bedrock");

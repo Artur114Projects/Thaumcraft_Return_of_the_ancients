@@ -168,7 +168,8 @@ public class HandlerR {
                 "sendMessage",
                 "sendMessageTranslate",
                 "injectPhase",
-                "injectPercentages"
+                "injectPercentages",
+                "changeTitle"
         };
         return isGoodNBTTagBase(nbt, Tag, false);
     }
@@ -211,6 +212,13 @@ public class HandlerR {
     public static void sendMessageTranslate(EntityPlayerMP playerMP, String key) {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setString("sendMessageTranslate", key);
+        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
+    }
+
+    public static void sendMessageTranslateWithChangeTitle(EntityPlayerMP playerMP, String key, String title) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setString("sendMessageTranslate", key);
+        nbt.setString("changeTitle", title);
         MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
     }
 }

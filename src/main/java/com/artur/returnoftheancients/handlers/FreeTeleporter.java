@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class FreeTeleporter extends Teleporter
 {
-    public boolean makePortal(Entity p_85188_1_)
+    public boolean makePortal(@NotNull Entity p_85188_1_)
     {
         return true;
     }
@@ -27,19 +27,9 @@ public class FreeTeleporter extends Teleporter
         player.motionX = player.motionY = player.motionZ = 0.0D;
     }
 
-    public FreeTeleporter(WorldServer world, double x, double y, double z) {
+    public FreeTeleporter(WorldServer world) {
         super(world);
-        this.worldServer = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
     }
-
-    private final WorldServer worldServer;
-    private double x;
-    private double y;
-    private double z;
-
 
     public static void teleportToDimension(EntityPlayer player, int dimension, double x, double y, double z) {
         int oldDimension = player.world.provider.getDimension();
@@ -52,7 +42,7 @@ public class FreeTeleporter extends Teleporter
             throw new IllegalArgumentException("Dimension: " + dimension + " doesn't exist!");
         }
 
-        worldServer.getMinecraftServer().getPlayerList().transferPlayerToDimension(entityPlayerMP, dimension, new FreeTeleporter(worldServer, x, y, z));
+        worldServer.getMinecraftServer().getPlayerList().transferPlayerToDimension(entityPlayerMP, dimension, new FreeTeleporter(worldServer));
         player.setPositionAndUpdate(x, y, z);
         if (oldDimension == 1) {
             // For some reason teleporting out of the end does weird things. Compensate for that

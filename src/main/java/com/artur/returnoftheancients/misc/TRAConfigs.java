@@ -73,6 +73,10 @@ public class TRAConfigs {
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.any.mcn")
         public String ModChatName = "TC RETURN OF THE ANCIENTS: ";
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.any.dm")
+        @Config.RequiresMcRestart
+        public boolean debugMode = false;
     }
 
     public static class AncientWorldSettings {

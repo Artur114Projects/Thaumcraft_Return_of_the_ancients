@@ -2,12 +2,15 @@ package com.artur.returnoftheancients.items;
 
 
 import com.artur.returnoftheancients.gui.SkalaGui;
+import com.artur.returnoftheancients.handlers.EventsHandler;
+import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.init.InitSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.command.CommandBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,13 +20,11 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.common.lib.network.PacketHandler;
 import thaumcraft.common.lib.network.misc.PacketMiscEvent;
@@ -42,9 +43,7 @@ public class ItemGavno extends BaseItem{
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		Minecraft.getMinecraft().player.motionY = 4;
-		FMLCommonHandler.instance().showGuiScreen(new SkalaGui());
+	public @NotNull EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player instanceof EntityPlayerMP) {
 			PacketHandler.INSTANCE.sendTo(new PacketMiscEvent((byte) 2), (EntityPlayerMP) player);
 		}
@@ -54,7 +53,7 @@ public class ItemGavno extends BaseItem{
 		System.out.println(Minecraft.getMinecraft().player.rotationYaw);
 		if (!worldIn.isRemote) {
 			player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 30, -1));
-			ResourceLocation location = new ResourceLocation(Referense.MODID, "ancient_portal_no_bedrock");
+			ResourceLocation location = new ResourceLocation(Referense.MODID, "ancient_kusok_portal");
 			String s = location.getResourceDomain();
 			String s1 = location.getResourcePath();
 			InputStream inputstream = MinecraftServer.class.getResourceAsStream("/assets/" + s + "/structures/" + s1 + ".nbt");
@@ -71,6 +70,7 @@ public class ItemGavno extends BaseItem{
 			nbt.setString("sendMessage", "gavno");
 			MainR.NETWORK.sendToAll(new ClientPacketMisc(nbt));
 		}
+		System.out.println(worldIn.playerEntities);
 		return EnumActionResult.SUCCESS;
 	}
 

@@ -1,8 +1,6 @@
 package com.artur.returnoftheancients.handlers;
 
-import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.misc.TRAConfigs;
-import com.artur.returnoftheancients.events.RemoveUnresolvedItems;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.blocks.TpToAncientWorldBlock;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
@@ -17,9 +15,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -36,10 +32,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 import thaumcraft.client.lib.events.RenderEventHandler;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
@@ -59,7 +51,7 @@ public class EventsHandler {
     public static void setAncientWorldLoad(boolean ancientWorldLoad) {isAncientWorldLoad = ancientWorldLoad;}
     public static byte getDifficultyId() {return difficultyId;}
 
-    public static void tpToHome(EntityPlayer player) {
+    public static void tpToHome(EntityPlayerMP player) {
         player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, true);
         FreeTeleporter.teleportToDimension(player, 0, TRAConfigs.PortalSettings.x + 3, 3, TRAConfigs.PortalSettings.z + 3);
         player.getEntityData().setBoolean(tpToHomeNBT, true);
@@ -123,7 +115,7 @@ public class EventsHandler {
                         if (player.getHealth() - e.getAmount() <= 0) {
                             e.setCanceled(true);
                             player.setHealth(20);
-                            tpToHome(player);
+                            tpToHome((EntityPlayerMP) player);
                             System.out.println("You dead");
                             return;
                         }
@@ -280,7 +272,7 @@ public class EventsHandler {
                     if (difficultyId == 0) {
                         if (e.player instanceof EntityPlayerMP) {
                             HandlerR.sendMessageString((EntityPlayerMP) e.player, "PEACEFUL DIFFICULTY ???");
-                            tpToHome(e.player);
+                            tpToHome((EntityPlayerMP) e.player);
                         }
                     }
                 }
@@ -306,7 +298,7 @@ public class EventsHandler {
 
     static byte wt = 0;
     static int maxDuration = 999999999;
-    PotionEffect[] potionEffects = new PotionEffect[4];
+    PotionEffect[] potionEffects = new PotionEffect[5];
 
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
@@ -332,18 +324,20 @@ public class EventsHandler {
     @SubscribeEvent
     public void WorldTick(TickEvent.WorldTickEvent e) {
         if (e.world.provider.getDimension() == ancient_world_dim_id) {
-            if (wt == 8) {
+            if (wt == 20) {
                 wt = 0;
                 int players = e.world.playerEntities.size();
                 int resistanceAmplifier = -1;
                 int strengthAmplifier = -1;
                 int fireResistanceAmplifier = -1;
                 int regenerationAmplifier = -1;
+                int invisibilityAmplifier = -1;
 
                 if (players >= 6) {
                     resistanceAmplifier = ((players / 3) < 5) ? (players / 3) : 4;
-                    strengthAmplifier = (players / 3);
-                    regenerationAmplifier = (players / 3);
+                    regenerationAmplifier = ((players / 3) < 5) ? (players / 3) : 4;
+                    invisibilityAmplifier = (HandlerR.genRandomIntRange(0, 4) == 0) ? 0 : -1;
+                    strengthAmplifier = (players / 6);
                     fireResistanceAmplifier = 0;
                 } else if (players > 3) {
                     resistanceAmplifier = 1;
@@ -371,6 +365,9 @@ public class EventsHandler {
                 }
                 if (fireResistanceAmplifier != -1) {
                     potionEffects[3] = (new PotionEffect(MobEffects.FIRE_RESISTANCE, maxDuration, fireResistanceAmplifier));
+                }
+                if (invisibilityAmplifier != -1) {
+                    potionEffects[4] = (new PotionEffect(MobEffects.INVISIBILITY, maxDuration, invisibilityAmplifier));
                 }
             }
             wt++;

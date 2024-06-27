@@ -16,6 +16,7 @@ import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import com.artur.returnoftheancients.utils.interfaces.IWorldTimer;
 import com.artur.returnoftheancients.utils.interfaces.IStructure;
+import net.minecraft.command.CommandKill;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.Rotation;
@@ -38,7 +39,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
     protected static final byte[] YX_states = new byte[2];
     protected static int bossGen = 0;
     protected static ArrayList<EntityPlayer> players = new ArrayList<>();
-    protected static boolean isGenerateStart = false;
+    public static boolean isGenerateStart = false;
     public static boolean isGen = false;
     public static byte PHASE = -1;
     public static boolean waitPlayersOut = false;
@@ -244,14 +245,12 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(ancient_world_dim_id);
         }
         if (!WorldData.get().saveData.getBoolean(isAncientWorldGenerateKey) || world.playerEntities.isEmpty()) {
-            if (!world.playerEntities.isEmpty() && !isGenerateStart) {
-                for (EntityPlayer player1 : world.playerEntities) {
-                    EventsHandler.tpToHome(player1);
-                }
-                player.getEntityData().setBoolean(noCollisionNBT, true);
-                player.getEntityData().setBoolean(EventsHandler.tpToHomeNBT, true);
-                return;
-            }
+//            if (!world.playerEntities.isEmpty() && !isGenerateStart) {
+//                for (EntityPlayer player1 : world.playerEntities) {
+//                    EventsHandler.tpToHome((EntityPlayerMP) player1);
+//                }
+//                return;
+//            }
             players.add(player);
             FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 126, -10);
             HandlerR.setLoadingGuiState(player, true);

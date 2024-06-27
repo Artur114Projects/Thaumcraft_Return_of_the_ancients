@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.proxy;
 import com.artur.returnoftheancients.commads.*;
 import com.artur.returnoftheancients.handlers.RegisterHandler;
 
+import com.artur.returnoftheancients.misc.TRAConfigs;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -27,10 +28,12 @@ public class CommonProxy {
 
     }
     public void serverStarting(FMLServerStartingEvent event) {
-        event.registerServerCommand(new TestCommand());
-        event.registerServerCommand(new TestCommand2());
-        event.registerServerCommand(new DataManager());
-        event.registerServerCommand(new GenAncientLabyrinth());
-        event.registerServerCommand(new Command());
+        if (TRAConfigs.Any.debugMode) {
+            event.registerServerCommand(new TestCommand());
+            event.registerServerCommand(new TestCommand2());
+            event.registerServerCommand(new DataManager());
+            event.registerServerCommand(new GenAncientLabyrinth());
+            event.registerServerCommand(new Command());
+        }
     }
 }

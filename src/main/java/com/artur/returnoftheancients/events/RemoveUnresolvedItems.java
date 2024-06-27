@@ -11,16 +11,17 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class RemoveUnresolvedItems {
     public static final String isUUI = Referense.MODID + "isUseUnresolvedItems";
-    public static final String dead = Referense.MODID + "setDead";
     public static final String time = Referense.MODID + "RemoveItemsTime";
     public static final String PRI = Referense.MODID + "phaseRemoveItems";
-//    public static final String isRespawn = Referense.MODID + "isRespawn";
+
+    private static final String rui_title = TextFormatting.BLACK + "[THEY] " + TextFormatting.RESET;
 
 
     private static void resetNBT(EntityPlayer player) {
@@ -62,11 +63,11 @@ public class RemoveUnresolvedItems {
             }
             if (phaseRemoveItems == 1 && timeRemoveItems >= 20) {
                 if (timeRemoveItems == 100 && e.player instanceof EntityPlayerMP) {
-                    HandlerR.sendMessageTranslate((EntityPlayerMP) e.player, Referense.MODID + ".rui.t");
+                    HandlerR.sendMessageTranslateWithChangeTitle((EntityPlayerMP) e.player, Referense.MODID + ".rui.t", rui_title);
                 }
                 if (timeRemoveItems == 160) {
                     if (e.player instanceof EntityPlayerMP) {
-                        HandlerR.sendMessageTranslate((EntityPlayerMP) e.player, Referense.MODID + ".rui.f");
+                        HandlerR.sendMessageTranslateWithChangeTitle((EntityPlayerMP) e.player, Referense.MODID + ".rui.f", rui_title);
                         e.player.sendMessage(new TextComponentString(HandlerR.isPlayerUseUnresolvedItems(e.player).toString()));
                     }
                     phaseRemoveItems = 2;

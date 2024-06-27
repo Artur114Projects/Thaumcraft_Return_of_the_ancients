@@ -518,7 +518,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
 
 
     public static byte[][][] genStructuresMap() {
-        random = new Random(123);
+        random = new Random();
         int void0 = 0;
         int void1 = 0;
         byte exit = 0;

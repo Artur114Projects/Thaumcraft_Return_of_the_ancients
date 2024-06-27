@@ -5,14 +5,17 @@ import com.artur.returnoftheancients.gui.SkalaGui;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.referense.Referense;
+import com.artur.returnoftheancients.init.InitSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -35,7 +38,7 @@ public class ItemGavno extends BaseItem{
 	public ItemGavno(String name) {
 		super(name);
 		setMaxStackSize(1);
-
+		setContainerItem(this);
 	}
 
 	@Override
@@ -45,10 +48,12 @@ public class ItemGavno extends BaseItem{
 		if (player instanceof EntityPlayerMP) {
 			PacketHandler.INSTANCE.sendTo(new PacketMiscEvent((byte) 2), (EntityPlayerMP) player);
 		}
+		Minecraft.getMinecraft().player.playSound(InitSounds.RUI_DEAD, 1, 1);
 		player.setHealth(player.getHealth() - 1);
 		player.performHurtAnimation();
 		System.out.println(Minecraft.getMinecraft().player.rotationYaw);
 		if (!worldIn.isRemote) {
+			player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 30, -1));
 			ResourceLocation location = new ResourceLocation(Referense.MODID, "ancient_portal_no_bedrock");
 			String s = location.getResourceDomain();
 			String s1 = location.getResourcePath();

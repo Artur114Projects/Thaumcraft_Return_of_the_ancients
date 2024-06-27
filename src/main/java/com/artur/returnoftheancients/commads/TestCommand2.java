@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.commads;
 
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
-import com.artur.returnoftheancients.sounds.ModSounds;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

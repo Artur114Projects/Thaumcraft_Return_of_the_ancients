@@ -74,7 +74,7 @@ public class TpToAncientWorldBlock extends BaseBlock{
                         player.sendMessage(new TextComponentString(ID.toString()));
                         ID.clear();
                     } else {
-                        player.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + "<TC RETURN OF THE ANCIENTS> " + TextFormatting.RESET + "PEACEFUL DIFFICULTY ???"));
+                        player.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + "TC RETURN OF THE ANCIENTS: " + TextFormatting.RESET + "PEACEFUL DIFFICULTY ???"));
                     }
                     player.getEntityData().setBoolean(EventsHandler.tpToHomeNBT, true);
                     player.getEntityData().setBoolean(noCollisionNBT, true);

@@ -4,14 +4,13 @@ import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.sounds.ModSounds;
+import com.artur.returnoftheancients.init.InitSounds;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -55,7 +54,7 @@ public class RemoveUnresolvedItems {
             }
             if (phaseRemoveItems == 0) {
                 if (e.player instanceof EntityPlayerSP) {
-                    e.player.playSound(ModSounds.WHISPER, 1, 1);
+                    e.player.playSound(InitSounds.WHISPER, 1, 1);
                 }
                 e.player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 1200));
                 e.player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1200, 10));
@@ -75,8 +74,8 @@ public class RemoveUnresolvedItems {
             }
             if (phaseRemoveItems == 2 && timeRemoveItems >= 760) {
                 e.player.setHealth(-1);
+                e.player.playSound(InitSounds.RUI_DEAD, 1, 1);
                 resetNBT(e.player);
-                e.player.isDead = true;
                 System.out.println("dead");
                 return;
             }
@@ -88,15 +87,15 @@ public class RemoveUnresolvedItems {
             }
             if (timeRemoveItems < 460) {
                 if ((timeRemoveItems % 40) == 0 && e.player instanceof EntityPlayerSP) {
-                    e.player.playSound(ModSounds.HEARTBEAT, 1, 1);
+                    e.player.playSound(InitSounds.HEARTBEAT, 1, 1);
                 }
             } else if (timeRemoveItems < 660) {
                 if ((timeRemoveItems % 20) == 0 && e.player instanceof EntityPlayerSP) {
-                    e.player.playSound(ModSounds.HEARTBEAT, 1, 1);
+                    e.player.playSound(InitSounds.HEARTBEAT, 1, 1);
                 }
             } else {
                 if ((timeRemoveItems % 10) == 0 && e.player instanceof EntityPlayerSP) {
-                    e.player.playSound(ModSounds.HEARTBEAT, 1, 1);
+                    e.player.playSound(InitSounds.HEARTBEAT, 1, 1);
                 }
             }
         }

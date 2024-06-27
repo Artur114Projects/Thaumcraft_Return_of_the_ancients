@@ -28,5 +28,15 @@
         "volume": 1
       }
     ]
+  },
+  "rui_dead": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "returnoftheancients:rui_dead",
+        "stream": true,
+        "volume": 2
+      }
+    ]
   }
 }

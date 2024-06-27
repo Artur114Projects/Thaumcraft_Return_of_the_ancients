@@ -2,9 +2,7 @@ package com.artur.returnoftheancients.commads;
 
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
 import com.artur.returnoftheancients.init.InitDimensions;
-import com.artur.returnoftheancients.sounds.ModSounds;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -13,8 +11,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.concurrent.TimeUnit;
 
 public class TestCommand extends CommandBase {
     String NAME = "testcommand", USAGE = "/testcommand";

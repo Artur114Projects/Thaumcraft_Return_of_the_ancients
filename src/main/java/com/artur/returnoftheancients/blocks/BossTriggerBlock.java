@@ -4,7 +4,7 @@ import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.handlers.EventsHandler;
 import com.artur.returnoftheancients.handlers.HandlerR;
-import com.artur.returnoftheancients.sounds.ModSounds;
+import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import com.artur.returnoftheancients.utils.interfaces.IStructure;
 import net.minecraft.block.SoundType;
@@ -18,10 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.common.entities.monster.boss.*;
-import thaumcraft.common.items.curios.ItemPrimordialPearl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class BossTriggerBlock extends BaseBlock {
@@ -70,7 +67,7 @@ public class BossTriggerBlock extends BaseBlock {
                         worldIn.spawnEntity(w);
                         break;
                 }
-                HandlerR.playSound(ModSounds.BUM);
+                HandlerR.playSound(InitSounds.BUM);
                 GenStructure.generateStructure(worldIn, pos.getX() + 5, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
                 GenStructure.generateStructure(worldIn, pos.getX() - 11, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
                 GenStructure.generateStructure(worldIn, pos.getX() + 5, pos.getY() + 2, pos.getZ() - 15, "ancient_door");

@@ -4,7 +4,7 @@ import com.artur.returnoftheancients.events.RemoveUnresolvedItems;
 import com.artur.returnoftheancients.generation.generators.AncientLabyrinthGenerator;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitItems;
-import com.artur.returnoftheancients.sounds.ModSounds;
+import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.utils.interfaces.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -31,7 +31,7 @@ public class RegisterHandler {
 	public static void preInitRegistries()
     {
 		MinecraftForge.EVENT_BUS.register(new EventsHandler());
-		MinecraftForge.EVENT_BUS.register(new ModSounds());
+		MinecraftForge.EVENT_BUS.register(new InitSounds());
 //		MinecraftForge.EVENT_BUS.register(new MCTimer());
 //		MinecraftForge.EVENT_BUS.register(new PortalEvent());
 //		MinecraftForge.EVENT_BUS.register(new GenPortal());

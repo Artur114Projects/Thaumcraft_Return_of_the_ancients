@@ -71,12 +71,6 @@ public class TpToAncientWorldBlock extends BaseBlock{
                 ArrayList<String> ID = HandlerR.isPlayerUseUnresolvedItems(player);
                 if ((ID.isEmpty() || !TRAConfigs.PortalSettings.checkItems) && (EventsHandler.getDifficultyId() != 0 || !TRAConfigs.AncientWorldSettings.noPeaceful)) {
                     player.fallDistance = 0;
-                    World world = Objects.requireNonNull(worldIn.getMinecraftServer()).getWorld(ancient_world_dim_id);
-                    if (!world.playerEntities.isEmpty() && !AncientLabyrinthGenerator.isGenerateStart && !WorldData.get().saveData.getBoolean(isAncientWorldGenerateKey)) {
-                        player.getEntityData().setBoolean(EventsHandler.tpToHomeNBT, true);
-                        player.getEntityData().setBoolean(noCollisionNBT, true);
-                        return;
-                    }
                     AncientLabyrinthGenerator.tpToAncientWorld((EntityPlayerMP) player);
                 } else {
                     if (!ID.isEmpty()) {

@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -18,6 +19,7 @@ public class InitSounds {
 
     //Это наш звук, `test_sound` это название звука указанного в sounds.json
     private static final List<SoundEvent> soundEvents = new ArrayList<>();
+    public static final HashMap<String, SoundEvent> SOUND_MAP = new HashMap<>();
     public static SoundEvent BUM = create("bum");
     public static SoundEvent WHISPER = create("whisper");
     public static SoundEvent HEARTBEAT = create("heartbeat");
@@ -36,6 +38,7 @@ public class InitSounds {
         ResourceLocation rl = new ResourceLocation(Referense.MODID, name);
         SoundEvent s = (new SoundEvent(rl)).setRegistryName(rl);
         soundEvents.add(s);
+        SOUND_MAP.put(name, s);
         return s;
     }
 }

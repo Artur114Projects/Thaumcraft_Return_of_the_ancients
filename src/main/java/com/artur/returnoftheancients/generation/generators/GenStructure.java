@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.generation.generators;
 
+import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.utils.interfaces.IStructure;
 import net.minecraft.block.state.IBlockState;
@@ -17,7 +18,9 @@ public class GenStructure implements IStructure {
 
     public static void generateStructure(World world, int x, int y, int z, String structureName)
     {
-//        System.out.println("Gen Structure: " + structureName + " XYZ " + x + "," + y + "," + z);
+        if (TRAConfigs.Any.debugMode) {
+            System.out.printf("Gen Structure: " + structureName + " XYZ " + x + "," + y + "," + z);
+        }
         BlockPos pos = new BlockPos(x, y, z);
         MinecraftServer mcServer = world.getMinecraftServer();
         TemplateManager manager = worldServer.getStructureTemplateManager();
@@ -29,6 +32,7 @@ public class GenStructure implements IStructure {
             IBlockState state = world.getBlockState(pos);
             world.notifyBlockUpdate(pos, state, state, 3);
             template.addBlocksToWorldChunk(world, pos, settings);
+            System.out.printf(" finish! \n");
         }
     }
 }

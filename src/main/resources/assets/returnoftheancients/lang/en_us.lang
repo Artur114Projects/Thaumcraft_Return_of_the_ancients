@@ -17,6 +17,10 @@ returnoftheancients.cfg.sub.any.primalbladespeed=The attack speed of the Primord
 returnoftheancients.cfg.sub.any.primalbladedamage=The damage of the Primordial Blade
 returnoftheancients.cfg.sub.any=Any
 returnoftheancients.cfg.sub.any.uog=Use old loading gui
+# Config Difficulty settings
+returnoftheancients.cfg.sub.ds=Difficulty settings
+returnoftheancients.cfg.sub.ds.pcd=Effect list
+returnoftheancients.cfg.sub.ds.sa=(obsolete)
 # Config Portal gen settings
 returnoftheancients.cfg.sub.portal.slm=Is send load message
 returnoftheancients.cfg.sub.portal=Ancient portal settings

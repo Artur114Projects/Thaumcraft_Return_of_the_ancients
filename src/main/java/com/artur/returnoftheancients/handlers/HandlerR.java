@@ -163,13 +163,15 @@ public class HandlerR {
     }
 
     public static boolean isGoodNBTTagMisc(NBTTagCompound nbt) {
-        final String[] Tag = new String[] {"setGuiState",
+        final String[] Tag = new String[] {
+                "setGuiState",
                 "sendAncientWorldLoadMessage",
                 "sendMessage",
                 "sendMessageTranslate",
                 "injectPhase",
                 "injectPercentages",
-                "changeTitle"
+                "changeTitle",
+                "playSound"
         };
         return isGoodNBTTagBase(nbt, Tag, false);
     }
@@ -221,4 +223,56 @@ public class HandlerR {
         nbt.setString("changeTitle", title);
         MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
     }
+
+    public static boolean isNumber(char c) {
+        char[] numbers = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+        for (char c1 : numbers) {
+            if (c == c1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isNumber(String s) {
+        char[] numbers = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+        for (int i = 0; i != s.length(); i++) {
+            boolean is = false;
+            for (char c1 : numbers) {
+                if (s.charAt(i) == c1) {
+                    is = true;
+                    break;
+                }
+            }
+            if (!is) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static final String[] defaultCountDifficultyData = new String[] {
+            "players=12, effect=invisibility, amplifier=2r0",
+            "players=12, effect=resistance, amplifier=3p4",
+            "players=12, effect=regeneration, amplifier=3p4",
+            "players=12, effect=strength, amplifier=6p",
+            "players=12, effect=fireResistance, amplifier=0",
+
+            "players=6, effect=resistance, amplifier=3p4",
+            "players=6, effect=regeneration, amplifier=3p4",
+            "players=6, effect=invisibility, amplifier=4r0",
+            "players=6, effect=strength, amplifier=6p",
+            "players=6, effect=fireResistance, amplifier=0",
+
+            "players=3, effect=resistance, amplifier=1",
+            "players=3, effect=regeneration, amplifier=1",
+            "players=3, effect=strength, amplifier=1",
+            "players=3, effect=fireResistance, amplifier=0",
+
+            "players=2, effect=resistance, amplifier=0",
+            "players=2, effect=regeneration, amplifier=0",
+            "players=2, effect=strength, amplifier=0",
+
+            "players=1, effect=speed, amplifier=1"
+    };
 }

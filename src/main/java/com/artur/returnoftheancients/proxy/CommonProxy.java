@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.proxy;
 import com.artur.returnoftheancients.commads.*;
 import com.artur.returnoftheancients.handlers.RegisterHandler;
 
+import com.artur.returnoftheancients.misc.PlayersCountDifficultyProcessor;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -25,7 +26,7 @@ public class CommonProxy {
 
     public void postInit(FMLPostInitializationEvent event)
     {
-
+        PlayersCountDifficultyProcessor.compile(TRAConfigs.DifficultySettings.playersCountDifficulty);
     }
     public void serverStarting(FMLServerStartingEvent event) {
         if (TRAConfigs.Any.debugMode) {
@@ -35,5 +36,6 @@ public class CommonProxy {
             event.registerServerCommand(new GenAncientLabyrinth());
             event.registerServerCommand(new Command());
         }
+        event.registerServerCommand(new TRACommand());
     }
 }

@@ -10,7 +10,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Rotation;
 
 
-public class Command  extends CommandBase implements IStructure {
+public class Command extends CommandBase implements IStructure {
     String NAME = "gen", USAGE = "/gen";
 
     @Override

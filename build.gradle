@@ -1,3 +1,5 @@
+String v = 'v1.2.0-betta'
+
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net/' }
@@ -13,7 +15,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = 'v1.1.1-betta'
+version = v
 group = 'com.artur.returnoftheancients' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'Return of the ancients'
 
@@ -88,7 +90,7 @@ jar {
         attributes([
             "Specification-Title": "Thaumcraft: Return of the ancients",
             "Specification-Vendor": "returnoftheancients",
-            "Specification-Version": "v1.1.1-betta", // We are version 1 of ourselves
+            "Specification-Version": v,
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"returnoftheancients",

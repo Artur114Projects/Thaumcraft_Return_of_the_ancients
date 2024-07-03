@@ -28,6 +28,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class AncientLabyrinthGenerator implements IStructure, IALGS{
@@ -39,10 +40,9 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
     protected static final byte[] YX_states = new byte[2];
     protected static int bossGen = 0;
     protected static ArrayList<EntityPlayer> players = new ArrayList<>();
-    public static boolean isGenerateStart = false;
+    protected static boolean isGenerateStart = false;
     public static boolean isGen = false;
     public static byte PHASE = -1;
-    public static boolean waitPlayersOut = false;
     @Deprecated
     public static long mobId;
 
@@ -245,12 +245,12 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(ancient_world_dim_id);
         }
         if (!WorldData.get().saveData.getBoolean(isAncientWorldGenerateKey) || world.playerEntities.isEmpty()) {
-//            if (!world.playerEntities.isEmpty() && !isGenerateStart) {
-//                for (EntityPlayer player1 : world.playerEntities) {
-//                    EventsHandler.tpToHome((EntityPlayerMP) player1);
-//                }
-//                return;
-//            }
+            if (!world.playerEntities.isEmpty() && !isGenerateStart) {
+                AncientWorldBuildProcessor.tpToHomePlayers(world.playerEntities);
+                player.getEntityData().setBoolean(EventsHandler.tpToHomeNBT, true);
+                player.getEntityData().setBoolean(noCollisionNBT, true);
+                return;
+            }
             players.add(player);
             FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 126, -10);
             HandlerR.setLoadingGuiState(player, true);
@@ -354,18 +354,26 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             reloadLight = true;
         }
 
-        static byte xtp = 0;
-        static byte ytp = 0;
-        static byte xtc = 0;
-        static byte ytc = 0;
-        static int xtl = -128;
-        static int ytl = -128;
+        public static void tpToHomePlayers(List<EntityPlayer> playerList) {
+            playersTP = playerList;
+            tpToHome = true;
+        }
 
-        static boolean reloadLight = false;
-        static boolean please = false;
-        static boolean clear = false;
+        private static byte xtp = 0;
+        private static byte ytp = 0;
+        private static byte xtc = 0;
+        private static byte ytc = 0;
+        private static int xtl = -128;
+        private static int ytl = -128;
 
-        static byte t = 0;
+        private static boolean reloadLight = false;
+        private static boolean please = false;
+        private static boolean clear = false;
+        private static boolean tpToHome = false;
+        private static List<EntityPlayer> playersTP = new ArrayList<>();
+
+        private static byte t = 0;
+        private static byte tht = 0;
 
         @SubscribeEvent
         public void Tick(TickEvent.WorldTickEvent e) {
@@ -474,6 +482,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                             PHASE = 2;
                             for (EntityPlayer player1 : players){
                                 HandlerR.injectPhaseOnClient((EntityPlayerMP) player1, (byte) 2);
+                                HandlerR.injectPercentagesOnClient((EntityPlayerMP) player1, 0, 0);
                             }
 
                             System.out.println("Generate structures");
@@ -505,6 +514,17 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                         world.checkLight(new BlockPos(xtl, 84, ytl));
                         xtl++;
                     }
+                }
+                if (tpToHome) {
+                    if (tht == playersTP.size()) {
+                        tpToHome = false;
+                        tht = 0;
+                        playersTP.clear();
+                        System.out.println("Players is teleported");
+                        return;
+                    }
+                    EntityPlayerMP player = (EntityPlayerMP) playersTP.get(tht);
+                    EventsHandler.tpToHome(player);
                 }
             }
         }

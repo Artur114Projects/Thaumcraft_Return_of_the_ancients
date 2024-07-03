@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.misc;
 
 import com.artur.returnoftheancients.referense.Referense;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -26,6 +27,53 @@ public class TRAConfigs {
     @Config.LangKey(Referense.MODID + ".cfg.sub.mgs")
     @Config.Comment("(Don`t work)")
     public static MobGenSettings MobGenSettings = new MobGenSettings();
+
+    @Config.LangKey(Referense.MODID + ".cfg.sub.ds")
+    @Config.Comment("Here you can change difficulty settings")
+    public static DifficultySettings DifficultySettings = new DifficultySettings();
+
+    public static class DifficultySettings {
+        @Config.LangKey(Referense.MODID + ".cfg.sub.ds.sa")
+        public int speedAmplifier = 2;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.ds.asb")
+        public boolean iaAddSpeedEffectToBoss = false;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.ds.pcd")
+        @Config.Comment({"List effects", "example line: playesr=[number of players, max 99], ", "",
+                "effect=[resistance or regeneration or invisibility or strength or fireResistance], ", "",
+                "amplifier=[number max max potion effect amplifier or ", "",
+                "[number by which the number of players is divided, the result is the potion level, max 9][p][maximum potion level that will be assigned, max 9] or ", "",
+                "[every second a number is selected min 0 max the number that you enter if it is equal to 0 then the effect is assigned, max 9][r][effect level that will be assigned]]", ""})
+        public String[] playersCountDifficulty = new String[] {
+                "players=12, effect=invisibility, amplifier=2r0",
+                "players=12, effect=resistance, amplifier=3p4",
+                "players=12, effect=regeneration, amplifier=3p4",
+                "players=12, effect=strength, amplifier=6p",
+                "players=12, effect=fireResistance, amplifier=0",
+                "players=12, effect=speed, amplifier=1",
+
+                "players=6, effect=resistance, amplifier=3p4",
+                "players=6, effect=regeneration, amplifier=3p4",
+                "players=6, effect=invisibility, amplifier=4r0",
+                "players=6, effect=strength, amplifier=6p",
+                "players=6, effect=fireResistance, amplifier=0",
+                "players=6, effect=speed, amplifier=1",
+
+                "players=3, effect=resistance, amplifier=1",
+                "players=3, effect=regeneration, amplifier=1",
+                "players=3, effect=strength, amplifier=1",
+                "players=3, effect=fireResistance, amplifier=0",
+                "players=3, effect=speed, amplifier=1",
+
+                "players=2, effect=resistance, amplifier=0",
+                "players=2, effect=regeneration, amplifier=0",
+                "players=2, effect=strength, amplifier=0",
+                "players=2, effect=speed, amplifier=1",
+
+                "players=1, effect=speed, amplifier=1"
+        };
+    }
 
     public static class PortalSettings {
         @Config.LangKey(Referense.MODID + ".cfg.sub.portal.slm")
@@ -111,8 +159,6 @@ public class TRAConfigs {
         @Config.Comment("the higher the number, the lower the chance")
         public int chanceIgnoringArmor = 2;
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.cia")
-        public int speedAmplifier = 2;
     }
 
     public static class AncientWorldGenerationSettings {
@@ -192,6 +238,12 @@ public class TRAConfigs {
     public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.getModID().equals(Referense.MODID)) {
             ConfigManager.sync(Referense.MODID, Config.Type.INSTANCE);
+            PlayersCountDifficultyProcessor.compile(DifficultySettings.playersCountDifficulty);
+            System.out.println("Configs is set");
         }
+    }
+
+    public static void playersCountDifficultyERROR(Runnable task) {
+        Minecraft.getMinecraft().addScheduledTask(task);
     }
 }

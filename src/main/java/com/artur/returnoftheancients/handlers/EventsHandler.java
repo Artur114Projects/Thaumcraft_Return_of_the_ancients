@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.handlers;
 
+import com.artur.returnoftheancients.misc.PlayersCountDifficultyProcessor;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.blocks.TpToAncientWorldBlock;
@@ -33,6 +34,8 @@ import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 import thaumcraft.client.lib.events.RenderEventHandler;
 
+import java.util.Arrays;
+
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
 
@@ -40,7 +43,6 @@ public class EventsHandler {
 
     public static final String tpToHomeNBT = "tpToHomeNBT";
     private static final String startUpNBT = "startUpNBT";
-    private boolean capIsSet = true;
     public static boolean bossIsDead = false;
     private static byte pT = 0;
     private static boolean isAncientWorldLoad = false;
@@ -298,7 +300,7 @@ public class EventsHandler {
 
     static byte wt = 0;
     static int maxDuration = 999999999;
-    PotionEffect[] potionEffects = new PotionEffect[5];
+    static final int[] potionEffects = new int[6];
 
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
@@ -311,12 +313,32 @@ public class EventsHandler {
             }
             if (event.getEntity() instanceof EntityLiving) {
                 EntityLiving living = (EntityLiving) event.getEntity();
-                living.addPotionEffect(new PotionEffect(MobEffects.SPEED, maxDuration, TRAConfigs.AncientWorldSettings.speedAmplifier - 1));
-                for (PotionEffect potionEffect : potionEffects) {
-                    if (potionEffect != null) {
-                        living.addPotionEffect(potionEffect);
+                if (living.isNonBoss()) {
+                    living.addPotionEffect(new PotionEffect(MobEffects.SPEED, maxDuration, TRAConfigs.DifficultySettings.speedAmplifier - 1));
+                }
+                if (potionEffects[0] != -1) {
+                    living.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, maxDuration, potionEffects[0]));
+                }
+                if (potionEffects[1] != -1) {
+                    living.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, maxDuration, potionEffects[1]));
+                }
+                if (potionEffects[2] != -1) {
+                    living.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, maxDuration, potionEffects[2]));
+                }
+                if (potionEffects[3] != -1) {
+                    living.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, maxDuration, potionEffects[3]));
+                }
+                if (potionEffects[4] != -1) {
+                    living.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, maxDuration, potionEffects[4]));
+                }
+                if (potionEffects[5] != -1) {
+                    if (living.isNonBoss() || TRAConfigs.DifficultySettings.iaAddSpeedEffectToBoss) {
+                        living.addPotionEffect(new PotionEffect(MobEffects.SPEED, maxDuration, potionEffects[5]));
                     }
                 }
+            }
+            if (TRAConfigs.Any.debugMode) {
+                System.out.println("Create entity potions is add " + Arrays.toString(potionEffects));
             }
         }
     }
@@ -326,49 +348,7 @@ public class EventsHandler {
         if (e.world.provider.getDimension() == ancient_world_dim_id) {
             if (wt == 20) {
                 wt = 0;
-                int players = e.world.playerEntities.size();
-                int resistanceAmplifier = -1;
-                int strengthAmplifier = -1;
-                int fireResistanceAmplifier = -1;
-                int regenerationAmplifier = -1;
-                int invisibilityAmplifier = -1;
-
-                if (players >= 6) {
-                    resistanceAmplifier = ((players / 3) < 5) ? (players / 3) : 4;
-                    regenerationAmplifier = ((players / 3) < 5) ? (players / 3) : 4;
-                    invisibilityAmplifier = (HandlerR.genRandomIntRange(0, 4) == 0) ? 0 : -1;
-                    strengthAmplifier = (players / 6);
-                    fireResistanceAmplifier = 0;
-                } else if (players > 3) {
-                    resistanceAmplifier = 1;
-                    strengthAmplifier = 1;
-                    regenerationAmplifier = 1;
-                    fireResistanceAmplifier = 0;
-                } else if (players >= 2) {
-                    resistanceAmplifier = 0;
-                    strengthAmplifier = 0;
-                    regenerationAmplifier = 0;
-                } else  {
-                    for (byte i = 0; i != potionEffects.length; i++) {
-                        potionEffects[i] = null;
-                    }
-                }
-
-                if (resistanceAmplifier != -1) {
-                    potionEffects[0] = (new PotionEffect(MobEffects.RESISTANCE, maxDuration, resistanceAmplifier));
-                }
-                if (strengthAmplifier != -1) {
-                    potionEffects[1] = (new PotionEffect(MobEffects.STRENGTH, maxDuration, strengthAmplifier));
-                }
-                if (regenerationAmplifier != -1) {
-                    potionEffects[2] = (new PotionEffect(MobEffects.REGENERATION, maxDuration, regenerationAmplifier));
-                }
-                if (fireResistanceAmplifier != -1) {
-                    potionEffects[3] = (new PotionEffect(MobEffects.FIRE_RESISTANCE, maxDuration, fireResistanceAmplifier));
-                }
-                if (invisibilityAmplifier != -1) {
-                    potionEffects[4] = (new PotionEffect(MobEffects.INVISIBILITY, maxDuration, invisibilityAmplifier));
-                }
+                PlayersCountDifficultyProcessor.calculate(e.world.playerEntities.size(), potionEffects);
             }
             wt++;
         }

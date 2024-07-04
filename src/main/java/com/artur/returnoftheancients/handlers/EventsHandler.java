@@ -139,18 +139,22 @@ public class EventsHandler {
 
     @SubscribeEvent
     public void BreakEvent(BlockEvent.BreakEvent e) {
-        if (e.getPlayer().dimension == ancient_world_dim_id) {
-            if (!e.getPlayer().isCreative())
-                e.setCanceled(true);
+        if (!TRAConfigs.Any.debugMode) {
+            if (e.getPlayer().dimension == ancient_world_dim_id) {
+                if (!e.getPlayer().isCreative())
+                    e.setCanceled(true);
+            }
         }
     }
 
     @SubscribeEvent
     public void PlaceEvent(BlockEvent.PlaceEvent e) {
-        if (e.getPlayer().dimension == ancient_world_dim_id) {
-            if (!e.getPlayer().isCreative()) {
-                e.getPlayer().addItemStackToInventory(e.getItemInHand().splitStack(1));
-                e.setCanceled(true);
+        if (!TRAConfigs.Any.debugMode){
+            if (e.getPlayer().dimension == ancient_world_dim_id) {
+                if (!e.getPlayer().isCreative()) {
+                    e.getPlayer().addItemStackToInventory(e.getItemInHand().splitStack(1));
+                    e.setCanceled(true);
+                }
             }
         }
     }
@@ -230,7 +234,7 @@ public class EventsHandler {
             GameSettings Settings = Minecraft.getMinecraft().gameSettings;
             EntityPlayerSP playerSP = Minecraft.getMinecraft().player;
             BlockPos pos = e.player.getPosition();
-            if (pos.getY() > 82 && !e.player.isCreative()) {
+            if (pos.getY() > 84 && !e.player.isCreative()) {
                 e.player.fallDistance = 0;
                 e.player.motionY += -1 - e.player.motionY;
             }

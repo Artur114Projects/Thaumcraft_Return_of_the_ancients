@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.misc;
 
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -40,21 +41,22 @@ public class TRAConfigs {
         public boolean iaAddSpeedEffectToBoss = false;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.ds.pcd")
-        @Config.Comment({"List effects", "example line: playesr=[number of players, max 99], ", "",
+        @Config.Comment({"List effects, if you want to disable this mechanics, remove all lines", "example line: players=[number of players, max 99], ", "",
                 "effect=[resistance or regeneration or invisibility or strength or fireResistance], ", "",
                 "amplifier=[number max max potion effect amplifier or ", "",
                 "[number by which the number of players is divided, the result is the potion level, max 9][p][maximum potion level that will be assigned, max 9] or ", "",
-                "[every second a number is selected min 0 max the number that you enter if it is equal to 0 then the effect is assigned, max 9][r][effect level that will be assigned]]", ""})
+                "[every second a number is selected min 0 max the number that you enter if it is equal to 0 then the effect is assigned, max 9][r][effect level that will be assigned]]", "",
+        })
         public String[] playersCountDifficulty = new String[] {
-                "players=12, effect=invisibility, amplifier=2r0",
+                "players=12, effect=invisibility, amplifier=1r0",
                 "players=12, effect=resistance, amplifier=3p4",
-                "players=12, effect=regeneration, amplifier=3p4",
+                "players=12, effect=regeneration, amplifier=3p6",
                 "players=12, effect=strength, amplifier=6p",
                 "players=12, effect=fireResistance, amplifier=0",
                 "players=12, effect=speed, amplifier=1",
 
                 "players=6, effect=resistance, amplifier=3p4",
-                "players=6, effect=regeneration, amplifier=3p4",
+                "players=6, effect=regeneration, amplifier=3p6",
                 "players=6, effect=invisibility, amplifier=4r0",
                 "players=6, effect=strength, amplifier=6p",
                 "players=6, effect=fireResistance, amplifier=0",

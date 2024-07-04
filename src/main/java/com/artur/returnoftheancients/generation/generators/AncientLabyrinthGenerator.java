@@ -29,13 +29,14 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class AncientLabyrinthGenerator implements IStructure, IALGS{
     protected static byte[][] ANCIENT_LABYRINTH_STRUCTURES = new byte[17][17];
     protected static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE = new byte[17][17];
     protected static final byte SIZE = 17;
-    protected static WorldServer world;
+    protected static World world;
     @Deprecated
     protected static final byte[] YX_states = new byte[2];
     protected static int bossGen = 0;
@@ -241,9 +242,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
 
     // разное
     public static void tpToAncientWorld(EntityPlayerMP player) {
-        if (world == null) {
-            world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(ancient_world_dim_id);
-        }
+        world = Objects.requireNonNull(player.getServerWorld().getMinecraftServer()).getWorld(ancient_world_dim_id);
         if (!WorldData.get().saveData.getBoolean(isAncientWorldGenerateKey) || world.playerEntities.isEmpty()) {
             if (!world.playerEntities.isEmpty() && !isGenerateStart) {
                 AncientWorldBuildProcessor.tpToHomePlayers(world.playerEntities);
@@ -252,8 +251,10 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                 return;
             }
             players.add(player);
-            FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 126, -10);
-            HandlerR.setLoadingGuiState(player, true);
+            if (player.world.provider.getDimension() != ancient_world_dim_id) {
+                FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 126, -10);
+            }
+//            HandlerR.setLoadingGuiState(player, true);
             if (!isGenerateStart) {
                 genAncientLabyrinth(player);
             } else if (world.playerEntities.isEmpty()) {

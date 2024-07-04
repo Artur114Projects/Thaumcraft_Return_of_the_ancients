@@ -252,14 +252,14 @@ public class HandlerR {
     }
 
     public static final String[] defaultCountDifficultyData = new String[] {
-            "players=12, effect=invisibility, amplifier=2r0",
+            "players=12, effect=invisibility, amplifier=1r0",
             "players=12, effect=resistance, amplifier=3p4",
-            "players=12, effect=regeneration, amplifier=3p4",
+            "players=12, effect=regeneration, amplifier=3p6",
             "players=12, effect=strength, amplifier=6p",
             "players=12, effect=fireResistance, amplifier=0",
 
             "players=6, effect=resistance, amplifier=3p4",
-            "players=6, effect=regeneration, amplifier=3p4",
+            "players=6, effect=regeneration, amplifier=3p6",
             "players=6, effect=invisibility, amplifier=4r0",
             "players=6, effect=strength, amplifier=6p",
             "players=6, effect=fireResistance, amplifier=0",

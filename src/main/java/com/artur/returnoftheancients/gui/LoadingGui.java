@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.gui;
 
+import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -119,8 +120,11 @@ public class LoadingGui extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if(keyCode != Keyboard.KEY_ESCAPE)
-        {
+        if (!TRAConfigs.Any.debugMode) {
+            if (keyCode != Keyboard.KEY_ESCAPE) {
+                super.keyTyped(typedChar, keyCode);
+            }
+        } else {
             super.keyTyped(typedChar, keyCode);
         }
     }

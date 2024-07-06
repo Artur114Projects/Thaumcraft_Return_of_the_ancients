@@ -10,7 +10,7 @@ import net.minecraft.world.biome.Biome;
 public class InitBiome {
 
 
-    public static final List<Biome> BIOMES = new ArrayList<Biome>();
+    public static final List<Biome> BIOMES = new ArrayList<>();
     public static final Biome ANCIENT_LABYRINTH = new BiomeAncientLabyrinth();
 
     public static void initBiomes() {

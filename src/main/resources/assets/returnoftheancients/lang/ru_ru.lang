@@ -21,7 +21,6 @@ returnoftheancients.cfg.sub.any.uog=Использовать старый заг
 # Config Difficulty settings
 returnoftheancients.cfg.sub.ds=Настройки сложности
 returnoftheancients.cfg.sub.ds.pcd=Лист эффектов
-returnoftheancients.cfg.sub.ds.sa=(obsolete)
 # Config Portal settings
 returnoftheancients.cfg.sub.portal.slm=Отправлять сообщение о загрузке
 returnoftheancients.cfg.sub.portal=Настройки древнего портала

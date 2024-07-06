@@ -122,7 +122,7 @@ public class EventsHandler {
                             System.out.println("You dead");
                             return;
                         }
-                    if (HandlerR.genRandomIntRange(0, TRAConfigs.AncientWorldSettings.chanceIgnoringArmor) == 0) {
+                    if (HandlerR.genRandomIntRange(0, TRAConfigs.DifficultySettings.chanceIgnoringArmor) == 0) {
                         player.setHealth(player.getHealth() - e.getAmount());
                         e.setCanceled(true);
                     }
@@ -318,9 +318,6 @@ public class EventsHandler {
             }
             if (event.getEntity() instanceof EntityLiving) {
                 EntityLiving living = (EntityLiving) event.getEntity();
-                if (living.isNonBoss()) {
-                    living.addPotionEffect(new PotionEffect(MobEffects.SPEED, maxDuration, TRAConfigs.DifficultySettings.speedAmplifier - 1));
-                }
                 if (potionEffects[0] != -1) {
                     living.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, maxDuration, potionEffects[0]));
                 }

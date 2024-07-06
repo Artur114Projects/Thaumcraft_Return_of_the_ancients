@@ -63,7 +63,6 @@ public class BossTriggerBlock extends BaseBlock {
                     case 2:
                         EntityEldritchWarden w = new EntityEldritchWarden(worldIn);
                         w.setPositionAndUpdate(pos.getX(), pos.getY() + 2, pos.getZ() + 1);
-                        w.setSwingingArms(true);
                         worldIn.spawnEntity(w);
                         break;
                 }

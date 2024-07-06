@@ -34,8 +34,11 @@ public class TRAConfigs {
     public static DifficultySettings DifficultySettings = new DifficultySettings();
 
     public static class DifficultySettings {
-        @Config.LangKey(Referense.MODID + ".cfg.sub.ds.sa")
-        public int speedAmplifier = 2;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.ds.cia")
+        @Config.Comment("the higher the number, the lower the chance")
+        public int chanceIgnoringArmor = 1;
+
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.ds.asb")
         public boolean iaAddSpeedEffectToBoss = false;
@@ -156,10 +159,6 @@ public class TRAConfigs {
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.daw")
         public boolean isDeadToAncientWorld = false;
-
-        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.cia")
-        @Config.Comment("the higher the number, the lower the chance")
-        public int chanceIgnoringArmor = 2;
 
     }
 

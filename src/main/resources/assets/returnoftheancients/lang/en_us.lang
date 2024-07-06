@@ -21,7 +21,6 @@ returnoftheancients.cfg.sub.any.uog=Use old loading gui
 # Config Difficulty settings
 returnoftheancients.cfg.sub.ds=Difficulty settings
 returnoftheancients.cfg.sub.ds.pcd=Effect list
-returnoftheancients.cfg.sub.ds.sa=(obsolete)
 # Config Portal gen settings
 returnoftheancients.cfg.sub.portal.slm=Is send load message
 returnoftheancients.cfg.sub.portal=Ancient portal settings

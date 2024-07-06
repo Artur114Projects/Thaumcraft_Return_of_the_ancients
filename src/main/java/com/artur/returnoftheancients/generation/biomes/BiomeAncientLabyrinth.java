@@ -24,13 +24,13 @@ import java.util.Set;
 public class BiomeAncientLabyrinth extends Biome implements IBiome {
 
     // Тип BiomeType, определяющий генерацию биома
-    private BiomeManager.BiomeType biomeType = BiomeManager.BiomeType.COOL;
+    private final BiomeManager.BiomeType biomeType = BiomeManager.BiomeType.COOL;
     // Вес биома
     private int weight = 0;
     // Типы биома
-    private BiomeDictionary.Type[] types = new BiomeDictionary.Type[]{BiomeDictionary.Type.DEAD, BiomeDictionary.Type.DENSE};
+    private final BiomeDictionary.Type[] types = new BiomeDictionary.Type[]{BiomeDictionary.Type.DEAD, BiomeDictionary.Type.DENSE};
     // Имена биомов
-    public static String NAME = "ANCIENT LABYRINTH";
+    public static String NAME = "ancient entry";
     public static List<SpawnListEntry> spawnListEntryList = new ArrayList<>();
 
     public BiomeAncientLabyrinth() {
@@ -51,7 +51,6 @@ public class BiomeAncientLabyrinth extends Biome implements IBiome {
         this.spawnableCaveCreatureList = spawnListEntryList;
         InitBiome.BIOMES.add(this);
         System.out.println("BiomeAncientLabyrinth is constructed, registry name: " + NAME);
-        Minecraft.getSystemTime();
     }
 
 

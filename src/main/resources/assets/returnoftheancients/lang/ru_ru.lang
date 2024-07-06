@@ -12,6 +12,7 @@ returnoftheancients.rui.t=убери это
 returnoftheancients.rui.f=у тебя 30 секунд
 returnoftheancients.message.ancientworldload.start=Началась генерация, мир может подтормаживать
 returnoftheancients.message.ancientworldload.finish=Генерация закончилась
+returnoftheancients.gui.esc=Нажмите ESC еще раз чтобы выйти.
 # Config any
 returnoftheancients.cfg.sub.any.primalbladespeed=Скорость атаки первородного клинка
 returnoftheancients.cfg.sub.any.primalbladedamage=Урон первородного клинка

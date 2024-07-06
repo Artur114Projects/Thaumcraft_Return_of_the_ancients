@@ -1,13 +1,30 @@
+RU:
 добавлен мультиплеер "будет переделан в будущем"
 изменена система придачи движения игроку
 переписан код портала 
 переписана часть механик 
 в древнем мире теперь везде туман
 изменен gui
-RUI - Remove Unresolved Items
-добавлена возможность отключения RUI
-добавлен звук после смерти в RUI
-пред сообщением в чате теперь пишется TC RETURN OF THE ANCIENTS: 
-исправлена ошибка иза которой иногда можно умереть в древнем мире 
+добавлена возможность отключения проверки предметов из других модов
+добавлен звук после смерти от проверки предметов из других модов
+пред сообщеними в чате теперь пишется TC RETURN OF THE ANCIENTS: 
+исправлена ошибка иза которой иногда можно было умереть в древнем мире 
+при установке блоков в древнем мире они возвращяются обратно
+генерацию теперь можно отменить клавишей ESC
 
 рекомендую сбросить конфиги или лучше удалить файл конфигов после обновления
+EU:
+multiplayer added "will be reworked in the future"
+player movement system changed
+portal code rewritten
+part of mechanics rewritten
+in the ancient world there is now fog everywhere
+gui changed
+added ability to disable checking items from other mods
+added sound after death from checking items from other mods
+TC RETURN OF THE ANCIENTS is now written before messages in the chat:
+fixed a bug due to which sometimes you could die in the ancient world
+when installing blocks in the ancient world they return back
+generation can now be canceled with the ESC key
+
+I recommend resetting the configs or better yet, deleting the config file after the update

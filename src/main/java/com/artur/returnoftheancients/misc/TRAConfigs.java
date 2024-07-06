@@ -41,7 +41,7 @@ public class TRAConfigs {
         public boolean iaAddSpeedEffectToBoss = false;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.ds.pcd")
-        @Config.Comment({"List effects, if you want to disable this mechanics, remove all lines", "example line: players=[number of players, max 99], ", "",
+        @Config.Comment({"List effects, the order of the lines does not matter, if you want to disable this mechanics, remove all lines", "example line: players=[number of players, max 99], ", "",
                 "effect=[resistance or regeneration or invisibility or strength or fireResistance], ", "",
                 "amplifier=[number max max potion effect amplifier or ", "",
                 "[number by which the number of players is divided, the result is the potion level, max 9][p][maximum potion level that will be assigned, max 9] or ", "",

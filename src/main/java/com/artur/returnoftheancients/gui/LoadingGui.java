@@ -1,10 +1,13 @@
 package com.artur.returnoftheancients.gui;
 
+import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
+import com.artur.returnoftheancients.network.ServerPacketTpToHome;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentTranslation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -22,11 +25,13 @@ public class LoadingGui extends GuiScreen {
     private static ResourceLocation location;
     private byte h = 0;
     private byte t = 0;
+    private byte iaDrawESCStringTime = 0;
+    private byte iaDrawESCStringTime1 = 0;
 //    private int xd = width + 40;
     private String ts = "";
     private final String[] constantNames = new String[] {"generating structures map", "cleaning area", "place structures in world", "reload light", "Finish!"};
-    private final String nameDefault = "ERROR";
-    private final int[] colors = new int[7];
+    public boolean iaDrawESCString = false;
+    public boolean iaESCString = false;
 
 
     public LoadingGui() {
@@ -48,6 +53,18 @@ public class LoadingGui extends GuiScreen {
 
     @Override
     public void updateScreen() {
+        if (iaESCString) {
+            iaDrawESCStringTime++;
+            iaDrawESCStringTime1++;
+        }
+        if (iaDrawESCStringTime == 80) {
+            iaESCString = false;
+            iaDrawESCStringTime = 0;
+        }
+        if (iaDrawESCStringTime1 == 10) {
+            iaDrawESCStringTime1 = 0;
+            iaDrawESCString = !iaDrawESCString;
+        }
         if (h == 20) {
             h = 0;
         }
@@ -80,7 +97,6 @@ public class LoadingGui extends GuiScreen {
         GL11.glColor4f(1, 1, 1, 1);
         mc.getTextureManager().bindTexture(location);
         this.drawDefaultBackground();
-        ScaledResolution sr = new ScaledResolution(mc);
         drawTexturedModalRect(0, 0, 0, 0, width, height);
 
         int hei = height / 3;
@@ -111,22 +127,34 @@ public class LoadingGui extends GuiScreen {
                 fontRenderer.drawString(text, wid, hei, White);
             }break;
             case -1:{
+                String nameDefault = "ERROR";
                 int wid = ((width / 2) - (fontRenderer.getStringWidth(nameDefault) / 2));
                 fontRenderer.drawString(nameDefault, wid, hei, Red);
             }break;
+        }
+
+        if (iaDrawESCString) {
+            String s = new TextComponentTranslation(Referense.MODID + ".gui.esc").getFormattedText();
+            int hieE = (int) (height / 1.25);
+            int widE = ((width / 2) - (fontRenderer.getStringWidth(s) / 2));
+            fontRenderer.drawString(s, widE, hieE, Red);
         }
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (!TRAConfigs.Any.debugMode) {
-            if (keyCode != Keyboard.KEY_ESCAPE) {
-                super.keyTyped(typedChar, keyCode);
+        System.out.println("key " + keyCode);
+        if (keyCode == Keyboard.KEY_ESCAPE) {
+            if (!iaESCString) {
+                iaESCString = true;
+            } else {
+                iaESCString = false;
+                MainR.NETWORK.sendToServer(new ServerPacketTpToHome());
             }
-        } else {
-            super.keyTyped(typedChar, keyCode);
+            return;
         }
+        super.keyTyped(typedChar, keyCode);
     }
 
     @Override

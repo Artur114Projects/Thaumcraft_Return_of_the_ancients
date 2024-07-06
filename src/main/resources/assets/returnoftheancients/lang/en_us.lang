@@ -12,6 +12,7 @@ returnoftheancients.rui.t=put it away
 returnoftheancients.rui.f=you have 30 seconds
 returnoftheancients.message.ancientworldload.start=Generation has begun, the world can slow down
 returnoftheancients.message.ancientworldload.finish=Generation is finish
+returnoftheancients.gui.esc=Press ESC again to exit.
 # Config any
 returnoftheancients.cfg.sub.any.primalbladespeed=The attack speed of the Primordial Blade
 returnoftheancients.cfg.sub.any.primalbladedamage=The damage of the Primordial Blade

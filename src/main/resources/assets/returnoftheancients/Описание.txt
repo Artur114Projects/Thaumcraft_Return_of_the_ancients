@@ -1,3 +1,4 @@
+RU:
 Мультиплеер "будет переработан в будущем":
 Если во время генерации в портал зайдет еще один игрок то ему тоже высветится gui
 после генерации все игроки вошедшие в портал поподут в лабиринт
@@ -47,3 +48,52 @@
 	невидимость 1 каждый 2 враг
 
 все это тонко настраивается в конфигах
+EU:
+Multiplayer "will be reworked in the future":
+If another player enters the portal during generation, he will also see the gui
+After generation, all players who entered the portal will go to the labyrinth
+If a player enters the portal after generation and there are still other players there
+then he will go to the labyrinth, but if there is no one there, the generation will not start over
+If one of the players enters the room with the boss, then all the players who are in the labyrinth
+will be teleported to the boss, after defeating the boss, each player will receive a primordial pearl of random strength
+If during the battle with the boss, a player enters the portal, then he will go to the boss
+but will not receive a primordial pearl after victory
+After someone enters the portal to the ordinary world, then the next time he enters the portal to the ancient world, everyone who was in the labyrinth will return to the ordinary world and the generation will start over
+
+During generation, the server will slow down "will be fixed in future updates"
+
+depending on the number of players in the labyrinth, enemies will receive positive effects "boss does not receive speed, can be configured"
+
+1 player:
+speed level 2
+
+2 players:
+speed level 2
+resistance level 1
+regeneration level 1
+strength level 1
+
+3 players:
+speed level 2
+resistance level 2
+regeneration level 2
+strength level 2
+fire resistance level 1
+
+6 players:
+speed level 2
+resistance (number of players / 3) + 1, max 4
+regeneration (number of players / 3) + 1, max 4
+strength (number of players / 6) + 1
+fire resistance level 1
+invisibility 1 every 5 enemy
+
+12 players:
+speed level 2
+resistance (number of players / 3) + 1, max 4
+regeneration (number of players / 3) + 1, max 4
+strength (number of players / 6) + 1
+fire resistance level 1
+invisibility 1 every 2 enemies
+
+all this is finely tuned in the configs

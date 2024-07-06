@@ -79,11 +79,9 @@ public class ClientPacketMisc implements IMessage {
                     }
                     if (nbt.hasKey("injectPhase")) {
                         LoadingGui.injectPhase(nbt.getByte("injectPhase"));
-                        System.out.println("injectPhaseOnClient");
                     }
                     if (nbt.hasKey("injectPercentages")) {
                         LoadingGui.injectPercentages(nbt.getByte("injectPercentages"));
-                        System.out.println("injectPercentagesOnClient");
                     }
                     if (nbt.hasKey("playSound")) {
                         playerSP.playSound(InitSounds.SOUND_MAP.get(nbt.getString("playSound")), 1, 1);

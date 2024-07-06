@@ -6,11 +6,13 @@ import static com.artur.returnoftheancients.misc.TRAConfigs.MobGenSettings;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
+import akka.Main;
 import com.artur.returnoftheancients.blocks.BossTriggerBlock;
 import com.artur.returnoftheancients.events.MCTimer;
 import com.artur.returnoftheancients.handlers.EventsHandler;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
 import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
@@ -254,7 +256,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             if (player.world.provider.getDimension() != ancient_world_dim_id) {
                 FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 126, -10);
             }
-//            HandlerR.setLoadingGuiState(player, true);
+            HandlerR.setLoadingGuiState(player, true);
             if (!isGenerateStart) {
                 genAncientLabyrinth(player);
             } else if (world.playerEntities.isEmpty()) {
@@ -342,22 +344,46 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         isGenerateStart = false;
     }
 
+    public static void stopGenerationFor(EntityPlayer player) {
+        players.remove(player);
+        if (players.isEmpty()) {
+            isGenerateStart = false;
+            AncientWorldBuildProcessor.stop();
+            if (TRAConfigs.PortalSettings.isSendWorldLoadMessage) {
+                HandlerR.sendAllWorldLoadMessage(false);
+            }
+        }
+    }
+
     public static class AncientWorldBuildProcessor {
-        public static void clearArea() {
+        private static void clearArea() {
             clear = true;
         }
 
-        public static void genStructuresInWorld() {
+        private static void genStructuresInWorld() {
             please = true;
         }
 
-        public static void reloadLight() {
+        private static void reloadLight() {
             reloadLight = true;
         }
 
-        public static void tpToHomePlayers(List<EntityPlayer> playerList) {
+        private static void tpToHomePlayers(List<EntityPlayer> playerList) {
             playersTP = playerList;
             tpToHome = true;
+        }
+
+        private static void stop() {
+            reloadLight = false;
+            please = false;
+            clear = false;
+            xtp = 0;
+            ytp = 0;
+            xtc = 0;
+            ytc = 0;
+            xtl = -128;
+            ytl = -128;
+            t = 0;
         }
 
         private static byte xtp = 0;
@@ -386,8 +412,10 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                         if (xtp == SIZE) {
                             ytp++;
                             xtp = 0;
-                            for (EntityPlayer player1 : players){
-                                HandlerR.injectPercentagesOnClient((EntityPlayerMP) player1, xtp, ytp);
+                            if (!players.isEmpty()) {
+                                for (EntityPlayer player1 : players) {
+                                    HandlerR.injectPercentagesOnClient((EntityPlayerMP) player1, xtp, ytp);
+                                }
                             }
                         }
                         if (ytp == SIZE) {
@@ -396,8 +424,10 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                             settings.setRotation(Rotation.NONE);
                             please = false;
                             PHASE = 3;
-                            for (EntityPlayer player1 : players){
-                                HandlerR.injectPhaseOnClient((EntityPlayerMP) player1, (byte) 3);
+                            if (!players.isEmpty()) {
+                                for (EntityPlayer player1 : players) {
+                                    HandlerR.injectPhaseOnClient((EntityPlayerMP) player1, (byte) 3);
+                                }
                             }
                             System.out.println("Reload light");
                             reloadLight();
@@ -471,8 +501,10 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                         if (xtc == SIZE) {
                             ytc++;
                             xtc = 0;
-                            for (EntityPlayer player1 : players){
-                                HandlerR.injectPercentagesOnClient((EntityPlayerMP) player1, xtc, ytc);
+                            if (!players.isEmpty()) {
+                                for (EntityPlayer player1 : players) {
+                                    HandlerR.injectPercentagesOnClient((EntityPlayerMP) player1, xtc, ytc);
+                                }
                             }
                         }
                         if (ytc == SIZE) {
@@ -481,9 +513,11 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                             clear = false;
                             genAncientEntryWay();
                             PHASE = 2;
-                            for (EntityPlayer player1 : players){
-                                HandlerR.injectPhaseOnClient((EntityPlayerMP) player1, (byte) 2);
-                                HandlerR.injectPercentagesOnClient((EntityPlayerMP) player1, 0, 0);
+                            if (!players.isEmpty()) {
+                                for (EntityPlayer player1 : players) {
+                                    HandlerR.injectPhaseOnClient((EntityPlayerMP) player1, (byte) 2);
+                                    HandlerR.injectPercentagesOnClient((EntityPlayerMP) player1, 0, 0);
+                                }
                             }
 
                             System.out.println("Generate structures");

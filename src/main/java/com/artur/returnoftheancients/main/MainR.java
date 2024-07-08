@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.main;
 
+import com.artur.returnoftheancients.handlers.RegisterHandler;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitDimensions;
@@ -15,6 +16,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 
@@ -31,6 +33,7 @@ public class MainR {
 	
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
+		RegisterHandler.registerPackets();
 		InitDimensions.registerDimensions();
 		InitBiome.initBiomes();
 		InitBlocks.registerTileEntity();

@@ -7,16 +7,13 @@ import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.*;
 
@@ -27,12 +24,6 @@ public class HandlerR {
     public static int genRandomIntRange(int min, int max) {
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
-    }
-
-    public static void playSound(SoundEvent e) {
-        System.out.println("playSound start");
-        if (FMLCommonHandler.instance().getMinecraftServerInstance().getServer() != null)
-            Minecraft.getMinecraft().player.playSound(e, 1.0F, 1.0F);
     }
 
     public static int CalculateGenerationHeight(World world, int x, int z) {
@@ -209,6 +200,13 @@ public class HandlerR {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setString("sendMessage", message);
         MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
+    }
+
+    public static void sendAllMessageStringNoTitle(String message) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setString("sendMessage", message);
+        nbt.setString("changeTitle", "");
+        MainR.NETWORK.sendToAll(new ClientPacketMisc(nbt));
     }
 
     public static void sendMessageTranslate(EntityPlayerMP playerMP, String key) {

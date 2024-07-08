@@ -13,9 +13,12 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
+@Mod.EventBusSubscriber(modid = Referense.MODID)
 public class RemoveUnresolvedItems {
     public static final String isUUI = Referense.MODID + "isUseUnresolvedItems";
     public static final String time = Referense.MODID + "RemoveItemsTime";
@@ -32,12 +35,12 @@ public class RemoveUnresolvedItems {
     }
 
     @SubscribeEvent
-    public void isClone(PlayerEvent.Clone e) {
+    public static void isClone(PlayerEvent.Clone e) {
         e.getEntityPlayer().isDead = false;
     }
 
     @SubscribeEvent
-    public void Tick(TickEvent.PlayerTickEvent e) {
+    public static void Tick(TickEvent.PlayerTickEvent e) {
         if (e.player.dimension == InitDimensions.ancient_world_dim_id && TRAConfigs.PortalSettings.checkItems) {
             if (!HandlerR.isPlayerUseUnresolvedItems(e.player).isEmpty() && (!e.player.getEntityData().getBoolean(isUUI) || !e.player.getEntityData().hasKey(isUUI)) && !e.player.isCreative() && !e.player.isDead) {
                 System.out.println("La ti krisa " + e.player.getName());

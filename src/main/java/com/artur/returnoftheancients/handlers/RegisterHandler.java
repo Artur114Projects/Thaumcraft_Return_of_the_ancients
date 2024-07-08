@@ -1,18 +1,19 @@
 package com.artur.returnoftheancients.handlers;
 
-import com.artur.returnoftheancients.events.RemoveUnresolvedItems;
-import com.artur.returnoftheancients.generation.generators.AncientLabyrinthGenerator;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitItems;
-import com.artur.returnoftheancients.init.InitSounds;
+import com.artur.returnoftheancients.main.MainR;
+import com.artur.returnoftheancients.network.ClientPacketMisc;
+import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
+import com.artur.returnoftheancients.network.ServerPacketTpToHome;
 import com.artur.returnoftheancients.utils.interfaces.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 @EventBusSubscriber
 public class RegisterHandler {
@@ -30,13 +31,13 @@ public class RegisterHandler {
 
 	public static void preInitRegistries()
     {
-		MinecraftForge.EVENT_BUS.register(new EventsHandler());
-		MinecraftForge.EVENT_BUS.register(new InitSounds());
-//		MinecraftForge.EVENT_BUS.register(new MCTimer());
-//		MinecraftForge.EVENT_BUS.register(new PortalEvent());
-//		MinecraftForge.EVENT_BUS.register(new GenPortal());
-		MinecraftForge.EVENT_BUS.register(new RemoveUnresolvedItems());
-		MinecraftForge.EVENT_BUS.register(new AncientLabyrinthGenerator.AncientWorldBuildProcessor());
+	}
+
+	public static void registerPackets() {
+		int id = 0;
+		MainR.NETWORK.registerMessage(new ServerPacketTpToHome.HandlerTTH(), ServerPacketTpToHome.class, id++, Side.SERVER);
+		MainR.NETWORK.registerMessage(new ClientPacketPlayerNBTData.HandlerPND(), ClientPacketPlayerNBTData.class, id++, Side.CLIENT);
+		MainR.NETWORK.registerMessage(new ClientPacketMisc.HandlerM(), ClientPacketMisc.class, id++, Side.CLIENT);
 	}
 
 	@SubscribeEvent

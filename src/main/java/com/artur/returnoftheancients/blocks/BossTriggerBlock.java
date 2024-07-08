@@ -1,10 +1,11 @@
 package com.artur.returnoftheancients.blocks;
 
+import com.artur.returnoftheancients.handlers.ServerEventsHandler;
+import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
-import com.artur.returnoftheancients.handlers.EventsHandler;
 import com.artur.returnoftheancients.handlers.HandlerR;
-import com.artur.returnoftheancients.init.InitSounds;
+import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import com.artur.returnoftheancients.utils.interfaces.IStructure;
 import net.minecraft.block.SoundType;
@@ -13,6 +14,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -66,7 +68,7 @@ public class BossTriggerBlock extends BaseBlock {
                         worldIn.spawnEntity(w);
                         break;
                 }
-                HandlerR.playSound(InitSounds.BUM);
+
                 GenStructure.generateStructure(worldIn, pos.getX() + 5, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
                 GenStructure.generateStructure(worldIn, pos.getX() - 11, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
                 GenStructure.generateStructure(worldIn, pos.getX() + 5, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
@@ -81,13 +83,22 @@ public class BossTriggerBlock extends BaseBlock {
                 if (worldIn.playerEntities.size() > 1) {
                     for (EntityPlayer player : worldIn.playerEntities) {
                         ((EntityPlayerMP) player).connection.setPlayerLocation(pos.getX(), pos.getY() + 2, pos.getZ() + 8, -181, 0);
+                        NBTTagCompound nbt = new NBTTagCompound();
+                        nbt.setString("playSound", "bum");
+                        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), (EntityPlayerMP) player);
+                    }
+                } else {
+                    for (EntityPlayer player : worldIn.playerEntities) {
+                        NBTTagCompound nbt = new NBTTagCompound();
+                        nbt.setString("playSound", "bum");
+                        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), (EntityPlayerMP) player);
                     }
                 }
             }
         }
-        if (!worldIn.isRemote && EventsHandler.bossIsDead && !worldIn.isAnyPlayerWithinRangeAt(pos.getX(), pos.getY(), pos.getZ(), 4)) {
+        if (!worldIn.isRemote && ServerEventsHandler.bossIsDead && !worldIn.isAnyPlayerWithinRangeAt(pos.getX(), pos.getY(), pos.getZ(), 4)) {
             GenStructure.generateStructure(worldIn, pos.getX() - 3, pos.getY() - 30, pos.getZ() - 2, "ancient_exit");
-            EventsHandler.bossIsDead = false;
+            ServerEventsHandler.bossIsDead = false;
             int players = 0;
             for (EntityPlayer player : worldIn.playerEntities) {
                 if (player.getEntityData().getLong("getReward") == WorldData.get().saveData.getLong("getReward"))  {

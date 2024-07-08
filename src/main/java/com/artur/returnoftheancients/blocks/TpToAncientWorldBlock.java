@@ -1,11 +1,10 @@
 package com.artur.returnoftheancients.blocks;
 
+import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.generation.generators.AncientLabyrinthGenerator;
-import com.artur.returnoftheancients.handlers.EventsHandler;
 import com.artur.returnoftheancients.handlers.HandlerR;
-import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.block.SoundType;
@@ -18,19 +17,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Objects;
-
-import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
-import static com.artur.returnoftheancients.utils.interfaces.IALGS.isAncientWorldGenerateKey;
 
 public class TpToAncientWorldBlock extends BaseBlock{
     public static boolean noCollision = false;
@@ -69,7 +62,7 @@ public class TpToAncientWorldBlock extends BaseBlock{
             if (entityIn instanceof EntityPlayerMP) {
                 EntityPlayer player = (EntityPlayer) entityIn;
                 ArrayList<String> ID = HandlerR.isPlayerUseUnresolvedItems(player);
-                if ((ID.isEmpty() || !TRAConfigs.PortalSettings.checkItems) && (EventsHandler.getDifficultyId() != 0 || !TRAConfigs.AncientWorldSettings.noPeaceful)) {
+                if ((ID.isEmpty() || !TRAConfigs.PortalSettings.checkItems) && (ServerEventsHandler.getDifficultyId() != 0 || !TRAConfigs.AncientWorldSettings.noPeaceful)) {
                     player.fallDistance = 0;
                     AncientLabyrinthGenerator.tpToAncientWorld((EntityPlayerMP) player);
                 } else {
@@ -82,7 +75,7 @@ public class TpToAncientWorldBlock extends BaseBlock{
                     } else {
                         player.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + "TC RETURN OF THE ANCIENTS: " + TextFormatting.RESET + "PEACEFUL DIFFICULTY ???"));
                     }
-                    player.getEntityData().setBoolean(EventsHandler.tpToHomeNBT, true);
+                    player.getEntityData().setBoolean(ServerEventsHandler.tpToHomeNBT, true);
                     player.getEntityData().setBoolean(noCollisionNBT, true);
                 }
             }

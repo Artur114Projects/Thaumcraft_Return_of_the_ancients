@@ -1,8 +1,8 @@
 package com.artur.returnoftheancients.blocks;
 
+import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
-import com.artur.returnoftheancients.handlers.EventsHandler;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -51,7 +51,7 @@ public class TpToHomeBlock extends BaseBlock {
         if (!entityIn.world.isRemote && entityIn instanceof EntityPlayerMP) {
             EntityPlayer player = (EntityPlayer) entityIn;
             if (player.getServer() != null && player.world != null) {
-                EventsHandler.tpToHome((EntityPlayerMP) player);
+                ServerEventsHandler.tpToHome((EntityPlayerMP) player);
                 player.move(MoverType.PLAYER, TRAConfigs.PortalSettings.x + 3, 3, TRAConfigs.PortalSettings.z + 3);
                 WorldData worldData = WorldData.get();
                 worldData.saveData.setBoolean(IALGS.isAncientWorldGenerateKey, false);

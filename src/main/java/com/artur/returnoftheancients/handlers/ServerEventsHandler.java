@@ -1,26 +1,22 @@
 package com.artur.returnoftheancients.handlers;
 
+import com.artur.returnoftheancients.blocks.BossTriggerBlock;
 import com.artur.returnoftheancients.misc.PlayersCountDifficultyProcessor;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.blocks.TpToAncientWorldBlock;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
-import com.artur.returnoftheancients.init.InitBiome;
+import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -28,30 +24,28 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
-import thaumcraft.client.lib.events.RenderEventHandler;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
-
-public class EventsHandler {
+@Mod.EventBusSubscriber(modid = Referense.MODID)
+public class ServerEventsHandler {
 
     public static final String tpToHomeNBT = "tpToHomeNBT";
-    private static final String startUpNBT = "startUpNBT";
+    protected static final String startUpNBT = "startUpNBT";
+    protected static final String notNoCollisionNBTTime = "notNoCollisionNBTTime";
     public static boolean bossIsDead = false;
     private static byte pT = 0;
-    private static boolean isAncientWorldLoad = false;
     private static byte difficultyId = -1;
 
 
-    public static boolean isAncientWorldLoad() {return isAncientWorldLoad;}
-    public static void setAncientWorldLoad(boolean ancientWorldLoad) {isAncientWorldLoad = ancientWorldLoad;}
     public static byte getDifficultyId() {return difficultyId;}
 
     public static void tpToHome(EntityPlayerMP player) {
@@ -61,14 +55,14 @@ public class EventsHandler {
     }
 
     @SubscribeEvent
-    public void DifficultyEvent(DifficultyChangeEvent e) {
+    public static void DifficultyEvent(DifficultyChangeEvent e) {
         EnumDifficulty d = e.getDifficulty();
         difficultyId = d == EnumDifficulty.PEACEFUL ? 0 : d == EnumDifficulty.EASY ? 1 : d == EnumDifficulty.NORMAL ? 2 : d == EnumDifficulty.HARD ? 3 : (byte) -1;
     }
 
 
     @SubscribeEvent
-    public void WorldEventLoad(WorldEvent.Load e) {
+    public static void WorldEventLoad(WorldEvent.Load e) {
         if (!e.getWorld().isRemote) {
             if (TRAConfigs.PortalSettings.isGen) {
                 WorldData worldData = WorldData.get();
@@ -89,13 +83,10 @@ public class EventsHandler {
         for (EntityPlayer player : e.getWorld().playerEntities) {
             player.getEntityData().setBoolean("isUUI", false);
         }
-        if (e.getWorld().provider.getDimension() == ancient_world_dim_id) {
-            isAncientWorldLoad = true;
-        }
     }
 
     @SubscribeEvent
-    public void LivingDeathEvent(LivingDeathEvent e) {
+    public static void LivingDeathEvent(LivingDeathEvent e) {
         World world = e.getEntity().world;
         if (!e.getEntity().isNonBoss() && world.provider.getDimension() == ancient_world_dim_id && !world.isRemote) {
             WorldData worldData = WorldData.get();
@@ -110,7 +101,7 @@ public class EventsHandler {
     }
 
     @SubscribeEvent
-    public void LivingHurtEvent(LivingHurtEvent e) {
+    public static void LivingHurtEvent(LivingHurtEvent e) {
         if (!TRAConfigs.AncientWorldSettings.isDeadToAncientWorld) {
             if (e.getEntity() instanceof EntityPlayerMP) {
                 if (e.getEntity().dimension == ancient_world_dim_id) {
@@ -132,24 +123,25 @@ public class EventsHandler {
     }
 
     @SubscribeEvent
-    public void LivingDropsEvent(LivingDropsEvent e) {
+    public static void LivingDropsEvent(LivingDropsEvent e) {
         if (e.getEntity().dimension == ancient_world_dim_id && !e.getEntity().isNonBoss()) {
             e.setCanceled(true);
         }
     }
 
     @SubscribeEvent
-    public void BreakEvent(BlockEvent.BreakEvent e) {
+    public static void BreakEvent(BlockEvent.BreakEvent e) {
         if (!TRAConfigs.Any.debugMode) {
             if (e.getPlayer().dimension == ancient_world_dim_id) {
-                if (!e.getPlayer().isCreative())
+                if (!e.getPlayer().isCreative()) {
                     e.setCanceled(true);
+                }
             }
         }
     }
 
     @SubscribeEvent
-    public void PlaceEvent(BlockEvent.PlaceEvent e) {
+    public static void PlaceEvent(BlockEvent.PlaceEvent e) {
         if (!TRAConfigs.Any.debugMode){
             if (e.getPlayer().dimension == ancient_world_dim_id) {
                 if (!e.getPlayer().isCreative()) {
@@ -160,30 +152,19 @@ public class EventsHandler {
         }
     }
 
-    @SubscribeEvent
-    public void fogSetColor(EntityViewRenderEvent.FogColors e) {
-        if (e.getEntity().getEntityWorld().getBiome(e.getEntity().getPosition()) == InitBiome.ANCIENT_LABYRINTH) {
-            e.setRed(0);
-            e.setBlue(0);
-            e.setGreen(0);
-        }
-    }
+
 
     @SubscribeEvent
-    public void PlayerTickEvent(TickEvent.PlayerTickEvent e) {
+    public static void PlayerTickEvent(TickEvent.PlayerTickEvent e) {
         int playerDimension = e.player.dimension;
         if (e.player.getEntityData().getBoolean(startUpNBT)) {
             if (playerDimension != ancient_world_dim_id) {
-                if (e.player instanceof EntityPlayerSP) {
-                    EntityPlayerSP playerSP = (EntityPlayerSP) e.player;
-                    playerSP.motionY += 2 - playerSP.motionY;
-                }
                 if (e.player instanceof EntityPlayerMP) {
                     if (e.player.posY > WorldData.get().saveData.getInteger(IALGS.AncientPortalYPosKey)) {
                         EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
 
                         HandlerR.setStartUpNBT(playerMP, false);
-                        playerMP.removePotionEffect(Potion.getPotionById(15));
+                        playerMP.removePotionEffect(Objects.requireNonNull(Potion.getPotionById(15)));
                         playerMP.fallDistance = 0;
 
                         e.player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, false);
@@ -200,7 +181,6 @@ public class EventsHandler {
             if (playerDimension != ancient_world_dim_id && pos.getY() <= 3) {
                 if (e.player.getServer() != null) {
                     if (e.player instanceof EntityPlayerMP) {
-                        GameSettings Settings = Minecraft.getMinecraft().gameSettings;
                         EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
                         if (TRAConfigs.AncientWorldSettings.isSetWarp) {
                             IPlayerWarp playerWarp = ThaumcraftCapabilities.getWarp(e.player);
@@ -209,18 +189,6 @@ public class EventsHandler {
                             playerWarp.set(IPlayerWarp.EnumWarpType.NORMAL, e.player.getEntityData().getInteger("NORMAL"));
                             playerWarp.sync(playerMP);
                             e.player.getEntityData().setBoolean("isWarpSet", false);
-                        }
-                        if (TRAConfigs.AncientWorldSettings.cantChangeRenderDistanceChunks) {
-                            int r = e.player.getEntityData().getInteger("renderDistanceChunks");
-                            if (r != 0) {
-                                Settings.renderDistanceChunks = r;
-                            }
-                            e.player.getEntityData().setInteger("renderDistanceChunks", 0);
-                        }
-                        if (TRAConfigs.AncientWorldSettings.cantChangeGammaSetting) {
-                            float g = e.player.getEntityData().getFloat("gammaSetting");
-                            e.player.getEntityData().setFloat("gammaSetting", 0.00001f);
-                            Settings.gammaSetting = g;
                         }
                         e.player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 600, 1));
                         e.player.getEntityData().setBoolean(tpToHomeNBT, false);
@@ -231,16 +199,14 @@ public class EventsHandler {
         }
 
         if (playerDimension == ancient_world_dim_id) {
-            IPlayerWarp playerWarp = ThaumcraftCapabilities.getWarp(e.player);
-            GameSettings Settings = Minecraft.getMinecraft().gameSettings;
-            EntityPlayerSP playerSP = Minecraft.getMinecraft().player;
-            BlockPos pos = e.player.getPosition();
-            if (pos.getY() > 84 && !e.player.isCreative()) {
+            if (e.player.posY > 84 && !e.player.isCreative()) {
                 e.player.fallDistance = 0;
                 e.player.motionY += -1 - e.player.motionY;
             }
-            if (pT >= 4) {
-                pT = 0;
+        }
+        if (pT >= 4) {
+            pT = 0;
+            if (playerDimension == ancient_world_dim_id) {
                 if (TRAConfigs.AncientWorldSettings.noNightVision) {
                     if (e.player.getActivePotionEffect(MobEffects.NIGHT_VISION) != null && !e.player.isCreative()) {
                         e.player.removePotionEffect(MobEffects.NIGHT_VISION);
@@ -249,6 +215,7 @@ public class EventsHandler {
                 if (TRAConfigs.AncientWorldSettings.isSetWarp) {
                     if (!e.player.getEntityData().getBoolean("isWarpSet") && e.player.getServer() != null) {
                         if (e.player instanceof EntityPlayerMP) {
+                            IPlayerWarp playerWarp = ThaumcraftCapabilities.getWarp(e.player);
                             e.player.getEntityData().setInteger("PERMANENT", playerWarp.get(IPlayerWarp.EnumWarpType.PERMANENT));
                             e.player.getEntityData().setInteger("TEMPORARY", playerWarp.get(IPlayerWarp.EnumWarpType.TEMPORARY));
                             e.player.getEntityData().setInteger("NORMAL", playerWarp.get(IPlayerWarp.EnumWarpType.NORMAL));
@@ -259,22 +226,6 @@ public class EventsHandler {
                         }
                     }
                 }
-                if (TRAConfigs.AncientWorldSettings.cantChangeGammaSetting) {
-                    if (Settings.gammaSetting != 0 && !e.player.isCreative() && playerSP.dimension == ancient_world_dim_id) {
-                        if (0.00001f == e.player.getEntityData().getFloat("gammaSetting")) {
-                            e.player.getEntityData().setFloat("gammaSetting", Settings.gammaSetting);
-                        }
-                        Settings.gammaSetting = 0;
-                    }
-                }
-                if (TRAConfigs.AncientWorldSettings.cantChangeRenderDistanceChunks && playerSP.dimension == ancient_world_dim_id) {
-                    if (Settings.renderDistanceChunks != 4 && !e.player.isCreative()) {
-                        if (0 == e.player.getEntityData().getInteger("renderDistanceChunks")) {
-                            e.player.getEntityData().setInteger("renderDistanceChunks", Settings.renderDistanceChunks);
-                        }
-                        Settings.renderDistanceChunks = 4;
-                    }
-                }
                 if (TRAConfigs.AncientWorldSettings.noPeaceful) {
                     if (difficultyId == 0) {
                         if (e.player instanceof EntityPlayerMP) {
@@ -283,24 +234,18 @@ public class EventsHandler {
                         }
                     }
                 }
-                if (e.player instanceof EntityPlayerSP && !e.player.isCreative()) {
-                    RenderEventHandler.fogFiddled = true;
-                    if (RenderEventHandler.fogDuration < 200) {
-                        RenderEventHandler.fogDuration = 200;
+            }
+            if (playerDimension != ancient_world_dim_id) {
+                if (e.player.getEntityData().getBoolean(TpToAncientWorldBlock.noCollisionNBT)) {
+                    e.player.getEntityData().setInteger(notNoCollisionNBTTime, (e.player.getEntityData().getInteger(notNoCollisionNBTTime) + 1));
+                    if (e.player.getEntityData().getInteger(notNoCollisionNBTTime) >= 40) {
+                        e.player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, false);
+                        e.player.getEntityData().setInteger(notNoCollisionNBTTime, 0);
                     }
                 }
             }
-            pT++;
         }
-    }
-
-    @SubscribeEvent
-    public void PlayerChangedDimensionEvent(PlayerEvent.PlayerChangedDimensionEvent e) {
-        if (e.toDim == ancient_world_dim_id && !e.player.world.isRemote) {
-            if (e.player.isCreative()) {
-                e.player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 999999, 0));
-            }
-        }
+        pT++;
     }
 
     static byte wt = 0;
@@ -308,7 +253,7 @@ public class EventsHandler {
     static final int[] potionEffects = new int[6];
 
     @SubscribeEvent
-    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+    public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (event.getEntity().dimension == ancient_world_dim_id && !event.getWorld().isRemote) {
             if (!event.getEntity().isNonBoss()) {
                 if (!WorldData.get().saveData.getBoolean(IALGS.isBossSpawn)) {
@@ -346,7 +291,7 @@ public class EventsHandler {
     }
 
     @SubscribeEvent
-    public void WorldTick(TickEvent.WorldTickEvent e) {
+    public static void WorldTick(TickEvent.WorldTickEvent e) {
         if (e.world.provider.getDimension() == ancient_world_dim_id) {
             if (wt == 20) {
                 wt = 0;

@@ -1,8 +1,6 @@
 package com.artur.returnoftheancients.misc;
 
 import com.artur.returnoftheancients.referense.Referense;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -244,7 +242,4 @@ public class TRAConfigs {
         }
     }
 
-    public static void playersCountDifficultyERROR(Runnable task) {
-        Minecraft.getMinecraft().addScheduledTask(task);
-    }
 }

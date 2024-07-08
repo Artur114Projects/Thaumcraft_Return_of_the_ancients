@@ -17,6 +17,8 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ClientPacketMisc implements IMessage {
     private NBTTagCompound data;
@@ -44,10 +46,11 @@ public class ClientPacketMisc implements IMessage {
         ByteBufUtils.writeTag(buf, data);
     }
 
-    public static class HandlerLG implements IMessageHandler<ClientPacketMisc, IMessage> {
+    public static class HandlerM implements IMessageHandler<ClientPacketMisc, IMessage> {
 
+        @SideOnly(Side.CLIENT)
         @Override
-        public IMessage onMessage(ClientPacketMisc message, MessageContext ctx) {
+        public  IMessage onMessage(ClientPacketMisc message, MessageContext ctx) {
             Minecraft.getMinecraft().addScheduledTask(() -> {
                 if (HandlerR.isGoodNBTTagMisc(message.data)) {
                     NBTTagCompound nbt = message.data;

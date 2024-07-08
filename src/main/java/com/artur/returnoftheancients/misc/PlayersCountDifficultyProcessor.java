@@ -1,8 +1,6 @@
 package com.artur.returnoftheancients.misc;
 
 import com.artur.returnoftheancients.handlers.HandlerR;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.*;
@@ -25,11 +23,9 @@ public class PlayersCountDifficultyProcessor {
         for (String rawData : array) {
             String data = replaceData(rawData);
             if (!isGood) {
-                TRAConfigs.playersCountDifficultyERROR(() -> {
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.RED + "line \" " + rawData + "\" is entered incorrectly!"));
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.RED + "Settings not applied"));
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.RED + "Default settings applied"));
-                });
+                HandlerR.sendAllMessageStringNoTitle(TextFormatting.RED + "line \" " + rawData + "\" is entered incorrectly!");
+                HandlerR.sendAllMessageStringNoTitle(TextFormatting.RED + "Settings not applied");
+                HandlerR.sendAllMessageStringNoTitle(TextFormatting.RED + "Default settings applied");
                 compile(HandlerR.defaultCountDifficultyData);
                 return;
             }
@@ -51,11 +47,9 @@ public class PlayersCountDifficultyProcessor {
         }
         sortedStrings.forEach((key, value) -> {
             if (value.size() > countEffects) {
-                TRAConfigs.playersCountDifficultyERROR(() -> {
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.RED + "you can't use more than " + countEffects + " lines per number of players, OnPlayers:" + key));
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.RED + "Settings not applied"));
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.RED + "Default settings applied"));
-                });
+                HandlerR.sendAllMessageStringNoTitle(TextFormatting.RED + "you can't use more than " + countEffects + " lines per number of players, OnPlayers:" + key);
+                HandlerR.sendAllMessageStringNoTitle(TextFormatting.RED + "Settings not applied");
+                HandlerR.sendAllMessageStringNoTitle(TextFormatting.RED + "Default settings applied");
                 compile(HandlerR.defaultCountDifficultyData);
                 isGood = false;
             }
@@ -238,11 +232,9 @@ public class PlayersCountDifficultyProcessor {
                 effectIndexes.add(effectIndex);
             }
             if (effectIndexes.stream().distinct().toArray().length != effectIndexes.size()) {
-                TRAConfigs.playersCountDifficultyERROR(() -> {
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.RED + "you can't use multiple identical effects, OnPlayers:" + onPlayers));
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.RED + "Settings not applied"));
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.RED + "Default settings applied"));
-                });
+                HandlerR.sendAllMessageStringNoTitle(TextFormatting.RED + "you can't use multiple identical effects, OnPlayers:" + onPlayers);
+                HandlerR.sendAllMessageStringNoTitle(TextFormatting.RED + "Settings not applied");
+                HandlerR.sendAllMessageStringNoTitle(TextFormatting.RED + "Default settings applied");
                 compile(HandlerR.defaultCountDifficultyData);
             }
         }

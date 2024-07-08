@@ -3,17 +3,13 @@ package com.artur.returnoftheancients.proxy;
 import com.artur.returnoftheancients.commads.*;
 import com.artur.returnoftheancients.handlers.RegisterHandler;
 
-import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.PlayersCountDifficultyProcessor;
 import com.artur.returnoftheancients.misc.TRAConfigs;
-import com.artur.returnoftheancients.network.ClientPacketMisc;
-import com.artur.returnoftheancients.network.ServerPacketTpToHome;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 
 public class CommonProxy {
@@ -21,7 +17,6 @@ public class CommonProxy {
 	
     public void preInit(FMLPreInitializationEvent event)
     {
-        MainR.NETWORK.registerMessage(new ServerPacketTpToHome.HandlerTTH(), ServerPacketTpToHome.class, 2, Side.SERVER);
     	RegisterHandler.preInitRegistries();
     }
     

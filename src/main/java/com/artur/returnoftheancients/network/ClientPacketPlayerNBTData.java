@@ -48,8 +48,10 @@ public class ClientPacketPlayerNBTData implements IMessage {
         @Override
         public IMessage onMessage(ClientPacketPlayerNBTData packet, MessageContext ctx) {
             Minecraft.getMinecraft().addScheduledTask(() -> {
+                System.out.println("ClientPacketPlayerNBTData packet!");
                 EntityPlayerSP playerSP = Minecraft.getMinecraft().player;
                 if (!HandlerR.isGoodNBTTagPND(packet.data)) {
+                    System.out.println("gavnoooooooooooooo");
                     return;
                 }
                 switch (packet.data.getByte("dataIndex")) {

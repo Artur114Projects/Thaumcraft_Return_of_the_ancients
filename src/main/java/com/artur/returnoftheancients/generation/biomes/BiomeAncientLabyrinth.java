@@ -4,7 +4,6 @@ import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.utils.interfaces.IBiome;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;

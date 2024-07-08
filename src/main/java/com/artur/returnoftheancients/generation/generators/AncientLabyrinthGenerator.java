@@ -6,26 +6,23 @@ import static com.artur.returnoftheancients.misc.TRAConfigs.MobGenSettings;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
-import akka.Main;
-import com.artur.returnoftheancients.blocks.BossTriggerBlock;
 import com.artur.returnoftheancients.events.MCTimer;
-import com.artur.returnoftheancients.handlers.EventsHandler;
+import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
 import com.artur.returnoftheancients.handlers.HandlerR;
-import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
+import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import com.artur.returnoftheancients.utils.interfaces.IWorldTimer;
 import com.artur.returnoftheancients.utils.interfaces.IStructure;
-import net.minecraft.command.CommandKill;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -209,12 +206,11 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             @Override
             public void start(long time, World world) {
                 genMobs();
-                EventsHandler.setAncientWorldLoad(false);
             }
 
             @Override
             public boolean is(long time, World world) {
-                return EventsHandler.isAncientWorldLoad();
+                return false;
             }
 
             @Override
@@ -248,7 +244,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         if (!WorldData.get().saveData.getBoolean(isAncientWorldGenerateKey) || world.playerEntities.isEmpty()) {
             if (!world.playerEntities.isEmpty() && !isGenerateStart) {
                 AncientWorldBuildProcessor.tpToHomePlayers(world.playerEntities);
-                player.getEntityData().setBoolean(EventsHandler.tpToHomeNBT, true);
+                player.getEntityData().setBoolean(ServerEventsHandler.tpToHomeNBT, true);
                 player.getEntityData().setBoolean(noCollisionNBT, true);
                 return;
             }
@@ -257,6 +253,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                 FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 126, -10);
             }
             HandlerR.setLoadingGuiState(player, true);
+            HandlerR.injectPercentagesOnClient(player, 0, 0);
             if (!isGenerateStart) {
                 genAncientLabyrinth(player);
             } else if (world.playerEntities.isEmpty()) {
@@ -264,6 +261,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             } else {
                 player.getEntityData().setLong("getReward", WorldData.get().saveData.getLong("getReward"));
                 HandlerR.injectPhaseOnClient(player, PHASE);
+
             }
         } else {
             if (player.isCreative()) {
@@ -292,7 +290,6 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         }
         isGen = false;
         isGenerateStart = true;
-        EventsHandler.setAncientWorldLoad(false);
         GenStructure.generateStructure(world, 4, 124, -14, "ancient_developer_platform");
 
         System.out.println("Generating ancient labyrinth start");
@@ -355,6 +352,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         }
     }
 
+    @Mod.EventBusSubscriber(modid = Referense.MODID)
     public static class AncientWorldBuildProcessor {
         private static void clearArea() {
             clear = true;
@@ -403,7 +401,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         private static byte tht = 0;
 
         @SubscribeEvent
-        public void Tick(TickEvent.WorldTickEvent e) {
+        public static void Tick(TickEvent.WorldTickEvent e) {
             if (!e.world.isRemote) {
                 if (please) {
                     if (t == AncientWorldSettings.AncientWorldGenerationSettings.structuresGenerationDelay) {
@@ -519,7 +517,6 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                                     HandlerR.injectPercentagesOnClient((EntityPlayerMP) player1, 0, 0);
                                 }
                             }
-
                             System.out.println("Generate structures");
                             genStructuresInWorld();
                             return;
@@ -559,7 +556,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                         return;
                     }
                     EntityPlayerMP player = (EntityPlayerMP) playersTP.get(tht);
-                    EventsHandler.tpToHome(player);
+                    ServerEventsHandler.tpToHome(player);
                 }
             }
         }

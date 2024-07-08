@@ -1,16 +1,11 @@
 package com.artur.returnoftheancients.items;
 
 
-import com.artur.returnoftheancients.gui.SkalaGui;
-import com.artur.returnoftheancients.handlers.EventsHandler;
-import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.init.InitSounds;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.command.CommandBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -23,7 +18,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.common.lib.network.PacketHandler;
@@ -46,11 +40,15 @@ public class ItemGavno extends BaseItem{
 	public @NotNull EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player instanceof EntityPlayerMP) {
 			PacketHandler.INSTANCE.sendTo(new PacketMiscEvent((byte) 2), (EntityPlayerMP) player);
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setString("playSound", "rui_dead");
+			MainR.NETWORK.sendTo(new ClientPacketMisc(nbt),(EntityPlayerMP)  player);
 		}
-		Minecraft.getMinecraft().player.playSound(InitSounds.RUI_DEAD, 1, 1);
 		player.setHealth(player.getHealth() - 1);
 		player.performHurtAnimation();
-		System.out.println(Minecraft.getMinecraft().player.rotationYaw);
+		if (player instanceof EntityPlayerSP) {
+			System.out.println(player.rotationYaw);
+		}
 		if (!worldIn.isRemote) {
 			player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 30, -1));
 			ResourceLocation location = new ResourceLocation(Referense.MODID, "ancient_kusok_portal");

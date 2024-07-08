@@ -23,8 +23,6 @@ public class ClientProxy extends CommonProxy
     @Override
     public void preInit(FMLPreInitializationEvent event)
     {
-        MainR.NETWORK.registerMessage(new ClientPacketPlayerNBTData.HandlerPND(), ClientPacketPlayerNBTData.class, 0, Side.CLIENT);
-        MainR.NETWORK.registerMessage(new ClientPacketMisc.HandlerLG(), ClientPacketMisc.class, 1, Side.CLIENT);
         super.preInit(event);
     }
 

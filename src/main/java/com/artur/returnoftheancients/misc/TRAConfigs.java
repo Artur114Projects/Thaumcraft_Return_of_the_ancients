@@ -103,7 +103,6 @@ public class TRAConfigs {
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.portal.modId")
         @Config.Comment("Here you can specify with items from which mods you can get into the ancient world")
-        // baubles , "thaumicaugmentation", "", "baubles"
         public String[] modId = new String[] {Referense.MODID, "minecraft", "thaumcraft", "baubles"};
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.portal.ci")

@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.items;
 
 
+import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.referense.Referense;
@@ -41,7 +42,7 @@ public class ItemGavno extends BaseItem{
 		if (player instanceof EntityPlayerMP) {
 			PacketHandler.INSTANCE.sendTo(new PacketMiscEvent((byte) 2), (EntityPlayerMP) player);
 			NBTTagCompound nbt = new NBTTagCompound();
-			nbt.setString("playSound", "rui_dead");
+			nbt.setString("playSound", InitSounds.RUI_DEAD.NAME);
 			MainR.NETWORK.sendTo(new ClientPacketMisc(nbt),(EntityPlayerMP)  player);
 		}
 		player.setHealth(player.getHealth() - 1);

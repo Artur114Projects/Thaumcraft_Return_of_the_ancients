@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class RemoveUnresolvedItems {
@@ -50,15 +51,15 @@ public class RemoveUnresolvedItems {
         if (e.player.getEntityData().getBoolean(isUUI)) {
             int timeRemoveItems = e.player.getEntityData().getInteger(time);
             byte phaseRemoveItems = e.player.getEntityData().getByte(PRI);
-            if (HandlerR.isPlayerUseUnresolvedItems(e.player).isEmpty()) {
+            if (HandlerR.isPlayerUseUnresolvedItems(e.player).isEmpty() || e.player.dimension != InitDimensions.ancient_world_dim_id) {
                 e.player.removePotionEffect(MobEffects.SLOWNESS);
                 e.player.removePotionEffect(MobEffects.BLINDNESS);
                 resetNBT(e.player);
                 return;
             }
             if (phaseRemoveItems == 0) {
-                if (e.player instanceof EntityPlayerSP) {
-                    e.player.playSound(InitSounds.WHISPER, 1, 1);
+                if (e.player instanceof EntityPlayerMP) {
+                    HandlerR.playSound((EntityPlayerMP) e.player, InitSounds.WHISPER.NAME);
                 }
                 e.player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 1200));
                 e.player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1200, 10));
@@ -78,7 +79,9 @@ public class RemoveUnresolvedItems {
             }
             if (phaseRemoveItems == 2 && timeRemoveItems >= 760) {
                 e.player.setHealth(-1);
-                e.player.playSound(InitSounds.RUI_DEAD, 1, 1);
+                if (e.player instanceof EntityPlayerMP) {
+                    HandlerR.playSound((EntityPlayerMP) e.player, InitSounds.RUI_DEAD.NAME);
+                }
                 resetNBT(e.player);
                 System.out.println("dead");
                 return;
@@ -86,20 +89,17 @@ public class RemoveUnresolvedItems {
             e.player.getEntityData().setInteger(time, timeRemoveItems + 1);
             e.player.getEntityData().setByte(PRI, phaseRemoveItems);
 
-            if (e.player instanceof EntityPlayerSP) {
-                e.player.motionY = -0.1;
-            }
             if (timeRemoveItems < 460) {
-                if ((timeRemoveItems % 40) == 0 && e.player instanceof EntityPlayerSP) {
-                    e.player.playSound(InitSounds.HEARTBEAT, 1, 1);
+                if ((timeRemoveItems % 40) == 0 && e.player instanceof EntityPlayerMP) {
+                    HandlerR.playSound((EntityPlayerMP) e.player, InitSounds.HEARTBEAT.NAME);
                 }
             } else if (timeRemoveItems < 660) {
-                if ((timeRemoveItems % 20) == 0 && e.player instanceof EntityPlayerSP) {
-                    e.player.playSound(InitSounds.HEARTBEAT, 1, 1);
+                if ((timeRemoveItems % 20) == 0 && e.player instanceof EntityPlayerMP) {
+                    HandlerR.playSound((EntityPlayerMP) e.player, InitSounds.HEARTBEAT.NAME);
                 }
             } else {
-                if ((timeRemoveItems % 10) == 0 && e.player instanceof EntityPlayerSP) {
-                    e.player.playSound(InitSounds.HEARTBEAT, 1, 1);
+                if ((timeRemoveItems % 10) == 0 && e.player instanceof EntityPlayerMP) {
+                    HandlerR.playSound((EntityPlayerMP) e.player, InitSounds.HEARTBEAT.NAME);
                 }
             }
         }

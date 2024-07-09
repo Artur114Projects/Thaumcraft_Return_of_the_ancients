@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
+import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -273,4 +274,10 @@ public class HandlerR {
 
             "players=1, effect=speed, amplifier=1"
     };
+
+    public static void playSound(EntityPlayerMP playerMP, String soundName) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setString("playSound", soundName);
+        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
+    }
 }

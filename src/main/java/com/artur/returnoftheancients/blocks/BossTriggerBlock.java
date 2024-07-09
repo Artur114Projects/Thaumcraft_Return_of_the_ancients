@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
+import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
@@ -84,13 +85,13 @@ public class BossTriggerBlock extends BaseBlock {
                     for (EntityPlayer player : worldIn.playerEntities) {
                         ((EntityPlayerMP) player).connection.setPlayerLocation(pos.getX(), pos.getY() + 2, pos.getZ() + 8, -181, 0);
                         NBTTagCompound nbt = new NBTTagCompound();
-                        nbt.setString("playSound", "bum");
+                        nbt.setString("playSound", InitSounds.BUM.NAME);
                         MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), (EntityPlayerMP) player);
                     }
                 } else {
                     for (EntityPlayer player : worldIn.playerEntities) {
                         NBTTagCompound nbt = new NBTTagCompound();
-                        nbt.setString("playSound", "bum");
+                        nbt.setString("playSound", InitSounds.BUM.NAME);
                         MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), (EntityPlayerMP) player);
                     }
                 }

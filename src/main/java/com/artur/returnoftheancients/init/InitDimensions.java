@@ -12,7 +12,7 @@ public class InitDimensions {
     public static final void registerDimensions()
     {
         DimensionManager.registerDimension(ancient_world_dim_id, ancient_world_dim_type);
-        System.out.println("Dimension registry ancient_world \ndim_type: " + ancient_world_dim_type + " \ndim_id: " + ancient_world_dim_id + " \nname: " + ancient_world_name);
+//        System.out.println("Dimension registry ancient_world \ndim_type: " + ancient_world_dim_type + " \ndim_id: " + ancient_world_dim_id + " \nname: " + ancient_world_name);
     }
 
 }

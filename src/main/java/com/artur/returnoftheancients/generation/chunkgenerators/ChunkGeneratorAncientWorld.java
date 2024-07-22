@@ -17,9 +17,9 @@ import java.util.List;
 public class ChunkGeneratorAncientWorld implements IChunkGenerator {
 
 
-    private Biome biome = InitBiome.ANCIENT_LABYRINTH;
-    private World world;
-    private ChunkPrimer chunkPrimer = new ChunkPrimer();
+    private final Biome biome = InitBiome.ANCIENT_LABYRINTH;
+    private final World world;
+    private final ChunkPrimer chunkPrimer = new ChunkPrimer();
 
     public ChunkGeneratorAncientWorld(World worldIn) {
         world = worldIn;

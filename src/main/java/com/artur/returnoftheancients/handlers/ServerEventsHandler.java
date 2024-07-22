@@ -1,6 +1,5 @@
 package com.artur.returnoftheancients.handlers;
 
-import com.artur.returnoftheancients.blocks.BossTriggerBlock;
 import com.artur.returnoftheancients.misc.PlayersCountDifficultyProcessor;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -319,7 +318,7 @@ public class ServerEventsHandler {
 ////                q.setPositionAndUpdate(8, 81, 8);
 ////                q.forceSpawn = true;
 ////                world.spawnEntity(q);
-////                System.out.println("Eldritch Guardian is gen XYZ " + 8 + " " + 81 + " " + 8);
+////                System.out.println("Eldritch Guardian is please XYZ " + 8 + " " + 81 + " " + 8);
 ////            }
 ////        }
 //    }

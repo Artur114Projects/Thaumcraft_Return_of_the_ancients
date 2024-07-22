@@ -1,31 +1,27 @@
 package com.artur.returnoftheancients.items;
 
 
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.main.MainR;
+import com.artur.returnoftheancients.main.Test;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
-import com.artur.returnoftheancients.referense.Referense;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.common.lib.network.PacketHandler;
 import thaumcraft.common.lib.network.misc.PacketMiscEvent;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 public class ItemGavno extends BaseItem{
@@ -45,24 +41,17 @@ public class ItemGavno extends BaseItem{
 			nbt.setString("playSound", InitSounds.RUI_DEAD.NAME);
 			MainR.NETWORK.sendTo(new ClientPacketMisc(nbt),(EntityPlayerMP)  player);
 		}
-		player.setHealth(player.getHealth() - 1);
-		player.performHurtAnimation();
-		if (player instanceof EntityPlayerSP) {
-			System.out.println(player.rotationYaw);
-		}
 		if (!worldIn.isRemote) {
-			player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 30, -1));
-			ResourceLocation location = new ResourceLocation(Referense.MODID, "ancient_kusok_portal");
-			String s = location.getResourceDomain();
-			String s1 = location.getResourcePath();
-			InputStream inputstream = MinecraftServer.class.getResourceAsStream("/assets/" + s + "/structures/" + s1 + ".nbt");
-			try {
-				assert inputstream != null;
-				NBTTagCompound nbttagcompound = CompressedStreamTools.readCompressed(inputstream);
-				System.out.println(nbttagcompound);
-			} catch (IOException e) {
-				System.out.println(e.getMessage());
-			}
+//			BlockPos playerPos = player.getPosition();
+//			long time1 = System.currentTimeMillis();
+//			GenStructure.generateStructure(player.world, playerPos.getX() + 20, playerPos.getY(), playerPos.getZ(), "ancient_turn");
+//			long time1Finish = System.currentTimeMillis() -  time1;
+//			player.sendMessage(new TextComponentString("template is took:" + time1Finish + "ms"));
+//			long time = System.currentTimeMillis();
+//			CustomGenStructure.registerOrPlease(player.world, playerPos.getX(), playerPos.getY(), playerPos.getZ(), "ancient_turn");
+//			long timeFinish = System.currentTimeMillis() -  time;
+//			player.sendMessage(new TextComponentString("my gen is took:" + timeFinish + "ms"));
+			Test.startTest(player);
 		}
 		if (!worldIn.isRemote) {
 			NBTTagCompound nbt = new NBTTagCompound();

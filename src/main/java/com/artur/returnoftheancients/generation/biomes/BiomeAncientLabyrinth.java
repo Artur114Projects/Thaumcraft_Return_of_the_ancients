@@ -28,7 +28,7 @@ public class BiomeAncientLabyrinth extends Biome implements IBiome {
     private int weight = 0;
     // Типы биома
     private final BiomeDictionary.Type[] types = new BiomeDictionary.Type[]{BiomeDictionary.Type.DEAD, BiomeDictionary.Type.DENSE};
-    // Имена биомов
+
     public static String NAME = "ancient entry";
     public static List<SpawnListEntry> spawnListEntryList = new ArrayList<>();
 

@@ -13,8 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
 
-    public BlockTileEntity(String name, Material material, float hardness, float resistanse, SoundType soundType) {
-        super(name, material, hardness, resistanse, soundType);
+    public BlockTileEntity(String name, Material material, float hardness, float resistance, SoundType soundType) {
+        super(name, material, hardness, resistance, soundType);
     }
 
     public abstract Class<T> getTileEntityClass();

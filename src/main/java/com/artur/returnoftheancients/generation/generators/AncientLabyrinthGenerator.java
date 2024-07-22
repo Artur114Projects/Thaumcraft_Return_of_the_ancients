@@ -6,6 +6,8 @@ import static com.artur.returnoftheancients.misc.TRAConfigs.MobGenSettings;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
+import com.artur.returnoftheancients.ancientworldgeneration.genmap.AncientLabyrinthMap;
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.events.MCTimer;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
@@ -163,9 +165,9 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
 //            e.setPositionAndUpdate(x, 81, z);
 //            e.forceSpawn = true;
 //            world.spawnEntity(e);
-//            System.out.println("Eldritch Guardian is gen XYZ " + x + " " + 81 + " " + z);
+//            System.out.println("Eldritch Guardian is please XYZ " + x + " " + 81 + " " + z);
 //        };
-//        G.gen(ANCIENT_LABYRINTH_MOB_ELDRITCH_GUARDIAN);
+//        G.please(ANCIENT_LABYRINTH_MOB_ELDRITCH_GUARDIAN);
 //
 //        IMobsGen S = (x, z) -> {
 //            EntityMindSpider e = new EntityMindSpider(world);
@@ -173,9 +175,9 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
 //            e.setPositionAndUpdate(x, 81, z);
 //            e.forceSpawn = true;
 //            world.spawnEntity(e);
-//            System.out.println("Mind Spider is gen XYZ " + x + " " + 81 + " " + z);
+//            System.out.println("Mind Spider is please XYZ " + x + " " + 81 + " " + z);
 //        };
-//        S.gen(ANCIENT_LABYRINTH_MOB_MIND_SPIDER);
+//        S.please(ANCIENT_LABYRINTH_MOB_MIND_SPIDER);
 //
 //        IMobsGen Z = (x, z) -> {
 //            Random r = new Random();
@@ -194,9 +196,9 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
 //
 //            e.forceSpawn = true;
 //            world.spawnEntity(e);
-//            System.out.println("Inhabited Zombie is gen XYZ " + x + " " + 81 + " " + z);
+//            System.out.println("Inhabited Zombie is please XYZ " + x + " " + 81 + " " + z);
 //        };
-//        Z.gen(ANCIENT_LABYRINTH_MOB_INHABITED_ZOMBIE);
+//        Z.please(ANCIENT_LABYRINTH_MOB_INHABITED_ZOMBIE);
     }
 
     @Deprecated
@@ -232,7 +234,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
     protected static void genAncientEntryWay() {
         for (int y = 0, cordY = 112; cordY < world.getHeight(); y++) {
             cordY = 112 + 32 * y;
-            GenStructure.generateStructure(world, 0, cordY, 0, ENTRY_WAY_STRING_ID);
+            CustomGenStructure.please(world, 0, cordY, 0, ENTRY_WAY_STRING_ID);
         }
         GenStructure.generateStructure(world, 6, 255, 6, "ancient_border_cap");
     }
@@ -261,7 +263,6 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             } else {
                 player.getEntityData().setLong("getReward", WorldData.get().saveData.getLong("getReward"));
                 HandlerR.injectPhaseOnClient(player, PHASE);
-
             }
         } else {
             if (player.isCreative()) {
@@ -406,7 +407,6 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                 if (please) {
                     if (t == AncientWorldSettings.AncientWorldGenerationSettings.structuresGenerationDelay) {
                         t = 0;
-//                        System.out.println("please " + "x" + xtp + " y" + ytp);
                         if (xtp == SIZE) {
                             ytp++;
                             xtp = 0;
@@ -435,51 +435,44 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                         byte structureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[ytp][xtp];
                         int cx = 128 - 16 * xtp;
                         int cz = 128 - 16 * ytp;
-                        int dx = 0;
-                        int dz = 0;
+                        byte rotate = 0;
                         switch (structureRotate) {
                             case 1:
-                                settings.setRotation(Rotation.NONE);
+                                rotate = 1;
                                 break;
                             case 2:
-                                settings.setRotation(Rotation.CLOCKWISE_90);
-                                dx = -15;
+                                rotate = 2;
                                 break;
                             case 3:
-                                settings.setRotation(Rotation.COUNTERCLOCKWISE_90);
-                                dz = -15;
+                                rotate = 3;
                                 break;
                             case 4:
-                                settings.setRotation(Rotation.CLOCKWISE_180);
-                                dz = -15;
-                                dx = -15;
+                                rotate = 4;
                                 break;
                         }
-                        cx = cx - dx;
-                        cz = cz - dz;
                         switch (structure) {
                             case WAY_ID:
-                                GenStructure.generateStructure(world, cx, 80, cz, WAY_STRING_ID);
+                                CustomGenStructure.please(world, cx, 80, cz, WAY_STRING_ID + rotate);
                                 break;
                             case CROSSROADS_ID:
-                                GenStructure.generateStructure(world, cx, 80, cz, CROSSROADS_STRING_ID);
+                                CustomGenStructure.please(world, cx, 80, cz, CROSSROADS_STRING_ID);
                                 break;
                             case ENTRY_ID:
-                                GenStructure.generateStructure(world, cx, 80, cz, ENTRY_STRING_ID);
+                                CustomGenStructure.please(world, cx, 80, cz, ENTRY_STRING_ID);
                                 break;
                             case TURN_ID:
-                                GenStructure.generateStructure(world, cx, 80, cz, TURN_STRING_ID);
+                                CustomGenStructure.please(world, cx, 80, cz, TURN_STRING_ID + rotate);
                                 break;
                             case FORK_ID:
-                                GenStructure.generateStructure(world, cx, 80, cz, FORK_STRING_ID);
+                                CustomGenStructure.please(world, cx, 80, cz, FORK_STRING_ID + rotate);
                                 break;
                             case END_ID:
-                                GenStructure.generateStructure(world, cx, 80, cz, END_STRING_ID);
+                                CustomGenStructure.please(world, cx, 80, cz, END_STRING_ID + rotate);
                                 break;
                             case BOSS_ID:
                                 bossGen++;
                                 if (bossGen == 4) {
-                                    GenStructure.generateStructure(world, cx, 79, cz, BOSS_STRING_ID);
+                                    CustomGenStructure.please(world, cx, 79, cz, BOSS_STRING_ID);
                                     bossGen = 0;
                                 }
                                 break;
@@ -523,8 +516,8 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                         }
                         int cx = 128 - 16 * xtc;
                         int cz = 128 - 16 * ytc;
-                        GenStructure.generateStructure(world, cx, 80, cz, AIR_CUBE_STRING_ID);
-                        GenStructure.generateStructure(world, cx, 80 - 31, cz, AIR_CUBE_STRING_ID);
+                        CustomGenStructure.please(world, cx, 80, cz, AIR_CUBE_STRING_ID);
+                        CustomGenStructure.please(world, cx, 80 - 31, cz, AIR_CUBE_STRING_ID);
 //                        System.out.println("clear x:" + cx + " z:" + cz);
 
                         xtc++;

@@ -8,7 +8,7 @@ import net.minecraft.server.MinecraftServer;
 
 
 public class GenAncientLabyrinth extends CommandBase {
-    String NAME = "setf", USAGE = "/setf";
+    String NAME = "please", USAGE = "/please";
 
     @Override
     public String getName() {
@@ -22,5 +22,6 @@ public class GenAncientLabyrinth extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+        System.out.println("wjnbehgiekwfmleedwqommkvdfiejowmdkfbjewkdfnbjdknjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
     }
 }

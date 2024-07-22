@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.blocks;
 
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.main.MainR;
@@ -70,15 +71,15 @@ public class BossTriggerBlock extends BaseBlock {
                         break;
                 }
 
-                GenStructure.generateStructure(worldIn, pos.getX() + 5, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
-                GenStructure.generateStructure(worldIn, pos.getX() - 11, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
-                GenStructure.generateStructure(worldIn, pos.getX() + 5, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
-                GenStructure.generateStructure(worldIn, pos.getX() - 11, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
+                CustomGenStructure.please(worldIn, pos.getX() + 5, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
+                CustomGenStructure.please(worldIn, pos.getX() - 11, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
+                CustomGenStructure.please(worldIn, pos.getX() + 5, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
+                CustomGenStructure.please(worldIn, pos.getX() - 11, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
                 IStructure.settings.setRotation(Rotation.CLOCKWISE_90);
-                GenStructure.generateStructure(worldIn, pos.getX() + 15, pos.getY() + 2, pos.getZ() + 6, "ancient_door");
-                GenStructure.generateStructure(worldIn, pos.getX() + 15, pos.getY() + 2, pos.getZ() - 10, "ancient_door");
-                GenStructure.generateStructure(worldIn, pos.getX() - 16, pos.getY() + 2, pos.getZ() + 6, "ancient_door");
-                GenStructure.generateStructure(worldIn, pos.getX() - 16, pos.getY() + 2, pos.getZ() - 10, "ancient_door");
+                CustomGenStructure.please(worldIn, pos.getX() + 15, pos.getY() + 2, pos.getZ() + 6, "ancient_door");
+                CustomGenStructure.please(worldIn, pos.getX() + 15, pos.getY() + 2, pos.getZ() - 10, "ancient_door");
+                CustomGenStructure.please(worldIn, pos.getX() - 16, pos.getY() + 2, pos.getZ() + 6, "ancient_door");
+                CustomGenStructure.please(worldIn, pos.getX() - 16, pos.getY() + 2, pos.getZ() - 10, "ancient_door");
                 IStructure.settings.setRotation(Rotation.NONE);
 
                 if (worldIn.playerEntities.size() > 1) {
@@ -98,7 +99,7 @@ public class BossTriggerBlock extends BaseBlock {
             }
         }
         if (!worldIn.isRemote && ServerEventsHandler.bossIsDead && !worldIn.isAnyPlayerWithinRangeAt(pos.getX(), pos.getY(), pos.getZ(), 4)) {
-            GenStructure.generateStructure(worldIn, pos.getX() - 3, pos.getY() - 30, pos.getZ() - 2, "ancient_exit");
+            CustomGenStructure.please(worldIn, pos.getX() - 3, pos.getY() - 30, pos.getZ() - 2, "ancient_exit");
             ServerEventsHandler.bossIsDead = false;
             int players = 0;
             for (EntityPlayer player : worldIn.playerEntities) {

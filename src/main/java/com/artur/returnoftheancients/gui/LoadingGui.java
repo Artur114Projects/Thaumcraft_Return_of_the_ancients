@@ -6,10 +6,14 @@ import com.artur.returnoftheancients.network.ServerPacketTpToHome;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import java.io.IOException;
 
@@ -17,7 +21,6 @@ import java.io.IOException;
 public class LoadingGui extends GuiScreen {
     private static byte PHASE = -1;
     private static byte percentages = 0;
-    private final int Green = 32768;
     private final int Red = 16711680;
     private final int White = 16777215;
     private static final int Y = 100;
@@ -94,7 +97,7 @@ public class LoadingGui extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        GL11.glColor4f(1, 1, 1, 1);
+        GL11.glColor4f(0, 0, 0, 1);
         mc.getTextureManager().bindTexture(location);
         this.drawDefaultBackground();
         drawTexturedModalRect(0, 0, 0, 0, width, height);
@@ -139,6 +142,8 @@ public class LoadingGui extends GuiScreen {
             int widE = ((width / 2) - (fontRenderer.getStringWidth(s) / 2));
             fontRenderer.drawString(s, widE, hieE, Red);
         }
+
+
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

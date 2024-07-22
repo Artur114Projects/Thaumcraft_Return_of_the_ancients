@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.generation.generators;
+package com.artur.returnoftheancients.ancientworldgeneration.genmap;
 
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
@@ -7,7 +7,7 @@ import java.util.Random;
 
 import static com.artur.returnoftheancients.generation.generators.AncientLabyrinthGeneratorHandler.getVoidStructures;
 
-public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IALGS {
+public class AncientLabyrinthMap implements IALGS {
 
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES = new byte[17][17];
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE = new byte[17][17];
@@ -18,6 +18,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
     private static final byte b_index = 1;
     private static final byte bl_index = 2;
     private static final byte u_index = 3;
+    private static final int SIZE = 17;
 
     public static int genRandomIntRange(int min, int max) {
         return random.nextInt((max - min) + 1) + min;
@@ -76,7 +77,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
         boolean is_bl = y < SIZE - 1;
         boolean is_u = y > 0;
 
-//        System.out.println("Way gen start IYX " + index + " " + y + " " + x);
+//        System.out.println("Way please start IYX " + index + " " + y + " " + x);
         if (wayRotate > 2) {
             return new byte[2];
         }
@@ -610,7 +611,7 @@ public class AncientLabyrinthMap extends AncientLabyrinthGenerator implements IA
                     boolean is_bl = y < SIZE - 1;
                     boolean is_u = y > 0;
 
-                    // gen
+                    // please
                     if (structure == CROSSROADS_ID || structure == ENTRY_ID || structure == BOSS_ID) {
                         if (forwardStructure == 0) {
                             setForwardWay(y, f_x, is_f, true);

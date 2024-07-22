@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.handlers;
 
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.TRAStructure;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.main.MainR;
@@ -12,10 +13,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 public class HandlerR {
@@ -279,5 +285,21 @@ public class HandlerR {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setString("playSound", soundName);
         MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
+    }
+
+    public static TRAStructure getTRAStructureFromRL(String structureName) {
+        return null;
+    }
+    private static NBTTagCompound readStructureAsName(String structureName) {
+        ResourceLocation location = new ResourceLocation(Referense.MODID, structureName);
+        String s = location.getResourceDomain();
+        String s1 = location.getResourcePath();
+        InputStream inputstream = MinecraftServer.class.getResourceAsStream("/assets/" + s + "/structures/" + s1 + ".nbt");
+        try {
+            assert inputstream != null;
+            return CompressedStreamTools.readCompressed(inputstream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

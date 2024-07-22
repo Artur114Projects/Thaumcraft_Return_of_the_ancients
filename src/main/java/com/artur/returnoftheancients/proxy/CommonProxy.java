@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.proxy;
 
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.commads.*;
 import com.artur.returnoftheancients.handlers.RegisterHandler;
 
@@ -26,7 +27,6 @@ public class CommonProxy {
 
     public void postInit(FMLPostInitializationEvent event)
     {
-        PlayersCountDifficultyProcessor.compile(TRAConfigs.DifficultySettings.playersCountDifficulty);
     }
     public void serverStarting(FMLServerStartingEvent event) {
         if (TRAConfigs.Any.debugMode) {
@@ -37,5 +37,34 @@ public class CommonProxy {
             event.registerServerCommand(new Command());
         }
         event.registerServerCommand(new TRACommand());
+
+        PlayersCountDifficultyProcessor.compile(TRAConfigs.DifficultySettings.playersCountDifficulty);
+        CustomGenStructure.put("ancient_entry");
+        CustomGenStructure.put("ancient_crossroads");
+
+        CustomGenStructure.put("ancient_way_rotate-1");
+        CustomGenStructure.put("ancient_way_rotate-2");
+        CustomGenStructure.put("ancient_turn_rotate-1");
+        CustomGenStructure.put("ancient_turn_rotate-2");
+        CustomGenStructure.put("ancient_turn_rotate-3");
+        CustomGenStructure.put("ancient_turn_rotate-4");
+        CustomGenStructure.put("ancient_fork_rotate-1");
+        CustomGenStructure.put("ancient_fork_rotate-2");
+        CustomGenStructure.put("ancient_fork_rotate-3");
+        CustomGenStructure.put("ancient_fork_rotate-4");
+        CustomGenStructure.put("ancient_end_rotate-1");
+        CustomGenStructure.put("ancient_end_rotate-2");
+        CustomGenStructure.put("ancient_end_rotate-3");
+        CustomGenStructure.put("ancient_end_rotate-4");
+
+        CustomGenStructure.put("ancient_boss");
+        CustomGenStructure.put("ancient_exit");
+        CustomGenStructure.put("ancient_entry_way");
+        CustomGenStructure.put("ancient_door");
+        CustomGenStructure.register();
+        CustomGenStructure.put("air_cube");
+        CustomGenStructure.setUseEBS();
+        CustomGenStructure.register();
     }
+
 }

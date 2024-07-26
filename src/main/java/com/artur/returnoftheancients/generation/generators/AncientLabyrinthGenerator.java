@@ -40,7 +40,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
     protected static World world;
     @Deprecated
     protected static final byte[] YX_states = new byte[2];
-    protected static int bossGen = 0;
+
     protected static ArrayList<EntityPlayer> players = new ArrayList<>();
     protected static boolean isGenerateStart = false;
     public static boolean isGen = false;
@@ -113,11 +113,11 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                         GenStructure.generateStructure(world, cx, 80, cz, END_STRING_ID);
                         break;
                     case BOSS_ID:
-                        bossGen++;
-                        if (bossGen == 4) {
-                            GenStructure.generateStructure(world, cx, 79, cz, BOSS_STRING_ID);
-                            bossGen = 0;
-                        }
+//                        bossGen++;
+//                        if (bossGen == 4) {
+//                            GenStructure.generateStructure(world, cx, 79, cz, BOSS_STRING_ID);
+//                            bossGen = 0;
+//                        }
                         break;
                     case 0:
                         break;
@@ -355,6 +355,11 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
 
     @Mod.EventBusSubscriber(modid = Referense.MODID)
     public static class AncientWorldBuildProcessor {
+        private static void tpToHomePlayers(List<EntityPlayer> playerList) {
+            playersTP = playerList;
+            tpToHome = true;
+        }
+
         private static void clearArea() {
             clear = true;
         }
@@ -365,11 +370,6 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
 
         private static void reloadLight() {
             reloadLight = true;
-        }
-
-        private static void tpToHomePlayers(List<EntityPlayer> playerList) {
-            playersTP = playerList;
-            tpToHome = true;
         }
 
         private static void stop() {
@@ -400,6 +400,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
 
         private static byte t = 0;
         private static byte tht = 0;
+        protected static int bossGen = 0;
 
         @SubscribeEvent
         public static void Tick(TickEvent.WorldTickEvent e) {

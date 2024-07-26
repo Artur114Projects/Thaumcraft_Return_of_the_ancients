@@ -5,4 +5,10 @@ import net.minecraft.world.World;
 public interface IBuild {
     void build(World world);
     boolean isBuild();
+    void onPlease();
+    void onClear();
+    void onPleaseStart();
+    void onClearStart();
+    void onReloadLightStart();
+    void onFinish();
 }

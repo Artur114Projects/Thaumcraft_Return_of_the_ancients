@@ -9,19 +9,16 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import java.util.*;
 
 public class Team {
-    public final long ID = new Random().nextLong();
     private final HashMap<UUID, EntityPlayerMP> players = new HashMap<>();;
     public Team(List<EntityPlayerMP> players) {
         for (EntityPlayerMP playerMP : players) {
             this.players.put(playerMP.getUniqueID(), playerMP);
-            playerMP.getEntityData().setLong("TeamID", ID);
         }
     }
 
     public Team(EntityPlayerMP... players) {
         for (EntityPlayerMP playerMP : players) {
             this.players.put(playerMP.getUniqueID(), playerMP);
-            playerMP.getEntityData().setLong("TeamID", ID);
         }
     }
 
@@ -33,7 +30,6 @@ public class Team {
             if (e instanceof EntityPlayerMP) {
                 EntityPlayerMP playerMP = (EntityPlayerMP) e;
                 this.players.put(playerMP.getUniqueID(), playerMP);
-                playerMP.getEntityData().setLong("TeamID", ID);
             } else {
                 throw new RuntimeException("Team.class, transferred incorrect NBTTag value:1");
             }
@@ -41,7 +37,6 @@ public class Team {
     }
 
     public void kill(UUID uuid) {
-        players.get(uuid).getEntityData().setLong("TeamID", 0);
         players.remove(uuid);
     }
 
@@ -51,5 +46,14 @@ public class Team {
 
     public EntityPlayerMP[] getAll() {
         return players.values().toArray(new EntityPlayerMP[0]);
+    }
+
+    public NBTTagCompound toNBT() {
+        NBTTagCompound nbt = new NBTTagCompound();
+        UUID[] arrayP = players.keySet().toArray(new UUID[0]);
+        for (int i = 0; i != arrayP.length; i++) {
+            nbt.setUniqueId("p" + i, arrayP[i]);
+        }
+        return nbt;
     }
 }

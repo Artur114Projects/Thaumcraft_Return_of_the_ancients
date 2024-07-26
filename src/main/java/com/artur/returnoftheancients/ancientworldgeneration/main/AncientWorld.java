@@ -20,16 +20,22 @@ public class AncientWorld {
 
     public static void serverStarting(FMLServerStartingEvent starting) {
         NBTTagCompound nbt = WorldData.get().saveData.getCompoundTag("AncientWorldPak");
-        int ancientEntriesCount = nbt.getInteger("ancientEntriesCount");
+        int ancientEntriesCount = nbt.getInteger("AncientEntriesCount");
         for (int i = 0; i != ancientEntriesCount; i++) {
 
         }
     }
 
     @SubscribeEvent
-    public static void save(WorldEvent.Save e) {
+    public static void eventSave(WorldEvent.Save e) {
         NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setInteger("ancientEntriesCount", ancientEntries.size());
+        save(nbt);
+        WorldData.get().saveData.setTag("AncientWorldPak", nbt);
+    }
+
+    private static void save(NBTTagCompound nbt) {
+        nbt.setInteger("AncientEntriesCount", ancientEntries.size());
 
     }
+
 }

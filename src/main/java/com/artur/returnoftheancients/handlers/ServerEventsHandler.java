@@ -1,5 +1,7 @@
 package com.artur.returnoftheancients.handlers;
 
+import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.misc.PlayersCountDifficultyProcessor;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -41,6 +43,7 @@ public class ServerEventsHandler {
     protected static final String startUpNBT = "startUpNBT";
     protected static final String notNoCollisionNBTTime = "notNoCollisionNBTTime";
     public static boolean bossIsDead = false;
+    private static boolean isAncientAreaSet = false;
     private static byte pT = 0;
     private static byte difficultyId = -1;
 
@@ -63,21 +66,32 @@ public class ServerEventsHandler {
     @SubscribeEvent
     public static void WorldEventLoad(WorldEvent.Load e) {
         if (!e.getWorld().isRemote) {
-            if (TRAConfigs.PortalSettings.isGen) {
-                WorldData worldData = WorldData.get();
-                if (TRAConfigs.PortalSettings.toBedrock) {
-                    if (!worldData.saveData.getBoolean(IALGS.isAncientPortalGenerateKey) && e.getWorld().provider.getDimension() == 0) {
-                        if (!worldData.saveData.hasKey(IALGS.AncientPortalYPosKey)) {
-                            worldData.saveData.setInteger(IALGS.AncientPortalYPosKey, HandlerR.CalculateGenerationHeight(e.getWorld(), TRAConfigs.PortalSettings.x, TRAConfigs.PortalSettings.z));
+            if (e.getWorld().provider.getDimension() == 0) {
+                if (TRAConfigs.PortalSettings.isGen) {
+                    WorldData worldData = WorldData.get();
+                    if (TRAConfigs.PortalSettings.toBedrock) {
+                        if (!worldData.saveData.getBoolean(IALGS.isAncientPortalGenerateKey) && e.getWorld().provider.getDimension() == 0) {
+                            if (!worldData.saveData.hasKey(IALGS.AncientPortalYPosKey)) {
+                                worldData.saveData.setInteger(IALGS.AncientPortalYPosKey, HandlerR.CalculateGenerationHeight(e.getWorld(), TRAConfigs.PortalSettings.x, TRAConfigs.PortalSettings.z));
+                            }
+                            HandlerR.genAncientPortal(e.getWorld(), TRAConfigs.PortalSettings.x, TRAConfigs.PortalSettings.y, TRAConfigs.PortalSettings.z, true);
+                            worldData.saveData.setBoolean(IALGS.isAncientPortalGenerateKey, true);
                         }
-                        HandlerR.genAncientPortal(e.getWorld(), TRAConfigs.PortalSettings.x, TRAConfigs.PortalSettings.y, TRAConfigs.PortalSettings.z, true);
-                        worldData.saveData.setBoolean(IALGS.isAncientPortalGenerateKey, true);
+                    } else {
+                        GenStructure.generateStructure(e.getWorld(), TRAConfigs.PortalSettings.x, HandlerR.CalculateGenerationHeight(e.getWorld(), TRAConfigs.PortalSettings.x, TRAConfigs.PortalSettings.z) + TRAConfigs.PortalSettings.y, TRAConfigs.PortalSettings.z, "ancient_portal_no_bedrock");
                     }
-                } else {
-                    GenStructure.generateStructure(e.getWorld(), TRAConfigs.PortalSettings.x, HandlerR.CalculateGenerationHeight(e.getWorld(), TRAConfigs.PortalSettings.x, TRAConfigs.PortalSettings.z) + TRAConfigs.PortalSettings.y, TRAConfigs.PortalSettings.z, "ancient_portal_no_bedrock");
+                    worldData.markDirty();
                 }
-                worldData.markDirty();
             }
+            if (e.getWorld().provider.getDimension() == ancient_world_dim_id) {
+                if (!isAncientAreaSet) {
+                    CustomGenStructure.please(e.getWorld(), -16, 240, -16, "ancient_area");
+                    CustomGenStructure.delete("ancient_area");
+                    isAncientAreaSet = true;
+                }
+                AncientWorld.load();
+            }
+
         }
         for (EntityPlayer player : e.getWorld().playerEntities) {
             player.getEntityData().setBoolean("isUUI", false);
@@ -108,8 +122,8 @@ public class ServerEventsHandler {
                         if (player.getHealth() - e.getAmount() <= 0) {
                             e.setCanceled(true);
                             player.setHealth(20);
+                            AncientWorld.playerLostBus(player.getUniqueID());
                             tpToHome((EntityPlayerMP) player);
-                            System.out.println("You dead");
                             return;
                         }
                     if (HandlerR.genRandomIntRange(0, TRAConfigs.DifficultySettings.chanceIgnoringArmor) == 0) {
@@ -283,9 +297,9 @@ public class ServerEventsHandler {
                     }
                 }
             }
-            if (TRAConfigs.Any.debugMode) {
-                System.out.println("Create entity potions is add " + Arrays.toString(potionEffects));
-            }
+//            if (TRAConfigs.Any.debugMode) {
+//                System.out.println("Create entity potions is add " + Arrays.toString(potionEffects));
+//            }
         }
     }
 

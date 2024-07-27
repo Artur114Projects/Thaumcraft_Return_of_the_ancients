@@ -48,6 +48,7 @@ public class BossTriggerBlock extends BaseBlock {
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         if (worldIn.isAnyPlayerWithinRangeAt(pos.getX(), pos.getY(), pos.getZ(), 17) && !worldIn.isRemote) {
             if (!WorldData.get().saveData.getBoolean(IALGS.isBossSpawn)) {
+                IStructure.settings.setRotation(Rotation.NONE);
                 System.out.println("Boss!");
                 WorldData worldData = WorldData.get();
                 worldData.saveData.setBoolean(IALGS.isBossSpawn, true);
@@ -76,10 +77,10 @@ public class BossTriggerBlock extends BaseBlock {
                 CustomGenStructure.please(worldIn, pos.getX() + 5, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
                 CustomGenStructure.please(worldIn, pos.getX() - 11, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
                 IStructure.settings.setRotation(Rotation.CLOCKWISE_90);
-                CustomGenStructure.please(worldIn, pos.getX() + 15, pos.getY() + 2, pos.getZ() + 6, "ancient_door");
-                CustomGenStructure.please(worldIn, pos.getX() + 15, pos.getY() + 2, pos.getZ() - 10, "ancient_door");
-                CustomGenStructure.please(worldIn, pos.getX() - 16, pos.getY() + 2, pos.getZ() + 6, "ancient_door");
-                CustomGenStructure.please(worldIn, pos.getX() - 16, pos.getY() + 2, pos.getZ() - 10, "ancient_door");
+                CustomGenStructure.please(worldIn, pos.getX() + 15, pos.getY() + 2, pos.getZ() + 6, "ancient_door1");
+                CustomGenStructure.please(worldIn, pos.getX() + 15, pos.getY() + 2, pos.getZ() - 10, "ancient_door1");
+                CustomGenStructure.please(worldIn, pos.getX() - 16, pos.getY() + 2, pos.getZ() + 6, "ancient_door1");
+                CustomGenStructure.please(worldIn, pos.getX() - 16, pos.getY() + 2, pos.getZ() - 10, "ancient_door1");
                 IStructure.settings.setRotation(Rotation.NONE);
 
                 if (worldIn.playerEntities.size() > 1) {

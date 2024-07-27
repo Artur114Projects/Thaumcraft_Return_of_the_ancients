@@ -63,6 +63,7 @@ public class TRAStructure {
     }
 
     public void please(World world, int x, int y, int z) {
+        world.getChunkFromBlockCoords(mutablePos.setPos(x, y, z)).onLoad();
         for (BlockInfo block : blocks) {
             world.setBlockState(mutablePos.setPos(block.x + x, block.y + y, block.z + z), block.state);
         }

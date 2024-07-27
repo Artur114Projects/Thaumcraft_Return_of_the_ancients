@@ -27,13 +27,17 @@ public class WorldData extends WorldSavedData {
     @Override
     public void readFromNBT(@NotNull NBTTagCompound nbt) {
         saveData = nbt.getCompoundTag(saveDataKey);
-        System.out.println("readFromNBT: " + saveData);
+        if (TRAConfigs.Any.debugMode) {
+            System.out.println("readFromNBT: " + saveData);
+        }
     }
 
     @Override
     public @NotNull NBTTagCompound writeToNBT(@NotNull NBTTagCompound compound) {
         compound.setTag(saveDataKey, saveData);
-        System.out.println("writeToNBT: " + saveData);
+        if (TRAConfigs.Any.debugMode) {
+            System.out.println("writeToNBT: " + saveData);
+        }
         return compound;
     }
 

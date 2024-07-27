@@ -69,7 +69,7 @@ public class RegisterHandler {
 		event.registerServerCommand(new TRACommand());
 	}
 
-	public 	static void registerStructures(FMLServerStartingEvent event) {
+	public 	static void registerStructures() {
 		CustomGenStructure.put("ancient_entry");
 		CustomGenStructure.put("ancient_crossroads");
 
@@ -92,8 +92,12 @@ public class RegisterHandler {
 		CustomGenStructure.put("ancient_exit");
 		CustomGenStructure.put("ancient_entry_way");
 		CustomGenStructure.put("ancient_door");
+		CustomGenStructure.put("ancient_door1");
+		CustomGenStructure.put("ancient_area");
+		CustomGenStructure.put("ancient_border_cap");
 		CustomGenStructure.register();
-		CustomGenStructure.setUseEBS();
+
+//		CustomGenStructure.setUseEBS();
 		CustomGenStructure.put("air_cube");
 		CustomGenStructure.register();
 	}

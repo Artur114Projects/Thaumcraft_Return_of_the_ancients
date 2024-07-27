@@ -66,13 +66,13 @@ public class DataManager extends CommandBase {
                 break;
             }
         } else if (args[0].equals("help") && args.length == 1){
-            playerMP.sendMessage(new TextComponentString("data set dataType key value"));
-            playerMP.sendMessage(new TextComponentString("data get dataType key"));
-            playerMP.sendMessage(new TextComponentString("data setnodropprimalblade"));
+            playerMP.sendMessage(new TextComponentString("/data set dataType [key] [value]"));
+            playerMP.sendMessage(new TextComponentString("/data get dataType [key]"));
+            playerMP.sendMessage(new TextComponentString("/data setnodropprimalblade"));
         } else {
-            playerMP.sendMessage(new TextComponentString("data set dataType key value"));
-            playerMP.sendMessage(new TextComponentString("data get dataType key"));
-            playerMP.sendMessage(new TextComponentString("data setnodropprimalblade"));
+            playerMP.sendMessage(new TextComponentString("/data set dataType [key] [value]"));
+            playerMP.sendMessage(new TextComponentString("/data get dataType [key]"));
+            playerMP.sendMessage(new TextComponentString("/data setnodropprimalblade"));
         }
     }
 }

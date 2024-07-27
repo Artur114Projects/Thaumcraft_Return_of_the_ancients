@@ -51,4 +51,8 @@ public class CustomGenStructure {
             structure.please(world, x, y, z);
         }
     }
+
+    public static void delete(String name) {
+        structures.remove(name);
+    }
 }

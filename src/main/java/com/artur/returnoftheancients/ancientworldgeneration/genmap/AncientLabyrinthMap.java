@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.ancientworldgeneration.genmap;
 
+import com.artur.returnoftheancients.ancientworldgeneration.util.StructureMap;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 
@@ -518,7 +519,7 @@ public class AncientLabyrinthMap implements IALGS {
      */
 
 
-    public static byte[][][] genStructuresMap() {
+    public static StructureMap genStructuresMap() {
         random = new Random();
         int void0 = 0;
         int void1 = 0;
@@ -536,12 +537,6 @@ public class AncientLabyrinthMap implements IALGS {
             exit++;
             ANCIENT_LABYRINTH_STRUCTURES = ANCIENT_LABYRINTH_STRUCTURES_IN_WORK;
             ANCIENT_LABYRINTH_STRUCTURES_ROTATE = ANCIENT_LABYRINTH_STRUCTURES_ROTATE_IN_WORK;
-//            System.out.println("passes: " + exit);
-//            System.out.println("ANCIENT_LABYRINTH_STRUCTURES");
-//            SOUT2DArray(ANCIENT_LABYRINTH_STRUCTURES);
-//            System.out.println("ANCIENT_LABYRINTH_STRUCTURES_ROTATE");
-//            SOUT2DArray(ANCIENT_LABYRINTH_STRUCTURES_ROTATE);
-//            System.out.println();
 
             void0 = getVoidStructures(ANCIENT_LABYRINTH_STRUCTURES);
             if (void0 == void1) {
@@ -558,7 +553,7 @@ public class AncientLabyrinthMap implements IALGS {
                 }
                 if (void0 < 145 || !TRAConfigs.AncientWorldSettings.AncientWorldGenerationSettings.isNeedMoreThan50Fill) {
                     System.out.println("void structures: " + void0);
-                    return new byte[][][] {ANCIENT_LABYRINTH_STRUCTURES, ANCIENT_LABYRINTH_STRUCTURES_ROTATE};
+                    return new StructureMap(ANCIENT_LABYRINTH_STRUCTURES, ANCIENT_LABYRINTH_STRUCTURES_ROTATE);
                 } else {
                     System.out.println("void structures: " + void0);
                     System.out.println("regenerate");

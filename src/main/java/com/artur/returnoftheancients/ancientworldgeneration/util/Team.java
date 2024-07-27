@@ -24,14 +24,14 @@ public class Team {
 
     public Team(NBTTagCompound nbt) {
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-        if (!nbt.hasKey("p0")) throw new RuntimeException("Team.class, transferred incorrect NBTTag value:0");
+        if (!nbt.hasKey("p0")) throw new RuntimeException("Team.class, transferred incorrect NBTTag EC:0");
         for (int i = 0; nbt.hasKey("p" + i); i++) {
             Entity e = server.getEntityFromUuid(Objects.requireNonNull(nbt.getUniqueId("p" + i)));
             if (e instanceof EntityPlayerMP) {
                 EntityPlayerMP playerMP = (EntityPlayerMP) e;
                 this.players.put(playerMP.getUniqueID(), playerMP);
             } else {
-                throw new RuntimeException("Team.class, transferred incorrect NBTTag value:1");
+                throw new RuntimeException("Team.class, transferred incorrect NBTTag EC:1");
             }
         }
     }

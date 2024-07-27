@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.handlers;
 
+import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntry;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.TRAStructure;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
@@ -302,4 +303,23 @@ public class HandlerR {
             throw new RuntimeException(e);
         }
     }
+
+    public static int foundFreePos(int[] array) {
+        boolean isFound;
+        int pos = 0;
+        while (true) {
+            isFound = true;
+            for (Integer i : array) {
+                if (i == pos) {
+                    isFound = false;
+                    break;
+                }
+            }
+            if (isFound) {
+                return pos;
+            }
+            pos++;
+        }
+    }
+
 }

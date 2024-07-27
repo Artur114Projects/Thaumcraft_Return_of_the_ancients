@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.commads;
 
+import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.generation.generators.AncientLabyrinthGenerator;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
 import net.minecraft.command.CommandBase;
@@ -10,7 +11,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
 public class TestCommand2 extends CommandBase {
-    String NAME = "regen", USAGE = "/regen";
+    String NAME = "testden", USAGE = "/testden";
 
     @Override
     public String getName() {
@@ -25,7 +26,6 @@ public class TestCommand2 extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        EntityPlayerMP player = getCommandSenderAsPlayer(sender);
-        AncientLabyrinthGenerator.tpToAncientWorld(player);
+        AncientWorld.tpToAncientWorld(getCommandSenderAsPlayer(sender));
     }
 }

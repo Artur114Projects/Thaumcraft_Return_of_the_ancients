@@ -8,6 +8,7 @@ import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_di
 
 import com.artur.returnoftheancients.ancientworldgeneration.genmap.AncientLabyrinthMap;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.ancientworldgeneration.util.StructureMap;
 import com.artur.returnoftheancients.events.MCTimer;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
@@ -34,8 +35,7 @@ import java.util.Objects;
 import java.util.Random;
 
 public class AncientLabyrinthGenerator implements IStructure, IALGS{
-    protected static byte[][] ANCIENT_LABYRINTH_STRUCTURES = new byte[17][17];
-    protected static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE = new byte[17][17];
+    protected static StructureMap MAP = new StructureMap(new byte[17][17], new byte[17][17]);
     protected static final byte SIZE = 17;
     protected static World world;
     @Deprecated
@@ -59,16 +59,14 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
     [[0][1][2][3][4][5][6][7][8]] 7
     [[0][1][2][3][4][5][6][7][8]] 8
      */
-    public static byte[][] getAncientLabyrinthStructures() {return ANCIENT_LABYRINTH_STRUCTURES;}
-    public static byte[][] getAncientLabyrinthStructuresRotate() {return ANCIENT_LABYRINTH_STRUCTURES_ROTATE;}
 
     // размещение структур
     @Deprecated
     protected static void genStructuresInWorld() {
         for (byte y = 0; y != SIZE; y++) {
             for (byte x = 0; x != SIZE; x++) {
-                byte structure = ANCIENT_LABYRINTH_STRUCTURES[y][x];
-                byte structureRotate  = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x];
+                byte structure = MAP.getStructure(x, y);
+                byte structureRotate  = MAP.getRotate(x, y);
                 int cx = 128 - 16 * x;
                 int cz = 128 - 16 * y;
                 int dx = 0;
@@ -236,7 +234,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             cordY = 112 + 32 * y;
             CustomGenStructure.please(world, 0, cordY, 0, ENTRY_WAY_STRING_ID);
         }
-        GenStructure.generateStructure(world, 6, 255, 6, "ancient_border_cap");
+        CustomGenStructure.please(world, 6, 255, 6, "ancient_border_cap");
     }
 
 
@@ -298,14 +296,14 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         for (EntityPlayer player1 : players){
             HandlerR.injectPhaseOnClient((EntityPlayerMP) player1, (byte) 0);
         }
-        byte[][][] a;
+        StructureMap a;
         if (AncientWorldSettings.isOldGenerator) {
-            a = AncientLabyrinthOldMap.genStructuresMap();
+            byte[][][] r = AncientLabyrinthOldMap.genStructuresMap();
+            a = new StructureMap(r[0], r[1]);
         } else {
             a = AncientLabyrinthMap.genStructuresMap();
         }
-        ANCIENT_LABYRINTH_STRUCTURES = a[0];
-        ANCIENT_LABYRINTH_STRUCTURES_ROTATE = a[1];
+        MAP = a;
 
         PHASE = 1;
         for (EntityPlayer player1 : players){
@@ -315,6 +313,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         System.out.println("Cleaning area");
         AncientWorldBuildProcessor.clearArea();
     }
+
     private static void genFinish() {
         System.out.println("Generate ancient labyrinth finish");
         PHASE = 4;
@@ -432,8 +431,8 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                             reloadLight();
                             return;
                         }
-                        byte structure = ANCIENT_LABYRINTH_STRUCTURES[ytp][xtp];
-                        byte structureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[ytp][xtp];
+                        byte structure = MAP.getStructure(xtp, ytp);
+                        byte structureRotate = MAP.getRotate(xtp, ytp);
                         int cx = 128 - 16 * xtp;
                         int cz = 128 - 16 * ytp;
                         byte rotate = 0;

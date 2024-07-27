@@ -1,8 +1,6 @@
 package com.artur.returnoftheancients.proxy;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
-import com.artur.returnoftheancients.commads.*;
 import com.artur.returnoftheancients.handlers.RegisterHandler;
 
 import com.artur.returnoftheancients.misc.PlayersCountDifficultyProcessor;
@@ -28,12 +26,11 @@ public class CommonProxy {
 
     public void postInit(FMLPostInitializationEvent event)
     {
+        RegisterHandler.registerStructures();
     }
     public void serverStarting(FMLServerStartingEvent event) {
         RegisterHandler.registerCommands(event);
-        RegisterHandler.registerStructures(event);
         PlayersCountDifficultyProcessor.compile(TRAConfigs.DifficultySettings.playersCountDifficulty);
-        AncientWorld.serverStarting(event);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.gui;
 
 import com.artur.returnoftheancients.referense.Referense;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -29,30 +30,18 @@ public class SkalaGui extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         GL11.glColor4f(1, 1, 1, 1);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        GL11.glPushMatrix();
         mc.getTextureManager().bindTexture(location);
-        GL11.glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        GL11.glEnableClientState(GL_VERTEX_ARRAY);
-
-        GL11.glVertexPointer(3, GL_FLOAT, FloatBuffer.wrap(vertex));
-        GL11.glTexCoordPointer(2, GL_FLOAT, FloatBuffer.wrap(tc));
-        GL11.glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-//        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-//        bufferbuilder.pos(0, 0, 0).tex(0, 0).endVertex();
-//        bufferbuilder.pos(1, 0, 0).tex(0, 0).endVertex();
-//        bufferbuilder.pos(1, 1, 0).tex(0, 0).endVertex();
-//        bufferbuilder.pos(0, 1, 0).tex(0, 0).endVertex();
-//        tessellator.draw();
-        GL11.glDisableClientState(GL_VERTEX_ARRAY);
-        GL11.glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-        GL11.glPopMatrix();
-        this.drawDefaultBackground();
-
-//        drawTexturedModalRect(0, 0, resolution.getScaledWidth(), resolution.getScaledHeight(), resolution.getScaledWidth_double(), resolution.getScaledHeight_double());
-
+        GlStateManager.popMatrix();
+        GlStateManager.loadIdentity();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+        bufferBuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+        bufferBuilder.pos(-1.0D, -1.0D, 1.0D).tex(0.0D, 0.0D).color(255, 255, 255, 0).endVertex();
+        bufferBuilder.pos(1.0D, -1.0D, 1.0D).tex(1.0D, 0.0D).color(255, 255, 255, 0).endVertex();
+        bufferBuilder.pos(1.0D, 1.0D, 1.0D).tex(1.0D, 1.0D).color(255, 255, 255, 0).endVertex();
+        bufferBuilder.pos(-1.0D, 1.0D, 1.0D).tex(0.0D, 1.0D).color(255, 255, 255, 0).endVertex();
+        tessellator.draw();
+        GlStateManager.pushMatrix();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

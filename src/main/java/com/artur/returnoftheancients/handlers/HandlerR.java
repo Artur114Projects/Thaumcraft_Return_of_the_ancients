@@ -19,11 +19,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class HandlerR {
 
@@ -320,6 +322,18 @@ public class HandlerR {
             }
             pos++;
         }
+    }
+
+    public static List<String> uuidKeySetToList(Set<String> set) {
+        String[] keys = set.toArray(new String[0]);
+        List<String> keysF = new ArrayList<>();
+        for (String key : keys) {
+            key = key.replaceAll("Most", "");
+            key = key.replaceAll("Least", "");
+            keysF.add(TextFormatting.AQUA + key);
+        }
+        keysF = keysF.stream().distinct().collect(Collectors.toList());
+        return keysF;
     }
 
 }

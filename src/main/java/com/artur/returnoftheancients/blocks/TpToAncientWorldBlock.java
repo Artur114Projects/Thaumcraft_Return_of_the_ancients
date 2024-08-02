@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.blocks;
 
+import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -64,7 +65,7 @@ public class TpToAncientWorldBlock extends BaseBlock{
                 ArrayList<String> ID = HandlerR.isPlayerUseUnresolvedItems(player);
                 if ((ID.isEmpty() || !TRAConfigs.PortalSettings.checkItems) && (ServerEventsHandler.getDifficultyId() != 0 || !TRAConfigs.AncientWorldSettings.noPeaceful)) {
                     player.fallDistance = 0;
-                    AncientLabyrinthGenerator.tpToAncientWorld((EntityPlayerMP) player);
+                    AncientWorld.tpToAncientWorld((EntityPlayerMP) player);
                 } else {
                     if (!ID.isEmpty()) {
                         NBTTagCompound nbt = new NBTTagCompound();

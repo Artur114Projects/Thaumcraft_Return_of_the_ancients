@@ -1,7 +1,9 @@
 package com.artur.returnoftheancients.blocks;
 
+import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
+import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -13,25 +15,28 @@ import com.artur.returnoftheancients.utils.interfaces.IStructure;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.common.entities.monster.boss.*;
 
+import java.util.List;
 import java.util.Random;
 
 public class BossTriggerBlock extends BaseBlock {
 
     public BossTriggerBlock(String name, Material material, float hardness, float resistanse, SoundType soundType) {
         super(name, material, hardness, resistanse, soundType);
-
-//        setCreativeTab(MainR.ReturnOfTheAncientsTab);
-        setTickRandomly(false);
     }
 
 
@@ -44,8 +49,7 @@ public class BossTriggerBlock extends BaseBlock {
     */
 
 
-    @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+    public void updateTiqck(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         if (worldIn.isAnyPlayerWithinRangeAt(pos.getX(), pos.getY(), pos.getZ(), 17) && !worldIn.isRemote) {
             if (!WorldData.get().saveData.getBoolean(IALGS.isBossSpawn)) {
                 IStructure.settings.setRotation(Rotation.NONE);
@@ -115,10 +119,16 @@ public class BossTriggerBlock extends BaseBlock {
     }
 
     @Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        WorldData worldData = WorldData.get();
-        worldData.saveData.setIntArray("bossTriggerBlockPos", new int[] {pos.getX(), pos.getY(), pos.getZ()});
-        worldData.markDirty();
-        worldIn.scheduleUpdate(pos, worldIn.getBlockState(pos).getBlock(), 4);
+    public void onBlockAdded(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state) {
+        if (!worldIn.isRemote) {
+            System.out.println("Boss Trigger block is pleased");
+            if (worldIn.provider.getDimension() == InitDimensions.ancient_world_dim_id) {
+                if (((int) pos.getX() / 10000L) > 0) {
+                    AncientWorld.onBossTriggerBlockAdd(pos.getX() / 10000, pos);
+                } else {
+                    System.out.println("Boss Trigger block no pleased " + ((int) pos.getX() / 10000L));
+                }
+            }
+        }
     }
 }

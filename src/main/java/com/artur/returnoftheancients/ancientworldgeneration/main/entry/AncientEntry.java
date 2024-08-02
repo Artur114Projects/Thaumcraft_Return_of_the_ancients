@@ -7,12 +7,16 @@ import com.artur.returnoftheancients.ancientworldgeneration.util.BuildPhase;
 import com.artur.returnoftheancients.ancientworldgeneration.util.StructureMap;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.IBuild;
 import com.artur.returnoftheancients.handlers.HandlerR;
-import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thaumcraft.common.entities.monster.boss.EntityCultistPortalGreater;
+import thaumcraft.common.entities.monster.boss.EntityEldritchGolem;
+import thaumcraft.common.entities.monster.boss.EntityEldritchWarden;
 
 import java.util.UUID;
 
@@ -20,10 +24,16 @@ import static com.artur.returnoftheancients.misc.TRAConfigs.AncientWorldSettings
 import static com.artur.returnoftheancients.utils.interfaces.IStructure.settings;
 
 public abstract class AncientEntry implements IBuild, IALGS {
+    protected static final BlockPos nullPos = new BlockPos(0, 0, 0);
     private final BuildPhase buildPhase = new BuildPhase();
+    protected BlockPos bossPos = new BlockPos(0 ,0, 0);
+    protected static final UUID nullUUId = new UUID(0, 0);
+    protected UUID bossUUID = new UUID(0, 0);
     private boolean delete = false;
     private boolean requestSave = false;
     protected StructureMap map;
+    protected boolean isFinal;
+    protected int finalTimer = 0;
     protected boolean isBossSpawn;
     protected boolean isBossDead;
     protected boolean isBuild;
@@ -33,37 +43,140 @@ public abstract class AncientEntry implements IBuild, IALGS {
     public AncientEntry(int pos) {
         isBossSpawn = false;
         isBossDead = false;
+        isFinal = false;
 
         this.pos = pos;
     }
 
     public AncientEntry(NBTTagCompound nbt) {
-        if (!nbt.hasKey("pos")) throw new RuntimeException("AncientEntry.class, transferred incorrect NBTTag EC:0");
+        if (!nbt.hasKey("pos")) error("AncientEntry.class, transferred incorrect NBTTag EC:0");
         pos = nbt.getInteger("pos");
 
-        if (!nbt.hasKey("map")) throw new RuntimeException("AncientEntry.class, transferred incorrect NBTTag EC:1");
-        map = new StructureMap(nbt.getCompoundTag("map"));
-
-        if (!nbt.hasKey("isBossSpawn")) throw new RuntimeException("AncientEntry.class, transferred incorrect NBTTag EC:2");
+        if (!nbt.hasKey("bossMost") || !nbt.hasKey("bossLeast")) error("AncientEntry.class, transferred incorrect NBTTag EC:6");
+        bossUUID = nbt.getUniqueId("boss");
+        if (!nbt.hasKey("isBossSpawn")) error("AncientEntry.class, transferred incorrect NBTTag EC:2");
         isBossSpawn = nbt.getBoolean("isBossSpawn");
-        if (!nbt.hasKey("isBossDead")) throw new RuntimeException("AncientEntry.class, transferred incorrect NBTTag EC:3");
+        if (!nbt.hasKey("isBossDead")) error("AncientEntry.class, transferred incorrect NBTTag EC:3");
         isBossDead = nbt.getBoolean("isBossDead");
-        if (!nbt.hasKey("isBuild")) throw new RuntimeException("AncientEntry.class, transferred incorrect NBTTag EC:4");
+        if (!nbt.hasKey("isFinal")) error("AncientEntry.class, transferred incorrect NBTTag EC:7");
+        isFinal = nbt.getBoolean("isFinal");
+        if (!nbt.hasKey("bossPos")) error("AncientEntry.class, transferred incorrect NBTTag EC:5");
+        bossPos = NBTToBlockPos(nbt.getCompoundTag("bossPos"));
+        if (!nbt.hasKey("isBuild")) error("AncientEntry.class, transferred incorrect NBTTag EC:4");
         isBuild = nbt.getBoolean("isBuild");
     }
 
-    public abstract void update();
-    public abstract void dead(UUID id);
+    public void update(World world) {
+        if (delete) {
+            return;
+        }
+        if (isFinal) {
+            if (finalTimer >= 120) {
+                requestToDelete();
+            }
+            finalTimer++;
+        }
+        if (!world.isRemote) {
+            if (isBossDead) {
+                if (!world.isAnyPlayerWithinRangeAt(bossPos.getX(), bossPos.getY(), bossPos.getZ(), 4)) {
+                    CustomGenStructure.please(world, bossPos.getX() - 3, bossPos.getY() - 30, bossPos.getZ() - 2, "ancient_exit");
+                    isFinal = true;
+                }
+            }
+            if (!bossPos.equals(nullPos) && !isBossSpawn) {
+                EntityPlayer player = world.getClosestPlayer(bossPos.getX(), bossPos.getY(), bossPos.getZ(), 17, false);
+                if (player != null) {
+                    onBossTiger(player, world);
+                    isBossSpawn = true;
+                }
+            }
+        }
+    };
+
+    protected abstract void onBossTiger(EntityPlayer player, World world);
+    public abstract boolean dead(UUID id);
+    public boolean deadBoss(UUID id) {
+        if (!bossUUID.equals(nullUUId) && bossUUID.equals(id)) {
+            isBossDead = true;
+            return true;
+        }
+        return false;
+    }
 
     public NBTTagCompound toNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setInteger("pos", pos);
-        nbt.setTag("map", map.toNBT());
 
+        nbt.setBoolean("isFinal", isFinal);
+        nbt.setUniqueId("boss", bossUUID);
+        nbt.setTag("bossPos", blockPosToNBT(bossPos));
         nbt.setBoolean("isBossSpawn", isBossSpawn);
         nbt.setBoolean("isBossDead", isBossDead);
         nbt.setBoolean("isBuild", isBuild);
         return nbt;
+    }
+
+    protected void please(World world, int x, int y, int z, String name) {
+        CustomGenStructure.please(world, x, y, z, name);
+    }
+
+    protected void pleaseBossDoors(World world, BlockPos pos) {
+        CustomGenStructure.please(world, pos.getX() + 5, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
+        CustomGenStructure.please(world, pos.getX() - 11, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
+        CustomGenStructure.please(world, pos.getX() + 5, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
+        CustomGenStructure.please(world, pos.getX() - 11, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
+
+        CustomGenStructure.please(world, pos.getX() + 15, pos.getY() + 2, pos.getZ() + 6, "ancient_door1");
+        CustomGenStructure.please(world, pos.getX() + 15, pos.getY() + 2, pos.getZ() - 10, "ancient_door1");
+        CustomGenStructure.please(world, pos.getX() - 16, pos.getY() + 2, pos.getZ() + 6, "ancient_door1");
+        CustomGenStructure.please(world, pos.getX() - 16, pos.getY() + 2, pos.getZ() - 10, "ancient_door1");
+    }
+
+    public boolean onBossTriggerBlockAdd(int pos, BlockPos bossPos) {
+        if (pos == this.pos) {
+            this.bossPos = bossPos;
+            return true;
+        }
+        return false;
+    }
+
+    protected EntityLiving getRandomBoss(World world, BlockPos pos) {
+        byte q = (byte) HandlerR.genRandomIntRange(0, 2);
+        switch (q) {
+            case 0:
+                EntityCultistPortalGreater p = new EntityCultistPortalGreater(world);
+                p.setPositionAndUpdate(pos.getX(), pos.getY() + 2, pos.getZ() + 1);
+                return p;
+            case 1:
+                EntityEldritchGolem g = new EntityEldritchGolem(world);
+                g.setPositionAndUpdate(pos.getX(), pos.getY() + 2, pos.getZ() + 1);
+                return g;
+            case 2:
+                EntityEldritchWarden w = new EntityEldritchWarden(world);
+                w.setPositionAndUpdate(pos.getX(), pos.getY() + 2, pos.getZ() + 1);
+                return w;
+        }
+        return null;
+    }
+
+    protected NBTTagCompound blockPosToNBT(BlockPos pos) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setInteger("x", pos.getX());
+        nbt.setInteger("y", pos.getY());
+        nbt.setInteger("z", pos.getZ());
+        return nbt;
+    }
+
+    protected BlockPos NBTToBlockPos(NBTTagCompound nbt) {
+        if (!nbt.hasKey("x")) error("AncientEntry.NBTToBlockPos(), transferred incorrect NBTTag EC:0");
+        if (!nbt.hasKey("y")) error("AncientEntry.NBTToBlockPos(), transferred incorrect NBTTag EC:1");
+        if (!nbt.hasKey("z")) error("AncientEntry.NBTToBlockPos(), transferred incorrect NBTTag EC:2");
+        return new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
+    }
+
+    protected void error(String s) {
+        System.out.println(s);
+        requestToDelete();
     }
 
     protected void requestToDelete() {
@@ -91,6 +204,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
     }
 
     protected void startGen() {
+        settings.setRotation(Rotation.NONE);
         onStart();
         AncientWorld.build(this);
         this.map = AncientLabyrinthMap.genStructuresMap();
@@ -101,9 +215,10 @@ public abstract class AncientEntry implements IBuild, IALGS {
     protected void genAncientEntryWay(World world) {
         for (int y = 0, cordY = 112; cordY < world.getHeight(); y++) {
             cordY = 112 + 32 * y;
-            CustomGenStructure.please(world, 10000 * pos, cordY, 0, ENTRY_WAY_STRING_ID);
+            please(world, 10000 * pos, cordY, 0, ENTRY_WAY_STRING_ID);
         }
-        CustomGenStructure.please(world, 6, 255, 6, "ancient_border_cap");
+        please(world, 6 + (10000 * pos), 255, 6, "ancient_border_cap");
+        please(world, 4 + (10000 * pos), 124, -14, "ancient_developer_platform");
     }
     @Override
     public void build(World world) {
@@ -147,27 +262,27 @@ public abstract class AncientEntry implements IBuild, IALGS {
                     }
                     switch (structure) {
                         case WAY_ID:
-                            CustomGenStructure.please(world, cx, 80, cz, WAY_STRING_ID + rotate);
+                            please(world, cx, 80, cz, WAY_STRING_ID + rotate);
                             break;
                         case CROSSROADS_ID:
-                            CustomGenStructure.please(world, cx, 80, cz, CROSSROADS_STRING_ID);
+                            please(world, cx, 80, cz, CROSSROADS_STRING_ID);
                             break;
                         case ENTRY_ID:
-                            CustomGenStructure.please(world, cx, 80, cz, ENTRY_STRING_ID);
+                            please(world, cx, 80, cz, ENTRY_STRING_ID);
                             break;
                         case TURN_ID:
-                            CustomGenStructure.please(world, cx, 80, cz, TURN_STRING_ID + rotate);
+                            please(world, cx, 80, cz, TURN_STRING_ID + rotate);
                             break;
                         case FORK_ID:
-                            CustomGenStructure.please(world, cx, 80, cz, FORK_STRING_ID + rotate);
+                            please(world, cx, 80, cz, FORK_STRING_ID + rotate);
                             break;
                         case END_ID:
-                            CustomGenStructure.please(world, cx, 80, cz, END_STRING_ID + rotate);
+                            please(world, cx, 80, cz, END_STRING_ID + rotate);
                             break;
                         case BOSS_ID:
                             buildPhase.bossGen++;
                             if (buildPhase.bossGen == 4) {
-                                CustomGenStructure.please(world, cx, 79, cz, BOSS_STRING_ID);
+                                please(world, cx, 79, cz, BOSS_STRING_ID);
                                 buildPhase.bossGen = 0;
                             }
                             break;
@@ -177,7 +292,6 @@ public abstract class AncientEntry implements IBuild, IALGS {
                             System.out.println("WTF????? " + structure);
                             break;
                     }
-
                     buildPhase.xtp++;
                 }
                 buildPhase.t++;
@@ -201,8 +315,8 @@ public abstract class AncientEntry implements IBuild, IALGS {
                     }
                     int cx = (128 - 16 * buildPhase.xtc) + (10000 * pos);
                     int cz = (128 - 16 * buildPhase.ytc);
-                    CustomGenStructure.please(world, cx, 80, cz, AIR_CUBE_STRING_ID);
-                    CustomGenStructure.please(world, cx, 80 - 31, cz, AIR_CUBE_STRING_ID);
+                    please(world, cx, 80, cz, AIR_CUBE_STRING_ID);
+                    please(world, cx, 80 - 31, cz, AIR_CUBE_STRING_ID);
                     buildPhase.xtc++;
                 }
             }

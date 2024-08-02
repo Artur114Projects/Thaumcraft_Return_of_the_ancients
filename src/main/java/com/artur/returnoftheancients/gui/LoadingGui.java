@@ -149,15 +149,16 @@ public class LoadingGui extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        System.out.println("key " + keyCode);
-        if (keyCode == Keyboard.KEY_ESCAPE) {
-            if (!iaESCString) {
-                iaESCString = true;
-            } else {
-                iaESCString = false;
-                MainR.NETWORK.sendToServer(new ServerPacketTpToHome());
+       if (!TRAConfigs.Any.debugMode) {
+            if (keyCode == Keyboard.KEY_ESCAPE) {
+                if (!iaESCString) {
+                    iaESCString = true;
+                } else {
+                    iaESCString = false;
+                    MainR.NETWORK.sendToServer(new ServerPacketTpToHome());
+                }
+                return;
             }
-            return;
         }
         super.keyTyped(typedChar, keyCode);
     }

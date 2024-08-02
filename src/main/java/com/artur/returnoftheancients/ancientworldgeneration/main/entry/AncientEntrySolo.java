@@ -1,11 +1,16 @@
 package com.artur.returnoftheancients.ancientworldgeneration.main.entry;
 
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitDimensions;
+import com.artur.returnoftheancients.misc.TRAConfigs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.Objects;
@@ -19,43 +24,62 @@ public class AncientEntrySolo extends AncientEntry {
         startGen();
     }
 
-    public AncientEntrySolo(NBTTagCompound nbt) {
+    public AncientEntrySolo(NBTTagCompound nbt, World world) {
         super(nbt);
-        if (!nbt.hasKey("IsTeam")) throw new RuntimeException("AncientEntrySolo.class, transferred incorrect NBTTag EC:-1");
-        if (nbt.getBoolean("IsTeam")) throw new RuntimeException("AncientEntrySolo.class, transferred incorrect NBTTag EC:0");
+        if (!nbt.hasKey("IsTeam")) error("AncientEntrySolo.class, transferred incorrect NBTTag EC:-1");
+        if (nbt.getBoolean("IsTeam")) error("AncientEntrySolo.class, transferred incorrect NBTTag EC:0");
 
-        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-        if (!nbt.hasKey("playerMost") || !nbt.hasKey("playerLeast")) throw new RuntimeException("AncientEntrySolo.class, transferred incorrect NBTTag EC:1");
-        Entity entity = server.getEntityFromUuid(Objects.requireNonNull(nbt.getUniqueId("player")));
+        if (!nbt.hasKey("playerMost") || !nbt.hasKey("playerLeast")) error("AncientEntrySolo.class, transferred incorrect NBTTag EC:1");
+        System.out.println(nbt.getUniqueId("player"));
+        EntityPlayer entity = world.getPlayerEntityByUUID(Objects.requireNonNull(nbt.getUniqueId("player")));
         if (entity instanceof EntityPlayerMP) {
             player = (EntityPlayerMP) entity;
         } else {
-            throw new RuntimeException("AncientEntrySolo.class, entity not instanceof EntityPlayerMP: " + entity);
+            player = null;
+            System.out.println("AncientEntrySolo.class, entity not instanceof EntityPlayerMP: " + entity);
+            requestToDelete();
         }
 
         if (!isBuild) startGen();
     }
 
     @Override
-    public void dead(UUID id) {
+    public boolean dead(UUID id) {
         if (id.equals(player.getUniqueID())) {
             requestToDelete();
+            return true;
         }
+        return false;
     }
 
     @Override
     public NBTTagCompound toNBT() {
-        NBTTagCompound nbt = super.toNBT();
-        nbt.setBoolean("IsTeam", false);
-        nbt.setUniqueId("player", player.getUniqueID());
-        return nbt;
+        if (!isRequestToDelete()) {
+            NBTTagCompound nbt = super.toNBT();
+            nbt.setBoolean("IsTeam", false);
+            nbt.setUniqueId("player", player.getUniqueID());
+            return nbt;
+        }
+        return new NBTTagCompound();
     }
 
     @Override
-    public void update() {
+    public void update(World world) {
+        if (isRequestToDelete()) {
+            return;
+        }
+        super.update(world);
         if (player.dimension != InitDimensions.ancient_world_dim_id) {
             requestToDelete();
         }
+    }
+
+    @Override
+    protected void onBossTiger(EntityPlayer player, World world) {
+        EntityLiving boss =  getRandomBoss(world, bossPos);
+        bossUUID = boss.getUniqueID();
+        world.spawnEntity(boss);
+        pleaseBossDoors(world, bossPos);
     }
 
     @Override
@@ -96,7 +120,11 @@ public class AncientEntrySolo extends AncientEntry {
     public void onFinish() {
         HandlerR.injectPhaseOnClient(player, (byte) 4);
         HandlerR.setLoadingGuiState(player, false);
-        player.connection.setPlayerLocation(8 + (10000 * pos), 253, 8, -181, 0);
+        if (player.isCreative() && TRAConfigs.Any.debugMode) {
+            player.connection.setPlayerLocation(8 + (10000 * pos), 126, -10, -181, 0);
+        } else {
+            player.connection.setPlayerLocation(8 + (10000 * pos), 253, 8, -181, 90);
+        }
         player.setHealth(20);
     }
 }

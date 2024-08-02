@@ -23,11 +23,7 @@ import java.util.Random;
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class Test { //
     public static void main(String[] args) {
-        long time = System.currentTimeMillis();
-        int[] array = new int[] {1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        System.out.println(Arrays.toString(array));
-        System.out.println(HandlerR.foundFreePos(array));
-        System.out.println("is took: " + (System.currentTimeMillis() - time));
+        System.out.println((int) 10240 / 10000);
     }
 
     public static void startTest(EntityPlayer player) {

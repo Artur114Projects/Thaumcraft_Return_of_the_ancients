@@ -31,7 +31,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
@@ -89,9 +88,8 @@ public class ServerEventsHandler {
                     CustomGenStructure.delete("ancient_area");
                     isAncientAreaSet = true;
                 }
-                AncientWorld.load();
-            }
 
+            }
         }
         for (EntityPlayer player : e.getWorld().playerEntities) {
             player.getEntityData().setBoolean("isUUI", false);
@@ -102,14 +100,7 @@ public class ServerEventsHandler {
     public static void LivingDeathEvent(LivingDeathEvent e) {
         World world = e.getEntity().world;
         if (!e.getEntity().isNonBoss() && world.provider.getDimension() == ancient_world_dim_id && !world.isRemote) {
-            WorldData worldData = WorldData.get();
-            if (!worldData.saveData.getBoolean(IALGS.isPrimalBladeDropKey)) {
-                GenStructure.generateStructure(world, (int) e.getEntity().posX, (int) e.getEntity().posY, (int) e.getEntity().posZ, "ancient_loot");
-                worldData.saveData.setBoolean(IALGS.isPrimalBladeDropKey, true);
-                worldData.markDirty();
-            }
-            bossIsDead = true;
-            System.out.println("Boss is dead");
+            AncientWorld.bossDeadBuss(e.getEntity().getUniqueID());
         }
     }
 
@@ -122,7 +113,7 @@ public class ServerEventsHandler {
                         if (player.getHealth() - e.getAmount() <= 0) {
                             e.setCanceled(true);
                             player.setHealth(20);
-                            AncientWorld.playerLostBus(player.getUniqueID());
+                            AncientWorld.playerLostBuss(player.getUniqueID());
                             tpToHome((EntityPlayerMP) player);
                             return;
                         }
@@ -267,6 +258,7 @@ public class ServerEventsHandler {
 
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
+
         if (event.getEntity().dimension == ancient_world_dim_id && !event.getWorld().isRemote) {
             if (!event.getEntity().isNonBoss()) {
                 if (!WorldData.get().saveData.getBoolean(IALGS.isBossSpawn)) {

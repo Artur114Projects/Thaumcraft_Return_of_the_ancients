@@ -4,11 +4,13 @@ import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.Cus
 import com.artur.returnoftheancients.commads.*;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitItems;
+import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
 import com.artur.returnoftheancients.network.ServerPacketTpToHome;
+import com.artur.returnoftheancients.tileentity.BlockTileEntity;
 import com.artur.returnoftheancients.utils.interfaces.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -17,6 +19,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 @EventBusSubscriber
@@ -31,6 +34,14 @@ public class RegisterHandler {
 	@SubscribeEvent
 	public static void onItemRegister(RegistryEvent.Register<Item> event) {
 		event.getRegistry().registerAll(InitItems.ITEMS.toArray(new Item[0]));
+	}
+
+	public static void registerTileEntity() {
+		for (Block block : InitTileEntity.TILE_ENTITIES) {
+			if (block instanceof BlockTileEntity) {
+				GameRegistry.registerTileEntity(((BlockTileEntity) block).getTileEntityClass(), block.getRegistryName().toString());
+			}
+		}
 	}
 
 	public static void preInitRegistries()
@@ -88,6 +99,7 @@ public class RegisterHandler {
 		CustomGenStructure.put("ancient_end_rotate-3");
 		CustomGenStructure.put("ancient_end_rotate-4");
 
+		CustomGenStructure.put("ancient_developer_platform");
 		CustomGenStructure.put("ancient_boss");
 		CustomGenStructure.put("ancient_exit");
 		CustomGenStructure.put("ancient_entry_way");

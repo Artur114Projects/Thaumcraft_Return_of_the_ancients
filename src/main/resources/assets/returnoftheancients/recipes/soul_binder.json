@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " L ",
+    "LDL",
+    " L "
+  ],
+  "key": {
+    "L": {
+      "item": "thaumcraft:ingot",
+      "data": 1
+    },
+    "D": {
+      "item": "minecraft:soul_sand",
+      "data": 32767
+    }
+  },
+  "result": {
+    "item": "returnoftheancients:soul_binder",
+    "count": 1
+  }
+}

@@ -26,6 +26,5 @@ public class InitBlocks {
     public static final Block TP_TO_ANCIENT_WORLD_BLOCK = new TpToAncientWorldBlock("tp_to_ancient_world_block", Material.PORTAL, -1, 999999999, SoundType.GLASS);
 
     public static void registerTileEntity() {
-//        GameRegistry.registerTileEntity(((BossTriggerBlock) BOSS_TRIGGER_BLOCK).getTileEntityClass(), BOSS_TRIGGER_BLOCK.getRegistryName().toString());
     }
 }

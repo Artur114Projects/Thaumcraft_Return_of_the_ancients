@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.utils.interfaces.IStructure;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.item.ItemBow;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Rotation;
 

@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "returnoftheancients:items/soul_binder_l0",
+    "layer1": "returnoftheancients:items/soul_binder_empty"
+  }
+}

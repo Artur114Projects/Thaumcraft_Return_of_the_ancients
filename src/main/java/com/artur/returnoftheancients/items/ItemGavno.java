@@ -1,8 +1,10 @@
 package com.artur.returnoftheancients.items;
 
 
+import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
+import com.artur.returnoftheancients.gui.SkalaGui;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.main.Test;
@@ -11,12 +13,14 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.common.lib.network.PacketHandler;
@@ -41,7 +45,9 @@ public class ItemGavno extends BaseItem{
 			nbt.setString("playSound", InitSounds.RUI_DEAD.NAME);
 			MainR.NETWORK.sendTo(new ClientPacketMisc(nbt),(EntityPlayerMP)  player);
 		}
+		FMLClientHandler.instance().displayGuiScreen(player, new SkalaGui());
 		if (!worldIn.isRemote) {
+			AncientWorld.load(worldIn);
 //			BlockPos playerPos = player.getPosition();
 //			long time1 = System.currentTimeMillis();
 //			GenStructure.generateStructure(player.world, playerPos.getX() + 20, playerPos.getY(), playerPos.getZ(), "ancient_turn");
@@ -51,7 +57,7 @@ public class ItemGavno extends BaseItem{
 //			CustomGenStructure.registerOrPlease(player.world, playerPos.getX(), playerPos.getY(), playerPos.getZ(), "ancient_turn");
 //			long timeFinish = System.currentTimeMillis() -  time;
 //			player.sendMessage(new TextComponentString("my gen is took:" + timeFinish + "ms"));
-			Test.startTest(player);
+//			Test.startTest(player);
 		}
 		if (!worldIn.isRemote) {
 			NBTTagCompound nbt = new NBTTagCompound();

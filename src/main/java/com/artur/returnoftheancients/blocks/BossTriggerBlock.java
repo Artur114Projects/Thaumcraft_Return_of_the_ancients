@@ -7,7 +7,6 @@ import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.WorldData;
-import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
@@ -15,22 +14,17 @@ import com.artur.returnoftheancients.utils.interfaces.IStructure;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.common.entities.monster.boss.*;
 
-import java.util.List;
 import java.util.Random;
 
 public class BossTriggerBlock extends BaseBlock {
@@ -76,15 +70,15 @@ public class BossTriggerBlock extends BaseBlock {
                         break;
                 }
 
-                CustomGenStructure.please(worldIn, pos.getX() + 5, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
-                CustomGenStructure.please(worldIn, pos.getX() - 11, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
-                CustomGenStructure.please(worldIn, pos.getX() + 5, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
-                CustomGenStructure.please(worldIn, pos.getX() - 11, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
+                CustomGenStructure.gen(worldIn, pos.getX() + 5, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
+                CustomGenStructure.gen(worldIn, pos.getX() - 11, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
+                CustomGenStructure.gen(worldIn, pos.getX() + 5, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
+                CustomGenStructure.gen(worldIn, pos.getX() - 11, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
                 IStructure.settings.setRotation(Rotation.CLOCKWISE_90);
-                CustomGenStructure.please(worldIn, pos.getX() + 15, pos.getY() + 2, pos.getZ() + 6, "ancient_door1");
-                CustomGenStructure.please(worldIn, pos.getX() + 15, pos.getY() + 2, pos.getZ() - 10, "ancient_door1");
-                CustomGenStructure.please(worldIn, pos.getX() - 16, pos.getY() + 2, pos.getZ() + 6, "ancient_door1");
-                CustomGenStructure.please(worldIn, pos.getX() - 16, pos.getY() + 2, pos.getZ() - 10, "ancient_door1");
+                CustomGenStructure.gen(worldIn, pos.getX() + 15, pos.getY() + 2, pos.getZ() + 6, "ancient_door1");
+                CustomGenStructure.gen(worldIn, pos.getX() + 15, pos.getY() + 2, pos.getZ() - 10, "ancient_door1");
+                CustomGenStructure.gen(worldIn, pos.getX() - 16, pos.getY() + 2, pos.getZ() + 6, "ancient_door1");
+                CustomGenStructure.gen(worldIn, pos.getX() - 16, pos.getY() + 2, pos.getZ() - 10, "ancient_door1");
                 IStructure.settings.setRotation(Rotation.NONE);
 
                 if (worldIn.playerEntities.size() > 1) {
@@ -104,7 +98,7 @@ public class BossTriggerBlock extends BaseBlock {
             }
         }
         if (!worldIn.isRemote && ServerEventsHandler.bossIsDead && !worldIn.isAnyPlayerWithinRangeAt(pos.getX(), pos.getY(), pos.getZ(), 4)) {
-            CustomGenStructure.please(worldIn, pos.getX() - 3, pos.getY() - 30, pos.getZ() - 2, "ancient_exit");
+            CustomGenStructure.gen(worldIn, pos.getX() - 3, pos.getY() - 30, pos.getZ() - 2, "ancient_exit");
             ServerEventsHandler.bossIsDead = false;
             int players = 0;
             for (EntityPlayer player : worldIn.playerEntities) {
@@ -121,12 +115,9 @@ public class BossTriggerBlock extends BaseBlock {
     @Override
     public void onBlockAdded(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state) {
         if (!worldIn.isRemote) {
-            System.out.println("Boss Trigger block is pleased");
             if (worldIn.provider.getDimension() == InitDimensions.ancient_world_dim_id) {
-                if (((int) pos.getX() / 10000L) > 0) {
-                    AncientWorld.onBossTriggerBlockAdd(pos.getX() / 10000, pos);
-                } else {
-                    System.out.println("Boss Trigger block no pleased " + ((int) pos.getX() / 10000L));
+                if (((int) (pos.getX() + 300) / 10000L) > 0) {
+                    AncientWorld.onBossTriggerBlockAdd((pos.getX() + 300) / 10000, pos);
                 }
             }
         }

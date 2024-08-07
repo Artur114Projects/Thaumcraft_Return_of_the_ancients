@@ -12,6 +12,7 @@ import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
 import com.artur.returnoftheancients.network.ServerPacketTpToHome;
 import com.artur.returnoftheancients.tileentity.BlockTileEntity;
 import com.artur.returnoftheancients.utils.interfaces.IHasModel;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -81,6 +82,7 @@ public class RegisterHandler {
 	}
 
 	public 	static void registerStructures() {
+		CustomGenStructure.setUseBinary();
 		CustomGenStructure.put("ancient_entry");
 		CustomGenStructure.put("ancient_crossroads");
 

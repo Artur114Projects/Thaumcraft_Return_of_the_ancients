@@ -38,7 +38,7 @@ public class LoadingGui extends GuiScreen {
 
 
     public LoadingGui() {
-        location = new ResourceLocation( Referense.MODID + ":textures/gui/boba.png");
+        location = new ResourceLocation( Referense.MODID + ":textures/gui/loading_gui_background.png");
     }
 
     public static void injectPhase(byte PHASE) {
@@ -95,12 +95,24 @@ public class LoadingGui extends GuiScreen {
         super.updateScreen();
     }
 
+    private void drawTexture() {
+        this.drawDefaultBackground();
+        mc.getTextureManager().bindTexture(location);
+
+        // Получаем текущие размеры экрана
+        int screenWidth = width;
+        int screenHeight = height;
+
+        // Рисуем текстуру с фиксированными размерами
+        drawModalRectWithCustomSizedTexture(0, 0, 0, 0, screenWidth, screenHeight, screenWidth, screenHeight);
+    }
+
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        GL11.glColor4f(0, 0, 0, 1);
-        mc.getTextureManager().bindTexture(location);
-        this.drawDefaultBackground();
-        drawTexturedModalRect(0, 0, 0, 0, width, height);
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        GL11.glColor4f(1, 1, 1, 1);
+        drawTexture();
 
         int hei = height / 3;
         switch (PHASE) {
@@ -142,9 +154,6 @@ public class LoadingGui extends GuiScreen {
             int widE = ((width / 2) - (fontRenderer.getStringWidth(s) / 2));
             fontRenderer.drawString(s, widE, hieE, Red);
         }
-
-
-        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     @Override

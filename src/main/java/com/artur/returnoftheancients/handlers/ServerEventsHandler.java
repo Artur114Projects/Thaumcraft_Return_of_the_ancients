@@ -84,7 +84,7 @@ public class ServerEventsHandler {
             }
             if (e.getWorld().provider.getDimension() == ancient_world_dim_id) {
                 if (!isAncientAreaSet) {
-                    CustomGenStructure.please(e.getWorld(), -16, 240, -16, "ancient_area");
+                    CustomGenStructure.gen(e.getWorld(), -16, 240, -16, "ancient_area");
                     CustomGenStructure.delete("ancient_area");
                     isAncientAreaSet = true;
                 }
@@ -258,13 +258,9 @@ public class ServerEventsHandler {
 
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
-
         if (event.getEntity().dimension == ancient_world_dim_id && !event.getWorld().isRemote) {
             if (!event.getEntity().isNonBoss()) {
-                if (!WorldData.get().saveData.getBoolean(IALGS.isBossSpawn)) {
-                    event.getWorld().removeEntity(event.getEntity());
-                    event.setCanceled(true);
-                }
+                AncientWorld.bossJoinBuss(event);
             }
             if (event.getEntity() instanceof EntityLiving) {
                 EntityLiving living = (EntityLiving) event.getEntity();
@@ -324,7 +320,7 @@ public class ServerEventsHandler {
 ////                q.setPositionAndUpdate(8, 81, 8);
 ////                q.forceSpawn = true;
 ////                world.spawnEntity(q);
-////                System.out.println("Eldritch Guardian is please XYZ " + 8 + " " + 81 + " " + 8);
+////                System.out.println("Eldritch Guardian is gen XYZ " + 8 + " " + 81 + " " + 8);
 ////            }
 ////        }
 //    }

@@ -109,7 +109,7 @@ public class AncientLabyrinthOldMap extends AncientLabyrinthGeneratorHandler imp
                         forwardStructureRotate = ANCIENT_LABYRINTH_STRUCTURES_ROTATE[y][x + 1];
                     }
 
-                    // please
+                    // gen
                     if (structure == CROSSROADS_ID || structure == ENTRY_ID || structure == BOSS_ID) {
                         if (x < SIZE - 1) {
                             if (forwardStructure == 0) {

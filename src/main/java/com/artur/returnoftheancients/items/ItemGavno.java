@@ -47,17 +47,16 @@ public class ItemGavno extends BaseItem{
 		}
 		FMLClientHandler.instance().displayGuiScreen(player, new SkalaGui());
 		if (!worldIn.isRemote) {
-			AncientWorld.load(worldIn);
 //			BlockPos playerPos = player.getPosition();
 //			long time1 = System.currentTimeMillis();
 //			GenStructure.generateStructure(player.world, playerPos.getX() + 20, playerPos.getY(), playerPos.getZ(), "ancient_turn");
 //			long time1Finish = System.currentTimeMillis() -  time1;
 //			player.sendMessage(new TextComponentString("template is took:" + time1Finish + "ms"));
 //			long time = System.currentTimeMillis();
-//			CustomGenStructure.registerOrPlease(player.world, playerPos.getX(), playerPos.getY(), playerPos.getZ(), "ancient_turn");
+//			CustomGenStructure.registerOrGen(player.world, playerPos.getX(), playerPos.getY(), playerPos.getZ(), "ancient_turn");
 //			long timeFinish = System.currentTimeMillis() -  time;
 //			player.sendMessage(new TextComponentString("my gen is took:" + timeFinish + "ms"));
-//			Test.startTest(player);
+			Test.startTest(player);
 		}
 		if (!worldIn.isRemote) {
 			NBTTagCompound nbt = new NBTTagCompound();

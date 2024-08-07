@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -35,7 +36,7 @@ public class AncientWorld {
         newAncientEntrySolo(player);
     }
 
-    public static void load(World world) {
+    public static void load(MinecraftServer server) {
         if (!isLoad) {
             if (WorldData.get().saveData.hasKey("AncientWorldPak")) {
                 NBTTagCompound nbt = WorldData.get().saveData.getCompoundTag("AncientWorldPak");
@@ -53,7 +54,7 @@ public class AncientWorld {
                     }
 
                     if (!compound.getBoolean("IsTeam")) {
-                        ANCIENT_ENTRIES.add(new AncientEntrySolo(compound, world));
+                        ANCIENT_ENTRIES.add(new AncientEntrySolo(compound, server));
                     } else {
 
                     }
@@ -85,6 +86,14 @@ public class AncientWorld {
         for (AncientEntry entry : ANCIENT_ENTRIES) {
             if (entry.deadBoss(id)) break;
         }
+    }
+
+    public static void bossJoinBuss(EntityJoinWorldEvent event) {
+        for (AncientEntry entry : ANCIENT_ENTRIES) {
+            if (entry.bossJoin(event)) return;
+        }
+        event.getWorld().removeEntity(event.getEntity());
+        event.setCanceled(true);
     }
 
 
@@ -119,7 +128,7 @@ public class AncientWorld {
     private static void saveAll(NBTTagCompound nbt) {
         nbt.setInteger("AncientEntriesCount", ANCIENT_ENTRIES.size());
         for (int i = 0; i != ANCIENT_ENTRIES.size(); i++) {
-            nbt.setTag("Entry:" + i, ANCIENT_ENTRIES.get(i).toNBT());
+            nbt.setTag("Entry:" + i, ANCIENT_ENTRIES.get(i).writeToNBT());
         }
     }
     private static byte t = 0;

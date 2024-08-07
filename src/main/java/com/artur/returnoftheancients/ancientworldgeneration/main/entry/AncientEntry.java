@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import thaumcraft.common.entities.monster.boss.EntityCultistPortalGreater;
 import thaumcraft.common.entities.monster.boss.EntityEldritchGolem;
 import thaumcraft.common.entities.monster.boss.EntityEldritchWarden;
@@ -29,6 +30,8 @@ public abstract class AncientEntry implements IBuild, IALGS {
     protected BlockPos bossPos = new BlockPos(0 ,0, 0);
     protected static final UUID nullUUId = new UUID(0, 0);
     protected UUID bossUUID = new UUID(0, 0);
+    private boolean isSleep;
+    private boolean loadCount;
     private boolean delete = false;
     private boolean requestSave = false;
     protected StructureMap map;
@@ -44,6 +47,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
         isBossSpawn = false;
         isBossDead = false;
         isFinal = false;
+        isSleep = false;
 
         this.pos = pos;
     }
@@ -79,15 +83,15 @@ public abstract class AncientEntry implements IBuild, IALGS {
         if (!world.isRemote) {
             if (isBossDead) {
                 if (!world.isAnyPlayerWithinRangeAt(bossPos.getX(), bossPos.getY(), bossPos.getZ(), 4)) {
-                    CustomGenStructure.please(world, bossPos.getX() - 3, bossPos.getY() - 30, bossPos.getZ() - 2, "ancient_exit");
+                    CustomGenStructure.gen(world, bossPos.getX() - 3, bossPos.getY() - 30, bossPos.getZ() - 2, "ancient_exit");
                     isFinal = true;
                 }
             }
             if (!bossPos.equals(nullPos) && !isBossSpawn) {
                 EntityPlayer player = world.getClosestPlayer(bossPos.getX(), bossPos.getY(), bossPos.getZ(), 17, false);
                 if (player != null) {
-                    onBossTiger(player, world);
                     isBossSpawn = true;
+                    onBossTiger(player, world);
                 }
             }
         }
@@ -103,7 +107,11 @@ public abstract class AncientEntry implements IBuild, IALGS {
         return false;
     }
 
-    public NBTTagCompound toNBT() {
+    public boolean bossJoin(EntityJoinWorldEvent event) {
+        return ((int) (event.getEntity().posX + 300) / 10000) == pos && isBossSpawn && !isBossDead;
+    }
+
+    public NBTTagCompound writeToNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setInteger("pos", pos);
 
@@ -117,19 +125,19 @@ public abstract class AncientEntry implements IBuild, IALGS {
     }
 
     protected void please(World world, int x, int y, int z, String name) {
-        CustomGenStructure.please(world, x, y, z, name);
+        CustomGenStructure.gen(world, x, y, z, name);
     }
 
     protected void pleaseBossDoors(World world, BlockPos pos) {
-        CustomGenStructure.please(world, pos.getX() + 5, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
-        CustomGenStructure.please(world, pos.getX() - 11, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
-        CustomGenStructure.please(world, pos.getX() + 5, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
-        CustomGenStructure.please(world, pos.getX() - 11, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
+        CustomGenStructure.gen(world, pos.getX() + 5, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
+        CustomGenStructure.gen(world, pos.getX() - 11, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
+        CustomGenStructure.gen(world, pos.getX() + 5, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
+        CustomGenStructure.gen(world, pos.getX() - 11, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
 
-        CustomGenStructure.please(world, pos.getX() + 15, pos.getY() + 2, pos.getZ() + 6, "ancient_door1");
-        CustomGenStructure.please(world, pos.getX() + 15, pos.getY() + 2, pos.getZ() - 10, "ancient_door1");
-        CustomGenStructure.please(world, pos.getX() - 16, pos.getY() + 2, pos.getZ() + 6, "ancient_door1");
-        CustomGenStructure.please(world, pos.getX() - 16, pos.getY() + 2, pos.getZ() - 10, "ancient_door1");
+        CustomGenStructure.gen(world, pos.getX() + 15, pos.getY() + 2, pos.getZ() + 6, "ancient_door1");
+        CustomGenStructure.gen(world, pos.getX() + 15, pos.getY() + 2, pos.getZ() - 10, "ancient_door1");
+        CustomGenStructure.gen(world, pos.getX() - 16, pos.getY() + 2, pos.getZ() + 6, "ancient_door1");
+        CustomGenStructure.gen(world, pos.getX() - 16, pos.getY() + 2, pos.getZ() - 10, "ancient_door1");
     }
 
     public boolean onBossTriggerBlockAdd(int pos, BlockPos bossPos) {

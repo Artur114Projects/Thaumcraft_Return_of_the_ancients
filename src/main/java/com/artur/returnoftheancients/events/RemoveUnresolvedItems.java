@@ -59,7 +59,7 @@ public class RemoveUnresolvedItems {
             }
             if (phaseRemoveItems == 0) {
                 if (e.player instanceof EntityPlayerMP) {
-                    HandlerR.playSound((EntityPlayerMP) e.player, InitSounds.WHISPER.NAME);
+                    HandlerR.playSound((EntityPlayerMP) e.player, InitSounds.WHISPER);
                 }
                 e.player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 1200));
                 e.player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1200, 10));
@@ -80,7 +80,7 @@ public class RemoveUnresolvedItems {
             if (phaseRemoveItems == 2 && timeRemoveItems >= 760) {
                 e.player.setHealth(-1);
                 if (e.player instanceof EntityPlayerMP) {
-                    HandlerR.playSound((EntityPlayerMP) e.player, InitSounds.RUI_DEAD.NAME);
+                    HandlerR.playSound((EntityPlayerMP) e.player, InitSounds.RUI_DEAD);
                 }
                 resetNBT(e.player);
                 System.out.println("dead");
@@ -91,15 +91,15 @@ public class RemoveUnresolvedItems {
 
             if (timeRemoveItems < 460) {
                 if ((timeRemoveItems % 40) == 0 && e.player instanceof EntityPlayerMP) {
-                    HandlerR.playSound((EntityPlayerMP) e.player, InitSounds.HEARTBEAT.NAME);
+                    HandlerR.playSound((EntityPlayerMP) e.player, InitSounds.HEARTBEAT);
                 }
             } else if (timeRemoveItems < 660) {
                 if ((timeRemoveItems % 20) == 0 && e.player instanceof EntityPlayerMP) {
-                    HandlerR.playSound((EntityPlayerMP) e.player, InitSounds.HEARTBEAT.NAME);
+                    HandlerR.playSound((EntityPlayerMP) e.player, InitSounds.HEARTBEAT);
                 }
             } else {
                 if ((timeRemoveItems % 10) == 0 && e.player instanceof EntityPlayerMP) {
-                    HandlerR.playSound((EntityPlayerMP) e.player, InitSounds.HEARTBEAT.NAME);
+                    HandlerR.playSound((EntityPlayerMP) e.player, InitSounds.HEARTBEAT);
                 }
             }
         }

@@ -1,6 +1,5 @@
 package com.artur.returnoftheancients.ancientworldgeneration.main.entry;
 
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -11,7 +10,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -24,14 +22,14 @@ public class AncientEntrySolo extends AncientEntry {
         startGen();
     }
 
-    public AncientEntrySolo(NBTTagCompound nbt, World world) {
+    public AncientEntrySolo(NBTTagCompound nbt, MinecraftServer server) {
         super(nbt);
         if (!nbt.hasKey("IsTeam")) error("AncientEntrySolo.class, transferred incorrect NBTTag EC:-1");
         if (nbt.getBoolean("IsTeam")) error("AncientEntrySolo.class, transferred incorrect NBTTag EC:0");
 
         if (!nbt.hasKey("playerMost") || !nbt.hasKey("playerLeast")) error("AncientEntrySolo.class, transferred incorrect NBTTag EC:1");
         System.out.println(nbt.getUniqueId("player"));
-        EntityPlayer entity = world.getPlayerEntityByUUID(Objects.requireNonNull(nbt.getUniqueId("player")));
+        Entity entity = server.getEntityFromUuid(Objects.requireNonNull(nbt.getUniqueId("player")));
         if (entity instanceof EntityPlayerMP) {
             player = (EntityPlayerMP) entity;
         } else {
@@ -53,9 +51,9 @@ public class AncientEntrySolo extends AncientEntry {
     }
 
     @Override
-    public NBTTagCompound toNBT() {
+    public NBTTagCompound writeToNBT() {
         if (!isRequestToDelete()) {
-            NBTTagCompound nbt = super.toNBT();
+            NBTTagCompound nbt = super.writeToNBT();
             nbt.setBoolean("IsTeam", false);
             nbt.setUniqueId("player", player.getUniqueID());
             return nbt;
@@ -76,7 +74,7 @@ public class AncientEntrySolo extends AncientEntry {
 
     @Override
     protected void onBossTiger(EntityPlayer player, World world) {
-        EntityLiving boss =  getRandomBoss(world, bossPos);
+        EntityLiving boss = getRandomBoss(world, bossPos);
         bossUUID = boss.getUniqueID();
         world.spawnEntity(boss);
         pleaseBossDoors(world, bossPos);

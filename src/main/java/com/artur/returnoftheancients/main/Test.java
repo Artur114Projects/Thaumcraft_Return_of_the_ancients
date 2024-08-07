@@ -1,14 +1,9 @@
 package com.artur.returnoftheancients.main;
 
-import com.artur.returnoftheancients.ancientworldgeneration.genmap.AncientLabyrinthMap;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
-import com.artur.returnoftheancients.ancientworldgeneration.util.StructureMap;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
-import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.referense.Referense;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.Mod;
@@ -16,9 +11,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class Test { //
@@ -31,6 +24,7 @@ public class Test { //
         Test.player = player;
         p = 0;
     }
+
     private static EntityPlayer player = null;
     private static byte p = 0;
     private static int test = 0;
@@ -48,7 +42,7 @@ public class Test { //
         if (test > 0) {
             BlockPos playerPos = player.getPosition();
             long time = System.currentTimeMillis();
-            CustomGenStructure.registerOrPlease(player.world, playerPos.getX() + 2, playerPos.getY(), playerPos.getZ(), "ancient_turn");
+            CustomGenStructure.registerOrGen(player.world, playerPos.getX() + 2, playerPos.getY(), playerPos.getZ(), "ancient_turn");
             myGenTime.add(System.currentTimeMillis() -  time);
             long time1 = System.currentTimeMillis();
             GenStructure.generateStructure(player.world, playerPos.getX() + 2, playerPos.getY() + 20, playerPos.getZ(), "ancient_turn");

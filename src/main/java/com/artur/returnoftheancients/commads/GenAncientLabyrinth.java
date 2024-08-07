@@ -9,7 +9,7 @@ import net.minecraft.server.MinecraftServer;
 
 
 public class GenAncientLabyrinth extends CommandBase {
-    String NAME = "please", USAGE = "/please";
+    String NAME = "gen", USAGE = "/gen";
 
     @Override
     public String getName() {

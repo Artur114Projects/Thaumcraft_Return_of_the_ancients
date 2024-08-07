@@ -78,7 +78,7 @@ public class AncientLabyrinthMap implements IALGS {
         boolean is_bl = y < SIZE - 1;
         boolean is_u = y > 0;
 
-//        System.out.println("Way please start IYX " + index + " " + y + " " + x);
+//        System.out.println("Way gen start IYX " + index + " " + y + " " + x);
         if (wayRotate > 2) {
             return new byte[2];
         }
@@ -606,7 +606,7 @@ public class AncientLabyrinthMap implements IALGS {
                     boolean is_bl = y < SIZE - 1;
                     boolean is_u = y > 0;
 
-                    // please
+                    // gen
                     if (structure == CROSSROADS_ID || structure == ENTRY_ID || structure == BOSS_ID) {
                         if (forwardStructure == 0) {
                             setForwardWay(y, f_x, is_f, true);

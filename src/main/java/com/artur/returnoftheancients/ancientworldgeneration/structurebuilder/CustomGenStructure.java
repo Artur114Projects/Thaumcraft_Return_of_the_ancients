@@ -9,8 +9,9 @@ import java.util.Map;
 
 public class CustomGenStructure {
     private static final List<String> rawStructures = new ArrayList<>();
-    private static final Map<String, TRAStructure> structures = new HashMap<>();
+    private static final Map<String, ITRAStructure> structures = new HashMap<>();
     private static boolean isUseEBS = false;
+    private static boolean isUseBinary = false;
 
     public static void put(String name) {
         rawStructures.add(name);
@@ -20,35 +21,50 @@ public class CustomGenStructure {
         isUseEBS = true;
     }
 
+    public static void setUseBinary() {
+        isUseBinary = true;
+    }
+
+
     public static void register() {
-        if (!isUseEBS) {
+        if (isUseBinary) {
             for (String s : rawStructures) {
-                structures.put(s, new TRAStructure(s));
+                structures.put(s, new TRAStructureBinary(s));
             }
-        } else {
+            isUseBinary = false;
+            rawStructures.clear();
+            return;
+        }
+        if (isUseEBS) {
             for (String s : rawStructures) {
                 structures.put(s, new TRAStructureEBS(s));
             }
             isUseEBS = false;
+            rawStructures.clear();
+            return;
+        }
+
+        for (String s : rawStructures) {
+            structures.put(s, new TRAStructure(s));
         }
         rawStructures.clear();
     }
 
-    public static void please(World world, int x, int y, int z, String name) {
+    public static void gen(World world, int x, int y, int z, String name) {
         if (structures.containsKey(name)) {
-            structures.get(name).please(world, x, y, z);
+            structures.get(name).gen(world, x, y, z);
         } else {
             throw new RuntimeException("invalid structure name: " + name);
         }
     }
 
-    public static void registerOrPlease(World world, int x, int y, int z, String name) {
+    public static void registerOrGen(World world, int x, int y, int z, String name) {
         if (structures.containsKey(name)) {
-            structures.get(name).please(world, x, y, z);
+            structures.get(name).gen(world, x, y, z);
         } else {
             TRAStructure structure = new TRAStructure(name);
             structures.put(name, structure);
-            structure.please(world, x, y, z);
+            structure.gen(world, x, y, z);
         }
     }
 

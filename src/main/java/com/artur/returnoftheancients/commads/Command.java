@@ -12,7 +12,7 @@ import net.minecraft.util.Rotation;
 
 
 public class Command extends CommandBase implements IStructure {
-    String NAME = "please", USAGE = "/please";
+    String NAME = "gen", USAGE = "/gen";
 
     @Override
     public String getName() {

@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.handlers;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntry;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.TRAStructure;
+import com.artur.returnoftheancients.misc.SoundTRA;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.main.MainR;
@@ -284,9 +285,9 @@ public class HandlerR {
             "players=1, effect=speed, amplifier=1"
     };
 
-    public static void playSound(EntityPlayerMP playerMP, String soundName) {
+    public static void playSound(EntityPlayerMP playerMP, SoundTRA sound) {
         NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setString("playSound", soundName);
+        nbt.setString("playSound", sound.NAME);
         MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
     }
 

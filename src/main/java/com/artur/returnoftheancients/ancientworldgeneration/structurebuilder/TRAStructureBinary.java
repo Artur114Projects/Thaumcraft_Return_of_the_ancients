@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.ancientworldgeneration.structurebuilder;
 
 import com.artur.returnoftheancients.referense.Referense;
-import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -16,45 +15,40 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 
-public class TRAStructure implements ITRAStructure{
+public class TRAStructureBinary implements ITRAStructure {
     protected final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+    protected final int[] blocks;
+    protected final IBlockState[] palette;
 
-    protected final ArrayDeque<BlockInfo> blocks;
-
-    public TRAStructure(String structureName) {
+    public TRAStructureBinary(String structureName) {
         NBTTagCompound structureNBT = readStructureAsName(structureName);
         NBTTagList palette = structureNBT.getTagList("palette", 10);
         NBTTagList blocksNBT = structureNBT.getTagList("blocks", 10);
 
         int air = -1;
-        IBlockState[] blocksNames = new IBlockState[palette.tagCount()];
+        this.palette = new IBlockState[palette.tagCount()];
         for (int i = 0; i != palette.tagCount(); i++) {
-            blocksNames[i] = getBlockByString(palette.getCompoundTagAt(i).getString("Name")).getDefaultState();
-            if (getBlockByString(palette.getCompoundTagAt(i).getString("Name")) == Blocks.AIR) {
+            this.palette[i] = getBlockByString(palette.getCompoundTagAt(i).getString("Name")).getDefaultState();
+            if (getBlockByString(palette.getCompoundTagAt(i).getString("Name")) == Blocks.AIR && air == -1) {
                 air = i;
             }
         }
 
-        ArrayList<BlockInfo> rawBlocks = new ArrayList<>();
+        ArrayList<Integer> rawBlocks = new ArrayList<>();
+
         for (int i = 0; i != blocksNBT.tagCount(); i++) {
             NBTTagCompound compound = blocksNBT.getCompoundTagAt(i);
             NBTTagList pos = compound.getTagList("pos", 3);
             int state = compound.getInteger("state");
-            if (state != air || structureName.equals("air_cube") || structureName.equals("ancient_exit")) {
-                rawBlocks.add(new BlockInfo(pos.getIntAt(0), pos.getIntAt(1), pos.getIntAt(2), blocksNames[state]));
+            if (state != air || structureName.equals("air_cube")) {
+                rawBlocks.add(packBytes((byte) pos.getIntAt(0), (byte) pos.getIntAt(1), (byte) pos.getIntAt(2), (byte) state));
             }
         }
-        blocks = new ArrayDeque<>();
-        blocks.addAll(rawBlocks);
-    }
 
-    @Override
-    public void gen(World world, int x, int y, int z) {
-        for (BlockInfo block : blocks) {
-            world.setBlockState(mutablePos.setPos(block.x + x, block.y + y, block.z + z), block.state);
-        }
+        blocks = rawBlocks.stream().mapToInt(Integer::intValue).toArray();
     }
 
     private static NBTTagCompound readStructureAsName(String structureName) {
@@ -78,17 +72,19 @@ public class TRAStructure implements ITRAStructure{
         }
     }
 
-    protected static class BlockInfo {
-        public final int x;
-        public final int y;
-        public final int z;
-        public final IBlockState state;
-
-        public BlockInfo(int x, int y, int z, IBlockState state) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.state = state;
+    @Override
+    public void gen(World world, int x, int y, int z) {
+        for (int block : blocks) {
+            byte xC = (byte) (block >> 24);
+            byte yC = (byte) (block >> 16);
+            byte zC = (byte) (block >> 8);
+            byte structure = (byte) block;
+            world.setBlockState(mutablePos.setPos(xC + x, yC + y, zC + z), palette[structure]);
         }
+    }
+
+
+    protected static int packBytes(byte b1, byte b2, byte b3, byte b4) {
+        return (b1 << 24) | ((b2 & 0xFF) << 16) | ((b3 & 0xFF) << 8) | (b4 & 0xFF);
     }
 }

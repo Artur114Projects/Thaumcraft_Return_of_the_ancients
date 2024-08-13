@@ -262,7 +262,7 @@ public class ServerEventsHandler {
             if (!event.getEntity().isNonBoss()) {
                 AncientWorld.bossJoinBuss(event);
             }
-            if (event.getEntity() instanceof EntityLiving) {
+            if (event.getEntity() instanceof EntityLiving && !(event.getEntity() instanceof EntityPlayer)) {
                 EntityLiving living = (EntityLiving) event.getEntity();
                 if (potionEffects[0] != -1) {
                     living.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, maxDuration, potionEffects[0]));

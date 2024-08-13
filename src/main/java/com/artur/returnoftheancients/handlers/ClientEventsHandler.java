@@ -40,12 +40,12 @@ public class ClientEventsHandler extends ServerEventsHandler {
         if (e.player.dimension == ancient_world_dim_id) {
             if (cpt >= 4) {
                 cpt = 0;
-                if (e.player instanceof EntityPlayerSP && !e.player.isCreative()) {
-                    RenderEventHandler.fogFiddled = true;
-                    if (RenderEventHandler.fogDuration < 200) {
-                        RenderEventHandler.fogDuration = 200;
-                    }
-                }
+//                if (e.player instanceof EntityPlayerSP && !e.player.isCreative()) {
+//                    RenderEventHandler.fogFiddled = true;
+//                    if (RenderEventHandler.fogDuration < 200) {
+//                        RenderEventHandler.fogDuration = 200;
+//                    }
+//                }
             }
             cpt++;
             if (e.player.posY > 84 && !e.player.isCreative()) {

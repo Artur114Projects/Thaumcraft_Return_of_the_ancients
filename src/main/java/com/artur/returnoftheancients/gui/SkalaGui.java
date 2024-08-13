@@ -19,10 +19,11 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class SkalaGui extends GuiScreen {
 
-    private static final int textureSize = 1280;
+    private static TRAGif gif;
     private static ResourceLocation location;
 
     public SkalaGui() {
+        gif = new TRAGif( Referense.MODID + ":textures/gui/gif/gen1v/gen_gif_v1-", 65, 0);
         location = new ResourceLocation( Referense.MODID + ":textures/gui/skala.png");
     }
     float[] tc = new float[] {0,0, 1,0, 1,1, 0,1};
@@ -54,12 +55,19 @@ public class SkalaGui extends GuiScreen {
         int screenHeight = height;
 
         // Рисуем текстуру с фиксированными размерами
-        drawModalRectWithCustomSizedTexture(0, 0, 0, 0, screenWidth, screenHeight, screenWidth, screenHeight);
+//        drawModalRectWithCustomSizedTexture(0, 0, 0, 0, screenWidth, screenHeight, screenWidth, screenHeight);
+        gif.drawModalRectWithCustomSizedGif(0, 0, 0, 0, screenWidth, screenHeight, screenWidth, screenHeight, mc);
     }
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
         skala();
+    }
+
+    @Override
+    public void updateScreen() {
+        gif.update();
     }
 
     private void quads() {

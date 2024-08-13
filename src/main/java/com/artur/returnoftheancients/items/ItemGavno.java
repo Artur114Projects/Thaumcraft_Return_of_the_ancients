@@ -7,7 +7,6 @@ import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.gui.SkalaGui;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.main.MainR;
-import com.artur.returnoftheancients.main.Test;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -56,7 +55,6 @@ public class ItemGavno extends BaseItem{
 //			CustomGenStructure.registerOrGen(player.world, playerPos.getX(), playerPos.getY(), playerPos.getZ(), "ancient_turn");
 //			long timeFinish = System.currentTimeMillis() -  time;
 //			player.sendMessage(new TextComponentString("my gen is took:" + timeFinish + "ms"));
-			Test.startTest(player);
 		}
 		if (!worldIn.isRemote) {
 			NBTTagCompound nbt = new NBTTagCompound();

@@ -20,18 +20,20 @@ import thaumcraft.common.entities.monster.boss.EntityEldritchGolem;
 import thaumcraft.common.entities.monster.boss.EntityEldritchWarden;
 
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import static com.artur.returnoftheancients.misc.TRAConfigs.AncientWorldSettings;
 import static com.artur.returnoftheancients.utils.interfaces.IStructure.settings;
 
 public abstract class AncientEntry implements IBuild, IALGS {
+    protected static final byte MAX_LOADING = 2;
     protected static final BlockPos nullPos = new BlockPos(0, 0, 0);
     private final BuildPhase buildPhase = new BuildPhase();
     protected BlockPos bossPos = new BlockPos(0 ,0, 0);
     protected static final UUID nullUUId = new UUID(0, 0);
     protected UUID bossUUID = new UUID(0, 0);
-    private boolean isSleep;
-    private boolean loadCount;
+    protected boolean isSleep;
+    private byte loadCount;
     private boolean delete = false;
     private boolean requestSave = false;
     protected StructureMap map;
@@ -44,10 +46,10 @@ public abstract class AncientEntry implements IBuild, IALGS {
     protected final int pos;
 
     public AncientEntry(int pos) {
-        isBossSpawn = false;
-        isBossDead = false;
-        isFinal = false;
-        isSleep = false;
+        this.isBossSpawn = false;
+        this.isBossDead = false;
+        this.isFinal = false;
+        this.isSleep = false;
 
         this.pos = pos;
     }
@@ -68,6 +70,16 @@ public abstract class AncientEntry implements IBuild, IALGS {
         bossPos = NBTToBlockPos(nbt.getCompoundTag("bossPos"));
         if (!nbt.hasKey("isBuild")) error("AncientEntry.class, transferred incorrect NBTTag EC:4");
         isBuild = nbt.getBoolean("isBuild");
+        if (!nbt.hasKey("isSleep")) error("AncientEntry.class, transferred incorrect NBTTag EC:8");
+        isSleep = nbt.getBoolean("isSleep");
+        if (!nbt.hasKey("loadCount")) error("AncientEntry.class, transferred incorrect NBTTag EC:9");
+        loadCount = nbt.getByte("loadCount");
+
+        if (isSleep) {
+            if (loadCount++ >= MAX_LOADING) {
+                requestToDelete();
+            }
+        }
     }
 
     public void update(World world) {
@@ -115,6 +127,8 @@ public abstract class AncientEntry implements IBuild, IALGS {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setInteger("pos", pos);
 
+        nbt.setByte("loadCount", loadCount);
+        nbt.setBoolean("isSleep", isSleep);
         nbt.setBoolean("isFinal", isFinal);
         nbt.setUniqueId("boss", bossUUID);
         nbt.setTag("bossPos", blockPosToNBT(bossPos));
@@ -184,7 +198,11 @@ public abstract class AncientEntry implements IBuild, IALGS {
 
     protected void error(String s) {
         System.out.println(s);
+        System.out.println("deleting...");
         requestToDelete();
+    }
+    public boolean isSleep() {
+        return isSleep;
     }
 
     protected void requestToDelete() {
@@ -212,7 +230,6 @@ public abstract class AncientEntry implements IBuild, IALGS {
     }
 
     protected void startGen() {
-        settings.setRotation(Rotation.NONE);
         onStart();
         AncientWorld.build(this);
         this.map = AncientLabyrinthMap.genStructuresMap();

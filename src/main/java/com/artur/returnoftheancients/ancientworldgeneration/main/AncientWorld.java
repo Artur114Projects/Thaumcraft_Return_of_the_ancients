@@ -17,6 +17,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.jetbrains.annotations.TestOnly;
 
 import java.util.LinkedList;
 import java.util.UUID;
@@ -29,15 +30,34 @@ public class AncientWorld {
     private static final int buildCount = 4;
     private static final LinkedList<IBuild> build = new LinkedList<>();
     private static final LinkedList<AncientEntry> ANCIENT_ENTRIES = new LinkedList<>();
+    @TestOnly
+    public static byte getBuildCount() {
+        return buildCount;
+    }
+    @TestOnly
+    public static boolean isIsLoad() {
+        return isLoad;
+    }
+    @TestOnly
+    public static LinkedList<AncientEntry> getAncientEntries() {
+        return ANCIENT_ENTRIES;
+    }
+    @TestOnly
+    public static LinkedList<IBuild> getBuild() {
+        return build;
+    }
+
 
     public static void tpToAncientWorld(EntityPlayerMP player) {
         FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 0, 244, 0);
         player.setHealth(20);
+        player.clearActivePotions();
         newAncientEntrySolo(player);
     }
 
     public static void load(MinecraftServer server) {
         if (!isLoad) {
+            if (TRAConfigs.Any.debugMode) System.out.println("Load from NBT start!");
             if (WorldData.get().saveData.hasKey("AncientWorldPak")) {
                 NBTTagCompound nbt = WorldData.get().saveData.getCompoundTag("AncientWorldPak");
                 int ancientEntriesCount = nbt.getInteger("AncientEntriesCount");
@@ -75,6 +95,11 @@ public class AncientWorld {
             save();
         }
     }
+
+    public static void playerJoinBuss(EntityPlayerMP player) {
+
+    }
+
 
     public static void playerLostBuss(UUID id) {
         for (AncientEntry entry : ANCIENT_ENTRIES) {

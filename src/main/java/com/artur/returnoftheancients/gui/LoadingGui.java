@@ -19,6 +19,7 @@ import java.io.IOException;
 
 
 public class LoadingGui extends GuiScreen {
+    private final TRAGif gif;
     private static byte PHASE = -1;
     private static byte percentages = 0;
     private final int Red = 16711680;
@@ -38,6 +39,7 @@ public class LoadingGui extends GuiScreen {
 
 
     public LoadingGui() {
+        gif = new TRAGif( Referense.MODID + ":textures/gui/gif/gen1v/gen_gif_v1-", 65, 0);
         location = new ResourceLocation( Referense.MODID + ":textures/gui/loading_gui_background.png");
     }
 
@@ -56,6 +58,7 @@ public class LoadingGui extends GuiScreen {
 
     @Override
     public void updateScreen() {
+        gif.update();
         if (iaESCString) {
             iaDrawESCStringTime++;
             iaDrawESCStringTime1++;
@@ -112,8 +115,7 @@ public class LoadingGui extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
         GL11.glColor4f(1, 1, 1, 1);
-        drawTexture();
-
+        gif.drawInFullScreen(mc, width, height);
         int hei = height / 3;
         switch (PHASE) {
             case 0: {

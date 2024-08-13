@@ -16,10 +16,12 @@ import java.util.UUID;
 
 public class AncientEntrySolo extends AncientEntry {
     private final EntityPlayerMP player;
+    private final UUID playerId;
     public AncientEntrySolo(EntityPlayerMP player, int pos) {
         super(pos);
         this.player = player;
-        startGen();
+        this.playerId = player.getUniqueID();
+        this.startGen();
     }
 
     public AncientEntrySolo(NBTTagCompound nbt, MinecraftServer server) {
@@ -28,22 +30,31 @@ public class AncientEntrySolo extends AncientEntry {
         if (nbt.getBoolean("IsTeam")) error("AncientEntrySolo.class, transferred incorrect NBTTag EC:0");
 
         if (!nbt.hasKey("playerMost") || !nbt.hasKey("playerLeast")) error("AncientEntrySolo.class, transferred incorrect NBTTag EC:1");
-        System.out.println(nbt.getUniqueId("player"));
         Entity entity = server.getEntityFromUuid(Objects.requireNonNull(nbt.getUniqueId("player")));
         if (entity instanceof EntityPlayerMP) {
             player = (EntityPlayerMP) entity;
-        } else {
+            playerId = nbt.getUniqueId("player");
+        } else if (entity == null) {
+            playerId = nbt.getUniqueId("player");
             player = null;
-            System.out.println("AncientEntrySolo.class, entity not instanceof EntityPlayerMP: " + entity);
+            if (TRAConfigs.Any.debugMode) System.out.println("AncientEntrySolo pos:" + getPos() + " isSleep");
+            isSleep = true;
+        } else {
+            System.out.println("Entity NOT instanceof EntityPlayerMP, deleting");
+            player = null;
+            playerId = null;
             requestToDelete();
         }
 
-        if (!isBuild) startGen();
+        if (!isSleep && !isBuild) startGen();
     }
 
     @Override
     public boolean dead(UUID id) {
-        if (id.equals(player.getUniqueID())) {
+        if (isSleep) {
+            return false;
+        }
+        if (id.equals(playerId)) {
             requestToDelete();
             return true;
         }
@@ -55,7 +66,7 @@ public class AncientEntrySolo extends AncientEntry {
         if (!isRequestToDelete()) {
             NBTTagCompound nbt = super.writeToNBT();
             nbt.setBoolean("IsTeam", false);
-            nbt.setUniqueId("player", player.getUniqueID());
+            nbt.setUniqueId("player", playerId);
             return nbt;
         }
         return new NBTTagCompound();
@@ -63,6 +74,9 @@ public class AncientEntrySolo extends AncientEntry {
 
     @Override
     public void update(World world) {
+        if (isSleep) {
+            return;
+        }
         if (isRequestToDelete()) {
             return;
         }

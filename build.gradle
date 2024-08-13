@@ -21,6 +21,11 @@ archivesBaseName = 'Return of the ancients'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
+test {
+    useJUnitPlatform()
+    include '**/*'
+}
+
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   Snapshot are built nightly.
@@ -57,9 +62,19 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
         }
+        test {
+            workingDirectory project.file('run')
+            taskName 'runTest'
+            environment 'MCP_TEST', 'true'
+            args '--launchTarget', 'fmluserdevclient'
+        }
     }
 
     dependencies {
+        testImplementation 'org.mockito:mockito-core:3.11.2'
+        testImplementation 'org.mockito:mockito-inline:3.11.2'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
         // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
         // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
         // The userdev artifact is a special name and will get all sorts of transformations applied to it.

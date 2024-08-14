@@ -7,14 +7,16 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
 public class TRAGif {
-    private int drawIndex;
-    private int time;
-    private final int speed;
-    private final ResourceLocation[] gif;
+    protected boolean isFirstDraw;
+    protected int drawIndex;
+    protected int time;
+    protected final int speed;
+    protected final ResourceLocation[] gif;
 
-    public TRAGif(String fileNoIndexName, int gifSize, int speed) {
+    public TRAGif(String fileNoIndexName, int gifSize, int speed, Minecraft mc) {
         this.time = 0;
         this.speed = speed;
+        this.isFirstDraw = true;
         fileNoIndexName = fileNoIndexName.replaceAll(".png", "");
         gif = new ResourceLocation[gifSize];
         for (int i = 0; i < gifSize; i++) {
@@ -22,25 +24,41 @@ public class TRAGif {
         }
     }
 
+    protected void onDraw(Minecraft mc) {
+        if (isFirstDraw) {
+            for (ResourceLocation l : gif) {
+                mc.getTextureManager().bindTexture(l);
+            }
+            isFirstDraw = false;
+        }
+    }
+
     public void update() {
         time++;
         if (time >= speed) {
-            drawIndex = ((drawIndex + 1) >= gif.length) ? (0) : (drawIndex + 1);
+            swapImage();
             time = 0;
         }
     }
 
+    protected void swapImage() {
+        drawIndex = ((drawIndex + 1) >= gif.length) ? (0) : (drawIndex + 1);
+    }
+
     public void drawInFullScreen(Minecraft mc, int screenWidth, int screenHeight) {
+        onDraw(mc);
         mc.getTextureManager().bindTexture(gif[drawIndex]);
         drawModalRectWithCustomSizedTexture(0, 0, 0, 0, screenWidth, screenHeight, screenWidth, screenHeight);
     }
 
     public void drawModalRectWithCustomSizedGif(int x, int y, float u, float v, int width, int height, float textureWidth, float textureHeight, Minecraft mc) {
+        onDraw(mc);
         mc.getTextureManager().bindTexture(gif[drawIndex]);
         drawModalRectWithCustomSizedTexture(x, y, u, v, width, height, textureWidth, textureHeight);
     }
 
     public void drawGifModalRect(int x, int y, int textureX, int textureY, int width, int height, float zLevel, Minecraft mc) {
+        onDraw(mc);
         mc.getTextureManager().bindTexture(gif[drawIndex]);
         drawTexturedModalRect(x, y, textureX, textureY, width ,height, zLevel);
     }

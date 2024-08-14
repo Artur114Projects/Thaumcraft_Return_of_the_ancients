@@ -5,6 +5,7 @@ import net.minecraft.world.World;
 public interface IBuild {
     void build(World world);
     boolean isBuild();
+    boolean isRequestToDelete();
 
     void onPlease(int x, int y);
     void onClear(int x, int y);

@@ -1,8 +1,10 @@
 package com.artur.returnoftheancients.network;
 
+import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.generation.generators.AncientLabyrinthGenerator;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -20,7 +22,7 @@ public class ServerPacketTpToHome implements IMessage {
     public static class HandlerTTH implements IMessageHandler<ServerPacketTpToHome, IMessage> {
         @Override
         public IMessage onMessage(ServerPacketTpToHome message, MessageContext ctx) {
-            AncientLabyrinthGenerator.stopGenerationFor(ctx.getServerHandler().player);
+            AncientWorld.interrupt(ctx.getServerHandler().player);
             ServerEventsHandler.tpToHome(ctx.getServerHandler().player);
             return null;
         }

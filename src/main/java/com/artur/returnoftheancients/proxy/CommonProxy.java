@@ -34,7 +34,6 @@ public class CommonProxy {
         RegisterHandler.registerStructures();
     }
     public void serverStarting(FMLServerStartingEvent event) {
-        AncientWorld.load(event.getServer());
         RegisterHandler.registerCommands(event);
         PlayersCountDifficultyProcessor.compile(TRAConfigs.DifficultySettings.playersCountDifficulty);
     }

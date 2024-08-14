@@ -5,6 +5,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class BuildPhase {
     public BuildPhase() {
+        isClearStart = false;
         pos = new BlockPos.MutableBlockPos();
         bossGen = 0;
         reloadLight = false;
@@ -29,7 +30,7 @@ public class BuildPhase {
 
     public byte t = 0;
     public boolean reloadLight;
-
+    public boolean isClearStart;
     public boolean please;
     public boolean clear;
 

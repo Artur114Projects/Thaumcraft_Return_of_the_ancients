@@ -109,9 +109,6 @@ public class RegisterHandler {
 		CustomGenStructure.put("ancient_door1");
 		CustomGenStructure.put("ancient_area");
 		CustomGenStructure.put("ancient_border_cap");
-		CustomGenStructure.register();
-
-//		CustomGenStructure.setUseEBS();
 		CustomGenStructure.put("air_cube");
 		CustomGenStructure.register();
 	}

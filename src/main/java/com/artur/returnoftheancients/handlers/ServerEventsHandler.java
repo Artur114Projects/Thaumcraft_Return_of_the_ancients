@@ -27,6 +27,7 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
@@ -88,7 +89,6 @@ public class ServerEventsHandler {
                     CustomGenStructure.delete("ancient_area");
                     isAncientAreaSet = true;
                 }
-
             }
         }
         for (EntityPlayer player : e.getWorld().playerEntities) {
@@ -258,6 +258,9 @@ public class ServerEventsHandler {
 
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
+        if (event.getEntity() instanceof EntityPlayerMP) {
+            AncientWorld.playerJoinBuss((EntityPlayerMP) event.getEntity());
+        }
         if (event.getEntity().dimension == ancient_world_dim_id && !event.getWorld().isRemote) {
             if (!event.getEntity().isNonBoss()) {
                 AncientWorld.bossJoinBuss(event);
@@ -285,9 +288,6 @@ public class ServerEventsHandler {
                     }
                 }
             }
-//            if (TRAConfigs.Any.debugMode) {
-//                System.out.println("Create entity potions is add " + Arrays.toString(potionEffects));
-//            }
         }
     }
 

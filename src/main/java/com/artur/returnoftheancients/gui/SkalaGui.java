@@ -19,11 +19,11 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class SkalaGui extends GuiScreen {
 
-    private static TRAGif gif;
+    private static TRAGifSTime gif;
     private static ResourceLocation location;
 
     public SkalaGui() {
-        gif = new TRAGif( Referense.MODID + ":textures/gui/gif/gen1v/gen_gif_v1-", 65, 0);
+        gif = new TRAGifSTime( Referense.MODID + ":textures/gui/gif/gen1v/gen_gif_v1-", 65, 50, mc);
         location = new ResourceLocation( Referense.MODID + ":textures/gui/skala.png");
     }
     float[] tc = new float[] {0,0, 1,0, 1,1, 0,1};
@@ -67,7 +67,7 @@ public class SkalaGui extends GuiScreen {
 
     @Override
     public void updateScreen() {
-        gif.update();
+
     }
 
     private void quads() {

@@ -19,7 +19,7 @@ import java.io.IOException;
 
 
 public class LoadingGui extends GuiScreen {
-    private final TRAGif gif;
+    public static TRAGifSTime gif;
     private static byte PHASE = -1;
     private static byte percentages = 0;
     private final int Red = 16711680;
@@ -31,15 +31,13 @@ public class LoadingGui extends GuiScreen {
     private byte t = 0;
     private byte iaDrawESCStringTime = 0;
     private byte iaDrawESCStringTime1 = 0;
-//    private int xd = width + 40;
     private String ts = "";
-    private final String[] constantNames = new String[] {"generating structures map", "cleaning area", "place structures in world", "reload light", "Finish!"};
+    private final String[] constantNames = new String[] {"Waiting for build", "cleaning area", "place structures in world", "reload light", "Finish!"};
     public boolean iaDrawESCString = false;
     public boolean iaESCString = false;
 
 
     public LoadingGui() {
-        gif = new TRAGif( Referense.MODID + ":textures/gui/gif/gen1v/gen_gif_v1-", 65, 0);
         location = new ResourceLocation( Referense.MODID + ":textures/gui/loading_gui_background.png");
     }
 
@@ -58,7 +56,6 @@ public class LoadingGui extends GuiScreen {
 
     @Override
     public void updateScreen() {
-        gif.update();
         if (iaESCString) {
             iaDrawESCStringTime++;
             iaDrawESCStringTime1++;
@@ -160,16 +157,15 @@ public class LoadingGui extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-       if (!TRAConfigs.Any.debugMode) {
-            if (keyCode == Keyboard.KEY_ESCAPE) {
-                if (!iaESCString) {
-                    iaESCString = true;
-                } else {
-                    iaESCString = false;
-                    MainR.NETWORK.sendToServer(new ServerPacketTpToHome());
-                }
-                return;
+        if (keyCode == Keyboard.KEY_ESCAPE) {
+            if (!iaESCString) {
+                iaESCString = true;
+            } else {
+                iaESCString = false;
+                MainR.NETWORK.sendToServer(new ServerPacketTpToHome());
+                mc.displayGuiScreen(null);
             }
+            return;
         }
         super.keyTyped(typedChar, keyCode);
     }

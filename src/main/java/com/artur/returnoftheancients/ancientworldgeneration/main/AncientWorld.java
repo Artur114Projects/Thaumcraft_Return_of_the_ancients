@@ -19,15 +19,15 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.TestOnly;
 
-import java.util.LinkedList;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class AncientWorld {
     private static boolean isLoad = false;
-    private static final int buildCount = 4;
+    private static final int buildCount = 1;
     private static final LinkedList<IBuild> build = new LinkedList<>();
     private static final LinkedList<AncientEntry> ANCIENT_ENTRIES = new LinkedList<>();
     @TestOnly
@@ -55,7 +55,7 @@ public class AncientWorld {
         newAncientEntrySolo(player);
     }
 
-    public static void load(MinecraftServer server) {
+    public static void load() {
         if (!isLoad) {
             if (TRAConfigs.Any.debugMode) System.out.println("Load from NBT start!");
             if (WorldData.get().saveData.hasKey("AncientWorldPak")) {
@@ -74,7 +74,7 @@ public class AncientWorld {
                     }
 
                     if (!compound.getBoolean("IsTeam")) {
-                        ANCIENT_ENTRIES.add(new AncientEntrySolo(compound, server));
+                        ANCIENT_ENTRIES.add(new AncientEntrySolo(compound));
                     } else {
 
                     }
@@ -82,6 +82,19 @@ public class AncientWorld {
             }
             isLoad = true;
         }
+    }
+
+    @TestOnly
+    public static void reload() {
+        ANCIENT_ENTRIES.clear();
+        isLoad = false;
+        load();
+    }
+
+    @TestOnly
+    public static void unload() {
+        isLoad = false;
+        ANCIENT_ENTRIES.clear();
     }
 
     private static void newAncientEntrySolo(EntityPlayerMP player) {
@@ -97,7 +110,9 @@ public class AncientWorld {
     }
 
     public static void playerJoinBuss(EntityPlayerMP player) {
-
+        for (AncientEntry entry : ANCIENT_ENTRIES) {
+            if (entry.wakeUp(player)) break;
+        }
     }
 
 
@@ -121,6 +136,11 @@ public class AncientWorld {
         event.setCanceled(true);
     }
 
+    public static void interrupt(EntityPlayerMP player) {
+        for (AncientEntry entry : ANCIENT_ENTRIES) {
+            if (entry.interrupt(player.getUniqueID())) break;
+        }
+    }
 
     private static int foundFreePos() {
         if (ANCIENT_ENTRIES.isEmpty()) return 1;
@@ -156,26 +176,31 @@ public class AncientWorld {
             nbt.setTag("Entry:" + i, ANCIENT_ENTRIES.get(i).writeToNBT());
         }
     }
+
     private static byte t = 0;
+
     @SubscribeEvent
     public static void Tick(TickEvent.WorldTickEvent e) {
         if (e.world.provider.getDimension() == ancient_world_dim_id) {
             int bc = buildCount;
-            for (IBuild entry : build) {
-                if (!entry.isBuild()) {
-                    if (bc > 0) {
-                        entry.build(e.world);
-                        bc--;
+            if (!build.isEmpty()) {
+                CopyOnWriteArrayList<IBuild> buildCopy = new CopyOnWriteArrayList<>(build);
+                for (IBuild entry : buildCopy) {
+                    if (!entry.isBuild() && !entry.isRequestToDelete()) {
+                        if (bc > 0) {
+                            entry.build(e.world);
+                            bc--;
+                        }
+                    } else {
+                        build.remove(entry);
                     }
-                } else {
-                    build.remove(entry);
                 }
             }
             if (t >= 10) {
                 t = 0;
                 boolean isSave = false;
-                for (int i = 0; i < ANCIENT_ENTRIES.size(); i++) {
-                    AncientEntry entry = ANCIENT_ENTRIES.get(i);
+                CopyOnWriteArrayList<AncientEntry> ancientEntriesCopy = new CopyOnWriteArrayList<>(ANCIENT_ENTRIES);
+                for (AncientEntry entry : ancientEntriesCopy) {
                     entry.update(e.world);
                     if (entry.isRequestToSave()) {
                         if (!isSave) {
@@ -194,6 +219,7 @@ public class AncientWorld {
             }
             t++;
         }
+        if (ANCIENT_ENTRIES.isEmpty()) build.clear();
     }
 
     public static void onBossTriggerBlockAdd(int pos, BlockPos bossPos) {

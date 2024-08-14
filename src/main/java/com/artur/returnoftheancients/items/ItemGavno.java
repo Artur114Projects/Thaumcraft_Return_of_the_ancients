@@ -43,6 +43,12 @@ public class ItemGavno extends BaseItem{
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setString("playSound", InitSounds.RUI_DEAD.NAME);
 			MainR.NETWORK.sendTo(new ClientPacketMisc(nbt),(EntityPlayerMP)  player);
+			if (player.isSneaking()) {
+				AncientWorld.reload();
+			} else {
+				AncientWorld.unload();
+				player.sendMessage(new TextComponentString("UNLOAD"));
+			}
 		}
 		FMLClientHandler.instance().displayGuiScreen(player, new SkalaGui());
 		if (!worldIn.isRemote) {

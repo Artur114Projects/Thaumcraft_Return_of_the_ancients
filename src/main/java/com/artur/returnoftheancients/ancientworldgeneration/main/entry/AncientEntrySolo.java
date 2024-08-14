@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class AncientEntrySolo extends AncientEntry {
-    private final EntityPlayerMP player;
+    private EntityPlayerMP player;
     private final UUID playerId;
     public AncientEntrySolo(EntityPlayerMP player, int pos) {
         super(pos);
@@ -24,29 +24,13 @@ public class AncientEntrySolo extends AncientEntry {
         this.startGen();
     }
 
-    public AncientEntrySolo(NBTTagCompound nbt, MinecraftServer server) {
+    public AncientEntrySolo(NBTTagCompound nbt) {
         super(nbt);
         if (!nbt.hasKey("IsTeam")) error("AncientEntrySolo.class, transferred incorrect NBTTag EC:-1");
         if (nbt.getBoolean("IsTeam")) error("AncientEntrySolo.class, transferred incorrect NBTTag EC:0");
-
         if (!nbt.hasKey("playerMost") || !nbt.hasKey("playerLeast")) error("AncientEntrySolo.class, transferred incorrect NBTTag EC:1");
-        Entity entity = server.getEntityFromUuid(Objects.requireNonNull(nbt.getUniqueId("player")));
-        if (entity instanceof EntityPlayerMP) {
-            player = (EntityPlayerMP) entity;
-            playerId = nbt.getUniqueId("player");
-        } else if (entity == null) {
-            playerId = nbt.getUniqueId("player");
-            player = null;
-            if (TRAConfigs.Any.debugMode) System.out.println("AncientEntrySolo pos:" + getPos() + " isSleep");
-            isSleep = true;
-        } else {
-            System.out.println("Entity NOT instanceof EntityPlayerMP, deleting");
-            player = null;
-            playerId = null;
-            requestToDelete();
-        }
-
-        if (!isSleep && !isBuild) startGen();
+        playerId = nbt.getUniqueId("player");
+        isSleep = true;
     }
 
     @Override
@@ -62,6 +46,16 @@ public class AncientEntrySolo extends AncientEntry {
     }
 
     @Override
+    public boolean interrupt(UUID id) {
+        if (id.equals(playerId)) {
+            requestToDelete();
+            if (TRAConfigs.Any.debugMode) System.out.println("build is interrupt!");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public NBTTagCompound writeToNBT() {
         if (!isRequestToDelete()) {
             NBTTagCompound nbt = super.writeToNBT();
@@ -70,6 +64,18 @@ public class AncientEntrySolo extends AncientEntry {
             return nbt;
         }
         return new NBTTagCompound();
+    }
+
+    @Override
+    public boolean wakeUp(EntityPlayerMP player) {
+        if (player.getUniqueID().equals(playerId)) {
+            this.player = player;
+            isSleep = false;
+            if (!isBuild) startGen();
+            if (TRAConfigs.Any.debugMode) System.out.println("AncientEntrySolo pos:" + getPos() + " is wake up!");
+            return true;
+        }
+        return false;
     }
 
     @Override

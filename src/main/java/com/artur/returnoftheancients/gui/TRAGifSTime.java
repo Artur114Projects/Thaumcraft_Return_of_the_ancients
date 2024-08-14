@@ -4,8 +4,9 @@ import net.minecraft.client.Minecraft;
 
 public class TRAGifSTime extends TRAGif {
     protected long lastTime = 0;
-    public TRAGifSTime(String fileNoIndexName, int gifSize, int speed, Minecraft mc) {
-        super(fileNoIndexName, gifSize, speed, mc);
+    public TRAGifSTime(String fileNoIndexName, int gifSize, int fps, Minecraft mc) {
+        super(fileNoIndexName, gifSize, fps, mc);
+        this.speed = (1000 / fps);
     }
 
     @Override

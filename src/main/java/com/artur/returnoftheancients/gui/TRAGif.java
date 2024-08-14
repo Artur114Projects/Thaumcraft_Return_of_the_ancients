@@ -10,7 +10,7 @@ public class TRAGif {
     protected boolean isFirstDraw;
     protected int drawIndex;
     protected int time;
-    protected final int speed;
+    protected int speed;
     protected final ResourceLocation[] gif;
 
     public TRAGif(String fileNoIndexName, int gifSize, int speed, Minecraft mc) {

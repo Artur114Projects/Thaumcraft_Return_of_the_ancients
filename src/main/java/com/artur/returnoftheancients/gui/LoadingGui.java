@@ -19,7 +19,7 @@ import java.io.IOException;
 
 
 public class LoadingGui extends GuiScreen {
-    public static TRAGifSTime gif;
+    private TRAGifSTime gif;
     private static byte PHASE = -1;
     private static byte percentages = 0;
     private final int Red = 16711680;
@@ -38,6 +38,7 @@ public class LoadingGui extends GuiScreen {
 
 
     public LoadingGui() {
+        gif = new TRAGifSTime( Referense.MODID + ":textures/gui/gif/gen1v/gen_gif_v1-", 65, 20, mc);
         location = new ResourceLocation( Referense.MODID + ":textures/gui/loading_gui_background.png");
     }
 

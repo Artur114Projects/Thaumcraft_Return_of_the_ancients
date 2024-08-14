@@ -1,29 +1,21 @@
 package com.artur.returnoftheancients.gui;
 
 import com.artur.returnoftheancients.referense.Referense;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexBuffer;
-import net.minecraft.util.ObjectIntIdentityMap;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-import java.nio.FloatBuffer;
-
-import static org.lwjgl.opengl.GL11.*;
-
 public class SkalaGui extends GuiScreen {
 
-    private static TRAGifSTime gif;
+    private static GifSTime gif;
     private static ResourceLocation location;
 
     public SkalaGui() {
-        gif = new TRAGifSTime( Referense.MODID + ":textures/gui/gif/gen1v/gen_gif_v1-", 65, 20, mc);
+        gif = new GifSTime( Referense.MODID + ":textures/gui/gif/gen1v/gen_gif_v1-", 65, 20, mc);
         location = new ResourceLocation( Referense.MODID + ":textures/gui/skala.png");
     }
     float[] tc = new float[] {0,0, 1,0, 1,1, 0,1};

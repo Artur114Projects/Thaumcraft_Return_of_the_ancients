@@ -80,13 +80,13 @@ public class AncientEntrySolo extends AncientEntry {
 
     @Override
     public void update(World world) {
+        super.update(world);
         if (isSleep) {
             return;
         }
         if (isRequestToDelete()) {
             return;
         }
-        super.update(world);
         if (player.dimension != InitDimensions.ancient_world_dim_id) {
             requestToDelete();
         }

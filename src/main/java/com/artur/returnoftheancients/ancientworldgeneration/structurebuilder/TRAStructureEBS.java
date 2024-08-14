@@ -12,24 +12,29 @@ public class TRAStructureEBS extends TRAStructure {
 
     @Override
     public void gen(World world, int x, int y, int z) {
-        BlockPos pos = new BlockPos(x, y, z);
-        Chunk chunk = world.getChunkFromBlockCoords(pos);
-
-        int selectionIndex = pos.getY() >> 4;
-        int chunkX = chunk.getPos().getXStart();
-        int chunkZ = chunk.getPos().getZStart();
-        int selectionY = selectionIndex >> 4;
-
-        ExtendedBlockStorage ebs = chunk.getBlockStorageArray()[selectionIndex];
-
-        if (ebs == Chunk.NULL_BLOCK_STORAGE) {
-            ebs = new ExtendedBlockStorage(pos.getY() >> 4, true);
-        }
         for (BlockInfo block : blocks) {
-            ebs.set((pos.getX() + block.x) & 15, (pos.getY() + block.y) & 15, (pos.getZ() + block.z) & 15, block.state);
-        }
+            int chunkX = (block.x + x) >> 4;
+            int chunkZ = (block.z + z) >> 4;
+            Chunk chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
+            int storageIndex = (block.y + y) >> 4;
 
-        chunk.markDirty();
-        world.markBlockRangeForRenderUpdate(chunkX, selectionY, chunkZ, chunkX + 15, selectionY + 15, chunkZ + 15);
+            // Проверка границ массива
+            if (storageIndex < 0 || storageIndex >= chunk.getBlockStorageArray().length) {
+                continue;
+            }
+
+            ExtendedBlockStorage storage = chunk.getBlockStorageArray()[storageIndex];
+            if (storage == null) {
+                storage = new ExtendedBlockStorage(storageIndex << 4, false);
+                chunk.getBlockStorageArray()[storageIndex] = storage;
+            }
+
+            // Проверка границ блока в ExtendedBlockStorage
+            int localX = block.x & 15;
+            int localY = block.y & 15;
+            int localZ = block.z & 15;
+
+            storage.set(localX, localY, localZ, block.state);
+        }
     }
 }

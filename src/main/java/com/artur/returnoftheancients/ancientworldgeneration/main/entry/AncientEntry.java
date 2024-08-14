@@ -82,14 +82,18 @@ public abstract class AncientEntry implements IBuild, IALGS {
     }
 
     public void update(World world) {
-        if (delete) {
-            return;
-        }
         if (isFinal) {
+            finalTimer++;
             if (finalTimer >= 120) {
                 requestToDelete();
+                finalTimer = 0;
             }
-            finalTimer++;
+        }
+        if (isSleep) {
+            return;
+        }
+        if (delete) {
+            return;
         }
         if (!world.isRemote) {
             if (isBossDead) {
@@ -239,6 +243,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
     }
 
     protected void startGen() {
+        System.out.println("Generate ancient labyrinth start pos:" + pos);
         onStart();
         AncientWorld.build(this);
         this.map = AncientLabyrinthMap.genStructuresMap();
@@ -275,7 +280,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                             settings.setRotation(Rotation.NONE);
                             buildPhase.please = false;
                             onReloadLightStart();
-                            System.out.println("Reload light");
+                            System.out.println("Reload light pos:" + pos);
                             buildPhase.reloadLight();
                             return;
                         }
@@ -347,7 +352,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                             buildPhase.clear = false;
                             genAncientEntryWay(world);
                             onPleaseStart();
-                            System.out.println("Generate structures");
+                            System.out.println("Generate structures pos:" + pos);
                             buildPhase.genStructuresInWorld();
                             return;
                         }
@@ -368,14 +373,14 @@ public abstract class AncientEntry implements IBuild, IALGS {
                             buildPhase.ytl = -128;
                             buildPhase.xtl = -128;
                             buildPhase.reloadLight = false;
-                            System.out.println("Generate ancient labyrinth finish");
+                            System.out.println("Generate ancient labyrinth finish pos:" + pos);
                             isBuild = true;
                             requestToSave();
                             onFinish();
                             return;
                         }
-                        int x = buildPhase.xtc + (10000 * pos);
-                        world.checkLight(buildPhase.pos.setPos(x, 84, buildPhase.ytl));
+                        int x = buildPhase.xtl + (10000 * pos);
+                        world.checkLight(new BlockPos(x, 84, buildPhase.ytl));
                         buildPhase.xtl++;
                     }
                 }

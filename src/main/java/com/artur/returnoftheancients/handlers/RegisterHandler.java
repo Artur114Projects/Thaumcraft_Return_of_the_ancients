@@ -103,12 +103,14 @@ public class RegisterHandler {
 
 		CustomGenStructure.put("ancient_developer_platform");
 		CustomGenStructure.put("ancient_boss");
-		CustomGenStructure.put("ancient_exit");
 		CustomGenStructure.put("ancient_entry_way");
 		CustomGenStructure.put("ancient_door");
 		CustomGenStructure.put("ancient_door1");
-		CustomGenStructure.put("ancient_area");
 		CustomGenStructure.put("ancient_border_cap");
+
+		CustomGenStructure.setUseAir();
+		CustomGenStructure.put("ancient_area");
+		CustomGenStructure.put("ancient_exit");
 		CustomGenStructure.put("air_cube");
 		CustomGenStructure.register();
 	}

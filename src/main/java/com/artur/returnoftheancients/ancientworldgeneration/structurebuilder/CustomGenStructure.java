@@ -10,10 +10,13 @@ import java.util.Map;
 public class CustomGenStructure {
     private static final List<String> rawStructures = new ArrayList<>();
     private static final Map<String, ITRAStructure> structures = new HashMap<>();
+    private static final List<String> useAirList = new ArrayList<>();
     private static boolean isUseEBS = false;
     private static boolean isUseBinary = false;
+    private static boolean isUseAir = false;
 
     public static void put(String name) {
+        if (isUseAir) useAirList.add(name);
         rawStructures.add(name);
     }
 
@@ -25,28 +28,45 @@ public class CustomGenStructure {
         isUseBinary = true;
     }
 
+    public static void setUseAir() {
+        isUseAir = true;
+    }
 
     public static void register() {
         if (isUseBinary) {
             for (String s : rawStructures) {
-                structures.put(s, new TRAStructureBinary(s));
+                boolean isAir = false;
+                for (String a : useAirList) {
+                    if (a.equals(s)) {
+                        structures.put(s, new TRAStructureBinary(s, true));
+                        isAir = true;
+                        break;
+                    }
+                }
+                if (isAir) continue;
+                structures.put(s, new TRAStructureBinary(s, false));
             }
-            isUseBinary = false;
-            rawStructures.clear();
+            postProsesRegister();
             return;
         }
         if (isUseEBS) {
             for (String s : rawStructures) {
                 structures.put(s, new TRAStructureEBS(s));
             }
-            isUseEBS = false;
-            rawStructures.clear();
+            postProsesRegister();
             return;
         }
 
         for (String s : rawStructures) {
             structures.put(s, new TRAStructure(s));
         }
+        postProsesRegister();
+    }
+
+    private static void postProsesRegister() {
+        isUseAir = false;
+        isUseEBS = false;
+        isUseBinary = false;
         rawStructures.clear();
     }
 

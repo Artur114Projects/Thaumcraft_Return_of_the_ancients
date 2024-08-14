@@ -1,25 +1,19 @@
 package com.artur.returnoftheancients.gui;
 
 import com.artur.returnoftheancients.main.MainR;
-import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.network.ServerPacketTpToHome;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import java.io.IOException;
 
 
 public class LoadingGui extends GuiScreen {
-    private TRAGifSTime gif;
+    private GifSTime gif;
     private static byte PHASE = -1;
     private static byte percentages = 0;
     private final int Red = 16711680;
@@ -38,7 +32,7 @@ public class LoadingGui extends GuiScreen {
 
 
     public LoadingGui() {
-        gif = new TRAGifSTime( Referense.MODID + ":textures/gui/gif/gen1v/gen_gif_v1-", 65, 20, mc);
+        gif = new GifSTime( Referense.MODID + ":textures/gui/gif/gen2v/gen_gif_v2-", 18, 20, mc);
         location = new ResourceLocation( Referense.MODID + ":textures/gui/loading_gui_background.png");
     }
 

@@ -23,7 +23,7 @@ public class TRAStructureBinary implements ITRAStructure {
     protected final int[] blocks;
     protected final IBlockState[] palette;
 
-    public TRAStructureBinary(String structureName) {
+    public TRAStructureBinary(String structureName, boolean isUseAir) {
         NBTTagCompound structureNBT = readStructureAsName(structureName);
         NBTTagList palette = structureNBT.getTagList("palette", 10);
         NBTTagList blocksNBT = structureNBT.getTagList("blocks", 10);
@@ -43,7 +43,7 @@ public class TRAStructureBinary implements ITRAStructure {
             NBTTagCompound compound = blocksNBT.getCompoundTagAt(i);
             NBTTagList pos = compound.getTagList("pos", 3);
             int state = compound.getInteger("state");
-            if (state != air || structureName.equals("air_cube")) {
+            if (state != air || isUseAir) {
                 rawBlocks.add(packBytes((byte) pos.getIntAt(0), (byte) pos.getIntAt(1), (byte) pos.getIntAt(2), (byte) state));
             }
         }

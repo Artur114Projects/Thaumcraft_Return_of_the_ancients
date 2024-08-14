@@ -1,7 +1,9 @@
 package com.artur.returnoftheancients.ancientworldgeneration.util;
 
+import com.artur.returnoftheancients.items.ItemSoulBinder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -9,7 +11,13 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import java.util.*;
 
 public class Team {
-    private final HashMap<UUID, EntityPlayerMP> players = new HashMap<>();;
+    private final HashMap<UUID, EntityPlayerMP> players = new HashMap<>();
+    public Team(ItemStack stack) {
+        if (stack.getItem() instanceof ItemSoulBinder) {
+
+        }
+    }
+
     public Team(List<EntityPlayerMP> players) {
         for (EntityPlayerMP playerMP : players) {
             this.players.put(playerMP.getUniqueID(), playerMP);

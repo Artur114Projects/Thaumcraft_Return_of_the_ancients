@@ -15,6 +15,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class AncientEntrySolo extends AncientEntry {
+
     private EntityPlayerMP player;
     private final UUID playerId;
     public AncientEntrySolo(EntityPlayerMP player, int pos) {
@@ -46,6 +47,11 @@ public class AncientEntrySolo extends AncientEntry {
     }
 
     @Override
+    protected void onRequestToDelete() {
+
+    }
+
+    @Override
     public boolean interrupt(UUID id) {
         if (id.equals(playerId)) {
             requestToDelete();
@@ -68,12 +74,12 @@ public class AncientEntrySolo extends AncientEntry {
 
     @Override
     public boolean wakeUp(EntityPlayerMP player) {
+        if (!isSleep) {
+            return false;
+        }
         if (player.getUniqueID().equals(playerId)) {
             this.player = player;
-            isSleep = false;
-            if (!isBuild) startGen();
-            if (TRAConfigs.Any.debugMode) System.out.println("AncientEntrySolo pos:" + getPos() + " is wake up!");
-            return true;
+            return super.wakeUp(player);
         }
         return false;
     }
@@ -81,6 +87,9 @@ public class AncientEntrySolo extends AncientEntry {
     @Override
     public void update(World world) {
         super.update(world);
+        if (player == null) {
+            isSleep = true;
+        }
         if (isSleep) {
             return;
         }
@@ -94,14 +103,14 @@ public class AncientEntrySolo extends AncientEntry {
 
     @Override
     protected void onBossTiger(EntityPlayer player, World world) {
-        EntityLiving boss = getRandomBoss(world, bossPos);
+        Entity boss = getRandomBoss(world, bossPos);
         bossUUID = boss.getUniqueID();
         world.spawnEntity(boss);
         pleaseBossDoors(world, bossPos);
     }
 
     @Override
-    public void onPlease(int x, int y) {
+    public void onGen(int x, int y) {
         HandlerR.injectPercentagesOnClient(player, x, y);
     }
 
@@ -118,7 +127,7 @@ public class AncientEntrySolo extends AncientEntry {
     }
 
     @Override
-    public void onPleaseStart() {
+    public void onGenStart() {
         HandlerR.injectPercentagesOnClient(player, 0, 0);
         HandlerR.injectPhaseOnClient(player, (byte) 2);
     }

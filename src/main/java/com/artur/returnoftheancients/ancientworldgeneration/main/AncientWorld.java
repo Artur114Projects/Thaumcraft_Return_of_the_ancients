@@ -2,12 +2,16 @@ package com.artur.returnoftheancients.ancientworldgeneration.main;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntry;
 import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntrySolo;
+import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntryTeam;
+import com.artur.returnoftheancients.ancientworldgeneration.util.Team;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.IBuild;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
+import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -49,9 +53,22 @@ public class AncientWorld {
 
 
     public static void tpToAncientWorld(EntityPlayerMP player) {
-        FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 0, 244, 0);
         player.setHealth(20);
         player.clearActivePotions();
+        ItemStack stack = HandlerR.getSoulBinder(player);
+        if (stack != null) {
+            if (HandlerR.isSoulBinderFull(stack)) {
+                Team team = new Team(stack, player.world);
+                if (team.getAll().length > 1) {
+                    team.setToAll((playerSet -> FreeTeleporter.teleportToDimension(playerSet, ancient_world_dim_id, 0, 244, 0)));
+                    newAncientEntryTeam(team);
+                    return;
+                } else {
+                    team.delete();
+                }
+            }
+        }
+        FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 0, 244, 0);
         newAncientEntrySolo(player);
     }
 
@@ -76,7 +93,7 @@ public class AncientWorld {
                     if (!compound.getBoolean("IsTeam")) {
                         ANCIENT_ENTRIES.add(new AncientEntrySolo(compound));
                     } else {
-
+                        ANCIENT_ENTRIES.add(new AncientEntryTeam(compound));
                     }
                 }
             }
@@ -99,6 +116,11 @@ public class AncientWorld {
 
     private static void newAncientEntrySolo(EntityPlayerMP player) {
         ANCIENT_ENTRIES.add(new AncientEntrySolo(player, foundFreePos()));
+        save();
+    }
+
+    private static void newAncientEntryTeam(Team team) {
+        ANCIENT_ENTRIES.add(new AncientEntryTeam(foundFreePos(), team));
         save();
     }
 
@@ -181,43 +203,46 @@ public class AncientWorld {
 
     @SubscribeEvent
     public static void Tick(TickEvent.WorldTickEvent e) {
-        if (e.world.provider.getDimension() == ancient_world_dim_id) {
-            int bc = buildCount;
-            if (!build.isEmpty()) {
-                CopyOnWriteArrayList<IBuild> buildCopy = new CopyOnWriteArrayList<>(build);
-                for (IBuild entry : buildCopy) {
-                    if (!entry.isBuild() && !entry.isRequestToDelete()) {
-                        if (bc > 0) {
-                            entry.build(e.world);
-                            bc--;
-                        }
-                    } else {
-                        build.remove(entry);
-                    }
-                }
-            }
-            if (t >= 10) {
-                t = 0;
-                boolean isSave = false;
-                CopyOnWriteArrayList<AncientEntry> ancientEntriesCopy = new CopyOnWriteArrayList<>(ANCIENT_ENTRIES);
-                for (AncientEntry entry : ancientEntriesCopy) {
-                    entry.update(e.world);
-                    if (entry.isRequestToSave()) {
-                        if (!isSave) {
-                            save();
-                            isSave = true;
-                            entry.saveFinish();
+        if (!e.world.isRemote) {
+            if (e.world.provider.getDimension() == ancient_world_dim_id) {
+                int bc = buildCount;
+                if (!build.isEmpty()) {
+                    CopyOnWriteArrayList<IBuild> buildCopy = new CopyOnWriteArrayList<>(build);
+                    for (IBuild entry : buildCopy) {
+                        if (!entry.isBuild() && !entry.isRequestToDelete()) {
+                            if (bc > 0) {
+                                entry.build(e.world);
+                                bc--;
+                            }
                         } else {
-                            entry.saveFinish();
+                            build.remove(entry);
                         }
                     }
-                    if (entry.isRequestToDelete()) {
-                        ANCIENT_ENTRIES.remove(entry);
-                        save();
+                }
+                if (t >= 10) {
+                    t = 0;
+                    Team.updateS();
+                    boolean isSave = false;
+                    CopyOnWriteArrayList<AncientEntry> ancientEntriesCopy = new CopyOnWriteArrayList<>(ANCIENT_ENTRIES);
+                    for (AncientEntry entry : ancientEntriesCopy) {
+                        entry.update(e.world);
+                        if (entry.isRequestToSave()) {
+                            if (!isSave) {
+                                save();
+                                isSave = true;
+                                entry.saveFinish();
+                            } else {
+                                entry.saveFinish();
+                            }
+                        }
+                        if (entry.isRequestToDelete()) {
+                            ANCIENT_ENTRIES.remove(entry);
+                            save();
+                        }
                     }
                 }
+                t++;
             }
-            t++;
         }
         if (ANCIENT_ENTRIES.isEmpty()) build.clear();
     }

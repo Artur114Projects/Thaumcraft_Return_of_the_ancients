@@ -13,6 +13,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemCompass;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
@@ -66,9 +67,12 @@ public class ServerEventsHandler {
     @SubscribeEvent
     public static void WorldEventLoad(WorldEvent.Load e) {
         if (!e.getWorld().isRemote) {
+            WorldData worldData = WorldData.get();
+            if (!worldData.saveData.hasKey("version")) {
+                worldData.saveData.setString("version", Referense.VERSION);
+            }
             if (e.getWorld().provider.getDimension() == 0) {
                 if (TRAConfigs.PortalSettings.isGen) {
-                    WorldData worldData = WorldData.get();
                     if (TRAConfigs.PortalSettings.toBedrock) {
                         if (!worldData.saveData.getBoolean(IALGS.isAncientPortalGenerateKey) && e.getWorld().provider.getDimension() == 0) {
                             if (!worldData.saveData.hasKey(IALGS.AncientPortalYPosKey)) {

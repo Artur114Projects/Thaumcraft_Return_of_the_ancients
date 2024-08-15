@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.handlers;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntry;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.TRAStructure;
+import com.artur.returnoftheancients.items.ItemSoulBinder;
 import com.artur.returnoftheancients.misc.SoundTRA;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
@@ -29,7 +30,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class HandlerR {
-
+    private static ArrayList<String> ID = new ArrayList<>();
     public static boolean isTriggered = false;
 
     public static int genRandomIntRange(int min, int max) {
@@ -74,7 +75,7 @@ public class HandlerR {
     }
 
     public static ArrayList<String> isPlayerUseUnresolvedItems(EntityPlayer player) {
-        ArrayList<String> ID = new ArrayList<>();
+        ID.clear();
         String[] modId = TRAConfigs.PortalSettings.modId;
         boolean is = true;
 
@@ -100,7 +101,6 @@ public class HandlerR {
                 ID.add(itemStack.getItem().getUnlocalizedName());
             }
         }
-
         return ID;
     }
 
@@ -291,50 +291,41 @@ public class HandlerR {
         MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
     }
 
-    public static TRAStructure getTRAStructureFromRL(String structureName) {
-        return null;
-    }
-    private static NBTTagCompound readStructureAsName(String structureName) {
-        ResourceLocation location = new ResourceLocation(Referense.MODID, structureName);
-        String s = location.getResourceDomain();
-        String s1 = location.getResourcePath();
-        InputStream inputstream = MinecraftServer.class.getResourceAsStream("/assets/" + s + "/structures/" + s1 + ".nbt");
-        try {
-            assert inputstream != null;
-            return CompressedStreamTools.readCompressed(inputstream);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static int foundFreePos(int[] array) {
-        boolean isFound;
-        int pos = 0;
-        while (true) {
-            isFound = true;
-            for (Integer i : array) {
-                if (i == pos) {
-                    isFound = false;
-                    break;
-                }
-            }
-            if (isFound) {
-                return pos;
-            }
-            pos++;
-        }
-    }
-
     public static List<String> uuidKeySetToList(Set<String> set) {
         String[] keys = set.toArray(new String[0]);
         List<String> keysF = new ArrayList<>();
         for (String key : keys) {
             key = key.replaceAll("Most", "");
             key = key.replaceAll("Least", "");
-            keysF.add(TextFormatting.AQUA + key);
+            keysF.add(key);
         }
         keysF = keysF.stream().distinct().collect(Collectors.toList());
         return keysF;
     }
 
+    public static List<String> uuidKeySetToList(Set<String> set, TextFormatting textFormatting) {
+        String[] keys = set.toArray(new String[0]);
+        List<String> keysF = new ArrayList<>();
+        for (String key : keys) {
+            key = key.replaceAll("Most", "");
+            key = key.replaceAll("Least", "");
+            keysF.add(textFormatting + key);
+        }
+        keysF = keysF.stream().distinct().collect(Collectors.toList());
+        return keysF;
+    }
+
+    public static ItemStack getSoulBinder(EntityPlayerMP player) {
+        for (ItemStack stack : player.inventory.mainInventory) {
+            if (stack.getItem() instanceof ItemSoulBinder) return stack;
+        }
+        return null;
+    }
+
+    public static boolean isSoulBinderFull(ItemStack stack) {
+        if (!(stack.getItem() instanceof ItemSoulBinder)) {
+            return false;
+        }
+        return stack.getOrCreateSubCompound(Referense.MODID).getBoolean("isFull");
+    }
 }

@@ -32,7 +32,7 @@ public class LoadingGui extends GuiScreen {
 
 
     public LoadingGui() {
-        gif = new GifSTime( Referense.MODID + ":textures/gui/gif/gen2v/gen_gif_v2-", 18, 20, mc);
+        gif = new GifSTime( Referense.MODID + ":textures/gui/gif/gen2v/gen_gif_v2-", 18, 15, mc);
         location = new ResourceLocation( Referense.MODID + ":textures/gui/loading_gui_background.png");
     }
 

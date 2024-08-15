@@ -7,11 +7,11 @@ public interface IBuild {
     boolean isBuild();
     boolean isRequestToDelete();
 
-    void onPlease(int x, int y);
+    void onGen(int x, int y);
     void onClear(int x, int y);
 
     void onStart();
-    void onPleaseStart();
+    void onGenStart();
     void onClearStart();
     void onReloadLightStart();
     void onFinish();

@@ -37,7 +37,7 @@ public class ItemSoulBinder extends BaseItem {
             @Override
             @SideOnly(Side.CLIENT)
             public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-                if (entityIn == null) {
+                if (entityIn == null && !stack.isOnItemFrame()) {
                     return 0;
                 }
                 return !stack.getOrCreateSubCompound(Referense.MODID).getBoolean("isFull") ? 1 : 0;
@@ -73,7 +73,7 @@ public class ItemSoulBinder extends BaseItem {
         if (nbt.getBoolean("isFull")) {
             NBTTagCompound list = nbt.getCompoundTag("players");
             tooltip.add(TextFormatting.YELLOW + "Players:");
-            tooltip.addAll(HandlerR.uuidKeySetToList(list.getKeySet()));
+            tooltip.addAll(HandlerR.uuidKeySetToList(list.getKeySet(), TextFormatting.AQUA));
         } else {
             tooltip.add(TextFormatting.YELLOW + "RMB - bind.");
             tooltip.add(TextFormatting.YELLOW + "Shift + RMB - unbind.");

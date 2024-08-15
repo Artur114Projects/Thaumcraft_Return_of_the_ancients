@@ -8,7 +8,7 @@ import java.util.Random;
 
 import static com.artur.returnoftheancients.generation.generators.AncientLabyrinthGeneratorHandler.getVoidStructures;
 
-public class AncientLabyrinthMap implements IALGS {
+public class AncientEntryMap implements IALGS {
 
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES = new byte[17][17];
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE = new byte[17][17];

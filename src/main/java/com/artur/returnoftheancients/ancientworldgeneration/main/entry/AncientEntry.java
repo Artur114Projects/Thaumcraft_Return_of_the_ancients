@@ -1,16 +1,20 @@
 package com.artur.returnoftheancients.ancientworldgeneration.main.entry;
 
-import com.artur.returnoftheancients.ancientworldgeneration.genmap.AncientLabyrinthMap;
+import com.artur.returnoftheancients.ancientworldgeneration.genmap.AncientEntryMap;
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.ancientworldgeneration.util.BuildPhase;
 import com.artur.returnoftheancients.ancientworldgeneration.util.StructureMap;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.IBuild;
 import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -20,8 +24,8 @@ import thaumcraft.common.entities.monster.boss.EntityCultistPortalGreater;
 import thaumcraft.common.entities.monster.boss.EntityEldritchGolem;
 import thaumcraft.common.entities.monster.boss.EntityEldritchWarden;
 
+import java.util.Random;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import static com.artur.returnoftheancients.misc.TRAConfigs.AncientWorldSettings;
 import static com.artur.returnoftheancients.utils.interfaces.IStructure.settings;
@@ -100,6 +104,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                 if (!world.isAnyPlayerWithinRangeAt(bossPos.getX(), bossPos.getY(), bossPos.getZ(), 4)) {
                     CustomGenStructure.gen(world, bossPos.getX() - 3, bossPos.getY() - 30, bossPos.getZ() - 2, "ancient_exit");
                     isFinal = true;
+                    requestToSave();
                 }
             }
             if (!bossPos.equals(nullPos) && !isBossSpawn) {
@@ -114,9 +119,11 @@ public abstract class AncientEntry implements IBuild, IALGS {
 
     protected abstract void onBossTiger(EntityPlayer player, World world);
     public abstract boolean dead(UUID id);
+    protected abstract void onRequestToDelete();
     public boolean deadBoss(UUID id) {
         if (!bossUUID.equals(nullUUId) && bossUUID.equals(id)) {
             isBossDead = true;
+            requestToSave();
             return true;
         }
         return false;
@@ -171,23 +178,16 @@ public abstract class AncientEntry implements IBuild, IALGS {
         return false;
     }
 
-    protected EntityLiving getRandomBoss(World world, BlockPos pos) {
-        byte q = (byte) HandlerR.genRandomIntRange(0, 2);
+    protected Entity getRandomBoss(World world, BlockPos pos) {
+        byte q = (byte) new Random().nextInt(4);
         switch (q) {
             case 0:
-                EntityCultistPortalGreater p = new EntityCultistPortalGreater(world);
-                p.setPositionAndUpdate(pos.getX(), pos.getY() + 2, pos.getZ() + 1);
-                return p;
+                return ItemMonsterPlacer.spawnCreature(world, EntityList.getKey(EntityCultistPortalGreater.class), pos.getX(), pos.getY() + 2, pos.getZ() + 1);
             case 1:
-                EntityEldritchGolem g = new EntityEldritchGolem(world);
-                g.setPositionAndUpdate(pos.getX(), pos.getY() + 2, pos.getZ() + 1);
-                return g;
-            case 2:
-                EntityEldritchWarden w = new EntityEldritchWarden(world);
-                w.setPositionAndUpdate(pos.getX(), pos.getY() + 2, pos.getZ() + 1);
-                return w;
+                return ItemMonsterPlacer.spawnCreature(world, EntityList.getKey(EntityEldritchGolem.class), pos.getX(), pos.getY() + 2, pos.getZ() + 1);
+            default:
+                return ItemMonsterPlacer.spawnCreature(world, EntityList.getKey(EntityEldritchWarden.class), pos.getX(), pos.getY() + 2, pos.getZ() + 1);
         }
-        return null;
     }
 
     protected NBTTagCompound blockPosToNBT(BlockPos pos) {
@@ -215,7 +215,10 @@ public abstract class AncientEntry implements IBuild, IALGS {
     }
     public boolean wakeUp(EntityPlayerMP player) {
         loadCount = 0;
-        return false;
+        isSleep = false;
+        if (!isBuild) startGen();
+        if (TRAConfigs.Any.debugMode) System.out.println("AncientEntry pos:" + getPos() + " is wake up!");
+        return true;
     };
 
     protected void requestToDelete() {
@@ -243,10 +246,10 @@ public abstract class AncientEntry implements IBuild, IALGS {
     }
 
     protected void startGen() {
-        System.out.println("Generate ancient labyrinth start pos:" + pos);
+        System.out.println("Generate ancient entry start pos:" + pos);
         onStart();
         AncientWorld.build(this);
-        this.map = AncientLabyrinthMap.genStructuresMap();
+        this.map = AncientEntryMap.genStructuresMap();
         isBuild = false;
         buildPhase.clearArea();
     }
@@ -272,7 +275,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                         if (buildPhase.xtp == map.SIZE) {
                             buildPhase.ytp++;
                             buildPhase.xtp = 0;
-                            onPlease(buildPhase.xtp, buildPhase.ytp);
+                            onGen(buildPhase.xtp, buildPhase.ytp);
                         }
                         if (buildPhase.ytp == map.SIZE) {
                             buildPhase.ytp = 0;
@@ -351,7 +354,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                             buildPhase.xtc = 0;
                             buildPhase.clear = false;
                             genAncientEntryWay(world);
-                            onPleaseStart();
+                            onGenStart();
                             System.out.println("Generate structures pos:" + pos);
                             buildPhase.genStructuresInWorld();
                             return;
@@ -373,7 +376,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                             buildPhase.ytl = -128;
                             buildPhase.xtl = -128;
                             buildPhase.reloadLight = false;
-                            System.out.println("Generate ancient labyrinth finish pos:" + pos);
+                            System.out.println("Generate ancient entry finish pos:" + pos);
                             isBuild = true;
                             requestToSave();
                             onFinish();

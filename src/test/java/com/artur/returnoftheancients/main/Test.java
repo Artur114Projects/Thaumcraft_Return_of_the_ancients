@@ -4,6 +4,7 @@ import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.Cus
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.Mod;
@@ -12,12 +13,22 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class Test { //
-    public static void main(String[] args) {
-        System.out.println((int) 10240 / 10000);
+    public static void main(String[] args) throws InterruptedException {
+        System.out.println("start!");
+        for (long i = 0; i != 1000000L; i++) {
+            list.add(new UUID(i, -i));
+        }
+        System.out.println("sleep");
+        while (true) {
+            TimeUnit.SECONDS.sleep(1);
+        }
     }
+    private static List<UUID> list = new ArrayList<>();
 
     public static void startTest(EntityPlayer player) {
         startTest = true;

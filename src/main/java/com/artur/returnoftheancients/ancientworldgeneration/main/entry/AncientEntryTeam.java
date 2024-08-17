@@ -80,6 +80,11 @@ public class AncientEntryTeam extends AncientEntry {
     }
 
     @Override
+    protected void onBossDead() {
+        team.setToAll(player -> player.addItemStackToInventory(getPrimordialPearl()));
+    }
+
+    @Override
     public boolean interrupt(UUID id) {
         if (team.contains(id)) {
             team.kill(id);

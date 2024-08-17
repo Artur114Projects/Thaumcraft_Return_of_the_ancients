@@ -38,5 +38,15 @@
         "volume": 2
       }
     ]
+  },
+  "fire_trap_sound": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "returnoftheancients:fire_trap_sound",
+        "stream": true,
+        "volume": 16
+      }
+    ]
   }
 }

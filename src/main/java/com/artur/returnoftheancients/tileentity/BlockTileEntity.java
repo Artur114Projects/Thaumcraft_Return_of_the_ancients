@@ -17,7 +17,6 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
 
     public BlockTileEntity(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
-
         InitTileEntity.TILE_ENTITIES.add(this);
     }
 

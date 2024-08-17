@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.handlers;
 
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.client.TrapParticleFlame;
 import com.artur.returnoftheancients.commads.*;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitItems;
@@ -14,7 +15,11 @@ import com.artur.returnoftheancients.tileentity.BlockTileEntity;
 import com.artur.returnoftheancients.utils.interfaces.IHasModel;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.IParticleFactory;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.item.Item;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -22,6 +27,9 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 @EventBusSubscriber
 public class RegisterHandler {
@@ -38,10 +46,10 @@ public class RegisterHandler {
 	}
 
 	public static void registerTileEntity() {
-		for (Block block : InitTileEntity.TILE_ENTITIES) {
-			if (block instanceof BlockTileEntity) {
-				GameRegistry.registerTileEntity(((BlockTileEntity) block).getTileEntityClass(), block.getRegistryName().toString());
-			}
+		System.out.println(InitTileEntity.TILE_ENTITIES.size());
+		for (BlockTileEntity block : InitTileEntity.TILE_ENTITIES) {
+			GameRegistry.registerTileEntity(block.getTileEntityClass(), block.getRegistryName().toString());
+			System.out.println(block.getRegistryName().toString());
 		}
 	}
 

@@ -15,11 +15,13 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemMonsterPlacer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import thaumcraft.api.items.ItemsTC;
 import thaumcraft.common.entities.monster.boss.EntityCultistPortalGreater;
 import thaumcraft.common.entities.monster.boss.EntityEldritchGolem;
 import thaumcraft.common.entities.monster.boss.EntityEldritchWarden;
@@ -35,6 +37,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
     protected static final BlockPos nullPos = new BlockPos(0, 0, 0);
     protected static final UUID nullUUId = new UUID(0, 0);
     private final BuildPhase buildPhase = new BuildPhase();
+    protected final Random random = new Random();
     protected BlockPos bossPos = new BlockPos(0 ,0, 0);
     protected UUID bossUUID = new UUID(0, 0);
     protected boolean isSleep;
@@ -120,9 +123,11 @@ public abstract class AncientEntry implements IBuild, IALGS {
     protected abstract void onBossTiger(EntityPlayer player, World world);
     public abstract boolean dead(UUID id);
     protected abstract void onRequestToDelete();
+    protected abstract void onBossDead();
     public boolean deadBoss(UUID id) {
         if (!bossUUID.equals(nullUUId) && bossUUID.equals(id)) {
             isBossDead = true;
+            onBossDead();
             requestToSave();
             return true;
         }
@@ -179,7 +184,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
     }
 
     protected Entity getRandomBoss(World world, BlockPos pos) {
-        byte q = (byte) new Random().nextInt(4);
+        byte q = (byte) random.nextInt(4);
         switch (q) {
             case 0:
                 return ItemMonsterPlacer.spawnCreature(world, EntityList.getKey(EntityCultistPortalGreater.class), pos.getX(), pos.getY() + 2, pos.getZ() + 1);
@@ -188,6 +193,10 @@ public abstract class AncientEntry implements IBuild, IALGS {
             default:
                 return ItemMonsterPlacer.spawnCreature(world, EntityList.getKey(EntityEldritchWarden.class), pos.getX(), pos.getY() + 2, pos.getZ() + 1);
         }
+    }
+
+    protected ItemStack getPrimordialPearl() {
+        return new ItemStack(ItemsTC.primordialPearl, 1, random.nextInt(8));
     }
 
     protected NBTTagCompound blockPosToNBT(BlockPos pos) {

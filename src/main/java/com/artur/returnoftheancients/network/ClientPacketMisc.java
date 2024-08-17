@@ -89,6 +89,9 @@ public class ClientPacketMisc implements IMessage {
                     if (nbt.hasKey("playSound")) {
                         playerSP.playSound(InitSounds.SOUND_MAP.get(nbt.getString("playSound")), 1, 1);
                     }
+                    if (nbt.hasKey("stopSound")) {
+                        playerSP.playSound(InitSounds.SOUND_MAP.get(nbt.getString("stopSound")), 0, 1);
+                    }
                 } else {
                     System.out.println("ti vtiraeh mne kakuyto dich");
                 }

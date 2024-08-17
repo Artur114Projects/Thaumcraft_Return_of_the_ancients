@@ -32,7 +32,7 @@ public class MainR {
 		RegisterHandler.registerPackets();
 		InitDimensions.registerDimensions();
 		InitBiome.initBiomes();
-		InitBlocks.registerTileEntity();
+		RegisterHandler.registerTileEntity();
 		proxy.preInit(event);
 	}
 	

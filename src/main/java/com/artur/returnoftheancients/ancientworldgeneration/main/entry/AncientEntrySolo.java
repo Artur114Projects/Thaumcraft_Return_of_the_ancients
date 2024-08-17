@@ -47,8 +47,11 @@ public class AncientEntrySolo extends AncientEntry {
     }
 
     @Override
-    protected void onRequestToDelete() {
+    protected void onRequestToDelete() {}
 
+    @Override
+    protected void onBossDead() {
+        player.addItemStackToInventory(getPrimordialPearl());
     }
 
     @Override

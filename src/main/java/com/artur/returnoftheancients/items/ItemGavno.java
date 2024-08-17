@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.gui.SkalaGui;
+import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
@@ -39,18 +40,23 @@ public class ItemGavno extends BaseItem{
 	@Override
 	public @NotNull EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player instanceof EntityPlayerMP) {
-			PacketHandler.INSTANCE.sendTo(new PacketMiscEvent((byte) 2), (EntityPlayerMP) player);
-			NBTTagCompound nbt = new NBTTagCompound();
-			nbt.setString("playSound", InitSounds.RUI_DEAD.NAME);
-			MainR.NETWORK.sendTo(new ClientPacketMisc(nbt),(EntityPlayerMP)  player);
+//			PacketHandler.INSTANCE.sendTo(new PacketMiscEvent((byte) 2), (EntityPlayerMP) player);
+//			NBTTagCompound nbt = new NBTTagCompound();
+//			nbt.setString("playSound", InitSounds.RUI_DEAD.NAME);
+//			MainR.NETWORK.sendTo(new ClientPacketMisc(nbt),(EntityPlayerMP)  player);
 			if (player.isSneaking()) {
 				AncientWorld.reload();
 			} else {
 				AncientWorld.unload();
 				player.sendMessage(new TextComponentString("UNLOAD"));
 			}
+			HandlerR.playSound((EntityPlayerMP) player, InitSounds.FIRE_TRAP_SOUND);
 		}
-		FMLClientHandler.instance().displayGuiScreen(player, new SkalaGui());
+		for (int i = 0; i != 20; i++) {
+			for (int j = 0; j != 1; j++) {
+				worldIn.spawnParticle(EnumParticleTypes.FLAME, pos.getX() + 0.5, pos.getY() + (1 + (j / 100D)), pos.getZ() + 0.5, 0, 0.1 + i / 40D, 0);
+			}
+		}
 		if (!worldIn.isRemote) {
 //			BlockPos playerPos = player.getPosition();
 //			long time1 = System.currentTimeMillis();

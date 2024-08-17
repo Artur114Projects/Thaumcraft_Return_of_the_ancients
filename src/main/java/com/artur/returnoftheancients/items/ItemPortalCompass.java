@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.items;
 
+import com.artur.returnoftheancients.main.MainR;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -93,5 +94,6 @@ public class ItemPortalCompass extends BaseItem {
                 return Math.atan2((double)blockpos.getZ() - p_185092_2_.posZ, (double)blockpos.getX() - p_185092_2_.posX);
             }
         });
+        setCreativeTab(MainR.ReturnOfTheAncientsTab);
     }
 }

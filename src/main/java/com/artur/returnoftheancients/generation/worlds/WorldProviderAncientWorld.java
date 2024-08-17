@@ -67,6 +67,6 @@ public class WorldProviderAncientWorld extends WorldProvider {
     @Nullable
     @Override
     public MusicTicker.MusicType getMusicType() {
-        return super.getMusicType();
+        return MusicTicker.MusicType.NETHER;
     }
 }

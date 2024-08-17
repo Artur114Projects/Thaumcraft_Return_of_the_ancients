@@ -103,7 +103,6 @@ public class BossTriggerBlock extends BaseBlock {
             int players = 0;
             for (EntityPlayer player : worldIn.playerEntities) {
                 if (player.getEntityData().getLong("getReward") == WorldData.get().saveData.getLong("getReward"))  {
-                    player.addItemStackToInventory(new ItemStack(ItemsTC.primordialPearl, 1, new Random().nextInt(8)));
                     players++;
                 }
             }

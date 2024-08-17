@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "returnoftheancients:blocks/fire_trap_0",
+    "up": "returnoftheancients:blocks/fire_trap_0",
+    "down": "returnoftheancients:blocks/fire_trap_1",
+    "east": "returnoftheancients:blocks/fire_trap_2",
+    "west": "returnoftheancients:blocks/fire_trap_3",
+    "north": "returnoftheancients:blocks/fire_trap_4",
+    "south": "returnoftheancients:blocks/fire_trap_5"
+  }
+}

@@ -16,15 +16,13 @@ import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class InitSounds {
-
-
-    //Это наш звук, `test_sound` это название звука указанного в sounds.json
     private static final List<SoundEvent> soundEvents = new ArrayList<>();
     public static final HashMap<String, SoundEvent> SOUND_MAP = new HashMap<>();
     public static SoundTRA BUM = create("bum");
     public static SoundTRA WHISPER = create("whisper");
-    public static SoundTRA HEARTBEAT = create("heartbeat");
     public static SoundTRA RUI_DEAD = create("rui_dead");
+    public static SoundTRA HEARTBEAT = create("heartbeat");
+    public static SoundTRA FIRE_TRAP_SOUND = create("fire_trap_sound");
 
     @SubscribeEvent
     public static void registerSounds(RegistryEvent.Register<SoundEvent> e) {
@@ -33,6 +31,7 @@ public class InitSounds {
                 ForgeRegistries.SOUND_EVENTS.register(soundEvent);
             }
         }
+        soundEvents.clear();
     }
 
     private static SoundTRA create(String name) {

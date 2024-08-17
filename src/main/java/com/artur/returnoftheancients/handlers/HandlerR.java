@@ -23,6 +23,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -173,7 +174,8 @@ public class HandlerR {
                 "injectPhase",
                 "injectPercentages",
                 "changeTitle",
-                "playSound"
+                "playSound",
+                "stopSound"
         };
         return isGoodNBTTagBase(nbt, Tag, false);
     }
@@ -328,4 +330,17 @@ public class HandlerR {
         }
         return stack.getOrCreateSubCompound(Referense.MODID).getBoolean("isFull");
     }
+
+    public static void playSoundToTargetPoint(SoundTRA sound, int dimension, double x, double y, double z, double range) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setString("playSound", sound.NAME);
+        MainR.NETWORK.sendToAllAround(new ClientPacketMisc(nbt), new NetworkRegistry.TargetPoint(dimension, x, y, z, range));
+    }
+
+    public static void stopSoundToTargetPoint(SoundTRA sound, int dimension, double x, double y, double z, double range) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setString("stopSound", sound.NAME);
+        MainR.NETWORK.sendToAllAround(new ClientPacketMisc(nbt), new NetworkRegistry.TargetPoint(dimension, x, y, z, range));
+    }
+
 }

@@ -11,7 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 
 public abstract class BaseBlock extends Block implements IHasModel {
-    private final Item item;
+    protected final Item item;
     protected BaseBlock(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(material);
 

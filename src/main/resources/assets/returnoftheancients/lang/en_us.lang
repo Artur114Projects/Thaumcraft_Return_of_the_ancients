@@ -3,6 +3,7 @@ item.soul_binder.name=Soul connection stone
 tile.boss_trigger_block.name=Boss trigger block
 itemGroup.returnoftheancients_tab=Thaumcraft: Return of the ancients
 item.itemprimalblade.name=Primal Blade
+tile.fire_trap.name=Incinerator
 tile.tp_to_home_block.name=Portal to overworld
 tile.taint_ancient_stone.name=Taint ancient stone
 tile.tp_to_ancient_world_block.name=Portal to Ancient World

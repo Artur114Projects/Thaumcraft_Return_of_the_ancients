@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.ancientworldgeneration.structurebuilder;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -77,6 +78,15 @@ public class CustomGenStructure {
             throw new RuntimeException("invalid structure name: " + name);
         }
     }
+
+    public static void gen(World world, BlockPos pos, String name) {
+        if (structures.containsKey(name)) {
+            structures.get(name).gen(world, pos.getX(), pos.getY(), pos.getZ());
+        } else {
+            throw new RuntimeException("invalid structure name: " + name);
+        }
+    }
+
 
     public static void registerOrGen(World world, int x, int y, int z, String name) {
         if (structures.containsKey(name)) {

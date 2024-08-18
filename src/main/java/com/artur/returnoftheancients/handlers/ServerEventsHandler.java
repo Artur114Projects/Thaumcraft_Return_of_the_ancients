@@ -139,23 +139,19 @@ public class ServerEventsHandler {
 
     @SubscribeEvent
     public static void BreakEvent(BlockEvent.BreakEvent e) {
-        if (!TRAConfigs.Any.debugMode) {
-            if (e.getPlayer().dimension == ancient_world_dim_id) {
-                if (!e.getPlayer().isCreative()) {
-                    e.setCanceled(true);
-                }
+        if (e.getPlayer().dimension == ancient_world_dim_id) {
+            if (!e.getPlayer().isCreative() && !e.getState().getBlock().equals(HandlerR.getBlockByString("thaumcraft:stone_arcane"))) {
+                e.setCanceled(true);
             }
         }
     }
 
     @SubscribeEvent
     public static void PlaceEvent(BlockEvent.PlaceEvent e) {
-        if (!TRAConfigs.Any.debugMode){
-            if (e.getPlayer().dimension == ancient_world_dim_id) {
-                if (!e.getPlayer().isCreative()) {
-                    e.getPlayer().addItemStackToInventory(e.getItemInHand().splitStack(1));
-                    e.setCanceled(true);
-                }
+        if (e.getPlayer().dimension == ancient_world_dim_id) {
+            if (!e.getPlayer().isCreative()) {
+                e.getPlayer().addItemStackToInventory(e.getItemInHand().splitStack(1));
+                e.setCanceled(true);
             }
         }
     }

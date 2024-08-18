@@ -23,7 +23,12 @@ public class Team {
                 }
             }
         }
+        System.out.println(teams);
         uniqueIds.clear();
+    }
+
+    public static void clear() {
+        teams.clear();
     }
     private static final Set<UUID> uniqueIds = new HashSet<>();
     private static final LinkedList<Team> teams = new LinkedList<>();

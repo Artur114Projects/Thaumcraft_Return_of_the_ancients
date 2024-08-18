@@ -115,6 +115,8 @@ public class RegisterHandler {
 		CustomGenStructure.put("ancient_door");
 		CustomGenStructure.put("ancient_door1");
 		CustomGenStructure.put("ancient_border_cap");
+		CustomGenStructure.put("ancient_door_rock_rotate-1");
+		CustomGenStructure.put("ancient_door_rock_rotate-2");
 
 		CustomGenStructure.setUseAir();
 		CustomGenStructure.put("ancient_area");

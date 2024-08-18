@@ -3,10 +3,14 @@ package com.artur.returnoftheancients.items;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.ITRAStructure;
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.TRAStructureEBS;
+import com.artur.returnoftheancients.ancientworldgeneration.util.Team;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.gui.SkalaGui;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitSounds;
+import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import net.minecraft.client.util.ITooltipFlag;
@@ -30,6 +34,7 @@ import java.util.List;
 
 public class ItemGavno extends BaseItem{
 
+	ITRAStructure structure = null;
 
 	public ItemGavno(String name) {
 		super(name);
@@ -40,15 +45,21 @@ public class ItemGavno extends BaseItem{
 	@Override
 	public @NotNull EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player instanceof EntityPlayerMP) {
+			if (structure == null) {
+				structure = new TRAStructureEBS("ancient_crossroads");
+			}
+			structure.gen(worldIn, pos.getX(), pos.getY(), pos.getZ());
 //			PacketHandler.INSTANCE.sendTo(new PacketMiscEvent((byte) 2), (EntityPlayerMP) player);
 //			NBTTagCompound nbt = new NBTTagCompound();
 //			nbt.setString("playSound", InitSounds.RUI_DEAD.NAME);
 //			MainR.NETWORK.sendTo(new ClientPacketMisc(nbt),(EntityPlayerMP)  player);
 			if (player.isSneaking()) {
 				AncientWorld.reload();
+				Team.clear();
 			} else {
 				AncientWorld.unload();
 				player.sendMessage(new TextComponentString("UNLOAD"));
+				Team.clear();
 			}
 			HandlerR.playSound((EntityPlayerMP) player, InitSounds.FIRE_TRAP_SOUND);
 		}
@@ -58,6 +69,7 @@ public class ItemGavno extends BaseItem{
 			}
 		}
 		if (!worldIn.isRemote) {
+			worldIn.setBlockState(pos, InitTileEntity.FAIR_TRAP.getDefaultState());
 //			BlockPos playerPos = player.getPosition();
 //			long time1 = System.currentTimeMillis();
 //			GenStructure.generateStructure(player.world, playerPos.getX() + 20, playerPos.getY(), playerPos.getZ(), "ancient_turn");

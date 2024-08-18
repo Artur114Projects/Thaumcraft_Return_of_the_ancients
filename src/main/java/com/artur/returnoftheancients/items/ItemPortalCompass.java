@@ -4,6 +4,7 @@ import com.artur.returnoftheancients.main.MainR;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,6 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -20,6 +22,7 @@ public class ItemPortalCompass extends BaseItem {
     public ItemPortalCompass(String name)
     {
         super(name);
+        this.setMaxStackSize(1);
         this.addPropertyOverride(new ResourceLocation("angle"), new IItemPropertyGetter()
         {
             @SideOnly(Side.CLIENT)
@@ -96,4 +99,9 @@ public class ItemPortalCompass extends BaseItem {
         });
         setCreativeTab(MainR.ReturnOfTheAncientsTab);
     }
+
+    public @NotNull EnumRarity getRarity(@NotNull ItemStack stack) {
+        return EnumRarity.UNCOMMON;
+    }
+
 }

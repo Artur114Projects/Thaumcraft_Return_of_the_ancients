@@ -15,8 +15,8 @@ public class TRAStructureEBS extends TRAStructure {
         for (BlockInfo block : blocks) {
             int chunkX = (block.x + x) >> 4;
             int chunkZ = (block.z + z) >> 4;
-            Chunk chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
             int storageIndex = (block.y + y) >> 4;
+            Chunk chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
 
             // Проверка границ массива
             if (storageIndex < 0 || storageIndex >= chunk.getBlockStorageArray().length) {

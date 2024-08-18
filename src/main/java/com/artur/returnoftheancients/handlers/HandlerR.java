@@ -343,4 +343,14 @@ public class HandlerR {
         MainR.NETWORK.sendToAllAround(new ClientPacketMisc(nbt), new NetworkRegistry.TargetPoint(dimension, x, y, z, range));
     }
 
+    public static Block getBlockByString(String block) {
+        ResourceLocation resourcelocation = new ResourceLocation(block);
+        if (!Block.REGISTRY.containsKey(resourcelocation)) {
+            throw new RuntimeException(block);
+        } else {
+            return Block.REGISTRY.getObject(resourcelocation);
+        }
+    }
+
+
 }

@@ -86,7 +86,7 @@ public class TileEntityFireTrap extends TileEntity implements ITickable {
                         spawnParticle(world, pos);
                         if (!player.isBurning() && !player.isCreative()) {
                             player.performHurtAnimation();
-                            player.playSound(SoundEvents.ENTITY_PLAYER_HURT_ON_FIRE, 1, 1);
+                            player.playSound(SoundEvents.ENTITY_PLAYER_HURT, 1, 1);
                         }
                     }
                     if (!world.isRemote) {

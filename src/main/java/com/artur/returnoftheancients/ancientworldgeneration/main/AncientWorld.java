@@ -13,9 +13,7 @@ import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -24,7 +22,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.TestOnly;
 
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
@@ -207,42 +204,49 @@ public class AncientWorld {
             if (e.world.provider.getDimension() == ancient_world_dim_id) {
                 int bc = buildCount;
                 if (!build.isEmpty()) {
-                    CopyOnWriteArrayList<IBuild> buildCopy = new CopyOnWriteArrayList<>(build);
-                    for (IBuild entry : buildCopy) {
+                    ArrayList<IBuild> toDelete = new ArrayList<>();
+                    for (IBuild entry : build) {
                         if (!entry.isBuild() && !entry.isRequestToDelete()) {
                             if (bc > 0) {
                                 entry.build(e.world);
                                 bc--;
                             }
                         } else {
-                            build.remove(entry);
+                            toDelete.add(entry);
                         }
                     }
-                }
-                if (t >= 10) {
-                    t = 0;
-                    Team.updateS();
-                    boolean isSave = false;
-                    CopyOnWriteArrayList<AncientEntry> ancientEntriesCopy = new CopyOnWriteArrayList<>(ANCIENT_ENTRIES);
-                    for (AncientEntry entry : ancientEntriesCopy) {
-                        entry.update(e.world);
-                        if (entry.isRequestToSave()) {
-                            if (!isSave) {
-                                save();
-                                isSave = true;
-                                entry.saveFinish();
-                            } else {
-                                entry.saveFinish();
-                            }
-                        }
-                        if (entry.isRequestToDelete()) {
-                            ANCIENT_ENTRIES.remove(entry);
-                            save();
-                        }
+                    if (!toDelete.isEmpty()) {
+                        build.removeAll(toDelete);
                     }
                 }
-                t++;
             }
+            if (t >= 10) {
+                t = 0;
+                Team.updateS();
+                boolean isSave = false;
+
+                ArrayList<AncientEntry> toDelete = new ArrayList<>();
+                for (AncientEntry entry : ANCIENT_ENTRIES) {
+                    entry.update(e.world);
+                    if (entry.isRequestToSave()) {
+                        if (!isSave) {
+                            save();
+                            isSave = true;
+                            entry.saveFinis();
+                        } else {
+                            entry.saveFinis();
+                        }
+                    }
+                    if (entry.isRequestToDelete()) {
+                        toDelete.add(entry);
+                    }
+                }
+                if (!toDelete.isEmpty()) {
+                    ANCIENT_ENTRIES.removeAll(toDelete);
+                    save();
+                }
+            }
+            t++;
         }
         if (ANCIENT_ENTRIES.isEmpty()) build.clear();
     }

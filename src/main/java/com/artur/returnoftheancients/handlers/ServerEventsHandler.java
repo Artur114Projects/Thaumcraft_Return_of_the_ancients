@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.handlers;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.misc.PlayersCountDifficultyProcessor;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -12,11 +13,16 @@ import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemCompass;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.DifficultyChangeEvent;
@@ -30,8 +36,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aspects.AspectRegistryEvent;
+import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
+import thaumcraft.common.lib.network.PacketHandler;
+import thaumcraft.common.lib.network.misc.PacketMiscEvent;
 
 import java.util.Objects;
 
@@ -45,7 +57,6 @@ public class ServerEventsHandler {
     protected static final String notNoCollisionNBTTime = "notNoCollisionNBTTime";
     public static boolean bossIsDead = false;
     private static boolean isAncientAreaSet = false;
-    private static byte pT = 0;
     private static byte difficultyId = -1;
 
 
@@ -208,9 +219,11 @@ public class ServerEventsHandler {
                 e.player.motionY += -1 - e.player.motionY;
             }
         }
-        if (pT >= 4) {
-            pT = 0;
+        if (e.player.ticksExisted % 4 == 0) {
             if (playerDimension == ancient_world_dim_id) {
+                if (!e.player.world.isRemote) {
+                    PacketHandler.INSTANCE.sendToDimension(new PacketMiscEvent((byte)2), ancient_world_dim_id);
+                }
                 if (TRAConfigs.AncientWorldSettings.noNightVision) {
                     if (e.player.getActivePotionEffect(MobEffects.NIGHT_VISION) != null && !e.player.isCreative()) {
                         e.player.removePotionEffect(MobEffects.NIGHT_VISION);
@@ -239,17 +252,31 @@ public class ServerEventsHandler {
                     }
                 }
             }
-            if (playerDimension != ancient_world_dim_id) {
-                if (e.player.getEntityData().getBoolean(TpToAncientWorldBlock.noCollisionNBT)) {
-                    e.player.getEntityData().setInteger(notNoCollisionNBTTime, (e.player.getEntityData().getInteger(notNoCollisionNBTTime) + 1));
-                    if (e.player.getEntityData().getInteger(notNoCollisionNBTTime) >= 40) {
-                        e.player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, false);
-                        e.player.getEntityData().setInteger(notNoCollisionNBTTime, 0);
-                    }
+        }
+        if (playerDimension != ancient_world_dim_id && e.player.ticksExisted % 20 == 0) {
+            if (e.player.getEntityData().getBoolean(TpToAncientWorldBlock.noCollisionNBT)) {
+                e.player.getEntityData().setInteger(notNoCollisionNBTTime, (e.player.getEntityData().getInteger(notNoCollisionNBTTime) + 1));
+                if (e.player.getEntityData().getInteger(notNoCollisionNBTTime) >= 8) {
+                    e.player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, false);
+                    e.player.getEntityData().setInteger(notNoCollisionNBTTime, 0);
                 }
             }
         }
-        pT++;
+        if (e.player.ticksExisted % 40 == 0) {
+            if (e.player instanceof EntityPlayerMP) {
+                checkResearch(e.player);
+            }
+        }
+    }
+
+    protected static void checkResearch(EntityPlayer player) {
+        if (!ThaumcraftCapabilities.knowsResearchStrict(player, "m_ENTERANCIENT") && player.dimension == ancient_world_dim_id) {
+            IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(player);
+            if (knowledge.addResearch("m_ENTERANCIENT")) {
+                knowledge.sync((EntityPlayerMP) player);
+                player.sendStatusMessage(new TextComponentTranslation(Referense.MODID + ".text.entered_ancient").setStyle(new Style().setColor(TextFormatting.DARK_PURPLE)), true);
+            }
+        }
     }
 
     static byte wt = 0;
@@ -268,23 +295,23 @@ public class ServerEventsHandler {
             if (event.getEntity() instanceof EntityLiving && !(event.getEntity() instanceof EntityPlayer)) {
                 EntityLiving living = (EntityLiving) event.getEntity();
                 if (potionEffects[0] != -1) {
-                    living.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, maxDuration, potionEffects[0]));
+                    living.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, maxDuration, potionEffects[0], false, false));
                 }
                 if (potionEffects[1] != -1) {
-                    living.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, maxDuration, potionEffects[1]));
+                    living.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, maxDuration, potionEffects[1], false, false));
                 }
                 if (potionEffects[2] != -1) {
-                    living.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, maxDuration, potionEffects[2]));
+                    living.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, maxDuration, potionEffects[2], false, false));
                 }
                 if (potionEffects[3] != -1) {
-                    living.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, maxDuration, potionEffects[3]));
+                    living.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, maxDuration, potionEffects[3], false, false));
                 }
                 if (potionEffects[4] != -1) {
-                    living.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, maxDuration, potionEffects[4]));
+                    living.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, maxDuration, potionEffects[4], false, false));
                 }
                 if (potionEffects[5] != -1) {
                     if (living.isNonBoss() || TRAConfigs.DifficultySettings.iaAddSpeedEffectToBoss) {
-                        living.addPotionEffect(new PotionEffect(MobEffects.SPEED, maxDuration, potionEffects[5]));
+                        living.addPotionEffect(new PotionEffect(MobEffects.SPEED, maxDuration, potionEffects[5], false, false));
                     }
                 }
             }
@@ -301,7 +328,6 @@ public class ServerEventsHandler {
             wt++;
         }
     }
-
 
 //    @SubscribeEvent
 //    public void canDeSpawn(LivingSpawnEvent.AllowDespawn event) {

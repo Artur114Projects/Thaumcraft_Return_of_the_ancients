@@ -14,5 +14,5 @@ public interface IBuild {
     void onGenStart();
     void onClearStart();
     void onReloadLightStart();
-    void onFinish();
+    void onFinal();
 }

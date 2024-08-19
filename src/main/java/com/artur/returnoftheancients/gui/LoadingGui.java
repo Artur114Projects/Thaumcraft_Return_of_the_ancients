@@ -26,7 +26,7 @@ public class LoadingGui extends GuiScreen {
     private byte iaDrawESCStringTime = 0;
     private byte iaDrawESCStringTime1 = 0;
     private String ts = "";
-    private final String[] constantNames = new String[] {"Waiting for build", "cleaning area", "place structures in world", "reload light", "Finish!"};
+    private final String[] constantNames = new String[] {"Waiting for build", "cleaning area", "place structures in world", "finalizing", "Finish!"};
     public boolean iaDrawESCString = false;
     public boolean iaESCString = false;
 

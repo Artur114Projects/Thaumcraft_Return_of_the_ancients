@@ -24,6 +24,7 @@ public interface IALGS {
     byte CROSSROADS_ROTATE_MAX = 1;
     byte[] CROSSROADS_q = new byte[] {};
     String CROSSROADS_STRING_ID = "ancient_crossroads";
+    String CROSSROADS_TRAP_STRING_ID = "ancient_crossroads_trap";
 
     byte END_ID = 5;
     byte END_CHANCE = 1;

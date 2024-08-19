@@ -93,6 +93,7 @@ public class RegisterHandler {
 		CustomGenStructure.setUseBinary();
 		CustomGenStructure.put("ancient_entry");
 		CustomGenStructure.put("ancient_crossroads");
+		CustomGenStructure.put("ancient_crossroads_trap");
 
 		CustomGenStructure.put("ancient_way_rotate-1");
 		CustomGenStructure.put("ancient_way_rotate-2");

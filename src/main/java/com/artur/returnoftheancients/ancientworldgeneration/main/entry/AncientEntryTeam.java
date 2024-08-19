@@ -27,6 +27,7 @@ public class AncientEntryTeam extends AncientEntry {
         if (!nbt.getBoolean("IsTeam")) error("AncientEntryTeam.class, transferred incorrect NBTTag EC:0");
         if (!nbt.hasKey("team")) error("AncientEntryTeam.class, transferred incorrect NBTTag EC:1");
         team = new Team(nbt.getCompoundTag("team"));
+        if (team.isRequestDelete()) requestToDelete();
         isSleep = true;
     }
 
@@ -40,11 +41,11 @@ public class AncientEntryTeam extends AncientEntry {
 
     @Override
     public void update(World world) {
-        if (!team.isActive()) isSleep = true;
         if (team.isRequestDelete()) {
             team.setToAll(ServerEventsHandler::tpToHome);
             requestToDelete();
         }
+        if (!team.isActive()) isSleep = true;
         super.update(world);
         team.update();
     }
@@ -139,7 +140,7 @@ public class AncientEntryTeam extends AncientEntry {
     }
 
     @Override
-    public void onFinish() {
+    public void onFinal() {
         team.setToAll(player -> {
             HandlerR.injectPhaseOnClient(player, (byte) 4);
             HandlerR.setLoadingGuiState(player, false);

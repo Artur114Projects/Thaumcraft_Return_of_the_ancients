@@ -1,5 +1,6 @@
-package com.artur.returnoftheancients.handlers;
+package com.artur.returnoftheancients.client;
 
+import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -13,8 +14,8 @@ import thaumcraft.client.lib.events.RenderEventHandler;
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = Referense.MODID)
-public class ClientEventsHandler extends ServerEventsHandler {
-
+public class ClientEventsHandler {
+    protected static final String startUpNBT = "startUpNBT";
     private static byte cpt = 0;
 
     @SubscribeEvent
@@ -27,25 +28,17 @@ public class ClientEventsHandler extends ServerEventsHandler {
     }
 
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public static void PlayerTickEvent(TickEvent.PlayerTickEvent e) {
         int playerDimension = e.player.dimension;
         if (e.player.getEntityData().getBoolean(startUpNBT)) {
             if (playerDimension != ancient_world_dim_id) {
-                if (e.player instanceof EntityPlayerSP) {
-                    EntityPlayerSP playerSP = (EntityPlayerSP) e.player;
-                    playerSP.motionY += 2 - playerSP.motionY;
-                }
+                e.player.motionY += 2 - e.player.motionY;
             }
         }
         if (e.player.dimension == ancient_world_dim_id) {
             if (cpt >= 4) {
                 cpt = 0;
-                if (e.player instanceof EntityPlayerSP && !e.player.isCreative()) {
-                    RenderEventHandler.fogFiddled = true;
-                    if (RenderEventHandler.fogDuration < 200) {
-                        RenderEventHandler.fogDuration = 200;
-                    }
-                }
             }
             cpt++;
             if (e.player.posY > 84 && !e.player.isCreative()) {
@@ -53,5 +46,6 @@ public class ClientEventsHandler extends ServerEventsHandler {
                 e.player.motionY += -1 - e.player.motionY;
             }
         }
+        CameraShake.updateShake();
     }
 }

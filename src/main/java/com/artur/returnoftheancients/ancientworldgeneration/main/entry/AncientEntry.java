@@ -6,12 +6,11 @@ import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.Cus
 import com.artur.returnoftheancients.ancientworldgeneration.util.BuildPhase;
 import com.artur.returnoftheancients.ancientworldgeneration.util.StructureMap;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.IBuild;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemMonsterPlacer;
@@ -21,6 +20,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.common.entities.monster.boss.EntityCultistPortalGreater;
 import thaumcraft.common.entities.monster.boss.EntityEldritchGolem;
@@ -72,8 +72,8 @@ public abstract class AncientEntry implements IBuild, IALGS {
         isBossSpawn = nbt.getBoolean("isBossSpawn");
         if (!nbt.hasKey("isBossDead")) error("AncientEntry.class, transferred incorrect NBTTag EC:3");
         isBossDead = nbt.getBoolean("isBossDead");
-        if (!nbt.hasKey("isFinal")) error("AncientEntry.class, transferred incorrect NBTTag EC:7");
-        isFinal = nbt.getBoolean("isFinal");
+        if (!nbt.hasKey("finalizing")) error("AncientEntry.class, transferred incorrect NBTTag EC:7");
+        isFinal = nbt.getBoolean("finalizing");
         if (!nbt.hasKey("bossPos")) error("AncientEntry.class, transferred incorrect NBTTag EC:5");
         bossPos = NBTToBlockPos(nbt.getCompoundTag("bossPos"));
         if (!nbt.hasKey("isBuild")) error("AncientEntry.class, transferred incorrect NBTTag EC:4");
@@ -150,7 +150,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
 
         nbt.setByte("loadCount", isSleep ? ((byte) (loadCount + 1)) : 0);
         nbt.setBoolean("isSleep", isSleep);
-        nbt.setBoolean("isFinal", isFinal);
+        nbt.setBoolean("finalizing", isFinal);
         nbt.setUniqueId("boss", bossUUID);
         nbt.setTag("bossPos", blockPosToNBT(bossPos));
         nbt.setBoolean("isBossSpawn", isBossSpawn);
@@ -159,7 +159,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
         return nbt;
     }
 
-    protected void please(World world, int x, int y, int z, String name) {
+    protected void gen(World world, int x, int y, int z, String name) {
         CustomGenStructure.gen(world, x, y, z, name);
     }
 
@@ -231,6 +231,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
     };
 
     protected void requestToDelete() {
+        onRequestToDelete();
         delete = true;
     }
 
@@ -246,7 +247,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
         return requestSave;
     }
 
-    public void saveFinish() {
+    public void saveFinis() {
         requestSave = false;
     }
 
@@ -265,10 +266,10 @@ public abstract class AncientEntry implements IBuild, IALGS {
     protected void genAncientEntryWay(World world) {
         for (int y = 0, cordY = 112; cordY < world.getHeight(); y++) {
             cordY = 112 + 32 * y;
-            please(world, 10000 * pos, cordY, 0, ENTRY_WAY_STRING_ID);
+            gen(world, 10000 * pos, cordY, 0, ENTRY_WAY_STRING_ID);
         }
-        please(world, 6 + (10000 * pos), 255, 6, "ancient_border_cap");
-        please(world, 4 + (10000 * pos), 124, -14, "ancient_developer_platform");
+        gen(world, 6 + (10000 * pos), 255, 6, "ancient_border_cap");
+        gen(world, 4 + (10000 * pos), 124, -14, "ancient_developer_platform");
     }
     @Override
     public void build(World world) {
@@ -292,8 +293,8 @@ public abstract class AncientEntry implements IBuild, IALGS {
                             settings.setRotation(Rotation.NONE);
                             buildPhase.please = false;
                             onReloadLightStart();
-                            System.out.println("Reload light pos:" + pos);
-                            buildPhase.reloadLight();
+                            System.out.println("Finalizing pos:" + pos);
+                            buildPhase.finalizing();
                             return;
                         }
                         byte structure = map.getStructure(buildPhase.xtp, buildPhase.ytp);
@@ -317,27 +318,31 @@ public abstract class AncientEntry implements IBuild, IALGS {
                         }
                         switch (structure) {
                             case WAY_ID:
-                                please(world, cx, 80, cz, WAY_STRING_ID + rotate);
+                                gen(world, cx, 80, cz, WAY_STRING_ID + rotate);
                                 break;
                             case CROSSROADS_ID:
-                                please(world, cx, 80, cz, CROSSROADS_STRING_ID);
+                                if (random.nextInt(3) == 0) {
+                                    gen(world, cx, 80, cz, CROSSROADS_STRING_ID);
+                                } else {
+                                    gen(world, cx, 80, cz, CROSSROADS_TRAP_STRING_ID);
+                                }
                                 break;
                             case ENTRY_ID:
-                                please(world, cx, 80, cz, ENTRY_STRING_ID);
+                                gen(world, cx, 80, cz, ENTRY_STRING_ID);
                                 break;
                             case TURN_ID:
-                                please(world, cx, 80, cz, TURN_STRING_ID + rotate);
+                                gen(world, cx, 80, cz, TURN_STRING_ID + rotate);
                                 break;
                             case FORK_ID:
-                                please(world, cx, 80, cz, FORK_STRING_ID + rotate);
+                                gen(world, cx, 80, cz, FORK_STRING_ID + rotate);
                                 break;
                             case END_ID:
-                                please(world, cx, 80, cz, END_STRING_ID + rotate);
+                                gen(world, cx, 80, cz, END_STRING_ID + rotate);
                                 break;
                             case BOSS_ID:
                                 buildPhase.bossGen++;
                                 if (buildPhase.bossGen == 4) {
-                                    please(world, cx, 79, cz, BOSS_STRING_ID);
+                                    gen(world, cx, 79, cz, BOSS_STRING_ID);
                                     buildPhase.bossGen = 0;
                                 }
                                 break;
@@ -370,30 +375,36 @@ public abstract class AncientEntry implements IBuild, IALGS {
                         }
                         int cx = (128 - 16 * buildPhase.xtc) + (10000 * pos);
                         int cz = (128 - 16 * buildPhase.ytc);
-                        please(world, cx, 80, cz, AIR_CUBE_STRING_ID);
-                        please(world, cx, 80 - 31, cz, AIR_CUBE_STRING_ID);
+                        gen(world, cx, 80, cz, AIR_CUBE_STRING_ID);
+                        gen(world, cx, 80 - 31, cz, AIR_CUBE_STRING_ID);
                         buildPhase.xtc++;
                     }
                 }
-                if (buildPhase.reloadLight) {
+                if (buildPhase.finalizing) {
                     for (int i = 0; i != AncientWorldSettings.AncientWorldGenerationSettings.numberSetReloadLightPerTick; i++) {
-                        if (buildPhase.xtl == 144) {
-                            buildPhase.ytl++;
-                            buildPhase.xtl = -128;
+                        if (buildPhase.xtf == 144) {
+                            buildPhase.ytf++;
+                            buildPhase.xtf = -128;
                         }
-                        if (buildPhase.ytl == 144) {
-                            buildPhase.ytl = -128;
-                            buildPhase.xtl = -128;
-                            buildPhase.reloadLight = false;
+                        if (buildPhase.ytf == 144) {
+                            buildPhase.ytf = -128;
+                            buildPhase.xtf = -128;
+                            buildPhase.finalizing = false;
                             System.out.println("Generate ancient entry finish pos:" + pos);
                             isBuild = true;
                             requestToSave();
-                            onFinish();
+                            onFinal();
                             return;
                         }
-                        int x = buildPhase.xtl + (10000 * pos);
-                        world.checkLight(new BlockPos(x, 84, buildPhase.ytl));
-                        buildPhase.xtl++;
+                        int x = buildPhase.xtf + (10000 * pos);
+                        world.checkLight(buildPhase.pos.setPos(x, 84, buildPhase.ytf));
+                        BlockPos pos = buildPhase.pos.setPos(x, 80, buildPhase.ytf);
+                        if (world.getBlockState(pos).equals(BlocksTC.stoneAncient.getDefaultState())) {
+                            if (world.rand.nextInt(100) == 0) {
+                                world.setBlockState(pos, InitTileEntity.FIRE_TRAP.getDefaultState());
+                            }
+                        }
+                        buildPhase.xtf++;
                     }
                 }
             }

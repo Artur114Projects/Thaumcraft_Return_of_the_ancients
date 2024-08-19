@@ -1,0 +1,17 @@
+{
+  "entries": [
+    {
+      "key": "DIMENSION_RESEARCH",
+      "name": "research.dimension.title",
+      "icons": [ "thaumcraft:textures/items/thaumonomicon.png" ],
+      "category": "ANCIENT_WORLD",
+      "location": [ 0,0 ],
+      "stages": [
+        {
+          "text": "research.dimension.text.stage.1",
+          "required_research": ["m_ENTERANCIENT"]
+        }
+      ]
+    }
+  ]
+}

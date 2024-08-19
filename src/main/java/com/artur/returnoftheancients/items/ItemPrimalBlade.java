@@ -32,7 +32,6 @@ public class ItemPrimalBlade extends ItemAxe implements IHasModel {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(TextFormatting.BLACK + I18n.translateToLocal("item.itemprimalblade.text"));
     }
 
     public @NotNull EnumRarity getRarity(@NotNull ItemStack stack) {

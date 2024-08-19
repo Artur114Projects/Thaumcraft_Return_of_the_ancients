@@ -147,7 +147,7 @@ public class AncientEntrySolo extends AncientEntry {
     }
 
     @Override
-    public void onFinish() {
+    public void onFinal() {
         HandlerR.injectPhaseOnClient(player, (byte) 4);
         HandlerR.setLoadingGuiState(player, false);
         if (player.isCreative() && TRAConfigs.Any.debugMode) {

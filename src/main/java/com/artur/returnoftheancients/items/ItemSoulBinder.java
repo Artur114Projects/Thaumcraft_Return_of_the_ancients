@@ -4,6 +4,7 @@ import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -71,13 +72,24 @@ public class ItemSoulBinder extends BaseItem {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         NBTTagCompound nbt = stack.getOrCreateSubCompound(Referense.MODID);
         if (nbt.getBoolean("isFull")) {
-            NBTTagCompound list = nbt.getCompoundTag("players");
-            tooltip.add(TextFormatting.YELLOW + "Players:");
-            tooltip.addAll(HandlerR.uuidKeySetToList(list.getKeySet(), TextFormatting.AQUA));
+            if(!GuiScreen.isShiftKeyDown()) {
+                NBTTagCompound list = nbt.getCompoundTag("players");
+                tooltip.add(TextFormatting.YELLOW + "Players:");
+                tooltip.addAll(HandlerR.uuidKeySetToList(list.getKeySet(), TextFormatting.AQUA));
+                tooltip.add("");
+                tooltip.add(TextFormatting.YELLOW + "Hold " + TextFormatting.WHITE + "[Shift]" + TextFormatting.YELLOW + " to see info.");
+            } else {
+                addInfo(tooltip);
+            }
         } else {
-            tooltip.add(TextFormatting.YELLOW + "RMB - bind.");
-            tooltip.add(TextFormatting.YELLOW + "Shift + RMB - unbind.");
-            tooltip.add(TextFormatting.YELLOW + "Put in crafting grid - clear.");
+            addInfo(tooltip);
         }
+    }
+
+
+    private void addInfo(List<String> tooltip) {
+        tooltip.add(TextFormatting.YELLOW + "RMB - bind.");
+        tooltip.add(TextFormatting.YELLOW + "Shift + RMB - unbind.");
+        tooltip.add(TextFormatting.YELLOW + "Put in crafting grid - clear.");
     }
 }

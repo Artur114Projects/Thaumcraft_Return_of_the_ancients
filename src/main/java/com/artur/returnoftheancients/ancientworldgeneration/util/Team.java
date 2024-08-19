@@ -23,7 +23,6 @@ public class Team {
                 }
             }
         }
-        System.out.println(teams);
         uniqueIds.clear();
     }
 
@@ -74,7 +73,7 @@ public class Team {
 
     public Team(NBTTagCompound nbt) {
         boolean error = false;
-        if (!nbt.hasKey("p0")) {
+        if (!nbt.hasKey("p0Most") || !nbt.hasKey("p0Least")) {
             System.out.println("Team.class, transferred incorrect NBTTag EC:0");
             error = true;
         }
@@ -82,6 +81,7 @@ public class Team {
             uuids.add(nbt.getUniqueId("p" + i));
         }
         if (!error) teams.add(this);
+        if (error) requestToDelete();
     }
 
     public boolean initialise(EntityPlayerMP player) {
@@ -101,7 +101,9 @@ public class Team {
 
     public boolean kill(UUID uuid) {
         players.remove(uuid);
-        return uuids.remove(uuid);
+        boolean flag = uuids.remove(uuid);
+        if (uuids.isEmpty()) requestToDelete();
+        return flag;
     }
 
     public EntityPlayerMP get(UUID uuid) {
@@ -170,6 +172,9 @@ public class Team {
 
     @Override
     public String toString() {
+        if (players.isEmpty()) {
+            return "";
+        }
         StringBuilder res = new StringBuilder("{");
         players.forEach((key, value) -> res.append(value.getName()).append(", "));
         res.delete(res.length() - 2, res.length());

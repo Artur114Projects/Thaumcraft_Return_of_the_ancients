@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.Cus
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.ITRAStructure;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.TRAStructureEBS;
 import com.artur.returnoftheancients.ancientworldgeneration.util.Team;
+import com.artur.returnoftheancients.client.CameraShake;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.gui.SkalaGui;
 import com.artur.returnoftheancients.handlers.HandlerR;
@@ -13,10 +14,14 @@ import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,31 +50,36 @@ public class ItemGavno extends BaseItem{
 	@Override
 	public @NotNull EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player instanceof EntityPlayerMP) {
-			if (structure == null) {
-				structure = new TRAStructureEBS("ancient_crossroads");
-			}
-			structure.gen(worldIn, pos.getX(), pos.getY(), pos.getZ());
 //			PacketHandler.INSTANCE.sendTo(new PacketMiscEvent((byte) 2), (EntityPlayerMP) player);
 //			NBTTagCompound nbt = new NBTTagCompound();
-//			nbt.setString("playSound", InitSounds.RUI_DEAD.NAME);
+//			nbt.setString("playSound", InitSounds.RUI_DEAD.NAM);
 //			MainR.NETWORK.sendTo(new ClientPacketMisc(nbt),(EntityPlayerMP)  player);
 			if (player.isSneaking()) {
-				AncientWorld.reload();
 				Team.clear();
+				AncientWorld.reload();
 			} else {
 				AncientWorld.unload();
 				player.sendMessage(new TextComponentString("UNLOAD"));
 				Team.clear();
 			}
-			HandlerR.playSound((EntityPlayerMP) player, InitSounds.FIRE_TRAP_SOUND);
 		}
-		for (int i = 0; i != 20; i++) {
-			for (int j = 0; j != 1; j++) {
-				worldIn.spawnParticle(EnumParticleTypes.FLAME, pos.getX() + 0.5, pos.getY() + (1 + (j / 100D)), pos.getZ() + 0.5, 0, 0.1 + i / 40D, 0);
+		if (worldIn.isRemote) {
+			CameraShake.startShake(4);
+			for (int i = 0; i != 20; i++) {
+				for (int j = 0; j != 1; j++) {
+					ParticleManager particleManager = Minecraft.getMinecraft().effectRenderer;
+					particleManager.spawnEffectParticle(
+							EnumParticleTypes.BLOCK_CRACK.getParticleID(),
+							pos.getX() + worldIn.rand.nextDouble(),
+							pos.getY() + worldIn.rand.nextDouble(),
+							pos.getZ() + worldIn.rand.nextDouble(),
+							0.0D, 0.1D, 0.0D,
+							Block.getStateId(worldIn.getBlockState(pos))
+					);
+				}
 			}
 		}
 		if (!worldIn.isRemote) {
-			worldIn.setBlockState(pos, InitTileEntity.FAIR_TRAP.getDefaultState());
 //			BlockPos playerPos = player.getPosition();
 //			long time1 = System.currentTimeMillis();
 //			GenStructure.generateStructure(player.world, playerPos.getX() + 20, playerPos.getY(), playerPos.getZ(), "ancient_turn");

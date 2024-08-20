@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.handlers;
 
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
-import com.artur.returnoftheancients.client.TrapParticleFlame;
 import com.artur.returnoftheancients.commads.*;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitItems;
@@ -11,15 +10,13 @@ import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
 import com.artur.returnoftheancients.network.ServerPacketTpToHome;
+import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.tileentity.BlockTileEntity;
 import com.artur.returnoftheancients.utils.interfaces.IHasModel;
-import com.mojang.authlib.GameProfile;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.IParticleFactory;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.item.Item;
-import net.minecraft.world.World;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -27,11 +24,17 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import org.jetbrains.annotations.NotNull;
+import thaumcraft.Thaumcraft;
+import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aspects.AspectRegistryEvent;
+import thaumcraft.api.crafting.InfusionRecipe;
+import thaumcraft.api.research.ResearchCategories;
+import static thaumcraft.api.items.ItemsTC.*;
+import static net.minecraft.init.Items.*;
 
-import java.util.Objects;
-
-@EventBusSubscriber
+@EventBusSubscriber(modid = Referense.MODID)
 public class RegisterHandler {
 
 	@SubscribeEvent
@@ -46,15 +49,14 @@ public class RegisterHandler {
 	}
 
 	public static void registerTileEntity() {
-		System.out.println(InitTileEntity.TILE_ENTITIES.size());
 		for (BlockTileEntity block : InitTileEntity.TILE_ENTITIES) {
 			GameRegistry.registerTileEntity(block.getTileEntityClass(), block.getRegistryName().toString());
-			System.out.println(block.getRegistryName().toString());
 		}
 	}
 
 	public static void preInitRegistries()
     {
+
 	}
 
 	public static void registerPackets() {
@@ -87,6 +89,11 @@ public class RegisterHandler {
 			event.registerServerCommand(new Command());
 		}
 		event.registerServerCommand(new TRACommand());
+	}
+
+	public static void registerResearch() {
+		ResearchCategories.registerCategory("ANCIENT_WORLD", "UNLOCKELDRITCH", new AspectList(), new ResourceLocation(Referense.MODID, "textures/gui/ancient_logo.png"), new ResourceLocation(Thaumcraft.MODID, "textures/gui/gui_research_back_6.jpg"));
+		ThaumcraftApi.registerResearchLocation(new ResourceLocation(Referense.MODID, "research/ancient_world"));
 	}
 
 	public 	static void registerStructures() {
@@ -124,5 +131,44 @@ public class RegisterHandler {
 		CustomGenStructure.put("ancient_exit");
 		CustomGenStructure.put("air_cube");
 		CustomGenStructure.register();
+	}
+
+	public static void registerTCRecipes() {
+		ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation(Referense.MODID + ":portal_compass"), new InfusionRecipe(
+				"START",
+				new ItemStack(InitItems.COMPASS),
+				4,
+				new AspectList().add(Aspect.ELDRITCH, 125).add(Aspect.DARKNESS, 75).add(Aspect.SENSES, 100),
+				COMPASS, mechanismComplex, new ItemStack(plate, 1, 3), morphicResonator, new ItemStack(plate, 1, 3))
+		);
+	}
+
+	@SubscribeEvent
+	public static void registerAspects(AspectRegistryEvent event) {
+		addAspectsPB(event);
+		addAspectsSB(event);
+	}
+
+	private static void addAspectsPB(AspectRegistryEvent event) {
+		ItemStack myItem = new ItemStack(InitItems.PRIMAL_BLADE);
+
+		AspectList aspects = new AspectList();
+		aspects.add(Aspect.FIRE, 20);
+		aspects.add(Aspect.WATER, 20);
+		aspects.add(Aspect.AIR, 20);
+		aspects.add(Aspect.EARTH, 20);
+		aspects.add(Aspect.AVERSION, 10);
+
+		event.register.registerObjectTag(myItem, aspects);
+	}
+
+	private static void addAspectsSB(AspectRegistryEvent event) {
+		ItemStack myItem = new ItemStack(InitItems.SOUL_BINDER);
+
+		AspectList aspects = new AspectList();
+		aspects.add(Aspect.SOUL, 10);
+		aspects.add(Aspect.TRAP, 4);
+
+		event.register.registerObjectTag(myItem, aspects);
 	}
 }

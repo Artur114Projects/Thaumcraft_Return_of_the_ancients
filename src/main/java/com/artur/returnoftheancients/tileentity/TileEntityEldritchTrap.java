@@ -38,7 +38,7 @@ public class TileEntityEldritchTrap extends TileEntity implements ITickable {
     @Override
     public void update() {
         if (detectionBox == null) {
-            detectionBox = new AxisAlignedBB(pos.add(-7, -7, -7), pos.add(8, 8, 8));
+            detectionBox = new AxisAlignedBB(pos.add(-7, -7, -7), pos.add(7, 7, 7));
         }
         if (poss == null) {
             poss = new BlockPos[] {pos.add(0, 1, -8), pos.add(0, 1, 7), pos.add(-8, 1, 0), pos.add(7, 1, 0)};
@@ -83,26 +83,24 @@ public class TileEntityEldritchTrap extends TileEntity implements ITickable {
 
         if (phase == 3) {
             if (!world.isRemote) {
-                for (byte i = 0; i != 2; i++) {
-                    int x;
-                    int z;
-                    if (world.rand.nextBoolean()) {
-                        x = getRandomInt(8);
-                        z = getRandomInt(2);
-                    } else {
-                        x = getRandomInt(2);
-                        z = getRandomInt(8);
-                    }
-                    Entity entity;
-                    if (world.rand.nextInt(10) == 0) {
-                        entity = ItemMonsterPlacer.spawnCreature(world, EntityList.getKey(EntityEldritchGuardian.class), (pos.getX() - 0.5) + x, (pos.getY() + 1), (pos.getZ() - 0.5) + z);
-                    } else {
-                        entity = ItemMonsterPlacer.spawnCreature(world, EntityList.getKey(EntityMindSpider.class), (pos.getX() - 0.5) + x, (pos.getY() + 1), (pos.getZ() - 0.5) + z);
-                    }
-                    if (entity != null) {
-                        EntityLiving living = (EntityLiving) entity;
-                        world.spawnEntity(living);
-                    }
+                int x;
+                int z;
+                if (world.rand.nextBoolean()) {
+                    x = getRandomInt(8);
+                    z = getRandomInt(2);
+                } else {
+                    x = getRandomInt(2);
+                    z = getRandomInt(8);
+                }
+                Entity entity;
+                if (world.rand.nextInt(10) == 0) {
+                    entity = ItemMonsterPlacer.spawnCreature(world, EntityList.getKey(EntityEldritchGuardian.class), (pos.getX() - 0.5) + x, (pos.getY() + 1), (pos.getZ() - 0.5) + z);
+                } else {
+                    entity = ItemMonsterPlacer.spawnCreature(world, EntityList.getKey(EntityMindSpider.class), (pos.getX() - 0.5) + x, (pos.getY() + 1), (pos.getZ() - 0.5) + z);
+                }
+                if (entity != null) {
+                    EntityLiving living = (EntityLiving) entity;
+                    world.spawnEntity(living);
                 }
             }
             m--;

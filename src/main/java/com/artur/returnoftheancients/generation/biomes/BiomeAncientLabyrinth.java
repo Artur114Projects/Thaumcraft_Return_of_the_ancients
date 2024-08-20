@@ -27,7 +27,7 @@ public class BiomeAncientLabyrinth extends Biome implements IBiome {
     // Вес биома
     private int weight = 0;
     // Типы биома
-    private final BiomeDictionary.Type[] types = new BiomeDictionary.Type[]{BiomeDictionary.Type.DEAD, BiomeDictionary.Type.DENSE};
+    private final BiomeDictionary.Type[] types = new BiomeDictionary.Type[] {BiomeDictionary.Type.DEAD, BiomeDictionary.Type.DENSE};
 
     public static String NAME = "ancient entry";
     public static List<SpawnListEntry> spawnListEntryList = new ArrayList<>();
@@ -49,7 +49,6 @@ public class BiomeAncientLabyrinth extends Biome implements IBiome {
         spawnListEntryList.add(new SpawnListEntry(EntityInhabitedZombie.class, 50, 4, 8));
         this.spawnableCaveCreatureList = spawnListEntryList;
         InitBiome.BIOMES.add(this);
-        System.out.println("BiomeAncientLabyrinth is constructed, registry name: " + NAME);
     }
 
 

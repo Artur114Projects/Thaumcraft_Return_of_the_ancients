@@ -237,7 +237,6 @@ public class TRAConfigs {
         if (event.getModID().equals(Referense.MODID)) {
             ConfigManager.sync(Referense.MODID, Config.Type.INSTANCE);
             PlayersCountDifficultyProcessor.compile(DifficultySettings.playersCountDifficulty);
-            System.out.println("Configs is set");
         }
     }
 

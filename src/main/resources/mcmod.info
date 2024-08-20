@@ -11,6 +11,6 @@
   "credits": "https://www.curseforge.com/members/artur114",
   "logoFile": "Logo.png",
   "screenshots": [],
-  "dependencies": ["thaumcraft"]
+  "dependencies": ["thaumcraft", "baubles"]
 }
 ]

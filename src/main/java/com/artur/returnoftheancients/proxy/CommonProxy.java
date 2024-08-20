@@ -32,8 +32,8 @@ public class CommonProxy {
     
     public void init(FMLInitializationEvent event)
     {
-        ResearchCategories.registerCategory("ANCIENT_WORLD", null, new AspectList(), new ResourceLocation(Thaumcraft.MODID, "textures/blocks/ancient_stone_5.png"), new ResourceLocation(Thaumcraft.MODID, "textures/gui/gui_research_back_6.jpg"));
-        ThaumcraftApi.registerResearchLocation(new ResourceLocation(Referense.MODID, "research/my_research"));
+        RegisterHandler.registerTCRecipes();
+        RegisterHandler.registerResearch();
     }
 
     public void postInit(FMLPostInitializationEvent event)

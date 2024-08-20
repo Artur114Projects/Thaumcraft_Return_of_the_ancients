@@ -55,3 +55,9 @@ returnoftheancients.cfg.sub.aws.wgs.nrt=Number of reload light block per tick
 # Config Mob gen settings
 returnoftheancients.cfg.sub.mgs=Mob gen settings (Don`t work)
 returnoftheancients.cfg.sub.mgs.umg=Use new mob generation (Don`t work)
+#research
+research.start.text.stage.1=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this
+research.start.text.stage.2=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this. <BR> <BR> Research and tests have shown that the device is not finished, I think that with my knowledge I can improve it
+research.start.text.stage.3=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this. <BR> <BR> Research and tests have shown that the device is not finished, I think that with my knowledge I can improve it. <BR> <BR> Great! I got a working prototype, I should go and see what's there
+tc.research_category.ANCIENT_WORLD=Ancient world
+research.start.title=Start

@@ -1,0 +1,47 @@
+{
+  "entries": [
+    {
+      "key": "START",
+      "name": "research.start.title",
+      "icons": [ "returnoftheancients:textures/gui/ancient_logo.png" ],
+      "category": "ANCIENT_WORLD",
+      "location": [ 0,0 ],
+      "parents": [ "UNLOCKELDRITCH" ],
+      "meta": [ "HIDDEN" ],
+      "stages": [
+        {
+          "text": "research.start.text.stage.1",
+          "required_knowledge":["THEORY;ELDRITCH;1"],
+          "recipes":[],
+          "required_item":[
+            "thaumcraft:plate;2;3",
+            "minecraft:compass"
+          ]
+        },
+        {
+          "text": "research.start.text.stage.2",
+          "required_knowledge":["THEORY;BASICS;1","THEORY;ARTIFICE;1","THEORY;ELDRITCH;1"]
+        },
+        {
+          "text": "research.start.text.stage.3",
+          "recipes":["returnoftheancients:portal_compass"]
+        }
+      ]
+    },
+    {
+      "key": "TO_ANCIENT",
+      "name": "research.toancient.title",
+      "icons": [ "returnoftheancients:portal_compass" ],
+      "category": "ANCIENT_WORLD",
+      "location": [ -4,0 ],
+      "parents": ["START"],
+      "meta": [],
+      "stages": [
+        {
+          "text": "research.toancient.text.stage.1",
+          "required_research":["m_ENTERANCIENT"]
+        }
+      ]
+    }
+  ]
+}

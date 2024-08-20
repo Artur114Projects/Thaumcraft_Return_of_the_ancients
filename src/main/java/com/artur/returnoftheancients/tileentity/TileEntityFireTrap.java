@@ -100,7 +100,9 @@ public class TileEntityFireTrap extends TileEntity implements ITickable {
                                 }
                             }
                             if (!haveResistance) {
-                                player.setHealth(player.getHealth() - 0.2f);
+                                if (!((player.getHealth() - 0.2f) <= 0)) {
+                                    player.setHealth(player.getHealth() - 0.2f);
+                                }
                             }
                             player.setFire(20);
                         }

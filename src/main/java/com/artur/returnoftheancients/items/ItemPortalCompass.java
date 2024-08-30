@@ -1,12 +1,12 @@
 package com.artur.returnoftheancients.items;
 
 import com.artur.returnoftheancients.main.MainR;
+import com.artur.returnoftheancients.misc.WorldDataFields;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -54,7 +54,7 @@ public class ItemPortalCompass extends BaseItem {
                     {
                         double d1 = flag ? (double)entity.rotationYaw : this.getFrameRotation((EntityItemFrame)entity);
                         d1 = MathHelper.positiveModulo(d1 / 360.0D, 1.0D);
-                        double d2 = this.getSpawnToAngle(worldIn, entity) / (Math.PI * 2D);
+                        double d2 = this.getPortalToAngle(entity) / (Math.PI * 2D);
                         d0 = 0.5D - (d1 - 0.25D - d2);
                     }
                     else
@@ -88,13 +88,13 @@ public class ItemPortalCompass extends BaseItem {
             @SideOnly(Side.CLIENT)
             private double getFrameRotation(EntityItemFrame p_185094_1_)
             {
-                return (double)MathHelper.wrapDegrees(180 + p_185094_1_.facingDirection.getHorizontalIndex() * 90);
+                return MathHelper.wrapDegrees(180 + p_185094_1_.facingDirection.getHorizontalIndex() * 90);
             }
             @SideOnly(Side.CLIENT)
-            private double getSpawnToAngle(World p_185092_1_, Entity p_185092_2_)
+            private double getPortalToAngle(Entity entity)
             {
-                BlockPos blockpos = new BlockPos(8, 0, 8);
-                return Math.atan2((double)blockpos.getZ() - p_185092_2_.posZ, (double)blockpos.getX() - p_185092_2_.posX);
+                BlockPos blockpos = WorldDataFields.blockPosToCompass;
+                return Math.atan2((double) blockpos.getZ() - entity.posZ, (double) blockpos.getX() - entity.posX);
             }
         });
         setCreativeTab(MainR.ReturnOfTheAncientsTab);

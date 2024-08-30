@@ -1,7 +1,5 @@
 package com.artur.returnoftheancients.handlers;
 
-import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntry;
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.TRAStructure;
 import com.artur.returnoftheancients.items.ItemSoulBinder;
 import com.artur.returnoftheancients.misc.SoundTRA;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -16,17 +14,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,7 +33,7 @@ public class HandlerR {
         return r.nextInt((max - min) + 1) + min;
     }
 
-    public static int CalculateGenerationHeight(World world, int x, int z) {
+    public static int calculateGenerationHeight(World world, int x, int z) {
         int y = world.getHeight();
 
         while (y-- >= 0) {
@@ -65,14 +59,17 @@ public class HandlerR {
     }
 
 
-    public static void genAncientPortal(World world, int x, int y, int z, boolean isSetCube) {
+    public static void genAncientPortal(World world, int x, int z, boolean isSetCube) {
+        int y = TRAConfigs.PortalSettings.y;
+        int fx = (16 * x) + 5;
+        int fz = (16 * z) + 5;
         if (isSetCube) {
-            GenStructure.generateStructure(world, x, HandlerR.CalculateGenerationHeight(world, x + 3, z + 3) + 1, z, "ancient_portal_air_cube");
+            GenStructure.generateStructure(world, fx, HandlerR.calculateGenerationHeight(world, fx + 3, fz + 3) + 1, fz, "ancient_portal_air_cube");
         }
-        while (CalculateGenerationHeight(world, x + 3, z + 3) > 0) {
-            GenStructure.generateStructure(world, x, CalculateGenerationHeight(world, x + 3, z + 3) + y, z, "ancient_portal");
+        while (calculateGenerationHeight(world, fx + 3, fz + 3) > 0) {
+            GenStructure.generateStructure(world, fx, calculateGenerationHeight(world, fx + 3, fz + 3) + y, fz, "ancient_portal");
         }
-        GenStructure.generateStructure(world, x, 0, z, "ancient_portal_floor");
+        GenStructure.generateStructure(world, fx, 0, fz, "ancient_portal_floor");
     }
 
     public static ArrayList<String> isPlayerUseUnresolvedItems(EntityPlayer player) {
@@ -226,6 +223,12 @@ public class HandlerR {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setString("sendMessageTranslate", key);
         MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
+    }
+
+    public static void sendMessageTranslateToAll(String key) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setString("sendMessageTranslate", key);
+        MainR.NETWORK.sendToAll(new ClientPacketMisc(nbt));
     }
 
     public static void sendMessageTranslateWithChangeTitle(EntityPlayerMP playerMP, String key, String title) {

@@ -39,7 +39,7 @@ public class ItemSoulBinder extends BaseItem {
             @SideOnly(Side.CLIENT)
             public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
                 if (entityIn == null && !stack.isOnItemFrame()) {
-                    return 0;
+                    return 1;
                 }
                 return !stack.getOrCreateSubCompound(Referense.MODID).getBoolean("isFull") ? 1 : 0;
             }

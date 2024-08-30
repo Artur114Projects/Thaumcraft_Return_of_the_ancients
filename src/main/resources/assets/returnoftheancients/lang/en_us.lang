@@ -1,17 +1,16 @@
 item.gavno.name=The subject of debugging
 item.soul_binder.name=Soul connection stone
-tile.boss_trigger_block.name=Boss trigger block
-itemGroup.returnoftheancients_tab=Thaumcraft: Return of the ancients
 item.itemprimalblade.name=Primal Blade
+item.portal_compass.name=Void compass
+tile.boss_trigger_block.name=Boss trigger block
 tile.fire_trap.name=Incinerator
 tile.tp_to_home_block.name=Portal to overworld
 tile.taint_ancient_stone.name=Taint ancient stone
 tile.tp_to_ancient_world_block.name=Portal to Ancient World
+itemGroup.returnoftheancients_tab=Thaumcraft: Return of the ancients
 # Any
-research.dimension.title=danos
-research.dimension.text.stage.1=gavno
-research.dimension.text.stage.2=panos
-returnoftheancients.text.entered_ancient=ABOBA
+returnoftheancients.text.entered_ancient=You visited the ancient world
+returnoftheancients.text.found_portal=You found an ancient portal
 returnoftheancients.portal.message=Cant use:
 item.itemprimalblade.text=Weapons of the gods
 returnoftheancients.rui.t=put it away
@@ -19,6 +18,7 @@ returnoftheancients.rui.f=you have 30 seconds
 returnoftheancients.message.ancientworldload.start=Generation has begun, the world can slow down
 returnoftheancients.message.ancientworldload.finish=Generation is finish
 returnoftheancients.gui.esc=Press ESC again to exit.
+returnoftheancients.message.new-version=Welcome to Thaumcraft: Return of the ancients v1.3.0-betta!
 # Config any
 returnoftheancients.cfg.sub.any.primalbladespeed=The attack speed of the Primordial Blade
 returnoftheancients.cfg.sub.any.primalbladedamage=The damage of the Primordial Blade
@@ -56,8 +56,12 @@ returnoftheancients.cfg.sub.aws.wgs.nrt=Number of reload light block per tick
 returnoftheancients.cfg.sub.mgs=Mob gen settings (Don`t work)
 returnoftheancients.cfg.sub.mgs.umg=Use new mob generation (Don`t work)
 #research
+tc.research_category.ANCIENT_WORLD=Ancient world
+#
+research.start.title=Start
 research.start.text.stage.1=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this
 research.start.text.stage.2=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this. <BR> <BR> Research and tests have shown that the device is not finished, I think that with my knowledge I can improve it
-research.start.text.stage.3=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this. <BR> <BR> Research and tests have shown that the device is not finished, I think that with my knowledge I can improve it. <BR> <BR> Great! I got a working prototype, I should go and see what's there
-tc.research_category.ANCIENT_WORLD=Ancient world
-research.start.title=Start
+research.start.text.stage.3=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this. <BR> <BR> Research and tests have shown that the device is not finished, I think that with my knowledge I can improve it. <BR> <BR> Great! I got a working prototype
+#
+research.to_ancient.title=To ancient world
+research.m_FOUND_ANCIENT.text=Find the portal

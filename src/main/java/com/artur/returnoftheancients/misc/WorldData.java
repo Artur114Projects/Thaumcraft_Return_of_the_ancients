@@ -27,6 +27,7 @@ public class WorldData extends WorldSavedData {
     @Override
     public void readFromNBT(@NotNull NBTTagCompound nbt) {
         saveData = nbt.getCompoundTag(saveDataKey);
+        WorldDataFields.onRead(saveData);
         if (TRAConfigs.Any.debugMode) {
             System.out.println("readFromNBT: " + saveData);
         }

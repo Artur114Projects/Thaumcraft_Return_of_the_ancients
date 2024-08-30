@@ -2,32 +2,27 @@ package com.artur.returnoftheancients.handlers;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
-import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.misc.PlayersCountDifficultyProcessor;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.blocks.TpToAncientWorldBlock;
-import com.artur.returnoftheancients.generation.generators.GenStructure;
+import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemCompass;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.DifficultyChangeEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -36,11 +31,7 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.aspects.AspectRegistryEvent;
 import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
@@ -48,6 +39,7 @@ import thaumcraft.common.lib.network.PacketHandler;
 import thaumcraft.common.lib.network.misc.PacketMiscEvent;
 
 import java.util.Objects;
+import java.util.Random;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
@@ -60,13 +52,13 @@ public class ServerEventsHandler {
     public static boolean bossIsDead = false;
     private static boolean isAncientAreaSet = false;
     private static byte difficultyId = -1;
-
+    private static boolean newVersion = false;
 
     public static byte getDifficultyId() {return difficultyId;}
 
     public static void tpToHome(EntityPlayerMP player) {
         player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, true);
-        FreeTeleporter.teleportToDimension(player, 0, TRAConfigs.PortalSettings.x + 3, 3, TRAConfigs.PortalSettings.z + 3);
+        FreeTeleporter.teleportToDimension(player, 0,WorldDataFields.portalX, 3, WorldDataFields.portalZ);
         player.getEntityData().setBoolean(tpToHomeNBT, true);
     }
 
@@ -76,28 +68,26 @@ public class ServerEventsHandler {
         difficultyId = d == EnumDifficulty.PEACEFUL ? 0 : d == EnumDifficulty.EASY ? 1 : d == EnumDifficulty.NORMAL ? 2 : d == EnumDifficulty.HARD ? 3 : (byte) -1;
     }
 
-
     @SubscribeEvent
     public static void WorldEventLoad(WorldEvent.Load e) {
         if (!e.getWorld().isRemote) {
             WorldData worldData = WorldData.get();
-            if (!worldData.saveData.hasKey("version")) {
-                worldData.saveData.setString("version", Referense.VERSION);
-            }
+            checkVersion(e);
+
             if (e.getWorld().provider.getDimension() == 0) {
                 if (TRAConfigs.PortalSettings.isGen) {
-                    if (TRAConfigs.PortalSettings.toBedrock) {
-                        if (!worldData.saveData.getBoolean(IALGS.isAncientPortalGenerateKey) && e.getWorld().provider.getDimension() == 0) {
-                            if (!worldData.saveData.hasKey(IALGS.AncientPortalYPosKey)) {
-                                worldData.saveData.setInteger(IALGS.AncientPortalYPosKey, HandlerR.CalculateGenerationHeight(e.getWorld(), TRAConfigs.PortalSettings.x, TRAConfigs.PortalSettings.z));
-                            }
-                            HandlerR.genAncientPortal(e.getWorld(), TRAConfigs.PortalSettings.x, TRAConfigs.PortalSettings.y, TRAConfigs.PortalSettings.z, true);
-                            worldData.saveData.setBoolean(IALGS.isAncientPortalGenerateKey, true);
-                        }
-                    } else {
-                        GenStructure.generateStructure(e.getWorld(), TRAConfigs.PortalSettings.x, HandlerR.CalculateGenerationHeight(e.getWorld(), TRAConfigs.PortalSettings.x, TRAConfigs.PortalSettings.z) + TRAConfigs.PortalSettings.y, TRAConfigs.PortalSettings.z, "ancient_portal_no_bedrock");
+                    if (!WorldDataFields.isPortalGenerate) {
+                        Random rand = new Random(e.getWorld().getSeed());
+                        int x = rand.nextInt(1000) - 500;
+                        int z = rand.nextInt(1000) - 500;
+                        worldData.saveData.setInteger(IALGS.ancientPortalXPosKey, x);
+                        worldData.saveData.setInteger(IALGS.ancientPortalZPosKey, z);
+                        worldData.saveData.setInteger(IALGS.ancientPortalYPosKey, HandlerR.calculateGenerationHeight(e.getWorld(), (16 * x) + 8, (16 * z) + 8));
+                        HandlerR.genAncientPortal(e.getWorld(), x, z, true);
+                        worldData.saveData.setBoolean(IALGS.isAncientPortalGenerateKey, true);
+                        worldData.markDirty();
+                        WorldDataFields.reload();
                     }
-                    worldData.markDirty();
                 }
             }
             if (e.getWorld().provider.getDimension() == ancient_world_dim_id) {
@@ -110,6 +100,21 @@ public class ServerEventsHandler {
         }
         for (EntityPlayer player : e.getWorld().playerEntities) {
             player.getEntityData().setBoolean("isUUI", false);
+        }
+        WorldDataFields.reload();
+    }
+
+    private static void checkVersion(WorldEvent.Load e) {
+        WorldData worldData = WorldData.get();
+        if (!worldData.saveData.hasKey("version")) {
+            if (WorldDataFields.isPortalGenerate) {
+                worldData.saveData.setInteger(IALGS.ancientPortalXPosKey, 0);
+                worldData.saveData.setInteger(IALGS.ancientPortalZPosKey, 0);
+                WorldDataFields.reload();
+                newVersion = true;
+                System.out.println("new version!");
+            }
+            worldData.saveData.setString("version", Referense.VERSION);
         }
     }
 
@@ -169,15 +174,13 @@ public class ServerEventsHandler {
         }
     }
 
-
-
     @SubscribeEvent
     public static void PlayerTickEvent(TickEvent.PlayerTickEvent e) {
         int playerDimension = e.player.dimension;
         if (e.player.getEntityData().getBoolean(startUpNBT)) {
             if (playerDimension != ancient_world_dim_id) {
                 if (e.player instanceof EntityPlayerMP) {
-                    if (e.player.posY > WorldData.get().saveData.getInteger(IALGS.AncientPortalYPosKey)) {
+                    if (e.player.posY > WorldData.get().saveData.getInteger(IALGS.ancientPortalYPosKey)) {
                         EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
 
                         HandlerR.setStartUpNBT(playerMP, false);
@@ -272,14 +275,24 @@ public class ServerEventsHandler {
     }
 
     protected static void checkResearch(EntityPlayer player) {
-        if (!ThaumcraftCapabilities.knowsResearchStrict(player, "m_ENTERANCIENT") && player.dimension == ancient_world_dim_id) {
-            IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(player);
-            if (knowledge.addResearch("m_ENTERANCIENT")) {
-                knowledge.sync((EntityPlayerMP) player);
-                player.sendStatusMessage(new TextComponentTranslation(Referense.MODID + ".text.entered_ancient").setStyle(new Style().setColor(TextFormatting.DARK_PURPLE)), true);
+        if (isWithinRadius(player.posX, player.posZ, WorldDataFields.portalX, WorldDataFields.portalZ, 20)) {
+            if (!ThaumcraftCapabilities.knowsResearchStrict(player, "m_FOUND_ANCIENT")) {
+                IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(player);
+                if (knowledge.addResearch("m_FOUND_ANCIENT")) {
+                    knowledge.sync((EntityPlayerMP) player);
+                    player.sendStatusMessage(new TextComponentTranslation(Referense.MODID + ".text.found_portal").setStyle(new Style().setColor(TextFormatting.DARK_PURPLE)), true);
+                }
             }
         }
     }
+
+    private static boolean isWithinRadius(double x1, double z1, double x2, double z2, double radius) {
+        double dx = x1 - x2;
+        double dz = z1 - z2;
+        return dx * dx + dz * dz <= radius * radius;
+    }
+
+
 
     static byte wt = 0;
     static int maxDuration = 999999999;
@@ -288,6 +301,10 @@ public class ServerEventsHandler {
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (event.getEntity() instanceof EntityPlayerMP) {
+            if (newVersion) {
+                HandlerR.sendMessageTranslate((EntityPlayerMP) event.getEntity(), Referense.MODID + ".message.new-version");
+                newVersion = false;
+            }
             AncientWorld.playerJoinBuss((EntityPlayerMP) event.getEntity());
         }
         if (event.getEntity().dimension == ancient_world_dim_id && !event.getWorld().isRemote) {

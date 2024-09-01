@@ -1,10 +1,13 @@
 package com.artur.returnoftheancients.items;
 
+import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.WorldDataFields;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
@@ -50,12 +53,17 @@ public class ItemPortalCompass extends BaseItem {
 
                     double d0;
 
-                    if (worldIn.provider.isSurfaceWorld())
+                    if (worldIn.provider.isSurfaceWorld() && entityIn instanceof EntityPlayer)
                     {
-                        double d1 = flag ? (double)entity.rotationYaw : this.getFrameRotation((EntityItemFrame)entity);
-                        d1 = MathHelper.positiveModulo(d1 / 360.0D, 1.0D);
-                        double d2 = this.getPortalToAngle(entity) / (Math.PI * 2D);
-                        d0 = 0.5D - (d1 - 0.25D - d2);
+                        EntityPlayer player = (EntityPlayer) entityIn;
+                        if (HandlerR.isHasItem(player, InitItems.COMPASS)) {
+                            double d1 = flag ? (double) entity.rotationYaw : this.getFrameRotation((EntityItemFrame) entity);
+                            d1 = MathHelper.positiveModulo(d1 / 360.0D, 1.0D);
+                            double d2 = this.getPortalToAngle(entity) / (Math.PI * 2D);
+                            d0 = 0.5D - (d1 - 0.25D - d2);
+                        } else {
+                            d0 = Math.random();
+                        }
                     }
                     else
                     {

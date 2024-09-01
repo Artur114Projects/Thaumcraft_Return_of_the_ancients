@@ -47,7 +47,7 @@ public class TileEntityFireTrap extends TileEntity implements ITickable {
                 detectionBox = new AxisAlignedBB(pos.add(-1, -1, -1), pos.add(2, 2, 2));
             }
             if (poss == null) {
-                poss = new BlockPos[]{pos.add(0, 1 ,1), pos.add(0, 1 ,-1), pos.add(1, 1 ,0), pos.add(-1, 1 ,0)};
+                poss = new BlockPos[] {pos.add(0, 1 ,1), pos.add(0, 1 ,-1), pos.add(1, 1 ,0), pos.add(-1, 1 ,0)};
             }
             if (fireState == null) {
                 fireState = Blocks.FIRE.getDefaultState();
@@ -61,16 +61,21 @@ public class TileEntityFireTrap extends TileEntity implements ITickable {
                 List<EntityLiving> livings = world.getEntitiesWithinAABB(EntityLiving.class, detectionBox);
                 if (!world.isRemote) {
 
-                    if (world.getBlockState(poss[0]).getBlock().equals(Blocks.AIR)) {
+                    IBlockState state0 = world.getBlockState(poss[0]);
+                    IBlockState state1 = world.getBlockState(poss[1]);
+                    IBlockState state2 = world.getBlockState(poss[2]);
+                    IBlockState state3 = world.getBlockState(poss[3]);
+
+                    if (state0.getBlock().equals(Blocks.AIR)) {
                         world.setBlockState(poss[0], fireState);
                     }
-                    if (world.getBlockState(poss[1]).getBlock().equals(Blocks.AIR)) {
+                    if (state1.getBlock().equals(Blocks.AIR)) {
                         world.setBlockState(poss[1], fireState);
                     }
-                    if (world.getBlockState(poss[2]).getBlock().equals(Blocks.AIR)) {
+                    if (state2.getBlock().equals(Blocks.AIR)) {
                         world.setBlockState(poss[2], fireState);
                     }
-                    if (world.getBlockState(poss[3]).getBlock().equals(Blocks.AIR)) {
+                    if (state3.getBlock().equals(Blocks.AIR)) {
                         world.setBlockState(poss[3], fireState);
                     }
 
@@ -104,7 +109,7 @@ public class TileEntityFireTrap extends TileEntity implements ITickable {
                                     player.setHealth(player.getHealth() - 0.2f);
                                 }
                             }
-                            player.setFire(20);
+                            player.setFire(8);
                         }
                     }
                 }

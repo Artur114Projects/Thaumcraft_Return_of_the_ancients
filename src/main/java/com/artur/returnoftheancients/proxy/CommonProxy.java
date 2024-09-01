@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.proxy;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
+import com.artur.returnoftheancients.capabilities.PlayerTimer;
 import com.artur.returnoftheancients.handlers.RegisterHandler;
 
 import com.artur.returnoftheancients.misc.CraftingRegister;
@@ -26,6 +27,7 @@ public class CommonProxy {
 	
     public void preInit(FMLPreInitializationEvent event)
     {
+        PlayerTimer.preInit();
         CraftingRegister.register();
     	RegisterHandler.preInitRegistries();
     }

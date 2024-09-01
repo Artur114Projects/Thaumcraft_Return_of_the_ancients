@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.ancientworldgeneration.main.entry;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.misc.TRAConfigs;
+import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -148,13 +149,10 @@ public class AncientEntrySolo extends AncientEntry {
 
     @Override
     public void onFinal() {
+        HandlerR.researchAndSendMessage(player, "m_ENTRY_ANCIENT", Referense.MODID + ".text.entered_ancient");
         HandlerR.injectPhaseOnClient(player, (byte) 4);
         HandlerR.setLoadingGuiState(player, false);
-        if (player.isCreative() && TRAConfigs.Any.debugMode) {
-            player.connection.setPlayerLocation(8 + (10000 * pos), 126, -10, -181, 0);
-        } else {
-            player.connection.setPlayerLocation(8 + (10000 * pos), 253, 8, -181, 90);
-        }
+        player.connection.setPlayerLocation(8 + (10000 * pos), 253, 8, player.rotationYaw, 90);
         player.setHealth(20);
     }
 }

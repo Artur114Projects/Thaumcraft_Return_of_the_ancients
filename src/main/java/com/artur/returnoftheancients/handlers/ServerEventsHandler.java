@@ -2,6 +2,9 @@ package com.artur.returnoftheancients.handlers;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
+import com.artur.returnoftheancients.capabilities.PlayerTimer;
+import com.artur.returnoftheancients.capabilities.TRACapabilities;
 import com.artur.returnoftheancients.misc.PlayersCountDifficultyProcessor;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -9,6 +12,7 @@ import com.artur.returnoftheancients.blocks.TpToAncientWorldBlock;
 import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -22,19 +26,25 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
+import thaumcraft.common.lib.capabilities.PlayerKnowledge;
+import thaumcraft.common.lib.capabilities.PlayerWarp;
 import thaumcraft.common.lib.network.PacketHandler;
 import thaumcraft.common.lib.network.misc.PacketMiscEvent;
 
@@ -45,7 +55,6 @@ import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_di
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class ServerEventsHandler {
-
     public static final String tpToHomeNBT = "tpToHomeNBT";
     protected static final String startUpNBT = "startUpNBT";
     protected static final String notNoCollisionNBTTime = "notNoCollisionNBTTime";
@@ -53,6 +62,8 @@ public class ServerEventsHandler {
     private static boolean isAncientAreaSet = false;
     private static byte difficultyId = -1;
     private static boolean newVersion = false;
+    private static int hurtCount = 0;
+
 
     public static byte getDifficultyId() {return difficultyId;}
 
@@ -66,6 +77,21 @@ public class ServerEventsHandler {
     public static void DifficultyEvent(DifficultyChangeEvent e) {
         EnumDifficulty d = e.getDifficulty();
         difficultyId = d == EnumDifficulty.PEACEFUL ? 0 : d == EnumDifficulty.EASY ? 1 : d == EnumDifficulty.NORMAL ? 2 : d == EnumDifficulty.HARD ? 3 : (byte) -1;
+    }
+
+    @SubscribeEvent
+    public static void playerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent e) {
+        if (e.player instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) e.player;
+
+            WorldDataFields.sync(player);
+            AncientWorld.playerJoinBuss(player);
+
+            if (newVersion) {
+                HandlerR.sendMessageTranslate(player, Referense.MODID + ".message.new-version");
+                newVersion = false;
+            }
+        }
     }
 
     @SubscribeEvent
@@ -97,11 +123,11 @@ public class ServerEventsHandler {
                     isAncientAreaSet = true;
                 }
             }
+            WorldDataFields.reload();
         }
         for (EntityPlayer player : e.getWorld().playerEntities) {
             player.getEntityData().setBoolean("isUUI", false);
         }
-        WorldDataFields.reload();
     }
 
     private static void checkVersion(WorldEvent.Load e) {
@@ -131,22 +157,38 @@ public class ServerEventsHandler {
         if (!TRAConfigs.AncientWorldSettings.isDeadToAncientWorld) {
             if (e.getEntity() instanceof EntityPlayerMP) {
                 if (e.getEntity().dimension == ancient_world_dim_id) {
-                    EntityPlayer player = (EntityPlayer) e.getEntity();
-                        if (player.getHealth() - e.getAmount() <= 0) {
-                            e.setCanceled(true);
-                            player.setHealth(20);
-                            AncientWorld.playerLostBuss(player.getUniqueID());
-                            tpToHome((EntityPlayerMP) player);
-                            return;
-                        }
-                    if (HandlerR.genRandomIntRange(0, TRAConfigs.DifficultySettings.chanceIgnoringArmor) == 0) {
+                    EntityPlayerMP player = (EntityPlayerMP) e.getEntity();
+                    if (player.getHealth() - e.getAmount() <= 0) {
+                        e.setCanceled(true);
+                        onPlayerLost(player);
+                        return;
+                    }
+                    if (hurtCount >= TRAConfigs.DifficultySettings.chanceIgnoringArmor) {
+                        hurtCount = 0;
                         player.setHealth(player.getHealth() - e.getAmount());
                         e.setCanceled(true);
+                    } else {
+                        hurtCount++;
                     }
                 }
             }
         }
     }
+
+    protected static void onPlayerLost(EntityPlayerMP player) {
+        player.setHealth(20);
+        AncientWorld.playerLostBuss(player.getUniqueID());
+        tpToHome(player);
+    }
+
+    protected static void onPlayerTpToHome(EntityPlayerMP player) {
+        if (!ThaumcraftCapabilities.knowsResearchStrict(player, "DEAD")) {
+            HandlerR.researchAndSendMessage(player, "DEAD", Referense.MODID + ".text.dead");
+            IPlayerTimerCapability timer = TRACapabilities.getTimer(player);
+            timer.createTimer("recovery");
+        }
+    }
+
 
     @SubscribeEvent
     public static void LivingDropsEvent(LivingDropsEvent e) {
@@ -213,6 +255,7 @@ public class ServerEventsHandler {
                         e.player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 600, 1));
                         e.player.getEntityData().setBoolean(tpToHomeNBT, false);
                         HandlerR.setStartUpNBT(playerMP, true);
+                        onPlayerTpToHome(playerMP);
                     }
                 }
             }
@@ -270,28 +313,27 @@ public class ServerEventsHandler {
         if (e.player.ticksExisted % 40 == 0) {
             if (e.player instanceof EntityPlayerMP) {
                 checkResearch(e.player);
+                tickTimer(e.player);
             }
         }
     }
 
     protected static void checkResearch(EntityPlayer player) {
-        if (isWithinRadius(player.posX, player.posZ, WorldDataFields.portalX, WorldDataFields.portalZ, 20)) {
-            if (!ThaumcraftCapabilities.knowsResearchStrict(player, "m_FOUND_ANCIENT")) {
-                IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(player);
-                if (knowledge.addResearch("m_FOUND_ANCIENT")) {
-                    knowledge.sync((EntityPlayerMP) player);
-                    player.sendStatusMessage(new TextComponentTranslation(Referense.MODID + ".text.found_portal").setStyle(new Style().setColor(TextFormatting.DARK_PURPLE)), true);
-                }
-            }
+        if (HandlerR.isWithinRadius(player.posX, player.posZ, WorldDataFields.portalX, WorldDataFields.portalZ, 20)) {
+            HandlerR.researchAndSendMessage((EntityPlayerMP) player, "m_FOUND_ANCIENT", Referense.MODID + ".text.found_portal");
         }
     }
 
-    private static boolean isWithinRadius(double x1, double z1, double x2, double z2, double radius) {
-        double dx = x1 - x2;
-        double dz = z1 - z2;
-        return dx * dx + dz * dz <= radius * radius;
+    private static void tickTimer(EntityPlayer player) {
+        IPlayerTimerCapability timer = TRACapabilities.getTimer(player);
+        if (timer.hasTimer("recovery")) {
+            timer.addTime(40, "recovery");
+            if (timer.getTime("recovery") >= 18000) {
+                timer.delete("recovery");
+                HandlerR.researchAndSendMessage((EntityPlayerMP) player, "RECOVERY", Referense.MODID + ".text.recovery");
+            }
+        }
     }
-
 
 
     static byte wt = 0;
@@ -300,13 +342,6 @@ public class ServerEventsHandler {
 
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
-        if (event.getEntity() instanceof EntityPlayerMP) {
-            if (newVersion) {
-                HandlerR.sendMessageTranslate((EntityPlayerMP) event.getEntity(), Referense.MODID + ".message.new-version");
-                newVersion = false;
-            }
-            AncientWorld.playerJoinBuss((EntityPlayerMP) event.getEntity());
-        }
         if (event.getEntity().dimension == ancient_world_dim_id && !event.getWorld().isRemote) {
             if (!event.getEntity().isNonBoss()) {
                 AncientWorld.bossJoinBuss(event);
@@ -348,14 +383,21 @@ public class ServerEventsHandler {
         }
     }
 
-//    @SubscribeEvent
-//    public void canDeSpawn(LivingSpawnEvent.AllowDespawn event) {
-////        if (!(event.getEntityLiving() instanceof EntityEldritchGuardian)) {
-////            return;
-////        }
-////        event.setResult(Event.Result.DENY);
-//    }
-//
+    @SubscribeEvent
+    public void canDeSpawn(LivingSpawnEvent.AllowDespawn event) {
+        if (event.getEntity().dimension == ancient_world_dim_id) {
+            event.setResult(Event.Result.DENY);
+        }
+    }
+
+    @SubscribeEvent
+    public static void attachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
+        if (event.getObject() instanceof EntityPlayer) {
+            event.addCapability(PlayerTimer.Provider.NAME, new PlayerTimer.Provider());
+        }
+    }
+
+
 //    @SubscribeEvent
 //    public void ChunkEventLoad(ChunkEvent.Load e) {
 ////        if (e.getWorld().provider.getDimension() == ancient_world_dim_id) {

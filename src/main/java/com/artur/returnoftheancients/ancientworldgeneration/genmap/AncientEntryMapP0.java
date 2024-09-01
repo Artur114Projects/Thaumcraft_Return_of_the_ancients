@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.ancientworldgeneration.genmap;
 
-import com.artur.returnoftheancients.ancientworldgeneration.util.StructureMap;
+import com.artur.returnoftheancients.ancientworldgeneration.genmap.util.StructureMap;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 
@@ -8,7 +8,7 @@ import java.util.Random;
 
 import static com.artur.returnoftheancients.generation.generators.AncientLabyrinthGeneratorHandler.getVoidStructures;
 
-public class AncientEntryMap implements IALGS {
+public class AncientEntryMapP0 implements IALGS {
 
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES = new byte[17][17];
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE = new byte[17][17];
@@ -120,7 +120,7 @@ public class AncientEntryMap implements IALGS {
                         }
                     }
                 } else {
-                    if (random.nextInt(2) == 0) {
+                    if (random.nextBoolean()) {
                         if (is_bl && belowYStructure == 0){
                             return new byte[]{TURN_ID, 2};
                         } else if (is_u && upYStructure == 0) {
@@ -147,7 +147,7 @@ public class AncientEntryMap implements IALGS {
                         }
                     }
                 } else {
-                    if (random.nextInt(2) == 0) {
+                    if (random.nextBoolean()) {
                         if (is_bl && belowYStructure == 0){
                             return new byte[] {TURN_ID, 4};
                         } else if (is_u && upYStructure == 0) {
@@ -174,7 +174,7 @@ public class AncientEntryMap implements IALGS {
                         }
                     }
                 } else {
-                    if (random.nextInt(2) == 0) {
+                    if (random.nextBoolean()) {
                         if (backStructure == 0){
                             return new byte[] {TURN_ID, 4};
                         } else if (forwardStructure == 0) {
@@ -201,7 +201,7 @@ public class AncientEntryMap implements IALGS {
                         }
                     }
                 } else {
-                    if (random.nextInt(2) == 0) {
+                    if (random.nextBoolean()) {
                         if (backStructure == 0){
                             return new byte[] {TURN_ID, 3};
                         } else if (forwardStructure == 0) {
@@ -279,7 +279,7 @@ public class AncientEntryMap implements IALGS {
 
         if (index == f_index) {
             if (x == 0) {
-                if (random.nextInt(2) == 0) {
+                if (random.nextBoolean()) {
                     if (is_bl && belowYStructure == 0){
                         return new byte[]{TURN_ID, 2};
                     } else if (is_u && upYStructure == 0) {
@@ -299,7 +299,7 @@ public class AncientEntryMap implements IALGS {
             }
             if (is_b) {
                 if (backStructure != 0) {
-                    if (random.nextInt(2) == 0) {
+                    if (random.nextBoolean()) {
                         if (random.nextInt(TRAConfigs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && backStructure == WAY_ID) {
                             if (is_bl && belowYStructure == 0) {
                                 return new byte[]{TURN_ID, 2};
@@ -323,7 +323,7 @@ public class AncientEntryMap implements IALGS {
         }
         if (index == b_index) {
             if (x == 16) {
-                if (random.nextInt(2) == 0) {
+                if (random.nextBoolean()) {
                     if (is_bl && belowYStructure == 0) {
                         return new byte[] {TURN_ID, 4};
                     } else if (is_u && upYStructure == 0) {
@@ -344,7 +344,7 @@ public class AncientEntryMap implements IALGS {
             if (is_f) {
                 if (forwardStructure != 0) {
                     if (random.nextInt(TRAConfigs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && forwardStructure == WAY_ID) {
-                        if (random.nextInt(2) == 0) {
+                        if (random.nextBoolean()) {
                             if (is_bl && belowYStructure == 0) {
                                 return new byte[]{TURN_ID, 4};
                             } else if (is_u && upYStructure == 0) {
@@ -367,7 +367,7 @@ public class AncientEntryMap implements IALGS {
         }
         if (index == bl_index) {
             if (y == 0) {
-                if (random.nextInt(2) == 0) {
+                if (random.nextBoolean()) {
                     if (is_f && forwardStructure == 0) {
                         return new byte[] {TURN_ID, 2};
                     } else if (is_b && backStructure == 0) {
@@ -388,7 +388,7 @@ public class AncientEntryMap implements IALGS {
             if (is_u) {
                 if (upYStructure != 0) {
                     if (random.nextInt(TRAConfigs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && upYStructure == WAY_ID) {
-                        if (random.nextInt(2) == 0) {
+                        if (random.nextBoolean()) {
                             if (is_f && forwardStructure == 0) {
                                 return new byte[]{TURN_ID, 2};
                             } else if (is_b && backStructure == 0) {
@@ -411,7 +411,7 @@ public class AncientEntryMap implements IALGS {
         }
         if (index == u_index) {
             if (y == 16) {
-                if (random.nextInt(2) == 0) {
+                if (random.nextBoolean()) {
                     if (is_f && forwardStructure == 0) {
                         return new byte[] {TURN_ID, 1};
                     } else if (is_b && backStructure == 0) {
@@ -432,7 +432,7 @@ public class AncientEntryMap implements IALGS {
             if (is_bl) {
                 if (belowYStructure != 0) {
                     if (random.nextInt(TRAConfigs.AncientWorldSettings.AncientWorldGenerationSettings.chanceToReplaceWayToFork + 1) != 0 && belowYStructure == WAY_ID) {
-                        if (random.nextInt(2) == 0) {
+                        if (random.nextBoolean()) {
                             if (is_f && forwardStructure == 0) {
                                 return new byte[]{TURN_ID, 1};
                             } else if (is_b && backStructure == 0) {
@@ -519,8 +519,8 @@ public class AncientEntryMap implements IALGS {
      */
 
 
-    public static StructureMap genStructuresMap() {
-        random = new Random();
+    public static StructureMap genStructuresMap(Random rand) {
+        random = rand;
         int void0 = 0;
         int void1 = 0;
         byte exit = 0;
@@ -544,20 +544,13 @@ public class AncientEntryMap implements IALGS {
             }
             if (e >= 4) {
                 System.out.println("is took " + exit + " passes to generate");
-                for (byte y = 0; y != SIZE; y++) {
-                    for (byte x = 0; x != SIZE; x++) {
-                        if (ANCIENT_LABYRINTH_STRUCTURES[y][x] == BOSS_N_ID) {
-                            ANCIENT_LABYRINTH_STRUCTURES[y][x] = BOSS_ID;
-                        }
-                    }
-                }
                 if (void0 < 145 || !TRAConfigs.AncientWorldSettings.AncientWorldGenerationSettings.isNeedMoreThan50Fill) {
                     System.out.println("void structures: " + void0);
                     return new StructureMap(ANCIENT_LABYRINTH_STRUCTURES, ANCIENT_LABYRINTH_STRUCTURES_ROTATE);
                 } else {
                     System.out.println("void structures: " + void0);
                     System.out.println("regenerate");
-                    return genStructuresMap();
+                    return genStructuresMap(random);
                 }
             }
             void1 = getVoidStructures(ANCIENT_LABYRINTH_STRUCTURES);

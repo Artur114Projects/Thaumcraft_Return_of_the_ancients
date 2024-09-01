@@ -6,6 +6,8 @@ import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.Cus
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.ITRAStructure;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.TRAStructureEBS;
 import com.artur.returnoftheancients.ancientworldgeneration.util.Team;
+import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
+import com.artur.returnoftheancients.capabilities.TRACapabilities;
 import com.artur.returnoftheancients.client.CameraShake;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.gui.SkalaGui;
@@ -39,8 +41,6 @@ import java.util.List;
 
 public class ItemGavno extends BaseItem{
 
-	ITRAStructure structure = null;
-
 	public ItemGavno(String name) {
 		super(name);
 		setMaxStackSize(1);
@@ -54,6 +54,7 @@ public class ItemGavno extends BaseItem{
 //			NBTTagCompound nbt = new NBTTagCompound();
 //			nbt.setString("playSound", InitSounds.RUI_DEAD.NAM);
 //			MainR.NETWORK.sendTo(new ClientPacketMisc(nbt),(EntityPlayerMP)  player);
+			IPlayerTimerCapability capability = TRACapabilities.getTimer(player);
 			if (player.isSneaking()) {
 				Team.clear();
 				AncientWorld.reload();
@@ -61,6 +62,10 @@ public class ItemGavno extends BaseItem{
 				AncientWorld.unload();
 				player.sendMessage(new TextComponentString("UNLOAD"));
 				Team.clear();
+			}
+			IPlayerTimerCapability timer = TRACapabilities.getTimer(player);
+			if (timer.hasTimer("recovery")) {
+				player.sendMessage(new TextComponentString("time:" + timer.getTime("recovery")));
 			}
 		}
 		if (worldIn.isRemote) {
@@ -78,6 +83,7 @@ public class ItemGavno extends BaseItem{
 					);
 				}
 			}
+			Minecraft.getMinecraft().displayGuiScreen(new SkalaGui());
 		}
 		if (!worldIn.isRemote) {
 //			BlockPos playerPos = player.getPosition();

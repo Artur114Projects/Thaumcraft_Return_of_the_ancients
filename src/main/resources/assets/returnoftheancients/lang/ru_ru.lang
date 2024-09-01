@@ -11,8 +11,6 @@ itemGroup.returnoftheancients_tab=Thaumcraft: Return of the ancients
 ###################################################################################
 # Any
 ###################################################################################
-returnoftheancients.text.entered_ancient=Вы посетили древний мир
-returnoftheancients.text.found_portal=Вы нашли древний портал
 returnoftheancients.portal.message=Нельзя использовать:
 item.itemprimalblade.text=Оружие богов
 returnoftheancients.rui.t=убери это
@@ -72,9 +70,14 @@ returnoftheancients.cfg.sub.mgs.umg=Использовать новую гене
 ################################################################################
 #research
 ################################################################################
+returnoftheancients.text.entered_ancient=Вы посетили древний мир
+returnoftheancients.text.found_portal=Вы нашли древний портал
+returnoftheancients.text.recovery=Вы пришли в себя
+returnoftheancients.text.dead=Вы умерли?
+#
 tc.research_category.ANCIENT_WORLD=Ancient world
 #
-research.start.title=Start
+research.start.title=Начало
 research.start.text.stage.1=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this
 research.start.text.stage.2=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this. <BR> <BR> Research and tests have shown that the device is not finished, I think that with my knowledge I can improve it
 research.start.text.stage.3=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this. <BR> <BR> Research and tests have shown that the device is not finished, I think that with my knowledge I can improve it. <BR> Great! I got a working prototype

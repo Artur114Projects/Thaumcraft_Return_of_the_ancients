@@ -8,9 +8,9 @@ tile.tp_to_home_block.name=Portal to overworld
 tile.taint_ancient_stone.name=Taint ancient stone
 tile.tp_to_ancient_world_block.name=Portal to Ancient World
 itemGroup.returnoftheancients_tab=Thaumcraft: Return of the ancients
+################################################################################
 # Any
-returnoftheancients.text.entered_ancient=You visited the ancient world
-returnoftheancients.text.found_portal=You found an ancient portal
+################################################################################
 returnoftheancients.portal.message=Cant use:
 item.itemprimalblade.text=Weapons of the gods
 returnoftheancients.rui.t=put it away
@@ -19,15 +19,21 @@ returnoftheancients.message.ancientworldload.start=Generation has begun, the wor
 returnoftheancients.message.ancientworldload.finish=Generation is finish
 returnoftheancients.gui.esc=Press ESC again to exit.
 returnoftheancients.message.new-version=Welcome to Thaumcraft: Return of the ancients v1.3.0-betta!
+################################################################################
 # Config any
+################################################################################
 returnoftheancients.cfg.sub.any.primalbladespeed=The attack speed of the Primordial Blade
 returnoftheancients.cfg.sub.any.primalbladedamage=The damage of the Primordial Blade
 returnoftheancients.cfg.sub.any=Any
 returnoftheancients.cfg.sub.any.uog=Use old loading gui
+################################################################################
 # Config Difficulty settings
+################################################################################
 returnoftheancients.cfg.sub.ds=Difficulty settings
 returnoftheancients.cfg.sub.ds.pcd=Effect list
+################################################################################
 # Config Portal gen settings
+################################################################################
 returnoftheancients.cfg.sub.portal.slm=Is send load message
 returnoftheancients.cfg.sub.portal=Ancient portal settings
 returnoftheancients.cfg.sub.portal.isgen=generate? (Don`t work)
@@ -36,7 +42,9 @@ returnoftheancients.cfg.sub.portal.z=Z
 returnoftheancients.cfg.sub.portal.y=Y
 returnoftheancients.cfg.sub.portal.tobedrock=Generate to bedrock? (Don`t work)
 returnoftheancients.cfg.sub.portal.modId=Mod ID
+################################################################################
 # Config Ancient world settings
+################################################################################
 returnoftheancients.cfg.sub.aws=Ancient world settings
 returnoftheancients.cfg.sub.aws.og=Use old generator
 returnoftheancients.cfg.sub.aws.ccg=()
@@ -45,17 +53,28 @@ returnoftheancients.cfg.sub.aws.crd=()
 returnoftheancients.cfg.sub.aws.isw=Is set Warp
 returnoftheancients.cfg.sub.aws.nnv=Cant use night vision
 returnoftheancients.cfg.sub.aws.daw=Is dead in ancient world
+################################################################################
 # Configs Ancient world generation settings
+################################################################################
 returnoftheancients.cfg.sub.aws.wgs=Ancient world generation settings
 returnoftheancients.cfg.sub.aws.wgs.fc=Chance of generating a fork
 returnoftheancients.cfg.sub.aws.wgs.tc=Chance of generating a turn
 returnoftheancients.cfg.sub.aws.wgs.sgd=Structures generation delay
 returnoftheancients.cfg.sub.aws.wgs.nct=Number of cleaned structures per tick
 returnoftheancients.cfg.sub.aws.wgs.nrt=Number of reload light block per tick
+################################################################################
 # Config Mob gen settings
+################################################################################
 returnoftheancients.cfg.sub.mgs=Mob gen settings (Don`t work)
 returnoftheancients.cfg.sub.mgs.umg=Use new mob generation (Don`t work)
+################################################################################
 #research
+################################################################################
+returnoftheancients.text.recovery=You came to your senses
+returnoftheancients.text.entered_ancient=You visited the ancient world
+returnoftheancients.text.found_portal=You found an ancient portal
+returnoftheancients.text.dead=You dead?
+#
 tc.research_category.ANCIENT_WORLD=Ancient world
 #
 research.start.title=Start

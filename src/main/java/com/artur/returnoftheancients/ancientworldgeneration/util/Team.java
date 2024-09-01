@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.ancientworldgeneration.util;
 
-import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.ITeamSet;
+import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.ITeamTask;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.referense.Referense;
@@ -126,7 +126,7 @@ public class Team {
         return !players.isEmpty();
     }
 
-    public void setToAll(ITeamSet set) {
+    public void setToAll(ITeamTask set) {
         players.forEach((key, value) -> {
             set.set(value);
         });

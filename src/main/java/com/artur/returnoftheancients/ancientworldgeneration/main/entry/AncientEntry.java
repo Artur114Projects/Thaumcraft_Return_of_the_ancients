@@ -1,10 +1,10 @@
 package com.artur.returnoftheancients.ancientworldgeneration.main.entry;
 
-import com.artur.returnoftheancients.ancientworldgeneration.genmap.AncientEntryMap;
+import com.artur.returnoftheancients.ancientworldgeneration.genmap.AncientEntryMapProvider;
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.ancientworldgeneration.util.BuildPhase;
-import com.artur.returnoftheancients.ancientworldgeneration.util.StructureMap;
+import com.artur.returnoftheancients.ancientworldgeneration.genmap.util.StructureMap;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.IBuild;
 import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -259,7 +259,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
         System.out.println("Generate ancient entry start pos:" + pos);
         onStart();
         AncientWorld.build(this);
-        this.map = AncientEntryMap.genStructuresMap();
+        this.map = AncientEntryMapProvider.createAncientEntryMap(new Random());
         isBuild = false;
         buildPhase.clearArea();
     }

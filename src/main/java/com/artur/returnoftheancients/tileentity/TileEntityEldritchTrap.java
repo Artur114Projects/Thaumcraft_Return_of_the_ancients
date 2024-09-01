@@ -38,7 +38,7 @@ public class TileEntityEldritchTrap extends TileEntity implements ITickable {
     @Override
     public void update() {
         if (detectionBox == null) {
-            detectionBox = new AxisAlignedBB(pos.add(-7, -7, -7), pos.add(7, 7, 7));
+            detectionBox = new AxisAlignedBB(pos.add(-7, 0, -7), pos.add(7, 3, 7));
         }
         if (poss == null) {
             poss = new BlockPos[] {pos.add(0, 1, -8), pos.add(0, 1, 7), pos.add(-8, 1, 0), pos.add(7, 1, 0)};

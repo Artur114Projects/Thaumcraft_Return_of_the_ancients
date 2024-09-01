@@ -13,13 +13,19 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import thaumcraft.api.capabilities.IPlayerKnowledge;
+import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -172,7 +178,8 @@ public class HandlerR {
                 "injectPercentages",
                 "changeTitle",
                 "playSound",
-                "stopSound"
+                "stopSound",
+                "sendStatusMessage"
         };
         return isGoodNBTTagBase(nbt, Tag, false);
     }
@@ -207,9 +214,7 @@ public class HandlerR {
     }
 
     public static void sendMessageString(EntityPlayerMP playerMP, String message) {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setString("sendMessage", message);
-        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
+        playerMP.sendMessage(new TextComponentString(message));
     }
 
     public static void sendAllMessageStringNoTitle(String message) {
@@ -220,9 +225,8 @@ public class HandlerR {
     }
 
     public static void sendMessageTranslate(EntityPlayerMP playerMP, String key) {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setString("sendMessageTranslate", key);
-        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
+        String TITLE = TextFormatting.DARK_PURPLE + TRAConfigs.Any.ModChatName + TextFormatting.RESET;
+        sendMessageTranslateWithChangeTitle(playerMP, key, TITLE);
     }
 
     public static void sendMessageTranslateToAll(String key) {
@@ -232,10 +236,7 @@ public class HandlerR {
     }
 
     public static void sendMessageTranslateWithChangeTitle(EntityPlayerMP playerMP, String key, String title) {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setString("sendMessageTranslate", key);
-        nbt.setString("changeTitle", title);
-        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
+        playerMP.sendMessage(new TextComponentString(title + new TextComponentTranslation(key).getFormattedText()));
     }
 
     public static boolean isNumber(char c) {
@@ -327,6 +328,13 @@ public class HandlerR {
         return null;
     }
 
+    public static boolean isHasItem(EntityPlayer player, Item item) {
+        for (ItemStack stack : player.inventory.mainInventory) {
+            if (stack.getItem().equals(item)) return true;
+        }
+        return false;
+    }
+
     public static boolean isSoulBinderFull(ItemStack stack) {
         if (!(stack.getItem() instanceof ItemSoulBinder)) {
             return false;
@@ -355,5 +363,33 @@ public class HandlerR {
         }
     }
 
+    public static void research(EntityPlayerMP player, String key) {
+        if (!ThaumcraftCapabilities.knowsResearchStrict(player, key)) {
+            IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(player);
+            if (knowledge.addResearch(key)) {
+                knowledge.sync(player);
+            }
+        }
+    }
+
+    public static void researchAndSendMessage(EntityPlayerMP player, String key, String translateKey, TextFormatting formatting) {
+        if (!ThaumcraftCapabilities.knowsResearchStrict(player, key)) {
+            IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(player);
+            if (knowledge.addResearch(key)) {
+                knowledge.sync(player);
+                player.sendStatusMessage(new TextComponentTranslation(translateKey).setStyle(new Style().setColor(formatting)), true);
+            }
+        }
+    }
+
+    public static void researchAndSendMessage(EntityPlayerMP player, String key, String translateKey) {
+        researchAndSendMessage(player, key, translateKey, TextFormatting.DARK_PURPLE);
+    }
+
+    public static boolean isWithinRadius(double x1, double z1, double x2, double z2, double radius) {
+        double dx = x1 - x2;
+        double dz = z1 - z2;
+        return dx * dx + dz * dz <= radius * radius;
+    }
 
 }

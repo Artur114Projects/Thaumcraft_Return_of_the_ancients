@@ -4,7 +4,7 @@ import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.gui.LoadingGui;
 import com.artur.returnoftheancients.gui.OldLoadingGui;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.referense.Referense;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -52,48 +52,47 @@ public class ClientPacketMisc implements IMessage {
         @Override
         public  IMessage onMessage(ClientPacketMisc message, MessageContext ctx) {
             Minecraft.getMinecraft().addScheduledTask(() -> {
-                if (HandlerR.isGoodNBTTagMisc(message.data)) {
-                    NBTTagCompound nbt = message.data;
-                    EntityPlayerSP playerSP = Minecraft.getMinecraft().player;
-                    String TITLE = TextFormatting.DARK_PURPLE + TRAConfigs.Any.ModChatName + TextFormatting.RESET;
-                    if (nbt.hasKey("changeTitle")) {
-                        TITLE = nbt.getString("changeTitle");
-                    }
-                    if (nbt.hasKey("setGuiState")) {
-                        if (nbt.getBoolean("setGuiState")) {
-                            if (!TRAConfigs.Any.useOldLoadingGui) {
-                                Minecraft.getMinecraft().displayGuiScreen(new LoadingGui());
-                            } else {
-                                Minecraft.getMinecraft().displayGuiScreen(new OldLoadingGui());
-                            }
+                NBTTagCompound nbt = message.data;
+                EntityPlayerSP playerSP = Minecraft.getMinecraft().player;
+                String TITLE = TextFormatting.DARK_PURPLE + TRAConfigs.Any.ModChatName + TextFormatting.RESET;
+                if (nbt.hasKey("changeTitle")) {
+                    TITLE = nbt.getString("changeTitle");
+                }
+                if (nbt.hasKey("setGuiState")) {
+                    if (nbt.getBoolean("setGuiState")) {
+                        if (!TRAConfigs.Any.useOldLoadingGui) {
+                            Minecraft.getMinecraft().displayGuiScreen(new LoadingGui());
                         } else {
-                            Minecraft.getMinecraft().displayGuiScreen(null);
+                            Minecraft.getMinecraft().displayGuiScreen(new OldLoadingGui());
                         }
-                    } else if (nbt.hasKey("sendAncientWorldLoadMessage")) {
-                        if (nbt.getBoolean("sendAncientWorldLoadMessage")) {
-                            playerSP.sendMessage(new TextComponentString(TITLE + I18n.translateToLocal(Referense.MODID + ".message.ancientworldload.start")));
-                        } else {
-                            playerSP.sendMessage(new TextComponentString(TITLE + I18n.translateToLocal(Referense.MODID + ".message.ancientworldload.finish")));
-                        }
-                    } else if (nbt.hasKey("sendMessage")) {
-                        playerSP.sendMessage(new TextComponentString(TITLE + nbt.getString("sendMessage")));
-                    } else if (nbt.hasKey("sendMessageTranslate")) {
-                        playerSP.sendMessage(new TextComponentString(TITLE + I18n.translateToLocal(nbt.getString("sendMessageTranslate"))));
+                    } else {
+                        Minecraft.getMinecraft().displayGuiScreen(null);
                     }
-                    if (nbt.hasKey("injectPhase")) {
-                        LoadingGui.injectPhase(nbt.getByte("injectPhase"));
+                } else if (nbt.hasKey("sendAncientWorldLoadMessage")) {
+                    if (nbt.getBoolean("sendAncientWorldLoadMessage")) {
+                        playerSP.sendMessage(new TextComponentString(TITLE + I18n.translateToLocal(Referense.MODID + ".message.ancientworldload.start")));
+                    } else {
+                        playerSP.sendMessage(new TextComponentString(TITLE + I18n.translateToLocal(Referense.MODID + ".message.ancientworldload.finish")));
                     }
-                    if (nbt.hasKey("injectPercentages")) {
-                        LoadingGui.injectPercentages(nbt.getByte("injectPercentages"));
-                    }
-                    if (nbt.hasKey("playSound")) {
-                        playerSP.playSound(InitSounds.SOUND_MAP.get(nbt.getString("playSound")), 1, 1);
-                    }
-                    if (nbt.hasKey("stopSound")) {
-                        playerSP.playSound(InitSounds.SOUND_MAP.get(nbt.getString("stopSound")), 0, 1);
-                    }
-                } else {
-                    System.out.println("ti vtiraeh mne kakuyto dich");
+                } else if (nbt.hasKey("sendMessage")) {
+                    playerSP.sendMessage(new TextComponentString(TITLE + nbt.getString("sendMessage")));
+                } else if (nbt.hasKey("sendMessageTranslate")) {
+                    playerSP.sendMessage(new TextComponentString(TITLE + I18n.translateToLocal(nbt.getString("sendMessageTranslate"))));
+                }
+                if (nbt.hasKey("injectPhase")) {
+                    LoadingGui.injectPhase(nbt.getByte("injectPhase"));
+                }
+                if (nbt.hasKey("injectPercentages")) {
+                    LoadingGui.injectPercentages(nbt.getByte("injectPercentages"));
+                }
+                if (nbt.hasKey("playSound")) {
+                    playerSP.playSound(InitSounds.SOUND_MAP.get(nbt.getString("playSound")), 1, 1);
+                }
+                if (nbt.hasKey("stopSound")) {
+                    playerSP.playSound(InitSounds.SOUND_MAP.get(nbt.getString("stopSound")), 0, 1);
+                }
+                if (nbt.hasKey("syncWorldDataFields")) {
+                    WorldDataFields.readOnClient(nbt.getCompoundTag("syncWorldDataFields"));
                 }
             });
             return null;

@@ -4,11 +4,13 @@ import com.artur.returnoftheancients.ancientworldgeneration.util.Team;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
+import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.world.World;
 
 import java.util.UUID;
@@ -146,6 +148,7 @@ public class AncientEntryTeam extends AncientEntry {
             HandlerR.setLoadingGuiState(player, false);
             player.setHealth(20);
             player.connection.setPlayerLocation(8 + (10000 * pos), 253, 8, -181, 90);
+            HandlerR.researchAndSendMessage(player, "m_ENTRY_ANCIENT", Referense.MODID + ".text.entered_ancient");
         });
     }
 }

@@ -6,9 +6,9 @@ import static com.artur.returnoftheancients.misc.TRAConfigs.MobGenSettings;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
-import com.artur.returnoftheancients.ancientworldgeneration.genmap.AncientEntryMap;
+import com.artur.returnoftheancients.ancientworldgeneration.genmap.AncientEntryMapProvider;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
-import com.artur.returnoftheancients.ancientworldgeneration.util.StructureMap;
+import com.artur.returnoftheancients.ancientworldgeneration.genmap.util.StructureMap;
 import com.artur.returnoftheancients.events.MCTimer;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
@@ -301,7 +301,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             byte[][][] r = AncientLabyrinthOldMap.genStructuresMap();
             a = new StructureMap(r[0], r[1]);
         } else {
-            a = AncientEntryMap.genStructuresMap();
+            a = AncientEntryMapProvider.createAncientEntryMap(new Random());
         }
         MAP = a;
 

@@ -8,6 +8,7 @@
       "location": [ 0,0 ],
       "parents": [ "UNLOCKELDRITCH" ],
       "meta": [ "HIDDEN" ],
+      "reward_knowledge": ["THEORY;ELDRITCH;1"],
       "stages": [
         {
           "text": "research.start.text.stage.1",
@@ -34,16 +35,50 @@
       "category": "ANCIENT_WORLD",
       "location": [ -3,0 ],
       "parents": ["START"],
-      "meta": [],
+      "reward_knowledge": ["THEORY;ANCIENT_WORLD;1"],
       "stages": [
         {
           "text": "research.to_ancient.text.stage.1",
-          "required_research":["m_FOUND_ANCIENT"]
+          "required_research":["m_FOUND_ANCIENT"],
+          "warp": 1
         },
         {
           "text": "research.to_ancient.text.stage.2",
           "required_research":["m_ENTRY_ANCIENT"],
-          "warp": 1
+          "warp": 2
+        }
+      ],
+      "addenda": [
+        {
+          "text": "research.to_ancient.text.addenda.1",
+          "required_research":["DEAD"],
+          "warp": 4
+        },
+        {
+          "text": "research.to_ancient.text.addenda.2",
+          "required_research":["RECOVERY"]
+        }
+      ]
+    },
+    {
+      "key": "SOUL_BINDER",
+      "name": "research.soul_binder.title",
+      "icons": ["returnoftheancients:soul_binder"],
+      "category": "ANCIENT_WORLD",
+      "location": [ -3,-2 ],
+      "parents": [ "TO_ANCIENT", "RECOVERY" ],
+      "meta": [ "HIDDEN", "ROUND" ],
+      "stages": [
+        {
+          "text": "research.soul_binder.text.stage.1",
+          "required_knowledge":["THEORY;ANCIENT_WORLD;1", "THEORY;ELDRITCH;1"],
+          "required_item":[
+            "minecraft:soul_sand"
+          ]
+        },
+        {
+          "text": "research.soul_binder.text.stage.2",
+          "recipes":["returnoftheancients:soul_binder"]
         }
       ]
     }

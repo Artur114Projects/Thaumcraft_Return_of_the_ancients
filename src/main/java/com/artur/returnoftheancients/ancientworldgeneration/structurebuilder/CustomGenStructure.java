@@ -15,10 +15,15 @@ public class CustomGenStructure {
     private static boolean isUseEBS = false;
     private static boolean isUseBinary = false;
     private static boolean isUseAir = false;
+    private static ITRAStructureTask task = null;
 
     public static void put(String name) {
         if (isUseAir) useAirList.add(name);
         rawStructures.add(name);
+    }
+
+    public static void addTaskToFirstBuild(ITRAStructureTask task) {
+        CustomGenStructure.task = task;
     }
 
     public static void setUseEBS() {
@@ -73,7 +78,10 @@ public class CustomGenStructure {
 
     public static void gen(World world, int x, int y, int z, String name) {
         if (structures.containsKey(name)) {
-            structures.get(name).gen(world, x, y, z);
+            ITRAStructure structure = structures.get(name);
+            structure.addDisposableTask(task);
+            structure.gen(world, x, y, z);
+            task = null;
         } else {
             throw new RuntimeException("invalid structure name: " + name);
         }

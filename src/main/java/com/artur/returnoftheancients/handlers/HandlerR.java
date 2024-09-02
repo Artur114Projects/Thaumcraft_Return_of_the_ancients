@@ -392,4 +392,10 @@ public class HandlerR {
         return dx * dx + dz * dz <= radius * radius;
     }
 
+    public static boolean getChance(int percentage, Random rand) {
+        if (percentage < 0 || percentage > 100) {
+            throw new IllegalArgumentException("Percentage must be between 0 and 100");
+        }
+        return rand.nextInt(100) < percentage;
+    }
 }

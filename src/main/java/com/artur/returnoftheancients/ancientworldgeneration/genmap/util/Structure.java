@@ -1,13 +1,16 @@
 package com.artur.returnoftheancients.ancientworldgeneration.genmap.util;
 
+import com.artur.returnoftheancients.utils.interfaces.IALGS;
+
 public class Structure {
     private byte deformationOfBoss;
     private byte rotate;
     private byte ID;
 
     public Structure(byte id, byte rotate) {
-        this.ID = id;
+        this.deformationOfBoss = 0;
         this.rotate = rotate;
+        this.ID = id;
     }
 
     public byte getRotate() {
@@ -32,5 +35,10 @@ public class Structure {
 
     public void setDeformationOfBoss(byte deformationOfBoss) {
         this.deformationOfBoss = deformationOfBoss;
+    }
+
+    @Override
+    public String toString() {
+        return "(id:" + ID + ", r:" + rotate + ", d:" + deformationOfBoss + ")";
     }
 }

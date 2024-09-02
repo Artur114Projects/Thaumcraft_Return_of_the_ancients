@@ -68,6 +68,20 @@ public class StructureMap implements IALGS {
         return structures[y][x].getID();
     }
 
+    public Structure getStructureObject(int x, int y) {
+        Structure structure = new Structure(structures[y][x].getID(), structures[y][x].getRotate());
+        structure.setDeformationOfBoss(structures[y][x].getDeformationOfBoss());
+        return structure;
+    }
+
+    public byte getDeformation(int x, int y) {
+        return structures[y][x].getDeformationOfBoss();
+    }
+
+    public void setDeformation(int x, int y, byte value) {
+        structures[y][x].setDeformationOfBoss(value);
+    }
+
     public byte getRotate(int x, int y) {
         return structures[y][x].getRotate();
     }
@@ -168,7 +182,9 @@ public class StructureMap implements IALGS {
                     ports[downC][cx] = true;
                 }
             } break;
-            case CROSSROADS_ID:{
+            case BOSS_ID:
+            case ENTRY_ID:
+            case CROSSROADS_ID: {
                 ports[cy][leftC] = true;
                 ports[cy][rightC] = true;
                 ports[upC][cx] = true;
@@ -239,7 +255,7 @@ public class StructureMap implements IALGS {
         for (int y = 0; y != SIZE; y++) {
             StringBuilder s = new StringBuilder();
             for (int x = 0; x != SIZE; x++) {
-                s.append(" (").append(structures[y][x]).append(",").append(getRotate(x, y)).append("),");
+                s.append(" {").append(structures[y][x]).append("},");
             }
             finalS.append(s).append("\n");
         }

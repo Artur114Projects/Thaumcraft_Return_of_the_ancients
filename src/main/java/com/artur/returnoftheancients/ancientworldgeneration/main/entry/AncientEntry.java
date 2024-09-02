@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.Cus
 import com.artur.returnoftheancients.ancientworldgeneration.util.BuildPhase;
 import com.artur.returnoftheancients.ancientworldgeneration.genmap.util.StructureMap;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.IBuild;
+import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
@@ -33,7 +34,7 @@ import static com.artur.returnoftheancients.misc.TRAConfigs.AncientWorldSettings
 import static com.artur.returnoftheancients.utils.interfaces.IStructure.settings;
 
 public abstract class AncientEntry implements IBuild, IALGS {
-    protected static final byte MAX_LOADING = 2;
+    protected static final byte MAX_LOADING = 4;
     protected static final BlockPos nullPos = new BlockPos(0, 0, 0);
     protected static final UUID nullUUId = new UUID(0, 0);
     private final BuildPhase buildPhase = new BuildPhase();
@@ -282,11 +283,13 @@ public abstract class AncientEntry implements IBuild, IALGS {
                 if (buildPhase.please) {
                     if (buildPhase.t == AncientWorldSettings.AncientWorldGenerationSettings.structuresGenerationDelay) {
                         buildPhase.t = 0;
+
                         if (buildPhase.xtp == map.SIZE) {
                             buildPhase.ytp++;
                             buildPhase.xtp = 0;
                             onGen(buildPhase.xtp, buildPhase.ytp);
                         }
+
                         if (buildPhase.ytp == map.SIZE) {
                             buildPhase.ytp = 0;
                             buildPhase.xtp = 0;
@@ -297,11 +300,14 @@ public abstract class AncientEntry implements IBuild, IALGS {
                             buildPhase.finalizing();
                             return;
                         }
+
+                        byte deformation = map.getDeformation(buildPhase.xtp, buildPhase.ytp);
                         byte structure = map.getStructure(buildPhase.xtp, buildPhase.ytp);
                         byte structureRotate = map.getRotate(buildPhase.xtp, buildPhase.ytp);
                         int cx = (128 - 16 * buildPhase.xtp) + (10000 * pos);
                         int cz = (128 - 16 * buildPhase.ytp);
                         byte rotate = 0;
+
                         switch (structureRotate) {
                             case 1:
                                 rotate = 1;
@@ -316,6 +322,20 @@ public abstract class AncientEntry implements IBuild, IALGS {
                                 rotate = 4;
                                 break;
                         }
+
+                        if (deformation > 0) {
+                            CustomGenStructure.addTaskToFirstBuild(state -> {
+                                if (HandlerR.getChance((int) (deformation / 1.5), random)) {
+                                    if (state.getBlock().equals(BlocksTC.stoneEldritchTile)) {
+                                        return BlocksTC.stoneAncient.getDefaultState();
+                                    } else if (state.getBlock().equals(BlocksTC.stoneAncient)) {
+                                        return BlocksTC.stoneEldritchTile.getDefaultState();
+                                    }
+                                }
+                                return state;
+                            });
+                        }
+
                         switch (structure) {
                             case WAY_ID:
                                 gen(world, cx, 80, cz, WAY_STRING_ID + rotate);
@@ -342,6 +362,16 @@ public abstract class AncientEntry implements IBuild, IALGS {
                             case BOSS_ID:
                                 buildPhase.bossGen++;
                                 if (buildPhase.bossGen == 4) {
+                                    CustomGenStructure.addTaskToFirstBuild(state -> {
+                                        if (HandlerR.getChance(10, random)) {
+                                            if (state.getBlock().equals(BlocksTC.stoneEldritchTile)) {
+                                                return BlocksTC.stoneAncient.getDefaultState();
+                                            } else if (state.getBlock().equals(BlocksTC.stoneAncient)) {
+                                                return BlocksTC.stoneEldritchTile.getDefaultState();
+                                            }
+                                        }
+                                        return state;
+                                    });
                                     gen(world, cx, 79, cz, BOSS_STRING_ID);
                                     buildPhase.bossGen = 0;
                                 }
@@ -352,6 +382,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                                 System.out.println("WTF????? " + structure);
                                 break;
                         }
+
                         buildPhase.xtp++;
                     }
                     buildPhase.t++;
@@ -400,7 +431,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                         world.checkLight(buildPhase.pos.setPos(x, 84, buildPhase.ytf));
                         BlockPos pos = buildPhase.pos.setPos(x, 80, buildPhase.ytf);
                         if (world.getBlockState(pos).equals(BlocksTC.stoneAncient.getDefaultState())) {
-                            if (world.rand.nextInt(100) == 0) {
+                            if (world.rand.nextInt(200) == 0) {
                                 world.setBlockState(pos, InitTileEntity.FIRE_TRAP.getDefaultState());
                             }
                         }

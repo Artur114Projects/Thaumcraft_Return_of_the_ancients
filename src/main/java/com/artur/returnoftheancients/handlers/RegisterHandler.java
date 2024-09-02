@@ -85,7 +85,7 @@ public class RegisterHandler {
 			event.registerServerCommand(new TestCommand());
 			event.registerServerCommand(new TestCommand2());
 			event.registerServerCommand(new DataManager());
-			event.registerServerCommand(new GenAncientLabyrinth());
+			event.registerServerCommand(new TpToPortal());
 			event.registerServerCommand(new Command());
 		}
 		event.registerServerCommand(new TRACommand());

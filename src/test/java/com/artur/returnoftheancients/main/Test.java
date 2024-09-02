@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.main;
 
+import com.artur.returnoftheancients.ancientworldgeneration.genmap.AncientEntryMapProvider;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.referense.Referense;
@@ -13,20 +14,14 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class Test { //
     public static void main(String[] args) throws InterruptedException {
-        System.out.println("start!");
-        for (long i = 0; i != 1000000L; i++) {
-            list.add(new UUID(i, -i));
-        }
-        System.out.println("sleep");
-        while (true) {
-            TimeUnit.SECONDS.sleep(1);
-        }
+        System.out.println(AncientEntryMapProvider.createAncientEntryMap(new Random()));
     }
     private static List<UUID> list = new ArrayList<>();
 

@@ -1,15 +1,15 @@
 package com.artur.returnoftheancients.commads;
 
-import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
+import com.artur.returnoftheancients.misc.WorldDataFields;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
-
-
-public class GenAncientLabyrinth extends CommandBase {
-    String NAME = "gen", USAGE = "/gen";
+public class TpToPortal extends CommandBase {
+    String NAME = "tptoportal", USAGE = "/tptoportal";
 
     @Override
     public String getName() {
@@ -23,6 +23,7 @@ public class GenAncientLabyrinth extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-
+        EntityPlayerMP player = getCommandSenderAsPlayer(sender);
+        player.connection.setPlayerLocation(WorldDataFields.portalX, 100, WorldDataFields.portalZ, player.rotationYaw, player.rotationPitch);
     }
 }

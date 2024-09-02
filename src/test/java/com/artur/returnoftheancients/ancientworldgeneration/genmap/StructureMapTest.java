@@ -101,6 +101,29 @@ public class StructureMapTest implements IALGS {
         posList1.add(new StructurePos(4, 3));
         posList1.add(new StructurePos(3, 2));
         Assertions.assertEquals(posList1, posList);
+
+        structures = new byte[][] {
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, WAY_ID, 0, 0, 0},
+                {0, 0, WAY_ID, BOSS_ID, BOSS_N_ID, 0, 0},
+                {0, 0, 0, BOSS_N_ID, BOSS_N_ID, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+        };
+        structuresRotate = new byte[][] {
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 2, 0, 0, 0},
+                {0, 0, 1, 1, 1, 0, 0},
+                {0, 0, 0, 1, 1, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+        };
+        structureMap = new StructureMap(structures, structuresRotate);
+        posList = structureMap.getConnectedStructures(3, 3);
+        System.out.println(posList);
+        Assertions.assertEquals(2, posList.size());
     }
 
     @Test

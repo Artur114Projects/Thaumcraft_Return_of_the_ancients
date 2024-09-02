@@ -57,6 +57,11 @@ public class TRAStructure implements ITRAStructure{
         }
     }
 
+    @Override
+    public void addDisposableTask(ITRAStructureTask task) {
+
+    }
+
     private static NBTTagCompound readStructureAsName(String structureName) {
         InputStream inputstream = MinecraftServer.class.getResourceAsStream("/assets/" + Referense.MODID + "/structures/" + structureName + ".nbt");
         try {

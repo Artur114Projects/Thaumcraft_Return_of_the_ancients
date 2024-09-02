@@ -115,7 +115,7 @@ public class TileEntityFireTrap extends TileEntity implements ITickable {
                 }
 
                 for (EntityLiving living : livings) {
-                    if (!world.isRemote) {
+                    if (!world.isRemote && living.isNonBoss()) {
                         if (!living.isBurning()) {
                             living.setHealth(living.getHealth() / 2);
                         }

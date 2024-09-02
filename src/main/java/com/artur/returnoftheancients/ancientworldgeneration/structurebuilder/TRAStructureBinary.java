@@ -22,6 +22,7 @@ public class TRAStructureBinary implements ITRAStructure {
     protected final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
     protected final int[] blocks;
     protected final IBlockState[] palette;
+    protected ITRAStructureTask task = null;
 
     public TRAStructureBinary(String structureName, boolean isUseAir) {
         NBTTagCompound structureNBT = readStructureAsName(structureName);
@@ -79,8 +80,16 @@ public class TRAStructureBinary implements ITRAStructure {
             byte yC = (byte) (block >> 16);
             byte zC = (byte) (block >> 8);
             byte structure = (byte) block;
-            world.setBlockState(mutablePos.setPos(xC + x, yC + y, zC + z), palette[structure]);
+            IBlockState state = palette[structure];
+            if (task != null) {state = task.run(state);}
+            world.setBlockState(mutablePos.setPos(xC + x, yC + y, zC + z), state);
         }
+        task = null;
+    }
+
+    @Override
+    public void addDisposableTask(ITRAStructureTask task) {
+        this.task = task;
     }
 
 

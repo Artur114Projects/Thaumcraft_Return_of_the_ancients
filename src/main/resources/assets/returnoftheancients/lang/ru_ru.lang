@@ -74,6 +74,7 @@ returnoftheancients.text.entered_ancient=Вы посетили древний м
 returnoftheancients.text.found_portal=Вы нашли древний портал
 returnoftheancients.text.recovery=Вы пришли в себя
 returnoftheancients.text.dead=Вы умерли?
+returnoftheancients.text.deformation=Вы обнаружили странное искажение в структуре лабиринта
 #
 tc.research_category.ANCIENT_WORLD=Ancient world
 #

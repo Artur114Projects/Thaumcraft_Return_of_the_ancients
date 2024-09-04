@@ -46,6 +46,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
     private boolean delete = false;
     private boolean requestSave = false;
     protected StructureMap map;
+    protected long mapSeed;
     protected boolean isFinal;
     protected int finalTimer = 0;
     protected boolean isBossSpawn;
@@ -55,6 +56,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
     protected final int pos;
 
     public AncientEntry(int pos) {
+        this.mapSeed = random.nextLong();
         this.isBossSpawn = false;
         this.isBossDead = false;
         this.isFinal = false;
@@ -83,8 +85,10 @@ public abstract class AncientEntry implements IBuild, IALGS {
         isSleep = nbt.getBoolean("isSleep");
         if (!nbt.hasKey("loadCount")) error("AncientEntry.class, transferred incorrect NBTTag EC:9");
         loadCount = nbt.getByte("loadCount");
+        if (!nbt.hasKey("mapSeed")) error("AncientEntry.class, transferred incorrect NBTTag EC:10");
+        mapSeed = nbt.getLong("mapSeed");
 
-        if (loadCount >= MAX_LOADING) {
+        if (loadCount > MAX_LOADING) {
             requestToDelete();
         }
     }
@@ -96,6 +100,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                 requestToDelete();
                 finalTimer = 0;
             }
+            return;
         }
         if (isSleep) {
             return;
@@ -127,8 +132,8 @@ public abstract class AncientEntry implements IBuild, IALGS {
     protected abstract void onBossDead();
     public boolean deadBoss(UUID id) {
         if (!bossUUID.equals(nullUUId) && bossUUID.equals(id)) {
-            isBossDead = true;
             onBossDead();
+            isBossDead = true;
             requestToSave();
             return true;
         }
@@ -136,7 +141,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
     }
 
     public boolean bossJoin(EntityJoinWorldEvent event) {
-        if (((int) (event.getEntity().posX + 300) / 10000) == pos && isBossSpawn && !isBossDead) {
+        if (((int) (event.getEntity().posX + 300) / 10000) == pos && isBossSpawn) {
             bossUUID = event.getEntity().getUniqueID();
             return true;
         }
@@ -151,6 +156,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
 
         nbt.setByte("loadCount", isSleep ? ((byte) (loadCount + 1)) : 0);
         nbt.setBoolean("isSleep", isSleep);
+        nbt.setLong("mapSeed", mapSeed);
         nbt.setBoolean("finalizing", isFinal);
         nbt.setUniqueId("boss", bossUUID);
         nbt.setTag("bossPos", blockPosToNBT(bossPos));
@@ -226,7 +232,11 @@ public abstract class AncientEntry implements IBuild, IALGS {
     public boolean wakeUp(EntityPlayerMP player) {
         loadCount = 0;
         isSleep = false;
-        if (!isBuild) startGen();
+        if (!isBuild) {
+            startGen(mapSeed);
+        } else {
+            map = AncientEntryMapProvider.createAncientEntryMap(new Random(mapSeed));
+        }
         if (TRAConfigs.Any.debugMode) System.out.println("AncientEntry pos:" + getPos() + " is wake up!");
         return true;
     };
@@ -256,11 +266,11 @@ public abstract class AncientEntry implements IBuild, IALGS {
         return pos;
     }
 
-    protected void startGen() {
+    protected void startGen(long seed) {
         System.out.println("Generate ancient entry start pos:" + pos);
         onStart();
         AncientWorld.build(this);
-        this.map = AncientEntryMapProvider.createAncientEntryMap(new Random());
+        this.map = AncientEntryMapProvider.createAncientEntryMap(new Random(seed));
         isBuild = false;
         buildPhase.clearArea();
     }
@@ -304,8 +314,8 @@ public abstract class AncientEntry implements IBuild, IALGS {
                         byte deformation = map.getDeformation(buildPhase.xtp, buildPhase.ytp);
                         byte structure = map.getStructure(buildPhase.xtp, buildPhase.ytp);
                         byte structureRotate = map.getRotate(buildPhase.xtp, buildPhase.ytp);
-                        int cx = (128 - 16 * buildPhase.xtp) + (10000 * pos);
-                        int cz = (128 - 16 * buildPhase.ytp);
+                        int cx = (128 - (16 * buildPhase.xtp)) + (10000 * pos);
+                        int cz = (128 - (16 * buildPhase.ytp));
                         byte rotate = 0;
 
                         switch (structureRotate) {

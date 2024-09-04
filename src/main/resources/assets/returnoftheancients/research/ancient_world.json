@@ -67,7 +67,7 @@
       "category": "ANCIENT_WORLD",
       "location": [ -3,-2 ],
       "parents": [ "TO_ANCIENT", "RECOVERY" ],
-      "meta": [ "HIDDEN", "ROUND" ],
+      "meta": [ "HIDDEN", "HEX" ],
       "stages": [
         {
           "text": "research.soul_binder.text.stage.1",

@@ -41,4 +41,14 @@ public class Structure {
     public String toString() {
         return "(id:" + ID + ", r:" + rotate + ", d:" + deformationOfBoss + ")";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Structure) {
+            Structure structure = (Structure) obj;
+            return structure.ID == ID && structure.rotate == rotate && structure.deformationOfBoss == deformationOfBoss;
+        } else {
+            return false;
+        }
+    }
 }

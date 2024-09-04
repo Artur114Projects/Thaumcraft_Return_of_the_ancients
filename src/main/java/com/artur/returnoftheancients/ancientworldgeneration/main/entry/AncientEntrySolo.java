@@ -10,9 +10,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 import java.util.Objects;
+import java.util.Random;
 import java.util.UUID;
 
 public class AncientEntrySolo extends AncientEntry {
@@ -23,7 +26,7 @@ public class AncientEntrySolo extends AncientEntry {
         super(pos);
         this.player = player;
         this.playerId = player.getUniqueID();
-        this.startGen();
+        this.startGen(mapSeed);
     }
 
     public AncientEntrySolo(NBTTagCompound nbt) {
@@ -102,6 +105,13 @@ public class AncientEntrySolo extends AncientEntry {
         }
         if (player.dimension != InitDimensions.ancient_world_dim_id) {
             requestToDelete();
+        }
+        int dx = ((((int) player.posX - (10000 * pos)) >> 4) - 8) * -1;
+        int dz = ((((int) player.posZ) >> 4) - 8) * -1;
+        if (dx >= 0 && dx < map.SIZE && dz >= 0 && dz < map.SIZE) {
+            if (map.getDeformation(dx, dz) > 6) {
+                HandlerR.researchAndSendMessage(player, "DEFORMATION", Referense.MODID + ".text.deformation");
+            }
         }
     }
 

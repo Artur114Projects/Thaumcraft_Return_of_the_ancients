@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.world.World;
 
+import java.util.Random;
 import java.util.UUID;
 
 public class AncientEntryTeam extends AncientEntry {
@@ -20,7 +21,7 @@ public class AncientEntryTeam extends AncientEntry {
     public AncientEntryTeam(int pos, Team team) {
         super(pos);
         this.team = team;
-        if (!isBuild) startGen();
+        if (!isBuild) startGen(mapSeed);
     }
 
     public AncientEntryTeam(NBTTagCompound nbt) {
@@ -43,6 +44,10 @@ public class AncientEntryTeam extends AncientEntry {
 
     @Override
     public void update(World world) {
+        if (team == null) {
+            requestToDelete();
+            return;
+        }
         if (team.isRequestDelete()) {
             team.setToAll(ServerEventsHandler::tpToHome);
             requestToDelete();
@@ -79,7 +84,9 @@ public class AncientEntryTeam extends AncientEntry {
 
     @Override
     protected void onRequestToDelete() {
-        team.delete();
+        if (team != null) {
+            team.delete();
+        }
     }
 
     @Override

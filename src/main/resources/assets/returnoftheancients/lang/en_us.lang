@@ -70,9 +70,10 @@ returnoftheancients.cfg.sub.mgs.umg=Use new mob generation (Don`t work)
 ################################################################################
 #research
 ################################################################################
-returnoftheancients.text.recovery=You came to your senses
+returnoftheancients.text.deformation=You have discovered a strange distortion in the structure of the labyrinth.
 returnoftheancients.text.entered_ancient=You visited the ancient world
 returnoftheancients.text.found_portal=You found an ancient portal
+returnoftheancients.text.recovery=You came to your senses
 returnoftheancients.text.dead=You dead?
 #
 tc.research_category.ANCIENT_WORLD=Ancient world

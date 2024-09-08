@@ -16,6 +16,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
@@ -24,6 +26,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
@@ -189,9 +192,10 @@ public class HandlerR {
         MainR.NETWORK.sendTo(new ClientPacketPlayerNBTData(HandlerR.createPlayerDataPacketTag((byte) 1, "startUpNBT", data)), playerMP);
     }
 
-    public static void setLoadingGuiState(EntityPlayerMP playerMP, boolean state) {
+    public static void setLoadingGuiState(EntityPlayerMP playerMP, boolean state, boolean isTeam) {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setBoolean("setGuiState", state);
+        nbt.setBoolean("isTeam", isTeam);
         MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
     }
 
@@ -211,6 +215,16 @@ public class HandlerR {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setByte("injectPhase", PHASE);
         MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
+    }
+
+    public static void injectNamesOnClient(List<String> names, EntityPlayerMP player) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        NBTTagList list = new NBTTagList();
+        for (String name : names) {
+            list.appendTag(new NBTTagString(name));
+        }
+        nbt.setTag("injectNamesOnClient", list);
+        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), player);
     }
 
     public static void sendMessageString(EntityPlayerMP playerMP, String message) {
@@ -321,7 +335,7 @@ public class HandlerR {
         return keysF;
     }
 
-    public static ItemStack getSoulBinder(EntityPlayerMP player) {
+    public static @Nullable ItemStack getSoulBinder(EntityPlayerMP player) {
         for (ItemStack stack : player.inventory.mainInventory) {
             if (stack.getItem() instanceof ItemSoulBinder) return stack;
         }
@@ -335,7 +349,10 @@ public class HandlerR {
         return false;
     }
 
-    public static boolean isSoulBinderFull(ItemStack stack) {
+    public static boolean isSoulBinderFull(@Nullable ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
         if (!(stack.getItem() instanceof ItemSoulBinder)) {
             return false;
         }

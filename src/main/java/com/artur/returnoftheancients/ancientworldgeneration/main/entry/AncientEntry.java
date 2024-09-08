@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.Cus
 import com.artur.returnoftheancients.ancientworldgeneration.util.BuildPhase;
 import com.artur.returnoftheancients.ancientworldgeneration.genmap.util.StructureMap;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.IBuild;
+import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -35,23 +36,25 @@ import static com.artur.returnoftheancients.utils.interfaces.IStructure.settings
 
 public abstract class AncientEntry implements IBuild, IALGS {
     protected static final byte MAX_LOADING = 4;
-    protected static final BlockPos nullPos = new BlockPos(0, 0, 0);
     protected static final UUID nullUUId = new UUID(0, 0);
+    protected static final BlockPos nullPos = new BlockPos(0, 0, 0);
+    protected UUID bossUUID = new UUID(0, 0);
     private final BuildPhase buildPhase = new BuildPhase();
+
     protected final Random random = new Random();
     protected BlockPos bossPos = new BlockPos(0 ,0, 0);
-    protected UUID bossUUID = new UUID(0, 0);
+    private boolean requestSave = false;
+    private boolean delete = false;
+    protected boolean isBossSpawn;
+    protected int finalTimer = 0;
+    protected boolean isBossDead;
+    protected byte fogTime = 0;
+    protected StructureMap map;
+    protected boolean isFinal;
+    protected boolean isBuild;
     protected boolean isSleep;
     private byte loadCount;
-    private boolean delete = false;
-    private boolean requestSave = false;
-    protected StructureMap map;
     protected long mapSeed;
-    protected boolean isFinal;
-    protected int finalTimer = 0;
-    protected boolean isBossSpawn;
-    protected boolean isBossDead;
-    protected boolean isBuild;
 
     protected final int pos;
 
@@ -110,11 +113,9 @@ public abstract class AncientEntry implements IBuild, IALGS {
         }
         if (!world.isRemote) {
             if (isBossDead) {
-                if (!world.isAnyPlayerWithinRangeAt(bossPos.getX(), bossPos.getY(), bossPos.getZ(), 4)) {
-                    CustomGenStructure.gen(world, bossPos.getX() - 3, bossPos.getY() - 30, bossPos.getZ() - 2, "ancient_exit");
-                    isFinal = true;
-                    requestToSave();
-                }
+                GenStructure.generateStructure(world, bossPos.getX() - 3, bossPos.getY() - 30, bossPos.getZ() - 2, "ancient_exit");
+                isFinal = true;
+                requestToSave();
             }
             if (!bossPos.equals(nullPos) && !isBossSpawn) {
                 EntityPlayer player = world.getClosestPlayer(bossPos.getX(), bossPos.getY(), bossPos.getZ(), 17, false);
@@ -123,6 +124,11 @@ public abstract class AncientEntry implements IBuild, IALGS {
                     onBossTiger(player, world);
                 }
             }
+                fogTime++;
+            if (fogTime >= 4) {
+                fogTime = 0;
+                addFog();
+            }
         }
     };
 
@@ -130,10 +136,11 @@ public abstract class AncientEntry implements IBuild, IALGS {
     public abstract boolean dead(UUID id);
     protected abstract void onRequestToDelete();
     protected abstract void onBossDead();
+    protected abstract void addFog();
     public boolean deadBoss(UUID id) {
         if (!bossUUID.equals(nullUUId) && bossUUID.equals(id)) {
-            onBossDead();
             isBossDead = true;
+            onBossDead();
             requestToSave();
             return true;
         }
@@ -275,8 +282,8 @@ public abstract class AncientEntry implements IBuild, IALGS {
         buildPhase.clearArea();
     }
     protected void genAncientEntryWay(World world) {
-        for (int y = 0, cordY = 112; cordY < world.getHeight(); y++) {
-            cordY = 112 + 32 * y;
+        for (int y = 0, cordY = 0; cordY < world.getHeight(); y++) {
+            cordY = 95 + (32 * y);
             gen(world, 10000 * pos, cordY, 0, ENTRY_WAY_STRING_ID);
         }
         gen(world, 6 + (10000 * pos), 255, 6, "ancient_border_cap");
@@ -305,6 +312,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                             buildPhase.xtp = 0;
                             settings.setRotation(Rotation.NONE);
                             buildPhase.please = false;
+                            genAncientEntryWay(world);
                             onReloadLightStart();
                             System.out.println("Finalizing pos:" + pos);
                             buildPhase.finalizing();
@@ -408,7 +416,6 @@ public abstract class AncientEntry implements IBuild, IALGS {
                             buildPhase.ytc = 0;
                             buildPhase.xtc = 0;
                             buildPhase.clear = false;
-                            genAncientEntryWay(world);
                             onGenStart();
                             System.out.println("Generate structures pos:" + pos);
                             buildPhase.genStructuresInWorld();

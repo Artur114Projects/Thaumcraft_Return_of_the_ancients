@@ -252,7 +252,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             if (player.world.provider.getDimension() != ancient_world_dim_id) {
                 FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 8, 126, -10);
             }
-            HandlerR.setLoadingGuiState(player, true);
+            HandlerR.setLoadingGuiState(player, true, false);
             HandlerR.injectPercentagesOnClient(player, 0, 0);
             if (!isGenerateStart) {
                 genAncientLabyrinth(player);
@@ -323,7 +323,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
 
         isGen = true;
         for (EntityPlayer player : players) {
-            HandlerR.setLoadingGuiState((EntityPlayerMP) player, false);
+            HandlerR.setLoadingGuiState((EntityPlayerMP) player, false, false);
             if (player != null) {
                 player.setHealth(20);
                 if (!player.isCreative()) {

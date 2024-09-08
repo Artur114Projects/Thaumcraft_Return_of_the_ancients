@@ -17,4 +17,5 @@ public class InitBlocks {
     public static final Block TP_TO_HOME_BLOCK = new TpToHomeBlock("tp_to_home_block", Material.PORTAL, -1, 999999999, SoundType.GLASS);
     public static final Block TAINT_ANCIENT_STONE = new TaintAncientStone("taint_ancient_stone", Material.ROCK, -1, 999999999, SoundType.STONE);
     public static final Block TP_TO_ANCIENT_WORLD_BLOCK = new TpToAncientWorldBlock("tp_to_ancient_world_block", Material.PORTAL, -1, 999999999, SoundType.GLASS);
+    public static final Block ANCIENT_TELEPORT = new AncientTeleport("ancient_teleport", Material.PORTAL, -1, 999999999, SoundType.GLASS);
 }

@@ -68,9 +68,7 @@ public class TpToAncientWorldBlock extends BaseBlock{
                     AncientWorld.tpToAncientWorld((EntityPlayerMP) player);
                 } else {
                     if (!ID.isEmpty()) {
-                        NBTTagCompound nbt = new NBTTagCompound();
-                        nbt.setString("sendMessageTranslate", Referense.MODID + ".portal.message");
-                        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), (EntityPlayerMP) player);
+                        HandlerR.sendMessageTranslate((EntityPlayerMP) player, Referense.MODID + ".portal.message");
                         player.sendMessage(new TextComponentString(ID.toString()));
                         ID.clear();
                     } else {

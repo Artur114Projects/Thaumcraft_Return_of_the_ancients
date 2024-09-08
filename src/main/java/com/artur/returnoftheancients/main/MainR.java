@@ -1,8 +1,9 @@
 package com.artur.returnoftheancients.main;
 
+import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
+import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntry;
 import com.artur.returnoftheancients.handlers.RegisterHandler;
 import com.artur.returnoftheancients.init.InitBiome;
-import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.misc.ReturnOfTheAncientsTab;
 import com.artur.returnoftheancients.proxy.CommonProxy;
@@ -48,8 +49,13 @@ public class MainR {
 
 
 	@EventHandler
-	public void serverStarting(FMLServerStartingEvent event) {
-		proxy.serverStarting(event);
+	public void serverStarting(FMLServerStartingEvent e) {
+		proxy.serverStarting(e);
+	}
+
+	@EventHandler
+	public void serverStopping(FMLServerStoppingEvent e) {
+		AncientWorld.unload();
 	}
 
 

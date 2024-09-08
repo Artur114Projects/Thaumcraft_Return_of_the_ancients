@@ -21,8 +21,23 @@ import java.util.concurrent.TimeUnit;
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class Test { //
     public static void main(String[] args) throws InterruptedException {
-        System.out.println(AncientEntryMapProvider.createAncientEntryMap(new Random()));
+        int block = 16711680;
+        byte xC = (byte) (block >> 24);
+        byte yC = (byte) (block >> 16);
+        byte zC = (byte) (block >> 8);
+        byte structure = (byte) block;
+        System.out.println(xC);
+        System.out.println(yC);
+        System.out.println(zC);
+        System.out.println(structure);
+        System.out.println(packBytes(xC, yC, zC, structure));
+        System.out.println(packBytes((byte) 0, (byte) -1, (byte) -1, (byte) 0));
     }
+
+    protected static int packBytes(byte b1, byte b2, byte b3, byte b4) {
+        return (b1 << 24) | ((b2 & 0xFF) << 16) | ((b3 & 0xFF) << 8) | (b4 & 0xFF);
+    }
+
     private static List<UUID> list = new ArrayList<>();
 
     public static void startTest(EntityPlayer player) {

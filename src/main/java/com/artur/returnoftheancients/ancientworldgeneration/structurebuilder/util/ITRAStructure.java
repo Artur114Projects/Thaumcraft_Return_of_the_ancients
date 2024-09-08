@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.ancientworldgeneration.structurebuilder;
+package com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util;
 
 import net.minecraft.world.World;
 

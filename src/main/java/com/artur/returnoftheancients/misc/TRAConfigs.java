@@ -139,12 +139,6 @@ public class TRAConfigs {
         @Config.Comment("Should I use an old generator?")
         public boolean isOldGenerator = false;
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.crd")
-        public boolean cantChangeRenderDistanceChunks = false;
-
-        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.ccg")
-        public boolean cantChangeGammaSetting = false;
-
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.np")
         public boolean noPeaceful = true;
 
@@ -157,6 +151,9 @@ public class TRAConfigs {
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.daw")
         public boolean isDeadToAncientWorld = false;
 
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.mpc")
+        @Config.RequiresMcRestart
+        public int minPlayersCount = 1;
     }
 
     public static class AncientWorldGenerationSettings {

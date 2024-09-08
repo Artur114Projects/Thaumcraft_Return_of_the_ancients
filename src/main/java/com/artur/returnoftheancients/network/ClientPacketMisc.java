@@ -3,13 +3,13 @@ package com.artur.returnoftheancients.network;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.gui.LoadingGui;
-import com.artur.returnoftheancients.gui.OldLoadingGui;
 import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.referense.Referense;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
@@ -60,11 +60,13 @@ public class ClientPacketMisc implements IMessage {
                 }
                 if (nbt.hasKey("setGuiState")) {
                     if (nbt.getBoolean("setGuiState")) {
-                        if (!TRAConfigs.Any.useOldLoadingGui) {
-                            Minecraft.getMinecraft().displayGuiScreen(new LoadingGui());
-                        } else {
-                            Minecraft.getMinecraft().displayGuiScreen(new OldLoadingGui());
-                        }
+
+                        LoadingGui.setIsTeam(nbt.getBoolean("isTeam"));
+                        LoadingGui.injectPercentages((byte) 0);
+                        LoadingGui.injectPhase((byte) 0);
+
+                        Minecraft.getMinecraft().displayGuiScreen(new LoadingGui());
+
                     } else {
                         Minecraft.getMinecraft().displayGuiScreen(null);
                     }
@@ -93,6 +95,14 @@ public class ClientPacketMisc implements IMessage {
                 }
                 if (nbt.hasKey("syncWorldDataFields")) {
                     WorldDataFields.readOnClient(nbt.getCompoundTag("syncWorldDataFields"));
+                }
+                if (nbt.hasKey("injectNamesOnClient")) {
+                    NBTTagList list = nbt.getTagList("injectNamesOnClient", 8);
+                    String[] names = new String[list.tagCount()];
+                    for (int i = 0; i != list.tagCount(); i++) {
+                        names[i] = list.getStringTagAt(i);
+                    }
+                    LoadingGui.injectPlayers(names);
                 }
             });
             return null;

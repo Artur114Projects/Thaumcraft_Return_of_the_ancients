@@ -11,12 +11,19 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import thaumcraft.common.lib.network.PacketHandler;
+import thaumcraft.common.lib.network.misc.PacketMiscEvent;
 
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
+
+import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
 public class AncientEntrySolo extends AncientEntry {
 
@@ -51,11 +58,26 @@ public class AncientEntrySolo extends AncientEntry {
     }
 
     @Override
+    protected void error(String s) {
+        super.error(s);
+        if (!isSleep) {
+            player.sendMessage(new TextComponentString(s).setStyle(new Style().setColor(TextFormatting.DARK_RED)));
+        }
+    }
+
+    @Override
     protected void onRequestToDelete() {}
 
     @Override
     protected void onBossDead() {
         player.addItemStackToInventory(getPrimordialPearl());
+    }
+
+    @Override
+    protected void addFog() {
+        if (!isBossSpawn) {
+            PacketHandler.INSTANCE.sendTo(new PacketMiscEvent((byte) 2), player);
+        }
     }
 
     @Override
@@ -109,7 +131,7 @@ public class AncientEntrySolo extends AncientEntry {
         int dx = ((((int) player.posX - (10000 * pos)) >> 4) - 8) * -1;
         int dz = ((((int) player.posZ) >> 4) - 8) * -1;
         if (dx >= 0 && dx < map.SIZE && dz >= 0 && dz < map.SIZE) {
-            if (map.getDeformation(dx, dz) > 6) {
+            if (map.getDeformation(dx, dz) > 4) {
                 HandlerR.researchAndSendMessage(player, "DEFORMATION", Referense.MODID + ".text.deformation");
             }
         }
@@ -135,7 +157,7 @@ public class AncientEntrySolo extends AncientEntry {
 
     @Override
     public void onStart() {
-        HandlerR.setLoadingGuiState(player, true);
+        HandlerR.setLoadingGuiState(player, true, false);
         HandlerR.injectPhaseOnClient(player, (byte) 0);
         HandlerR.injectPercentagesOnClient(player, 0, 0);
     }
@@ -161,7 +183,7 @@ public class AncientEntrySolo extends AncientEntry {
     public void onFinal() {
         HandlerR.researchAndSendMessage(player, "m_ENTRY_ANCIENT", Referense.MODID + ".text.entered_ancient");
         HandlerR.injectPhaseOnClient(player, (byte) 4);
-        HandlerR.setLoadingGuiState(player, false);
+        HandlerR.setLoadingGuiState(player, false, false);
         player.connection.setPlayerLocation(8 + (10000 * pos), 253, 8, player.rotationYaw, 90);
         player.setHealth(20);
     }

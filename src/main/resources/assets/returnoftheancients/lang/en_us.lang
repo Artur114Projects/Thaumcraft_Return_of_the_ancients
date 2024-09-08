@@ -47,9 +47,7 @@ returnoftheancients.cfg.sub.portal.modId=Mod ID
 ################################################################################
 returnoftheancients.cfg.sub.aws=Ancient world settings
 returnoftheancients.cfg.sub.aws.og=Use old generator
-returnoftheancients.cfg.sub.aws.ccg=()
 returnoftheancients.cfg.sub.aws.np=No peaceful difficulty
-returnoftheancients.cfg.sub.aws.crd=()
 returnoftheancients.cfg.sub.aws.isw=Is set Warp
 returnoftheancients.cfg.sub.aws.nnv=Cant use night vision
 returnoftheancients.cfg.sub.aws.daw=Is dead in ancient world

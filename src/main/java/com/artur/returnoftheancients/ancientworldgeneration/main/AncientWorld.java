@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEn
 import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntryTeam;
 import com.artur.returnoftheancients.ancientworldgeneration.util.Team;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.IBuild;
+import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.ITeamTask;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -29,6 +30,7 @@ import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_di
 public class AncientWorld {
     private static boolean isLoad = false;
     private static final int buildCount = 1;
+    private static Team.RawTeam rawTeam = null;
     private static final LinkedList<IBuild> build = new LinkedList<>();
     private static final LinkedList<AncientEntry> ANCIENT_ENTRIES = new LinkedList<>();
     @TestOnly
@@ -48,16 +50,25 @@ public class AncientWorld {
         return build;
     }
 
-
     public static void tpToAncientWorld(EntityPlayerMP player) {
+        if (TRAConfigs.AncientWorldSettings.minPlayersCount > 1) {
+            tpToAncientWorldWithQueue(player);
+        } else {
+            tpToAncientWorldNotQueue(player);
+        }
+    }
+
+    private static void tpToAncientWorldNotQueue(EntityPlayerMP player) {
         player.setHealth(20);
         player.clearActivePotions();
         ItemStack stack = HandlerR.getSoulBinder(player);
+
         if (stack != null) {
             if (HandlerR.isSoulBinderFull(stack)) {
-                Team team = new Team(stack, player.world);
-                if (team.getAll().length > 1) {
-                    team.setToAll((playerSet -> FreeTeleporter.teleportToDimension(playerSet, ancient_world_dim_id, 0, 244, 0)));
+                Team team = new Team(stack, player);
+                if (team.size() > 1) {
+                    team.setToAll(AncientWorld::telepotToAncientArea);
+                    team.injectNamesToPlayers();
                     newAncientEntryTeam(team);
                     return;
                 } else {
@@ -65,12 +76,41 @@ public class AncientWorld {
                 }
             }
         }
-        FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 0, 244, 0);
+
+        telepotToAncientArea(player);
         newAncientEntrySolo(player);
+    }
+
+    private static void tpToAncientWorldWithQueue(EntityPlayerMP player) {
+        player.setHealth(20);
+        player.clearActivePotions();
+        ItemStack stack = HandlerR.getSoulBinder(player);
+
+        if (HandlerR.isSoulBinderFull(stack)) {
+            Team team = new Team(stack, player);
+            rawTeam.add(team);
+        } else {
+            rawTeam.add(player);
+        }
+
+        telepotToAncientArea(player);
+        HandlerR.setLoadingGuiState(player, true, true);
+        rawTeam.injectNamesToPlayers();
+
+        Team team = rawTeam.toTeam();
+        if (team != null) {
+            newAncientEntryTeam(team);
+        }
+    }
+
+
+    public static void telepotToAncientArea(EntityPlayerMP player) {
+        FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 0, 244, 0);
     }
 
     public static void load() {
         if (!isLoad) {
+            rawTeam = new Team.RawTeam(TRAConfigs.AncientWorldSettings.minPlayersCount);
             if (TRAConfigs.Any.debugMode) System.out.println("Load from NBT start!");
             if (WorldData.get().saveData.hasKey("AncientWorldPak")) {
                 NBTTagCompound nbt = WorldData.get().saveData.getCompoundTag("AncientWorldPak");
@@ -105,10 +145,10 @@ public class AncientWorld {
         load();
     }
 
-    @TestOnly
     public static void unload() {
         isLoad = false;
         ANCIENT_ENTRIES.clear();
+        build.clear();
     }
 
     private static void newAncientEntrySolo(EntityPlayerMP player) {
@@ -157,8 +197,9 @@ public class AncientWorld {
 
     public static void interrupt(EntityPlayerMP player) {
         for (AncientEntry entry : ANCIENT_ENTRIES) {
-            if (entry.interrupt(player.getUniqueID())) break;
+            if (entry.interrupt(player.getUniqueID())) return;
         }
+        rawTeam.remove(player);
     }
 
     private static int foundFreePos() {
@@ -223,6 +264,7 @@ public class AncientWorld {
             if (t >= 10) {
                 t = 0;
                 Team.updateS();
+
                 boolean isSave = false;
 
                 ArrayList<AncientEntry> toDelete = new ArrayList<>();

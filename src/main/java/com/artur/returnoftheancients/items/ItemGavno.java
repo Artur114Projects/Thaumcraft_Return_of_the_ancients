@@ -2,18 +2,13 @@ package com.artur.returnoftheancients.items;
 
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.ITRAStructure;
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructure;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.TRAStructureEBS;
 import com.artur.returnoftheancients.ancientworldgeneration.util.Team;
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
 import com.artur.returnoftheancients.client.CameraShake;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
-import com.artur.returnoftheancients.gui.SkalaGui;
-import com.artur.returnoftheancients.handlers.HandlerR;
-import com.artur.returnoftheancients.init.InitSounds;
-import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import net.minecraft.block.Block;
@@ -23,23 +18,20 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import thaumcraft.common.lib.network.PacketHandler;
-import thaumcraft.common.lib.network.misc.PacketMiscEvent;
 
 import java.util.List;
 
 public class ItemGavno extends BaseItem{
+
+	private ITRAStructure structure = null;
 
 	public ItemGavno(String name) {
 		super(name);
@@ -50,11 +42,13 @@ public class ItemGavno extends BaseItem{
 	@Override
 	public @NotNull EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player instanceof EntityPlayerMP) {
+			if (structure == null) {
+				structure = new TRAStructureEBS("ancient_crossroads", null);
+			}
 //			PacketHandler.INSTANCE.sendTo(new PacketMiscEvent((byte) 2), (EntityPlayerMP) player);
 //			NBTTagCompound nbt = new NBTTagCompound();
 //			nbt.setString("playSound", InitSounds.RUI_DEAD.NAM);
 //			MainR.NETWORK.sendTo(new ClientPacketMisc(nbt),(EntityPlayerMP)  player);
-			IPlayerTimerCapability capability = TRACapabilities.getTimer(player);
 			if (player.isSneaking()) {
 				Team.clear();
 				AncientWorld.reload();
@@ -67,6 +61,8 @@ public class ItemGavno extends BaseItem{
 			if (timer.hasTimer("recovery")) {
 				player.sendMessage(new TextComponentString("time:" + timer.getTime("recovery")));
 			}
+			GenStructure.generateStructure(worldIn, pos.getX() - 3, pos.getY() - 30, pos.getZ() - 2, "ancient_exit");
+
 		}
 		if (worldIn.isRemote) {
 			CameraShake.startShake(4);
@@ -83,7 +79,6 @@ public class ItemGavno extends BaseItem{
 					);
 				}
 			}
-			Minecraft.getMinecraft().displayGuiScreen(new SkalaGui());
 		}
 		if (!worldIn.isRemote) {
 //			BlockPos playerPos = player.getPosition();

@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.ancientworldgeneration.main.entry;
 
 import com.artur.returnoftheancients.ancientworldgeneration.util.Team;
+import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.ITeamTask;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -11,7 +12,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityHopper;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import thaumcraft.common.lib.network.PacketHandler;
+import thaumcraft.common.lib.network.misc.PacketMiscEvent;
 
 import java.util.Random;
 import java.util.UUID;
@@ -55,7 +61,18 @@ public class AncientEntryTeam extends AncientEntry {
         if (!team.isActive()) isSleep = true;
         super.update(world);
         team.update();
+        team.setToAll(updateResearch);
     }
+
+    private final ITeamTask updateResearch = player -> {
+        int dx = ((((int) player.posX - (10000 * pos)) >> 4) - 8) * -1;
+        int dz = ((((int) player.posZ) >> 4) - 8) * -1;
+        if (dx >= 0 && dx < map.SIZE && dz >= 0 && dz < map.SIZE) {
+            if (map.getDeformation(dx, dz) > 4) {
+                HandlerR.researchAndSendMessage(player, "DEFORMATION", Referense.MODID + ".text.deformation");
+            }
+        }
+    };
 
     @Override
     public boolean wakeUp(EntityPlayerMP player) {
@@ -83,6 +100,14 @@ public class AncientEntryTeam extends AncientEntry {
     }
 
     @Override
+    protected void error(String s) {
+        super.error(s);
+        if (!isSleep) {
+            team.setToAll(player -> player.sendMessage(new TextComponentString(s).setStyle(new Style().setColor(TextFormatting.DARK_RED))));
+        }
+    }
+
+    @Override
     protected void onRequestToDelete() {
         if (team != null) {
             team.delete();
@@ -93,6 +118,15 @@ public class AncientEntryTeam extends AncientEntry {
     protected void onBossDead() {
         team.setToAll(player -> player.addItemStackToInventory(getPrimordialPearl()));
     }
+
+    @Override
+    protected void addFog() {
+        if (!isBossSpawn) {
+            team.setToAll(setFog);
+        }
+    }
+
+    private final ITeamTask setFog = player -> PacketHandler.INSTANCE.sendTo(new PacketMiscEvent((byte) 2), player);
 
     @Override
     public boolean interrupt(UUID id) {
@@ -120,9 +154,7 @@ public class AncientEntryTeam extends AncientEntry {
     @Override
     public void onStart() {
         team.setToAll(player -> {
-            HandlerR.setLoadingGuiState(player, true);
-            HandlerR.injectPhaseOnClient(player, (byte) 0);
-            HandlerR.injectPercentagesOnClient(player, 0, 0);
+            HandlerR.setLoadingGuiState(player, true, true);
         });
     }
 
@@ -152,7 +184,7 @@ public class AncientEntryTeam extends AncientEntry {
     public void onFinal() {
         team.setToAll(player -> {
             HandlerR.injectPhaseOnClient(player, (byte) 4);
-            HandlerR.setLoadingGuiState(player, false);
+            HandlerR.setLoadingGuiState(player, false, true);
             player.setHealth(20);
             player.connection.setPlayerLocation(8 + (10000 * pos), 253, 8, -181, 90);
             HandlerR.researchAndSendMessage(player, "m_ENTRY_ANCIENT", Referense.MODID + ".text.entered_ancient");

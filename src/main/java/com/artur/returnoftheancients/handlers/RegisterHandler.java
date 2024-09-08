@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.handlers;
 
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructureIsUseEBS;
 import com.artur.returnoftheancients.commads.*;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitItems;
@@ -14,6 +15,9 @@ import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.tileentity.BlockTileEntity;
 import com.artur.returnoftheancients.utils.interfaces.IHasModel;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -29,6 +33,7 @@ import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.AspectRegistryEvent;
+import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.api.research.ResearchCategories;
 import static thaumcraft.api.items.ItemsTC.*;
@@ -97,10 +102,8 @@ public class RegisterHandler {
 	}
 
 	public 	static void registerStructures() {
-		CustomGenStructure.setUseBinary();
 		CustomGenStructure.put("ancient_entry");
 		CustomGenStructure.put("ancient_crossroads");
-		CustomGenStructure.put("ancient_crossroads_trap");
 
 		CustomGenStructure.put("ancient_way_rotate-1");
 		CustomGenStructure.put("ancient_way_rotate-2");
@@ -116,9 +119,18 @@ public class RegisterHandler {
 		CustomGenStructure.put("ancient_end_rotate-2");
 		CustomGenStructure.put("ancient_end_rotate-3");
 		CustomGenStructure.put("ancient_end_rotate-4");
+		CustomGenStructure.setUseEBS((x, y, z, state) -> {
+            if (state.getBlock().equals(InitBlocks.BOSS_TRIGGER_BLOCK)) return false;
+            if (state.getBlock().equals(BlocksTC.nitor.get(EnumDyeColor.BLACK))) return false;
+            return true;
+		});
+		CustomGenStructure.register();
 
-		CustomGenStructure.put("ancient_developer_platform");
+		CustomGenStructure.setUseBinary();
 		CustomGenStructure.put("ancient_boss");
+		CustomGenStructure.put("ancient_crossroads_trap");
+		CustomGenStructure.put("ancient_developer_platform");
+
 		CustomGenStructure.put("ancient_entry_way");
 		CustomGenStructure.put("ancient_door");
 		CustomGenStructure.put("ancient_door1");
@@ -141,6 +153,14 @@ public class RegisterHandler {
 				new AspectList().add(Aspect.ELDRITCH, 125).add(Aspect.DARKNESS, 75).add(Aspect.SENSES, 100),
 				COMPASS, mechanismComplex, new ItemStack(plate, 1, 3), morphicResonator, new ItemStack(plate, 1, 3))
 		);
+		ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation(Referense.MODID + ":soul_binder"), new InfusionRecipe(
+				"SOUL_BINDER",
+				new ItemStack(InitItems.SOUL_BINDER),
+				1,
+				new AspectList().add(Aspect.TRAP, 75).add(Aspect.SOUL, 100),
+				Blocks.SOUL_SAND, new ItemStack(plate, 1, 3), new ItemStack(plate, 1, 3), new ItemStack(plate, 1, 3), new ItemStack(plate, 1, 3))
+		);
+
 	}
 
 	@SubscribeEvent

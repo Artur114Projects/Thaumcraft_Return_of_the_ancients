@@ -1,5 +1,8 @@
 package com.artur.returnoftheancients.ancientworldgeneration.structurebuilder;
 
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructure;
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructureIsUseEBS;
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructureTask;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -16,6 +19,7 @@ public class CustomGenStructure {
     private static boolean isUseBinary = false;
     private static boolean isUseAir = false;
     private static ITRAStructureTask task = null;
+    private static ITRAStructureIsUseEBS isUseEBSTask = null;
 
     public static void put(String name) {
         if (isUseAir) useAirList.add(name);
@@ -26,7 +30,8 @@ public class CustomGenStructure {
         CustomGenStructure.task = task;
     }
 
-    public static void setUseEBS() {
+    public static void setUseEBS(ITRAStructureIsUseEBS isUseEBSTask) {
+        CustomGenStructure.isUseEBSTask = isUseEBSTask;
         isUseEBS = true;
     }
 
@@ -57,7 +62,7 @@ public class CustomGenStructure {
         }
         if (isUseEBS) {
             for (String s : rawStructures) {
-                structures.put(s, new TRAStructureEBS(s));
+                structures.put(s, new TRAStructureEBS(s, isUseEBSTask));
             }
             postProsesRegister();
             return;

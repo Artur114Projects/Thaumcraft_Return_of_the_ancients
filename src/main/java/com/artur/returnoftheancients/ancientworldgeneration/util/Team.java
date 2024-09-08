@@ -9,7 +9,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import java.util.*;
 
@@ -36,18 +37,26 @@ public class Team {
     private final LinkedList<UUID> toRemove = new LinkedList<>();
     private final LinkedList<UUID> uuids = new LinkedList<>();
     private final HashMap<UUID, EntityPlayerMP> players = new HashMap<>();
-    public Team(ItemStack stack, World world) {
+    public Team(ItemStack stack, EntityPlayerMP player) {
+        players.put(player.getUniqueID(), player);
         NBTTagCompound nbt = stack.getOrCreateSubCompound(Referense.MODID);
         NBTTagCompound list = nbt.getCompoundTag("players");
         List<String> keys = HandlerR.uuidKeySetToList(list.getKeySet());
-        MinecraftServer server = world.getMinecraftServer();
+        MinecraftServer server = player.world.getMinecraftServer();
         for (String key : keys) {
             if (server != null) {
                 UUID id = Objects.requireNonNull(list.getUniqueId(key));
                 Entity entity = server.getEntityFromUuid(id);
                 if (entity instanceof EntityPlayerMP && entity.dimension != InitDimensions.ancient_world_dim_id) {
-                    uuids.add(id);
-                    players.put(id, (EntityPlayerMP) entity);
+                    EntityPlayerMP playerMP = (EntityPlayerMP) entity;
+                    List<String> uui = HandlerR.isPlayerUseUnresolvedItems(playerMP);
+                    if (uui.isEmpty()) {
+                        uuids.add(id);
+                        players.put(id, (EntityPlayerMP) entity);
+                    } else {
+                        playerMP.sendMessage(new TextComponentTranslation(Referense.MODID + ".portal.message"));
+                        playerMP.sendMessage(new TextComponentString(uui.toString()));
+                    }
                 }
             }
         }
@@ -70,6 +79,17 @@ public class Team {
         }
         teams.add(this);
     }
+
+    public Team(RawTeam rawTeam) {
+        for (EntityPlayerMP player : rawTeam.players) {
+            if (player != null) {
+                this.uuids.add(player.getUniqueID());
+                this.players.put(player.getUniqueID(), player);
+            }
+        }
+        teams.add(this);
+    }
+
 
     public Team(NBTTagCompound nbt) {
         boolean error = false;
@@ -132,6 +152,21 @@ public class Team {
         });
     }
 
+    public void injectNamesToPlayers() {
+        List<String> names = new ArrayList<>();
+        players.forEach((key, value) -> {
+            names.add(value.getName());
+        });
+        players.forEach((key, value) -> HandlerR.injectNamesOnClient(names, value));
+    }
+    public int size() {
+        return uuids.size();
+    }
+
+    public int activeSize() {
+        return players.size();
+    }
+
     public void delete() {
         teams.remove(this);
     }
@@ -180,5 +215,54 @@ public class Team {
         res.delete(res.length() - 2, res.length());
         res.append('}');
         return res.toString();
+    }
+
+    public static class RawTeam {
+        public final int minPlayersCount;
+        private final ArrayList<EntityPlayerMP> players = new ArrayList<>();
+
+        public RawTeam(int minPlayersCount) {
+            this.minPlayersCount = minPlayersCount;
+        }
+
+        public void add(EntityPlayerMP playerMP) {
+            if (players.contains(playerMP)) return;
+            players.add(playerMP);
+        }
+
+        public void add(Team team) {
+            players.addAll(Arrays.asList(team.getAll()));
+            team.delete();
+        }
+
+        public void remove(EntityPlayerMP playerMP) {
+            players.remove(playerMP);
+        }
+
+        public Team toTeam() {
+            if (players.size() < minPlayersCount) return null;
+            return new Team(this);
+        }
+
+        public void setToAll(ITeamTask set) {
+            for (EntityPlayerMP player : players) {
+                set.set(player);
+            }
+        }
+
+        public void injectNamesToPlayers() {
+            List<String> names = new ArrayList<>();
+            for (int i = 0; i != minPlayersCount; i++) {
+                if (i < players.size()) {
+                    names.add(players.get(i).getName());
+                } else {
+                    names.add(" ");
+                }
+            }
+            for (EntityPlayerMP player : players) {
+                HandlerR.injectNamesOnClient(names, player);
+            }
+        }
+
     }
 }

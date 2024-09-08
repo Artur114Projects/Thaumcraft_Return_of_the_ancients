@@ -4,8 +4,8 @@ import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ServerPacketTpToHome;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextComponentTranslation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -13,13 +13,17 @@ import java.io.IOException;
 
 
 public class LoadingGui extends GuiScreen {
-    private GifSTime gif;
+    private final GifSTime gif;
+    private final int Red = 16711680;
+    private final int Yellow = 16776960;
+    private final int White = 16777215;
+    private final int WhiteD = 0xf5f5f5;
+    private final int Blue = 0xBFFF;
+    private final int Aqua = 0x00ffff;
     private static byte PHASE = -1;
     private static byte percentages = 0;
-    private final int Red = 16711680;
-    private final int White = 16777215;
-    private static final int Y = 100;
-    private static final int X = 427;
+    private static boolean isTeam = false;
+    private static String[] players = new String[0];
     private static ResourceLocation location;
     private byte h = 0;
     private byte t = 0;
@@ -30,10 +34,13 @@ public class LoadingGui extends GuiScreen {
     public boolean iaDrawESCString = false;
     public boolean iaESCString = false;
 
-
     public LoadingGui() {
         gif = new GifSTime( Referense.MODID + ":textures/gui/gif/gen_gif/gen_gif_v2-", 18, 15, mc);
         location = new ResourceLocation( Referense.MODID + ":textures/gui/loading_gui_background.png");
+    }
+
+    public static void setIsTeam(boolean isTeam) {
+        LoadingGui.isTeam = isTeam;
     }
 
     public static void injectPhase(byte PHASE) {
@@ -42,6 +49,10 @@ public class LoadingGui extends GuiScreen {
 
     public static void injectPercentages(byte percentages) {
         LoadingGui.percentages = percentages;
+    }
+
+    public static void injectPlayers(String[] players) {
+        LoadingGui.players = players;
     }
 
     @Override
@@ -111,9 +122,9 @@ public class LoadingGui extends GuiScreen {
         int hei = height / 3;
         switch (PHASE) {
             case 0: {
-                String text = constantNames[0] + ts;
+                String text = constantNames[0];
                 int wid = ((width / 2) - (fontRenderer.getStringWidth(text) / 2));
-                fontRenderer.drawString(text, wid, hei, White);
+                fontRenderer.drawString(text + ts, wid, hei, White);
             }break;
             case 1: {
                 String text = constantNames[1] + " " + percentages + "%";
@@ -126,9 +137,9 @@ public class LoadingGui extends GuiScreen {
                 fontRenderer.drawString(text, wid, hei, White);
             }break;
             case 3: {
-                String text = constantNames[3] + ts;
+                String text = constantNames[3];
                 int wid = ((width / 2) - (fontRenderer.getStringWidth(text) / 2));
-                fontRenderer.drawString(text, wid, hei, White);
+                fontRenderer.drawString(text + ts, wid, hei, White);
             }break;
             case 4: {
                 String text = constantNames[4];
@@ -143,11 +154,37 @@ public class LoadingGui extends GuiScreen {
         }
 
         if (iaDrawESCString) {
-            String s = new TextComponentTranslation(Referense.MODID + ".gui.esc").getFormattedText();
+            String s = I18n.format(Referense.MODID + ".gui.esc");
             int hieE = (int) (height / 1.25);
             int widE = ((width / 2) - (fontRenderer.getStringWidth(s) / 2));
             fontRenderer.drawString(s, widE, hieE, Red);
         }
+
+
+        if (isTeam) {
+            int mColor = White;
+            if (PHASE == 0) {
+                mColor = Red;
+            }
+            fontRenderer.drawStringWithShadow("Team:", 4, 2, mColor);
+            for (byte i = 0; i != players.length ; i++) {
+                String text = (i + 1) + ": ";
+                int color0 = White;
+                if (players[i].equals(" ")) {
+                    color0 = Red;
+                }
+                fontRenderer.drawStringWithShadow(text, 4, 12 + (10 * i), color0);
+                int w = fontRenderer.getStringWidth(text);
+                fontRenderer.drawStringWithShadow(players[i], 4 + w, 12 + (10 * i), Aqua);
+            }
+        }
+    }
+
+    private void resetToDefault() {
+        players = new String[0];
+        isTeam = false;
+        percentages = 0;
+        PHASE = -1;
     }
 
     @Override
@@ -177,7 +214,7 @@ public class LoadingGui extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
-        super.onGuiClosed();
+        resetToDefault();
     }
 
     @Override

@@ -7,7 +7,6 @@ import net.minecraftforge.common.crafting.IRecipeFactory;
 
 public class CraftingRegister {
     public static void register() {
-        registerRecipes("soul_binder");
         registerRecipes("soul_binder_clear");
     }
 

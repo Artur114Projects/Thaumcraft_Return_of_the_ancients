@@ -1,7 +1,8 @@
 package com.artur.returnoftheancients.ancientworldgeneration.structurebuilder;
 
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructure;
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructureTask;
 import com.artur.returnoftheancients.referense.Referense;
-import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;

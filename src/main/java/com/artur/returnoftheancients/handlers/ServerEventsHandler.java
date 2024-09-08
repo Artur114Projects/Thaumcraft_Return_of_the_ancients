@@ -269,9 +269,6 @@ public class ServerEventsHandler {
         }
         if (e.player.ticksExisted % 4 == 0) {
             if (playerDimension == ancient_world_dim_id) {
-                if (!e.player.world.isRemote) {
-                    PacketHandler.INSTANCE.sendToDimension(new PacketMiscEvent((byte)2), ancient_world_dim_id);
-                }
                 if (TRAConfigs.AncientWorldSettings.noNightVision) {
                     if (e.player.getActivePotionEffect(MobEffects.NIGHT_VISION) != null && !e.player.isCreative()) {
                         e.player.removePotionEffect(MobEffects.NIGHT_VISION);

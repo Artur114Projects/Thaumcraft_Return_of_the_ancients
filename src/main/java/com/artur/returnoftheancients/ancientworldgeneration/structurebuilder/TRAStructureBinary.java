@@ -1,5 +1,7 @@
 package com.artur.returnoftheancients.ancientworldgeneration.structurebuilder;
 
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructure;
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructureTask;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -15,7 +17,6 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 public class TRAStructureBinary implements ITRAStructure {

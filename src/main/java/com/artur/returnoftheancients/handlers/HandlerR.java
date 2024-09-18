@@ -415,4 +415,15 @@ public class HandlerR {
         }
         return rand.nextInt(100) < percentage;
     }
+
+    public static boolean getIgnoringChance(int percentage, Random rand) {
+        if (percentage <= 0 ) {
+            return true;
+        }
+        if (percentage >= 100) {
+            return false;
+        }
+        return rand.nextInt(100) < percentage;
+    }
+
 }

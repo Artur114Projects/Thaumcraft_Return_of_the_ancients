@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.main;
 import com.artur.returnoftheancients.ancientworldgeneration.genmap.AncientEntryMapProvider;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
+import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMonsterPlacer;
@@ -21,17 +22,26 @@ import java.util.concurrent.TimeUnit;
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class Test { //
     public static void main(String[] args) throws InterruptedException {
-        int block = 16711680;
-        byte xC = (byte) (block >> 24);
-        byte yC = (byte) (block >> 16);
-        byte zC = (byte) (block >> 8);
-        byte structure = (byte) block;
-        System.out.println(xC);
-        System.out.println(yC);
-        System.out.println(zC);
-        System.out.println(structure);
-        System.out.println(packBytes(xC, yC, zC, structure));
-        System.out.println(packBytes((byte) 0, (byte) -1, (byte) -1, (byte) 0));
+        int notIgnoringOffset = 25;
+        int ignoringOffset = 25;
+        int baseChange = 50;
+        int hurt = 0;
+        int ignoringCount = 0;
+        int notIgnoringCount = 0;
+        Random rand = new Random();
+        for (int i = 0; i != 996; i++) {
+            if (!HandlerR.getIgnoringChance(baseChange + (ignoringOffset * hurt), rand)) {
+                hurt++;
+                ignoringCount++;
+                System.out.println(1);
+            } else {
+                notIgnoringCount++;
+                hurt--;
+                System.out.println(0);
+            }
+        }
+        System.out.println(notIgnoringCount + " notIgnoringCount");
+        System.out.println(ignoringCount + " IgnoringCount");
     }
 
     protected static int packBytes(byte b1, byte b2, byte b3, byte b4) {

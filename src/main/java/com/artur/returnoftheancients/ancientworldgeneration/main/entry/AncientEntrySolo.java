@@ -75,7 +75,7 @@ public class AncientEntrySolo extends AncientEntry {
 
     @Override
     protected void addFog() {
-        if (!isBossSpawn) {
+        if (!isBossSpawn && !player.isCreative()) {
             PacketHandler.INSTANCE.sendTo(new PacketMiscEvent((byte) 2), player);
         }
     }

@@ -21,6 +21,7 @@ public class Team {
             for (UUID id : team.uuids) {
                 if (!uniqueIds.add(id)) {
                     team.requestToDelete();
+                    System.out.println("panos!!!");
                 }
             }
         }
@@ -169,6 +170,7 @@ public class Team {
 
     public void delete() {
         teams.remove(this);
+        uuids.clear();
     }
 
     public void update() {
@@ -246,7 +248,9 @@ public class Team {
 
         public void setToAll(ITeamTask set) {
             for (EntityPlayerMP player : players) {
-                set.set(player);
+                if (player != null) {
+                    set.set(player);
+                }
             }
         }
 
@@ -254,6 +258,10 @@ public class Team {
             List<String> names = new ArrayList<>();
             for (int i = 0; i != minPlayersCount; i++) {
                 if (i < players.size()) {
+                    if (players.get(i) == null) {
+                        players.remove(players.get(i));
+                        continue;
+                    }
                     names.add(players.get(i).getName());
                 } else {
                     names.add(" ");

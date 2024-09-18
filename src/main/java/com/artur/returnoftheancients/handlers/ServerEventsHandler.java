@@ -98,7 +98,6 @@ public class ServerEventsHandler {
     public static void WorldEventLoad(WorldEvent.Load e) {
         if (!e.getWorld().isRemote) {
             WorldData worldData = WorldData.get();
-            checkVersion(e);
 
             if (e.getWorld().provider.getDimension() == 0) {
                 if (TRAConfigs.PortalSettings.isGen) {
@@ -106,6 +105,7 @@ public class ServerEventsHandler {
                         Random rand = new Random(e.getWorld().getSeed());
                         int x = rand.nextInt(1000) - 500;
                         int z = rand.nextInt(1000) - 500;
+                        worldData.saveData.setString("version", Referense.VERSION);
                         worldData.saveData.setInteger(IALGS.ancientPortalXPosKey, x);
                         worldData.saveData.setInteger(IALGS.ancientPortalZPosKey, z);
                         worldData.saveData.setInteger(IALGS.ancientPortalYPosKey, HandlerR.calculateGenerationHeight(e.getWorld(), (16 * x) + 8, (16 * z) + 8));
@@ -115,6 +115,7 @@ public class ServerEventsHandler {
                         WorldDataFields.reload();
                     }
                 }
+                checkVersion();
             }
             if (e.getWorld().provider.getDimension() == ancient_world_dim_id) {
                 if (!isAncientAreaSet) {
@@ -130,12 +131,13 @@ public class ServerEventsHandler {
         }
     }
 
-    private static void checkVersion(WorldEvent.Load e) {
+    public static void checkVersion() {
         WorldData worldData = WorldData.get();
         if (!worldData.saveData.hasKey("version")) {
             if (WorldDataFields.isPortalGenerate) {
                 worldData.saveData.setInteger(IALGS.ancientPortalXPosKey, 0);
                 worldData.saveData.setInteger(IALGS.ancientPortalZPosKey, 0);
+                worldData.markDirty();
                 WorldDataFields.reload();
                 newVersion = true;
                 System.out.println("new version!");
@@ -161,14 +163,20 @@ public class ServerEventsHandler {
                     if (player.getHealth() - e.getAmount() <= 0) {
                         e.setCanceled(true);
                         onPlayerLost(player);
+//                        player.getEntityData().setBoolean("deadd", true);
                         return;
                     }
-                    if (hurtCount >= TRAConfigs.DifficultySettings.chanceIgnoringArmor) {
-                        hurtCount = 0;
+
+                    int ignoringOffset = 25;
+                    int baseChange = 50;
+
+                    int hurt = player.getEntityData().getInteger("hurt");
+                    if (HandlerR.getIgnoringChance(baseChange + (ignoringOffset * hurt), player.world.rand)) {
+                        player.getEntityData().setInteger("hurt", hurt + 1);
                         player.setHealth(player.getHealth() - e.getAmount());
                         e.setCanceled(true);
                     } else {
-                        hurtCount++;
+                        player.getEntityData().setInteger("hurt", hurt - 1);
                     }
                 }
             }
@@ -218,10 +226,15 @@ public class ServerEventsHandler {
 
     @SubscribeEvent
     public static void PlayerTickEvent(TickEvent.PlayerTickEvent e) {
+//        if (e.player.getEntityData().getBoolean("deadd")) {
+//            e.player.getEntityData().setBoolean("deadd", false);
+//            return;
+//        }
         int playerDimension = e.player.dimension;
         if (e.player.getEntityData().getBoolean(startUpNBT)) {
             if (playerDimension != ancient_world_dim_id) {
                 if (e.player instanceof EntityPlayerMP) {
+                    e.player.motionY += 2 - e.player.motionY;
                     if (e.player.posY > WorldData.get().saveData.getInteger(IALGS.ancientPortalYPosKey)) {
                         EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
 
@@ -260,11 +273,12 @@ public class ServerEventsHandler {
                 }
             }
         }
-
-        if (playerDimension == ancient_world_dim_id) {
-            if (e.player.posY > 84 && !e.player.isCreative()) {
-                e.player.fallDistance = 0;
-                e.player.motionY += -1 - e.player.motionY;
+        if (e.player instanceof EntityPlayerMP) {
+            if (playerDimension == ancient_world_dim_id) {
+                if (e.player.posY > 84 && !e.player.isCreative()) {
+                    e.player.fallDistance = 0;
+                    e.player.motionY += -1 - e.player.motionY;
+                }
             }
         }
         if (e.player.ticksExisted % 4 == 0) {

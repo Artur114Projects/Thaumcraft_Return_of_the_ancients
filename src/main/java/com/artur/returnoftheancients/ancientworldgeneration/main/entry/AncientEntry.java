@@ -113,9 +113,11 @@ public abstract class AncientEntry implements IBuild, IALGS {
         }
         if (!world.isRemote) {
             if (isBossDead) {
-                GenStructure.generateStructure(world, bossPos.getX() - 3, bossPos.getY() - 30, bossPos.getZ() - 2, "ancient_exit");
-                isFinal = true;
-                requestToSave();
+                if (!world.isAnyPlayerWithinRangeAt(bossPos.getX(), bossPos.getY(), bossPos.getZ(), 4)) {
+                    CustomGenStructure.gen(world, bossPos.getX() - 3, bossPos.getY() - 30, bossPos.getZ() - 2, "ancient_exit");
+                    isFinal = true;
+                    requestToSave();
+                }
             }
             if (!bossPos.equals(nullPos) && !isBossSpawn) {
                 EntityPlayer player = world.getClosestPlayer(bossPos.getX(), bossPos.getY(), bossPos.getZ(), 17, false);
@@ -137,6 +139,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
     protected abstract void onRequestToDelete();
     protected abstract void onBossDead();
     protected abstract void addFog();
+
     public boolean deadBoss(UUID id) {
         if (!bossUUID.equals(nullUUId) && bossUUID.equals(id)) {
             isBossDead = true;

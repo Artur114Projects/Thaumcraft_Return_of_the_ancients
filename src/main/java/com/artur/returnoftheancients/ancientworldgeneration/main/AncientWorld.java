@@ -89,6 +89,7 @@ public class AncientWorld {
         if (HandlerR.isSoulBinderFull(stack)) {
             Team team = new Team(stack, player);
             rawTeam.add(team);
+            team.delete();
         } else {
             rawTeam.add(player);
         }
@@ -149,6 +150,7 @@ public class AncientWorld {
         isLoad = false;
         ANCIENT_ENTRIES.clear();
         build.clear();
+        Team.clear();
     }
 
     private static void newAncientEntrySolo(EntityPlayerMP player) {
@@ -260,37 +262,37 @@ public class AncientWorld {
                         build.removeAll(toDelete);
                     }
                 }
-            }
-            if (t >= 10) {
-                t = 0;
-                Team.updateS();
+                if (t >= 10) {
+                    t = 0;
+                    Team.updateS();
 
-                boolean isSave = false;
+                    boolean isSave = false;
 
-                ArrayList<AncientEntry> toDelete = new ArrayList<>();
-                for (AncientEntry entry : ANCIENT_ENTRIES) {
-                    entry.update(e.world);
-                    if (entry.isRequestToSave()) {
-                        if (!isSave) {
-                            save();
-                            isSave = true;
-                            entry.saveFinis();
-                        } else {
-                            entry.saveFinis();
+                    ArrayList<AncientEntry> toDelete = new ArrayList<>();
+                    for (AncientEntry entry : ANCIENT_ENTRIES) {
+                        entry.update(e.world);
+                        if (entry.isRequestToSave()) {
+                            if (!isSave) {
+                                save();
+                                isSave = true;
+                                entry.saveFinis();
+                            } else {
+                                entry.saveFinis();
+                            }
+                        }
+                        if (entry.isRequestToDelete()) {
+                            toDelete.add(entry);
                         }
                     }
-                    if (entry.isRequestToDelete()) {
-                        toDelete.add(entry);
+                    if (!toDelete.isEmpty()) {
+                        ANCIENT_ENTRIES.removeAll(toDelete);
+                        save();
                     }
                 }
-                if (!toDelete.isEmpty()) {
-                    ANCIENT_ENTRIES.removeAll(toDelete);
-                    save();
-                }
+                t++;
+                if (ANCIENT_ENTRIES.isEmpty()) build.clear();
             }
-            t++;
         }
-        if (ANCIENT_ENTRIES.isEmpty()) build.clear();
     }
 
     public static void onBossTriggerBlockAdd(int pos, BlockPos bossPos) {

@@ -139,6 +139,7 @@ public class AncientEntrySolo extends AncientEntry {
 
     @Override
     protected void onBossTiger(EntityPlayer player, World world) {
+        HandlerR.researchAndSendMessage((EntityPlayerMP) player, "BOSS", Referense.MODID + ".text.boss");
         Entity boss = getRandomBoss(world, bossPos);
         bossUUID = boss.getUniqueID();
         world.spawnEntity(boss);

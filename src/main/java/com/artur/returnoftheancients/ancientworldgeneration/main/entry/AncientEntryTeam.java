@@ -87,7 +87,10 @@ public class AncientEntryTeam extends AncientEntry {
 
     @Override
     protected void onBossTiger(EntityPlayer player, World world) {
-        team.setToAll(playerSet -> playerSet.connection.setPlayerLocation(player.posX, player.posY, player.posZ, playerSet.rotationYaw, playerSet.rotationPitch));
+        team.setToAll(playerSet -> {
+            playerSet.connection.setPlayerLocation(player.posX, player.posY, player.posZ, playerSet.rotationYaw, playerSet.rotationPitch);
+            HandlerR.researchAndSendMessage(playerSet, "BOSS", Referense.MODID + ".text.boss");
+        });
         Entity boss = getRandomBoss(world, bossPos);
         bossUUID = boss.getUniqueID();
         world.spawnEntity(boss);

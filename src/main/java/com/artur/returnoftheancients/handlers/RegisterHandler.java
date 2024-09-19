@@ -97,8 +97,9 @@ public class RegisterHandler {
 	}
 
 	public static void registerResearch() {
-		ResearchCategories.registerCategory("ANCIENT_WORLD", "UNLOCKELDRITCH", new AspectList(), new ResourceLocation(Referense.MODID, "textures/gui/ancient_logo.png"), new ResourceLocation(Thaumcraft.MODID, "textures/gui/gui_research_back_6.jpg"));
-		ThaumcraftApi.registerResearchLocation(new ResourceLocation(Referense.MODID, "research/ancient_world"));
+		ResearchCategories.registerCategory("ANCIENT_WORLD", "UNLOCKELDRITCH", new AspectList().add(Aspect.ELDRITCH, 1), new ResourceLocation(Referense.MODID, "textures/gui/ancient_logo.png"), new ResourceLocation(Thaumcraft.MODID, "textures/gui/gui_research_back_6.jpg"));
+		ThaumcraftApi.registerResearchLocation(new ResourceLocation(Referense.MODID, "research/ancient_world_base"));
+		ThaumcraftApi.registerResearchLocation(new ResourceLocation(Referense.MODID, "research/ancient_world_things"));
 	}
 
 	public 	static void registerStructures() {

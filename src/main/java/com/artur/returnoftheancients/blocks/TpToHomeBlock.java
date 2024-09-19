@@ -53,9 +53,6 @@ public class TpToHomeBlock extends BaseBlock {
             if (player.getServer() != null && player.world != null) {
                 ServerEventsHandler.tpToHome((EntityPlayerMP) player);
                 player.move(MoverType.PLAYER, TRAConfigs.PortalSettings.x + 3, 3, TRAConfigs.PortalSettings.z + 3);
-                WorldData worldData = WorldData.get();
-                worldData.saveData.setBoolean(IALGS.isAncientWorldGenerateKey, false);
-                worldData.markDirty();
             }
         }
     }

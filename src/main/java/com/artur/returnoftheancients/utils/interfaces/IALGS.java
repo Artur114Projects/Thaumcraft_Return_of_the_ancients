@@ -47,10 +47,15 @@ public interface IALGS {
     String BOSS_STRING_ID = "ancient_boss";
 
     byte[] ROTATE_MAX = new byte[] {WAY_ROTATE_MAX, TURN_ROTATE_MAX, FORK_ROTATE_MAX, CROSSROADS_ROTATE_MAX, END_ROTATE_MAX, ENTRY_ROTATE_MAX, BOSS_ROTATE_MAX};
-    String isAncientPortalGenerateKey = "IAPGK";
+
+    @Deprecated
     String isPrimalBladeDropKey = "IPBDK";
+    @Deprecated
     String isBossSpawn = "IBSK";
+    @Deprecated
     String isAncientWorldGenerateKey = "IAWGK";
+
+    String isAncientPortalGenerateKey = "IAPGK";
     String ancientPortalXPosKey = "APXPK";
     String ancientPortalYPosKey = "APYPK";
     String ancientPortalZPosKey = "APZPK";

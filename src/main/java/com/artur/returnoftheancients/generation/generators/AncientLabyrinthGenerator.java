@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+@Deprecated
 public class AncientLabyrinthGenerator implements IStructure, IALGS{
     protected static StructureMap MAP = new StructureMap(new byte[17][17], new byte[17][17]);
     protected static final byte SIZE = 17;

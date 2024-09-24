@@ -10,6 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WorldDataFields {
+    public static boolean isPrimalBladeDrop;
     public static boolean isPortalGenerate;
     public static int portalY;
     public static int portalXC;
@@ -18,25 +19,31 @@ public class WorldDataFields {
     public static int portalZ;
     public static BlockPos blockPosToCompass;
 
+
+    public static void unload() {
+        isPrimalBladeDrop = false;
+        isPortalGenerate = false;
+        portalZC = 0;
+        portalXC = 0;
+        portalX = 0;
+        portalZ = 0;
+        portalY = 0;
+        blockPosToCompass = new BlockPos(0, 0, 0);
+    }
+
     protected static void onRead(NBTTagCompound saveData) {
         portalXC = saveData.getInteger(IALGS.ancientPortalXPosKey);
         portalY = saveData.getInteger(IALGS.ancientPortalYPosKey);
         portalZC = saveData.getInteger(IALGS.ancientPortalZPosKey);
         isPortalGenerate = saveData.getBoolean(IALGS.isAncientPortalGenerateKey);
+        isPrimalBladeDrop = saveData.getBoolean(IALGS.isPrimalBladeDropKey);
         portalZ = (16 * portalZC) + 8;
         portalX = (16 * portalXC) + 8;
         blockPosToCompass = new BlockPos(portalX, portalY, portalZ);
     }
 
     public static void reload() {
-        NBTTagCompound saveData = WorldData.get().saveData;
-        portalXC = saveData.getInteger(IALGS.ancientPortalXPosKey);
-        portalY = saveData.getInteger(IALGS.ancientPortalYPosKey);
-        portalZC = saveData.getInteger(IALGS.ancientPortalZPosKey);
-        isPortalGenerate = saveData.getBoolean(IALGS.isAncientPortalGenerateKey);
-        portalZ = (16 * portalZC) + 8;
-        portalX = (16 * portalXC) + 8;
-        blockPosToCompass = new BlockPos(portalX, portalY, portalZ);
+        onRead(WorldData.get().saveData);
     }
 
     public static void sync(EntityPlayerMP player) {

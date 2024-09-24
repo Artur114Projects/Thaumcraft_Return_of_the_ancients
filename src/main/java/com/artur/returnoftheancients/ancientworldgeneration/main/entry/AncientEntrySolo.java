@@ -81,6 +81,11 @@ public class AncientEntrySolo extends AncientEntry {
     }
 
     @Override
+    public boolean isBelong(EntityPlayerMP player) {
+        return player.getUniqueID().equals(playerId);
+    }
+
+    @Override
     public boolean interrupt(UUID id) {
         if (id.equals(playerId)) {
             requestToDelete();

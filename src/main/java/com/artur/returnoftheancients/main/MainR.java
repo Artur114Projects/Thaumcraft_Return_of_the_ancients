@@ -3,9 +3,11 @@ package com.artur.returnoftheancients.main;
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntry;
 import com.artur.returnoftheancients.handlers.RegisterHandler;
+import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.misc.ReturnOfTheAncientsTab;
+import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.proxy.CommonProxy;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.creativetab.CreativeTabs;
@@ -56,6 +58,8 @@ public class MainR {
 	@EventHandler
 	public void serverStopping(FMLServerStoppingEvent e) {
 		AncientWorld.unload();
+		WorldDataFields.unload();
+		ServerEventsHandler.unload();
 	}
 
 

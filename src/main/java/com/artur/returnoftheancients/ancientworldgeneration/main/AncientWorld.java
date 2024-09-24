@@ -170,6 +170,13 @@ public class AncientWorld {
         }
     }
 
+    public static long getSeed(EntityPlayerMP player) {
+        for (AncientEntry entry : ANCIENT_ENTRIES) {
+            if (entry.isBelong(player)) return entry.getMapSeed();
+        }
+        return 0;
+    }
+
     public static void playerJoinBuss(EntityPlayerMP player) {
         for (AncientEntry entry : ANCIENT_ENTRIES) {
             if (entry.wakeUp(player)) break;

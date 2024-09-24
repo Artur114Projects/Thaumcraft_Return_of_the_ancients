@@ -58,12 +58,16 @@ public class ServerEventsHandler {
     public static final String tpToHomeNBT = "tpToHomeNBT";
     protected static final String startUpNBT = "startUpNBT";
     protected static final String notNoCollisionNBTTime = "notNoCollisionNBTTime";
-    public static boolean bossIsDead = false;
     private static boolean isAncientAreaSet = false;
     private static byte difficultyId = -1;
     private static boolean newVersion = false;
     private static int hurtCount = 0;
 
+
+    public  static void unload() {
+        isAncientAreaSet = false;
+        newVersion = false;
+    }
 
     public static byte getDifficultyId() {return difficultyId;}
 
@@ -120,7 +124,6 @@ public class ServerEventsHandler {
             if (e.getWorld().provider.getDimension() == ancient_world_dim_id) {
                 if (!isAncientAreaSet) {
                     CustomGenStructure.gen(e.getWorld(), -16, 240, -16, "ancient_area");
-                    CustomGenStructure.delete("ancient_area");
                     isAncientAreaSet = true;
                 }
             }

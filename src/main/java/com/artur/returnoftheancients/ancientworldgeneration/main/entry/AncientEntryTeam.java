@@ -86,6 +86,12 @@ public class AncientEntryTeam extends AncientEntry {
     }
 
     @Override
+    public boolean isBelong(EntityPlayerMP player) {
+        return team.contains(player.getUniqueID());
+    }
+
+
+    @Override
     protected void onBossTiger(EntityPlayer player, World world) {
         team.setToAll(playerSet -> {
             playerSet.connection.setPlayerLocation(player.posX, player.posY, player.posZ, playerSet.rotationYaw, playerSet.rotationPitch);

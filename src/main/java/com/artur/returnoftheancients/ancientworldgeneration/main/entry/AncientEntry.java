@@ -8,8 +8,11 @@ import com.artur.returnoftheancients.ancientworldgeneration.genmap.util.Structur
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.IBuild;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.misc.TRAConfigs;
+import com.artur.returnoftheancients.misc.WorldData;
+import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -27,18 +30,22 @@ import thaumcraft.api.items.ItemsTC;
 import thaumcraft.common.entities.monster.boss.EntityCultistPortalGreater;
 import thaumcraft.common.entities.monster.boss.EntityEldritchGolem;
 import thaumcraft.common.entities.monster.boss.EntityEldritchWarden;
+import thaumcraft.common.lib.utils.EntityUtils;
 
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
 import static com.artur.returnoftheancients.misc.TRAConfigs.AncientWorldSettings;
 import static com.artur.returnoftheancients.utils.interfaces.IStructure.settings;
+import static com.artur.returnoftheancients.utils.interfaces.IStructure.worldServer;
 
 public abstract class AncientEntry implements IBuild, IALGS {
     protected static final byte MAX_LOADING = 4;
     protected static final UUID nullUUId = new UUID(0, 0);
     protected static final BlockPos nullPos = new BlockPos(0, 0, 0);
-    protected UUID bossUUID = new UUID(0, 0);
+    protected UUID bossUUID = nullUUId;
+    protected Entity boss = null;
     private final BuildPhase buildPhase = new BuildPhase();
 
     protected final Random random = new Random();
@@ -139,10 +146,17 @@ public abstract class AncientEntry implements IBuild, IALGS {
     protected abstract void onRequestToDelete();
     protected abstract void onBossDead();
     protected abstract void addFog();
+    public abstract boolean isBelong(EntityPlayerMP player);
 
     public boolean deadBoss(UUID id) {
         if (!bossUUID.equals(nullUUId) && bossUUID.equals(id)) {
             isBossDead = true;
+            if (boss != null && !WorldDataFields.isPrimalBladeDrop) {
+                EntityUtils.entityDropSpecialItem(boss, new ItemStack(InitItems.PRIMAL_BLADE), boss.height / 2.0f);
+                WorldData.get().saveData.setBoolean(isPrimalBladeDropKey, true);
+                WorldData.get().markDirty();
+                WorldDataFields.reload();
+            }
             onBossDead();
             requestToSave();
             return true;
@@ -152,7 +166,10 @@ public abstract class AncientEntry implements IBuild, IALGS {
 
     public boolean bossJoin(EntityJoinWorldEvent event) {
         if (((int) (event.getEntity().posX + 300) / 10000) == pos && isBossSpawn) {
-            bossUUID = event.getEntity().getUniqueID();
+            if (bossUUID.equals(nullUUId)) {
+                bossUUID = event.getEntity().getUniqueID();
+                boss = event.getEntity();
+            }
             return true;
         }
         return false;
@@ -249,7 +266,11 @@ public abstract class AncientEntry implements IBuild, IALGS {
         }
         if (TRAConfigs.Any.debugMode) System.out.println("AncientEntry pos:" + getPos() + " is wake up!");
         return true;
-    };
+    }
+
+    public long getMapSeed() {
+        return mapSeed;
+    }
 
     protected void requestToDelete() {
         onRequestToDelete();

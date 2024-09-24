@@ -16,8 +16,8 @@ public class AncientEntryMapP1 implements IALGS {
     private static final int SIZE = 17;
     public static StructureMap createAncientEntryMap(Random rand) {
         StructureMap structureMap = AncientEntryMapP0.genStructuresMap(rand);
-        foundAndAddDeformation(structureMap);
         if (!foundAndCheckWeyToEntry(structureMap)) return createAncientEntryMap(rand);
+        foundAndAddDeformation(structureMap);
         removeBossN(structureMap);
         return structureMap;
     }
@@ -49,6 +49,7 @@ public class AncientEntryMapP1 implements IALGS {
     }
 
     private static boolean foundAndCheckWeyToEntry(StructureMap map) {
+        isFoundWay = false;
         foundArray = new boolean[17][17];
         for (byte y = 0; y != SIZE; y++) {
             for (byte x = 0; x != SIZE; x++) {

@@ -112,7 +112,10 @@ public class AncientEntryTeam extends AncientEntry {
     protected void error(String s) {
         super.error(s);
         if (!isSleep) {
-            team.setToAll(player -> player.sendMessage(new TextComponentString(s).setStyle(new Style().setColor(TextFormatting.DARK_RED))));
+            team.setToAll(player -> {
+                player.sendMessage(new TextComponentString(s).setStyle(new Style().setColor(TextFormatting.DARK_RED)));
+                player.sendMessage(new TextComponentString("deleting...").setStyle(new Style().setColor(TextFormatting.DARK_RED)));
+            });
         }
     }
 
@@ -145,6 +148,7 @@ public class AncientEntryTeam extends AncientEntry {
                 requestToDelete();
                 if (TRAConfigs.Any.debugMode) System.out.println("build is interrupt!");
             }
+            team.injectNamesToPlayers();
             return true;
         }
         return false;
@@ -164,6 +168,7 @@ public class AncientEntryTeam extends AncientEntry {
     public void onStart() {
         team.setToAll(player -> {
             HandlerR.setLoadingGuiState(player, true, true);
+            team.injectNamesToPlayers();
         });
     }
 

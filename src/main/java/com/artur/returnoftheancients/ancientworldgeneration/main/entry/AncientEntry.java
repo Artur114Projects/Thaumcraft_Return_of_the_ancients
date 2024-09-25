@@ -447,8 +447,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                         }
                         int cx = (128 - 16 * buildPhase.xtc) + (10000 * pos);
                         int cz = (128 - 16 * buildPhase.ytc);
-                        gen(world, cx, 80, cz, AIR_CUBE_STRING_ID);
-                        gen(world, cx, 80 - 31, cz, AIR_CUBE_STRING_ID);
+                        CustomGenStructure.clearChunk(world, cx >> 4, cz >> 4);
                         buildPhase.xtc++;
                     }
                 }

@@ -5,11 +5,9 @@ import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.uti
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructureTask;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CustomGenStructure {
     private static final List<String> rawStructures = new ArrayList<>();
@@ -110,6 +108,20 @@ public class CustomGenStructure {
             structure.gen(world, x, y, z);
         }
     }
+
+    public static void clearChunk(World world, int x, int z) {
+        Chunk chunk = world.getChunkFromChunkCoords(x, z);
+
+        List<BlockPos> tileEntityPoss = new ArrayList<>(chunk.getTileEntityMap().keySet());
+        for (BlockPos tileEntityPos : tileEntityPoss) {
+            chunk.removeTileEntity(tileEntityPos);
+        }
+
+        for (byte y = 0; y != chunk.getBlockStorageArray().length; y++) {
+            chunk.getBlockStorageArray()[y] = Chunk.NULL_BLOCK_STORAGE;
+        }
+    }
+
 
     public static void delete(String name) {
         structures.remove(name);

@@ -29,7 +29,7 @@ import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_di
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class AncientWorld {
     private static boolean isLoad = false;
-    private static final int buildCount = 1;
+    private static final int buildCount = 2;
     private static Team.RawTeam rawTeam = null;
     private static final LinkedList<IBuild> build = new LinkedList<>();
     private static final LinkedList<AncientEntry> ANCIENT_ENTRIES = new LinkedList<>();
@@ -100,6 +100,7 @@ public class AncientWorld {
 
         Team team = rawTeam.toTeam();
         if (team != null) {
+            rawTeam.clear();
             newAncientEntryTeam(team);
         }
     }

@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.*;
 
@@ -121,9 +122,13 @@ public class Team {
     }
 
     public boolean kill(UUID uuid) {
+        EntityPlayerMP playerDead = players.get(uuid);
         players.remove(uuid);
         boolean flag = uuids.remove(uuid);
         if (uuids.isEmpty()) requestToDelete();
+        if (flag && playerDead != null) {
+            setToAll(player -> player.sendMessage(new TextComponentString(TextFormatting.RED + "Player: " + TextFormatting.AQUA + "[" + playerDead.getName() + "]" + TextFormatting.RED + " is dead :(")));
+        }
         return flag;
     }
 
@@ -254,6 +259,11 @@ public class Team {
             }
         }
 
+        public void clear() {
+            injectNamesToPlayers();
+            players.clear();
+        }
+
         public void injectNamesToPlayers() {
             List<String> names = new ArrayList<>();
             for (int i = 0; i != minPlayersCount; i++) {
@@ -264,7 +274,7 @@ public class Team {
                     }
                     names.add(players.get(i).getName());
                 } else {
-                    names.add(" ");
+                    names.add("");
                 }
             }
             for (EntityPlayerMP player : players) {

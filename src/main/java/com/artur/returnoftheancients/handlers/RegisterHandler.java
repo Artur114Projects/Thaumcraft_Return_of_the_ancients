@@ -122,7 +122,9 @@ public class RegisterHandler {
 		CustomGenStructure.put("ancient_end_rotate-4");
 		CustomGenStructure.setUseEBS((x, y, z, state) -> {
             if (state.getBlock().equals(InitBlocks.BOSS_TRIGGER_BLOCK)) return false;
-            if (state.getBlock().equals(BlocksTC.nitor.get(EnumDyeColor.BLACK))) return false;
+			if (state.getBlock().equals(InitTileEntity.ELDRITCH_TRAP)) return false;
+			if (state.getBlock().equals(InitTileEntity.FIRE_TRAP)) return false;
+			if (state.getBlock().equals(BlocksTC.nitor.get(EnumDyeColor.BLACK))) return false;
             return true;
 		});
 		CustomGenStructure.register();

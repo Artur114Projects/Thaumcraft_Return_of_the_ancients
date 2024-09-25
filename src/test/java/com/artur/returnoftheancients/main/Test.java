@@ -22,26 +22,10 @@ import java.util.concurrent.TimeUnit;
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class Test { //
     public static void main(String[] args) throws InterruptedException {
-        int notIgnoringOffset = 25;
-        int ignoringOffset = 25;
-        int baseChange = 50;
-        int hurt = 0;
-        int ignoringCount = 0;
-        int notIgnoringCount = 0;
-        Random rand = new Random();
-        for (int i = 0; i != 996; i++) {
-            if (!HandlerR.getIgnoringChance(baseChange + (ignoringOffset * hurt), rand)) {
-                hurt++;
-                ignoringCount++;
-                System.out.println(1);
-            } else {
-                notIgnoringCount++;
-                hurt--;
-                System.out.println(0);
-            }
-        }
-        System.out.println(notIgnoringCount + " notIgnoringCount");
-        System.out.println(ignoringCount + " IgnoringCount");
+        System.out.println(10000 >> 4);
+        System.out.println((10000 >> 4) << 4);
+        System.out.println(10000 / 16);
+        System.out.println((10000 / 16) * 16);
     }
 
     protected static int packBytes(byte b1, byte b2, byte b3, byte b4) {

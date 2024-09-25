@@ -62,6 +62,7 @@ public class AncientEntrySolo extends AncientEntry {
         super.error(s);
         if (!isSleep) {
             player.sendMessage(new TextComponentString(s).setStyle(new Style().setColor(TextFormatting.DARK_RED)));
+            player.sendMessage(new TextComponentString("deleting...").setStyle(new Style().setColor(TextFormatting.DARK_RED)));
         }
     }
 

@@ -61,11 +61,10 @@ public class ClientPacketMisc implements IMessage {
                 if (nbt.hasKey("setGuiState")) {
                     if (nbt.getBoolean("setGuiState")) {
 
-                        LoadingGui.setIsTeam(nbt.getBoolean("isTeam"));
                         LoadingGui.injectPercentages((byte) 0);
                         LoadingGui.injectPhase((byte) 0);
 
-                        Minecraft.getMinecraft().displayGuiScreen(new LoadingGui());
+                        Minecraft.getMinecraft().displayGuiScreen(new LoadingGui(nbt.getBoolean("isTeam")));
 
                     } else {
                         Minecraft.getMinecraft().displayGuiScreen(null);

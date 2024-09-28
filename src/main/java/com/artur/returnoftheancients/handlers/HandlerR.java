@@ -231,6 +231,11 @@ public class HandlerR {
         playerMP.sendMessage(new TextComponentString(message));
     }
 
+    public static void sendMessageString(EntityPlayerMP playerMP, String message, TextFormatting formatting) {
+        playerMP.sendMessage(new TextComponentString(message).setStyle(new Style().setColor(formatting)));
+    }
+
+
     public static void sendAllMessageStringNoTitle(String message) {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setString("sendMessage", message);

@@ -6,7 +6,6 @@ import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.Cus
 import com.artur.returnoftheancients.ancientworldgeneration.util.BuildPhase;
 import com.artur.returnoftheancients.ancientworldgeneration.genmap.util.StructureMap;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.IBuild;
-import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.init.InitTileEntity;
@@ -32,13 +31,11 @@ import thaumcraft.common.entities.monster.boss.EntityEldritchGolem;
 import thaumcraft.common.entities.monster.boss.EntityEldritchWarden;
 import thaumcraft.common.lib.utils.EntityUtils;
 
-import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
 import static com.artur.returnoftheancients.misc.TRAConfigs.AncientWorldSettings;
 import static com.artur.returnoftheancients.utils.interfaces.IStructure.settings;
-import static com.artur.returnoftheancients.utils.interfaces.IStructure.worldServer;
 
 public abstract class AncientEntry implements IBuild, IALGS {
     protected static final byte MAX_LOADING = 4;
@@ -147,6 +144,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
     protected abstract void onBossDead();
     protected abstract void addFog();
     public abstract boolean isBelong(EntityPlayerMP player);
+    public abstract boolean sleepPlayer(UUID id);
 
     public boolean deadBoss(UUID id) {
         if (!bossUUID.equals(nullUUId) && bossUUID.equals(id)) {

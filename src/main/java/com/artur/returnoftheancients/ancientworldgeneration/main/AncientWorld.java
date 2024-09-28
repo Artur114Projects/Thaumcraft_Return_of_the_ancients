@@ -5,9 +5,9 @@ import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEn
 import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntryTeam;
 import com.artur.returnoftheancients.ancientworldgeneration.util.Team;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.IBuild;
-import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.ITeamTask;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
 import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.referense.Referense;
@@ -180,24 +180,30 @@ public class AncientWorld {
 
     public static void playerJoinBuss(EntityPlayerMP player) {
         for (AncientEntry entry : ANCIENT_ENTRIES) {
-            if (entry.wakeUp(player)) break;
+            if (entry.wakeUp(player)) return;
+        }
+        if (!player.isCreative() || TRAConfigs.Any.debugMode) ServerEventsHandler.tpToHome(player);
+    }
+
+    public static void playerLoggedOutBus(UUID id) {
+        for (AncientEntry entry : ANCIENT_ENTRIES) {
+            if (entry.sleepPlayer(id)) break;
         }
     }
 
-
-    public static void playerLostBuss(UUID id) {
+    public static void playerLostBus(UUID id) {
         for (AncientEntry entry : ANCIENT_ENTRIES) {
             if (entry.dead(id)) break;
         }
     }
 
-    public static void bossDeadBuss(UUID id) {
+    public static void bossDeadBus(UUID id) {
         for (AncientEntry entry : ANCIENT_ENTRIES) {
             if (entry.deadBoss(id)) break;
         }
     }
 
-    public static void bossJoinBuss(EntityJoinWorldEvent event) {
+    public static void bossJoinBus(EntityJoinWorldEvent event) {
         for (AncientEntry entry : ANCIENT_ENTRIES) {
             if (entry.bossJoin(event)) return;
         }

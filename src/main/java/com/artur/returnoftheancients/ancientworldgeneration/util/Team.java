@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.ancientworldgeneration.util;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.ITeamTask;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitDimensions;
+import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -127,7 +128,16 @@ public class Team {
         boolean flag = uuids.remove(uuid);
         if (uuids.isEmpty()) requestToDelete();
         if (flag && playerDead != null) {
-            setToAll(player -> player.sendMessage(new TextComponentString(TextFormatting.RED + "Player: " + TextFormatting.AQUA + "[" + playerDead.getName() + "]" + TextFormatting.RED + " is dead :(")));
+            setToAll(player -> HandlerR.sendMessageString(player, TextFormatting.RED + "Player: " + TextFormatting.AQUA + "[" + playerDead.getName() + "]" + TextFormatting.RED + " is dead :("));
+        }
+        return flag;
+    }
+
+    public boolean sleepPlayer(UUID id) {
+        boolean flag = players.containsKey(id);
+        if (flag) {
+            if (TRAConfigs.Any.debugMode) System.out.println("Player: " + players.get(id).getName() + " is out game");
+            players.remove(id);
         }
         return flag;
     }

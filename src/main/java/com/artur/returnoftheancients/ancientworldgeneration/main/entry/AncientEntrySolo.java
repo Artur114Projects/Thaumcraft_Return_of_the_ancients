@@ -87,6 +87,19 @@ public class AncientEntrySolo extends AncientEntry {
     }
 
     @Override
+    public boolean sleepPlayer(UUID id) {
+        if (isSleep) {
+            return false;
+        }
+        if (id.equals(playerId)) {
+            if (TRAConfigs.Any.debugMode) System.out.println("Player: " + player.getName() + " is out game");
+            isSleep = true;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean interrupt(UUID id) {
         if (id.equals(playerId)) {
             requestToDelete();

@@ -20,10 +20,6 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -40,13 +36,8 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
-import thaumcraft.common.lib.capabilities.PlayerKnowledge;
-import thaumcraft.common.lib.capabilities.PlayerWarp;
-import thaumcraft.common.lib.network.PacketHandler;
-import thaumcraft.common.lib.network.misc.PacketMiscEvent;
 
 import java.util.Objects;
 import java.util.Random;
@@ -89,7 +80,7 @@ public class ServerEventsHandler {
             EntityPlayerMP player = (EntityPlayerMP) e.player;
 
             WorldDataFields.sync(player);
-            AncientWorld.playerJoinBuss(player);
+            if (player.dimension == ancient_world_dim_id) AncientWorld.playerJoinBuss(player);
 
             if (newVersion) {
                 HandlerR.sendMessageTranslate(player, Referense.MODID + ".message.new-version");
@@ -97,6 +88,15 @@ public class ServerEventsHandler {
             }
         }
     }
+
+    @SubscribeEvent
+    public static void playerLoggedOutEvent(PlayerEvent.PlayerLoggedOutEvent e) {
+        if (e.player instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) e.player;
+            if (player.dimension == ancient_world_dim_id) AncientWorld.playerLoggedOutBus(player.getUniqueID());
+        }
+    }
+
 
     @SubscribeEvent
     public static void WorldEventLoad(WorldEvent.Load e) {
@@ -153,7 +153,7 @@ public class ServerEventsHandler {
     public static void LivingDeathEvent(LivingDeathEvent e) {
         World world = e.getEntity().world;
         if (!e.getEntity().isNonBoss() && world.provider.getDimension() == ancient_world_dim_id && !world.isRemote) {
-            AncientWorld.bossDeadBuss(e.getEntity().getUniqueID());
+            AncientWorld.bossDeadBus(e.getEntity().getUniqueID());
         }
     }
 
@@ -188,7 +188,7 @@ public class ServerEventsHandler {
 
     protected static void onPlayerLost(EntityPlayerMP player) {
         player.setHealth(20);
-        AncientWorld.playerLostBuss(player.getUniqueID());
+        AncientWorld.playerLostBus(player.getUniqueID());
         tpToHome(player);
     }
 
@@ -358,7 +358,7 @@ public class ServerEventsHandler {
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (event.getEntity().dimension == ancient_world_dim_id && !event.getWorld().isRemote) {
             if (!event.getEntity().isNonBoss()) {
-                AncientWorld.bossJoinBuss(event);
+                AncientWorld.bossJoinBus(event);
             }
             if (event.getEntity() instanceof EntityLiving && !(event.getEntity() instanceof EntityPlayer)) {
                 EntityLiving living = (EntityLiving) event.getEntity();

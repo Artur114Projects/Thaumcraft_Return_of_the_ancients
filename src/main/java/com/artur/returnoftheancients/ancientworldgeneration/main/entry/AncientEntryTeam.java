@@ -7,11 +7,9 @@ import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -19,7 +17,6 @@ import net.minecraft.world.World;
 import thaumcraft.common.lib.network.PacketHandler;
 import thaumcraft.common.lib.network.misc.PacketMiscEvent;
 
-import java.util.Random;
 import java.util.UUID;
 
 public class AncientEntryTeam extends AncientEntry {
@@ -90,6 +87,19 @@ public class AncientEntryTeam extends AncientEntry {
         return team.contains(player.getUniqueID());
     }
 
+    @Override
+    public boolean sleepPlayer(UUID id) {
+        if (isSleep) {
+            return false;
+        }
+        boolean flag = team.sleepPlayer(id);
+        if (flag) {
+            if (!team.isActive()) {
+                isSleep = true;
+            }
+        }
+        return flag;
+    }
 
     @Override
     protected void onBossTiger(EntityPlayer player, World world) {

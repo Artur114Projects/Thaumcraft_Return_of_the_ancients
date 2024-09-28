@@ -62,7 +62,7 @@
     },
     {
       "key": "SOUL_BINDER",
-      "name": "research.soul_binder.title",
+      "name": "item.soul_binder.name",
       "icons": ["returnoftheancients:soul_binder"],
       "category": "ANCIENT_WORLD",
       "location": [ -3,-2 ],
@@ -110,7 +110,7 @@
       "category": "ANCIENT_WORLD",
       "location": [ -9,0 ],
       "parents": [ "BOSS" ],
-      "meta": [ "HIDDEN", "HEX" ],
+      "meta": [ "HIDDEN", "ROUND" ],
       "stages": [
         {
           "text": "research.final.text.stage.1",

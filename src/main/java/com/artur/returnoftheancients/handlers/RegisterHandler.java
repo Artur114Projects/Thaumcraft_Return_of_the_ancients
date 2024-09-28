@@ -17,6 +17,7 @@ import com.artur.returnoftheancients.utils.interfaces.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,6 +37,10 @@ import thaumcraft.api.aspects.AspectRegistryEvent;
 import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.api.research.ResearchCategories;
+import thaumcraft.api.research.ScanBlock;
+import thaumcraft.api.research.ScanItem;
+import thaumcraft.api.research.ScanningManager;
+
 import static thaumcraft.api.items.ItemsTC.*;
 import static net.minecraft.init.Items.*;
 
@@ -61,7 +66,6 @@ public class RegisterHandler {
 
 	public static void preInitRegistries()
     {
-
 	}
 
 	public static void registerPackets() {
@@ -100,6 +104,8 @@ public class RegisterHandler {
 		ResearchCategories.registerCategory("ANCIENT_WORLD", "UNLOCKELDRITCH", new AspectList().add(Aspect.ELDRITCH, 1), new ResourceLocation(Referense.MODID, "textures/gui/ancient_logo.png"), new ResourceLocation(Thaumcraft.MODID, "textures/gui/gui_research_back_6.jpg"));
 		ThaumcraftApi.registerResearchLocation(new ResourceLocation(Referense.MODID, "research/ancient_world_base"));
 		ThaumcraftApi.registerResearchLocation(new ResourceLocation(Referense.MODID, "research/ancient_world_things"));
+		ScanningManager.addScannableThing(new ScanItem("!PRIMAL_BLADE", new ItemStack(InitItems.PRIMAL_BLADE)));
+		ScanningManager.addScannableThing(new ScanBlock("!FIRE_TRAP", InitTileEntity.FIRE_TRAP));
 	}
 
 	public 	static void registerStructures() {
@@ -144,7 +150,6 @@ public class RegisterHandler {
 		CustomGenStructure.setUseAir();
 		CustomGenStructure.put("ancient_area");
 		CustomGenStructure.put("ancient_exit");
-		CustomGenStructure.put("air_cube");
 		CustomGenStructure.register();
 	}
 

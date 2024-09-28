@@ -3,6 +3,7 @@ item.soul_binder.name=Soul connection stone
 item.itemprimalblade.name=Primal Blade
 item.portal_compass.name=Void compass
 tile.boss_trigger_block.name=Boss trigger block
+tile.eldritch_trap.name=Trap
 tile.fire_trap.name=Incinerator
 tile.tp_to_home_block.name=Portal to overworld
 tile.taint_ancient_stone.name=Taint ancient stone
@@ -12,11 +13,8 @@ itemGroup.returnoftheancients_tab=Thaumcraft: Return of the ancients
 # Any
 ################################################################################
 returnoftheancients.portal.message=Cant use:
-item.itemprimalblade.text=Weapons of the gods
 returnoftheancients.rui.t=put it away
 returnoftheancients.rui.f=you have 30 seconds
-returnoftheancients.message.ancientworldload.start=Generation has begun, the world can slow down
-returnoftheancients.message.ancientworldload.finish=Generation is finish
 returnoftheancients.gui.esc=Press ESC again to exit.
 returnoftheancients.message.new-version=Welcome to Thaumcraft: Return of the ancients v1.3.0-betta!
 ################################################################################
@@ -30,7 +28,7 @@ returnoftheancients.cfg.sub.any.uog=Use old loading gui
 # Config Difficulty settings
 ################################################################################
 returnoftheancients.cfg.sub.ds=Difficulty settings
-returnoftheancients.cfg.sub.ds.pcd=Effect list
+returnoftheancients.cfg.sub.ds.pcd=Effect list (Don`t work)
 ################################################################################
 # Config Portal gen settings
 ################################################################################
@@ -83,3 +81,13 @@ research.start.text.stage.3=Also in this book it is written about a certain anci
 #
 research.to_ancient.title=To ancient world
 research.m_FOUND_ANCIENT.text=Find the portal
+#
+research.final.title=End?
+research.final.text.stage.1=For now, yes...
+#
+research.boss.title=Boss
+################################################################################
+#research things
+################################################################################
+research.primal_blade.text.stage.1=A blade made of primordial matter, created using ancient lost technology, cannot be recreated.
+research.fire_trap.text.stage.1=An ancient and very powerful burner, it is not clear how it works, I should be more careful!

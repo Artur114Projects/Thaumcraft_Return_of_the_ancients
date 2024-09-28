@@ -5,7 +5,6 @@ import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.Cus
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.PlayerTimer;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
-import com.artur.returnoftheancients.misc.PlayersCountDifficultyProcessor;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.blocks.TpToAncientWorldBlock;
@@ -22,6 +21,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -36,6 +36,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
@@ -166,15 +167,15 @@ public class ServerEventsHandler {
                     if (player.getHealth() - e.getAmount() <= 0) {
                         e.setCanceled(true);
                         onPlayerLost(player);
-//                        player.getEntityData().setBoolean("deadd", true);
                         return;
                     }
 
-                    int ignoringOffset = 25;
-                    int baseChange = 50;
+                    int additionalOffset = TRAConfigs.DifficultySettings.additionalOffset;
+                    int ignoringOffset = TRAConfigs.DifficultySettings.ignoringOffset;
+                    int baseChange = TRAConfigs.DifficultySettings.baseChange;
 
                     int hurt = player.getEntityData().getInteger("hurt");
-                    if (HandlerR.getIgnoringChance(baseChange + (ignoringOffset * hurt), player.world.rand)) {
+                    if (HandlerR.getIgnoringChance(baseChange + (ignoringOffset * hurt), player.world.rand) && HandlerR.getChance(additionalOffset, player.world.rand)) {
                         player.getEntityData().setInteger("hurt", hurt + 1);
                         player.setHealth(player.getHealth() - e.getAmount());
                         e.setCanceled(true);
@@ -211,7 +212,7 @@ public class ServerEventsHandler {
     @SubscribeEvent
     public static void BreakEvent(BlockEvent.BreakEvent e) {
         if (e.getPlayer().dimension == ancient_world_dim_id) {
-            if (!e.getPlayer().isCreative() && !e.getState().getBlock().equals(HandlerR.getBlockByString("thaumcraft:stone_arcane"))) {
+            if (!e.getPlayer().isCreative() && !e.getState().getBlock().equals(BlocksTC.stoneArcane)) {
                 e.setCanceled(true);
             }
         }
@@ -229,10 +230,6 @@ public class ServerEventsHandler {
 
     @SubscribeEvent
     public static void PlayerTickEvent(TickEvent.PlayerTickEvent e) {
-//        if (e.player.getEntityData().getBoolean("deadd")) {
-//            e.player.getEntityData().setBoolean("deadd", false);
-//            return;
-//        }
         int playerDimension = e.player.dimension;
         if (e.player.getEntityData().getBoolean(startUpNBT)) {
             if (playerDimension != ancient_world_dim_id) {
@@ -260,14 +257,6 @@ public class ServerEventsHandler {
                 if (e.player.getServer() != null) {
                     if (e.player instanceof EntityPlayerMP) {
                         EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
-                        if (TRAConfigs.AncientWorldSettings.isSetWarp) {
-                            IPlayerWarp playerWarp = ThaumcraftCapabilities.getWarp(e.player);
-                            playerWarp.set(IPlayerWarp.EnumWarpType.PERMANENT, e.player.getEntityData().getInteger("PERMANENT"));
-                            playerWarp.set(IPlayerWarp.EnumWarpType.TEMPORARY, e.player.getEntityData().getInteger("TEMPORARY"));
-                            playerWarp.set(IPlayerWarp.EnumWarpType.NORMAL, e.player.getEntityData().getInteger("NORMAL"));
-                            playerWarp.sync(playerMP);
-                            e.player.getEntityData().setBoolean("isWarpSet", false);
-                        }
                         e.player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 600, 1));
                         e.player.getEntityData().setBoolean(tpToHomeNBT, false);
                         HandlerR.setStartUpNBT(playerMP, true);
@@ -289,20 +278,6 @@ public class ServerEventsHandler {
                 if (TRAConfigs.AncientWorldSettings.noNightVision) {
                     if (e.player.getActivePotionEffect(MobEffects.NIGHT_VISION) != null && !e.player.isCreative()) {
                         e.player.removePotionEffect(MobEffects.NIGHT_VISION);
-                    }
-                }
-                if (TRAConfigs.AncientWorldSettings.isSetWarp) {
-                    if (!e.player.getEntityData().getBoolean("isWarpSet") && e.player.getServer() != null) {
-                        if (e.player instanceof EntityPlayerMP) {
-                            IPlayerWarp playerWarp = ThaumcraftCapabilities.getWarp(e.player);
-                            e.player.getEntityData().setInteger("PERMANENT", playerWarp.get(IPlayerWarp.EnumWarpType.PERMANENT));
-                            e.player.getEntityData().setInteger("TEMPORARY", playerWarp.get(IPlayerWarp.EnumWarpType.TEMPORARY));
-                            e.player.getEntityData().setInteger("NORMAL", playerWarp.get(IPlayerWarp.EnumWarpType.NORMAL));
-                            e.player.getEntityData().setBoolean("isWarpSet", true);
-                            playerWarp.set(IPlayerWarp.EnumWarpType.TEMPORARY, 100);
-                            EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
-                            playerWarp.sync(playerMP);
-                        }
                     }
                 }
                 if (TRAConfigs.AncientWorldSettings.noPeaceful) {
@@ -350,9 +325,7 @@ public class ServerEventsHandler {
     }
 
 
-    static byte wt = 0;
     static int maxDuration = 999999999;
-    static final int[] potionEffects = new int[6];
 
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
@@ -362,38 +335,10 @@ public class ServerEventsHandler {
             }
             if (event.getEntity() instanceof EntityLiving && !(event.getEntity() instanceof EntityPlayer)) {
                 EntityLiving living = (EntityLiving) event.getEntity();
-                if (potionEffects[0] != -1) {
-                    living.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, maxDuration, potionEffects[0], false, false));
-                }
-                if (potionEffects[1] != -1) {
-                    living.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, maxDuration, potionEffects[1], false, false));
-                }
-                if (potionEffects[2] != -1) {
-                    living.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, maxDuration, potionEffects[2], false, false));
-                }
-                if (potionEffects[3] != -1) {
-                    living.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, maxDuration, potionEffects[3], false, false));
-                }
-                if (potionEffects[4] != -1) {
-                    living.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, maxDuration, potionEffects[4], false, false));
-                }
-                if (potionEffects[5] != -1) {
-                    if (living.isNonBoss() || TRAConfigs.DifficultySettings.iaAddSpeedEffectToBoss) {
-                        living.addPotionEffect(new PotionEffect(MobEffects.SPEED, maxDuration, potionEffects[5], false, false));
-                    }
+                if (living.isNonBoss() || TRAConfigs.DifficultySettings.iaAddSpeedEffectToBoss) {
+                    living.addPotionEffect(new PotionEffect(MobEffects.SPEED, maxDuration, TRAConfigs.DifficultySettings.speedAmplifier - 1, false, false));
                 }
             }
-        }
-    }
-
-    @SubscribeEvent
-    public static void WorldTick(TickEvent.WorldTickEvent e) {
-        if (e.world.provider.getDimension() == ancient_world_dim_id) {
-            if (wt == 20) {
-                wt = 0;
-                PlayersCountDifficultyProcessor.calculate(e.world.playerEntities.size(), potionEffects);
-            }
-            wt++;
         }
     }
 

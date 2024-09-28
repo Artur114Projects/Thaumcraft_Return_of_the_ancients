@@ -110,7 +110,7 @@ public class AncientEntryTeam extends AncientEntry {
         Entity boss = getRandomBoss(world, bossPos);
         bossUUID = boss.getUniqueID();
         world.spawnEntity(boss);
-        pleaseBossDoors(world, bossPos);
+        genBossDoors(world, bossPos);
     }
 
     @Override
@@ -200,7 +200,7 @@ public class AncientEntryTeam extends AncientEntry {
     }
 
     @Override
-    public void onReloadLightStart() {
+    public void onFinalizing() {
         team.setToAll(player -> HandlerR.injectPhaseOnClient(player, (byte) 3));
     }
 

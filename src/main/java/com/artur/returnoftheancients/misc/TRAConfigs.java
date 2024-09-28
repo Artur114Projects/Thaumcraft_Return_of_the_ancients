@@ -32,56 +32,23 @@ public class TRAConfigs {
     public static DifficultySettings DifficultySettings = new DifficultySettings();
 
     public static class DifficultySettings {
+        @Config.LangKey(Referense.MODID + ".cfg.sub.ds.bc")
+        public int baseChange = 50;
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.ds.cia")
-        @Config.Comment("the higher the number, the lower the chance")
-        public int chanceIgnoringArmor = 1;
+        @Config.LangKey(Referense.MODID + ".cfg.sub.ds.io")
+        public int ignoringOffset = 25;
 
+        @Config.LangKey(Referense.MODID + ".cfg.sub.ds.ao")
+        public int additionalOffset = 40;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.ds.asb")
         public boolean iaAddSpeedEffectToBoss = false;
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.ds.pcd")
-        @Config.Comment({"List effects, the order of the lines does not matter, if you want to disable this mechanics, remove all lines", "example line: players=[number of players, max 99], ", "",
-                "effect=[resistance or regeneration or invisibility or strength or fireResistance], ", "",
-                "amplifier=[number max max potion effect amplifier or ", "",
-                "[number by which the number of players is divided, the result is the potion level, max 9][p][maximum potion level that will be assigned, max 9] or ", "",
-                "[every second a number is selected min 0 max the number that you enter if it is equal to 0 then the effect is assigned, max 9][r][effect level that will be assigned]]", "",
-        })
-        public String[] playersCountDifficulty = new String[] {
-                "players=12, effect=invisibility, amplifier=1r0",
-                "players=12, effect=resistance, amplifier=3p4",
-                "players=12, effect=regeneration, amplifier=3p6",
-                "players=12, effect=strength, amplifier=6p",
-                "players=12, effect=fireResistance, amplifier=0",
-                "players=12, effect=speed, amplifier=1",
-
-                "players=6, effect=resistance, amplifier=3p4",
-                "players=6, effect=regeneration, amplifier=3p6",
-                "players=6, effect=invisibility, amplifier=4r0",
-                "players=6, effect=strength, amplifier=6p",
-                "players=6, effect=fireResistance, amplifier=0",
-                "players=6, effect=speed, amplifier=1",
-
-                "players=3, effect=resistance, amplifier=1",
-                "players=3, effect=regeneration, amplifier=1",
-                "players=3, effect=strength, amplifier=1",
-                "players=3, effect=fireResistance, amplifier=0",
-                "players=3, effect=speed, amplifier=1",
-
-                "players=2, effect=resistance, amplifier=0",
-                "players=2, effect=regeneration, amplifier=0",
-                "players=2, effect=strength, amplifier=0",
-                "players=2, effect=speed, amplifier=1",
-
-                "players=1, effect=speed, amplifier=1"
-        };
-    }
+        @Config.LangKey(Referense.MODID + ".cfg.sub.ds.sa")
+        public int speedAmplifier = 2;
+     }
 
     public static class PortalSettings {
-        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.slm")
-        @Config.Comment("is send ancient world load and finish message")
-        public boolean isSendWorldLoadMessage = true;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.portal.x")
         @Config.Comment("only affects new worlds")
@@ -118,9 +85,6 @@ public class TRAConfigs {
         @Config.RequiresMcRestart
         public double primalBladeSpeed = -3.2D;
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.any.uog")
-        public boolean useOldLoadingGui = false;
-
         @Config.LangKey(Referense.MODID + ".cfg.sub.any.mcn")
         public String ModChatName = "TC RETURN OF THE ANCIENTS: ";
 
@@ -135,15 +99,8 @@ public class TRAConfigs {
         @Config.Comment("Here you can change ancient world generation settings")
         public AncientWorldGenerationSettings AncientWorldGenerationSettings = new AncientWorldGenerationSettings();
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.og")
-        @Config.Comment("Should I use an old generator?")
-        public boolean isOldGenerator = false;
-
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.np")
         public boolean noPeaceful = true;
-
-        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.isw")
-        public boolean isSetWarp = false;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.nnv")
         public boolean noNightVision = true;
@@ -178,18 +135,17 @@ public class TRAConfigs {
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.sgd")
         @Config.Comment("set the value more if the server lags during generation")
-        public int structuresGenerationDelay = 8;
+        public int structuresGenerationDelay2 = 1;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.nct")
-        public int numberSetClearPerTick = 1;
+        public int numberSetClearPerTick2 = 2;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.nrt")
         public int numberSetReloadLightPerTick = 925;
-
     }
 
 
-        public static class MobGenSettings {
+    public static class MobGenSettings {
         @Config.LangKey(Referense.MODID + ".cfg.sub.mgs.c_c")
         @Config.Comment({"EntityInhabitedZombie = 1", "EntityEldritchGuardian = 2", "EntityMindSpider = 3"})
         public int[] CROSSROADS_CHANGE = new int[] {0, 0, 0};
@@ -228,13 +184,10 @@ public class TRAConfigs {
     }
 
 
-    // Данное событие нужно для того, чтобы все значения которые были изменены в игре, перезаписывались в самом конфиг файле
     @SubscribeEvent
     public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.getModID().equals(Referense.MODID)) {
             ConfigManager.sync(Referense.MODID, Config.Type.INSTANCE);
-            PlayersCountDifficultyProcessor.compile(DifficultySettings.playersCountDifficulty);
         }
     }
-
 }

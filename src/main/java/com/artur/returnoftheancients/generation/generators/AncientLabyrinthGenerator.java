@@ -285,9 +285,6 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         worldData.saveData.setLong("getReward", new Random().nextLong());
         worldData.markDirty();
         player.getEntityData().setLong("getReward", WorldData.get().saveData.getLong("getReward"));
-        if (TRAConfigs.PortalSettings.isSendWorldLoadMessage) {
-            HandlerR.sendAllWorldLoadMessage(true);
-        }
         isGen = false;
         isGenerateStart = true;
         GenStructure.generateStructure(world, 4, 124, -14, "ancient_developer_platform");
@@ -298,7 +295,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
             HandlerR.injectPhaseOnClient((EntityPlayerMP) player1, (byte) 0);
         }
         StructureMap a;
-        if (AncientWorldSettings.isOldGenerator) {
+        if (true) {
             byte[][][] r = AncientLabyrinthOldMap.genStructuresMap();
             a = new StructureMap(r[0], r[1]);
         } else {
@@ -336,9 +333,6 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         worldData.saveData.setBoolean(isAncientWorldGenerateKey, true);
         worldData.markDirty();
         players.clear();
-        if (TRAConfigs.PortalSettings.isSendWorldLoadMessage) {
-            HandlerR.sendAllWorldLoadMessage(false);
-        }
         isGenerateStart = false;
     }
 
@@ -347,9 +341,6 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         if (players.isEmpty()) {
             isGenerateStart = false;
             AncientWorldBuildProcessor.stop();
-            if (TRAConfigs.PortalSettings.isSendWorldLoadMessage) {
-                HandlerR.sendAllWorldLoadMessage(false);
-            }
         }
     }
 
@@ -406,7 +397,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         public static void Tick(TickEvent.WorldTickEvent e) {
             if (!e.world.isRemote) {
                 if (please) {
-                    if (t == AncientWorldSettings.AncientWorldGenerationSettings.structuresGenerationDelay) {
+                    if (t == AncientWorldSettings.AncientWorldGenerationSettings.structuresGenerationDelay2) {
                         t = 0;
                         if (xtp == SIZE) {
                             ytp++;
@@ -489,7 +480,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                     t++;
                 }
                 if (clear) {
-                    for (byte i = 0; i != AncientWorldSettings.AncientWorldGenerationSettings.numberSetClearPerTick; i++) {
+                    for (byte i = 0; i != AncientWorldSettings.AncientWorldGenerationSettings.numberSetClearPerTick2; i++) {
                         if (xtc == SIZE) {
                             ytc++;
                             xtc = 0;

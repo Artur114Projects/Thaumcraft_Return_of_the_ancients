@@ -5,25 +5,17 @@ import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import thaumcraft.common.lib.network.PacketHandler;
 import thaumcraft.common.lib.network.misc.PacketMiscEvent;
 
-import java.util.Objects;
-import java.util.Random;
 import java.util.UUID;
-
-import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
 public class AncientEntrySolo extends AncientEntry {
 
@@ -162,7 +154,7 @@ public class AncientEntrySolo extends AncientEntry {
         Entity boss = getRandomBoss(world, bossPos);
         bossUUID = boss.getUniqueID();
         world.spawnEntity(boss);
-        pleaseBossDoors(world, bossPos);
+        genBossDoors(world, bossPos);
     }
 
     @Override
@@ -195,7 +187,7 @@ public class AncientEntrySolo extends AncientEntry {
     }
 
     @Override
-    public void onReloadLightStart() {
+    public void onFinalizing() {
         HandlerR.injectPhaseOnClient(player, (byte) 3);
     }
 

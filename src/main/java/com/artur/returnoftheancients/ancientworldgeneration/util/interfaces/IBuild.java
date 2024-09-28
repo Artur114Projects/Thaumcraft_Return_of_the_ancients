@@ -13,6 +13,6 @@ public interface IBuild {
     void onStart();
     void onGenStart();
     void onClearStart();
-    void onReloadLightStart();
+    void onFinalizing();
     void onFinal();
 }

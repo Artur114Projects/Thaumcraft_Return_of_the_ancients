@@ -5,21 +5,11 @@ import com.artur.returnoftheancients.capabilities.PlayerTimer;
 import com.artur.returnoftheancients.handlers.RegisterHandler;
 
 import com.artur.returnoftheancients.misc.CraftingRegister;
-import com.artur.returnoftheancients.misc.PlayersCountDifficultyProcessor;
-import com.artur.returnoftheancients.misc.TRAConfigs;
-import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import thaumcraft.Thaumcraft;
-import thaumcraft.api.ThaumcraftApi;
-import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.research.ResearchCategories;
-
-import java.util.Objects;
 
 
 public class CommonProxy {
@@ -46,7 +36,6 @@ public class CommonProxy {
     public void serverStarting(FMLServerStartingEvent event) {
         AncientWorld.load();
         RegisterHandler.registerCommands(event);
-        PlayersCountDifficultyProcessor.compile(TRAConfigs.DifficultySettings.playersCountDifficulty);
     }
 
 }

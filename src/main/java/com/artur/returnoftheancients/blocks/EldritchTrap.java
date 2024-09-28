@@ -31,17 +31,14 @@ public class EldritchTrap extends BlockTileEntity<TileEntityEldritchTrap> {
     public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
         super.randomDisplayTick(state, world, pos, rand);
         if (world.isRemote) {
-            for (int i = 0; i < 8; i++) {
-                ParticleManager particleManager = Minecraft.getMinecraft().effectRenderer;
-                particleManager.spawnEffectParticle(
-                        EnumParticleTypes.BLOCK_CRACK.getParticleID(),
-                        pos.getX() + rand.nextDouble(),
+            for (int i = 0; i < 2; i++) {
+                world.spawnParticle(
+                        EnumParticleTypes.PORTAL,
+                        pos.getX() - 0.5 + rand.nextDouble(),
                         pos.getY() + rand.nextDouble(),
-                        pos.getZ() + rand.nextDouble(),
-                        0.0D, 2D, 0.0D,
-                        Block.getStateId(HandlerR.getBlockByString("thaumcraft:stone_eldritch_tile").getDefaultState())
+                        pos.getZ() - 0.5 + rand.nextDouble(),
+                        0.0D, 0.0D, 0.0D
                 );
-
             }
         }
     }

@@ -9,10 +9,10 @@ public class BuildPhase {
         pos = new BlockPos.MutableBlockPos();
         bossGen = 0;
         finalizing = false;
-        please = false;
+        gen = false;
         clear = false;
-        xtp = 0;
-        ytp = 0;
+        xtg = 0;
+        ytg = 0;
         xtc = 0;
         ytc = 0;
         xtf = -128;
@@ -20,8 +20,8 @@ public class BuildPhase {
     }
 
     public BlockPos.MutableBlockPos pos;
-    public byte xtp;
-    public byte ytp;
+    public byte xtg;
+    public byte ytg;
     public byte xtc;
     public byte ytc;
     public int xtf;
@@ -31,7 +31,7 @@ public class BuildPhase {
     public byte t = 0;
     public boolean finalizing;
     public boolean isClearStart;
-    public boolean please;
+    public boolean gen;
     public boolean clear;
 
 
@@ -39,7 +39,7 @@ public class BuildPhase {
         clear = true;
     }
     public void genStructuresInWorld() {
-        please = true;
+        gen = true;
     }
     public void finalizing() {
         finalizing = true;
@@ -47,10 +47,10 @@ public class BuildPhase {
     public void stop() {
         bossGen = 0;
         finalizing = false;
-        please = false;
+        gen = false;
         clear = false;
-        xtp = 0;
-        ytp = 0;
+        xtg = 0;
+        ytg = 0;
         xtc = 0;
         ytc = 0;
         xtf = -128;

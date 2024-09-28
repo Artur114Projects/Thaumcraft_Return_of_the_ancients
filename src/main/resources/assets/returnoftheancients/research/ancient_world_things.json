@@ -1,7 +1,47 @@
 {
   "entries": [
     {
-
+      "key": "FIRE_TRAP",
+      "name": "tile.fire_trap.name",
+      "icons": ["returnoftheancients:fire_trap"],
+      "category": "ANCIENT_WORLD",
+      "location": [ 0,-2 ],
+      "parents": [ "~TO_ANCIENT", "!FIRE_TRAP" ],
+      "meta": [ "HIDDEN", "HEX" ],
+      "stages": [
+        {
+          "text": "research.fire_trap.text.stage.1"
+        }
+      ]
+    },
+    {
+      "key": "ELDRITCH_TRAP",
+      "name": "tile.eldritch_trap.name",
+      "icons": ["returnoftheancients:eldritch_trap"],
+      "category": "ANCIENT_WORLD",
+      "location": [ 0,-3 ],
+      "parents": [ "~TO_ANCIENT", "!ELDRITCH_TRAP" ],
+      "meta": [ "HIDDEN", "HEX" ],
+      "stages": [
+        {
+          "text": "research.eldritch_trap.text.stage.1"
+        }
+      ]
+    },
+    {
+      "key": "PRIMAL_BLADE",
+      "name": "item.itemprimalblade.name",
+      "icons": ["returnoftheancients:itemprimalblade"],
+      "category": "ANCIENT_WORLD",
+      "location": [ 0,-4 ],
+      "parents": [ "~TO_ANCIENT", "!PRIMAL_BLADE" ],
+      "meta": [ "HIDDEN", "HEX" ],
+      "stages": [
+        {
+          "text": "research.primal_blade.text.stage.1"
+        }
+      ]
     }
+
   ]
 }

@@ -182,7 +182,7 @@ public class AncientWorld {
         for (AncientEntry entry : ANCIENT_ENTRIES) {
             if (entry.wakeUp(player)) return;
         }
-        if (!player.isCreative() || TRAConfigs.Any.debugMode) ServerEventsHandler.tpToHome(player);
+        if (!player.isCreative()) ServerEventsHandler.tpToHome(player);
     }
 
     public static void playerLoggedOutBus(UUID id) {

@@ -10,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -28,6 +29,7 @@ import thaumcraft.common.entities.monster.EntityEldritchGuardian;
 import thaumcraft.common.entities.monster.EntityMindSpider;
 
 import java.util.List;
+import java.util.logging.Handler;
 
 public class TileEntityEldritchTrap extends TileEntity implements ITickable {
     private AxisAlignedBB detectionBox = null;
@@ -49,6 +51,7 @@ public class TileEntityEldritchTrap extends TileEntity implements ITickable {
         if (!players.isEmpty() && phase == 0 && !players.get(0).isCreative()) {
             if (!world.isRemote) {
                 for (EntityPlayer player : players) {
+                    HandlerR.researchTC((EntityPlayerMP) player, "!ELDRITCH_TRAP");
                     player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 30, 0));
                 }
             }

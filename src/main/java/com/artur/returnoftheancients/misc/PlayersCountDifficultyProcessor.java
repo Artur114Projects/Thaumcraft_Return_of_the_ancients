@@ -6,6 +6,7 @@ import net.minecraft.util.text.TextFormatting;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class PlayersCountDifficultyProcessor {
     private static final List<PlayersCountDifficultyPhase> countDifficultyPhases = new ArrayList<>();
     private static boolean isGood = true;

@@ -195,7 +195,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
         CustomGenStructure.gen(world, x, y, z, name);
     }
 
-    protected void pleaseBossDoors(World world, BlockPos pos) {
+    protected void genBossDoors(World world, BlockPos pos) {
         CustomGenStructure.gen(world, pos.getX() + 5, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
         CustomGenStructure.gen(world, pos.getX() - 11, pos.getY() + 2, pos.getZ() + 16, "ancient_door");
         CustomGenStructure.gen(world, pos.getX() + 5, pos.getY() + 2, pos.getZ() - 15, "ancient_door");
@@ -251,9 +251,11 @@ public abstract class AncientEntry implements IBuild, IALGS {
         System.out.println("deleting...");
         requestToDelete();
     }
+
     public boolean isSleep() {
         return isSleep;
     }
+
     public boolean wakeUp(EntityPlayerMP player) {
         loadCount = 0;
         isSleep = false;
@@ -319,33 +321,32 @@ public abstract class AncientEntry implements IBuild, IALGS {
                     onClearStart();
                     buildPhase.isClearStart = true;
                 }
-                if (buildPhase.please) {
-                    if (buildPhase.t == AncientWorldSettings.AncientWorldGenerationSettings.structuresGenerationDelay) {
+                if (buildPhase.gen) {
+                    if (buildPhase.t == AncientWorldSettings.AncientWorldGenerationSettings.structuresGenerationDelay2) {
                         buildPhase.t = 0;
 
-                        if (buildPhase.xtp == map.SIZE) {
-                            buildPhase.ytp++;
-                            buildPhase.xtp = 0;
-                            onGen(buildPhase.xtp, buildPhase.ytp);
+                        if (buildPhase.xtg == map.SIZE) {
+                            buildPhase.ytg++;
+                            buildPhase.xtg = 0;
+                            onGen(buildPhase.xtg, buildPhase.ytg);
                         }
 
-                        if (buildPhase.ytp == map.SIZE) {
-                            buildPhase.ytp = 0;
-                            buildPhase.xtp = 0;
+                        if (buildPhase.ytg == map.SIZE) {
+                            buildPhase.ytg = 0;
+                            buildPhase.xtg = 0;
                             settings.setRotation(Rotation.NONE);
-                            buildPhase.please = false;
-                            genAncientEntryWay(world);
-                            onReloadLightStart();
+                            buildPhase.gen = false;
+                            onFinalizing();
                             System.out.println("Finalizing pos:" + pos);
                             buildPhase.finalizing();
                             return;
                         }
 
-                        byte deformation = map.getDeformation(buildPhase.xtp, buildPhase.ytp);
-                        byte structure = map.getStructure(buildPhase.xtp, buildPhase.ytp);
-                        byte structureRotate = map.getRotate(buildPhase.xtp, buildPhase.ytp);
-                        int cx = (128 - (16 * buildPhase.xtp)) + (10000 * pos);
-                        int cz = (128 - (16 * buildPhase.ytp));
+                        byte deformation = map.getDeformation(buildPhase.xtg, buildPhase.ytg);
+                        byte structure = map.getStructure(buildPhase.xtg, buildPhase.ytg);
+                        byte structureRotate = map.getRotate(buildPhase.xtg, buildPhase.ytg);
+                        int cx = (128 - (16 * buildPhase.xtg)) + (10000 * pos);
+                        int cz = (128 - (16 * buildPhase.ytg));
                         byte rotate = 0;
 
                         switch (structureRotate) {
@@ -422,13 +423,12 @@ public abstract class AncientEntry implements IBuild, IALGS {
                                 System.out.println("WTF????? " + structure);
                                 break;
                         }
-
-                        buildPhase.xtp++;
+                        buildPhase.xtg++;
                     }
                     buildPhase.t++;
                 }
                 if (buildPhase.clear) {
-                    for (byte i = 0; i != AncientWorldSettings.AncientWorldGenerationSettings.numberSetClearPerTick; i++) {
+                    for (byte i = 0; i != AncientWorldSettings.AncientWorldGenerationSettings.numberSetClearPerTick2; i++) {
                         if (buildPhase.xtc == map.SIZE) {
                             buildPhase.ytc++;
                             buildPhase.xtc = 0;
@@ -459,6 +459,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                             buildPhase.ytf = -128;
                             buildPhase.xtf = -128;
                             buildPhase.finalizing = false;
+                            genAncientEntryWay(world);
                             System.out.println("Generate ancient entry finish pos:" + pos);
                             isBuild = true;
                             requestToSave();

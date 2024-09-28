@@ -408,6 +408,15 @@ public class HandlerR {
         researchAndSendMessage(player, key, translateKey, TextFormatting.DARK_PURPLE);
     }
 
+    public static void researchTC(EntityPlayerMP player, String key) {
+        if (!ThaumcraftCapabilities.knowsResearchStrict(player, key)) {
+            IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(player);
+            if (knowledge.addResearch(key)) {
+                knowledge.sync(player);
+            }
+        }
+    }
+
     public static boolean isWithinRadius(double x1, double z1, double x2, double z2, double radius) {
         double dx = x1 - x2;
         double dz = z1 - z2;

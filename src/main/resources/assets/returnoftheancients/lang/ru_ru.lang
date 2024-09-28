@@ -3,6 +3,7 @@ item.itemprimalblade.name=Певородный клинок
 item.portal_compass.name=Пустотный компас
 item.soul_binder.name=Камень связи душ
 tile.boss_trigger_block.name=Босс триггер блок
+tile.eldritch_trap.name=Ловушка
 tile.fire_trap.name=Испепелитель
 tile.tp_to_home_block.name=Портал в верхний мир
 tile.taint_ancient_stone.name=Заражённый древний камень
@@ -12,11 +13,8 @@ itemGroup.returnoftheancients_tab=Thaumcraft: Return of the ancients
 # Any
 ###################################################################################
 returnoftheancients.portal.message=Нельзя использовать:
-item.itemprimalblade.text=Оружие богов
 returnoftheancients.rui.t=убери это
 returnoftheancients.rui.f=у тебя 30 секунд
-returnoftheancients.message.ancientworldload.start=Началась генерация, мир может подтормаживать
-returnoftheancients.message.ancientworldload.finish=Генерация закончилась
 returnoftheancients.gui.esc=Нажмите ESC еще раз чтобы выйти.
 returnoftheancients.message.new-version=Добро пожаловать в Thaumcraft: Return of the ancients v1.3.0-betta!
 ##################################################################################
@@ -30,7 +28,7 @@ returnoftheancients.cfg.sub.any.uog=Использовать старый заг
 # Config Difficulty settings
 ##################################################################################
 returnoftheancients.cfg.sub.ds=Настройки сложности
-returnoftheancients.cfg.sub.ds.pcd=Лист эффектов
+returnoftheancients.cfg.sub.ds.pcd=Лист эффектов (Не работает)
 ##################################################################################
 # Config Portal settings
 ##################################################################################
@@ -47,9 +45,7 @@ returnoftheancients.cfg.sub.portal.modId=ID Модов
 #################################################################################
 returnoftheancients.cfg.sub.aws=Настройки древнего ира
 returnoftheancients.cfg.sub.aws.og=Использовать старый генетратор
-returnoftheancients.cfg.sub.aws.ccg=Нельзя изменить яркость
 returnoftheancients.cfg.sub.aws.np=Нельзя использовать мирную сложность
-returnoftheancients.cfg.sub.aws.crd=Нельзя изменить дистанцию обзора
 returnoftheancients.cfg.sub.aws.isw=Устанавливать искажение
 returnoftheancients.cfg.sub.aws.nnv=Нельзя использовать ночное зрение
 returnoftheancients.cfg.sub.aws.daw=Умирать в дремнем мире
@@ -79,9 +75,18 @@ returnoftheancients.text.deformation=Вы обнаружили странное 
 tc.research_category.ANCIENT_WORLD=Ancient world
 #
 research.start.title=Начало
-research.start.text.stage.1=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this
-research.start.text.stage.2=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this. <BR> <BR> Research and tests have shown that the device is not finished, I think that with my knowledge I can improve it
-research.start.text.stage.3=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this. <BR> <BR> Research and tests have shown that the device is not finished, I think that with my knowledge I can improve it. <BR> Great! I got a working prototype
+research.start.text.stage.1=Также в этой книге написано о неком древнем мире и о устройстве которое поможет найти вход, думою под это стоит выделить отдельную категорию исследований.
+research.start.text.stage.2=Также в этой книге написано о неком древнем мире и о устройстве которое поможет найти вход, думою под это стоит выделить отдельную категорию исследований. <BR> <BR> Мне удалось воссоздать это устройство... Оно не работает, думаю что с моими знаниями я смогу его доработать.
+research.start.text.stage.3=Также в этой книге написано о неком древнем мире и о устройстве которое поможет найти вход, думою под это стоит выделить отдельную категорию исследований. <BR> <BR> Мне удалось воссоздать это устройство... Оно не работает, думаю что с моими знаниями я смогу его доработать.. <BR> <BR> Отлично! у меня есть рабочий прототип.
 #
 research.to_ancient.title=В древний мир
-
+#
+research.final.title=Конец?
+research.final.text.stage.1=Пока что да...
+#
+research.boss.title=Босс
+################################################################################
+#research things
+################################################################################
+research.primal_blade.text.stage.1=Клинок из первозданной материи, созданный по древней утерянной технологии, не подлежит воссозданию.
+research.fire_trap.text.stage.1=Древняя и очень мощная горелка, не понятно как она работает, мне стоит быть внимательнее!

@@ -4,6 +4,7 @@ import com.artur.returnoftheancients.utils.interfaces.IALGS;
 
 import static com.artur.returnoftheancients.handlers.HandlerR.genRandomIntRange;
 
+@Deprecated
 public class AncientLabyrinthOldMap extends AncientLabyrinthGeneratorHandler implements IALGS {
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES = new byte[17][17];
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE = new byte[17][17];

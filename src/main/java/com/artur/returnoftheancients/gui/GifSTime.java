@@ -4,8 +4,8 @@ import net.minecraft.client.Minecraft;
 
 public class GifSTime extends Gif {
     protected long lastTime = 0;
-    public GifSTime(String fileNoIndexName, int gifSize, int fps, Minecraft mc) {
-        super(fileNoIndexName, gifSize, fps, mc);
+    public GifSTime(String fileNoIndexName, int gifSize, int fps) {
+        super(fileNoIndexName, gifSize, fps);
         this.speed = (1000 / fps);
     }
 

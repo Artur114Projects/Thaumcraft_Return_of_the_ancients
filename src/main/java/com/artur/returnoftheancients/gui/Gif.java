@@ -16,7 +16,7 @@ public class Gif {
     protected int speed;
     protected final ResourceLocation[] gif;
 
-    public Gif(String fileNoIndexName, int gifSize, int speed, Minecraft mc) {
+    public Gif(String fileNoIndexName, int gifSize, int speed) {
         this.time = 0;
         this.speed = speed;
         this.isFirstDraw = true;

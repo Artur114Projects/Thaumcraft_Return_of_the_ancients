@@ -31,6 +31,20 @@ public class TRAConfigs {
     @Config.Comment("Here you can change difficulty settings")
     public static DifficultySettings DifficultySettings = new DifficultySettings();
 
+    @Config.LangKey(Referense.MODID + ".cfg.sub.ps")
+    @Config.Comment("Here you can change performance settings")
+    public static PerformanceSettings PerformanceSettings = new PerformanceSettings();
+
+    @Config.LangKey(Referense.MODID + ".cfg.sub.cs")
+    @Config.Comment("Here you can change performance settings")
+    public static ClientSettings ClientSettings = new ClientSettings();
+
+
+    public static class ClientSettings {
+        @Config.LangKey(Referense.MODID + ".cfg.sub.cs.usi")
+        public boolean useStaticImageOnLoadingGui = false;
+    }
+
     public static class DifficultySettings {
         @Config.LangKey(Referense.MODID + ".cfg.sub.ds.bc")
         public int baseChange = 50;
@@ -133,14 +147,21 @@ public class TRAConfigs {
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.nt5")
         public boolean isNeedMoreThan50Fill = true;
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.sgd")
+        @Config.Comment("the higher the number, the lower the chance")
+        public int incineratorGenerateChange = 200;
+
+        @Config.Comment("the higher the number, the lower the chance")
+        public int eldritchTrapGenerateChange = 3;
+    }
+    public static class PerformanceSettings {
+        @Config.LangKey(Referense.MODID + ".cfg.sub.ps.sgd")
         @Config.Comment("set the value more if the server lags during generation")
-        public int structuresGenerationDelay2 = 1;
+        public int structuresGenerationDelay = 1;
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.nct")
-        public int numberSetClearPerTick2 = 2;
+        @Config.LangKey(Referense.MODID + ".cfg.sub.ps.nct")
+        public int numberSetClearPerTick = 2;
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.wgs.nrt")
+        @Config.LangKey(Referense.MODID + ".cfg.sub.ps.nrt")
         public int numberSetReloadLightPerTick = 925;
     }
 

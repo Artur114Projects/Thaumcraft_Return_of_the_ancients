@@ -32,7 +32,7 @@ public class Test { //
         int n = 0;
         Random rand = new Random();
 
-        for (int j = 0; j != 1000; j++) {
+        for (int j = 0; j != 100000; j++) {
             int offset;
             if (hurt > 0) {
                 offset = (ignoringOffset * hurt);

@@ -26,6 +26,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.common.entities.monster.EntityEldritchGuardian;
+import thaumcraft.common.entities.monster.EntityInhabitedZombie;
 import thaumcraft.common.entities.monster.EntityMindSpider;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class TileEntityEldritchTrap extends TileEntity implements ITickable {
     private AxisAlignedBB detectionBox = null;
     private BlockPos[] poss = null;
     private byte phase = 0;
-    private byte m = 40;
+    private byte m = 8;
 
     @Override
     public void update() {
@@ -62,6 +63,18 @@ public class TileEntityEldritchTrap extends TileEntity implements ITickable {
         if (phase == 1) {
             phase = 2;
             if (!world.isRemote) {
+                world.setBlockState(pos.add(0, 4, 4), Blocks.AIR.getDefaultState());
+                world.setBlockState(pos.add(-1, 4, 4), Blocks.AIR.getDefaultState());
+
+                world.setBlockState(pos.add(4, 4, 0), Blocks.AIR.getDefaultState());
+                world.setBlockState(pos.add(4, 4, -1), Blocks.AIR.getDefaultState());
+
+                world.setBlockState(pos.add(0, 4, -5), Blocks.AIR.getDefaultState());
+                world.setBlockState(pos.add(-1, 4, -5), Blocks.AIR.getDefaultState());
+
+                world.setBlockState(pos.add(-5, 4, 0), Blocks.AIR.getDefaultState());
+                world.setBlockState(pos.add(-5, 4, -1), Blocks.AIR.getDefaultState());
+
                 CustomGenStructure.gen(world, pos.add(-3, 1, -8), "ancient_door_rock_rotate-1");
                 CustomGenStructure.gen(world, pos.add(-3, 1, 7), "ancient_door_rock_rotate-1");
                 CustomGenStructure.gen(world, pos.add(-8, 1, -3), "ancient_door_rock_rotate-2");
@@ -96,10 +109,10 @@ public class TileEntityEldritchTrap extends TileEntity implements ITickable {
                     z = getRandomInt(8);
                 }
                 Entity entity;
-                if (world.rand.nextInt(10) == 0) {
+                if (world.rand.nextBoolean()) {
                     entity = ItemMonsterPlacer.spawnCreature(world, EntityList.getKey(EntityEldritchGuardian.class), (pos.getX() - 0.5) + x, (pos.getY() + 1), (pos.getZ() - 0.5) + z);
                 } else {
-                    entity = ItemMonsterPlacer.spawnCreature(world, EntityList.getKey(EntityMindSpider.class), (pos.getX() - 0.5) + x, (pos.getY() + 1), (pos.getZ() - 0.5) + z);
+                    entity = ItemMonsterPlacer.spawnCreature(world, EntityList.getKey(EntityInhabitedZombie.class), (pos.getX() - 0.5) + x, (pos.getY() + 1), (pos.getZ() - 0.5) + z);
                 }
                 if (entity != null) {
                     EntityLiving living = (EntityLiving) entity;

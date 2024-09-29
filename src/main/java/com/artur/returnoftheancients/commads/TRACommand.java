@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class TRACommand extends CommandBase {
 
-    String NAME = Referense.MODID, USAGE = "/" + Referense.MODID + " updatedropprimalblade" + ", seed" + ", help";
+    String NAME = Referense.MODID, USAGE = "/" + Referense.MODID + " updatedropprimalblade" + "; seed" + "; help" + "; tptoportal";
 
 
     @Override
@@ -54,6 +54,9 @@ public class TRACommand extends CommandBase {
                 } else {
                     player.sendMessage(new TextComponentString(seed + "").setStyle(new Style().setColor(TextFormatting.GREEN)));
                 }
+                break;
+            case "tptoportal":
+                player.connection.setPlayerLocation(WorldDataFields.portalX, 100, WorldDataFields.portalZ, player.rotationYaw, player.rotationPitch);
                 break;
             default:
                 player.sendMessage(new TextComponentString(TextFormatting.RED + "Usage: " + USAGE));

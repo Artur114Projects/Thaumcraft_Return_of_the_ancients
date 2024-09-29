@@ -17,6 +17,15 @@ returnoftheancients.rui.t=put it away
 returnoftheancients.rui.f=you have 30 seconds
 returnoftheancients.gui.esc=Press ESC again to exit.
 returnoftheancients.message.new-version=Welcome to Thaumcraft: Return of the ancients v1.3.0-betta!
+###################################################################################
+# Loading gui
+###################################################################################
+rota.l-gui.generate.stage.0=Waiting for build
+rota.l-gui.generate.stage.1=Cleaning area
+rota.l-gui.generate.stage.2=Place structures in world
+rota.l-gui.generate.stage.3=Finalizing
+rota.l-gui.generate.stage.4=Finis!
+rota.l-gui.button.team=Team
 ################################################################################
 # Config any
 ################################################################################
@@ -40,6 +49,7 @@ returnoftheancients.cfg.sub.portal.z=Z
 returnoftheancients.cfg.sub.portal.y=Y
 returnoftheancients.cfg.sub.portal.tobedrock=Generate to bedrock? (Don`t work)
 returnoftheancients.cfg.sub.portal.modId=Mod ID
+returnoftheancients.cfg.sub.portal.ci=Check items?
 ################################################################################
 # Config Ancient world settings
 ################################################################################
@@ -59,6 +69,18 @@ returnoftheancients.cfg.sub.aws.wgs.sgd=Structures generation delay
 returnoftheancients.cfg.sub.aws.wgs.nct=Number of cleaned structures per tick
 returnoftheancients.cfg.sub.aws.wgs.nrt=Number of reload light block per tick
 ################################################################################
+# Config Performance settings
+################################################################################
+returnoftheancients.cfg.sub.ps=Performance settings
+returnoftheancients.cfg.sub.ps.sgd=Number of ticks for which 1 structure is generated
+returnoftheancients.cfg.sub.ps.nct=Number of chunks cleared per 1 tick
+returnoftheancients.cfg.sub.ps.nrt=Number of blocks that rebooted the light in 1 tick
+################################################################################
+# Config Client settings
+################################################################################
+returnoftheancients.cfg.sub.cs=Client settings
+returnoftheancients.cfg.sub.cs.usi=Use static image in gui?
+################################################################################
 # Config Mob gen settings
 ################################################################################
 returnoftheancients.cfg.sub.mgs=Mob gen settings (Don`t work)
@@ -76,18 +98,32 @@ tc.research_category.ANCIENT_WORLD=Ancient world
 #
 research.start.title=Start
 research.start.text.stage.1=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this
-research.start.text.stage.2=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this. <BR> <BR> Research and tests have shown that the device is not finished, I think that with my knowledge I can improve it
-research.start.text.stage.3=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this. <BR> <BR> Research and tests have shown that the device is not finished, I think that with my knowledge I can improve it. <BR> <BR> Great! I got a working prototype
+research.start.text.stage.2=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this. <BR> <BR> I managed to recreate this device... It doesn't work, I think that with my knowledge I can improve it.
+research.start.text.stage.3=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this. <BR> <BR> I managed to recreate this device... It doesn't work, I think that with my knowledge I can improve it.. <BR> <BR> Great! I got a working prototype
 #
 research.to_ancient.title=To ancient world
 research.m_FOUND_ANCIENT.text=Find the portal
+research.m_ENTRY_ANCIENT.text=Enter the portal
+research.to_ancient.text.stage.1=I should go and see where it leads, I might have a long journey ahead of me.
+research.to_ancient.text.stage.2=I should go and see where it leads, I might have a long journey ahead of me. <BR> <BR> Should I go there? Am I ready? Will I come back from there? In the 'crimson rituals' it is written that the armor is ~40% less effective in this world. In any case, without this, this research branch will stop.
+research.to_ancient.text.stage.3=I should go and see where it leads, I might have a long journey ahead of me. <BR> <BR> Should I go there? Am I ready? Will I come back from there? In the 'crimson rituals' it is written that the armor is ~40% less effective in this world. In any case, without this, this research branch will stop. <BR> <BR> <BR> <BR> <BR> Everything looks almost the same as in the illustrations in the 'crimson rituals'. This layer should be the entrance to the ancient world itself, which itself is nothing, somewhere here there should be a guard who guards the passage to the next layer, at least that's what the cultists write.
+research.to_ancient.text.addenda.1=Am I dead? Am I dead! Or not? I need time...
 #
 research.final.title=End?
 research.final.text.stage.1=For now, yes...
 #
-research.boss.title=Boss
+research.boss.title=Guard
+research.boss.text.stage.1=Still, the cultists were right about the armor (I wonder where they know all this from) I think I should continue my research.
+research.boss.text.stage.2=Still, the cultists were right about the armor (I wonder where they know all this from) I think I should continue my research. <BR> Interesting... it seems to increase as you go in a certain direction.
+research.boss.text.stage.3=Still, the cultists were right about the armor (I wonder where they know all this from) I think I should continue my research. <BR> Interesting... it seems to increase as you go in a certain direction. <BR> I found the guard! It seems that the closer to the guard the greater this deformation, now I know where to go.
+research.DEFORMATION.text=Continue exploring the ancient world
+research.m_BOSS.text=Go towards increasing deformation
+#
+research.soul_binder.text.stage.1=Based on the cultists' data and my research, it looks like a person who enters the portal appears in different parts of the layer. If I want to explore the ancient world in a group, I need to somehow solve this problem.
+research.soul_binder.text.stage.2=Based on the cultists' data and my research, it looks like a person who enters the portal appears in different parts of the layer. If I want to explore the ancient world in a group, I need to somehow solve this problem. <BR> <BR> I managed to develop a soul connection stone, it can be tied to yourself and if you enter the portal with it, then everyone who is tied will move to the ancient world.
 ################################################################################
 #research things
 ################################################################################
 research.primal_blade.text.stage.1=A blade made of primordial matter, created using ancient lost technology, cannot be recreated.
 research.fire_trap.text.stage.1=An ancient and very powerful burner, it is not clear how it works, I should be more careful!
+research.eldritch_trap.text.stage.1=It appears only at intersections, you can recognize it by the purple particles, apparently over time the mechanism has worn out and the doors can be broken, I should be more careful!

@@ -311,7 +311,6 @@ public abstract class AncientEntry implements IBuild, IALGS {
             gen(world, 10000 * pos, cordY, 0, ENTRY_WAY_STRING_ID);
         }
         gen(world, 6 + (10000 * pos), 255, 6, "ancient_border_cap");
-        gen(world, 4 + (10000 * pos), 124, -14, "ancient_developer_platform");
     }
     @Override
     public void build(World world) {
@@ -322,7 +321,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                     buildPhase.isClearStart = true;
                 }
                 if (buildPhase.gen) {
-                    if (buildPhase.t == AncientWorldSettings.AncientWorldGenerationSettings.structuresGenerationDelay2) {
+                    if (buildPhase.t == TRAConfigs.PerformanceSettings.structuresGenerationDelay) {
                         buildPhase.t = 0;
 
                         if (buildPhase.xtg == map.SIZE) {
@@ -382,7 +381,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                                 gen(world, cx, 80, cz, WAY_STRING_ID + rotate);
                                 break;
                             case CROSSROADS_ID:
-                                if (random.nextInt(3) == 0) {
+                                if (random.nextInt(AncientWorldSettings.AncientWorldGenerationSettings.eldritchTrapGenerateChange) == 0) {
                                     gen(world, cx, 80, cz, CROSSROADS_STRING_ID);
                                 } else {
                                     gen(world, cx, 80, cz, CROSSROADS_TRAP_STRING_ID);
@@ -428,7 +427,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                     buildPhase.t++;
                 }
                 if (buildPhase.clear) {
-                    for (byte i = 0; i != AncientWorldSettings.AncientWorldGenerationSettings.numberSetClearPerTick2; i++) {
+                    for (byte i = 0; i != TRAConfigs.PerformanceSettings.numberSetClearPerTick; i++) {
                         if (buildPhase.xtc == map.SIZE) {
                             buildPhase.ytc++;
                             buildPhase.xtc = 0;
@@ -450,7 +449,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                     }
                 }
                 if (buildPhase.finalizing) {
-                    for (int i = 0; i != AncientWorldSettings.AncientWorldGenerationSettings.numberSetReloadLightPerTick; i++) {
+                    for (int i = 0; i != TRAConfigs.PerformanceSettings.numberSetReloadLightPerTick; i++) {
                         if (buildPhase.xtf == 144) {
                             buildPhase.ytf++;
                             buildPhase.xtf = -128;
@@ -470,7 +469,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                         world.checkLight(buildPhase.pos.setPos(x, 84, buildPhase.ytf));
                         BlockPos pos = buildPhase.pos.setPos(x, 80, buildPhase.ytf);
                         if (world.getBlockState(pos).equals(BlocksTC.stoneAncient.getDefaultState())) {
-                            if (world.rand.nextInt(200) == 0) {
+                            if (world.rand.nextInt(AncientWorldSettings.AncientWorldGenerationSettings.incineratorGenerateChange) == 0) {
                                 world.setBlockState(pos, InitTileEntity.FIRE_TRAP.getDefaultState());
                             }
                         }

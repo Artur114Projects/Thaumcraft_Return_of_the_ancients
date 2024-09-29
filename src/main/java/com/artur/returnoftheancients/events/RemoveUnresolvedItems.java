@@ -21,7 +21,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class RemoveUnresolvedItems {
-    private static byte checkTime = 0;
     public static final String isUUI = Referense.MODID + "isUseUnresolvedItems";
     public static final String time = Referense.MODID + "RemoveItemsTime";
     public static final String PRI = Referense.MODID + "phaseRemoveItems";
@@ -43,9 +42,7 @@ public class RemoveUnresolvedItems {
 
     @SubscribeEvent
     public static void Tick(TickEvent.PlayerTickEvent e) {
-        checkTime++;
-        if (checkTime >= 40) {
-            checkTime = 0;
+        if (e.player.ticksExisted % 40 == 0) {
             if (e.player.dimension == InitDimensions.ancient_world_dim_id && TRAConfigs.PortalSettings.checkItems) {
                 if (!HandlerR.isPlayerUseUnresolvedItems(e.player).isEmpty() && (!e.player.getEntityData().getBoolean(isUUI) || !e.player.getEntityData().hasKey(isUUI)) && !e.player.isCreative() && !e.player.isDead) {
                     System.out.println("La ti krisa " + e.player.getName());

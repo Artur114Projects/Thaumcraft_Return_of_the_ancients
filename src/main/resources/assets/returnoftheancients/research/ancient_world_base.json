@@ -46,6 +46,9 @@
           "text": "research.to_ancient.text.stage.2",
           "required_research":["m_ENTRY_ANCIENT"],
           "warp": 2
+        },
+        {
+          "text": "research.to_ancient.text.stage.3"
         }
       ],
       "addenda": [
@@ -53,10 +56,6 @@
           "text": "research.to_ancient.text.addenda.1",
           "required_research":["DEAD"],
           "warp": 4
-        },
-        {
-          "text": "research.to_ancient.text.addenda.2",
-          "required_research":["RECOVERY"]
         }
       ]
     },
@@ -88,18 +87,19 @@
       "icons": ["thaumcraft:stone_ancient"],
       "category": "ANCIENT_WORLD",
       "location": [ -6,0 ],
-      "parents": [ "TO_ANCIENT" ],
+      "parents": [ "TO_ANCIENT", "RECOVERY" ],
       "meta": [ "HIDDEN" ],
       "stages": [
         {
           "text": "research.boss.text.stage.1",
-          "required_knowledge":["DEFORMATION"]
-        }
-      ],
-      "addenda": [
+          "required_research":["DEFORMATION"]
+        },
         {
-          "text": "research.boss.text.addenda.1",
-          "required_research":["BOSS"]
+          "text": "research.boss.text.stage.2",
+          "required_research":["m_BOSS"]
+        },
+        {
+          "text": "research.boss.text.stage.3"
         }
       ]
     },
@@ -109,12 +109,11 @@
       "icons": ["returnoftheancients:itemprimalblade"],
       "category": "ANCIENT_WORLD",
       "location": [ -9,0 ],
-      "parents": [ "BOSS" ],
+      "parents": [ "BOSS", "!FINAL" ],
       "meta": [ "HIDDEN", "ROUND" ],
       "stages": [
         {
-          "text": "research.final.text.stage.1",
-          "required_knowledge":["!FINAL"]
+          "text": "research.final.text.stage.1"
         }
       ]
     }

@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 
 public class TpToPortal extends CommandBase {
-    String NAME = "tptoportal", USAGE = "/tptoportal";
+    String NAME = "", USAGE = "/tptoportal";
 
     @Override
     public String getName() {
@@ -24,6 +24,5 @@ public class TpToPortal extends CommandBase {
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         EntityPlayerMP player = getCommandSenderAsPlayer(sender);
-        player.connection.setPlayerLocation(WorldDataFields.portalX, 100, WorldDataFields.portalZ, player.rotationYaw, player.rotationPitch);
     }
 }

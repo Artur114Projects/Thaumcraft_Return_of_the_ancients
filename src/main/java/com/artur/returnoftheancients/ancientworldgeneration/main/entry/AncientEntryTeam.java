@@ -105,7 +105,7 @@ public class AncientEntryTeam extends AncientEntry {
     protected void onBossTiger(EntityPlayer player, World world) {
         team.setToAll(playerSet -> {
             playerSet.connection.setPlayerLocation(player.posX, player.posY, player.posZ, playerSet.rotationYaw, playerSet.rotationPitch);
-            HandlerR.researchAndSendMessage(playerSet, "BOSS", Referense.MODID + ".text.boss");
+            HandlerR.researchAndSendMessage(playerSet, "m_BOSS", Referense.MODID + ".text.boss");
         });
         Entity boss = getRandomBoss(world, bossPos);
         bossUUID = boss.getUniqueID();
@@ -138,7 +138,10 @@ public class AncientEntryTeam extends AncientEntry {
 
     @Override
     protected void onBossDead() {
-        team.setToAll(player -> player.addItemStackToInventory(getPrimordialPearl()));
+        team.setToAll(player -> {
+            player.addItemStackToInventory(getPrimordialPearl());
+            HandlerR.researchTC(player, "!FINAL");
+        });
     }
 
     @Override

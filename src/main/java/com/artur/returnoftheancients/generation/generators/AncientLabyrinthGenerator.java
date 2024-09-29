@@ -397,7 +397,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
         public static void Tick(TickEvent.WorldTickEvent e) {
             if (!e.world.isRemote) {
                 if (please) {
-                    if (t == AncientWorldSettings.AncientWorldGenerationSettings.structuresGenerationDelay2) {
+                    if (t == TRAConfigs.PerformanceSettings.structuresGenerationDelay) {
                         t = 0;
                         if (xtp == SIZE) {
                             ytp++;
@@ -480,7 +480,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                     t++;
                 }
                 if (clear) {
-                    for (byte i = 0; i != AncientWorldSettings.AncientWorldGenerationSettings.numberSetClearPerTick2; i++) {
+                    for (byte i = 0; i != TRAConfigs.PerformanceSettings.numberSetClearPerTick; i++) {
                         if (xtc == SIZE) {
                             ytc++;
                             xtc = 0;
@@ -516,7 +516,7 @@ public class AncientLabyrinthGenerator implements IStructure, IALGS{
                     }
                 }
                 if (reloadLight) {
-                    for (int i = 0; i != AncientWorldSettings.AncientWorldGenerationSettings.numberSetReloadLightPerTick; i++) {
+                    for (int i = 0; i != TRAConfigs.PerformanceSettings.numberSetReloadLightPerTick; i++) {
                         if (xtl == 144) {
                             ytl++;
                             xtl = -128;

@@ -60,7 +60,6 @@ public class AncientWorld {
 
     private static void tpToAncientWorldNotQueue(EntityPlayerMP player) {
         player.setHealth(20);
-        player.clearActivePotions();
         ItemStack stack = HandlerR.getSoulBinder(player);
 
         if (stack != null) {
@@ -83,7 +82,6 @@ public class AncientWorld {
 
     private static void tpToAncientWorldWithQueue(EntityPlayerMP player) {
         player.setHealth(20);
-        player.clearActivePotions();
         ItemStack stack = HandlerR.getSoulBinder(player);
 
         if (HandlerR.isSoulBinderFull(stack)) {

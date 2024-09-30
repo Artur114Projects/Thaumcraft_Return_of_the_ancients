@@ -23,33 +23,42 @@ import java.util.concurrent.TimeUnit;
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class Test { //
     public static void main(String[] args) {
-        int notIgnoringOffset = 25;
-        int ignoringOffset = 25;
-        int baseChange = 50;
+        for (byte k = 0; k != 20; k ++) {
+            int notIgnoringOffset = 25;
+            int ignoringOffset = 25;
+            int baseChange = 50;
+            int offsetBarrier = 100;
 
-        int hurt = 0;
-        int i = 0;
-        int n = 0;
-        Random rand = new Random();
+            float hurt = 4;
+            int i = 0;
+            int n = 0;
+            Random rand = new Random();
 
-        for (int j = 0; j != 100000; j++) {
-            int offset;
-            if (hurt > 0) {
-                offset = (ignoringOffset * hurt);
-            } else {
-                offset = (notIgnoringOffset * hurt);
+            int to = rand.nextInt(1000000);
+
+            for (int j = 0; j != to; j++) {
+                int offset;
+                if (hurt > 0) {
+                    offset = (int) (ignoringOffset * hurt);
+                } else {
+                    offset = (int) (notIgnoringOffset * hurt);
+                }
+                if (HandlerR.getIgnoringChance(baseChange + offset, rand)) {
+                    hurt += 2.5F;
+                    i++;
+                } else {
+                    n++;
+                    hurt--;
+                }
             }
-            if (HandlerR.getIgnoringChance(baseChange + offset, rand) && HandlerR.getIgnoringChance(30, rand)) {
-                hurt++;
-                i++;
-            } else {
-                n++;
-                hurt--;
-            }
+
+            System.out.println(i);
+            System.out.println(n);
+            double if0 = i;
+            double nf = n;
+            System.out.println(if0 / nf);
+            System.out.println();
         }
-
-        System.out.println(i);
-        System.out.println(n);
     }
 
     protected static int packBytes(byte b1, byte b2, byte b3, byte b4) {

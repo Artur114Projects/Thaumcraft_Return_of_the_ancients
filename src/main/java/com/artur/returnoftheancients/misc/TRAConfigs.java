@@ -53,13 +53,17 @@ public class TRAConfigs {
         public int ignoringOffset = 25;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.ds.ao")
-        public int additionalOffset = 40;
+        @Config.Comment("The higher the value, the lower the chance of armor penetration.")
+        @Config.RangeDouble(min = -2.0D, max = 2.0D)
+        public double additionalOffset = 0.0D;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.ds.asb")
         public boolean iaAddSpeedEffectToBoss = false;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.ds.sa")
         public int speedAmplifier = 2;
+
+        public int incineratorActivationSpeed = 8;
      }
 
     public static class PortalSettings {
@@ -117,10 +121,13 @@ public class TRAConfigs {
         public boolean noPeaceful = true;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.nnv")
-        public boolean noNightVision = true;
+        public boolean noNightVision = false;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.daw")
         public boolean isDeadToAncientWorld = false;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.aws.iaf")
+        public boolean isAddFogOnAncientWorld = true;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.aws.mpc")
         @Config.RequiresMcRestart

@@ -99,7 +99,8 @@
           "required_research":["m_BOSS"]
         },
         {
-          "text": "research.boss.text.stage.3"
+          "text": "research.boss.text.stage.3",
+          "required_research":["f_!FINAL"]
         }
       ]
     },
@@ -109,7 +110,7 @@
       "icons": ["returnoftheancients:itemprimalblade"],
       "category": "ANCIENT_WORLD",
       "location": [ -9,0 ],
-      "parents": [ "BOSS", "!FINAL" ],
+      "parents": [ "BOSS" ],
       "meta": [ "HIDDEN", "ROUND" ],
       "stages": [
         {

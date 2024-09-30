@@ -19,9 +19,9 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -37,7 +37,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import thaumcraft.api.blocks.BlocksTC;
-import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
 import java.util.Objects;
@@ -170,17 +169,17 @@ public class ServerEventsHandler {
                         return;
                     }
 
-                    int additionalOffset = TRAConfigs.DifficultySettings.additionalOffset;
+                    double additionalOffset = TRAConfigs.DifficultySettings.additionalOffset;
                     int ignoringOffset = TRAConfigs.DifficultySettings.ignoringOffset;
                     int baseChange = TRAConfigs.DifficultySettings.baseChange;
 
-                    int hurt = player.getEntityData().getInteger("hurt");
-                    if (HandlerR.getIgnoringChance(baseChange + (ignoringOffset * hurt), player.world.rand) && HandlerR.getChance(additionalOffset, player.world.rand)) {
-                        player.getEntityData().setInteger("hurt", hurt + 1);
+                    double hurt = player.getEntityData().getDouble("hurt");
+                    if (HandlerR.getIgnoringChance((int) (baseChange + (ignoringOffset * hurt)), player.world.rand)) {
+                        player.getEntityData().setDouble("hurt", hurt + 1.0D + additionalOffset);
                         player.setHealth(player.getHealth() - e.getAmount());
                         e.setCanceled(true);
                     } else {
-                        player.getEntityData().setInteger("hurt", hurt - 1);
+                        player.getEntityData().setDouble("hurt", hurt - 1.0D);
                     }
                 }
             }
@@ -317,7 +316,7 @@ public class ServerEventsHandler {
         IPlayerTimerCapability timer = TRACapabilities.getTimer(player);
         if (timer.hasTimer("recovery")) {
             timer.addTime(40, "recovery");
-            if (timer.getTime("recovery") >= 18000) {
+            if (timer.getTime("recovery") >= 10000) {
                 timer.delete("recovery");
                 HandlerR.researchAndSendMessage((EntityPlayerMP) player, "RECOVERY", Referense.MODID + ".text.recovery");
             }

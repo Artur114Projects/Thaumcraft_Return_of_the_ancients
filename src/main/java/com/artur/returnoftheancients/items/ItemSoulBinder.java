@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -77,19 +78,19 @@ public class ItemSoulBinder extends BaseItem {
                 tooltip.add(TextFormatting.YELLOW + "Players:");
                 tooltip.addAll(HandlerR.uuidKeySetToList(list.getKeySet(), TextFormatting.AQUA));
                 tooltip.add("");
-                tooltip.add(TextFormatting.YELLOW + "Hold " + TextFormatting.WHITE + "[Shift]" + TextFormatting.YELLOW + " to see info.");
+                tooltip.add(TextFormatting.YELLOW + I18n.format("item.soul_binder.info.d.1")  + " " + TextFormatting.WHITE + "[Shift]" + TextFormatting.YELLOW  + " " + I18n.format("item.soul_binder.info.d.2"));
             } else {
-                addInfo(tooltip);
+                addInfoTranslate(tooltip);
             }
         } else {
-            addInfo(tooltip);
+            addInfoTranslate(tooltip);
         }
     }
 
-
-    private void addInfo(List<String> tooltip) {
-        tooltip.add(TextFormatting.YELLOW + "RMB - bind.");
-        tooltip.add(TextFormatting.YELLOW + "Shift + RMB - unbind.");
-        tooltip.add(TextFormatting.YELLOW + "Put in crafting grid - clear.");
+    private void addInfoTranslate(List<String> tooltip) {
+        tooltip.add(TextFormatting.YELLOW + I18n.format("item.soul_binder.info.s.1"));
+        tooltip.add(TextFormatting.YELLOW + I18n.format("item.soul_binder.info.s.2"));
+        tooltip.add(TextFormatting.YELLOW + I18n.format("item.soul_binder.info.s.3"));
     }
+
 }

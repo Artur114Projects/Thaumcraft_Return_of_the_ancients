@@ -12,6 +12,12 @@ itemGroup.returnoftheancients_tab=Thaumcraft: Return of the ancients
 ################################################################################
 # Any
 ################################################################################
+item.soul_binder.info.s.1=RMB - bind.
+item.soul_binder.info.s.2=Shift + RMB - unbind.
+item.soul_binder.info.s.3=Put in crafting grid - clear.
+item.soul_binder.info.d.1=Hold
+item.soul_binder.info.d.2= to see info.
+#
 returnoftheancients.portal.message=Cant use:
 returnoftheancients.rui.t=put it away
 returnoftheancients.rui.f=you have 30 seconds
@@ -88,6 +94,7 @@ returnoftheancients.cfg.sub.mgs.umg=Use new mob generation (Don`t work)
 ################################################################################
 #research
 ################################################################################
+returnoftheancients.text.boss=You found the Guard
 returnoftheancients.text.deformation=You have discovered a strange distortion in the structure of the labyrinth.
 returnoftheancients.text.entered_ancient=You visited the ancient world
 returnoftheancients.text.found_portal=You found an ancient portal
@@ -106,7 +113,7 @@ research.m_FOUND_ANCIENT.text=Find the portal
 research.m_ENTRY_ANCIENT.text=Enter the portal
 research.to_ancient.text.stage.1=I should go and see where it leads, I might have a long journey ahead of me.
 research.to_ancient.text.stage.2=I should go and see where it leads, I might have a long journey ahead of me. <BR> <BR> Should I go there? Am I ready? Will I come back from there? In the 'crimson rituals' it is written that the armor is ~40% less effective in this world. In any case, without this, this research branch will stop.
-research.to_ancient.text.stage.3=I should go and see where it leads, I might have a long journey ahead of me. <BR> <BR> Should I go there? Am I ready? Will I come back from there? In the 'crimson rituals' it is written that the armor is ~40% less effective in this world. In any case, without this, this research branch will stop. <BR> <BR> <BR> <BR> <BR> Everything looks almost the same as in the illustrations in the 'crimson rituals'. This layer should be the entrance to the ancient world itself, which itself is nothing, somewhere here there should be a guard who guards the passage to the next layer, at least that's what the cultists write.
+research.to_ancient.text.stage.3=I should go and see where it leads, I might have a long journey ahead of me. <BR> <BR> Should I go there? Am I ready? Will I come back from there? In the 'crimson rituals' it is written that the armor is ~40% less effective in this world. In any case, without this, this research branch will stop. <BR> <BR> <BR> Everything looks almost the same as in the illustrations in the 'crimson rituals'. This layer should be the entrance to the ancient world itself, which itself is nothing, somewhere here there should be a guard who guards the passage to the next layer, at least that's what the cultists write.
 research.to_ancient.text.addenda.1=Am I dead? Am I dead! Or not? I need time...
 #
 research.final.title=End?
@@ -118,6 +125,7 @@ research.boss.text.stage.2=Still, the cultists were right about the armor (I won
 research.boss.text.stage.3=Still, the cultists were right about the armor (I wonder where they know all this from) I think I should continue my research. <BR> Interesting... it seems to increase as you go in a certain direction. <BR> I found the guard! It seems that the closer to the guard the greater this deformation, now I know where to go.
 research.DEFORMATION.text=Continue exploring the ancient world
 research.m_BOSS.text=Go towards increasing deformation
+research.f_!FINAL.text=Defeat the Guardian
 #
 research.soul_binder.text.stage.1=Based on the cultists' data and my research, it looks like a person who enters the portal appears in different parts of the layer. If I want to explore the ancient world in a group, I need to somehow solve this problem.
 research.soul_binder.text.stage.2=Based on the cultists' data and my research, it looks like a person who enters the portal appears in different parts of the layer. If I want to explore the ancient world in a group, I need to somehow solve this problem. <BR> <BR> I managed to develop a soul connection stone, it can be tied to yourself and if you enter the portal with it, then everyone who is tied will move to the ancient world.
@@ -125,5 +133,5 @@ research.soul_binder.text.stage.2=Based on the cultists' data and my research, i
 #research things
 ################################################################################
 research.primal_blade.text.stage.1=A blade made of primordial matter, created using ancient lost technology, cannot be recreated.
-research.fire_trap.text.stage.1=An ancient and very powerful burner, it is not clear how it works, I should be more careful!
-research.eldritch_trap.text.stage.1=It appears only at intersections, you can recognize it by the purple particles, apparently over time the mechanism has worn out and the doors can be broken, I should be more careful!
+research.fire_trap.text.stage.1=An ancient and very powerful burner, it is not clear how it works, fortunately it does not activate instantly and you can have time to escape.
+research.eldritch_trap.text.stage.1=It appears only at intersections, you can recognize it by the purple particles, apparently over time the mechanism has worn out and the doors can be broken.

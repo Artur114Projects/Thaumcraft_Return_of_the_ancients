@@ -140,13 +140,13 @@ public class AncientEntryTeam extends AncientEntry {
     protected void onBossDead() {
         team.setToAll(player -> {
             player.addItemStackToInventory(getPrimordialPearl());
-            HandlerR.researchTC(player, "!FINAL");
+            HandlerR.researchTC(player, "f_!FINAL");
         });
     }
 
     @Override
     protected void addFog() {
-        if (!isBossSpawn) {
+        if (!isBossSpawn && TRAConfigs.AncientWorldSettings.isAddFogOnAncientWorld) {
             team.setToAll(setFog);
         }
     }

@@ -64,12 +64,12 @@ public class AncientEntrySolo extends AncientEntry {
     @Override
     protected void onBossDead() {
         player.addItemStackToInventory(getPrimordialPearl());
-        HandlerR.researchTC(player, "!FINAL");
+        HandlerR.researchTC(player, "f_!FINAL");
     }
 
     @Override
     protected void addFog() {
-        if (!isBossSpawn && !player.isCreative()) {
+        if (!isBossSpawn && !player.isCreative() && TRAConfigs.AncientWorldSettings.isAddFogOnAncientWorld) {
             PacketHandler.INSTANCE.sendTo(new PacketMiscEvent((byte) 2), player);
         }
     }

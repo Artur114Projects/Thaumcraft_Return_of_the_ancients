@@ -23,6 +23,7 @@ public class InitSounds {
     public static SoundTRA RUI_DEAD = create("rui_dead");
     public static SoundTRA HEARTBEAT = create("heartbeat");
     public static SoundTRA FIRE_TRAP_SOUND = create("fire_trap_sound");
+    public static SoundTRA FIRE_TRAP_START_SOUND = create("fire_trap_sound_start");
 
     @SubscribeEvent
     public static void registerSounds(RegistryEvent.Register<SoundEvent> e) {

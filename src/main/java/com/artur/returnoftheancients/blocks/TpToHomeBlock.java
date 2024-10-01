@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.blocks;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
+import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -52,7 +53,7 @@ public class TpToHomeBlock extends BaseBlock {
             EntityPlayer player = (EntityPlayer) entityIn;
             if (player.getServer() != null && player.world != null) {
                 ServerEventsHandler.tpToHome((EntityPlayerMP) player);
-                player.move(MoverType.PLAYER, TRAConfigs.PortalSettings.x + 3, 3, TRAConfigs.PortalSettings.z + 3);
+                player.move(MoverType.PLAYER, WorldDataFields.portalXC, 3, WorldDataFields.portalZC);
             }
         }
     }

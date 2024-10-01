@@ -19,7 +19,6 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -101,14 +100,24 @@ public class ServerEventsHandler {
     @SubscribeEvent
     public static void WorldEventLoad(WorldEvent.Load e) {
         if (!e.getWorld().isRemote) {
-            WorldData worldData = WorldData.get();
 
             if (e.getWorld().provider.getDimension() == 0) {
                 if (TRAConfigs.PortalSettings.isGen) {
                     if (!WorldDataFields.isPortalGenerate) {
-                        Random rand = new Random(e.getWorld().getSeed());
-                        int x = rand.nextInt(1000) - 500;
-                        int z = rand.nextInt(1000) - 500;
+                        WorldData worldData = WorldData.get();
+
+                        int x;
+                        int z;
+
+                        if (TRAConfigs.PortalSettings.isRandomGenerate) {
+                            Random rand = new Random(e.getWorld().getSeed());
+                            x = rand.nextInt(TRAConfigs.PortalSettings.generationRange) - 500;
+                            z = rand.nextInt(TRAConfigs.PortalSettings.generationRange) - 500;
+                        } else {
+                            x = TRAConfigs.PortalSettings.chunkX;
+                            z = TRAConfigs.PortalSettings.chunkZ;
+                        }
+
                         worldData.saveData.setString("version", Referense.VERSION);
                         worldData.saveData.setInteger(IALGS.ancientPortalXPosKey, x);
                         worldData.saveData.setInteger(IALGS.ancientPortalZPosKey, z);

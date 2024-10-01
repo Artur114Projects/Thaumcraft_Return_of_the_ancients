@@ -1,4 +1,4 @@
-String v = 'v1.3.0-betta'
+String v = 'v1.3.2-betta'
 
 buildscript {
     repositories {

@@ -63,28 +63,34 @@ public class TRAConfigs {
         @Config.LangKey(Referense.MODID + ".cfg.sub.ds.sa")
         public int speedAmplifier = 2;
 
+        @Config.LangKey(Referense.MODID + ".cfg.sub.ds.as")
         public int incineratorActivationSpeed = 8;
      }
 
     public static class PortalSettings {
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.x")
-        @Config.Comment("only affects new worlds")
-        public int x = 5;
+        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.chunkX")
+        @Config.Comment("works if notRandomGenerate = true, only affects new worlds")
+        public int chunkX = 0;
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.z")
-        @Config.Comment("only affects new worlds")
-        public int z = 5;
+        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.chunkZ")
+        @Config.Comment("works if notRandomGenerate = true, only affects new worlds")
+        public int chunkZ = 0;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.portal.y")
         @Config.Comment("only affects new worlds")
         public int y = -31;
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.isgen")
+        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.gr")
+        @Config.Comment("works if notRandomGenerate = false, only affects new worlds")
+        @Config.RangeInt(min = 0)
+        public int generationRange = 1000;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.ig")
         public boolean isGen = true;
 
-        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.tobedrock")
-        public boolean toBedrock = true;
+        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.rg")
+        public boolean isRandomGenerate = true;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.portal.modId")
         @Config.Comment("Here you can specify with items from which mods you can get into the ancient world")

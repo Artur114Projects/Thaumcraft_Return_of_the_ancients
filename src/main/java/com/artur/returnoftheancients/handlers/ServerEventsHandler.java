@@ -100,11 +100,11 @@ public class ServerEventsHandler {
     @SubscribeEvent
     public static void WorldEventLoad(WorldEvent.Load e) {
         if (!e.getWorld().isRemote) {
+            WorldData worldData = WorldData.get();
 
             if (e.getWorld().provider.getDimension() == 0) {
                 if (TRAConfigs.PortalSettings.isGen) {
-                    if (!WorldDataFields.isPortalGenerate) {
-                        WorldData worldData = WorldData.get();
+                    if (!worldData.saveData.getBoolean(IALGS.isAncientPortalGenerateKey)) {
 
                         int x;
                         int z;
@@ -146,7 +146,7 @@ public class ServerEventsHandler {
     public static void checkVersion() {
         WorldData worldData = WorldData.get();
         if (!worldData.saveData.hasKey("version")) {
-            if (WorldDataFields.isPortalGenerate) {
+            if (worldData.saveData.getBoolean(IALGS.isAncientPortalGenerateKey)) {
                 worldData.saveData.setInteger(IALGS.ancientPortalXPosKey, 0);
                 worldData.saveData.setInteger(IALGS.ancientPortalZPosKey, 0);
                 worldData.markDirty();

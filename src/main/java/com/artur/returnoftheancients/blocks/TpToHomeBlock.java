@@ -53,7 +53,7 @@ public class TpToHomeBlock extends BaseBlock {
             EntityPlayer player = (EntityPlayer) entityIn;
             if (player.getServer() != null && player.world != null) {
                 ServerEventsHandler.tpToHome((EntityPlayerMP) player);
-                player.move(MoverType.PLAYER, WorldDataFields.portalXC, 3, WorldDataFields.portalZC);
+                player.move(MoverType.PLAYER, WorldDataFields.portalX, 3, WorldDataFields.portalZ);
             }
         }
     }

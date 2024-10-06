@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.Cus
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.PlayerTimer;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
+import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.blocks.TpToAncientWorldBlock;
@@ -21,6 +22,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -29,6 +31,7 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -37,6 +40,8 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
+import thaumcraft.common.world.aura.AuraChunk;
+import thaumcraft.common.world.aura.AuraHandler;
 
 import java.util.Objects;
 import java.util.Random;
@@ -365,17 +370,7 @@ public class ServerEventsHandler {
     }
 
 
-//    @SubscribeEvent
-//    public void ChunkEventLoad(ChunkEvent.Load e) {
-////        if (e.getWorld().provider.getDimension() == ancient_world_dim_id) {
-////            if (e.getChunk().getPos().equals(new ChunkPos(0, 0))) {
-////                World world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(ancient_world_dim_id);
-////                EntityEldritchGuardian q = new EntityEldritchGuardian(world);
-////                q.setPositionAndUpdate(8, 81, 8);
-////                q.forceSpawn = true;
-////                world.spawnEntity(q);
-////                System.out.println("Eldritch Guardian is gen XYZ " + 8 + " " + 81 + " " + 8);
-////            }
-////        }
-//    }
+    @SubscribeEvent
+    public static void ChunkEventLoad(ChunkEvent.Load e) {
+    }
 }

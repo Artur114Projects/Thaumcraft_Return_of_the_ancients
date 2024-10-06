@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.main;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntry;
+import com.artur.returnoftheancients.generation.terraingen.TerrainHandler;
 import com.artur.returnoftheancients.handlers.RegisterHandler;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.init.InitBiome;
@@ -11,6 +12,7 @@ import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.proxy.CommonProxy;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -32,6 +34,7 @@ public class MainR {
 	
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
+		MinecraftForge.TERRAIN_GEN_BUS.register(new TerrainHandler());
 		RegisterHandler.registerPackets();
 		InitDimensions.registerDimensions();
 		InitBiome.initBiomes();

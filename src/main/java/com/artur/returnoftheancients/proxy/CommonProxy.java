@@ -2,8 +2,10 @@ package com.artur.returnoftheancients.proxy;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.capabilities.PlayerTimer;
+import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
 import com.artur.returnoftheancients.handlers.RegisterHandler;
 
+import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.CraftingRegister;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -24,6 +26,7 @@ public class CommonProxy {
     
     public void init(FMLInitializationEvent event)
     {
+        ((BiomeTaint) InitBiome.TAINT).registerBiomeP2();
         RegisterHandler.registerTCRecipes();
         RegisterHandler.registerResearch();
     }

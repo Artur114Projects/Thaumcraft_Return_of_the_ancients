@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.client;
 
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
+import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -24,6 +25,18 @@ public class ClientEventsHandler {
             e.setRed(0);
             e.setBlue(0);
             e.setGreen(0);
+            return;
+        }
+        if (e.getEntity().getEntityWorld().getBiome(e.getEntity().getPosition()).equals(InitBiome.TAINT)) {
+            e.setRed(59.0F / 255.0F);
+            e.setGreen(25.0F / 255.0F);
+            e.setBlue(76.0F / 255.0F);
+
+            RenderEventHandler.fogFiddled = true;
+            if (RenderEventHandler.fogDuration < 100) {
+                RenderEventHandler.fogDuration += 4;
+            }
+            return;
         }
     }
 

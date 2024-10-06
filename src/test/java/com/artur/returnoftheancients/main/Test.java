@@ -23,42 +23,20 @@ import java.util.concurrent.TimeUnit;
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class Test { //
     public static void main(String[] args) {
-        for (byte k = 0; k != 20; k ++) {
-            int notIgnoringOffset = 25;
-            int ignoringOffset = 25;
-            int baseChange = 50;
-            int offsetBarrier = 100;
-
-            float hurt = 4;
-            int i = 0;
-            int n = 0;
-            Random rand = new Random();
-
-            int to = rand.nextInt(1000000);
-
-            for (int j = 0; j != to; j++) {
-                int offset;
-                if (hurt > 0) {
-                    offset = (int) (ignoringOffset * hurt);
-                } else {
-                    offset = (int) (notIgnoringOffset * hurt);
-                }
-                if (HandlerR.getIgnoringChance(baseChange + offset, rand)) {
-                    hurt += 2.5F;
-                    i++;
-                } else {
-                    n++;
-                    hurt--;
-                }
-            }
-
-            System.out.println(i);
-            System.out.println(n);
-            double if0 = i;
-            double nf = n;
-            System.out.println(if0 / nf);
-            System.out.println();
+        double baseGen = 100;
+        // Начальное значение множителя = 1.0;
+        double genMult = 1.0d;
+        double gen = 1;
+        //Делегируем значение буста на предмет-бустер, таким образом получается 1..n тиров со своими значениями. Главное отрицательными их не сделать ^_^
+        for(int i = 0; i != 2; i++) {
+            //Значение getBoost должно лежать на (0; 1].
+            gen *= 0.8;
+            // Подобная формула приведёт к тому, что значение genMult будет 0 < genBoost <= 1.
         }
+
+        //Поэтому мы его прибавим к 1 и домножим на какое-то базовое значение.
+        //Ну и обработаем слувай, когда улучшений нет, конечно же.
+        System.out.println(baseGen * (1 + gen));
     }
 
     protected static int packBytes(byte b1, byte b2, byte b3, byte b4) {

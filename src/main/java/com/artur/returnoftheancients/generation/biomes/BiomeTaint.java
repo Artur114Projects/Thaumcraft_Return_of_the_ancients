@@ -22,6 +22,8 @@ public class BiomeTaint extends BiomeBase {
 
     TaintType type;
 
+
+    // TODO: Добавить больше существ в spawnableCreatureList
     public BiomeTaint(String registryName, BiomeProperties properties, EBiome eBiome, TaintType type) {
         super(registryName, properties, eBiome);
         this.spawnableCreatureList.clear();
@@ -46,15 +48,18 @@ public class BiomeTaint extends BiomeBase {
     public void decorate(World worldIn, Random rand, BlockPos pos) {
         super.decorate(worldIn, rand, pos);
         if (this.type == TaintType.EDGE) {
-            if (pos.getY() >= 74) {
-                worldIn.setBlockState(pos, Blocks.SNOW_LAYER.getDefaultState());
-            }
-        } else if (this.type == TaintType.NORMAL) {
-            if (!worldIn.isRemote) {
-                if (!TaintHelper.isNearTaintSeed(worldIn, pos)) {
-                    ItemMonsterPlacer.spawnCreature(worldIn, EntityList.getKey(EntityTaintSeedPrime.class), pos.getX(), pos.getY() + 1, pos.getZ());
+            for (int x = 0; x != 16; x++) {
+                for (int z = 0; z != 16; z++) {
+                    BlockPos currentPos = pos.add(x, 0, z);
+
+                    int y = HandlerR.calculateGenerationHeight(worldIn, currentPos.getX(), currentPos.getZ());
+
+                    if (y >= 100) {
+                        worldIn.setBlockState(currentPos.add(0, y, 0), Blocks.SNOW_LAYER.getDefaultState());
+                    }
                 }
             }
+        } else if (this.type == TaintType.NORMAL) {
         }
     }
 
@@ -81,6 +86,11 @@ public class BiomeTaint extends BiomeBase {
     @Override
     public int getFoliageColorAtPos(BlockPos pos) {
         return this.type == TaintType.EDGE ? super.getFoliageColorAtPos(pos) : 0x563367;
+    }
+
+    @Override
+    public int getSkyColorByTemp(float currentTemperature) {
+        return 0x563367;
     }
 
     @Override

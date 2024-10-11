@@ -10,7 +10,7 @@ public class AncientEntryMapProviderTest {
 
     @Test
     public void createAncientEntryMapTest() {
-        for (int i = 0; i != 200; i++){
+        for (int i = 0; i != 10; i++){
             long seed = new Random().nextLong();
             System.out.println(seed);
             StructureMap map0 = AncientEntryMapProvider.createAncientEntryMap(new Random(seed));

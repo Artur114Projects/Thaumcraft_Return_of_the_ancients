@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
+import com.artur.returnoftheancients.transform.util.MappingsProcessor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.util.math.BlockPos;
@@ -23,20 +24,6 @@ import java.util.concurrent.TimeUnit;
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class Test { //
     public static void main(String[] args) {
-        double baseGen = 100;
-        // Начальное значение множителя = 1.0;
-        double genMult = 1.0d;
-        double gen = 1;
-        //Делегируем значение буста на предмет-бустер, таким образом получается 1..n тиров со своими значениями. Главное отрицательными их не сделать ^_^
-        for(int i = 0; i != 2; i++) {
-            //Значение getBoost должно лежать на (0; 1].
-            gen *= 0.8;
-            // Подобная формула приведёт к тому, что значение genMult будет 0 < genBoost <= 1.
-        }
-
-        //Поэтому мы его прибавим к 1 и домножим на какое-то базовое значение.
-        //Ну и обработаем слувай, когда улучшений нет, конечно же.
-        System.out.println(baseGen * (1 + gen));
     }
 
     protected static int packBytes(byte b1, byte b2, byte b3, byte b4) {

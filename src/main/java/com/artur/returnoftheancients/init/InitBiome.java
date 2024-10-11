@@ -19,8 +19,8 @@ public class InitBiome {
 
     public static final List<Biome> BIOMES = new ArrayList<>();
 
-    public static final Biome TAINT_EDGE = new BiomeTaint("taint_edge_r", new Biome.BiomeProperties("Taint edge").setBaseHeight(2.5F).setRainfall(0.7F).setHeightVariation(0.1F).setSnowEnabled(), EBiome.TAINT_EDGE, BiomeTaint.TaintType.EDGE);
-    public static final Biome TAINT = new BiomeTaint("taint_r", new Biome.BiomeProperties("Taint").setWaterColor(0x563367).setBaseHeight(0.2F).setRainfall(1.0F).setHeightVariation(0.1F), EBiome.TAINT, BiomeTaint.TaintType.NORMAL);
+    public static final Biome TAINT_EDGE = new BiomeTaint("taint_edge_r", new Biome.BiomeProperties("Taint edge").setBaseHeight(3.0F).setRainfall(0.7F).setHeightVariation(0.1F).setSnowEnabled(), EBiome.TAINT_EDGE, BiomeTaint.TaintType.EDGE);
+    public static final Biome TAINT = new BiomeTaint("taint_r", new Biome.BiomeProperties("Taint").setWaterColor(0x563367).setBaseHeight(0.1F).setRainfall(1.0F).setHeightVariation(0.0F), EBiome.TAINT, BiomeTaint.TaintType.NORMAL);
     public static final Biome ANCIENT_LABYRINTH = new BiomeAncientLabyrinth("ancient_entry", new Biome.BiomeProperties("Ancient entry").setRainDisabled().setWaterColor(0), EBiome.ANCIENT);
 
     public static void initBiomes() {

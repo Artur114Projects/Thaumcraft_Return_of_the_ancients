@@ -19,7 +19,7 @@ public class ClientEventsHandler {
     protected static final String startUpNBT = "startUpNBT";
     private static byte cpt = 0;
 
-
+    // TODO: Сделать что нибуть с туманом
     @SubscribeEvent
     public static void fogSetColor(EntityViewRenderEvent.FogColors e) {
         if (e.getEntity().getEntityWorld().provider.getDimension() == ancient_world_dim_id) {

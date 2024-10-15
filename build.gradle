@@ -11,12 +11,11 @@ buildscript {
 }
         
 apply plugin: 'net.minecraftforge.gradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 version = v
-group = 'com.artur.returnoftheancients' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'com.artur.returnoftheancients'
 archivesBaseName = 'Y_Return of the ancients'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
@@ -46,21 +45,15 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
+            jvmArg '-Dfml.coreMods.load=com.artur.returnoftheancients.main.FMLLoadingPluginTRA'
         }
 
         server {
-
-            // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
+            jvmArg '-Dfml.coreMods.load=com.artur.returnoftheancients.main.FMLLoadingPluginTRA'
         }
         test {
             workingDirectory project.file('run')
@@ -140,4 +133,6 @@ dependencies {
     implementation 'org.jetbrains:annotations:24.0.0'
 }
 
-sourceSets { main { output.resourcesDir = output.classesDir } }
+sourceSets {
+    main { output.resourcesDir = output.classesDir }
+}

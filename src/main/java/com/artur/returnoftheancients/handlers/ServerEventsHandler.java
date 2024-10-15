@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.Cus
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.PlayerTimer;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
+import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -22,7 +23,10 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -40,8 +44,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
-import thaumcraft.common.world.aura.AuraChunk;
-import thaumcraft.common.world.aura.AuraHandler;
 
 import java.util.Objects;
 import java.util.Random;
@@ -366,6 +368,40 @@ public class ServerEventsHandler {
     public static void attachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof EntityPlayer) {
             event.addCapability(PlayerTimer.Provider.NAME, new PlayerTimer.Provider());
+        }
+    }
+
+    @SubscribeEvent
+    public static void tick(TickEvent.WorldTickEvent e) {
+        if (!e.world.isRemote) {
+            if (e.world.provider.getDimension() == 0) {
+                int taintChunks = 0;
+                for (Chunk chunk : ((WorldServer) e.world).getChunkProvider().getLoadedChunks()) {
+                    if (chunk == null) {
+                        continue;
+                    }
+
+                    int chunkArea = 16;
+                    byte[] biomes = chunk.getBiomeArray();
+                    boolean ret = false;
+
+                    for (int i = 0; i < chunkArea; ++i) {
+                        for (int j = 0; j < chunkArea; ++j) {
+                            int k = biomes[j + i * chunkArea];
+                            if (BiomeDictionary.hasType(Biome.getBiomeForId(k & 255), InitBiome.TAINT_TYPE)) {
+                                BiomeTaint.chunkHasBiomeUpdate(chunk);
+                                taintChunks++;
+                                ret = true;
+                                break;
+                            }
+                        }
+                        if (ret) {
+                            break;
+                        }
+                    }
+                }
+                BiomeTaint.taintChunks = taintChunks;
+            }
         }
     }
 

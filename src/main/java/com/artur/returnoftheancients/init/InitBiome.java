@@ -14,6 +14,9 @@ import thaumcraft.common.world.biomes.BiomeHandler;
 
 public class InitBiome {
 
+    /**
+     * DON'T USE if you biome not instansof BiomeTaint
+     */
     public static final BiomeDictionary.Type TAINT_TYPE = BiomeDictionary.Type.getType("TAINT_R");
     public static final BiomeDictionary.Type TAINT_TYPE_EDGE = BiomeDictionary.Type.getType("TAINT_EDGE_R", BiomeDictionary.Type.COLD);
 

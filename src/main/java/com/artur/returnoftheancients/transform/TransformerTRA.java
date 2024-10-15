@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.transform;
 
+import com.artur.returnoftheancients.transform.transformers.BiomeSearchWorkerTransformer;
 import com.artur.returnoftheancients.transform.transformers.ITransformer;
 import com.artur.returnoftheancients.transform.transformers.TaintHelperTransformer;
 import org.objectweb.asm.*;
@@ -14,9 +15,10 @@ public class TransformerTRA implements IClassTransformer {
 
     static {
         TRANSFORMERS.add(new TaintHelperTransformer());
+        TRANSFORMERS.add(new BiomeSearchWorkerTransformer());
     }
 
-
+    // TODO: Пропатчить BiomeSearchWorker.doWork()
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         for (ITransformer transformer : TRANSFORMERS) {

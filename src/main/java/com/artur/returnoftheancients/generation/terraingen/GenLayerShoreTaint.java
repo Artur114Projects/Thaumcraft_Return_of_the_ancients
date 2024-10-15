@@ -20,6 +20,7 @@ public class GenLayerShoreTaint extends GenLayer {
 
     public int[] getInts(int areaX, int areaY, int areaWidth, int areaHeight) {
         int[] aint = this.parent.getInts(areaX - 1, areaY - 1, areaWidth + 2, areaHeight + 2);
+        int[] aint2P = this.parent.getInts(areaX - 2, areaY - 2, areaWidth + 4, areaHeight + 4);
         int[] aint1 = IntCache.getIntCache(areaWidth * areaHeight);
 
         for (int i = 0; i < areaHeight; ++i) {
@@ -70,18 +71,23 @@ public class GenLayerShoreTaint extends GenLayer {
                                 } else {
                                     aint1[j + i * areaWidth] = Biome.getIdForBiome(Biomes.BEACH);
                                 }
-                            } else { // Данный код выполняется для наших биомов, которым нужна граница
-                                int l1 = aint[j + 1 + (i + 0) * (areaWidth + 2)];
-                                int k1 = aint[j + 2 + (i + 1) * (areaWidth + 2)];
-                                int j1 = aint[j + 0 + (i + 1) * (areaWidth + 2)];
-                                int i1 = aint[j + 1 + (i + 2) * (areaWidth + 2)];
+                            } else {
+                                int l1 = aint2P[j + 2 + (i + 1) * (areaWidth + 4)];
+                                int k1 = aint2P[j + 3 + (i + 2) * (areaWidth + 4)];
+                                int j1 = aint2P[j + 1 + (i + 2) * (areaWidth + 4)];
+                                int i1 = aint2P[j + 2 + (i + 3) * (areaWidth + 4)];
 
-                                int l2 = aint[j + 2 + (i + 0) * (areaWidth + 2)];
-                                int i2 = aint[j + 3 + (i + 1) * (areaWidth + 2)];
-                                int j2 = aint[j + 0 + (i + 2) * (areaWidth + 2)];
-                                int k2 = aint[j + 1 + (i + 3) * (areaWidth + 2)];
+                                int l2 = aint2P[j + 3 + (i + 1) * (areaWidth + 4)];
+                                int i2 = aint2P[j + 4 + (i + 2) * (areaWidth + 4)];
+                                int j2 = aint2P[j + 1 + (i + 3) * (areaWidth + 4)];
+                                int k2 = aint2P[j + 0 + (i + 2) * (areaWidth + 4)];
 
-                                if (isTaint(l1) && isTaint(i1) && isTaint(j1) && isTaint(k1) && isTaint(l2) && isTaint(i2) && isTaint(j2) && isTaint(k2)) {
+                                int k3 = aint2P[j + 2 + (i + 4) * (areaWidth + 4)];
+                                int l3 = aint2P[j + 2 + (i + 0) * (areaWidth + 4)];
+                                int i3 = aint2P[j + 1 + (i + 1) * (areaWidth + 4)];
+                                int j3 = aint2P[j + 3 + (i + 3) * (areaWidth + 4)];
+
+                                if (isTaint(l1) && isTaint(i1) && isTaint(j1) && isTaint(k1) && isTaint(l2) && isTaint(i2) && isTaint(j2) && isTaint(k2) && isTaint(l3) && isTaint(i3) && isTaint(j3) && isTaint(k3)) {
                                     aint1[j + i * areaWidth] = k;
                                 } else {
                                     aint1[j + i * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_EDGE);
@@ -109,6 +115,7 @@ public class GenLayerShoreTaint extends GenLayer {
                 } else {
                     this.replaceIfNeighborOcean(aint, aint1, j, i, areaWidth, k, Biome.getIdForBiome(Biomes.STONE_BEACH));
                 }
+
             }
         }
 

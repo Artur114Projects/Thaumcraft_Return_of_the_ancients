@@ -27,6 +27,7 @@ public abstract class GenLayerTaint extends GenLayer {
         super(seed);
     }
 
+    // i == x, j == z
     public static GenLayer[] initializeAllBiomeGenerators(long seed, WorldType worldType) {
         GenLayer genlayer = new GenLayerIsland(1L);
         genlayer = new GenLayerFuzzyZoom(2000L, genlayer);

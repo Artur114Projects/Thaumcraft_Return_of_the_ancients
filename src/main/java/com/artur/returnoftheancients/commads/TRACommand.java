@@ -56,8 +56,10 @@ public class TRACommand extends CommandBase {
                 }
                 break;
             case "tptoportal":
+            if (player.isCreative()) {
                 player.connection.setPlayerLocation(WorldDataFields.portalX, 100, WorldDataFields.portalZ, player.rotationYaw, player.rotationPitch);
-                break;
+            }
+            break;
             default:
                 player.sendMessage(new TextComponentString(TextFormatting.RED + "Usage: " + USAGE));
                 break;

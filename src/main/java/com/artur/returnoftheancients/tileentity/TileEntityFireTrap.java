@@ -1,21 +1,13 @@
 package com.artur.returnoftheancients.tileentity;
 
-import com.artur.returnoftheancients.blocks.FireTrap;
-import com.artur.returnoftheancients.client.TrapParticleFlame;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.client.particle.RotateParticleFlame;
+import com.artur.returnoftheancients.client.particle.TrapParticleFlame;
 import com.artur.returnoftheancients.init.InitSounds;
-import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockFurnace;
-import net.minecraft.block.BlockGlowstone;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -24,18 +16,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.artur.returnoftheancients.blocks.FireTrap.ACTIVE;
 
 public class TileEntityFireTrap extends TileEntity implements ITickable {
     private AxisAlignedBB detectionBox = null;
@@ -171,28 +158,27 @@ public class TileEntityFireTrap extends TileEntity implements ITickable {
     @SideOnly(Side.CLIENT)
     public static void spawnParticle(World world, BlockPos pos) {
         for (int i = 0; i != 4; i++) {
-            spawnCustomParticle(world, pos.getX() + 0.7, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.1 + i / 20D, 0);
-            spawnCustomParticle(world, pos.getX() + 0.3, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.1 + i / 20D, 0);
-            spawnCustomParticle(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.3, 0, 0.1 + i / 20D, 0);
-            spawnCustomParticle(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.7, 0, 0.1 + i / 20D, 0);
-            if (world.rand.nextInt(4) == 0) {
-                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, pos.getX() + 0.7, pos.getY() + 3 - (world.rand.nextDouble() * 2), pos.getZ() + 0.5, 0, 0.1 + i / 20.0D, 0);
-                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, pos.getX() + 0.3, pos.getY() + 3 - (world.rand.nextDouble() * 2), pos.getZ() + 0.5, 0, 0.1 + i / 20.0D, 0);
-                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, pos.getX() + 0.5, pos.getY() + 3 - (world.rand.nextDouble() * 2), pos.getZ() + 0.3, 0, 0.1 + i / 20.0D, 0);
-                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, pos.getX() + 0.5, pos.getY() + 3 - (world.rand.nextDouble() * 2), pos.getZ() + 0.7, 0, 0.1 + i / 20.0D, 0);
-            }
+            spawnCustomParticle(world, pos.getX() + 0.7, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.6 + i / 20D, 0);
+            spawnCustomParticle(world, pos.getX() + 0.3, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.6 + i / 20D, 0);
+            spawnCustomParticle(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.3, 0, 0.6 + i / 20D, 0);
+            spawnCustomParticle(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.7, 0, 0.6 + i / 20D, 0);
         }
         for (int i = 0; i != 6; i++) {
-            spawnCustomParticle(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.1 + i / 20D, 0);
-            if (world.rand.nextBoolean()) {
-                world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, pos.getX() + 0.5, pos.getY() + 3 - (world.rand.nextDouble() * 2), pos.getZ() + 0.5, 0, 0.1 + i / 20.0D, 0);
-            }
+            spawnCustomParticleTM(world, pos.getX(), pos.getY(), pos.getZ(), 0.5D);
+            spawnCustomParticleTM(world, pos.getX(), pos.getY() + 0.8, pos.getZ(), 1.0D);
+            spawnCustomParticleTM(world, pos.getX(), pos.getY() + 1.4, pos.getZ(), 0.5D);
+            spawnCustomParticle(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.6 + i / 20D, 0);
         }
     }
 
     @SideOnly(Side.CLIENT)
     public static void spawnCustomParticle(World world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
         Minecraft.getMinecraft().effectRenderer.addEffect(new TrapParticleFlame(world, x, y, z, xSpeed, ySpeed, zSpeed));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void spawnCustomParticleTM(World world, double x, double y, double z, double radius) {
+        Minecraft.getMinecraft().effectRenderer.addEffect(new RotateParticleFlame(world, x, y + 1.5, z, radius, 0.6 + (world.rand.nextDouble() / 5)));
     }
 
     @Override

@@ -7,7 +7,7 @@ import org.objectweb.asm.*;
 
 
 // TODO: Добавить трансформер для spreadFibres чтобы он не заражал TAINT_EDGE.
-public class TaintHelperTransformer implements ITransformer {
+public class TransformerTaintHelper implements ITransformer {
 
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         ClassReader classReader = new ClassReader(basicClass);
@@ -18,7 +18,7 @@ public class TaintHelperTransformer implements ITransformer {
             public MethodVisitor visitMethod(int asses, String name, String desc, String signature, String[] exceptions) {
                 MethodVisitor mv = super.visitMethod(asses, name, desc, signature, exceptions);
                 if (name.equals("isNearTaintSeed")) {
-                    return new TaintHelperTransformer.VisitorIsNearTaintSeed(mv);
+                    return new TransformerTaintHelper.VisitorIsNearTaintSeed(mv);
                 }
 
                 return mv;
@@ -45,7 +45,7 @@ public class TaintHelperTransformer implements ITransformer {
             mv.visitVarInsn(Opcodes.ALOAD, 0);
             mv.visitVarInsn(Opcodes.ALOAD, 1);
 
-            mv.visitMethodInsn(Opcodes.INVOKESTATIC, "com/artur/returnoftheancients/transform/transformers/TaintHelperTransformer", "isTaintBiome", "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)Z", false);
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, HANDLER_PATH, "isTaintBiome", "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)Z", false);
 
             Label continueLabel = new Label();
             mv.visitJumpInsn(Opcodes.IFEQ, continueLabel);
@@ -57,11 +57,5 @@ public class TaintHelperTransformer implements ITransformer {
         }
     }
 
-    public static boolean isTaintBiome(World world, BlockPos pos) {
-        return world.getBiome(pos).equals(InitBiome.TAINT);
-    }
 
-    public static boolean isTaintEdgeBiome(World world, BlockPos pos) {
-        return world.getBiome(pos).equals(InitBiome.TAINT_EDGE);
-    }
 }

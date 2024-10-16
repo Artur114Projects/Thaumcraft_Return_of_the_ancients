@@ -1,14 +1,11 @@
 package com.artur.returnoftheancients.transform.transformers;
 
 import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
-import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.chaosthedude.naturescompass.util.BiomeSearchWorker;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.objectweb.asm.*;
 
-public class BiomeSearchWorkerTransformer implements ITransformer {
+public class TransformerBiomeSearchWorker implements ITransformer {
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         ClassReader classReader = new ClassReader(basicClass);
@@ -45,7 +42,7 @@ public class BiomeSearchWorkerTransformer implements ITransformer {
         public void visitInsn(int opcode) {
             super.visitInsn(opcode);
             mv.visitVarInsn(Opcodes.ALOAD, 0);
-            mv.visitMethodInsn(Opcodes.INVOKESTATIC, "com/artur/returnoftheancients/transform/transformers/BiomeSearchWorkerTransformer", "isTaintBiome", "(Lcom/chaosthedude/naturescompass/util/BiomeSearchWorker;)Z", false);
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, HANDLER_PATH, "isTaintBiome", "(Lcom/chaosthedude/naturescompass/util/BiomeSearchWorker;)Z", false);
 
             Label continueLabel = new Label();
             mv.visitJumpInsn(Opcodes.IFEQ, continueLabel);
@@ -62,7 +59,4 @@ public class BiomeSearchWorkerTransformer implements ITransformer {
         }
     }
 
-    public static boolean isTaintBiome(BiomeSearchWorker bsw) {
-        return !TRAConfigs.Any.debugMode && bsw.biome instanceof BiomeTaint;
-    }
 }

@@ -66,9 +66,10 @@ public class BiomeTaint extends BiomeBase {
 
 
 
+    // TODO: Вывести значения в конфиги
     public static void chunkHasBiomeUpdate(Chunk chunk) {
         World world = chunk.getWorld();
-        if (world.rand.nextInt((24 * taintChunks) + 2001) == 0) {
+        if (world.rand.nextInt((28 * taintChunks) + 2001) == 0) {
             int chunkArea = 16;
             ArrayList<Short> taintBiomeArea = new ArrayList<>();
             byte[] biomes = chunk.getBiomeArray();

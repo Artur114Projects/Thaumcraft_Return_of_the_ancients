@@ -1,19 +1,13 @@
 package com.artur.returnoftheancients.items;
 
 
-import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructure;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.TRAStructureEBS;
-import com.artur.returnoftheancients.ancientworldgeneration.util.Team;
-import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
-import com.artur.returnoftheancients.capabilities.TRACapabilities;
-import com.artur.returnoftheancients.client.CameraShake;
-import com.artur.returnoftheancients.generation.generators.GenStructure;
+import com.artur.returnoftheancients.client.particle.RotateParticleFlame;
+import com.artur.returnoftheancients.client.particle.TrapParticleFlame;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,8 +16,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,36 +44,29 @@ public class ItemGavno extends BaseItem{
 //			NBTTagCompound nbt = new NBTTagCompound();
 //			nbt.setString("playSound", InitSounds.RUI_DEAD.NAM);
 //			MainR.NETWORK.sendTo(new ClientPacketMisc(nbt),(EntityPlayerMP)  player);
-			if (player.isSneaking()) {
-				Team.clear();
-				AncientWorld.reload();
-			} else {
-				AncientWorld.unload();
-				player.sendMessage(new TextComponentString("UNLOAD"));
-				Team.clear();
-			}
-			IPlayerTimerCapability timer = TRACapabilities.getTimer(player);
-			if (timer.hasTimer("recovery")) {
-				player.sendMessage(new TextComponentString("time:" + timer.getTime("recovery")));
-			}
-			GenStructure.generateStructure(worldIn, pos.getX() - 3, pos.getY() - 30, pos.getZ() - 2, "ancient_exit");
-
+//			if (player.isSneaking()) {
+//				Team.clear();
+//				AncientWorld.reload();
+//			} else {
+//				AncientWorld.unload();
+//				player.sendMessage(new TextComponentString("UNLOAD"));
+//				Team.clear();
+//			}
+//			IPlayerTimerCapability timer = TRACapabilities.getTimer(player);
+//			if (timer.hasTimer("recovery")) {
+//				player.sendMessage(new TextComponentString("time:" + timer.getTime("recovery")));
+//			}
+//			GenStructure.generateStructure(worldIn, pos.getX() - 3, pos.getY() - 30, pos.getZ() - 2, "ancient_exit");
+//			System.out.println(worldIn.getBlockState(pos));
+//			EntityLightningBolt lightningBolt = new EntityLightningBolt(worldIn, pos.getX(), pos.getY(), pos.getZ(), false);
+//			worldIn.addWeatherEffect(lightningBolt);
 		}
 		if (worldIn.isRemote) {
-			CameraShake.startShake(4);
-			for (int i = 0; i != 20; i++) {
-				for (int j = 0; j != 1; j++) {
-					ParticleManager particleManager = Minecraft.getMinecraft().effectRenderer;
-					particleManager.spawnEffectParticle(
-							EnumParticleTypes.BLOCK_CRACK.getParticleID(),
-							pos.getX() + worldIn.rand.nextDouble(),
-							pos.getY() + worldIn.rand.nextDouble(),
-							pos.getZ() + worldIn.rand.nextDouble(),
-							0.0D, 0.1D, 0.0D,
-							Block.getStateId(worldIn.getBlockState(pos))
-					);
-				}
+			for (int i = 0; i != 10; i++) {
+//				spawnCustomParticleTM(worldIn, pos.getX() + 1.5, pos.getY() + 1.5, pos.getZ() + 0.6);
+				spawnCustomParticleTM(worldIn, pos.getX(), pos.getY(), pos.getZ(), 1);
 			}
+//			spawnCustomParticle(worldIn, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.1, 0);
 		}
 		if (!worldIn.isRemote) {
 //			BlockPos playerPos = player.getPosition();
@@ -98,6 +86,16 @@ public class ItemGavno extends BaseItem{
 		}
 		System.out.println(worldIn.playerEntities);
 		return EnumActionResult.SUCCESS;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static void spawnCustomParticleTM(World world, double x, double y, double z, double radius) {
+		Minecraft.getMinecraft().effectRenderer.addEffect(new RotateParticleFlame(world, x, y + 1.5, z, radius, 1.0 + (world.rand.nextDouble() / 5)));
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static void spawnCustomParticle(World world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+		Minecraft.getMinecraft().effectRenderer.addEffect(new TrapParticleFlame(world, x, y, z, xSpeed, ySpeed, zSpeed));
 	}
 
 	@Override

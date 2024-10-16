@@ -21,6 +21,7 @@ public class MappingsProcessor {
 
     public static void load() {
         try {
+            System.out.println("Loading mappings start!");
             loadMethods();
         } catch (IOException e) {
             e.printStackTrace();
@@ -29,6 +30,11 @@ public class MappingsProcessor {
 
     private static void loadMethods() throws IOException {
         String resourcePath = "/assets/returnoftheancients/transform/mappings/methods.csv";
+        loadCSVMappings(methods, resourcePath);
+        System.out.println("Loading methods complete");
+    }
+
+    private static void loadCSVMappings(Map<String, String> map, String resourcePath) throws IOException {
         InputStream stream = MinecraftServer.class.getResourceAsStream(resourcePath);
         if (stream == null) {
             new NullPointerException().printStackTrace();
@@ -38,7 +44,7 @@ public class MappingsProcessor {
         String line;
         while ((line = reader.readLine()) != null) {
             String[] values = line.split(",");
-            methods.put(values[1], values[0]);
+            map.put(values[1], values[0]);
         }
     }
 

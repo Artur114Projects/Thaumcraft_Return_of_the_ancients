@@ -118,8 +118,8 @@ public class ServerEventsHandler {
 
                         if (TRAConfigs.PortalSettings.isRandomGenerate) {
                             Random rand = new Random(e.getWorld().getSeed());
-                            x = rand.nextInt(TRAConfigs.PortalSettings.generationRange) - 500;
-                            z = rand.nextInt(TRAConfigs.PortalSettings.generationRange) - 500;
+                            x = rand.nextInt(TRAConfigs.PortalSettings.generationRange) - TRAConfigs.PortalSettings.generationRange / 2;
+                            z = rand.nextInt(TRAConfigs.PortalSettings.generationRange) - TRAConfigs.PortalSettings.generationRange / 2;
                         } else {
                             x = TRAConfigs.PortalSettings.chunkX;
                             z = TRAConfigs.PortalSettings.chunkZ;
@@ -162,6 +162,13 @@ public class ServerEventsHandler {
                 System.out.println("new version!");
             }
             worldData.saveData.setString("version", Referense.VERSION);
+            return;
+        }
+        if (!worldData.saveData.getString("version").equals(Referense.VERSION)) {
+            newVersion = true;
+            System.out.println("new version!");
+            worldData.saveData.setString("version", Referense.VERSION);
+            worldData.markDirty();
         }
     }
 
@@ -298,7 +305,7 @@ public class ServerEventsHandler {
                 if (TRAConfigs.AncientWorldSettings.noPeaceful) {
                     if (difficultyId == 0) {
                         if (e.player instanceof EntityPlayerMP) {
-                            HandlerR.sendMessageString((EntityPlayerMP) e.player, "PEACEFUL DIFFICULTY ???");
+//                            HandlerR.sendMessageString((EntityPlayerMP) e.player, "PEACEFUL DIFFICULTY ???");
                             tpToHome((EntityPlayerMP) e.player);
                         }
                     }
@@ -359,8 +366,15 @@ public class ServerEventsHandler {
 
     @SubscribeEvent
     public void canDeSpawn(LivingSpawnEvent.AllowDespawn event) {
-        if (event.getEntity().dimension == ancient_world_dim_id) {
-            event.setResult(Event.Result.DENY);
+//        if (event.getEntity().dimension == ancient_world_dim_id) {
+//            event.setResult(Event.Result.DENY);
+//        }
+    }
+
+    @SubscribeEvent
+    public static void canSpawn(LivingSpawnEvent.CheckSpawn e) {
+        if (e.getEntity().dimension == ancient_world_dim_id && e.getEntity().world.canSeeSky(e.getEntity().getPosition())) {
+            e.setResult(Event.Result.DENY);
         }
     }
 

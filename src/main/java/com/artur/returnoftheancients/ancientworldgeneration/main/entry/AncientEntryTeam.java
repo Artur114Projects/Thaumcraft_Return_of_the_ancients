@@ -109,7 +109,6 @@ public class AncientEntryTeam extends AncientEntry {
         });
         Entity boss = getRandomBoss(world, bossPos);
         bossUUID = boss.getUniqueID();
-        world.spawnEntity(boss);
         genBossDoors(world, bossPos);
     }
 

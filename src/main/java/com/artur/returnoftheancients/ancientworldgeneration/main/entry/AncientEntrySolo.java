@@ -154,7 +154,6 @@ public class AncientEntrySolo extends AncientEntry {
         HandlerR.researchAndSendMessage((EntityPlayerMP) player, "m_BOSS", Referense.MODID + ".text.boss");
         Entity boss = getRandomBoss(world, bossPos);
         bossUUID = boss.getUniqueID();
-        world.spawnEntity(boss);
         genBossDoors(world, bossPos);
     }
 

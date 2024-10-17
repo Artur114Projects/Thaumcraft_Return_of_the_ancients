@@ -45,6 +45,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 
@@ -385,10 +386,14 @@ public class ServerEventsHandler {
         }
     }
 
+    private static byte bTick = 0;
+
     @SubscribeEvent
     public static void tick(TickEvent.WorldTickEvent e) {
         if (!e.world.isRemote) {
-            if (e.world.provider.getDimension() == 0) {
+            bTick++;
+            if (e.world.provider.getDimension() == 0 && bTick >= 20) {
+                bTick = 0;
                 int taintChunks = 0;
                 for (Chunk chunk : ((WorldServer) e.world).getChunkProvider().getLoadedChunks()) {
                     if (chunk == null) {
@@ -402,7 +407,7 @@ public class ServerEventsHandler {
                     for (int i = 0; i < chunkArea; ++i) {
                         for (int j = 0; j < chunkArea; ++j) {
                             int k = biomes[j + i * chunkArea];
-                            if (BiomeDictionary.hasType(Biome.getBiomeForId(k & 255), InitBiome.TAINT_TYPE)) {
+                            if (BiomeDictionary.hasType(Biome.getBiomeForId(k & 255), InitBiome.TAINT_TYPE_L)) {
                                 BiomeTaint.chunkHasBiomeUpdate(chunk);
                                 taintChunks++;
                                 ret = true;

@@ -1,14 +1,7 @@
 package com.artur.returnoftheancients.transform.transformers;
 
-import com.artur.returnoftheancients.transform.util.MappingsProcessor;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
 import org.objectweb.asm.*;
-import thaumcraft.common.blocks.world.taint.BlockTaint;
-
-import java.util.Random;
 
 public class TransformerBlockTaint implements ITransformer {
     @Override

@@ -4,6 +4,7 @@ import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.chaosthedude.naturescompass.util.BiomeSearchWorker;
+import org.objectweb.asm.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -23,12 +24,31 @@ public class TransformerHandler {
 
     public static void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
         if (world.isRemote) {
-//            System.out.println("ppppppppppppppppppppppppppp");
+            System.out.println("ppppppppppppppppppppppppppp");
             world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, pos.getX() + rand.nextDouble(), pos.getY() + rand.nextDouble(), pos.getZ() + rand.nextDouble(), 0, 0.1, 0);
         }
     }
 
+
     public static boolean isTaintBiome(BiomeSearchWorker bsw) {
         return !TRAConfigs.Any.debugMode && bsw.biome instanceof BiomeTaint;
+    }
+
+    public static class ReturnFloatVisitor extends MethodVisitor {
+
+        private final float ret;
+
+        public ReturnFloatVisitor(MethodVisitor methodVisitor, float value) {
+            super(Opcodes.ASM5, methodVisitor);
+            ret = value;
+        }
+
+        @Override
+        public void visitCode() {
+            super.visitCode();
+
+            mv.visitLdcInsn(ret);
+            mv.visitInsn(Opcodes.FRETURN);
+        }
     }
 }

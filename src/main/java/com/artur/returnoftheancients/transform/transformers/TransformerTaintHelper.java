@@ -1,8 +1,6 @@
 package com.artur.returnoftheancients.transform.transformers;
 
-import com.artur.returnoftheancients.init.InitBiome;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
 import org.objectweb.asm.*;
 
 

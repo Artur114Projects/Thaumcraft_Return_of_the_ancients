@@ -29,13 +29,13 @@ public class ClientEventsHandler {
             return;
         }
         if (e.getEntity().getEntityWorld().getBiome(e.getEntity().getPosition()).equals(InitBiome.TAINT)) {
-            e.setRed(59.0F / 255.0F);
-            e.setGreen(25.0F / 255.0F);
-            e.setBlue(76.0F / 255.0F);
+            e.setRed(28.0F / 255.0F);
+            e.setGreen(17.0F / 255.0F);
+            e.setBlue(34.0F / 255.0F);
 
             RenderEventHandler.fogFiddled = true;
-            if (RenderEventHandler.fogDuration < 100) {
-                RenderEventHandler.fogDuration += 4;
+            if (RenderEventHandler.fogDuration < 60) {
+                RenderEventHandler.fogDuration += 2;
             }
             return;
         }

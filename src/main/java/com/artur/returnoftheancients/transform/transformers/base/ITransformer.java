@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.transform.transformers;
+package com.artur.returnoftheancients.transform.transformers.base;
 
 public interface ITransformer {
 

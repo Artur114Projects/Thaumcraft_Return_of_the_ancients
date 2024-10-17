@@ -37,7 +37,7 @@ public class TrapParticleFlame extends ParticleFlame {
 
         if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
             motionX = rand.nextInt(2) == 0 ? rand.nextDouble() / 10 : (rand.nextDouble() / 10) * -1;
-            motionY = -motionY / 100;
+            motionY = 0;
             motionZ = rand.nextInt(2) == 0 ? rand.nextDouble() / 10 : (rand.nextDouble() / 10) * -1;
         }
     }

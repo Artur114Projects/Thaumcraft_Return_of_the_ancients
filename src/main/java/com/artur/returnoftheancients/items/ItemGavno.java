@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -62,9 +63,11 @@ public class ItemGavno extends BaseItem{
 //			worldIn.addWeatherEffect(lightningBolt);
 		}
 		if (worldIn.isRemote) {
+			Vec3d vec3d = player.getLook(1.0F);
 			for (int i = 0; i != 10; i++) {
+				spawnCustomParticle(worldIn, player.posX, player.posY + 1, player.posZ, vec3d.x + (i / 20D) / vec3d.x, vec3d.y + (i / 20D) / vec3d.y, vec3d.z + (i / 20D) / vec3d.z);
 //				spawnCustomParticleTM(worldIn, pos.getX() + 1.5, pos.getY() + 1.5, pos.getZ() + 0.6);
-				spawnCustomParticleTM(worldIn, pos.getX(), pos.getY(), pos.getZ(), 1);
+//				spawnCustomParticleTM(worldIn, pos.getX(), pos.getY(), pos.getZ(), 1);
 			}
 //			spawnCustomParticle(worldIn, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.1, 0);
 		}

@@ -1,7 +1,8 @@
 package com.artur.returnoftheancients.transform;
 
 import com.artur.returnoftheancients.transform.transformers.TransformerBiomeSearchWorker;
-import com.artur.returnoftheancients.transform.transformers.ITransformer;
+import com.artur.returnoftheancients.transform.transformers.WorldTransformer;
+import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
 import com.artur.returnoftheancients.transform.transformers.TransformerBlockTaint;
 import com.artur.returnoftheancients.transform.transformers.TransformerTaintHelper;
 import net.minecraft.launchwrapper.IClassTransformer;
@@ -17,6 +18,7 @@ public class TransformerTRA implements IClassTransformer {
         TRANSFORMERS.add(new TransformerTaintHelper());
         TRANSFORMERS.add(new TransformerBiomeSearchWorker());
         TRANSFORMERS.add(new TransformerBlockTaint());
+        TRANSFORMERS.add(new WorldTransformer());
     }
 
     // TODO: Пропатчить BiomeSearchWorker.doWork()

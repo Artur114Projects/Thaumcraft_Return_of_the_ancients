@@ -69,7 +69,7 @@ public class BiomeTaint extends BiomeBase {
     // TODO: Вывести значения в конфиги
     public static void chunkHasBiomeUpdate(Chunk chunk) {
         World world = chunk.getWorld();
-        if (world.rand.nextInt((28 * taintChunks) + 2001) == 0) {
+        if (world.rand.nextInt(((40 * taintChunks) + 2001) / 20) == 0) {
             int chunkArea = 16;
             ArrayList<Short> taintBiomeArea = new ArrayList<>();
             byte[] biomes = chunk.getBiomeArray();
@@ -77,12 +77,8 @@ public class BiomeTaint extends BiomeBase {
             for (int i = 0; i < chunkArea; ++i) {
                 for (int j = 0; j < chunkArea; ++j) {
                     int k = biomes[j + i * chunkArea];
-                    Biome biome = Biome.getBiomeForId(k);
-                    if (BiomeDictionary.hasType(biome, InitBiome.TAINT_TYPE)) {
-                        BiomeTaint taint = (BiomeTaint) biome;
-                        if (taint.type == TaintType.NORMAL) {
-                            taintBiomeArea.add((short) ((i << 8) | (j & 0xFF)));
-                        }
+                    if (BiomeDictionary.hasType(Biome.getBiomeForId(k), InitBiome.TAINT_TYPE_L)) {
+                        taintBiomeArea.add((short) ((i << 8) | (j & 0xFF)));
                     }
                 }
             }
@@ -153,7 +149,7 @@ public class BiomeTaint extends BiomeBase {
 
     @Override
     public int getSkyColorByTemp(float currentTemperature) {
-        return 0x563367;
+        return this.type == TaintType.EDGE ? super.getSkyColorByTemp(currentTemperature) : 0x1C1122;
     }
 
     @Override

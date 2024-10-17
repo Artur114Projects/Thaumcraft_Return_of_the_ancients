@@ -1,8 +1,6 @@
 package com.artur.returnoftheancients.transform.transformers;
 
-import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
-import com.artur.returnoftheancients.misc.TRAConfigs;
-import com.chaosthedude.naturescompass.util.BiomeSearchWorker;
+import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
 import org.objectweb.asm.*;
 
 public class TransformerBiomeSearchWorker implements ITransformer {

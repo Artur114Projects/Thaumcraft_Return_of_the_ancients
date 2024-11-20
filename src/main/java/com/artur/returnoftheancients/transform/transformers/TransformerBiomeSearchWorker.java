@@ -37,8 +37,9 @@ public class TransformerBiomeSearchWorker implements ITransformer {
         }
 
         @Override
-        public void visitInsn(int opcode) {
-            super.visitInsn(opcode);
+        public void visitCode() {
+            super.visitCode();
+
             mv.visitVarInsn(Opcodes.ALOAD, 0);
             mv.visitMethodInsn(Opcodes.INVOKESTATIC, HANDLER_PATH, "isTaintBiome", "(Lcom/chaosthedude/naturescompass/util/BiomeSearchWorker;)Z", false);
 

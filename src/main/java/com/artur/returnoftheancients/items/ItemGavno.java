@@ -10,8 +10,10 @@ import com.artur.returnoftheancients.network.ClientPacketMisc;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
@@ -89,6 +91,22 @@ public class ItemGavno extends BaseItem{
 		}
 		System.out.println(worldIn.playerEntities);
 		return EnumActionResult.SUCCESS;
+	}
+
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		if (worldIn.isRemote) {
+			Vec3d vec3d = playerIn.getLook(1.0F);
+
+			double xOff = Math.sin(Math.toRadians(playerIn.rotationYaw)) * 2;
+			double zOff = Math.cos(Math.toRadians(playerIn.rotationYaw)) * 2;
+
+			for (int i = 0; i != 32; i++) {
+				spawnCustomParticle(worldIn, playerIn.posX + xOff, playerIn.posY + 1, playerIn.posZ + zOff, vec3d.x * ((i / 10.0D) + 1), vec3d.y * ((i / 10.0D) + 1), vec3d.z * ((i / 10.0D) + 1));
+			}
+		}
+		playerIn.setActiveHand(handIn);
+		return super.onItemRightClick(worldIn, playerIn, handIn);
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 import thaumcraft.client.lib.events.RenderEventHandler;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
@@ -19,7 +20,7 @@ public class ClientEventsHandler {
     protected static final String startUpNBT = "startUpNBT";
     private static byte cpt = 0;
 
-    // TODO: Сделать что нибуть с туманом
+    // TODO: Сделать что нибуть с туманом (Починить)
     @SubscribeEvent
     public static void fogSetColor(EntityViewRenderEvent.FogColors e) {
         if (e.getEntity().getEntityWorld().provider.getDimension() == ancient_world_dim_id) {
@@ -29,17 +30,28 @@ public class ClientEventsHandler {
             return;
         }
         if (e.getEntity().getEntityWorld().getBiome(e.getEntity().getPosition()).equals(InitBiome.TAINT)) {
-            e.setRed(28.0F / 255.0F);
-            e.setGreen(17.0F / 255.0F);
-            e.setBlue(34.0F / 255.0F);
+            e.setRed(43.0F / 255.0F);
+            e.setGreen(0.0F / 255.0F);
+            e.setBlue(61.0F / 255.0F);
 
             RenderEventHandler.fogFiddled = true;
-            if (RenderEventHandler.fogDuration < 60) {
+            if (RenderEventHandler.fogDuration < 40) {
                 RenderEventHandler.fogDuration += 2;
             }
             return;
         }
     }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public static void fogDensityEvent(EntityViewRenderEvent.RenderFogEvent event) {
+        if (RenderEventHandler.fogDuration < 2 && RenderEventHandler.fogFiddled) {
+            GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
+            GL11.glFogf(GL11.GL_FOG_DENSITY, 0.04F);
+            RenderEventHandler.fogFiddled = false;
+        }
+    }
+
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)

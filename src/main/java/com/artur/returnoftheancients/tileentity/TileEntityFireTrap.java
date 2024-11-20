@@ -54,7 +54,7 @@ public class TileEntityFireTrap extends TileEntity implements ITickable {
                     if (playerNearby) {
                         isActivating = true;
                         if (!world.isRemote) {
-                            world.playSound(null, pos, InitSounds.FIRE_TRAP_START_SOUND.SOUND, SoundCategory.BLOCKS, 4f, 1f);
+                            world.playSound(null, pos, InitSounds.FIRE_TRAP_START_SOUND.SOUND, SoundCategory.BLOCKS, 6f, 1f);
                         }
                     }
                 }
@@ -65,7 +65,7 @@ public class TileEntityFireTrap extends TileEntity implements ITickable {
                 if (activatingTimer >= TRAConfigs.DifficultySettings.incineratorActivationSpeed) {
                     activatingTimer = 0;
                     isActivating = false;
-                    activeTimer = 20;
+                    activeTimer = 40;
                     isActivee = true;
                 }
                 return;
@@ -158,16 +158,17 @@ public class TileEntityFireTrap extends TileEntity implements ITickable {
     @SideOnly(Side.CLIENT)
     public static void spawnParticle(World world, BlockPos pos) {
         for (int i = 0; i != 4; i++) {
-            spawnCustomParticle(world, pos.getX() + 0.7, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.6 + i / 20D, 0);
-            spawnCustomParticle(world, pos.getX() + 0.3, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.6 + i / 20D, 0);
-            spawnCustomParticle(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.3, 0, 0.6 + i / 20D, 0);
-            spawnCustomParticle(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.7, 0, 0.6 + i / 20D, 0);
+            spawnCustomParticle(world, pos.getX() + 0.7, pos.getY() + 1, pos.getZ() + 0.5,  world.rand.nextDouble() / 80.0D, 0.6 + i / 20D,  world.rand.nextDouble() / 80.0D);
+            spawnCustomParticle(world, pos.getX() + 0.3, pos.getY() + 1, pos.getZ() + 0.5,  world.rand.nextDouble() / 80.0D, 0.6 + i / 20D,  world.rand.nextDouble() / 80.0D);
+            spawnCustomParticle(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.3,  world.rand.nextDouble() / 80.0D, 0.6 + i / 20D,  world.rand.nextDouble() / 80.0D);
+            spawnCustomParticle(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.7,  world.rand.nextDouble() / 80.0D, 0.6 + i / 20D,  world.rand.nextDouble() / 80.0D);
         }
         for (int i = 0; i != 6; i++) {
-            spawnCustomParticleTM(world, pos.getX(), pos.getY(), pos.getZ(), 0.5D);
+            spawnCustomParticleTM(world, pos.getX(), pos.getY() + 0.2, pos.getZ(), 0.5D);
             spawnCustomParticleTM(world, pos.getX(), pos.getY() + 0.8, pos.getZ(), 1.0D);
             spawnCustomParticleTM(world, pos.getX(), pos.getY() + 1.4, pos.getZ(), 0.5D);
-            spawnCustomParticle(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.6 + i / 20D, 0);
+
+            spawnCustomParticle(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, world.rand.nextDouble() / 80.0D, 0.6 + i / 20D,  world.rand.nextDouble() / 80.0D);
         }
     }
 

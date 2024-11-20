@@ -49,7 +49,7 @@ public class HandlerR {
 
         while (y-- >= 0) {
             Block block = world.getBlockState(new BlockPos(x,y,z)).getBlock();
-            if (block != Blocks.AIR) {
+            if (block != Blocks.AIR && block != Blocks.BEDROCK) {
                 break;
             }
         }

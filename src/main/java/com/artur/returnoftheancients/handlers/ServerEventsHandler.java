@@ -425,7 +425,7 @@ public class ServerEventsHandler {
     }
 
 
-    @SubscribeEvent
-    public static void ChunkEventLoad(ChunkEvent.Load e) {
-    }
+//    @SubscribeEvent
+//    public static void ChunkEventLoad(ChunkEvent.Load e) {
+//    }
 }

@@ -4,6 +4,8 @@ import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.chaosthedude.naturescompass.util.BiomeSearchWorker;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import org.objectweb.asm.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumParticleTypes;
@@ -16,6 +18,15 @@ public class TransformerHandler {
 
     public static boolean isTaintBiome(World world, BlockPos pos) {
         return world.getBiome(pos).equals(InitBiome.TAINT);
+    }
+    public static boolean isClientPlayerInTaintBiome() {
+        if (Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().world != null) {
+            EntityPlayerSP player = Minecraft.getMinecraft().player;
+            World world = Minecraft.getMinecraft().world;
+            return world.getBiome(player.getPosition()).equals(InitBiome.TAINT);
+        } else {
+            return false;
+        }
     }
 
     public static boolean isTaintEdgeBiome(World world, BlockPos pos) {

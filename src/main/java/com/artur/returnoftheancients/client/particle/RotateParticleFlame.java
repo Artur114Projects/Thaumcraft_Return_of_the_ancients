@@ -13,6 +13,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RotateParticleFlame extends ParticleFlame {
 
+    private static double staticAngle = 0;
+
     private double angle;
     private final double radius;
     private final double angularVelocity;
@@ -24,24 +26,32 @@ public class RotateParticleFlame extends ParticleFlame {
         super(worldIn, xCoordIn + 0.5, yCoordIn, zCoordIn + 0.5, 0, 0, 0);
         this.radius = radius;
         this.angularVelocity = angularVelocity;
-        this.angle = 0;
         this.particleMaxAge *= 3;
 
         this.centerX = xCoordIn + 0.5D;
         this.centerZ = zCoordIn + 0.5D;
+
+        if (staticAngle >= 360) {
+            staticAngle =- 360;
+        }
+        this.angle = staticAngle;
+
+        this.posX = centerX + radius * Math.cos(this.angle);
+        this.posZ = centerZ + radius * Math.sin(this.angle);
+        staticAngle++;
     }
 
-    @Override
-    public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-        GlStateManager.depthMask(false);
-
-        super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
-
-        GlStateManager.depthMask(true);
-        GlStateManager.disableBlend();
-    }
+//    @Override
+//    public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+//        GlStateManager.enableBlend();
+//        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+//        GlStateManager.depthMask(false);
+//
+//        super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
+//
+//        GlStateManager.depthMask(true);
+//        GlStateManager.disableBlend();
+//    }
 
     @Override
     public void onUpdate() {
@@ -52,9 +62,6 @@ public class RotateParticleFlame extends ParticleFlame {
 
         super.onUpdate();
         this.angle += this.angularVelocity;
-
-        this.motionX = -radius * Math.sin(this.angle) * this.angularVelocity;
-        this.motionZ = radius * Math.cos(this.angle) * this.angularVelocity;
 
         this.posX = centerX + radius * Math.cos(this.angle);
         this.posZ = centerZ + radius * Math.sin(this.angle);

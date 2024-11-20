@@ -24,7 +24,6 @@ public class BiomeTaint extends BiomeBase {
     public final TaintType type;
     public static int taintChunks = 0;
 
-    // TODO: Добавить обработку чанков с этим биомом и спавн молний.
     // TODO: Добавить больше существ в spawnableCreatureList.
     public BiomeTaint(String registryName, BiomeProperties properties, EBiome eBiome, TaintType type) {
         super(registryName, properties, eBiome);
@@ -69,7 +68,7 @@ public class BiomeTaint extends BiomeBase {
     // TODO: Вывести значения в конфиги
     public static void chunkHasBiomeUpdate(Chunk chunk) {
         World world = chunk.getWorld();
-        if (world.rand.nextInt(((40 * taintChunks) + 2001) / 20) == 0) {
+        if (world.rand.nextInt(((80 * taintChunks) + 2000) / 20) == 0) {
             int chunkArea = 16;
             ArrayList<Short> taintBiomeArea = new ArrayList<>();
             byte[] biomes = chunk.getBiomeArray();
@@ -109,6 +108,8 @@ public class BiomeTaint extends BiomeBase {
                 IBlockState state = BlocksTC.taintFeature.getBlockState().getBaseState();
                 BlockPos posUp = pos.up();
                 worldIn.setBlockState(posUp, state.withProperty(BlockDirectional.FACING, EnumFacing.UP), 3);
+                worldIn.checkLight(posUp);
+                worldIn.checkLight(pos);
             }
         }
     }
@@ -144,12 +145,12 @@ public class BiomeTaint extends BiomeBase {
 
     @Override
     public int getFoliageColorAtPos(BlockPos pos) {
-        return this.type == TaintType.EDGE ? super.getFoliageColorAtPos(pos) : 0x563367;
+        return this.type == TaintType.EDGE ? super.getFoliageColorAtPos(pos) : 0x2b003d;
     }
 
     @Override
     public int getSkyColorByTemp(float currentTemperature) {
-        return this.type == TaintType.EDGE ? super.getSkyColorByTemp(currentTemperature) : 0x1C1122;
+        return this.type == TaintType.EDGE ? super.getSkyColorByTemp(currentTemperature) : 0x2b003d;
     }
 
     @Override

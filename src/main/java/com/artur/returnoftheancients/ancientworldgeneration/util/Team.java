@@ -52,13 +52,15 @@ public class Team {
                 Entity entity = server.getEntityFromUuid(id);
                 if (entity instanceof EntityPlayerMP && entity.dimension != InitDimensions.ancient_world_dim_id) {
                     EntityPlayerMP playerMP = (EntityPlayerMP) entity;
-                    List<String> uui = HandlerR.isPlayerUseUnresolvedItems(playerMP);
-                    if (uui.isEmpty()) {
-                        uuids.add(id);
-                        players.put(id, (EntityPlayerMP) entity);
-                    } else {
-                        playerMP.sendMessage(new TextComponentTranslation(Referense.MODID + ".portal.message"));
-                        playerMP.sendMessage(new TextComponentString(uui.toString()));
+                    if (player.dimension == playerMP.dimension) {
+                        List<String> uui = HandlerR.isPlayerUseUnresolvedItems(playerMP);
+                        if (uui.isEmpty()) {
+                            uuids.add(id);
+                            players.put(id, (EntityPlayerMP) entity);
+                        } else {
+                            playerMP.sendMessage(new TextComponentTranslation(Referense.MODID + ".portal.message"));
+                            playerMP.sendMessage(new TextComponentString(uui.toString()));
+                        }
                     }
                 }
             }

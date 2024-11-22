@@ -16,14 +16,14 @@ public class Gif {
     protected int speed;
     protected final ResourceLocation[] gif;
 
-    public Gif(String fileNoIndexName, int gifSize, int speed) {
+    public Gif(String fileNoIndexName, int gifSize, int speed, boolean isStartIn0) {
         this.time = 0;
         this.speed = speed;
         this.isFirstDraw = true;
         fileNoIndexName = fileNoIndexName.replaceAll(".png", "");
         gif = new ResourceLocation[gifSize];
         for (int i = 0; i < gifSize; i++) {
-            gif[i] = new ResourceLocation(fileNoIndexName + i + ".png");
+            gif[i] = new ResourceLocation(fileNoIndexName + (i + (isStartIn0 ? 0 : 1)) + ".png");
         }
     }
 
@@ -64,6 +64,11 @@ public class Gif {
         onDraw(mc);
         mc.getTextureManager().bindTexture(gif[drawIndex]);
         drawTexturedModalRect(x, y, textureX, textureY, width ,height, zLevel);
+    }
+
+    public void bindGifTexture(Minecraft mc) {
+        onDraw(mc);
+        mc.getTextureManager().bindTexture(gif[drawIndex]);
     }
 
     private static void drawModalRectWithCustomSizedTexture(int x, int y, float u, float v, int width, int height, float textureWidth, float textureHeight)

@@ -41,7 +41,7 @@ public class LoadingGui extends GuiScreen {
     public LoadingGui(boolean isTeam) {
         this.isTeam = isTeam;
         if (!TRAConfigs.ClientSettings.useStaticImageOnLoadingGui) {
-            gif = new GifSTime(Referense.MODID + ":textures/gui/gif/gen_gif/gen_gif_v2-", 18, 15);
+            gif = new GifSTime(Referense.MODID + ":textures/gui/gif/gen_gif/gen_gif_v2-", 18, 15, true);
         }
         location = new ResourceLocation( Referense.MODID + ":textures/gui/loading_gui_background.png");
         for (int i = 0; i != constantNamesTranslate.length; i++) {

@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.items;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.referense.Referense;
+import net.minecraft.block.BlockStructure;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -75,8 +76,10 @@ public class ItemSoulBinder extends BaseItem {
         if (nbt.getBoolean("isFull")) {
             if(!GuiScreen.isShiftKeyDown()) {
                 NBTTagCompound list = nbt.getCompoundTag("players");
-                tooltip.add(TextFormatting.YELLOW + "Players:");
-                tooltip.addAll(HandlerR.uuidKeySetToList(list.getKeySet(), TextFormatting.AQUA));
+                tooltip.add(TextFormatting.YELLOW + I18n.format("item.soul_binder.info.d.3"));
+                for (String text : HandlerR.uuidKeySetToList(list.getKeySet(), TextFormatting.AQUA)) {
+                    tooltip.add(TextFormatting.WHITE + "[" + text + TextFormatting.RESET + "]");
+                }
                 tooltip.add("");
                 tooltip.add(TextFormatting.YELLOW + I18n.format("item.soul_binder.info.d.1")  + " " + TextFormatting.WHITE + "[Shift]" + TextFormatting.YELLOW  + " " + I18n.format("item.soul_binder.info.d.2"));
             } else {

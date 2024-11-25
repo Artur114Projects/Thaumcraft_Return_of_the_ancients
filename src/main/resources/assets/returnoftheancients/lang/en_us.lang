@@ -17,6 +17,7 @@ item.soul_binder.info.s.2=Shift + RMB - unbind.
 item.soul_binder.info.s.3=Put in crafting grid - clear.
 item.soul_binder.info.d.1=Hold
 item.soul_binder.info.d.2= to see info.
+item.soul_binder.info.d.3=Players:
 #
 returnoftheancients.portal.message=Cant use:
 returnoftheancients.rui.t=put it away
@@ -32,6 +33,9 @@ rota.l-gui.generate.stage.2=Place structures in world
 rota.l-gui.generate.stage.3=Finalizing
 rota.l-gui.generate.stage.4=Finis!
 rota.l-gui.button.team=Team
+rota.l-gui.lore.0=Meow, Meow, Meow, Meow, Meow, Meow, Meow, Meow, Meow, Meow!
+rota.l-gui.lore.1=This layer was used a protection so that outsiders could not enter the ancient world, only from whom such a developed civilization was protected remains a question.
+rota.l-gui.lore.title=Lore
 ################################################################################
 # Config any
 ################################################################################
@@ -92,7 +96,7 @@ returnoftheancients.cfg.sub.cs.usi=Use static image in gui?
 returnoftheancients.cfg.sub.mgs=Mob gen settings (Don`t work)
 returnoftheancients.cfg.sub.mgs.umg=Use new mob generation (Don`t work)
 ################################################################################
-#research
+#research main
 ################################################################################
 returnoftheancients.text.boss=You found the Guard
 returnoftheancients.text.deformation=You have discovered a strange distortion in the structure of the labyrinth.

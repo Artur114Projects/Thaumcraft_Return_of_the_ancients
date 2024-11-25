@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.network.ServerPacketTpToHome;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -15,6 +16,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 public class CoolLoadingGui extends GuiScreen {
@@ -32,6 +34,8 @@ public class CoolLoadingGui extends GuiScreen {
     private final int Aqua = 0x00ffff;
     private String[] players = new String[0];
 
+    protected ScaledResolution resolution;
+
     protected Random rand = new Random();
     protected boolean isTpToHome = false;
     protected boolean isDrawTeam = false;
@@ -41,11 +45,14 @@ public class CoolLoadingGui extends GuiScreen {
     protected float closingTime = 10;
     protected float openingTime = 0;
     protected boolean isTeam;
+    protected String lore;
 
 
     public CoolLoadingGui(boolean isTeam) {
-        int id = new Random().nextInt(3);
+        int id = rand.nextInt(3);
         background = new ResourceLocation(Referense.MODID + ":textures/gui/loading_gui_backgrounds/background" + id + ".png");
+        int loreId = rand.nextInt(2);
+        lore = I18n.format("rota.l-gui.lore." + loreId);
         this.isTeam = isTeam;
         instance = this;
     }
@@ -86,8 +93,9 @@ public class CoolLoadingGui extends GuiScreen {
     @Override
     public void initGui() {
         super.initGui();
+        resolution = new ScaledResolution(mc);
         if (isTeam) {
-            this.button = new TRAButton(0, 0, 0, fontRenderer.getStringWidth(I18n.format("rota.l-gui.button.team")) + 16, 20, "Team");
+            this.button = new TRAButton(0, 0, 0, fontRenderer.getStringWidth(I18n.format("rota.l-gui.button.team")) + 16, 20, I18n.format("rota.l-gui.button.team"));
             this.buttonList.add(this.button);
         }
     }
@@ -132,11 +140,31 @@ public class CoolLoadingGui extends GuiScreen {
     }
 
     protected void drawLore() {
+        int scale = resolution.getScaleFactor();
+        int y = (int) (height - ((height / 10) * 1.2F));
+        float scaleText = 1.0F;
+        float scaleMainText = 1.2F;
         int x = width / 40;
-        int y = (int) (height - (height / 12) * 1.6F);
 
-        drawScaledText("\u00A7nLore", x, y, Yellow, 1.2F);
-        drawScaledText("Meow, Meow, Meow, Meow, Meow, Meow, Meow, Meow, Meow, Meow", x, y + 16, White, 1.0F);
+        if (scale == 3) {
+            scaleText = 0.6F;
+            scaleMainText = 1.0F;
+            y = (int) (height - ((height / 6) * 1.0F));
+        } else if (scale == 2) {
+
+        } else if (scale == 1) {
+            y = (int) (height - ((height / 20) * 1.6F));
+            scaleMainText = 1.6F;
+            scaleText = 1.2F;
+        }
+
+        drawScaledText("\u00A7n" + I18n.format("rota.l-gui.lore.title"), x, y, Yellow, scaleMainText);
+
+        y += (int) (5 * scaleMainText);
+        List<String> text = fontRenderer.listFormattedStringToWidth(lore, (int) (((width / 2) - (width / 40) * 2) * (2 - scaleText)));
+        for (int i = 0; i != text.size(); i++) {
+            drawScaledText(text.get(i), x, y + 10 * (i + 1), White, scaleText);
+        }
     }
 
     protected void drawScaledText(String text, int x, int y, int color, float scale) {
@@ -203,6 +231,12 @@ public class CoolLoadingGui extends GuiScreen {
         int x = width - width / 60;
         int y = height - height / 12;
         int size = 16;
+        if (resolution.getScaleFactor() == 3) {
+            size = 12;
+            y = height - height / 14;
+        } else if (resolution.getScaleFactor() == 1) {
+            y = height - height / 20;
+        }
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
 

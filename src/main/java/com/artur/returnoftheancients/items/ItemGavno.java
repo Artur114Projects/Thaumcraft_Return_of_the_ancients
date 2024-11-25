@@ -9,6 +9,7 @@ import com.artur.returnoftheancients.gui.CoolLoadingGui;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -96,6 +97,7 @@ public class ItemGavno extends BaseItem {
 				"Meow227",
 				"wesfrgtfhjgh125"
 			});
+			System.out.println(new ScaledResolution(Minecraft.getMinecraft()).getScaleFactor());
 		}
 		return EnumActionResult.SUCCESS;
 	}

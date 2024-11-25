@@ -44,6 +44,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
+import thaumcraft.common.entities.monster.EntityEldritchGuardian;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -59,7 +60,6 @@ public class ServerEventsHandler {
     private static boolean isAncientAreaSet = false;
     private static byte difficultyId = -1;
     private static boolean newVersion = false;
-    private static int hurtCount = 0;
 
 
     public  static void unload() {
@@ -69,11 +69,16 @@ public class ServerEventsHandler {
 
     public static byte getDifficultyId() {return difficultyId;}
 
-    public static void tpToHome(EntityPlayerMP player) {
+    public static void tpToHome(EntityPlayerMP player, int dimension) {
         player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, true);
-        FreeTeleporter.teleportToDimension(player, 0,WorldDataFields.portalX, 3, WorldDataFields.portalZ);
+        FreeTeleporter.teleportToDimension(player, dimension, WorldDataFields.portalX, 3, WorldDataFields.portalZ);
         player.getEntityData().setBoolean(tpToHomeNBT, true);
     }
+
+    public static void tpToHome(EntityPlayerMP player) {
+        tpToHome(player, WorldDataFields.portalDimension);
+    }
+
 
     @SubscribeEvent
     public static void DifficultyEvent(DifficultyChangeEvent e) {
@@ -110,7 +115,7 @@ public class ServerEventsHandler {
         if (!e.getWorld().isRemote) {
             WorldData worldData = WorldData.get();
 
-            if (e.getWorld().provider.getDimension() == 0) {
+            if (e.getWorld().provider.getDimension() == TRAConfigs.PortalSettings.dimensionGenerate) {
                 if (TRAConfigs.PortalSettings.isGen) {
                     if (!worldData.saveData.getBoolean(IALGS.isAncientPortalGenerateKey)) {
 
@@ -130,7 +135,8 @@ public class ServerEventsHandler {
                         worldData.saveData.setInteger(IALGS.ancientPortalXPosKey, x);
                         worldData.saveData.setInteger(IALGS.ancientPortalZPosKey, z);
                         worldData.saveData.setInteger(IALGS.ancientPortalYPosKey, HandlerR.calculateGenerationHeight(e.getWorld(), (16 * x) + 8, (16 * z) + 8));
-                        HandlerR.genAncientPortal(e.getWorld(), x, z, true);
+                        HandlerR.genAncientPortal(e.getWorld(), x, z, TRAConfigs.PortalSettings.dimensionGenerate == 0);
+                        worldData.saveData.setInteger(IALGS.portalDimension, TRAConfigs.PortalSettings.dimensionGenerate);
                         worldData.saveData.setBoolean(IALGS.isAncientPortalGenerateKey, true);
                         worldData.markDirty();
                         WorldDataFields.reload();
@@ -162,15 +168,23 @@ public class ServerEventsHandler {
                 newVersion = true;
                 System.out.println("new version!");
             }
-            worldData.saveData.setString("version", Referense.VERSION);
+            worldData.saveData.setString("version", "1.2.0-betta");
             return;
         }
-        if (!worldData.saveData.getString("version").equals(Referense.VERSION)) {
-            newVersion = true;
-            System.out.println("new version!");
-            worldData.saveData.setString("version", Referense.VERSION);
-            worldData.markDirty();
+        if (worldData.saveData.getString("version").contains("1.3") && !worldData.saveData.getString("version").contains("1.3.5")) {
+            worldData.saveData.setInteger(IALGS.portalDimension, 0);
+            worldData.saveData.setString("version", "1.3.4-betta");
         }
+        if (!worldData.saveData.getString("version").equals(Referense.VERSION)) {
+            newVersion(worldData);
+        }
+    }
+
+    private static void newVersion(WorldData worldData) {
+        newVersion = true;
+        System.out.println("new version!");
+        worldData.saveData.setString("version", Referense.VERSION);
+        worldData.markDirty();
     }
 
     @SubscribeEvent
@@ -212,8 +226,7 @@ public class ServerEventsHandler {
 
     protected static void onPlayerLost(EntityPlayerMP player) {
         player.setHealth(20);
-        AncientWorld.playerLostBus(player.getUniqueID());
-        tpToHome(player);
+        if (!AncientWorld.playerLostBus(player.getUniqueID())) tpToHome(player);
     }
 
     protected static void onPlayerTpToHome(EntityPlayerMP player) {
@@ -258,7 +271,7 @@ public class ServerEventsHandler {
             if (playerDimension != ancient_world_dim_id) {
                 if (e.player instanceof EntityPlayerMP) {
                     e.player.motionY += 2 - e.player.motionY;
-                    if (e.player.posY > WorldData.get().saveData.getInteger(IALGS.ancientPortalYPosKey)) {
+                    if (e.player.posY > 100 || e.player.posY > WorldData.get().saveData.getInteger(IALGS.ancientPortalYPosKey)) {
                         EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
 
                         HandlerR.setStartUpNBT(playerMP, false);
@@ -267,8 +280,6 @@ public class ServerEventsHandler {
 
                         e.player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, false);
                         e.player.getEntityData().setBoolean(startUpNBT, false);
-
-                        System.out.println("Effects clear");
                     }
                 }
             }

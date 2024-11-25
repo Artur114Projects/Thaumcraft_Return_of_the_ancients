@@ -11,10 +11,8 @@ import com.artur.returnoftheancients.network.ClientPacketMisc;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
@@ -92,7 +90,12 @@ public class ItemGavno extends BaseItem {
 		}
 		System.out.println(worldIn.playerEntities);
 		if (worldIn.isRemote) {
-			Minecraft.getMinecraft().displayGuiScreen(new CoolLoadingGui());
+			Minecraft.getMinecraft().displayGuiScreen(new CoolLoadingGui(true));
+			CoolLoadingGui.instance.updatePlayersList(new String[] {
+				"Artur114",
+				"Meow227",
+				"wesfrgtfhjgh125"
+			});
 		}
 		return EnumActionResult.SUCCESS;
 	}

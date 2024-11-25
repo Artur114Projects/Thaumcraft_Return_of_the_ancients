@@ -100,7 +100,7 @@ public class TRAConfigs {
         public boolean checkItems = true;
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.portal.dwl")
-        public int[] dimensionWhiteList = new int[] {0};
+        public int dimensionGenerate = 0;
     }
 
     public static class Any {
@@ -118,6 +118,9 @@ public class TRAConfigs {
         @Config.LangKey(Referense.MODID + ".cfg.sub.any.dm")
         @Config.RequiresMcRestart
         public boolean debugMode = false;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.any.uog")
+        public boolean useOldLoadingGui = false;
     }
 
     public static class AncientWorldSettings {

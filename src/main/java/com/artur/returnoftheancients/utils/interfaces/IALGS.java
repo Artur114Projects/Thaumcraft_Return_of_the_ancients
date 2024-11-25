@@ -59,5 +59,6 @@ public interface IALGS {
     String ancientPortalXPosKey = "APXPK";
     String ancientPortalYPosKey = "APYPK";
     String ancientPortalZPosKey = "APZPK";
+    String portalDimension = "PD";
 
 }

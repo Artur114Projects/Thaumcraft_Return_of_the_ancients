@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.commads;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
+import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.referense.Referense;
@@ -57,7 +58,12 @@ public class TRACommand extends CommandBase {
                 break;
             case "tptoportal":
             if (player.isCreative()) {
-                player.connection.setPlayerLocation(WorldDataFields.portalX, 100, WorldDataFields.portalZ, player.rotationYaw, player.rotationPitch);
+                if (player.dimension == WorldDataFields.portalDimension) {
+                    player.connection.setPlayerLocation(WorldDataFields.portalX, 100, WorldDataFields.portalZ, player.rotationYaw, player.rotationPitch);
+                    player.sendMessage(new TextComponentString("Teleport complete!").setStyle(new Style().setColor(TextFormatting.GREEN)));
+                } else {
+                    player.sendMessage(new TextComponentString("you are in a dimension without a portal, a dimension with a portal: " + WorldDataFields.portalDimension).setStyle(new Style().setColor(TextFormatting.RED)));
+                }
             }
             break;
             default:

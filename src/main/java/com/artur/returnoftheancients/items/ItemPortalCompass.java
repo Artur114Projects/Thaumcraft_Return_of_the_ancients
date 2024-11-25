@@ -53,10 +53,10 @@ public class ItemPortalCompass extends BaseItem {
 
                     double d0;
 
-                    if (worldIn.provider.isSurfaceWorld() && entityIn instanceof EntityPlayer)
+                    if (entityIn instanceof EntityPlayer)
                     {
                         EntityPlayer player = (EntityPlayer) entityIn;
-                        if (HandlerR.isHasItem(player, InitItems.COMPASS)) {
+                        if (HandlerR.isHasItem(player, InitItems.COMPASS) && player.dimension == WorldDataFields.portalDimension && !HandlerR.isWithinRadius(player.posX, player.posZ, WorldDataFields.portalX, WorldDataFields.portalZ, 8)) {
                             double d1 = flag ? (double) entity.rotationYaw : this.getFrameRotation((EntityItemFrame) entity);
                             d1 = MathHelper.positiveModulo(d1 / 360.0D, 1.0D);
                             double d2 = this.getPortalToAngle(entity) / (Math.PI * 2D);

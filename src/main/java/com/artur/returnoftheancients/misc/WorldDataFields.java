@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class WorldDataFields {
     public static boolean isPrimalBladeDrop;
     public static boolean isPortalGenerate;
+    public static int portalDimension;
     public static int portalY;
     public static int portalXC;
     public static int portalZC;
@@ -23,6 +24,7 @@ public class WorldDataFields {
     public static void unload() {
         isPrimalBladeDrop = false;
         isPortalGenerate = false;
+        portalDimension = 0;
         portalZC = 0;
         portalXC = 0;
         portalX = 0;
@@ -32,6 +34,7 @@ public class WorldDataFields {
     }
 
     protected static void onRead(NBTTagCompound saveData) {
+        portalDimension = saveData.getInteger(IALGS.portalDimension);
         portalXC = saveData.getInteger(IALGS.ancientPortalXPosKey);
         portalY = saveData.getInteger(IALGS.ancientPortalYPosKey);
         portalZC = saveData.getInteger(IALGS.ancientPortalZPosKey);
@@ -48,6 +51,7 @@ public class WorldDataFields {
 
     public static void sync(EntityPlayerMP player) {
         NBTTagCompound data = new NBTTagCompound();
+        data.setInteger(IALGS.portalDimension, portalDimension);
         data.setInteger(IALGS.ancientPortalXPosKey, portalXC);
         data.setInteger(IALGS.ancientPortalYPosKey, portalY);
         data.setInteger(IALGS.ancientPortalZPosKey, portalZC);
@@ -59,6 +63,7 @@ public class WorldDataFields {
 
     @SideOnly(Side.CLIENT)
     public static void readOnClient(NBTTagCompound data) {
+        portalDimension = data.getInteger(IALGS.portalDimension);
         portalXC = data.getInteger(IALGS.ancientPortalXPosKey);
         portalY = data.getInteger(IALGS.ancientPortalYPosKey);
         portalZC = data.getInteger(IALGS.ancientPortalZPosKey);

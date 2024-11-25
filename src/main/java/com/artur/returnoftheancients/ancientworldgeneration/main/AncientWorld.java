@@ -189,10 +189,11 @@ public class AncientWorld {
         }
     }
 
-    public static void playerLostBus(UUID id) {
+    public static boolean playerLostBus(UUID id) {
         for (AncientEntry entry : ANCIENT_ENTRIES) {
-            if (entry.dead(id)) break;
+            if (entry.dead(id)) return true;
         }
+        return false;
     }
 
     public static void bossDeadBus(UUID id) {

@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.network;
 
+import com.artur.returnoftheancients.gui.CoolLoadingGui;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.gui.LoadingGui;
@@ -64,10 +65,18 @@ public class ClientPacketMisc implements IMessage {
                         LoadingGui.injectPercentages((byte) 0);
                         LoadingGui.injectPhase((byte) 0);
 
-                        Minecraft.getMinecraft().displayGuiScreen(new LoadingGui(nbt.getBoolean("isTeam")));
+                        if (TRAConfigs.Any.useOldLoadingGui) {
+                            Minecraft.getMinecraft().displayGuiScreen(new LoadingGui(nbt.getBoolean("isTeam")));
+                        } else {
+                            Minecraft.getMinecraft().displayGuiScreen(new CoolLoadingGui(nbt.getBoolean("isTeam")));
+                        }
 
                     } else {
-                        Minecraft.getMinecraft().displayGuiScreen(null);
+                        if (TRAConfigs.Any.useOldLoadingGui) {
+                            Minecraft.getMinecraft().displayGuiScreen(null);
+                        } else {
+                            CoolLoadingGui.instance.close();
+                        }
                     }
                 } else if (nbt.hasKey("sendAncientWorldLoadMessage")) {
                     if (nbt.getBoolean("sendAncientWorldLoadMessage")) {
@@ -101,7 +110,11 @@ public class ClientPacketMisc implements IMessage {
                     for (int i = 0; i != list.tagCount(); i++) {
                         names[i] = list.getStringTagAt(i);
                     }
-                    LoadingGui.injectPlayers(names);
+                    if (TRAConfigs.Any.useOldLoadingGui) {
+                        LoadingGui.injectPlayers(names);
+                    } else {
+                        CoolLoadingGui.instance.updatePlayersList(names);
+                    }
                 }
             });
             return null;

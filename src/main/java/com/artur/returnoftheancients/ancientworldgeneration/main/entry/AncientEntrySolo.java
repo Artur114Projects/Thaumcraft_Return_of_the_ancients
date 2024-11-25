@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.ancientworldgeneration.main.entry;
 
 import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
@@ -44,6 +45,7 @@ public class AncientEntrySolo extends AncientEntry {
         }
         if (id.equals(playerId)) {
             requestToDelete();
+            ServerEventsHandler.tpToHome(player);
             return true;
         }
         return false;
@@ -97,6 +99,7 @@ public class AncientEntrySolo extends AncientEntry {
         if (id.equals(playerId)) {
             requestToDelete();
             if (TRAConfigs.Any.debugMode) System.out.println("build is interrupt!");
+            ServerEventsHandler.tpToHome(player);
             return true;
         }
         return false;

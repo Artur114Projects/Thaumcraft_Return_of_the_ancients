@@ -35,7 +35,6 @@ public class TransformerHandler {
 
     public static void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
         if (world.isRemote) {
-            System.out.println("ppppppppppppppppppppppppppp");
             world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, pos.getX() + rand.nextDouble(), pos.getY() + rand.nextDouble(), pos.getZ() + rand.nextDouble(), 0, 0.1, 0);
         }
     }

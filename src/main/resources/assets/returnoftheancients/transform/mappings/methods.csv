@@ -1,3 +1,4 @@
+searge,name,side,desc
 func_100011_g,getIsPotionDurationMax,0,Get the value of the isPotionDurationMax field.
 func_100012_b,setPotionDurationMax,0,Toggle the isPotionDurationMax field.
 func_100015_a,isKeyDown,0,Returns whether the specified key binding is currently being pressed.
@@ -9652,3 +9653,4 @@ func_98299_i,getFriendlyFlags,2,Gets a bitmask containing the friendly fire and 
 func_98300_b,setSeeFriendlyInvisiblesEnabled,2,Sets whether members of this team can see other members that are invisible.
 func_98306_d,readGlyphSizes,0,
 func_99999_d,run,0,
+getSunBrightnessBody,getSunBrightnessBody

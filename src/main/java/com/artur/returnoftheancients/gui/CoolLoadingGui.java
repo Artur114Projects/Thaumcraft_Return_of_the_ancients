@@ -29,8 +29,6 @@ public class CoolLoadingGui extends GuiScreen {
     private final int Red = 16711680;
     private final int Yellow = 0xffff40;
     private final int White = 16777215;
-    private final int WhiteD = 0xf5f5f5;
-    private final int Blue = 0xBFFF;
     private final int Aqua = 0x00ffff;
     private String[] players = new String[0];
 

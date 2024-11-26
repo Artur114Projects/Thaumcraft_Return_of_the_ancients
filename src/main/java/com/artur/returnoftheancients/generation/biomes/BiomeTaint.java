@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.generation.biomes;
 
+import com.artur.returnoftheancients.generation.generators.WorldGenTaintBigTree;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBiome;
 import net.minecraft.block.BlockDirectional;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BiomeTaint extends BiomeBase {
+
+    WorldGenAbstractTree BIG_TREE_TAINT_FEATURE = new WorldGenTaintBigTree(false);
 
     public final TaintType type;
     public static int taintChunks = 0;
@@ -155,7 +158,7 @@ public class BiomeTaint extends BiomeBase {
 
     @Override
     public WorldGenAbstractTree getRandomTreeFeature(Random rand) {
-        return BIG_TREE_FEATURE;
+        return BIG_TREE_TAINT_FEATURE;
     }
 
     public enum TaintType {

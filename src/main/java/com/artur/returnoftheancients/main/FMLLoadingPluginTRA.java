@@ -29,7 +29,7 @@ public class FMLLoadingPluginTRA implements IFMLLoadingPlugin {
 
     @Override
     public void injectData(Map<String, Object> data) {
-        MappingsProcessor.load();
+
     }
 
     @Override

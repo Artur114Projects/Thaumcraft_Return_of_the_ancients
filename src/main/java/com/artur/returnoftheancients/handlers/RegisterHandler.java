@@ -136,6 +136,8 @@ public class RegisterHandler {
 		CustomGenStructure.register();
 
 		CustomGenStructure.setUseBinary();
+		CustomGenStructure.put("taint_tree_big");
+		CustomGenStructure.put("taint_tree_small");
 		CustomGenStructure.put("ancient_boss");
 		CustomGenStructure.put("ancient_crossroads_trap");
 		CustomGenStructure.put("ancient_developer_platform");

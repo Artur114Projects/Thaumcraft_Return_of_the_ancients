@@ -2,12 +2,15 @@ package com.artur.returnoftheancients.transform.util;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class MappingsProcessor {
+    public static boolean LOAD = false;
     private static Map<String, String> methods = new HashMap<>();
 
     public static void unload() {
@@ -15,10 +18,14 @@ public class MappingsProcessor {
     }
 
     public static void load() {
+        if (LOAD) {
+            return;
+        }
         try {
             System.out.println("Loading mappings start!");
             loadMethods();
             System.out.println("Loading mappings complete!");
+            LOAD = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,10 +51,17 @@ public class MappingsProcessor {
         }
     }
 
+    @NotNull
     public static String getObfuscateMethodName(String name) {
         if (FMLLaunchHandler.isDeobfuscatedEnvironment()) {
             return name;
         }
-        return methods.get(name);
+        load();
+        String obfuscatedName = methods.get(name);
+        if (obfuscatedName == null) {
+            System.out.println("Warning: Method '" + name + "' not found in mappings.");
+            return name;
+        }
+        return obfuscatedName;
     }
 }

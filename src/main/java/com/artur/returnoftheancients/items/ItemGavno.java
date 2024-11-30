@@ -4,14 +4,19 @@ package com.artur.returnoftheancients.items;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructure;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.TRAStructureEBS;
 import com.artur.returnoftheancients.client.particle.RotateParticleFlame;
+import com.artur.returnoftheancients.client.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.particle.TrapParticleFlame;
+import com.artur.returnoftheancients.generation.generators.portal.AncientPortalNaturalGeneration;
+import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortal;
 import com.artur.returnoftheancients.gui.CoolLoadingGui;
+import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.effect.EntityWeatherEffect;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -19,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -88,16 +94,17 @@ public class ItemGavno extends BaseItem {
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setString("sendMessage", "gavno");
 			MainR.NETWORK.sendToAll(new ClientPacketMisc(nbt));
+
+			AncientPortal portal = new AncientPortalNaturalGeneration(worldIn.getMinecraftServer(), worldIn.provider.getDimension(), pos.getX() >> 4, pos.getZ() >> 4, HandlerR.calculateGenerationHeight(worldIn, pos.getX(), pos.getZ()));
+			portal.build();
+
+//			worldIn.createExplosion(player, pos.getX(), pos.getY(), pos.getZ(), 12, true);
 		}
 		System.out.println(worldIn.playerEntities);
 		if (worldIn.isRemote) {
-			Minecraft.getMinecraft().displayGuiScreen(new CoolLoadingGui(true));
-			CoolLoadingGui.instance.updatePlayersList(new String[] {
-				"Artur114",
-				"Meow227",
-				"wesfrgtfhjgh125"
-			});
-			System.out.println(new ScaledResolution(Minecraft.getMinecraft()).getScaleFactor());
+			for (int i = 0; i != 32; i++) {
+				spawnCustomParticleTM(worldIn, 1, 0.4 + (i / 100.0D), player, i / 10.0D);
+			}
 		}
 		return EnumActionResult.SUCCESS;
 	}
@@ -119,8 +126,8 @@ public class ItemGavno extends BaseItem {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void spawnCustomParticleTM(World world, double x, double y, double z, double radius) {
-		Minecraft.getMinecraft().effectRenderer.addEffect(new RotateParticleFlame(world, x, y + 1.5, z, radius, 1.0 + (world.rand.nextDouble() / 5)));
+	public static void spawnCustomParticleTM(World world, double radius, double angularVelocity, EntityPlayer player, double yOffset) {
+		Minecraft.getMinecraft().effectRenderer.addEffect(new RotateParticleSmokeInPlayer(world, radius, angularVelocity, player, yOffset));
 	}
 
 	@SideOnly(Side.CLIENT)

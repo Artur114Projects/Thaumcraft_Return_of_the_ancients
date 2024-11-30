@@ -1,6 +1,9 @@
 package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
+import com.artur.returnoftheancients.generation.generators.portal.AncientPortalNaturalGeneration;
+import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortal;
+import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.handlers.HandlerR;
@@ -57,14 +60,15 @@ public class TpToAncientWorldBlock extends BaseBlock{
     public void onEntityCollidedWithBlock(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull Entity entityIn) {
         if (!entityIn.getEntityData().getBoolean(noCollisionNBT)) {
             if (entityIn instanceof EntityPlayerMP) {
-                EntityPlayer player = (EntityPlayer) entityIn;
+                EntityPlayerMP player = (EntityPlayerMP) entityIn;
                 ArrayList<String> ID = HandlerR.isPlayerUseUnresolvedItems(player);
                 if ((ID.isEmpty() || !TRAConfigs.PortalSettings.checkItems) && (ServerEventsHandler.getDifficultyId() != 0 || !TRAConfigs.AncientWorldSettings.noPeaceful)) {
                     player.fallDistance = 0;
-                    AncientWorld.tpToAncientWorld((EntityPlayerMP) player);
+//                    AncientWorld.tpToAncientWorld(player);
+                    AncientPortalsProcessor.onPlayerCollidePortal(player);
                 } else {
                     if (!ID.isEmpty()) {
-                        HandlerR.sendMessageTranslate((EntityPlayerMP) player, Referense.MODID + ".portal.message");
+                        HandlerR.sendMessageTranslate(player, Referense.MODID + ".portal.message");
                         player.sendMessage(new TextComponentString(ID.toString()));
                         ID.clear();
                     } else {

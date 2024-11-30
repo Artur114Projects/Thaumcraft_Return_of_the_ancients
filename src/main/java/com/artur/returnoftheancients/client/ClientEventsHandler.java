@@ -4,6 +4,8 @@ import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.world.WorldProviderEnd;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -21,6 +23,7 @@ public class ClientEventsHandler {
     private static byte cpt = 0;
 
     // TODO: Сделать что нибуть с туманом (Починить)
+    // TODO: Сделать плавный переход со светом и цветом тумана
     @SubscribeEvent
     public static void fogSetColor(EntityViewRenderEvent.FogColors e) {
         if (e.getEntity().getEntityWorld().provider.getDimension() == ancient_world_dim_id) {
@@ -30,24 +33,30 @@ public class ClientEventsHandler {
             return;
         }
         if (e.getEntity().getEntityWorld().getBiome(e.getEntity().getPosition()).equals(InitBiome.TAINT)) {
-            e.setRed(43.0F / 255.0F);
+            e.setRed((43.0F / 4.0f) / 255.0F);
             e.setGreen(0.0F / 255.0F);
-            e.setBlue(61.0F / 255.0F);
+            e.setBlue((61.0F / 4.0f) / 255.0F);
 
             RenderEventHandler.fogFiddled = true;
             if (RenderEventHandler.fogDuration < 40) {
                 RenderEventHandler.fogDuration += 2;
             }
-            return;
         }
     }
+
+//    @SubscribeEvent
+//    public static void fogRender(EntityViewRenderEvent.RenderFogEvent e) {
+//        if (e.getEntity().dimension == ancient_world_dim_id) {
+//            GlStateManager.color(0, 0, 0, 1);
+//        }
+//    }
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public static void fogDensityEvent(EntityViewRenderEvent.RenderFogEvent event) {
         if (RenderEventHandler.fogDuration < 2 && RenderEventHandler.fogFiddled) {
             GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
-            GL11.glFogf(GL11.GL_FOG_DENSITY, 0.04F);
+            GL11.glFogf(GL11.GL_FOG_DENSITY, 0.1F);
             RenderEventHandler.fogFiddled = false;
         }
     }

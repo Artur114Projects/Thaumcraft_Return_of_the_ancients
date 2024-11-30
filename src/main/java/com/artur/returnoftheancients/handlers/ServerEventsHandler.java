@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.PlayerTimer;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
 import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
+import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -13,6 +14,7 @@ import com.artur.returnoftheancients.blocks.TpToAncientWorldBlock;
 import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
+import net.minecraft.command.CommandWeather;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -72,6 +74,11 @@ public class ServerEventsHandler {
     public static void tpToHome(EntityPlayerMP player, int dimension) {
         player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, true);
         FreeTeleporter.teleportToDimension(player, dimension, WorldDataFields.portalX, 3, WorldDataFields.portalZ);
+        player.getEntityData().setBoolean(tpToHomeNBT, true);
+    }
+
+    public static void setTpToHomeNBTData(EntityPlayerMP player) {
+        player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, true);
         player.getEntityData().setBoolean(tpToHomeNBT, true);
     }
 
@@ -226,7 +233,7 @@ public class ServerEventsHandler {
 
     protected static void onPlayerLost(EntityPlayerMP player) {
         player.setHealth(20);
-        if (!AncientWorld.playerLostBus(player.getUniqueID())) tpToHome(player);
+        if (!AncientWorld.playerLostBus(player.getUniqueID())) AncientPortalsProcessor.tpToHome(player);
     }
 
     protected static void onPlayerTpToHome(EntityPlayerMP player) {
@@ -318,7 +325,7 @@ public class ServerEventsHandler {
                     if (difficultyId == 0) {
                         if (e.player instanceof EntityPlayerMP) {
 //                            HandlerR.sendMessageString((EntityPlayerMP) e.player, "PEACEFUL DIFFICULTY ???");
-                            tpToHome((EntityPlayerMP) e.player);
+                            AncientPortalsProcessor.tpToHome((EntityPlayerMP) e.player);
                         }
                     }
                 }

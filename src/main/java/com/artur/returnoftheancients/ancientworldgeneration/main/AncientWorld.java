@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEn
 import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntryTeam;
 import com.artur.returnoftheancients.ancientworldgeneration.util.Team;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.IBuild;
+import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
@@ -180,7 +181,7 @@ public class AncientWorld {
         for (AncientEntry entry : ANCIENT_ENTRIES) {
             if (entry.wakeUp(player)) return;
         }
-        if (!player.isCreative()) ServerEventsHandler.tpToHome(player);
+        if (!player.isCreative()) AncientPortalsProcessor.tpToHome(player);
     }
 
     public static void playerLoggedOutBus(UUID id) {

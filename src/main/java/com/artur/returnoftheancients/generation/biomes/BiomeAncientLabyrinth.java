@@ -27,8 +27,8 @@ public class BiomeAncientLabyrinth extends BiomeBase {
 
     public BiomeAncientLabyrinth(String registryName, Biome.BiomeProperties properties, EBiome eBiome) {
         super(registryName, properties, eBiome);
-        this.topBlock = Blocks.BEDROCK.getDefaultState();
-        this.fillerBlock = Blocks.BEDROCK.getDefaultState();
+        this.topBlock = Blocks.AIR.getDefaultState();
+        this.fillerBlock = Blocks.AIR.getDefaultState();
 
         spawnListEntryList.add(new SpawnListEntry(EntityEldritchGuardian.class, 100, 4, 14));
         spawnListEntryList.add(new SpawnListEntry(EntityMindSpider.class, 30, 20, 100));

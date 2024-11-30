@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.handlers;
 
+import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntry;
 import com.artur.returnoftheancients.items.ItemSoulBinder;
 import com.artur.returnoftheancients.misc.SoundTRA;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -9,8 +10,8 @@ import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockAnvil;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -26,9 +27,9 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.layer.IntCache;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.jetbrains.annotations.Nullable;
+import scala.Int;
 import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
@@ -96,7 +97,7 @@ public class HandlerR {
                 }
             }
             if (!is) {
-                ID.add(itemStack.getItem().getCreatorModId(itemStack) + ":" + itemStack.getItem().getUnlocalizedName().replaceAll("item.", ""));
+                ID.add(I18n.format(itemStack.getItem().getUnlocalizedName() + ".name"));
             }
         }
         for (ItemStack itemStack : player.inventory.armorInventory) {
@@ -442,4 +443,27 @@ public class HandlerR {
         return rand.nextInt(100) < percentage;
     }
 
+
+    public static int foundMostSmallUniqueIntInList(List<Integer> list) {
+        if (list.isEmpty()) return 0;
+        boolean isFound;
+        int value = 0;
+        while (true) {
+            isFound = true;
+            for (Integer i : list) {
+                if (i == value) {
+                    isFound = false;
+                    break;
+                }
+            }
+            if (isFound) {
+                return value;
+            }
+            value++;
+        }
+    }
+
+    public static BlockPos.MutableBlockPos addToMutableBP(BlockPos.MutableBlockPos mPos, int addX, int addY, int addZ) {
+        return mPos.setPos(mPos.getX() + addX, mPos.getY() + addY, mPos.getZ() + addZ);
+    }
 }

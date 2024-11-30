@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.blocks;
 
+import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -52,7 +53,7 @@ public class TpToHomeBlock extends BaseBlock {
         if (!entityIn.world.isRemote && entityIn instanceof EntityPlayerMP) {
             EntityPlayer player = (EntityPlayer) entityIn;
             if (player.getServer() != null && player.world != null) {
-                ServerEventsHandler.tpToHome((EntityPlayerMP) player);
+                AncientPortalsProcessor.tpToHome((EntityPlayerMP) player);
                 player.move(MoverType.PLAYER, WorldDataFields.portalX, 3, WorldDataFields.portalZ);
             }
         }

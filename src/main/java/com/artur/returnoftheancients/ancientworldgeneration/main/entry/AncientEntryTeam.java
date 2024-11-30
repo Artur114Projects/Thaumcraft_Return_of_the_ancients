@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.ancientworldgeneration.main.entry;
 
 import com.artur.returnoftheancients.ancientworldgeneration.util.Team;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.ITeamTask;
+import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -52,7 +53,7 @@ public class AncientEntryTeam extends AncientEntry {
             return;
         }
         if (team.isRequestDelete()) {
-            team.setToAll(ServerEventsHandler::tpToHome);
+            team.setToAll(AncientPortalsProcessor::tpToHome);
             requestToDelete();
         }
         if (!team.isActive()) isSleep = true;

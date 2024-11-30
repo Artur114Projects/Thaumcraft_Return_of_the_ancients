@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.network;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
+import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -21,7 +22,7 @@ public class ServerPacketTpToHome implements IMessage {
         @Override
         public IMessage onMessage(ServerPacketTpToHome message, MessageContext ctx) {
             AncientWorld.interrupt(ctx.getServerHandler().player);
-            ServerEventsHandler.tpToHome(ctx.getServerHandler().player);
+            AncientPortalsProcessor.tpToHome(ctx.getServerHandler().player);
             return null;
         }
     }

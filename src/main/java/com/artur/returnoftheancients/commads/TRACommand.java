@@ -6,19 +6,25 @@ import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
+
 public class TRACommand extends CommandBase {
 
-    String NAME = Referense.MODID, USAGE = "/" + Referense.MODID + " updatedropprimalblade" + "; seed" + "; help" + "; tptoportal";
+    String NAME = Referense.MODID, USAGE = "returnoftheancients.command.main.usage";
 
 
     @Override
@@ -39,9 +45,6 @@ public class TRACommand extends CommandBase {
             return;
         }
         switch (args[0]) {
-            case "help":
-                player.sendMessage(new TextComponentString(TextFormatting.RED + "Usage: " + USAGE));
-                break;
             case "updatedropprimalblade":
                 WorldData.get().saveData.setBoolean(IALGS.isPrimalBladeDropKey, false);
                 WorldData.get().markDirty();
@@ -57,19 +60,21 @@ public class TRACommand extends CommandBase {
                 }
                 break;
             case "tptoportal":
-            if (player.isCreative()) {
                 if (player.dimension == WorldDataFields.portalDimension) {
                     player.connection.setPlayerLocation(WorldDataFields.portalX, 100, WorldDataFields.portalZ, player.rotationYaw, player.rotationPitch);
                     player.sendMessage(new TextComponentString("Teleport complete!").setStyle(new Style().setColor(TextFormatting.GREEN)));
                 } else {
                     player.sendMessage(new TextComponentString("you are in a dimension without a portal, a dimension with a portal: " + WorldDataFields.portalDimension).setStyle(new Style().setColor(TextFormatting.RED)));
                 }
-            }
             break;
             default:
-                player.sendMessage(new TextComponentString(TextFormatting.RED + "Usage: " + USAGE));
+                player.sendMessage(new TextComponentString(TextFormatting.RED + "Usage: " + I18n.format(USAGE)));
                 break;
         }
     }
 
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
+    {
+        return args.length == 1 ? getListOfStringsMatchingLastWord(args, "tptoportal", "seed", "help", "updatedropprimalblade") : Collections.emptyList();
+    }
 }

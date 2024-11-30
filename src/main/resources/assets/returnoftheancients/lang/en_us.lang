@@ -24,6 +24,7 @@ returnoftheancients.rui.t=put it away
 returnoftheancients.rui.f=you have 30 seconds
 returnoftheancients.gui.esc=Press ESC again to exit.
 returnoftheancients.message.new-version=Welcome to Thaumcraft: Return of the ancients v1.4.0-betta!
+returnoftheancients.command.main.usage=/returnoftheancients <updatedropprimalblade|seed|help|tptoportal>
 ###################################################################################
 # Loading gui
 ###################################################################################

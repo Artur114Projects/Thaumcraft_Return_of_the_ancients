@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.generation.chunkgenerators;
 import com.artur.returnoftheancients.generation.biomes.BiomeAncientLabyrinth;
 import com.artur.returnoftheancients.init.InitBiome;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -19,7 +20,6 @@ public class ChunkGeneratorAncientWorld implements IChunkGenerator {
 
     private final Biome biome = InitBiome.ANCIENT_LABYRINTH;
     private final World world;
-    private final ChunkPrimer chunkPrimer = new ChunkPrimer();
 
     public ChunkGeneratorAncientWorld(World worldIn) {
         world = worldIn;
@@ -27,7 +27,7 @@ public class ChunkGeneratorAncientWorld implements IChunkGenerator {
 
     @Override
     public Chunk generateChunk(int parChunkX, int parChunkZ) {
-        Chunk chunk = new Chunk(world, chunkPrimer, parChunkX, parChunkZ);
+        Chunk chunk = new Chunk(world, new ChunkPrimer(), parChunkX, parChunkZ);
         byte[] abyte = chunk.getBiomeArray();
 
         for (int i = 0; i < abyte.length; ++i)

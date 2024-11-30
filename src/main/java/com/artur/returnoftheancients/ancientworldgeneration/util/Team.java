@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.ancientworldgeneration.util;
 
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.ITeamTask;
+import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.init.InitDimensions;
@@ -132,7 +133,7 @@ public class Team {
         if (uuids.isEmpty()) requestToDelete();
         if (flag && playerDead != null) {
             setToAll(player -> HandlerR.sendMessageString(player, TextFormatting.RED + "Player: " + TextFormatting.AQUA + "[" + playerDead.getName() + "]" + TextFormatting.RED + " is dead :("));
-            ServerEventsHandler.tpToHome(playerDead);
+            AncientPortalsProcessor.tpToHome(playerDead);
         }
         return flag;
     }

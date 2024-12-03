@@ -6,6 +6,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 
 import java.util.Random;
+// TODO: Сделать по нормальному
 
 public class WorldGenTaintBigTree extends WorldGenAbstractTree {
     public WorldGenTaintBigTree(boolean notify) {

@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.generation.generators.portal.base;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
+import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.generation.generators.portal.util.interfaces.IExplore;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
 import com.artur.returnoftheancients.handlers.HandlerR;
@@ -8,29 +9,35 @@ import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.blocks.BlocksTC;
 
 import java.util.ArrayList;
 import java.util.List;
 
 // TODO: Добавить posY портала в tpToHome
+// TODO: Добавить естественную генерацию портала
+// TODO: Разобраться с компасом
+// TODO: Решить не понятный баг с тем что при прерывании возвращает на портал 0
 public abstract class AncientPortal {
 
     public static final String PortalID = "PortalID";
 
     protected final BlockPos.MutableBlockPos mPos = new BlockPos.MutableBlockPos();
-    private final List<IExplore> exploreList;
+    private final List<IExplore> exploreList = new ArrayList<>();
+    private boolean isExplore = false;
     private int exploreIndex = 0;
 
     protected final World world;
+    private boolean isExploring;
 
     public final int dimension;
-    private boolean isExplore;
     public final int chunkX;
     public final int chunkZ;
 
@@ -44,24 +51,42 @@ public abstract class AncientPortal {
 
 
     public AncientPortal(MinecraftServer server, int dimension, int chunkX, int chunkZ, int posY, int id) {
-        if (TRAConfigs.Any.debugMode) System.out.println("New portal x:" + chunkX + "z:" + chunkZ);
+        if (TRAConfigs.Any.debugMode) System.out.println("New portal x:" + chunkX + "z:" + chunkZ + " id:" + id);
+        if (AncientPortalsProcessor.hasPortal(chunkX, chunkZ, dimension)) isExplore = true;
         AncientPortalsProcessor.PORTALS.put(id, this);
         this.world = server.getWorld(dimension);
-        this.exploreList = new ArrayList<>();
         this.dimension = dimension;
         this.posX = chunkX << 4;
         this.posZ = chunkZ << 4;
-        this.isExplore = false;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
         this.posY = posY;
         this.id = id;
     }
 
+    public AncientPortal(MinecraftServer server, NBTTagCompound compound) {
+        this.chunkX = compound.getInteger("chunkX");
+        this.chunkZ = compound.getInteger("chunkZ");
+        this.id = compound.getInteger("id");
+        if (TRAConfigs.Any.debugMode) System.out.println("Portal load x:" + chunkX + "z:" + chunkZ + " id:" + id);
+        this.dimension = compound.getInteger("dimension");
+        this.isExploring = compound.getBoolean("isExploring");
+        this.posY = compound.getInteger("posY");
+        this.world = server.getWorld(dimension);
+        AncientPortalsProcessor.PORTALS.put(id, this);
+        this.posX = chunkX << 4;
+        this.posZ = chunkZ << 4;
+        this.isExplore = false;
+    }
+
 
     public abstract void build();
+    protected abstract int getPortalTypeID();
 
     public void update(TickEvent.ServerTickEvent e) {
+        if (isExploring && exploreList.isEmpty()) {
+            explore();
+        }
         if (!exploreList.isEmpty()) {
             if (exploreIndex == exploreList.size()) {
                 exploreList.clear();
@@ -72,6 +97,10 @@ public abstract class AncientPortal {
             exploreList.get(exploreIndex).explore();
             exploreIndex++;
         }
+    }
+
+    public void onCollide(EntityPlayerMP player) {
+        tpToAncientWorld(player);
     }
 
     public void tpToAncientWorld(EntityPlayerMP player) {
@@ -90,6 +119,17 @@ public abstract class AncientPortal {
             explore();
         }
     }
+
+    protected void genAncientPortal() {
+        int localX = posX + 5;
+        int localZ = posZ + 5;
+        CustomGenStructure.gen(world, localX, posY, localZ, "ancient_portal_air_cube");
+        for (int y = posY + 32; y > 0; y -= 31) {
+            CustomGenStructure.gen(world, localX, y - (31 + 32), localZ, "ancient_portal");
+        }
+        CustomGenStructure.gen(world, localX, 0, localZ, "ancient_portal_floor");
+    }
+
 
     public boolean isCollide(int x, int y, int z) {
         if (x >> 4 == chunkX && z >> 4 == chunkZ) {
@@ -155,6 +195,23 @@ public abstract class AncientPortal {
             }
         }
         exploreList.add(() -> world.createExplosion(null, eX, posY, eZ, 16, true));
+        isExploring = true;
         if (TRAConfigs.Any.debugMode) System.out.println("Portal id:" + id + " is explore!");
+    }
+
+    @Nullable
+    public NBTTagCompound writeToNBT() {
+        if (isExplore) {
+            return null;
+        }
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setInteger("portalTypeID", getPortalTypeID());
+        nbt.setBoolean("isExploring", isExploring);
+        nbt.setInteger("dimension", dimension);
+        nbt.setInteger("chunkX", chunkX);
+        nbt.setInteger("chunkZ", chunkZ);
+        nbt.setInteger("posY", posY);
+        nbt.setInteger("id", id);
+        return nbt;
     }
 }

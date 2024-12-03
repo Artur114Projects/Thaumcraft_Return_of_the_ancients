@@ -243,7 +243,7 @@ public class AncientWorld {
         WorldData worldData = WorldData.get();
         worldData.saveData.setTag("AncientWorldPak", nbt);
         worldData.markDirty();
-        if (TRAConfigs.Any.debugMode) System.out.println("Save finish " + nbt);
+        if (TRAConfigs.Any.debugMode) System.out.println("Save ancient world finish " + nbt);
     }
 
     private static void saveAll(NBTTagCompound nbt) {

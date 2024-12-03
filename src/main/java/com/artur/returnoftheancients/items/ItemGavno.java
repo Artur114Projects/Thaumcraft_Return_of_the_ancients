@@ -95,8 +95,7 @@ public class ItemGavno extends BaseItem {
 			nbt.setString("sendMessage", "gavno");
 			MainR.NETWORK.sendToAll(new ClientPacketMisc(nbt));
 
-			AncientPortal portal = new AncientPortalNaturalGeneration(worldIn.getMinecraftServer(), worldIn.provider.getDimension(), pos.getX() >> 4, pos.getZ() >> 4, HandlerR.calculateGenerationHeight(worldIn, pos.getX(), pos.getZ()));
-			portal.build();
+			new AncientPortalNaturalGeneration(worldIn.getMinecraftServer(), worldIn.provider.getDimension(), pos.getX() >> 4, pos.getZ() >> 4, HandlerR.calculateGenerationHeight(worldIn, pos.getX(), pos.getZ()));
 
 //			worldIn.createExplosion(player, pos.getX(), pos.getY(), pos.getZ(), 12, true);
 		}

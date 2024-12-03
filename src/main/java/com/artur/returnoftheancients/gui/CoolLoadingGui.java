@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
+// TODO: Сделать картинку не изменяемой в зависимости от соотношения сторон
 public class CoolLoadingGui extends GuiScreen {
     public static CoolLoadingGui instance;
     private GuiButton button;

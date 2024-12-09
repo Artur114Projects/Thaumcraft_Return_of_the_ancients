@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.tileentity;
 
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
-import com.artur.returnoftheancients.client.CameraShake;
+import com.artur.returnoftheancients.client.misc.CameraShake;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -27,10 +27,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.common.entities.monster.EntityEldritchGuardian;
 import thaumcraft.common.entities.monster.EntityInhabitedZombie;
-import thaumcraft.common.entities.monster.EntityMindSpider;
 
 import java.util.List;
-import java.util.logging.Handler;
 
 public class TileEntityEldritchTrap extends TileEntity implements ITickable {
     private AxisAlignedBB detectionBox = null;

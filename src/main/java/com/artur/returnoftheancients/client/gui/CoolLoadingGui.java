@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.gui;
+package com.artur.returnoftheancients.client.gui;
 
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ServerPacketTpToHome;
@@ -94,7 +94,7 @@ public class CoolLoadingGui extends GuiScreen {
         super.initGui();
         resolution = new ScaledResolution(mc);
         if (isTeam) {
-            this.button = new TRAButton(0, 0, 0, fontRenderer.getStringWidth(I18n.format("rota.l-gui.button.team")) + 16, 20, I18n.format("rota.l-gui.button.team"));
+            this.button = new TRAButton(0, 0, 0, fontRenderer.getStringWidth(I18n.format("rota.l-gui.button.team")) + 16, 20, I18n.format("rota.l-gui.button.team"), new ResourceLocation(Referense.MODID + ":textures/gui/tra_button.png"));
             this.buttonList.add(this.button);
         }
     }

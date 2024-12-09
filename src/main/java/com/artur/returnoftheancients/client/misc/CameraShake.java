@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.client;
+package com.artur.returnoftheancients.client.misc;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;

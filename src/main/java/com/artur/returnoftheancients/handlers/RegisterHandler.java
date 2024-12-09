@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.handlers;
 
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructureIsUseEBS;
+import com.artur.returnoftheancients.blocks.BaseBlockContainer;
 import com.artur.returnoftheancients.commads.*;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitItems;
@@ -10,6 +11,7 @@ import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
+import com.artur.returnoftheancients.network.ServerPacketTileAncientTeleportData;
 import com.artur.returnoftheancients.network.ServerPacketTpToHome;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.tileentity.BlockTileEntity;
@@ -59,9 +61,13 @@ public class RegisterHandler {
 	}
 
 	public static void registerTileEntity() {
-		for (BlockTileEntity block : InitTileEntity.TILE_ENTITIES) {
+		for (BlockTileEntity<?> block : InitTileEntity.TILE_ENTITIES) {
 			GameRegistry.registerTileEntity(block.getTileEntityClass(), block.getRegistryName().toString());
 		}
+		for (BaseBlockContainer<?> block : InitTileEntity.TILE_ENTITIES_CONTAINER) {
+			GameRegistry.registerTileEntity(block.getTileEntityClass(), block.getRegistryName().toString());
+		}
+
 	}
 
 	public static void preInitRegistries()
@@ -73,6 +79,7 @@ public class RegisterHandler {
 		MainR.NETWORK.registerMessage(new ServerPacketTpToHome.HandlerTTH(), ServerPacketTpToHome.class, id++, Side.SERVER);
 		MainR.NETWORK.registerMessage(new ClientPacketPlayerNBTData.HandlerPND(), ClientPacketPlayerNBTData.class, id++, Side.CLIENT);
 		MainR.NETWORK.registerMessage(new ClientPacketMisc.HandlerM(), ClientPacketMisc.class, id++, Side.CLIENT);
+		MainR.NETWORK.registerMessage(new ServerPacketTileAncientTeleportData.HandlerTATD(), ServerPacketTileAncientTeleportData.class, id++, Side.SERVER);
 	}
 
 	@SubscribeEvent

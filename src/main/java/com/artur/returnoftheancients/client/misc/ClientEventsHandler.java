@@ -1,12 +1,12 @@
-package com.artur.returnoftheancients.client;
+package com.artur.returnoftheancients.client.misc;
 
-import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.init.InitBiome;
+import com.artur.returnoftheancients.items.ItemGavno;
 import com.artur.returnoftheancients.referense.Referense;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.world.WorldProviderEnd;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -43,6 +43,26 @@ public class ClientEventsHandler {
             }
         }
     }
+
+    @SubscribeEvent
+    public static void onRenderPlayer(RenderPlayerEvent.Pre event) {
+        EntityPlayer player = event.getEntityPlayer();
+        ItemStack heldItem = player.getHeldItemMainhand();
+
+        if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemGavno) {
+            player.swingProgress = 0.0F;
+            player.prevSwingProgress = 0.0F;
+
+            player.limbSwingAmount = 0.0F;
+        }
+    }
+
+    @SubscribeEvent
+    public static void renderView(EntityViewRenderEvent.CameraSetup e) {
+
+
+    }
+
 
 //    @SubscribeEvent
 //    public static void fogRender(EntityViewRenderEvent.RenderFogEvent e) {

@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.gui;
+package com.artur.returnoftheancients.client.gui;
 
 import net.minecraft.client.Minecraft;
 

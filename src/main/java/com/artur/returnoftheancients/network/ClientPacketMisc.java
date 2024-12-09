@@ -1,9 +1,9 @@
 package com.artur.returnoftheancients.network;
 
-import com.artur.returnoftheancients.gui.CoolLoadingGui;
+import com.artur.returnoftheancients.client.gui.CoolLoadingGui;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.misc.TRAConfigs;
-import com.artur.returnoftheancients.gui.LoadingGui;
+import com.artur.returnoftheancients.client.gui.LoadingGui;
 import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.referense.Referense;
 import io.netty.buffer.ByteBuf;

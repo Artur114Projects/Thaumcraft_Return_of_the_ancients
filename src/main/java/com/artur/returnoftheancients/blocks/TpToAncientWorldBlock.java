@@ -5,34 +5,46 @@ import com.artur.returnoftheancients.generation.generators.portal.AncientPortalN
 import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortal;
 import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
+import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TpToAncientWorldBlock extends BaseBlock{
-    public static boolean noCollision = false;
 
     public static final String noCollisionNBT = "noCollisionNBT";
     protected static final AxisAlignedBB HOME_PORTAL_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D);
     public TpToAncientWorldBlock(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
-//        this.setCreativeTab(MainR.ReturnOfTheAncientsTab);
+        this.setCreativeTab(MainR.ReturnOfTheAncientsTab);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
+        tooltip.add(TextFormatting.RED + I18n.format("tile.tp_to_ancient_world_block.info"));
     }
 
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)

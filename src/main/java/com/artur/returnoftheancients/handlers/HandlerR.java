@@ -11,6 +11,10 @@ import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -28,6 +32,8 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 import scala.Int;
 import thaumcraft.api.capabilities.IPlayerKnowledge;
@@ -466,4 +472,32 @@ public class HandlerR {
     public static BlockPos.MutableBlockPos addToMutableBP(BlockPos.MutableBlockPos mPos, int addX, int addY, int addZ) {
         return mPos.setPos(mPos.getX() + addX, mPos.getY() + addY, mPos.getZ() + addZ);
     }
+
+    @SideOnly(Side.CLIENT)
+    private void renderBox(Tessellator tessellator, BufferBuilder bufferBuilder, double x, double y, double z, double x1, double y1, double z1, int a, int b, int c)
+    {
+        GlStateManager.glLineWidth(2.0F);
+        bufferBuilder.begin(3, DefaultVertexFormats.POSITION_COLOR);
+        bufferBuilder.pos(x, y, z).color((float)b, (float)b, (float)b, 0.0F).endVertex();
+        bufferBuilder.pos(x, y, z).color(b, b, b, a).endVertex();
+        bufferBuilder.pos(x1, y, z).color(b, c, c, a).endVertex();
+        bufferBuilder.pos(x1, y, z1).color(b, b, b, a).endVertex();
+        bufferBuilder.pos(x, y, z1).color(b, b, b, a).endVertex();
+        bufferBuilder.pos(x, y, z).color(c, c, b, a).endVertex();
+        bufferBuilder.pos(x, y1, z).color(c, b, c, a).endVertex();
+        bufferBuilder.pos(x1, y1, z).color(b, b, b, a).endVertex();
+        bufferBuilder.pos(x1, y1, z1).color(b, b, b, a).endVertex();
+        bufferBuilder.pos(x, y1, z1).color(b, b, b, a).endVertex();
+        bufferBuilder.pos(x, y1, z).color(b, b, b, a).endVertex();
+        bufferBuilder.pos(x, y1, z1).color(b, b, b, a).endVertex();
+        bufferBuilder.pos(x, y, z1).color(b, b, b, a).endVertex();
+        bufferBuilder.pos(x1, y, z1).color(b, b, b, a).endVertex();
+        bufferBuilder.pos(x1, y1, z1).color(b, b, b, a).endVertex();
+        bufferBuilder.pos(x1, y1, z).color(b, b, b, a).endVertex();
+        bufferBuilder.pos(x1, y, z).color(b, b, b, a).endVertex();
+        bufferBuilder.pos(x1, y, z).color((float)b, (float)b, (float)b, 0.0F).endVertex();
+        tessellator.draw();
+        GlStateManager.glLineWidth(1.0F);
+    }
+
 }

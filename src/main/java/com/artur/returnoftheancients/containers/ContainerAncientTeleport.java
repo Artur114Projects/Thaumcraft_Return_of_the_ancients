@@ -29,7 +29,7 @@ public class ContainerAncientTeleport extends Container {
             for (int j = 0; j < 9; ++j) {
                 int x = j * 18 + 74;
                 int y = i * 18 + 106;
-                this.addSlotToContainer(new Slot(playerInventory, j + i * 9 + 10, x, y));
+                this.addSlotToContainer(new Slot(playerInventory, j + i * 9 + 9, x, y));
             }
         }
 
@@ -58,6 +58,8 @@ public class ContainerAncientTeleport extends Container {
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
         listener.sendWindowProperty(this, 0, tile.isActive);
+
+        tile.aspectBottles.addListener(listener, this);
     }
 
     @Override
@@ -70,6 +72,8 @@ public class ContainerAncientTeleport extends Container {
                 icontainerlistener.sendWindowProperty(this, 0, tile.isActive);
             }
 
+            tile.aspectBottles.detectAndSendChanges(icontainerlistener, this);
+
             lastIsActive = tile.isActive;
         }
     }
@@ -81,6 +85,10 @@ public class ContainerAncientTeleport extends Container {
             case 0:{
                 tile.isActive = data;
             } break;
+        }
+
+        if (id >= 100) {
+            tile.aspectBottles.updateCount(id, data);
         }
     }
 

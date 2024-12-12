@@ -43,6 +43,7 @@ public class CoolLoadingGui extends GuiScreen {
     protected boolean isDraw = false;
     protected float closingTime = 10;
     protected float openingTime = 0;
+    protected int buttonTime = 0;
     protected boolean isTeam;
     protected String lore;
 
@@ -59,6 +60,7 @@ public class CoolLoadingGui extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == 0) {
+            button.enabled = false;
             isDrawTeam = !isDrawTeam;
         }
     }
@@ -67,15 +69,27 @@ public class CoolLoadingGui extends GuiScreen {
     public void updateScreen() {
         super.updateScreen();
         if (isDraw) {
+            if (button != null) {
+                if (!button.enabled) {
+                    buttonTime++;
+                    if (buttonTime >= 2) {
+                        buttonTime = 0;
+                        button.enabled = true;
+                    }
+                }
+            }
+
             if (rand.nextInt(11) != 0) {
                 gif.update();
             }
+
             if (isOpening) {
                 openingTime += 0.5F;
                 if (openingTime >= 10) {
                     isOpening = false;
                 }
             }
+
             if (isClosing) {
                 closingTime -= 0.5F;
                 if (closingTime <= 0) {

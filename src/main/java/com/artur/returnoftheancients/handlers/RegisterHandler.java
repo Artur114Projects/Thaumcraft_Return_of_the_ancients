@@ -9,10 +9,7 @@ import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
-import com.artur.returnoftheancients.network.ClientPacketMisc;
-import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
-import com.artur.returnoftheancients.network.ServerPacketTileAncientTeleportData;
-import com.artur.returnoftheancients.network.ServerPacketTpToHome;
+import com.artur.returnoftheancients.network.*;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.tileentity.BlockTileEntity;
 import com.artur.returnoftheancients.utils.interfaces.IHasModel;
@@ -80,6 +77,7 @@ public class RegisterHandler {
 		MainR.NETWORK.registerMessage(new ClientPacketPlayerNBTData.HandlerPND(), ClientPacketPlayerNBTData.class, id++, Side.CLIENT);
 		MainR.NETWORK.registerMessage(new ClientPacketMisc.HandlerM(), ClientPacketMisc.class, id++, Side.CLIENT);
 		MainR.NETWORK.registerMessage(new ServerPacketTileAncientTeleportData.HandlerTATD(), ServerPacketTileAncientTeleportData.class, id++, Side.SERVER);
+        MainR.NETWORK.registerMessage(new ClientPacketSyncTileAncientTeleport.HandlerCSTAT(), ClientPacketSyncTileAncientTeleport.class, id++, Side.CLIENT);
 	}
 
 	@SubscribeEvent

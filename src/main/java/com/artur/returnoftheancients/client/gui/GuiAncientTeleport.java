@@ -5,8 +5,8 @@ import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ServerPacketTileAncientTeleportData;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientTeleport;
+import com.artur.returnoftheancients.utils.AspectBottle;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,10 +19,9 @@ import java.io.IOException;
 
 public class GuiAncientTeleport extends GuiContainer {
     private final ResourceLocation textureBackground = new ResourceLocation(Referense.MODID, "textures/gui/container/mystorage.png");
-    private final ResourceLocation textureButton = new ResourceLocation(Referense.MODID, "textures/gui/container/ancient_teleport_main_button_icon.png");
     private final TileEntityAncientTeleport tile;
     private final InventoryPlayer inventory;
-    private GuiButton buttonMain;
+    private ButtonAncientTeleportMain buttonMain;
 
     public GuiAncientTeleport(TileEntityAncientTeleport tile, EntityPlayer player) {
         super(new ContainerAncientTeleport(player.inventory, tile));
@@ -43,6 +42,7 @@ public class GuiAncientTeleport extends GuiContainer {
         super.actionPerformed(button);
         switch (button.id) {
             case 0:{
+                buttonMain.press();
                 MainR.NETWORK.sendToServer(new ServerPacketTileAncientTeleportData(tile.getPos(), tile.getWorld().provider.getDimension(), 0));
             } break;
         }
@@ -51,6 +51,7 @@ public class GuiAncientTeleport extends GuiContainer {
     @Override
     public void updateScreen() {
         super.updateScreen();
+        buttonMain.update();
     }
 
     @Override
@@ -59,8 +60,17 @@ public class GuiAncientTeleport extends GuiContainer {
         buttonMain.enabled = tile.isActive != 1;
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        this.tile.aspectBottles.aspectBottles[0].draw(this, (width - xSize) / 2 + 10, (height - ySize) / 2 + 22, mouseX, mouseY, 32, 64);
+        this.tile.aspectBottles.aspectBottles[1].draw(this, (width - xSize) / 2 + 10 + 32 + 4, (height - ySize) / 2 + 22, mouseX, mouseY, 32, 64);
+        drawHovered(mouseX, mouseY);
+    }
+
+    public void drawHovered(int mouseX, int mouseY) {
         this.renderHoveredToolTip(mouseX, mouseY);
         this.renderMainButtonHoveredToolTip(mouseX, mouseY);
+        for (AspectBottle bottle : tile.aspectBottles.aspectBottles) {
+            bottle.drawHoveredText(this, mouseX, mouseY);
+        }
     }
 
     public void renderMainButtonHoveredToolTip(int mouseX, int mouseY) {

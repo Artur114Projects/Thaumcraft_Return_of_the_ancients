@@ -11,6 +11,7 @@ import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -35,6 +36,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.opengl.GL11;
 import scala.Int;
 import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
@@ -55,7 +57,7 @@ public class HandlerR {
         int y = world.getHeight();
 
         while (y-- >= 0) {
-            Block block = world.getBlockState(new BlockPos(x,y,z)).getBlock();
+            Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
             if (block != Blocks.AIR && block != Blocks.BEDROCK) {
                 break;
             }
@@ -173,7 +175,7 @@ public class HandlerR {
     }
 
     public static boolean isGoodNBTTagPND(NBTTagCompound nbt) {
-        final String[] Tag = new String[] {"dataIndex", "tagSetName", "data"};
+        final String[] Tag = new String[]{"dataIndex", "tagSetName", "data"};
         if (nbt.getByte("dataIndex") > 3) {
             return false;
         }
@@ -181,7 +183,7 @@ public class HandlerR {
     }
 
     public static boolean isGoodNBTTagMisc(NBTTagCompound nbt) {
-        final String[] Tag = new String[] {
+        final String[] Tag = new String[]{
                 "setGuiState",
                 "sendAncientWorldLoadMessage",
                 "sendMessage",
@@ -268,7 +270,7 @@ public class HandlerR {
     }
 
     public static boolean isNumber(char c) {
-        char[] numbers = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+        char[] numbers = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
         for (char c1 : numbers) {
             if (c == c1) {
                 return true;
@@ -278,7 +280,7 @@ public class HandlerR {
     }
 
     public static boolean isNumber(String s) {
-        char[] numbers = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+        char[] numbers = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
         for (int i = 0; i != s.length(); i++) {
             boolean is = false;
             for (char c1 : numbers) {
@@ -294,7 +296,7 @@ public class HandlerR {
         return true;
     }
 
-    public static final String[] defaultCountDifficultyData = new String[] {
+    public static final String[] defaultCountDifficultyData = new String[]{
             "players=12, effect=invisibility, amplifier=1r0",
             "players=12, effect=resistance, amplifier=3p4",
             "players=12, effect=regeneration, amplifier=3p6",
@@ -440,7 +442,7 @@ public class HandlerR {
     }
 
     public static boolean getIgnoringChance(int percentage, Random rand) {
-        if (percentage <= 0 ) {
+        if (percentage <= 0) {
             return true;
         }
         if (percentage >= 100) {
@@ -474,11 +476,10 @@ public class HandlerR {
     }
 
     @SideOnly(Side.CLIENT)
-    private void renderBox(Tessellator tessellator, BufferBuilder bufferBuilder, double x, double y, double z, double x1, double y1, double z1, int a, int b, int c)
-    {
+    private void renderBox(Tessellator tessellator, BufferBuilder bufferBuilder, double x, double y, double z, double x1, double y1, double z1, int a, int b, int c) {
         GlStateManager.glLineWidth(2.0F);
         bufferBuilder.begin(3, DefaultVertexFormats.POSITION_COLOR);
-        bufferBuilder.pos(x, y, z).color((float)b, (float)b, (float)b, 0.0F).endVertex();
+        bufferBuilder.pos(x, y, z).color((float) b, (float) b, (float) b, 0.0F).endVertex();
         bufferBuilder.pos(x, y, z).color(b, b, b, a).endVertex();
         bufferBuilder.pos(x1, y, z).color(b, c, c, a).endVertex();
         bufferBuilder.pos(x1, y, z1).color(b, b, b, a).endVertex();
@@ -495,9 +496,45 @@ public class HandlerR {
         bufferBuilder.pos(x1, y1, z1).color(b, b, b, a).endVertex();
         bufferBuilder.pos(x1, y1, z).color(b, b, b, a).endVertex();
         bufferBuilder.pos(x1, y, z).color(b, b, b, a).endVertex();
-        bufferBuilder.pos(x1, y, z).color((float)b, (float)b, (float)b, 0.0F).endVertex();
+        bufferBuilder.pos(x1, y, z).color((float) b, (float) b, (float) b, 0.0F).endVertex();
         tessellator.draw();
         GlStateManager.glLineWidth(1.0F);
     }
 
+    @SideOnly(Side.CLIENT)
+    public static void renderQuadTextureAtlas(int posX, int posY, float startDrawX, float startDrawY, float textureSizeX, float textureSizeY, float scale) {
+
+        startDrawX = (scale * startDrawX);
+        startDrawY = (scale * startDrawY);
+        textureSizeX = (scale * textureSizeX);
+        textureSizeY = (scale * textureSizeY);
+
+        float drawQuadSize = Math.min(textureSizeX, textureSizeY);
+
+        float posX1 = posX + drawQuadSize;
+        float posY1 = posY + drawQuadSize;
+
+        float iX = startDrawX / drawQuadSize;
+        float iY = startDrawY / drawQuadSize;
+
+        double endU = (double) (drawQuadSize * (iX + 1)) / textureSizeX;
+        double startU = (double) (drawQuadSize * iX) / textureSizeX;
+
+        double endV = (double) (drawQuadSize * (iY + 1)) / textureSizeY;
+        double startV = (double) (drawQuadSize * iY) / textureSizeY;
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder builder = tessellator.getBuffer();
+        builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        builder.pos(posX, posY1, 0).tex(startU, endV).endVertex();
+        builder.pos(posX1, posY1, 0).tex(endU, endV).endVertex();
+        builder.pos(posX1, posY, 0).tex(endU, startV).endVertex();
+        builder.pos(posX, posY, 0).tex(startU, startV).endVertex();
+        tessellator.draw();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void renderQuadTextureAtlas(int posX, int posY, int startDrawX, int startDrawY, int textureSizeX, int textureSizeY) {
+        renderQuadTextureAtlas(posX, posY, startDrawX, startDrawY, textureSizeX, textureSizeY, 1);
+    }
 }

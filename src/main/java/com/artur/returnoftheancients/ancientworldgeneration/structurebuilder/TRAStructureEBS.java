@@ -45,19 +45,9 @@ public class TRAStructureEBS extends TRAStructure {
                     chunk.getBlockStorageArray()[storageIndex] = storage;
                 }
 
-                // Проверка границ блока в ExtendedBlockStorage
                 int localX = block.x >= 16 ? (block.x >> 4) : block.x;
                 int localY = block.y >= 16 ? (block.y >> 4) : block.y;
                 int localZ = block.z >= 16 ? (block.z >> 4) : block.z;
-
-//            int localX = block.x >= 16 ? 16 - (block.x >> 4) : block.x;
-//            int localY = block.y >= 16 ? 16 - (block.y >> 4) : block.y;
-//            int localZ = block.z >= 16 ? 16 - (block.z >> 4) : block.z;
-
-//            int localX = block.x & 15;
-//            int localY = block.y & 15;
-//            int localZ = block.z & 15;
-
 
                 storage.set(localX, localY, localZ, state);
                 chunkSet.add(chunk);

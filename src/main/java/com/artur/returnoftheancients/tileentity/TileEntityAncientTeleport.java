@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.tileentity;
 
 import com.artur.returnoftheancients.generation.generators.portal.AncientPortalNaturalGeneration;
+import com.artur.returnoftheancients.generation.generators.portal.AncientPortalOpening;
 import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortal;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.utils.AspectBottle;
@@ -13,6 +14,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -22,9 +24,15 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
 import thaumcraft.api.aspects.IEssentiaTransport;
+import thaumcraft.common.lib.events.ToolEvents;
+import thaumcraft.common.tiles.TileThaumcraft;
+import thaumcraft.common.tiles.crafting.TileGolemBuilder;
+import thaumcraft.common.tiles.essentia.TileJarFillable;
 
-public class TileEntityAncientTeleport extends TileEntity implements IAspectContainer, IEssentiaTransport, ITickable {
-    public static final int SIZE = 1;
+import javax.tools.Tool;
+
+public class TileEntityAncientTeleport extends TileThaumcraft implements IAspectContainer, IEssentiaTransport, ITickable {
+    public static final int SIZE = 5;
 
 
     private final ItemStackHandler itemStackHandler = new ItemStackHandler(SIZE) {
@@ -45,10 +53,11 @@ public class TileEntityAncientTeleport extends TileEntity implements IAspectCont
 
     public void requestToActivate() {
         ItemStack stack = itemStackHandler.getStackInSlot(0);
-        if (stack.getItem() == InitItems.GAVNO) {
+        if (stack.getItem() == InitItems.GAVNO && aspectBottles.isAllFull()) {
             itemStackHandler.setStackInSlot(0, ItemStack.EMPTY);
+            aspectBottles.empty(0, 1);
             isActive = 1;
-            portal = new AncientPortalNaturalGeneration(world.getMinecraftServer(), world.provider.getDimension(), pos.getX() >> 4, pos.getZ() >> 4, pos.getY() - 1);
+            portal = new AncientPortalOpening(this);
         }
     }
 
@@ -85,7 +94,6 @@ public class TileEntityAncientTeleport extends TileEntity implements IAspectCont
         }
         if (compound.hasKey("AspectBottles")) {
             aspectBottles.readFromNBT(compound);
-            aspectBottles.sync(this);
         }
     }
 
@@ -98,6 +106,16 @@ public class TileEntityAncientTeleport extends TileEntity implements IAspectCont
         aspectBottles.writeToNBT(compound);
 
         return compound;
+    }
+
+    @Override
+    public void readSyncNBT(NBTTagCompound nbt) {
+        aspectBottles.readFromNBT(nbt);
+    }
+
+    @Override
+    public NBTTagCompound writeSyncNBT(NBTTagCompound nbt) {
+        return aspectBottles.writeToNBT(nbt);
     }
 
     @Override
@@ -123,6 +141,12 @@ public class TileEntityAncientTeleport extends TileEntity implements IAspectCont
     }
 
     @Override
+    public void markDirty() {
+        super.markDirty();
+        this.syncTile(false);
+    }
+
+    @Override
     public AspectList getAspects() {
         return aspectBottles.toAspectList();
     }
@@ -143,7 +167,6 @@ public class TileEntityAncientTeleport extends TileEntity implements IAspectCont
             return 0;
         }
         int ret = aspectBottles.add(aspect, i);
-        aspectBottles.sync(this);
         this.markDirty();
         return ret;
     }

@@ -77,7 +77,6 @@ public class RegisterHandler {
 		MainR.NETWORK.registerMessage(new ClientPacketPlayerNBTData.HandlerPND(), ClientPacketPlayerNBTData.class, id++, Side.CLIENT);
 		MainR.NETWORK.registerMessage(new ClientPacketMisc.HandlerM(), ClientPacketMisc.class, id++, Side.CLIENT);
 		MainR.NETWORK.registerMessage(new ServerPacketTileAncientTeleportData.HandlerTATD(), ServerPacketTileAncientTeleportData.class, id++, Side.SERVER);
-        MainR.NETWORK.registerMessage(new ClientPacketSyncTileAncientTeleport.HandlerCSTAT(), ClientPacketSyncTileAncientTeleport.class, id++, Side.CLIENT);
 	}
 
 	@SubscribeEvent

@@ -1,5 +1,7 @@
 package com.artur.returnoftheancients.client.gui;
 
+import com.artur.returnoftheancients.client.gui.buttons.TRAButton;
+import com.artur.returnoftheancients.client.gui.gif.Gif;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ServerPacketTpToHome;
 import com.artur.returnoftheancients.referense.Referense;

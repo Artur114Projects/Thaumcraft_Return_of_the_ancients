@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.generation.generators.portal.base;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.generation.generators.portal.AncientPortalNaturalGeneration;
+import com.artur.returnoftheancients.generation.generators.portal.AncientPortalOpening;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -93,8 +94,12 @@ public class AncientPortalsProcessor {
     @NotNull
     public static AncientPortal loadPortal(MinecraftServer server, NBTTagCompound nbt) {
         switch (nbt.getInteger("portalTypeID")) {
-            case 0:
+            case 0:{
                 return new AncientPortalNaturalGeneration(server, nbt);
+            }
+            case 1:{
+                return new AncientPortalOpening(server, nbt);
+            }
         }
         return null;
     }

@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.client.gui;
 
+import com.artur.returnoftheancients.client.gui.gif.GifSTime;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.network.ServerPacketTpToHome;

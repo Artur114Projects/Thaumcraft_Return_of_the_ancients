@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -135,6 +136,6 @@ public class ItemGavno extends BaseItem {
 
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add("Don t click");
+		tooltip.add(TextFormatting.UNDERLINE + "M" + TextFormatting.RESET + TextFormatting.OBFUSCATED + "e" + TextFormatting.RESET  + TextFormatting.BOLD + "o" + TextFormatting.RESET  + TextFormatting.STRIKETHROUGH + "w");
 	}
 }

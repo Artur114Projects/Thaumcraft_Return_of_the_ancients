@@ -79,7 +79,9 @@ public class BiomeTaint extends BiomeBase {
             for (int i = 0; i < chunkArea; ++i) {
                 for (int j = 0; j < chunkArea; ++j) {
                     int k = biomes[j + i * chunkArea];
-                    if (BiomeDictionary.hasType(Biome.getBiomeForId(k), InitBiome.TAINT_TYPE_L)) {
+                    Biome biome = Biome.getBiomeForId(k & 255);
+                    if (biome == null) continue;
+                    if (BiomeDictionary.hasType(biome, InitBiome.TAINT_TYPE_L)) {
                         taintBiomeArea.add((short) ((i << 8) | (j & 0xFF)));
                     }
                 }

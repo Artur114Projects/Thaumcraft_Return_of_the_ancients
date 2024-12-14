@@ -9,11 +9,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 
-public class ContainerAncientTeleport extends Container {
+import java.util.HashMap;
+import java.util.Map;
+
+public class ContainerAncientTeleport extends ContainerWithPages {
 
     private final TileEntityAncientTeleport tile;
     private int lastIsActive;
+
 
     public ContainerAncientTeleport(IInventory playerInventory, TileEntityAncientTeleport te) {
 
@@ -25,9 +30,11 @@ public class ContainerAncientTeleport extends Container {
     }
 
     private void bindPlayerSlots(IInventory playerInventory) {
+        setAddSlotsToPlayerInventory();
+
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
-                int x = j * 18 + 74;
+                int x = j * 18 + 69;
                 int y = i * 18 + 106;
                 this.addSlotToContainer(new Slot(playerInventory, j + i * 9 + 9, x, y));
             }
@@ -43,15 +50,19 @@ public class ContainerAncientTeleport extends Container {
     }
 
     private void addSlots() {
+        setAddSlotsToCustomInventory();
 
         IItemHandler itemHandler = this.tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
         int slotID = 0;
 
+        addSlotToContainer(new SlotItemHandler(itemHandler, slotID++, 199, 20));
+        addSlotToContainer(new SlotItemHandler(itemHandler, slotID++, 199, 56));
 
-//        addSlotToContainer(new SlotItemHandler(itemHandler, slotID++, 44, 17));
-        addSlotToContainer(new SlotItemHandler(itemHandler, slotID++, 80, 35));
-//        addSlotToContainer(new SlotItemHandler(itemHandler, slotID++, 116, 53));
+        addSlotToContainer(new SlotItemHandler(itemHandler, slotID++, 181, 38));
+
+        addSlotToContainer(new SlotItemHandler(itemHandler, slotID++, 163, 20));
+        addSlotToContainer(new SlotItemHandler(itemHandler, slotID++, 163, 56));
     }
 
     @Override

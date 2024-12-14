@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.client.gui;
 
+import com.artur.returnoftheancients.client.gui.container.GuiAncientTeleport;
 import com.artur.returnoftheancients.containers.ContainerAncientTeleport;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientTeleport;
 import net.minecraft.entity.player.EntityPlayer;

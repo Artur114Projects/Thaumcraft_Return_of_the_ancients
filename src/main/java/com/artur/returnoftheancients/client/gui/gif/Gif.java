@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.client.gui;
+package com.artur.returnoftheancients.client.gui.gif;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;

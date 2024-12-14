@@ -1,14 +1,9 @@
 package com.artur.returnoftheancients.utils;
 
-import com.artur.returnoftheancients.main.MainR;
-import com.artur.returnoftheancients.network.ClientPacketSyncTileAncientTeleport;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
@@ -44,6 +39,12 @@ public class AspectBottlesList {
     @Nullable
     public AspectBottle getAspectBottleWithAspect(Aspect aspect) {
         return getAspectBottleWithAspect(aspect, 0);
+    }
+
+    public void empty(int... ids) {
+        for (int i : ids) {
+            aspectBottles[i].setCount(0);
+        }
     }
 
     public boolean containAmount(Aspect aspect, int amount) {
@@ -129,23 +130,9 @@ public class AspectBottlesList {
     }
 
     public void readFromNBT(NBTTagCompound nbt) {
-        NBTTagList list = nbt.getTagList("AspectBottles", 9);
+        NBTTagList list = nbt.getTagList("AspectBottles", 10);
         for (int i = 0; i != list.tagCount(); i++) {
             aspectBottles[i].readFromNBT(list.getCompoundTagAt(i));
         }
-    }
-
-    public void sync(TileEntity tile) {
-        BlockPos pos = tile.getPos();
-        MainR.NETWORK.sendToAllAround(new ClientPacketSyncTileAncientTeleport(pos, 0, writeToNBT(new NBTTagCompound())), new NetworkRegistry.TargetPoint(tile.getWorld().provider.getDimension(), pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 128.0D));
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void syncInClient(NBTTagCompound nbt) {
-        NBTTagList list = nbt.getTagList("AspectBottles", 9);
-        for (int i = 0; i != list.tagCount(); i++) {
-            aspectBottles[i].readFromNBT(list.getCompoundTagAt(i));
-        }
-        System.out.println("Sync " + nbt);
     }
 }

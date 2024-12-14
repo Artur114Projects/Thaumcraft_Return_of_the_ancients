@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.client.gui;
+package com.artur.returnoftheancients.client.gui.buttons;
 
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.Minecraft;

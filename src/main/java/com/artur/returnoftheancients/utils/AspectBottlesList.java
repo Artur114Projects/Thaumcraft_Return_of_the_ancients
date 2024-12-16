@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 
+import java.util.List;
 import java.util.Objects;
 
 public class AspectBottlesList {
@@ -47,6 +48,14 @@ public class AspectBottlesList {
         }
     }
 
+    public AspectBottlesList get(int... ids) {
+        AspectBottle[] bottles = new AspectBottle[ids.length];
+        for (int i = 0; i != ids.length; i++) {
+            bottles[i] = aspectBottles[ids[i]];
+        }
+        return new AspectBottlesList(bottles);
+    }
+
     public boolean containAmount(Aspect aspect, int amount) {
         AspectBottle bottle = getAspectBottleWithAspect(aspect);
         return bottle != null && bottle.getCount() < amount;
@@ -61,14 +70,34 @@ public class AspectBottlesList {
         return true;
     }
 
+    public Aspect containAnyAspectOnList(List<Aspect> list) {
+        for (Aspect aspect : list) {
+            if (containsAspect(aspect)) {
+                return aspect;
+            }
+        }
+        return null;
+    }
+
     public boolean isAllFull() {
         for (AspectBottle bottle : aspectBottles) {
-            if (bottle.isNotFull()) {
+            if (bottle.isCanAdd()) {
                 return false;
             }
         }
         return true;
     }
+
+    public boolean isFull(int... bottles) {
+        for (int id : bottles) {
+            AspectBottle bottle = aspectBottles[id];
+            if (bottle.isCanAdd()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public boolean take(Aspect aspect, int amount) {
         return Objects.requireNonNull(getAspectBottleWithAspect(aspect)).takeCount(amount);
@@ -76,6 +105,10 @@ public class AspectBottlesList {
 
     public int add(Aspect aspect, int amount) {
         return Objects.requireNonNull(getAspectBottleWithAspect(aspect)).addCount(amount);
+    }
+
+    public boolean canAdd(Aspect aspect, int amount) {
+        return Objects.requireNonNull(getAspectBottleWithAspect(aspect)).canAdd(amount);
     }
 
     public boolean containsAspect(Aspect aspect) {

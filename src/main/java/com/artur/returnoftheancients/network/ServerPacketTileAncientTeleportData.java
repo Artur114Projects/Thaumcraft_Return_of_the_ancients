@@ -20,9 +20,9 @@ public class ServerPacketTileAncientTeleportData implements IMessage {
 
     }
 
-    public ServerPacketTileAncientTeleportData(BlockPos pos, int dimension, int id) {
-        this.dimension = dimension;
-        this.pos = pos;
+    public ServerPacketTileAncientTeleportData(TileEntity tile, int id) {
+        this.dimension = tile.getWorld().provider.getDimension();
+        this.pos = tile.getPos();
         this.id = id;
     }
 

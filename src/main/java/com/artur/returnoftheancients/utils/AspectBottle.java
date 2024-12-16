@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.utils;
 
+import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -18,19 +19,23 @@ public class AspectBottle {
 
     public static ResourceLocation texture = new ResourceLocation(Referense.MODID, "textures/gui/container/aspect_bottle_vertical.png");
 
-    public Aspect aspect;
+    public final Aspect aspect;
     public final int maxCont;
     public int lastCount;
+    private final int x;
+    private final int y;
     private int count;
 
     @SideOnly(Side.CLIENT)
     private boolean hovered = false;
 
 
-    public AspectBottle(Aspect aspect, int maxCount) {
+    public AspectBottle(Aspect aspect, int maxCount, int x, int y) {
         this.maxCont = maxCount;
         this.aspect = aspect;
         this.count = 0;
+        this.x = x;
+        this.y = y;
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
@@ -43,11 +48,14 @@ public class AspectBottle {
     }
 
     @SideOnly(Side.CLIENT)
-    public void draw(GuiContainer container, int x, int y, int mouseX, int mouseY, int width, int height) {
+    public void draw(GuiContainer container, int mouseX, int mouseY, int width, int height) {
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();
-        int x1 = x + width;
-        int y1 = y + height;
+        int dx = (container.width - container.xSize) / 2 + x;
+        int dy = (container.height - container.ySize) / 2 + y;
+
+        int x1 = dx + width;
+        int y1 = dy + height;
 
         double endU;
         double startU;
@@ -66,10 +74,10 @@ public class AspectBottle {
         BufferBuilder builder = tessellator.getBuffer();
         container.mc.getTextureManager().bindTexture(texture);
         builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        builder.pos(x, y1, 0).tex(startU, 1).endVertex();
+        builder.pos(dx, y1, 0).tex(startU, 1).endVertex();
         builder.pos(x1, y1, 0).tex(endU, 1).endVertex();
-        builder.pos(x1, y, 0).tex(endU, 0).endVertex();
-        builder.pos(x, y, 0).tex(startU, 0).endVertex();
+        builder.pos(x1, dy, 0).tex(endU, 0).endVertex();
+        builder.pos(dx, dy, 0).tex(startU, 0).endVertex();
         tessellator.draw();
 
 
@@ -81,20 +89,20 @@ public class AspectBottle {
 
         int localHeight = (int) (height - 8 * iy);
 
-        int ay = (int) ((y) + (localHeight - (localHeight * ((float) count / maxCont))));
+        int ay = (int) ((dy) + (localHeight - (localHeight * ((float) count / maxCont))));
 
         builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        builder.pos(x + 7 * ix, y + localHeight + 4, 0).color(red, green, blue, alpha).endVertex();
-        builder.pos(x1 - 7 * ix, y + localHeight + 4, 0).color(red, green, blue, alpha).endVertex();
+        builder.pos(dx + 7 * ix, dy + localHeight + 4, 0).color(red, green, blue, alpha).endVertex();
+        builder.pos(x1 - 7 * ix, dy + localHeight + 4, 0).color(red, green, blue, alpha).endVertex();
         builder.pos(x1 - 7 * ix, ay + 4, 0).color(red, green, blue, alpha).endVertex();
-        builder.pos(x + 7 * ix, ay + 4, 0).color(red, green, blue, alpha).endVertex();
+        builder.pos(dx + 7 * ix, ay + 4, 0).color(red, green, blue, alpha).endVertex();
         tessellator.draw();
 
         GlStateManager.enableTexture2D();
         GlStateManager.color(1, 1, 1, 1);
 
 
-        hovered = mouseX > x && mouseX < x1 && mouseY > y && mouseY < y1;
+        hovered = mouseX > dx && mouseX < x1 && mouseY > dy && mouseY < y1;
 
         int i = hovered ? 1 : 0;
 
@@ -103,10 +111,10 @@ public class AspectBottle {
 
         container.mc.getTextureManager().bindTexture(texture);
         builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        builder.pos(x, y1, 0).tex(startU, 1).endVertex();
+        builder.pos(dx, y1, 0).tex(startU, 1).endVertex();
         builder.pos(x1, y1, 0).tex(endU, 1).endVertex();
-        builder.pos(x1, y, 0).tex(endU, 0).endVertex();
-        builder.pos(x, y, 0).tex(startU, 0).endVertex();
+        builder.pos(x1, dy, 0).tex(endU, 0).endVertex();
+        builder.pos(dx, dy, 0).tex(startU, 0).endVertex();
         tessellator.draw();
 
         GlStateManager.enableLighting();
@@ -118,14 +126,16 @@ public class AspectBottle {
             char s = Character.toUpperCase(aspect.getName().charAt(0));
             String string = s + aspect.getName().replaceAll(String.valueOf(aspect.getName().charAt(0)), "");
             String sColor = "";
-            if (aspect.getChatcolor() != null) {
-                sColor = "\u00a7" + aspect.getChatcolor();
+            String chatColor = HandlerR.getAspectChatColor(aspect);
+            if (chatColor != null) {
+                sColor = chatColor;
             }
             container.drawHoveringText(sColor + string + TextFormatting.RESET + " " + count + "/" + maxCont, mouseX, mouseY);
+            hovered = false;
         }
     }
 
-    public boolean isNotFull() {
+    public boolean isCanAdd() {
         return count < maxCont;
     }
 
@@ -153,5 +163,9 @@ public class AspectBottle {
             this.count = maxCont;
             return maxCont - localCount;
         }
+    }
+
+    public boolean canAdd(int count) {
+        return !(this.count + count > maxCont);
     }
 }

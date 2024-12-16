@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class AncientPortalOpening extends AncientPortal {
     public AncientPortalOpening(TileEntityAncientTeleport tile) {
-        super(tile.getWorld().getMinecraftServer(), tile.getWorld().provider.getDimension(), tile.getPos().getX() >> 4, tile.getPos().getZ() >> 4, tile.getPos().getY(), HandlerR.foundMostSmallUniqueIntInList(new ArrayList<>(AncientPortalsProcessor.PORTALS.keySet())));
+        super(tile.getWorld().getMinecraftServer(), tile.getWorld().provider.getDimension(), tile.getPos().getX() >> 4, tile.getPos().getZ() >> 4, tile.getPos().getY() - 1, HandlerR.foundMostSmallUniqueIntInList(new ArrayList<>(AncientPortalsProcessor.PORTALS.keySet())));
         build();
     }
 

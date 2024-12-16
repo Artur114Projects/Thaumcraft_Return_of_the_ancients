@@ -1,38 +1,34 @@
 package com.artur.returnoftheancients.tileentity;
 
-import com.artur.returnoftheancients.generation.generators.portal.AncientPortalNaturalGeneration;
+import com.artur.returnoftheancients.containers.ContainerWithPages;
+import com.artur.returnoftheancients.containers.IContainerWithPages;
+import com.artur.returnoftheancients.containers.util.AspectInputSlotsManager;
+import com.artur.returnoftheancients.containers.util.CustomCraftingGear;
 import com.artur.returnoftheancients.generation.generators.portal.AncientPortalOpening;
 import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortal;
-import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.utils.AspectBottle;
 import com.artur.returnoftheancients.utils.AspectBottlesList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
 import thaumcraft.api.aspects.IEssentiaTransport;
-import thaumcraft.common.lib.events.ToolEvents;
+import thaumcraft.api.items.ItemsTC;
 import thaumcraft.common.tiles.TileThaumcraft;
-import thaumcraft.common.tiles.crafting.TileGolemBuilder;
-import thaumcraft.common.tiles.essentia.TileJarFillable;
 
-import javax.tools.Tool;
+import java.util.Objects;
 
-public class TileEntityAncientTeleport extends TileThaumcraft implements IAspectContainer, IEssentiaTransport, ITickable {
-    public static final int SIZE = 5;
+public class TileEntityAncientTeleport extends TileThaumcraft implements IAspectContainer, IEssentiaTransport, ITickable, IContainerWithPages {
+    public static final int SIZE = 9;
 
 
     private final ItemStackHandler itemStackHandler = new ItemStackHandler(SIZE) {
@@ -42,21 +38,39 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
         }
     };
     public final AspectBottlesList aspectBottles = new AspectBottlesList (
-            new AspectBottle(Aspect.FIRE, 200),
-            new AspectBottle(Aspect.ELDRITCH, 64)
-    );
+            new AspectBottle(Aspect.VOID    , 60, 38 + 24         , 16),
+            new AspectBottle(Aspect.DARKNESS, 60, 38 + 24 + 24 + 4, 16),
+            new AspectBottle(Aspect.ELDRITCH, 60, 38 + 24 + 48 + 8, 16),
 
-    public int isActive = 0;
+            new AspectBottle(Aspect.ORDER   , 80, 38 + 28         , 16),
+            new AspectBottle(Aspect.ENTROPY , 80, 38 + 28 + 32 + 4, 16)
+    );
+    public CustomCraftingGear craftingGear = new CustomCraftingGear(itemStackHandler, new int[] {4, 5, 6, 7, 8}, new ItemStack[] {
+            new ItemStack(ItemsTC.plate, 4, 3),
+            new ItemStack(ItemsTC.plate, 4, 3),
+
+            new ItemStack(ItemsTC.mechanismComplex, 1),
+
+            new ItemStack(ItemsTC.plate, 4, 3),
+            new ItemStack(ItemsTC.plate, 4, 3)
+    });
+    public AspectInputSlotsManager inputSlotsManager = new AspectInputSlotsManager(itemStackHandler, aspectBottles, new int[] {0, 1, 2, 3},
+            new int[] {3},
+            new int[] {0, 1, 2}
+    );
+    private ContainerWithPages currentContainer;
 
     public AncientPortal portal;
 
+    public int isActive = 0;
+
+
 
     public void requestToActivate() {
-        ItemStack stack = itemStackHandler.getStackInSlot(0);
-        if (stack.getItem() == InitItems.GAVNO && aspectBottles.isAllFull()) {
-            itemStackHandler.setStackInSlot(0, ItemStack.EMPTY);
-            aspectBottles.empty(0, 1);
+        if (craftingGear.craft() && aspectBottles.isFull(0, 1, 2)) {
+            aspectBottles.empty(0, 1, 2);
             isActive = 1;
+            inputSlotsManager.reset(new int[] {0, 1}, new int[] {3});
             portal = new AncientPortalOpening(this);
         }
     }
@@ -64,7 +78,10 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
 
     @Override
     public void update() {
-        fill();
+        if (!world.isRemote) {
+            fill();
+            inputSlotsManager.fill();
+        }
     }
 
     private void fill() {
@@ -76,11 +93,12 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
             EnumFacing oppositeFacing =  facing.getOpposite();
             Aspect aspect = ic.getEssentiaType(oppositeFacing);
             AspectBottle bottle = aspectBottles.getAspectBottleWithAspect(aspect);
-            if (bottle != null && ic.getEssentiaAmount(oppositeFacing) > 0 && bottle.isNotFull()) {
+            if (bottle != null && ic.getEssentiaAmount(oppositeFacing) > 0 && bottle.isCanAdd()) {
                 addToContainer(aspect, ic.takeEssentia(aspect, 1, oppositeFacing));
             }
         }
     }
+
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
@@ -163,10 +181,11 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
 
     @Override
     public int addToContainer(Aspect aspect, int i) {
-        if (i == 0) {
+        AspectBottle bottle = aspectBottles.getAspectBottleWithAspect(aspect);
+        if (i == 0 || bottle == null || !bottle.isCanAdd()) {
             return 0;
         }
-        int ret = aspectBottles.add(aspect, i);
+        int ret = bottle.addCount(i);
         this.markDirty();
         return ret;
     }
@@ -227,7 +246,7 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
 
     @Override
     public Aspect getSuctionType(EnumFacing enumFacing) {
-        return null;
+        return isActive == 0 ? null : Aspect.ORDER;
     }
 
     @Override
@@ -252,11 +271,31 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
 
     @Override
     public int getEssentiaAmount(EnumFacing enumFacing) {
-        return 0;
+        return enumFacing == EnumFacing.DOWN ? Objects.requireNonNull(aspectBottles.getAspectBottleWithAspect(Aspect.ENTROPY)).getCount() : 0;
     }
 
     @Override
     public int getMinimumSuction() {
         return 0;
+    }
+
+    @Override
+    public ContainerWithPages getContainer() {
+        return currentContainer;
+    }
+
+    @Override
+    public void setContainer(ContainerWithPages container) {
+        this.currentContainer = container;
+    }
+
+    @Override
+    public int getDimension() {
+        return world.provider.getDimension();
+    }
+
+    @Override
+    public boolean isRemote() {
+        return world.isRemote;
     }
 }

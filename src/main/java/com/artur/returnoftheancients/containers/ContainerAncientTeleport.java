@@ -1,5 +1,8 @@
 package com.artur.returnoftheancients.containers;
 
+import com.artur.returnoftheancients.containers.slots.SlotItemHandlerAspectInput;
+import com.artur.returnoftheancients.containers.slots.SlotItemHandlerLimitedByClass;
+import com.artur.returnoftheancients.containers.slots.SlotItemHandlerOutput;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientTeleport;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.*;
@@ -10,6 +13,10 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
+import thaumcraft.api.aspects.IEssentiaContainerItem;
+import thaumcraft.common.blocks.essentia.BlockJarItem;
+import thaumcraft.common.container.slot.SlotOutput;
+import thaumcraft.common.items.consumables.ItemPhial;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +28,7 @@ public class ContainerAncientTeleport extends ContainerWithPages {
 
 
     public ContainerAncientTeleport(IInventory playerInventory, TileEntityAncientTeleport te) {
-
+        super(te);
         this.tile = te;
 
 
@@ -55,14 +62,18 @@ public class ContainerAncientTeleport extends ContainerWithPages {
         IItemHandler itemHandler = this.tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
         int slotID = 0;
+        addSlotToContainer(new SlotItemHandlerAspectInput(itemHandler, slotID++, 21, 22));
+        addSlotToContainer(new SlotItemHandlerOutput(itemHandler, slotID++, 21, 58));
 
-        addSlotToContainer(new SlotItemHandler(itemHandler, slotID++, 199, 20));
-        addSlotToContainer(new SlotItemHandler(itemHandler, slotID++, 199, 56));
+        addSlotToContainer(new SlotItemHandlerAspectInput(itemHandler, slotID++, 21, 22));
+        addSlotToContainer(new SlotItemHandlerOutput(itemHandler, slotID++, 21, 58));
 
-        addSlotToContainer(new SlotItemHandler(itemHandler, slotID++, 181, 38));
+        int[] x = new int[] {166, 202, 184, 202, 166};
+        int[] y = new int[] {22, 22, 40, 58, 58};
 
-        addSlotToContainer(new SlotItemHandler(itemHandler, slotID++, 163, 20));
-        addSlotToContainer(new SlotItemHandler(itemHandler, slotID++, 163, 56));
+        for (Slot slot : tile.craftingGear.getSlots(x, y)) {
+            addSlotToContainer(slot);
+        }
     }
 
     @Override
@@ -139,6 +150,136 @@ public class ContainerAncientTeleport extends ContainerWithPages {
 
         return itemstack;
     }
+
+    @Override
+    protected boolean mergeItemStack(ItemStack stack, int startIndex, int endIndex, boolean reverseDirection) {
+        boolean flag = false;
+        int i = startIndex;
+
+        if (reverseDirection)
+        {
+            i = endIndex - 1;
+        }
+
+        if (stack.isStackable())
+        {
+            while (!stack.isEmpty())
+            {
+                if (reverseDirection)
+                {
+                    if (i < startIndex)
+                    {
+                        break;
+                    }
+                }
+                else if (i >= endIndex)
+                {
+                    break;
+                }
+
+                Slot slot = this.inventorySlots.get(i);
+                ItemStack itemstack = slot.getStack();
+
+                if (!itemstack.isEmpty() && itemstack.getItem() == stack.getItem() && (!stack.getHasSubtypes() || stack.getMetadata() == itemstack.getMetadata()) && ItemStack.areItemStackTagsEqual(stack, itemstack) && !isHide(i)) {
+                    int slotStackLimit = slot.getSlotStackLimit();
+
+                    if (stack.getItem() instanceof ItemPhial && slot instanceof SlotItemHandlerAspectInput) {
+                        slotStackLimit = 64;
+                    }
+
+                    int j = itemstack.getCount() + stack.getCount();
+                    int maxSize = Math.min(slotStackLimit, stack.getMaxStackSize());
+
+                    if (j <= maxSize)
+                    {
+                        stack.setCount(0);
+                        itemstack.setCount(j);
+                        slot.onSlotChanged();
+                        flag = true;
+                    }
+                    else if (itemstack.getCount() < maxSize)
+                    {
+                        stack.shrink(maxSize - itemstack.getCount());
+                        itemstack.setCount(maxSize);
+                        slot.onSlotChanged();
+                        flag = true;
+                    }
+                }
+
+                if (reverseDirection)
+                {
+                    --i;
+                }
+                else
+                {
+                    ++i;
+                }
+            }
+        }
+
+        if (!stack.isEmpty())
+        {
+            if (reverseDirection)
+            {
+                i = endIndex - 1;
+            }
+            else
+            {
+                i = startIndex;
+            }
+
+            while (true)
+            {
+                if (reverseDirection)
+                {
+                    if (i < startIndex)
+                    {
+                        break;
+                    }
+                }
+                else if (i >= endIndex)
+                {
+                    break;
+                }
+
+                Slot slot1 = this.inventorySlots.get(i);
+                ItemStack itemstack1 = slot1.getStack();
+
+                if (itemstack1.isEmpty() && slot1.isItemValid(stack) && !isHide(i)) {
+                    int slotStackLimit = slot1.getSlotStackLimit();
+
+                    if (stack.getItem() instanceof ItemPhial && slot1 instanceof SlotItemHandlerAspectInput) {
+                        slotStackLimit = 64;
+                    }
+
+                    if (stack.getCount() > slotStackLimit)
+                    {
+                        slot1.putStack(stack.splitStack(slotStackLimit));
+                    }
+                    else
+                    {
+                        slot1.putStack(stack.splitStack(stack.getCount()));
+                    }
+
+                    slot1.onSlotChanged();
+                    flag = true;
+                    break;
+                }
+
+                if (reverseDirection)
+                {
+                    --i;
+                }
+                else
+                {
+                    ++i;
+                }
+            }
+        }
+
+        return flag;
+    }
+
     @Override
     public boolean canInteractWith(EntityPlayer player) {
         return tile.isUsableByPlayer(player);

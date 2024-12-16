@@ -53,7 +53,9 @@ public class GuiAncientTeleport extends GuiContainer {
             public void onPageChange(int page, int pageIn) {
                 super.onPageChange(page, pageIn);
                 if (pageIn == 1) {
-                    container.unHideAll();
+                    container.setNotVisible(0, 1);
+                } else if (pageIn == 0){
+                    container.setVisible(0, 1);
                 } else {
                     container.hideAll();
                 }
@@ -70,7 +72,7 @@ public class GuiAncientTeleport extends GuiContainer {
         switch (button.id) {
             case 0:{
                 buttonMain.press();
-                MainR.NETWORK.sendToServer(new ServerPacketTileAncientTeleportData(tile.getPos(), tile.getWorld().provider.getDimension(), 0));
+                MainR.NETWORK.sendToServer(new ServerPacketTileAncientTeleportData(tile, 0));
             } break;
         }
     }
@@ -88,11 +90,26 @@ public class GuiAncientTeleport extends GuiContainer {
         buttonMain.enabled = tile.isActive != 1;
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        if (pageManager.getCurrentPage() == 1) {
-            this.tile.aspectBottles.aspectBottles[0].draw(this, (width - xSize) / 2 + 10, (height - ySize) / 2 + 16, mouseX, mouseY, 32, 64);
-            this.tile.aspectBottles.aspectBottles[1].draw(this, (width - xSize) / 2 + 10 + 32 + 4, (height - ySize) / 2 + 16, mouseX, mouseY, 32, 64);
-        }
+        drawBottles(mouseX, mouseY);
         drawHovered(mouseX, mouseY);
+    }
+
+    public void drawBottles(int mouseX, int mouseY) {
+        int startI = 0;
+        int endI = 0;
+        int rW = 24;
+
+        if (pageManager.getCurrentPage() == 1) {
+            endI = tile.aspectBottles.aspectBottles.length - 2;
+        } else if (pageManager.getCurrentPage() == 0) {
+            startI = tile.aspectBottles.aspectBottles.length - 2;
+            endI = tile.aspectBottles.aspectBottles.length;
+            rW = 32;
+        }
+
+        for (int i = startI; i != endI; i++) {
+            tile.aspectBottles.aspectBottles[i].draw(this, mouseX, mouseY, rW, 64);
+        }
     }
 
     public void drawHovered(int mouseX, int mouseY) {

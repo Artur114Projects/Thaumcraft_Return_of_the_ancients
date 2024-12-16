@@ -38,6 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import scala.Int;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
@@ -536,5 +537,19 @@ public class HandlerR {
     @SideOnly(Side.CLIENT)
     public static void renderQuadTextureAtlas(int posX, int posY, int startDrawX, int startDrawY, int textureSizeX, int textureSizeY) {
         renderQuadTextureAtlas(posX, posY, startDrawX, startDrawY, textureSizeX, textureSizeY, 1);
+    }
+
+    @Nullable
+    public static String getAspectChatColor(Aspect aspect) {
+        String color = aspect.getChatcolor();
+        if (color != null) {
+            return "\u00a7" + color;
+        }
+        if (aspect == Aspect.DARKNESS) {
+            return TextFormatting.BLACK.toString();
+        } else if (aspect == Aspect.ELDRITCH) {
+            return TextFormatting.DARK_PURPLE.toString();
+        }
+        return null;
     }
 }

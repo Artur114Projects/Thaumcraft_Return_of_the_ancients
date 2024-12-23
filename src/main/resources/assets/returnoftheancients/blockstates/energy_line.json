@@ -1,0 +1,33 @@
+{    
+    "multipart": [
+        {   "when": { "north": true },
+            "apply": { "model": "returnoftheancients:energy_line_side", "y": 180, "x": 90 }
+        },        
+        {   "when": { "south": true },
+            "apply": { "model": "returnoftheancients:energy_line_side", "x": 90 }
+        },
+        {   "when": { "east": true },
+            "apply": { "model": "returnoftheancients:energy_line_side", "y": 270, "x": 90 }
+        },
+        {   "when": { "west": true },
+            "apply": { "model": "returnoftheancients:energy_line_side", "y": 90, "x": 90 }
+        },
+        {   "when": { "up": true },
+            "apply": { "model": "returnoftheancients:energy_line_side", "x": 180 }
+        },
+        {   "when": { "down": true },
+            "apply": { "model": "returnoftheancients:energy_line_side" }
+        },
+        {
+            "when": { "OR": [
+                {"north": false}, 
+                {"east": false}, 
+                {"south": false}, 
+                {"west": false}, 
+                {"up": false}, 
+                {"down": false}
+            ]},
+            "apply": { "model": "returnoftheancients:energy_line_core"}
+        }
+    ]
+}

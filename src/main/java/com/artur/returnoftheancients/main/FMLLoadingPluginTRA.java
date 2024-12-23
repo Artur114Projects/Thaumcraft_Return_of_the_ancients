@@ -9,7 +9,7 @@ import java.util.Map;
 
 @IFMLLoadingPlugin.MCVersion("1.12.2")
 @IFMLLoadingPlugin.SortingIndex(1001)
-@IFMLLoadingPlugin.Name("FMLLoadingPluginTRA")
+@IFMLLoadingPlugin.Name("Thaumcraft: Return of the Ancients core")
 public class FMLLoadingPluginTRA implements IFMLLoadingPlugin {
     @Override
     public String[] getASMTransformerClass() {

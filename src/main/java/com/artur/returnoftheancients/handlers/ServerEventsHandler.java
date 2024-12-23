@@ -71,21 +71,6 @@ public class ServerEventsHandler {
 
     public static byte getDifficultyId() {return difficultyId;}
 
-    public static void tpToHome(EntityPlayerMP player, int dimension) {
-        player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, true);
-        FreeTeleporter.teleportToDimension(player, dimension, WorldDataFields.portalX, 3, WorldDataFields.portalZ);
-        player.getEntityData().setBoolean(tpToHomeNBT, true);
-    }
-
-    public static void setTpToHomeNBTData(EntityPlayerMP player) {
-        player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, true);
-        player.getEntityData().setBoolean(tpToHomeNBT, true);
-    }
-
-    public static void tpToHome(EntityPlayerMP player) {
-        tpToHome(player, WorldDataFields.portalDimension);
-    }
-
 
     @SubscribeEvent
     public static void DifficultyEvent(DifficultyChangeEvent e) {
@@ -236,13 +221,6 @@ public class ServerEventsHandler {
         if (!AncientWorld.playerLostBus(player.getUniqueID())) AncientPortalsProcessor.tpToHome(player);
     }
 
-    protected static void onPlayerTpToHome(EntityPlayerMP player) {
-        if (!ThaumcraftCapabilities.knowsResearchStrict(player, "DEAD")) {
-            HandlerR.researchAndSendMessage(player, "DEAD", Referense.MODID + ".text.dead");
-            IPlayerTimerCapability timer = TRACapabilities.getTimer(player);
-            timer.createTimer("recovery");
-        }
-    }
 
 
     @SubscribeEvent
@@ -274,39 +252,7 @@ public class ServerEventsHandler {
     @SubscribeEvent
     public static void PlayerTickEvent(TickEvent.PlayerTickEvent e) {
         int playerDimension = e.player.dimension;
-        if (e.player.getEntityData().getBoolean(startUpNBT)) {
-            if (playerDimension != ancient_world_dim_id) {
-                if (e.player instanceof EntityPlayerMP) {
-                    e.player.motionY += 2 - e.player.motionY;
-                    if (e.player.posY > 100 || e.player.posY > WorldData.get().saveData.getInteger(IALGS.ancientPortalYPosKey)) {
-                        EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
-
-                        HandlerR.setStartUpNBT(playerMP, false);
-                        playerMP.removePotionEffect(Objects.requireNonNull(Potion.getPotionById(15)));
-                        playerMP.fallDistance = 0;
-
-                        e.player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, false);
-                        e.player.getEntityData().setBoolean(startUpNBT, false);
-                    }
-                }
-            }
-        }
-
-        if (e.player.getEntityData().getBoolean(tpToHomeNBT)) {
-            BlockPos pos = e.player.getPosition();
-            if (playerDimension != ancient_world_dim_id && pos.getY() <= 3) {
-                if (e.player.getServer() != null) {
-                    if (e.player instanceof EntityPlayerMP) {
-                        EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
-                        e.player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 600, 1));
-                        e.player.getEntityData().setBoolean(tpToHomeNBT, false);
-                        HandlerR.setStartUpNBT(playerMP, true);
-                        onPlayerTpToHome(playerMP);
-                    }
-                }
-            }
-        }
-        if (e.player instanceof EntityPlayerMP) {
+        if (!e.player.world.isRemote) {
             if (playerDimension == ancient_world_dim_id) {
                 if (e.player.posY > 84 && !e.player.isCreative()) {
                     e.player.fallDistance = 0;
@@ -323,8 +269,7 @@ public class ServerEventsHandler {
                 }
                 if (TRAConfigs.AncientWorldSettings.noPeaceful) {
                     if (difficultyId == 0) {
-                        if (e.player instanceof EntityPlayerMP) {
-//                            HandlerR.sendMessageString((EntityPlayerMP) e.player, "PEACEFUL DIFFICULTY ???");
+                        if (!e.player.world.isRemote) {
                             AncientPortalsProcessor.tpToHome((EntityPlayerMP) e.player);
                         }
                     }
@@ -341,7 +286,7 @@ public class ServerEventsHandler {
             }
         }
         if (e.player.ticksExisted % 40 == 0) {
-            if (e.player instanceof EntityPlayerMP) {
+            if (!e.player.world.isRemote) {
                 checkResearch(e.player);
                 tickTimer(e.player);
             }

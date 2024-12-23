@@ -149,7 +149,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
     public boolean deadBoss(UUID id) {
         if (!bossUUID.equals(nullUUId) && bossUUID.equals(id)) {
             isBossDead = true;
-            if (boss != null && !WorldDataFields.isPrimalBladeDrop) {
+            if (boss != null && (!WorldDataFields.isPrimalBladeDrop || !TRAConfigs.Any.isPrimalBladeOneToWorld)) {
                 EntityUtils.entityDropSpecialItem(boss, new ItemStack(InitItems.PRIMAL_BLADE), boss.height / 2.0f);
                 WorldData.get().saveData.setBoolean(isPrimalBladeDropKey, true);
                 WorldData.get().markDirty();

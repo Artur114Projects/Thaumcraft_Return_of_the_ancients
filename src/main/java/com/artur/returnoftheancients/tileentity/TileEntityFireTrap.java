@@ -12,8 +12,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -128,6 +128,7 @@ public class TileEntityFireTrap extends TileEntity implements ITickable {
                                 if (haveResistance) {
                                     player.setHealth(player.getHealth() - (player.getHealth() / 4));
                                 } else {
+                                    player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 160, 1));
                                     player.setHealth(player.getHealth() / 2);
                                 }
                             }

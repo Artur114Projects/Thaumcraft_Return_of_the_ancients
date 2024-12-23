@@ -8,18 +8,18 @@ import java.util.Arrays;
 import java.util.List;
 
 public class StructureMap implements IALGS {
-    private final Structure[][] changedStructures;
-    private Structure[][] structures;
+    private final Structure[] changedStructures;
+    private Structure[] structures;
     public final int SIZE;
 
     public StructureMap(byte[][] structures, byte[][] rotates) {
         if (!(structures.length == rotates.length && structures[0].length == rotates[0].length && structures.length == structures[0].length)) throw new RuntimeException("StructureMap.class, transferred incorrect arrays");
         this.SIZE = structures.length;
-        this.structures = new Structure[SIZE][SIZE];
+        this.structures = new Structure[SIZE * SIZE];
 
         for (int y = 0; y != SIZE; y++) {
             for (int x = 0; x != SIZE; x++) {
-                this.structures[y][x] = new Structure(structures[y][x], rotates[y][x]);
+                this.structures[x + y * SIZE] = new Structure(structures[y][x], rotates[y][x]);
             }
         }
 
@@ -65,33 +65,38 @@ public class StructureMap implements IALGS {
     }
 
     public byte getStructure(int x, int y) {
-        return structures[y][x].getID();
+        return structures[x + y * SIZE].getID();
     }
 
+    public byte getStructure(StructurePos pos) {
+        return getStructure(pos.x, pos.y);
+    }
+
+
     public Structure getStructureObject(int x, int y) {
-        Structure structure = new Structure(structures[y][x].getID(), structures[y][x].getRotate());
-        structure.setDeformationOfBoss(structures[y][x].getDeformationOfBoss());
+        Structure structure = new Structure(structures[x + y * SIZE].getID(), structures[x + y * SIZE].getRotate());
+        structure.setDeformationOfBoss(structures[x + y * SIZE].getDeformationOfBoss());
         return structure;
     }
 
     public byte getDeformation(int x, int y) {
-        return structures[y][x].getDeformationOfBoss();
+        return structures[x + y * SIZE].getDeformationOfBoss();
     }
 
     public void setDeformation(int x, int y, byte value) {
-        structures[y][x].setDeformationOfBoss(value);
+        structures[x + y * SIZE].setDeformationOfBoss(value);
     }
 
     public byte getRotate(int x, int y) {
-        return structures[y][x].getRotate();
+        return structures[x + y * SIZE].getRotate();
     }
 
     public void setStructure(int x, int y, byte value) {
-        changedStructures[y][x].setID(value);
+        changedStructures[x + y * SIZE].setID(value);
     }
 
     public void setRotate(int x, int y, byte value) {
-        changedStructures[y][x].setRotate(value);
+        changedStructures[x + y * SIZE].setRotate(value);
     }
 
     public void swapBuffers() {
@@ -106,6 +111,10 @@ public class StructureMap implements IALGS {
 //        nbt.setTag("rotates", NBTInArray(rotates));
 //        return nbt;
 //    }
+
+    public List<StructurePos> getConnectedStructures(StructurePos pos) {
+        return getConnectedStructures(pos.x, pos.y);
+    }
 
     public List<StructurePos> getConnectedStructures(int x, int y) {
         List<StructurePos> posList = new ArrayList<>();
@@ -255,7 +264,7 @@ public class StructureMap implements IALGS {
         for (int y = 0; y != SIZE; y++) {
             StringBuilder s = new StringBuilder();
             for (int x = 0; x != SIZE; x++) {
-                s.append(" {").append(structures[y][x]).append("},");
+                s.append(" {").append(structures[x + y * SIZE]).append("},");
             }
             finalS.append(s).append("\n");
         }

@@ -1,12 +1,12 @@
 package com.artur.returnoftheancients.generation.generators.portal.base;
 
-import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.generation.generators.portal.AncientPortalNaturalGeneration;
 import com.artur.returnoftheancients.generation.generators.portal.AncientPortalOpening;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.referense.Referense;
+import net.minecraft.block.BlockGlass;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -18,17 +18,20 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
+
+// TODO: добавить систему загрузок выгрузок
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class AncientPortalsProcessor {
+
 
     private static final List<Integer> LOAD_DIMENSIONS = new ArrayList<>();
     private static final List<Integer> TO_DELETE = new ArrayList<>();
     public static Map<Integer, AncientPortal> PORTALS = new HashMap<>();
+
 
     @SubscribeEvent
     public static void eventSave(WorldEvent.Save e) {
@@ -71,18 +74,45 @@ public class AncientPortalsProcessor {
         t++;
         if (t >= 10) {
             t = 0;
+            if (PORTALS.isEmpty()) return;
+
             PORTALS.forEach((key, value) -> {
                 value.update(e);
-                if (value.isExplore()) {
+                if (value.isExploded()) {
                     TO_DELETE.add(key);
                 }
             });
+
             for (int d : TO_DELETE) {
                 Objects.requireNonNull(PORTALS.remove(d));
             }
+
             if (!TO_DELETE.isEmpty()) {
                 TO_DELETE.clear();
                 save();
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void PlayerTick(TickEvent.PlayerTickEvent e) {
+        if (e.player.world.isRemote) {
+            return;
+        }
+        if (e.player.dimension == ancient_world_dim_id) {
+            return;
+        }
+
+        if (e.player.ticksExisted % 4 == 0) {
+            if (e.player.getEntityData().hasKey(AncientPortal.PortalID)) {
+                NBTTagCompound data = e.player.getEntityData();
+                int i = data.getInteger(AncientPortal.PortalID);
+                if (i != -1) {
+                    AncientPortal portal = getPortal(i);
+                    if (portal != null) {
+                        portal.playerHasPortalIdUpdate((EntityPlayerMP) e.player);
+                    }
+                }
             }
         }
     }
@@ -91,7 +121,6 @@ public class AncientPortalsProcessor {
         return PORTALS.get(ID);
     }
 
-    @NotNull
     public static AncientPortal loadPortal(MinecraftServer server, NBTTagCompound nbt) {
         switch (nbt.getInteger("portalTypeID")) {
             case 0:{
@@ -101,7 +130,7 @@ public class AncientPortalsProcessor {
                 return new AncientPortalOpening(server, nbt);
             }
         }
-        return null;
+        throw new IllegalArgumentException();
     }
 
     public static boolean hasPortal(int chunkX, int chunkZ, int dimension) {
@@ -117,6 +146,7 @@ public class AncientPortalsProcessor {
         return hasPortal(pos.getX() >> 4, pos.getZ() >> 4, dimension);
     }
 
+    // TODO: Оптимизировать, возможно убрать систему с сортировкой по измерениям
     public static void save() {
         long time = System.nanoTime();
         WorldData worldData = WorldData.get();

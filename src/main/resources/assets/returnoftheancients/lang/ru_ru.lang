@@ -19,6 +19,7 @@ item.soul_binder.info.d.1=Нажмите
 item.soul_binder.info.d.2=для дополнительной информации.
 item.soul_binder.info.d.3=Игроки:
 #
+item.portal_compass.info=Показывает на ближайший древний портал
 tile.tp_to_ancient_world_block.info=Только для креатива
 returnoftheancients.portal.message=Нельзя использовать:
 returnoftheancients.rui.t=убери это

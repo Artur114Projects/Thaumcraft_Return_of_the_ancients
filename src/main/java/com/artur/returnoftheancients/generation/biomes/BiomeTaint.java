@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.generation.biomes;
 import com.artur.returnoftheancients.generation.generators.WorldGenTaintBigTree;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBiome;
+import com.artur.returnoftheancients.init.InitBlocks;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -107,7 +108,7 @@ public class BiomeTaint extends BiomeBase {
     }
 
 
-    public void decorateNormal(World worldIn, Random rand, BlockPos pos) {
+    public void decorateNormal(World worldIn, Random rand, BlockPos.MutableBlockPos pos) {
         if (rand.nextInt(33) == 0) {
             if (worldIn.getBlockState(pos).getBlock() == BlocksTC.taintSoil) {
                 IBlockState state = BlocksTC.taintFeature.getBlockState().getBaseState();
@@ -117,6 +118,9 @@ public class BiomeTaint extends BiomeBase {
                 worldIn.checkLight(pos);
             }
         }
+//        if (worldIn.getBiome(pos).equals(InitBiome.TAINT)) {
+//            worldIn.setBlockState(pos.setPos(pos.getX(), 255, pos.getZ()), InitBlocks.BLOCK_HEAVY_AIR.getDefaultState());
+//        }
     }
 
     public void decorateEdge(World worldIn, Random rand, BlockPos pos) {

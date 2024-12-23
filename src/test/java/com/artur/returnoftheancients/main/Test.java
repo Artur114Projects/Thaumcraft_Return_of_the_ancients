@@ -15,15 +15,81 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class Test { //
+
+
+    // Проверка выхода за границы и препятствий
+    private static boolean isValid(int[][] grid, int x, int y, boolean[][] visited) {
+        return x >= 0 && x < grid.length && y >= 0 && y < grid[0].length
+                && grid[x][y] == 0 && !visited[x][y];
+    }
+
+    public static List<int[]> findPath(int[][] grid, int startX, int startY, int endX, int endY) {
+        int[][] directions = { {0, 1}, {1, 0}, {0, -1}, {-1, 0} }; // Вправо, вниз, влево, вверх
+        Queue<List<int[]>> queue = new LinkedList<>(); // Очередь для BFS
+        boolean[][] visited = new boolean[grid.length][grid[0].length]; // Массив посещений
+
+        // Добавляем стартовую позицию в очередь с пустым путём
+        List<int[]> startPath = new ArrayList<>();
+        startPath.add(new int[] {startX, startY});
+        queue.add(startPath);
+        visited[startX][startY] = true;
+
+        while (!queue.isEmpty()) {
+            List<int[]> path = queue.poll(); // Берём текущий путь из очереди
+            int[] current = path.get(path.size() - 1); // Последняя клетка в пути
+            int curX = current[0], curY = current[1];
+
+            if (curX == endX && curY == endY) {
+                return path; // Нашли цель, возвращаем путь
+            }
+
+            // Добавляем соседей
+            for (int[] dir : directions) {
+                int newX = curX + dir[0];
+                int newY = curY + dir[1];
+
+                if (isValid(grid, newX, newY, visited)) {
+                    visited[newX][newY] = true; // Отмечаем как посещённую
+                    List<int[]> newPath = new ArrayList<>(path); // Копируем текущий путь
+                    newPath.add(new int[] {newX, newY}); // Добавляем новую клетку
+                    queue.add(newPath); // Добавляем в очередь
+                }
+            }
+        }
+
+        return null; // Если путь не найден
+    }
+
     public static void main(String[] args) {
+        int size = 10;
+        int[][] grid = new int[size][size];
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                grid[i][j] = Math.random() < 0.7 ? 0 : 1; // 70% клеток проходимы
+            }
+        }
+
+        grid[0][0] = 0;
+        grid[size - 1][size - 1] = 0;
+        for (int[] a : grid) {
+            System.out.println(Arrays.toString(a));
+        }
+        long time = System.nanoTime();
+        List<int[]> path = findPath(grid, 0, 0, size - 1, size - 1);
+        System.out.println("is took:" + ((System.nanoTime() - time) / 1000000.0D) + "ms");
+        if (path != null) {
+            for (int[] pos : path) {
+                System.out.println(Arrays.toString(pos));
+            }
+        } else {
+            System.out.println("Путь не найден");
+        }
     }
 
     protected static int packBytes(byte b1, byte b2, byte b3, byte b4) {

@@ -25,7 +25,7 @@ public class TransformerWorld extends TransformerBase {
 
                     @Override
                     public String[] getTargets() {
-                        return new String[] {MappingsProcessor.getObfuscateMethodName("getSunBrightnessBody"), MappingsProcessor.getObfuscateMethodName("getSunBrightness")};
+                        return new String[] {MappingsProcessor.getObfuscateMethodName("getSunBrightnessBody")};
                     }
                 },
         };

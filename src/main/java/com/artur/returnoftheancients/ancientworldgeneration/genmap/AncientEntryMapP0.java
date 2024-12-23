@@ -10,16 +10,16 @@ import static com.artur.returnoftheancients.generation.generators.AncientLabyrin
 
 public class AncientEntryMapP0 implements IALGS {
 
-    private static byte[][] ANCIENT_LABYRINTH_STRUCTURES = new byte[17][17];
-    private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE = new byte[17][17];
-    private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_IN_WORK = new byte[17][17];
-    private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE_IN_WORK = new byte[17][17];
+    private static final int SIZE = 17;
+    private static byte[][] ANCIENT_LABYRINTH_STRUCTURES = new byte[SIZE][SIZE];
+    private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE = new byte[SIZE][SIZE];
+    private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_IN_WORK = new byte[SIZE][SIZE];
+    private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE_IN_WORK = new byte[SIZE][SIZE];
     private static Random random = null;
     private static final byte f_index = 0;
     private static final byte b_index = 1;
     private static final byte bl_index = 2;
     private static final byte u_index = 3;
-    private static final int SIZE = 17;
 
     public static int genRandomIntRange(int min, int max) {
         return random.nextInt((max - min) + 1) + min;

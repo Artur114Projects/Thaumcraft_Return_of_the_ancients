@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.blocks;
 
+import com.artur.returnoftheancients.energy.blocks.BlockContainerEnergyBase;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientTeleport;
 import net.minecraft.block.SoundType;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class AncientTeleport extends BaseBlockContainer<TileEntityAncientTeleport> {
+public class AncientTeleport extends BlockContainerEnergyBase<TileEntityAncientTeleport> {
     private final Random rand = new Random();
 
 
@@ -82,6 +83,8 @@ public class AncientTeleport extends BaseBlockContainer<TileEntityAncientTelepor
             item.setVelocity((rand.nextDouble() - 0.5) * 0.25, rand.nextDouble() * 0.5 * 0.25, (rand.nextDouble() - 0.5) * 0.25);
             worldIn.spawnEntity(item);
         }
+
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Nullable

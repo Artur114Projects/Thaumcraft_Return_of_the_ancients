@@ -112,6 +112,9 @@ public class TRAConfigs {
         @Config.RequiresMcRestart
         public double primalBladeSpeed = -3.2D;
 
+        @Config.LangKey(Referense.MODID + ".cfg.sub.any.otw")
+        public boolean isPrimalBladeOneToWorld = true;
+
         @Config.LangKey(Referense.MODID + ".cfg.sub.any.mcn")
         public String ModChatName = "TC RETURN OF THE ANCIENTS: ";
 

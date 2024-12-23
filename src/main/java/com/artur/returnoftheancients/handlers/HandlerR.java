@@ -1,6 +1,8 @@
 package com.artur.returnoftheancients.handlers;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntry;
+import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortal;
+import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.items.ItemSoulBinder;
 import com.artur.returnoftheancients.misc.SoundTRA;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -46,8 +48,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class HandlerR {
-    private static ArrayList<String> ID = new ArrayList<>();
-    public static boolean isTriggered = false;
+    private static final ArrayList<String> ID = new ArrayList<>();
 
     public static int genRandomIntRange(int min, int max) {
         Random r = new Random();
@@ -123,9 +124,15 @@ public class HandlerR {
         return ID;
     }
 
-
-    public static NBTTagCompound createPlayerDataPacketTag(byte dataIndex, String tagSetName, boolean data) {
-        NBTTagCompound nbt = createRawPlayerDataPacketTag(dataIndex, tagSetName);
+    /**
+     * Creates a player data packet with a specified boolean value.
+     *
+     * @param tagSetName  Name of the NBT tag to set.
+     * @param data        Boolean value to include in the packet.
+     * @return An NBTTagCompound containing the specified data.
+     */
+    public static NBTTagCompound createPlayerDataPacketTag(String tagSetName, boolean data) {
+        NBTTagCompound nbt = createRawPlayerDataPacketTag((byte) 1, tagSetName);
         nbt.setBoolean("data", data);
         return nbt;
     }
@@ -200,8 +207,16 @@ public class HandlerR {
     }
 
     public static void setStartUpNBT(EntityPlayerMP playerMP, boolean data) {
-        playerMP.getEntityData().setBoolean("startUpNBT", data);
-        MainR.NETWORK.sendTo(new ClientPacketPlayerNBTData(HandlerR.createPlayerDataPacketTag((byte) 1, "startUpNBT", data)), playerMP);
+        NBTTagCompound dataNBT = playerMP.getEntityData();
+        if (dataNBT.getBoolean("startUpNBT") != data) {
+            dataNBT.setBoolean("startUpNBT", data);
+            MainR.NETWORK.sendTo(new ClientPacketPlayerNBTData(HandlerR.createPlayerDataPacketTag("startUpNBT", data)), playerMP);
+        }
+    }
+
+    public static void setTeleportingToHomeNBT(EntityPlayerMP playerMP, boolean data) {
+        playerMP.getEntityData().setBoolean(AncientPortal.tpToHomeNBT, data);
+        MainR.NETWORK.sendTo(new ClientPacketPlayerNBTData(HandlerR.createPlayerDataPacketTag(AncientPortal.tpToHomeNBT, data)), playerMP);
     }
 
     public static void setLoadingGuiState(EntityPlayerMP playerMP, boolean state, boolean isTeam) {
@@ -471,6 +486,26 @@ public class HandlerR {
             value++;
         }
     }
+
+    public static int foundMostSmallUniqueIntInSet(Set<Integer> set) {
+        if (set.isEmpty()) return 0;
+        boolean isFound;
+        int value = 0;
+        while (true) {
+            isFound = true;
+            for (Integer i : set) {
+                if (i == value) {
+                    isFound = false;
+                    break;
+                }
+            }
+            if (isFound) {
+                return value;
+            }
+            value++;
+        }
+    }
+
 
     public static BlockPos.MutableBlockPos addToMutableBP(BlockPos.MutableBlockPos mPos, int addX, int addY, int addZ) {
         return mPos.setPos(mPos.getX() + addX, mPos.getY() + addY, mPos.getZ() + addZ);

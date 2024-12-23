@@ -4,6 +4,7 @@ import com.artur.returnoftheancients.containers.ContainerWithPages;
 import com.artur.returnoftheancients.containers.IContainerWithPages;
 import com.artur.returnoftheancients.containers.util.AspectInputSlotsManager;
 import com.artur.returnoftheancients.containers.util.CustomCraftingGear;
+import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
 import com.artur.returnoftheancients.generation.generators.portal.AncientPortalOpening;
 import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortal;
 import com.artur.returnoftheancients.utils.AspectBottle;
@@ -27,7 +28,7 @@ import thaumcraft.common.tiles.TileThaumcraft;
 
 import java.util.Objects;
 
-public class TileEntityAncientTeleport extends TileThaumcraft implements IAspectContainer, IEssentiaTransport, ITickable, IContainerWithPages {
+public class TileEntityAncientTeleport extends TileThaumcraft implements IAspectContainer, IEssentiaTransport, ITickable, IContainerWithPages, ITileEnergyProvider {
     public static final int SIZE = 9;
 
 
@@ -46,19 +47,20 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
             new AspectBottle(Aspect.ENTROPY , 80, 38 + 28 + 32 + 4, 16)
     );
     public CustomCraftingGear craftingGear = new CustomCraftingGear(itemStackHandler, new int[] {4, 5, 6, 7, 8}, new ItemStack[] {
-            new ItemStack(ItemsTC.plate, 4, 3),
-            new ItemStack(ItemsTC.plate, 4, 3),
+            new ItemStack(ItemsTC.plate, 8, 3),
+            new ItemStack(ItemsTC.plate, 8, 3),
 
-            new ItemStack(ItemsTC.mechanismComplex, 1),
+            new ItemStack(ItemsTC.mechanismComplex, 2),
 
-            new ItemStack(ItemsTC.plate, 4, 3),
-            new ItemStack(ItemsTC.plate, 4, 3)
+            new ItemStack(ItemsTC.plate, 8, 3),
+            new ItemStack(ItemsTC.plate, 8, 3)
     });
     public AspectInputSlotsManager inputSlotsManager = new AspectInputSlotsManager(itemStackHandler, aspectBottles, new int[] {0, 1, 2, 3},
             new int[] {3},
             new int[] {0, 1, 2}
     );
     private ContainerWithPages currentContainer;
+    private int energyNetworkId = -1;
 
     public AncientPortal portal;
 
@@ -113,6 +115,9 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
         if (compound.hasKey("AspectBottles")) {
             aspectBottles.readFromNBT(compound);
         }
+        if (compound.hasKey("NetworkId")) {
+            energyNetworkId = compound.getInteger("NetworkId");
+        }
     }
 
     @Override
@@ -121,6 +126,7 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
 
         compound.setTag("items", itemStackHandler.serializeNBT());
         compound.setInteger("isActive", isActive);
+        compound.setInteger("NetworkId", energyNetworkId);
         aspectBottles.writeToNBT(compound);
 
         return compound;
@@ -297,5 +303,25 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
     @Override
     public boolean isRemote() {
         return world.isRemote;
+    }
+
+    @Override
+    public int getNetworkId() {
+        return energyNetworkId;
+    }
+
+    @Override
+    public void setNetworkId(int id) {
+        energyNetworkId = id;
+    }
+
+    @Override
+    public boolean isCanConnect(EnumFacing facing) {
+        return facing != EnumFacing.DOWN && facing != EnumFacing.UP;
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
     }
 }

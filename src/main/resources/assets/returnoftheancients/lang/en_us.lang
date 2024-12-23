@@ -19,6 +19,7 @@ item.soul_binder.info.d.1=Hold
 item.soul_binder.info.d.2= to see info.
 item.soul_binder.info.d.3=Players:
 #
+item.portal_compass.info=Points to the nearest ancient portal
 tile.tp_to_ancient_world_block.info=For creativity only
 returnoftheancients.portal.message=Cant use:
 returnoftheancients.rui.t=put it away

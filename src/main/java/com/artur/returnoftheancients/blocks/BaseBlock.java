@@ -10,8 +10,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 
+import java.util.Objects;
+
 public abstract class BaseBlock extends Block implements IHasModel {
-    protected final Item item;
+    public Item item;
     protected BaseBlock(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(material);
 
@@ -22,7 +24,7 @@ public abstract class BaseBlock extends Block implements IHasModel {
         this.setSoundType(soundType);
 
         InitBlocks.BLOCKS.add(this);
-        item = new ItemBlock(this).setRegistryName(this.getRegistryName());
+        item = new ItemBlock(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
         InitItems.ITEMS.add(item);
     }
 

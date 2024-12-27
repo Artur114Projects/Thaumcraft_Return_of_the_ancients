@@ -3,18 +3,22 @@ package com.artur.returnoftheancients.energy;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergy;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
 import com.artur.returnoftheancients.handlers.HandlerR;
-import net.minecraft.block.state.IBlockState;
+import com.artur.returnoftheancients.referense.Referense;
+import net.minecraft.block.BlockObsidian;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.*;
 
+@Mod.EventBusSubscriber(modid = Referense.MODID)
 public class EnergySystemsProvider {
 
-    public static final Map<Integer, EnergySystem> energySystems = new HashMap<>();
+    public static final Map<Integer, EnergySystem> ENERGY_SYSTEMS = new HashMap<>();
 
     public static void onBlockDestroyed(World world, BlockPos pos) {
         if (world.isRemote) return;
@@ -24,16 +28,19 @@ public class EnergySystemsProvider {
         int tileNetworkId = tileEnergy.getNetworkId();
 
         if (connectedTiles.isEmpty()) {
-            energySystems.remove(tileNetworkId);
+            if (ENERGY_SYSTEMS.remove(tileNetworkId) == null) {
+                System.out.println("Warning! failed to remove network for broken block id:" + tileNetworkId);
+                System.out.println(ENERGY_SYSTEMS);
+            }
             return;
         }
 
         if (connectedTiles.size() == 1) {
-            EnergySystem system = energySystems.get(tileNetworkId);
+            EnergySystem system = ENERGY_SYSTEMS.get(tileNetworkId);
             if (system != null) {
                 system.remove(tileEnergy);
             } else {
-                energySystems.remove(connectedTiles.get(0).getNetworkId());
+                ENERGY_SYSTEMS.remove(connectedTiles.get(0).getNetworkId());
                 buildNetwork(world, connectedTiles.get(0));
             }
             world.removeTileEntity(pos);
@@ -46,11 +53,10 @@ public class EnergySystemsProvider {
             int currentId = tile.getNetworkId();
             if (!ids.contains(currentId)) {
                 ids.add(buildNetwork(world, tile, foundFreeIdWithBlackList(currentId)));
-                energySystems.remove(currentId);
+                ENERGY_SYSTEMS.remove(currentId);
             }
         }
     }
-
 
     public static void onBlockAdded(World world, ITileEnergy tileEnergy) {
         if (world.isRemote) return;
@@ -69,7 +75,7 @@ public class EnergySystemsProvider {
 
         int id0 = connectedTiles.get(0).getNetworkId();
         if (connectedTiles.stream().allMatch(t -> t.getNetworkId() == id0)) {
-            EnergySystem system = energySystems.get(id0);
+            EnergySystem system = ENERGY_SYSTEMS.get(id0);
             if (system != null) {
                 system.add(tileEnergy);
             } else {
@@ -93,12 +99,18 @@ public class EnergySystemsProvider {
             return;
         }
 
-        EnergySystem system = energySystems.get(id);
-        if (system != null && ids.stream().allMatch(energySystems::containsKey)) {
+        EnergySystem system = ENERGY_SYSTEMS.get(id);
+        if (system != null && ids.stream().allMatch(ENERGY_SYSTEMS::containsKey)) {
             system.add(tileEnergy);
             unite(id, ids);
         } else {
             buildNetwork(world, tileEnergy);
+        }
+    }
+
+    public static void onTileLoad(ITileEnergyProvider tile) {
+        if (!ENERGY_SYSTEMS.containsKey(tile.getNetworkId())) {
+            buildNetwork(tile.getWorld(), tile);
         }
     }
 
@@ -107,7 +119,7 @@ public class EnergySystemsProvider {
     }
 
     public static int buildNetwork(World world, ITileEnergy startTile, int id) {
-        if (energySystems.containsKey(id)) return -1;
+        if (ENERGY_SYSTEMS.containsKey(id)) return -1;
         long time = System.nanoTime();
         int queueSize = 0;
         ArrayDeque<BlockPos> queue = new ArrayDeque<>(100);
@@ -126,6 +138,7 @@ public class EnergySystemsProvider {
         while (!queue.isEmpty()) {
             queueSize++;
             BlockPos pos = queue.poll();
+            ITileEnergy tile = (ITileEnergy) world.getTileEntity(pos);
 
             for (EnumFacing facing : EnumFacing.values()) {
                 BlockPos offsetPos = pos.offset(facing);
@@ -133,7 +146,7 @@ public class EnergySystemsProvider {
                 if (tileRaw instanceof ITileEnergy) {
                     ITileEnergy tileEnergy = (ITileEnergy) tileRaw;
                     if (lines.contains(tileEnergy)) continue;
-                    if (tileEnergy.isCanConnect(facing.getOpposite())) {
+                    if (tile != null && tile.isCanConnect(facing) && tileEnergy.isCanConnect(facing.getOpposite())) {
                         if (tileEnergy.isEnergyLine()) {
                             queue.addLast(tileEnergy.getPos());
                             lines.add(tileEnergy);
@@ -142,7 +155,7 @@ public class EnergySystemsProvider {
                             energyStorages.add((ITileEnergyProvider) tileEnergy);
                         }
                         if (tileEnergy.getNetworkId() != id && tileEnergy.getNetworkId() != -1) {
-                            energySystems.remove(tileEnergy.getNetworkId());
+                            ENERGY_SYSTEMS.remove(tileEnergy.getNetworkId());
                             tileEnergy.setNetworkId(id);
                         }
                     }
@@ -162,10 +175,9 @@ public class EnergySystemsProvider {
 
     public static EnergySystem createEnergyNetwork(Set<ITileEnergyProvider> tileEnergyProviders, Set<ITileEnergy> energyLines, int id) {
         EnergySystem system = new EnergySystem(tileEnergyProviders, energyLines, id);
-        energySystems.put(id, system);
+        ENERGY_SYSTEMS.put(id, system);
         return system;
     }
-
 
     public static List<ITileEnergy> getNeighbors(World world, ITileEnergy tile) {
         List<ITileEnergy> list = new ArrayList<>(6);
@@ -174,22 +186,7 @@ public class EnergySystemsProvider {
             TileEntity tileRaw = world.getTileEntity(offsetPos);
             if (tileRaw instanceof ITileEnergy) {
                 ITileEnergy tileEnergy = (ITileEnergy) tileRaw;
-                if (tileEnergy.isCanConnect(facing.getOpposite())) {
-                    list.add(tileEnergy);
-                }
-            }
-        }
-        return list;
-    }
-
-    public static List<ITileEnergy> getNeighbors(IBlockAccess world, BlockPos pos) {
-        List<ITileEnergy> list = new ArrayList<>(6);
-        for (EnumFacing facing : EnumFacing.values()) {
-            BlockPos offsetPos = pos.offset(facing);
-            TileEntity tileRaw = world.getTileEntity(offsetPos);
-            if (tileRaw instanceof ITileEnergy) {
-                ITileEnergy tileEnergy = (ITileEnergy) tileRaw;
-                if (tileEnergy.isCanConnect(facing.getOpposite())) {
+                if (tile.isCanConnect(facing) && tileEnergy.isCanConnect(facing.getOpposite())) {
                     list.add(tileEnergy);
                 }
             }
@@ -198,11 +195,11 @@ public class EnergySystemsProvider {
     }
 
     public static int foundFreeId() {
-        return HandlerR.foundMostSmallUniqueIntInSet(energySystems.keySet());
+        return HandlerR.foundMostSmallUniqueIntInSet(ENERGY_SYSTEMS.keySet());
     }
 
     public static int foundFreeIdWithBlackList(int... not) {
-        Set<Integer> set = new HashSet<>(energySystems.keySet());
+        Set<Integer> set = new HashSet<>(ENERGY_SYSTEMS.keySet());
         for (int i : not) {
             set.add(i);
         }
@@ -212,8 +209,21 @@ public class EnergySystemsProvider {
 
     public static void unite(int id0, Set<Integer> ids) {
         for (int id : ids) {
-            energySystems.get(id0).addSystem(energySystems.get(id));
-            energySystems.remove(id);
+            ENERGY_SYSTEMS.get(id0).addSystem(ENERGY_SYSTEMS.get(id));
+            ENERGY_SYSTEMS.remove(id);
         }
     }
+
+    public static void unload() {
+        ENERGY_SYSTEMS.clear();
+    }
+
+    @SubscribeEvent
+    public static void tick(TickEvent.ServerTickEvent e) {
+        for (EnergySystem system : ENERGY_SYSTEMS.values()) {
+            system.update();
+        }
+    }
+
+
 }

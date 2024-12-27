@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.energy.blocks;
 import com.artur.returnoftheancients.energy.EnergySystem;
 import com.artur.returnoftheancients.energy.EnergySystemsProvider;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergy;
+import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.tileentity.BlockTileEntity;
 import net.minecraft.block.SoundType;
@@ -14,10 +15,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public abstract class BlockEnergyBase<T extends TileEntity> extends BlockTileEntity<T> implements IEnergyBlock {
     protected BlockEnergyBase(String name, Material material, float hardness, float resistance, SoundType soundType) {
@@ -35,6 +33,9 @@ public abstract class BlockEnergyBase<T extends TileEntity> extends BlockTileEnt
     @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         TileEntity tile = createTileEntity(worldIn, state);
+        if (tile instanceof ITileEnergyProvider) {
+            ((ITileEnergyProvider) tile).setAdding();
+        }
         worldIn.setTileEntity(pos, tile);
         if (!worldIn.isRemote) {
             EnergySystemsProvider.onBlockAdded(worldIn, (ITileEnergy) tile);
@@ -59,7 +60,7 @@ public abstract class BlockEnergyBase<T extends TileEntity> extends BlockTileEnt
 
         ITileEnergy tile = (ITileEnergy) tileRaw;
         if (playerIn.isSneaking()) {
-            for (EnergySystem system : EnergySystemsProvider.energySystems.values()){
+            for (EnergySystem system : EnergySystemsProvider.ENERGY_SYSTEMS.values()){
                 playerIn.sendMessage(new TextComponentString("Network " + system.id + " " + system));
             }
         } else {

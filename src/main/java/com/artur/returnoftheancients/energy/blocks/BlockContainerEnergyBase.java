@@ -4,6 +4,7 @@ import com.artur.returnoftheancients.blocks.BaseBlockContainer;
 import com.artur.returnoftheancients.energy.EnergySystem;
 import com.artur.returnoftheancients.energy.EnergySystemsProvider;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergy;
+import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -33,6 +34,9 @@ public abstract class BlockContainerEnergyBase<T extends TileEntity> extends Bas
     @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         TileEntity tile = createTileEntity(worldIn, state);
+        if (tile instanceof ITileEnergyProvider) {
+            ((ITileEnergyProvider) tile).setAdding();
+        }
         worldIn.setTileEntity(pos, tile);
         if (!worldIn.isRemote) {
             EnergySystemsProvider.onBlockAdded(worldIn, (ITileEnergy) tile);

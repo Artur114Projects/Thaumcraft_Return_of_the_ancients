@@ -9,6 +9,9 @@ tile.tp_to_home_block.name=Portal to overworld
 tile.taint_ancient_stone.name=Taint ancient stone
 tile.tp_to_ancient_world_block.name=Portal to Ancient World
 itemGroup.returnoftheancients_tab=Thaumcraft: Return of the ancients
+tile.energy_line.name=Energy line
+tile.energy_source.name=Energy source
+tile.ancient_teleport.name=Ancient portal
 ################################################################################
 # Any
 ################################################################################

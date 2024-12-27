@@ -3,12 +3,20 @@ package com.artur.returnoftheancients.energy;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergy;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
 import com.artur.returnoftheancients.misc.TRAConfigs;
+import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class EnergySystem {
+    private final Set<ITileEnergyProvider> canTake = new HashSet<>();
+    private final Set<ITileEnergyProvider> canAdd = new HashSet<>();
     private final Set<ITileEnergyProvider> energyStorages;
     private final Set<ITileEnergy> energyLines;
+    private boolean isChanged = true;
+    private boolean isWork = false;
+    private byte workTick = 0;
 
     public final int id;
 
@@ -27,25 +35,19 @@ public class EnergySystem {
         for (ITileEnergy tileEnergy : energyStorages) {
             tileEnergy.setNetworkId(id);
         }
+        isChanged = true;
         if (TRAConfigs.Any.debugMode) System.out.println("A merger has occurred main system:" + id + " merged system:" + system.id);
     }
 
     public void add(ITileEnergy tileEnergy) {
         if (tileEnergy.isEnergyLine()) {
             tileEnergy.setNetworkId(id);
-            addLine(tileEnergy);
+            energyLines.add(tileEnergy);
         } else {
             tileEnergy.setNetworkId(id);
-            addStorage((ITileEnergyProvider) tileEnergy);
+            energyStorages.add((ITileEnergyProvider) tileEnergy);
         }
-    }
-
-    public void addLine(ITileEnergy tileEnergy) {
-        energyLines.add(tileEnergy);
-    }
-
-    public void addStorage(ITileEnergyProvider tileEnergyProvider) {
-        energyStorages.add(tileEnergyProvider);
+        isChanged = true;
     }
 
     public void remove(ITileEnergy tileEnergy) {
@@ -54,10 +56,91 @@ public class EnergySystem {
         } else {
             energyStorages.remove((ITileEnergyProvider) tileEnergy);
         }
+        isChanged = true;
     }
 
     public void update() {
+        if (!isWork) {
+            workTick++;
+            if (workTick >= 10) {
+                workTick = 0;
+                if (energyStorages.stream().anyMatch(ITileEnergyProvider::isNeedAdd)) {
+                    isWork = true;
+                } else {
+                    isWork = false;
+                    return;
+                }
+            }
+            if (!isWork) {
+                return;
+            }
+        }
 
+        if (isChanged) {
+            for (ITileEnergyProvider tile : energyStorages) {
+                if (tile.canAdd()) {
+                    canAdd.add(tile);
+                }
+                if (tile.canTake()) {
+                    canTake.add(tile);
+                }
+            }
+            isChanged = false;
+        }
+
+        if (canTake.isEmpty()) {
+            return;
+        }
+
+        boolean flag = false;
+        for (ITileEnergyProvider tile : canAdd) {
+            if (tile.isNeedAdd()) {
+                tile.add(takeFromAll(tile.canAdd(tile.maxInput())));
+                flag = true;
+            }
+        }
+
+        isWork = flag;
+    }
+
+    private float takeFromAll(float count) {
+        float localCount = count;
+        Set<ITileEnergyProvider> localCanTake = new HashSet<>();
+        for (ITileEnergyProvider tile : canTake) {
+            if (!tile.isEmpty()) {
+                localCanTake.add(tile);
+            }
+        }
+
+        Set<ITileEnergyProvider> tilesWithMaxOutputIsLessThanCount = getTilesWithMaxOutputIsLessThanCount(localCount / localCanTake.size());
+        if (tilesWithMaxOutputIsLessThanCount != null) {
+            localCanTake.removeAll(tilesWithMaxOutputIsLessThanCount);
+            for (ITileEnergyProvider tileEnergyProvider : tilesWithMaxOutputIsLessThanCount) {
+                localCount -= tileEnergyProvider.take(tileEnergyProvider.maxOutput());
+            }
+        }
+
+        float takeCount = localCount / localCanTake.size();
+
+        for (ITileEnergyProvider tile : localCanTake) {
+            localCount -= tile.take(takeCount);
+        }
+
+        return count - localCount;
+    }
+
+    @Nullable
+    private Set<ITileEnergyProvider> getTilesWithMaxOutputIsLessThanCount(float count) {
+        Set<ITileEnergyProvider> tiles = null;
+        for (ITileEnergyProvider tile : canTake) {
+            if (tile.maxOutput() < count) {
+                if (tiles == null) {
+                    tiles = new HashSet<>();
+                }
+                tiles.add(tile);
+            }
+        }
+        return tiles;
     }
 
     @Override

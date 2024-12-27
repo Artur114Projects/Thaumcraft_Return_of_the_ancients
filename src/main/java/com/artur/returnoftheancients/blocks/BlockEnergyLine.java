@@ -1,20 +1,24 @@
 package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.energy.blocks.BlockEnergyBase;
-import com.artur.returnoftheancients.energy.blocks.IEnergyBlock;
-import com.artur.returnoftheancients.energy.intefaces.ITileEnergy;
+import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.tileentity.TileEntityEnergyLine;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IRarity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +37,9 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
 
     public BlockEnergyLine(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
+        InitItems.ITEMS.remove(item);
+        item = new ItemBlockEnergyLine(this).setRegistryName(this.getRegistryName());
+        InitItems.ITEMS.add(item);
     }
 
 
@@ -140,5 +147,17 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
     @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         super.onBlockAdded(worldIn, pos, state);
+    }
+
+    private static class ItemBlockEnergyLine extends ItemBlock {
+
+        public ItemBlockEnergyLine(Block block) {
+            super(block);
+        }
+
+        @Override
+        public @NotNull IRarity getForgeRarity(@NotNull ItemStack stack) {
+            return EnumRarity.UNCOMMON;
+        }
     }
 }

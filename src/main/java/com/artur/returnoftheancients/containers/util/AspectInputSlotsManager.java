@@ -26,6 +26,7 @@ public class AspectInputSlotsManager {
         this.inputSlots = inputSlots;
     }
 
+    // TODO: Добавить анимацию на клиенте
     public void fill() {
         for (int i = 0; i < inputSlots.length; i = i + 2) {
             ItemStack stack = itemHandler.getStackInSlot(inputSlots[i]);

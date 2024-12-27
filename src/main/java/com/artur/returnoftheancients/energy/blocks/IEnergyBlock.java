@@ -14,14 +14,15 @@ import java.util.List;
 public interface IEnergyBlock {
 
     default void calculateNeighborChange(World world, BlockPos pos) {
-        List<ITileEnergy> tileEnergies = EnergySystemsProvider.getNeighbors(world, pos);
-        for (ITileEnergy energy : tileEnergies) {
-            if (energy.getNetworkId() == -1) EnergySystemsProvider.onBlockAdded(world, energy);
-        }
+//        List<ITileEnergy> tileEnergies = EnergySystemsProvider.getNeighbors(world, pos);
+//        for (ITileEnergy energy : tileEnergies) {
+//            if (energy.getNetworkId() == -1) EnergySystemsProvider.onBlockAdded(world, energy);
+//        }
     }
 
     default boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing facing){
-        TileEntity tile = world.getTileEntity(pos.offset(facing));
-        return tile instanceof ITileEnergy && ((ITileEnergy) (tile)).isCanConnect(facing.getOpposite());
+        TileEntity tileOffset = world.getTileEntity(pos.offset(facing));
+        TileEntity tile = world.getTileEntity(pos);
+        return tileOffset instanceof ITileEnergy && ((ITileEnergy) (tileOffset)).isCanConnect(facing.getOpposite()) && tile instanceof ITileEnergy && ((ITileEnergy) (tile)).isCanConnect(facing);
     }
 }

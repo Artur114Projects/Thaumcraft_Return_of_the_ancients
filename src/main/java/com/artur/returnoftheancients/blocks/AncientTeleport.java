@@ -1,13 +1,17 @@
 package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.energy.blocks.BlockContainerEnergyBase;
+import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientTeleport;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -15,6 +19,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IRarity;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
@@ -28,14 +33,16 @@ import java.util.Random;
 public class AncientTeleport extends BlockContainerEnergyBase<TileEntityAncientTeleport> {
     private final Random rand = new Random();
 
-
     public AncientTeleport(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
         this.setCreativeTab(MainR.ReturnOfTheAncientsTab);
+        InitItems.ITEMS.remove(item);
+        item = new ItemBlockAncientTeleport(this).setRegistryName(this.getRegistryName());
+        InitItems.ITEMS.add(item);
     }
 
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
+    public @NotNull EnumBlockRenderType getRenderType(@NotNull IBlockState state) {
         return EnumBlockRenderType.MODEL;
     }
 
@@ -89,7 +96,19 @@ public class AncientTeleport extends BlockContainerEnergyBase<TileEntityAncientT
 
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createNewTileEntity(@NotNull World worldIn, int meta) {
         return new TileEntityAncientTeleport();
+    }
+
+    private static class ItemBlockAncientTeleport extends ItemBlock {
+
+        public ItemBlockAncientTeleport(Block block) {
+            super(block);
+        }
+
+        @Override
+        public @NotNull IRarity getForgeRarity(@NotNull ItemStack stack) {
+            return EnumRarity.RARE;
+        }
     }
 }

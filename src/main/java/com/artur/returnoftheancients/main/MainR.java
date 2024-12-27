@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.main;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntry;
+import com.artur.returnoftheancients.energy.EnergySystemsProvider;
 import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.generation.terraingen.TerrainHandler;
 import com.artur.returnoftheancients.handlers.RegisterHandler;
@@ -63,6 +64,7 @@ public class MainR {
 	public void serverStopping(FMLServerStoppingEvent e) {
 		AncientWorld.unload();
 		AncientPortalsProcessor.unload();
+		EnergySystemsProvider.unload();
 		WorldDataFields.unload();
 		ServerEventsHandler.unload();
 	}

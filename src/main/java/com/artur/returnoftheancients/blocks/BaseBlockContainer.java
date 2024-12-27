@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class BaseBlockContainer<T extends TileEntity> extends BlockContainer implements IHasModel {
 
-    protected final Item item;
+    protected Item item;
     protected BaseBlockContainer(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(material);
 

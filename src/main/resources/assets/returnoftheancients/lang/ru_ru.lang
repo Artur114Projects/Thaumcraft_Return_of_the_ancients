@@ -9,6 +9,9 @@ tile.tp_to_home_block.name=Портал в верхний мир
 tile.taint_ancient_stone.name=Заражённый древний камень
 tile.tp_to_ancient_world_block.name=Портал в древний мир
 itemGroup.returnoftheancients_tab=Thaumcraft: Return of the ancients
+tile.energy_line.name=Энерго трасса
+tile.energy_source.name=Источник энергии
+tile.ancient_teleport.name=Древний портал
 ###################################################################################
 # Any
 ###################################################################################

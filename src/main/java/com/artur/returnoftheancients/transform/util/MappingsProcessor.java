@@ -59,7 +59,6 @@ public class MappingsProcessor {
         load();
         String obfuscatedName = methods.get(name);
         if (obfuscatedName == null) {
-            System.out.println("Warning: Method '" + name + "' not found in mappings.");
             return name;
         }
         return obfuscatedName;

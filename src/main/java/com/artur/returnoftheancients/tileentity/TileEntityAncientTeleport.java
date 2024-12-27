@@ -4,7 +4,10 @@ import com.artur.returnoftheancients.containers.ContainerWithPages;
 import com.artur.returnoftheancients.containers.IContainerWithPages;
 import com.artur.returnoftheancients.containers.util.AspectInputSlotsManager;
 import com.artur.returnoftheancients.containers.util.CustomCraftingGear;
+import com.artur.returnoftheancients.energy.EnergySystemsProvider;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
+import com.artur.returnoftheancients.energy.tiles.TileEnergyProviderBase;
+import com.artur.returnoftheancients.energy.util.EnergyHandler;
 import com.artur.returnoftheancients.generation.generators.portal.AncientPortalOpening;
 import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortal;
 import com.artur.returnoftheancients.utils.AspectBottle;
@@ -28,7 +31,7 @@ import thaumcraft.common.tiles.TileThaumcraft;
 
 import java.util.Objects;
 
-public class TileEntityAncientTeleport extends TileThaumcraft implements IAspectContainer, IEssentiaTransport, ITickable, IContainerWithPages, ITileEnergyProvider {
+public class TileEntityAncientTeleport extends TileEnergyProviderBase implements IAspectContainer, IEssentiaTransport, ITickable, IContainerWithPages, ITileEnergyProvider {
     public static final int SIZE = 9;
 
 
@@ -38,15 +41,15 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
             markDirty();
         }
     };
-    public final AspectBottlesList aspectBottles = new AspectBottlesList (
-            new AspectBottle(Aspect.VOID    , 60, 38 + 24         , 16),
+    public final AspectBottlesList aspectBottles = new AspectBottlesList(
+            new AspectBottle(Aspect.VOID, 60, 38 + 24, 16),
             new AspectBottle(Aspect.DARKNESS, 60, 38 + 24 + 24 + 4, 16),
             new AspectBottle(Aspect.ELDRITCH, 60, 38 + 24 + 48 + 8, 16),
 
-            new AspectBottle(Aspect.ORDER   , 80, 38 + 28         , 16),
-            new AspectBottle(Aspect.ENTROPY , 80, 38 + 28 + 32 + 4, 16)
+            new AspectBottle(Aspect.ORDER, 80, 38 + 28, 16),
+            new AspectBottle(Aspect.ENTROPY, 80, 38 + 28 + 32 + 4, 16)
     );
-    public CustomCraftingGear craftingGear = new CustomCraftingGear(itemStackHandler, new int[] {4, 5, 6, 7, 8}, new ItemStack[] {
+    public CustomCraftingGear craftingGear = new CustomCraftingGear(itemStackHandler, new int[]{4, 5, 6, 7, 8}, new ItemStack[]{
             new ItemStack(ItemsTC.plate, 8, 3),
             new ItemStack(ItemsTC.plate, 8, 3),
 
@@ -55,12 +58,12 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
             new ItemStack(ItemsTC.plate, 8, 3),
             new ItemStack(ItemsTC.plate, 8, 3)
     });
-    public AspectInputSlotsManager inputSlotsManager = new AspectInputSlotsManager(itemStackHandler, aspectBottles, new int[] {0, 1, 2, 3},
-            new int[] {3},
-            new int[] {0, 1, 2}
+    public AspectInputSlotsManager inputSlotsManager = new AspectInputSlotsManager(itemStackHandler, aspectBottles, new int[]{0, 1, 2, 3},
+            new int[]{3},
+            new int[]{0, 1, 2}
     );
+    public EnergyHandler energyHandler = new EnergyHandler(100.0F, 0, 4.0F, 1);
     private ContainerWithPages currentContainer;
-    private int energyNetworkId = -1;
 
     public AncientPortal portal;
 
@@ -68,6 +71,7 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
 
 
 
+    // TODO: Доделать систему с удалением вкладки после активации
     public void requestToActivate() {
         if (craftingGear.craft() && aspectBottles.isFull(0, 1, 2)) {
             aspectBottles.empty(0, 1, 2);
@@ -91,8 +95,8 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
         for (EnumFacing facing : facings) {
             TileEntity te = ThaumcraftApiHelper.getConnectableTile(this.world, this.pos, facing);
             if (te == null) continue;
-            IEssentiaTransport ic = (IEssentiaTransport)te;
-            EnumFacing oppositeFacing =  facing.getOpposite();
+            IEssentiaTransport ic = (IEssentiaTransport) te;
+            EnumFacing oppositeFacing = facing.getOpposite();
             Aspect aspect = ic.getEssentiaType(oppositeFacing);
             AspectBottle bottle = aspectBottles.getAspectBottleWithAspect(aspect);
             if (bottle != null && ic.getEssentiaAmount(oppositeFacing) > 0 && bottle.isCanAdd()) {
@@ -115,9 +119,6 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
         if (compound.hasKey("AspectBottles")) {
             aspectBottles.readFromNBT(compound);
         }
-        if (compound.hasKey("NetworkId")) {
-            energyNetworkId = compound.getInteger("NetworkId");
-        }
     }
 
     @Override
@@ -126,7 +127,6 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
 
         compound.setTag("items", itemStackHandler.serializeNBT());
         compound.setInteger("isActive", isActive);
-        compound.setInteger("NetworkId", energyNetworkId);
         aspectBottles.writeToNBT(compound);
 
         return compound;
@@ -306,22 +306,52 @@ public class TileEntityAncientTeleport extends TileThaumcraft implements IAspect
     }
 
     @Override
-    public int getNetworkId() {
-        return energyNetworkId;
-    }
-
-    @Override
-    public void setNetworkId(int id) {
-        energyNetworkId = id;
-    }
-
-    @Override
     public boolean isCanConnect(EnumFacing facing) {
         return facing != EnumFacing.DOWN && facing != EnumFacing.UP;
     }
 
     @Override
-    public void onLoad() {
-        super.onLoad();
+    public float canAdd(float count) {
+        return energyHandler.canAdd(count);
+    }
+
+    @Override
+    public float add(float count) {
+        return energyHandler.add(count);
+    }
+
+    @Override
+    public float take(float count) {
+        return energyHandler.take(count);
+    }
+
+    @Override
+    public boolean canAddFromFacing(EnumFacing facing) {
+        return facing != EnumFacing.DOWN && facing != EnumFacing.UP;
+    }
+
+    @Override
+    public boolean canTakeFromFacing(EnumFacing facing) {
+        return false;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return energyHandler.isEmpty();
+    }
+
+    @Override
+    public boolean isNeedAdd() {
+        return energyHandler.isNeedAdd();
+    }
+
+    @Override
+    public float maxInput() {
+        return energyHandler.getMaxInputInkW();
+    }
+
+    @Override
+    public float maxOutput() {
+        return energyHandler.getMaxOutputInkW();
     }
 }

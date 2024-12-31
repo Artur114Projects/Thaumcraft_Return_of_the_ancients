@@ -3,10 +3,14 @@ package com.artur.returnoftheancients.client.misc;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.items.ItemGavno;
 import com.artur.returnoftheancients.referense.Referense;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -14,6 +18,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import thaumcraft.client.lib.events.RenderEventHandler;
+
+import java.lang.ref.Reference;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
@@ -62,6 +68,11 @@ public class ClientEventsHandler {
 
 
     }
+
+//    @SubscribeEvent
+//    public static void renderSpecificHandEvent(RenderSpecificHandEvent e) {
+//        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(Referense.MODID, "aaaaaaaa"));
+//    }
 
 
 //    @SubscribeEvent

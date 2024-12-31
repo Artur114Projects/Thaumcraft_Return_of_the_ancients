@@ -4,7 +4,6 @@ import com.artur.returnoftheancients.energy.intefaces.ITileEnergy;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.referense.Referense;
-import net.minecraft.block.BlockObsidian;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -14,10 +13,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class EnergySystemsProvider {
 
+    public static final Set<Integer> LOADED_NETWORKS = new HashSet<>();
     public static final Map<Integer, EnergySystem> ENERGY_SYSTEMS = new HashMap<>();
 
     public static void onBlockDestroyed(World world, BlockPos pos) {
@@ -109,8 +110,14 @@ public class EnergySystemsProvider {
     }
 
     public static void onTileLoad(ITileEnergyProvider tile) {
+        if (tile.getNetworkId() == -1) {
+            System.out.println("asdfsdhgjdryewrafdsfgftfwgfnchtsrthjhjterreggfjhg");
+            return;
+        }
         if (!ENERGY_SYSTEMS.containsKey(tile.getNetworkId())) {
-            buildNetwork(tile.getWorld(), tile);
+            buildNetwork(tile.getWorld(), tile, foundFreeId(), false);
+        } else if (!ENERGY_SYSTEMS.get(tile.getNetworkId()).containsEnergyProviderPos(tile.getPos())) {
+            buildNetwork(tile.getWorld(), tile, foundFreeId(), false);
         }
     }
 
@@ -119,6 +126,10 @@ public class EnergySystemsProvider {
     }
 
     public static int buildNetwork(World world, ITileEnergy startTile, int id) {
+        return buildNetwork(world, startTile, id, true);
+    }
+
+    public static int buildNetwork(World world, ITileEnergy startTile, int id, boolean isRemoveFoundNetworks) {
         if (ENERGY_SYSTEMS.containsKey(id)) return -1;
         long time = System.nanoTime();
         int queueSize = 0;
@@ -155,7 +166,9 @@ public class EnergySystemsProvider {
                             energyStorages.add((ITileEnergyProvider) tileEnergy);
                         }
                         if (tileEnergy.getNetworkId() != id && tileEnergy.getNetworkId() != -1) {
-                            ENERGY_SYSTEMS.remove(tileEnergy.getNetworkId());
+                            if (isRemoveFoundNetworks) {
+                                ENERGY_SYSTEMS.remove(tileEnergy.getNetworkId());
+                            }
                             tileEnergy.setNetworkId(id);
                         }
                     }
@@ -206,6 +219,13 @@ public class EnergySystemsProvider {
         return HandlerR.foundMostSmallUniqueIntInSet(set);
     }
 
+    public static int foundFreeIdWithBlackList(Set<Integer> not) {
+        Set<Integer> set = new HashSet<>(ENERGY_SYSTEMS.keySet());
+        set.addAll(not);
+        return HandlerR.foundMostSmallUniqueIntInSet(set);
+    }
+
+
 
     public static void unite(int id0, Set<Integer> ids) {
         for (int id : ids) {
@@ -215,6 +235,7 @@ public class EnergySystemsProvider {
     }
 
     public static void unload() {
+        LOADED_NETWORKS.clear();
         ENERGY_SYSTEMS.clear();
     }
 

@@ -17,8 +17,6 @@ import thaumcraft.api.aspects.Aspect;
 
 public class AspectBottle {
 
-    public static ResourceLocation texture = new ResourceLocation(Referense.MODID, "textures/gui/container/aspect_bottle_vertical.png");
-
     public final Aspect aspect;
     public final int maxCont;
     public int lastCount;
@@ -48,7 +46,7 @@ public class AspectBottle {
     }
 
     @SideOnly(Side.CLIENT)
-    public void draw(GuiContainer container, int mouseX, int mouseY, int width, int height) {
+    public void draw(GuiContainer container, int mouseX, int mouseY, int width, int height, ResourceLocation texture) {
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();
         int dx = (container.width - container.xSize) / 2 + x;

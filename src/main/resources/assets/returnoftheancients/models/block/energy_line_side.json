@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"textures": {
-		"particle": "returnoftheancients:blocks/energy_line",
-		"side": "returnoftheancients:blocks/energy_line"
+		"side": "returnoftheancients:blocks/energy_line",
+		"particle": "returnoftheancients:blocks/energy_line_particle"
 	},
 	"elements": [
 		{

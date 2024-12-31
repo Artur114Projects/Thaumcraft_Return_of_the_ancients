@@ -29,6 +29,11 @@ returnoftheancients.rui.t=убери это
 returnoftheancients.rui.f=у тебя 30 секунд
 returnoftheancients.gui.esc=Нажмите ESC еще раз чтобы выйти.
 returnoftheancients.message.new-version=Добро пожаловать в Thaumcraft: Return of the ancients v1.4.0-betta!
+returnoftheancients.kJ.prefixes=Дж/кДж/МДж/ГДж/ТДж
+returnoftheancients.kW.prefixes=Вт/кВт/МВт/ГВт/ТВт
+returnoftheancients.energy.local.0=Энергия:
+returnoftheancients.energy.local.1=Вход:
+returnoftheancients.energy.local.2=Выход:
 ###################################################################################
 # Loading gui
 ###################################################################################

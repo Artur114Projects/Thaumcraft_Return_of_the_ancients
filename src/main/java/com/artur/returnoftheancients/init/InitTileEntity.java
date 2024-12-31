@@ -19,7 +19,7 @@ public class InitTileEntity {
 
     public static final BlockTileEntity<TileEntityFireTrap> FIRE_TRAP = new FireTrap("fire_trap", Material.ROCK, 100, 999999999, SoundType.STONE);
     public static final BlockTileEntity<TileEntityEldritchTrap> ELDRITCH_TRAP = new EldritchTrap("eldritch_trap", Material.ROCK, 100, 999999999, SoundType.STONE);
-    public static final BaseBlockContainer<TileEntityAncientTeleport> ANCIENT_TELEPORT = new AncientTeleport("ancient_teleport", Material.IRON, 0.6F, 10, SoundType.STONE);
+    public static final BaseBlockContainer<TileEntityAncientTeleport> ANCIENT_TELEPORT = new AncientTeleport("ancient_teleport", Material.IRON, 1.4F, 10, SoundType.STONE);
     public static final BlockTileEntity<TileEntityEnergyLine> ENERGY_LINE = new BlockEnergyLine("energy_line", Material.CLAY, 0.2F, 8, SoundType.METAL);
     public static final BlockTileEntity<TileEnergySource> ENERGY_SOURCE = new BlockEnergySource("energy_source", Material.CLAY, 1.0F, 10, SoundType.METAL);
 }

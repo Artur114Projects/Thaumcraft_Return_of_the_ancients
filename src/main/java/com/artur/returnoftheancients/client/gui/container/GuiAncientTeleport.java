@@ -27,12 +27,16 @@ public class GuiAncientTeleport extends GuiContainer {
             new ResourceLocation(Referense.MODID, "textures/gui/container/ancient_teleport_gui_page0.png"),
             new ResourceLocation(Referense.MODID, "textures/gui/container/ancient_teleport_gui_page1.png")
     };
+    private final ResourceLocation aspectBottlesTexture = new ResourceLocation(Referense.MODID, "textures/gui/container/aspect_bottle_vertical.png");
+    private final ResourceLocation ancientEnergyBarTexture = new ResourceLocation(Referense.MODID, "textures/gui/container/ancient_energy_bar.png");
 
     public final ContainerAncientTeleport container;
     private final TileEntityAncientTeleport tile;
     private ButtonAncientTeleportMain buttonMain;
     private final InventoryPlayer inventory;
     public ButtonsPageManager pageManager;
+
+
 
     public GuiAncientTeleport(TileEntityAncientTeleport tile, EntityPlayer player) {
         super(new ContainerAncientTeleport(player.inventory, tile));
@@ -45,10 +49,10 @@ public class GuiAncientTeleport extends GuiContainer {
     @Override
     public void initGui() {
         super.initGui();
-        buttonMain = new ButtonAncientTeleportMain(0, (width - xSize) / 2 + (xSize - 16 - 64), (height - ySize) / 2 + 16);
+        buttonMain = new ButtonAncientTeleportMain(0, (width - xSize) / 2 + (xSize - 16 - 64), (height - ySize) / 2 + 12);
         buttonList.add(buttonMain);
         ResourceLocation baseTexture = new ResourceLocation(Referense.MODID, "textures/gui/button/ancient_button_page1.png");
-        pageManager = new ButtonsPageManager(buttonList, ((width - xSize) / 2 + 1 - 16), (height - ySize) / 2 + 0, 100, 2, 16, 1.0F, 'y', baseTexture, new ResourceLocation[] {new ResourceLocation(Referense.MODID, "textures/gui/button/ancient_button_page_icon0.png"), null}, new String[] {"Main page", "Activating"}) {
+        pageManager = new ButtonsPageManager(buttonList, ((width - xSize) / 2 + 1 - 16), (height - ySize) / 2, 100, 2, 16, 1.0F, 'y', baseTexture, new ResourceLocation[] {new ResourceLocation(Referense.MODID, "textures/gui/button/ancient_button_page_icon0.png"), null}, new String[] {"Main page", "Activating"}) {
             @Override
             public void onPageChange(int page, int pageIn) {
                 super.onPageChange(page, pageIn);
@@ -91,6 +95,7 @@ public class GuiAncientTeleport extends GuiContainer {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         drawBottles(mouseX, mouseY);
+        drawEnergy(mouseX, mouseY);
         drawHovered(mouseX, mouseY);
     }
 
@@ -108,11 +113,19 @@ public class GuiAncientTeleport extends GuiContainer {
         }
 
         for (int i = startI; i != endI; i++) {
-            tile.aspectBottles.aspectBottles[i].draw(this, mouseX, mouseY, rW, 64);
+            tile.aspectBottles.aspectBottles[i].draw(this, mouseX, mouseY, 32, 64, aspectBottlesTexture);
+        }
+    }
+
+    public void drawEnergy(int mouseX, int mouseY) {
+        if (pageManager.getCurrentPage() == 0) {
+            tile.energyHandler.drawInput ((width - xSize) / 2 + 8, (height - ySize) / 2 + 84, 48, 6, mouseX, mouseY, ancientEnergyBarTexture);
+            tile.energyHandler.drawOutput((width - xSize) / 2 + xSize - 48 - 8, (height - ySize) / 2 + 84, 48, 6, mouseX, mouseY, ancientEnergyBarTexture);
         }
     }
 
     public void drawHovered(int mouseX, int mouseY) {
+        this.tile.energyHandler.drawHoveredText(this, mouseX, mouseY);
         this.renderHoveredToolTip(mouseX, mouseY);
         this.renderMainButtonHoveredToolTip(mouseX, mouseY);
         this.pageManager.renderHoveredText(this, mouseX, mouseY);
@@ -122,7 +135,7 @@ public class GuiAncientTeleport extends GuiContainer {
     }
 
     public void renderMainButtonHoveredToolTip(int mouseX, int mouseY) {
-        if  (pageManager.getCurrentPage() != 0) {
+        if (pageManager.getCurrentPage() != 0) {
             return;
         }
         int x = buttonMain.x;

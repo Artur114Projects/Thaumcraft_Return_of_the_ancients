@@ -3,6 +3,8 @@ package com.artur.returnoftheancients.energy;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergy;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
 import com.artur.returnoftheancients.misc.TRAConfigs;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,6 +26,23 @@ public class EnergySystem {
         this.energyStorages = energyStorages;
         this.energyLines = energyLines;
         this.id = id;
+    }
+
+    public boolean containsTile(ITileEnergy tileEnergy) {
+        if (tileEnergy.isEnergyLine()) {
+            return energyLines.contains(tileEnergy);
+        } else {
+            return energyStorages.contains((ITileEnergyProvider) tileEnergy);
+        }
+    }
+
+    public boolean containsEnergyProviderPos(BlockPos pos) {
+        for (ITileEnergyProvider t : energyStorages) {
+            if (pos.equals(t.getPos())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addSystem(EnergySystem system) {
@@ -77,6 +96,9 @@ public class EnergySystem {
         }
 
         if (isChanged) {
+            canTake.clear();
+            canAdd.clear();
+
             for (ITileEnergyProvider tile : energyStorages) {
                 if (tile.canAdd()) {
                     canAdd.add(tile);
@@ -85,6 +107,7 @@ public class EnergySystem {
                     canTake.add(tile);
                 }
             }
+
             isChanged = false;
         }
 

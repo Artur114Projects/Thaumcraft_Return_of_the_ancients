@@ -42,14 +42,14 @@ public class TileEntityAncientTeleport extends TileEnergyProviderBase implements
         }
     };
     public final AspectBottlesList aspectBottles = new AspectBottlesList(
-            new AspectBottle(Aspect.VOID, 60, 38 + 24, 16),
-            new AspectBottle(Aspect.DARKNESS, 60, 38 + 24 + 24 + 4, 16),
-            new AspectBottle(Aspect.ELDRITCH, 60, 38 + 24 + 48 + 8, 16),
+            new AspectBottle(Aspect.VOID, 60, 32 + 24, 16),
+            new AspectBottle(Aspect.DARKNESS, 60, 32 + 24 + 24 + 4, 16),
+            new AspectBottle(Aspect.ELDRITCH, 60, 32 + 24 + 48 + 8, 16),
 
-            new AspectBottle(Aspect.ORDER, 80, 38 + 28, 16),
-            new AspectBottle(Aspect.ENTROPY, 80, 38 + 28 + 32 + 4, 16)
+            new AspectBottle(Aspect.ORDER, 80, 38 + 28, 12),
+            new AspectBottle(Aspect.ENTROPY, 80, 38 + 28 + 32 + 4, 12)
     );
-    public CustomCraftingGear craftingGear = new CustomCraftingGear(itemStackHandler, new int[]{4, 5, 6, 7, 8}, new ItemStack[]{
+    public CustomCraftingGear craftingGear = new CustomCraftingGear(itemStackHandler, new int[]{4, 5, 6, 7, 8}, new ItemStack[] {
             new ItemStack(ItemsTC.plate, 8, 3),
             new ItemStack(ItemsTC.plate, 8, 3),
 
@@ -58,11 +58,11 @@ public class TileEntityAncientTeleport extends TileEnergyProviderBase implements
             new ItemStack(ItemsTC.plate, 8, 3),
             new ItemStack(ItemsTC.plate, 8, 3)
     });
-    public AspectInputSlotsManager inputSlotsManager = new AspectInputSlotsManager(itemStackHandler, aspectBottles, new int[]{0, 1, 2, 3},
-            new int[]{3},
-            new int[]{0, 1, 2}
+    public AspectInputSlotsManager inputSlotsManager = new AspectInputSlotsManager(itemStackHandler, aspectBottles, new int[] {0, 1, 2, 3},
+            new int[] {3},
+            new int[] {0, 1, 2}
     );
-    public EnergyHandler energyHandler = new EnergyHandler(100.0F, 0, 4.0F, 1);
+    public EnergyHandler energyHandler = new EnergyHandler(1000.0F, 0, 100.0F, 1);
     private ContainerWithPages currentContainer;
 
     public AncientPortal portal;

@@ -537,15 +537,56 @@ public class HandlerR {
         GlStateManager.glLineWidth(1.0F);
     }
 
-    @SideOnly(Side.CLIENT)
-    public static void renderQuadTextureAtlas(int posX, int posY, float startDrawX, float startDrawY, float textureSizeX, float textureSizeY, float scale) {
+    public static void renderPrimitive(int x, int x1, int y, int y1, double startU, double endU, double startV, double endV) {
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder builder = tessellator.getBuffer();
+        builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        builder.pos(x, y1, 0).tex(startU, endV).endVertex();
+        builder.pos(x1, y1, 0).tex(endU, endV).endVertex();
+        builder.pos(x1, y, 0).tex(endU, startV).endVertex();
+        builder.pos(x, y, 0).tex(startU, startV).endVertex();
+        tessellator.draw();
+    }
 
+    @SideOnly(Side.CLIENT)
+    public static void renderTextureAtlas(int posX, int posY, float startDrawX, float startDrawY, float textureSizeX, float textureSizeY, float drawAreaWidth, float drawAreaHeight) {
+        float posX1 = posX + drawAreaWidth;
+        float posY1 = posY + drawAreaHeight;
+
+        float iX = startDrawX / drawAreaWidth;
+        float iY = startDrawY / drawAreaHeight;
+
+        double endU = (double) (drawAreaWidth * (iX + 1)) / textureSizeX;
+        double startU = (double) (drawAreaWidth * iX) / textureSizeX;
+
+        double endV = (double) (drawAreaHeight * (iY + 1)) / textureSizeY;
+        double startV = (double) (drawAreaHeight * iY) / textureSizeY;
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder builder = tessellator.getBuffer();
+        builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        builder.pos(posX, posY1, 0).tex(startU, endV).endVertex();
+        builder.pos(posX1, posY1, 0).tex(endU, endV).endVertex();
+        builder.pos(posX1, posY, 0).tex(endU, startV).endVertex();
+        builder.pos(posX, posY, 0).tex(startU, startV).endVertex();
+        tessellator.draw();
+    }
+
+    /**
+     * @param posX drawing start position
+     * @param posY drawing start position
+     * @param startDrawX drawing start position in texture
+     * @param startDrawY drawing start position in texture
+     * @param textureSizeX texture size
+     * @param textureSizeY texture size
+     * @param scale scale
+     */
+    @SideOnly(Side.CLIENT)
+    public static void renderQuadTextureAtlas(int posX, int posY, float startDrawX, float startDrawY, float textureSizeX, float textureSizeY, float drawQuadSize, float scale) {
         startDrawX = (scale * startDrawX);
         startDrawY = (scale * startDrawY);
         textureSizeX = (scale * textureSizeX);
         textureSizeY = (scale * textureSizeY);
-
-        float drawQuadSize = Math.min(textureSizeX, textureSizeY);
 
         float posX1 = posX + drawQuadSize;
         float posY1 = posY + drawQuadSize;
@@ -570,6 +611,11 @@ public class HandlerR {
     }
 
     @SideOnly(Side.CLIENT)
+    public static void renderQuadTextureAtlas(int posX, int posY, float startDrawX, float startDrawY, float textureSizeX, float textureSizeY, float scale) {
+        renderQuadTextureAtlas(posX, posY, startDrawX, startDrawY, textureSizeX, textureSizeY, Math.min(textureSizeX, textureSizeY), scale);
+    }
+
+    @SideOnly(Side.CLIENT)
     public static void renderQuadTextureAtlas(int posX, int posY, int startDrawX, int startDrawY, int textureSizeX, int textureSizeY) {
         renderQuadTextureAtlas(posX, posY, startDrawX, startDrawY, textureSizeX, textureSizeY, 1);
     }
@@ -586,5 +632,35 @@ public class HandlerR {
             return TextFormatting.DARK_PURPLE.toString();
         }
         return null;
+    }
+
+    public static String kJToString(float count) {
+        String[] prefixes = I18n.format(Referense.MODID + ".kJ.prefixes").split("/");
+        float localCount = count;
+        if (localCount < 1) {
+            return ((int) (localCount * 1000)) + prefixes[0];
+        }
+        for (int i = 1; i != prefixes.length; i++) {
+            if (localCount < 1000) {
+                return (((int) (localCount * 100)) / 100.0F) + prefixes[i];
+            }
+            localCount /= 1000;
+        }
+        return "";
+    }
+
+    public static String kWToString(float count) {
+        String[] prefixes = I18n.format(Referense.MODID + ".kW.prefixes").split("/");
+        float localCount = count;
+        if (localCount < 1) {
+            return ((int) (localCount * 1000)) + prefixes[0];
+        }
+        for (int i = 1; i != prefixes.length; i++) {
+            if (localCount < 1000) {
+                return (((int) (localCount * 100)) / 100.0F) + prefixes[i];
+            }
+            localCount /= 1000;
+        }
+        return "";
     }
 }

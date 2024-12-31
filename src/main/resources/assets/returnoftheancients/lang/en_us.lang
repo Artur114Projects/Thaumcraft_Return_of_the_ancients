@@ -30,6 +30,11 @@ returnoftheancients.rui.f=you have 30 seconds
 returnoftheancients.gui.esc=Press ESC again to exit.
 returnoftheancients.message.new-version=Welcome to Thaumcraft: Return of the ancients v1.4.0-betta!
 returnoftheancients.command.main.usage=/returnoftheancients <updatedropprimalblade|seed|help|tptoportal>
+returnoftheancients.kJ.prefixes=J/kJ/MJ/GJ/TJ
+returnoftheancients.kW.prefixes=W/kW/MW/GW/TW
+returnoftheancients.energy.local.0=Energy:
+returnoftheancients.energy.local.1=Input:
+returnoftheancients.energy.local.2=Output:
 ###################################################################################
 # Loading gui
 ###################################################################################

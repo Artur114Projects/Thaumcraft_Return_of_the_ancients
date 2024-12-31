@@ -62,8 +62,8 @@ public class ContainerAncientTeleport extends ContainerWithPages {
         IItemHandler itemHandler = this.tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
         int slotID = 0;
-        addSlotToContainer(new SlotItemHandlerAspectInput(itemHandler, slotID++, 21, 22));
-        addSlotToContainer(new SlotItemHandlerOutput(itemHandler, slotID++, 21, 58));
+        addSlotToContainer(new SlotItemHandlerAspectInput(itemHandler, slotID++, 23, 18));
+        addSlotToContainer(new SlotItemHandlerOutput(itemHandler, slotID++, 23, 54));
 
         addSlotToContainer(new SlotItemHandlerAspectInput(itemHandler, slotID++, 21, 22));
         addSlotToContainer(new SlotItemHandlerOutput(itemHandler, slotID++, 21, 58));

@@ -76,7 +76,6 @@ public class TpToAncientWorldBlock extends BaseBlock{
                 ArrayList<String> ID = HandlerR.isPlayerUseUnresolvedItems(player);
                 if ((ID.isEmpty() || !TRAConfigs.PortalSettings.checkItems) && (ServerEventsHandler.getDifficultyId() != 0 || !TRAConfigs.AncientWorldSettings.noPeaceful)) {
                     player.fallDistance = 0;
-//                    AncientWorld.tpToAncientWorld(player);
                     AncientPortalsProcessor.onPlayerCollidePortal(player);
                 } else {
                     if (!ID.isEmpty()) {
@@ -86,8 +85,10 @@ public class TpToAncientWorldBlock extends BaseBlock{
                     } else {
                         player.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + "TC RETURN OF THE ANCIENTS: " + TextFormatting.RESET + "PEACEFUL DIFFICULTY ???"));
                     }
-                    player.getEntityData().setBoolean(ServerEventsHandler.tpToHomeNBT, true);
-                    player.getEntityData().setBoolean(noCollisionNBT, true);
+                    AncientPortal portal = AncientPortalsProcessor.getPortalOnPos(pos);
+                    if (portal != null) {
+                        portal.tpToHome(player, false);
+                    }
                 }
             }
         }

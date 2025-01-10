@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.containers;
 
 import com.artur.returnoftheancients.containers.slots.SlotItemHandlerAspectInput;
-import com.artur.returnoftheancients.containers.slots.SlotItemHandlerLimitedByClass;
 import com.artur.returnoftheancients.containers.slots.SlotItemHandlerOutput;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientTeleport;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,15 +10,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
-import thaumcraft.api.aspects.IEssentiaContainerItem;
-import thaumcraft.common.blocks.essentia.BlockJarItem;
-import thaumcraft.common.container.slot.SlotOutput;
 import thaumcraft.common.items.consumables.ItemPhial;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class ContainerAncientTeleport extends ContainerWithPages {
 
@@ -81,7 +73,7 @@ public class ContainerAncientTeleport extends ContainerWithPages {
         super.addListener(listener);
         listener.sendWindowProperty(this, 0, tile.isActive);
 
-        tile.energyHandler.sendWindowProperty(listener, this);
+        tile.energyHandler.addListener(listener, this);
         tile.aspectBottles.addListener(listener, this);
     }
 
@@ -109,11 +101,9 @@ public class ContainerAncientTeleport extends ContainerWithPages {
             case 0:{
                 tile.isActive = data;
             } break;
-            case 1:{
-                tile.energyHandler.updateOnClient(data);
-            } break;
         }
 
+        tile.energyHandler.updateDataOnClient(id, data);
         if (id >= 100) {
             tile.aspectBottles.updateCount(id, data);
         }

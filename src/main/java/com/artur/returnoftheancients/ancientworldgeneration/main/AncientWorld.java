@@ -211,11 +211,11 @@ public class AncientWorld {
         event.setCanceled(true);
     }
 
-    public static void interrupt(EntityPlayerMP player) {
+    public static boolean interrupt(EntityPlayerMP player) {
         for (AncientEntry entry : ANCIENT_ENTRIES) {
-            if (entry.interrupt(player.getUniqueID())) return;
+            if (entry.interrupt(player.getUniqueID())) return true;
         }
-        rawTeam.remove(player);
+        return rawTeam.remove(player);
     }
 
     private static int foundFreePos() {

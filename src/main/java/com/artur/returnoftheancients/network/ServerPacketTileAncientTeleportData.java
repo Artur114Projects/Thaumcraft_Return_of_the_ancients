@@ -45,6 +45,9 @@ public class ServerPacketTileAncientTeleportData implements IMessage {
         @Override
         public IMessage onMessage(ServerPacketTileAncientTeleportData message, MessageContext ctx) {
             World world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(message.dimension);
+            if (!world.isBlockLoaded(message.pos)) {
+                return null;
+            }
             TileEntity tileRaw = world.getTileEntity(message.pos);
             if (tileRaw instanceof TileEntityAncientTeleport) {
                 TileEntityAncientTeleport tile = (TileEntityAncientTeleport) tileRaw;

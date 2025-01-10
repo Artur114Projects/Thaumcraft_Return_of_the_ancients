@@ -4,7 +4,6 @@ import com.artur.returnoftheancients.containers.ContainerWithPages;
 import com.artur.returnoftheancients.containers.IContainerWithPages;
 import com.artur.returnoftheancients.containers.util.AspectInputSlotsManager;
 import com.artur.returnoftheancients.containers.util.CustomCraftingGear;
-import com.artur.returnoftheancients.energy.EnergySystemsProvider;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
 import com.artur.returnoftheancients.energy.tiles.TileEnergyProviderBase;
 import com.artur.returnoftheancients.energy.util.EnergyHandler;
@@ -27,7 +26,6 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectContainer;
 import thaumcraft.api.aspects.IEssentiaTransport;
 import thaumcraft.api.items.ItemsTC;
-import thaumcraft.common.tiles.TileThaumcraft;
 
 import java.util.Objects;
 
@@ -62,7 +60,7 @@ public class TileEntityAncientTeleport extends TileEnergyProviderBase implements
             new int[] {3},
             new int[] {0, 1, 2}
     );
-    public EnergyHandler energyHandler = new EnergyHandler(1000.0F, 0, 100.0F, 1);
+    public EnergyHandler energyHandler = new EnergyHandler(1000.0F, 0, 400.0F, 1, 2, 3);
     private ContainerWithPages currentContainer;
 
     public AncientPortal portal;
@@ -85,8 +83,9 @@ public class TileEntityAncientTeleport extends TileEnergyProviderBase implements
     @Override
     public void update() {
         if (!world.isRemote) {
-            fill();
             inputSlotsManager.fill();
+            energyHandler.update();
+            this.fill();
         }
     }
 
@@ -347,11 +346,11 @@ public class TileEntityAncientTeleport extends TileEnergyProviderBase implements
 
     @Override
     public float maxInput() {
-        return energyHandler.getMaxInputInkW();
+        return energyHandler.getMaxInput();
     }
 
     @Override
     public float maxOutput() {
-        return energyHandler.getMaxOutputInkW();
+        return energyHandler.getMaxOutput();
     }
 }

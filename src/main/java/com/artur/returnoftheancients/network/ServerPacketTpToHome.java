@@ -21,8 +21,7 @@ public class ServerPacketTpToHome implements IMessage {
     public static class HandlerTTH implements IMessageHandler<ServerPacketTpToHome, IMessage> {
         @Override
         public IMessage onMessage(ServerPacketTpToHome message, MessageContext ctx) {
-            AncientWorld.interrupt(ctx.getServerHandler().player);
-            AncientPortalsProcessor.tpToHome(ctx.getServerHandler().player);
+            if (AncientWorld.interrupt(ctx.getServerHandler().player)) AncientPortalsProcessor.tpToHome(ctx.getServerHandler().player);
             return null;
         }
     }

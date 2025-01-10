@@ -46,7 +46,7 @@ public class TransformerWorld extends TransformerBase {
             Label continueLabel = new Label();
             mv.visitJumpInsn(Opcodes.IFEQ, continueLabel);
 
-            mv.visitLdcInsn(0.0f);
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, HANDLER_PATH, "getSunBrightnessInTaintBiome", "()F", false);
             mv.visitInsn(Opcodes.FRETURN);
 
             mv.visitLabel(continueLabel);

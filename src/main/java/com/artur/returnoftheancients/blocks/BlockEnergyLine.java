@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.energy.blocks.BlockEnergyBase;
 import com.artur.returnoftheancients.init.InitItems;
+import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.tileentity.TileEntityEnergyLine;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -21,12 +22,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IRarity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import thaumcraft.common.blocks.essentia.BlockTube;
 
 import java.util.List;
 
 public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
-    //Каждое свойство отвечает за то, подключен ли к этой стороне провод или другой участник цепи(true/false)
-
     public static final PropertyBool DOWN = PropertyBool.create("down");
     public static final PropertyBool UP = PropertyBool.create("up");
     public static final PropertyBool NORTH = PropertyBool.create("north");
@@ -40,14 +40,14 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
         InitItems.ITEMS.remove(item);
         item = new ItemBlockEnergyLine(this).setRegistryName(this.getRegistryName());
         InitItems.ITEMS.add(item);
+        setCreativeTab(MainR.ReturnOfTheAncientsTab);
     }
 
 
     @Override
-    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox,
-                                      List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
-        //В зависимости от того, какие стороны подключены, выставляем определенную коллизию
-        if (canConnectTo(world, pos, EnumFacing.UP)) {
+    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
+        addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(0.377, 0.377, 0.377, 0.623D, 0.623D, 0.623D));
+        if (canConnectTo(world, pos, EnumFacing.DOWN)) {
             addCollisionBoxToList(pos, entityBox, collidingBoxes,
                     new AxisAlignedBB(0.377, 0, 0.377, 0.623D, 0.623D, 0.623D));
         }
@@ -74,7 +74,7 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public @NotNull AxisAlignedBB getBoundingBox(@NotNull IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos) {
         double[] sideBound = new double[6];
         sideBound[0]= sideBound[1]= sideBound[2]=0.377D;
         sideBound[3]= sideBound[4]= sideBound[5]=0.6231D;
@@ -108,8 +108,6 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
 
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        //Пользуясь методом просто устанавливаем true/false свойствам
-        // С помощью этого мы будем рендерить(или нет) частичку кабеля с определенной стороны.
         return state
                 .withProperty(DOWN, canConnectTo(world, pos, EnumFacing.DOWN))
                 .withProperty(UP, canConnectTo(world, pos, EnumFacing.UP))

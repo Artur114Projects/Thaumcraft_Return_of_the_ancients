@@ -1,8 +1,6 @@
 package com.artur.returnoftheancients.handlers;
 
-import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntry;
 import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortal;
-import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.items.ItemSoulBinder;
 import com.artur.returnoftheancients.misc.SoundTRA;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -28,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -39,11 +38,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
-import scala.Int;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -118,7 +117,7 @@ public class HandlerR {
                 }
             }
             if (!is) {
-                ID.add(itemStack.getItem().getUnlocalizedName());
+                ID.add(I18n.format(itemStack.getItem().getUnlocalizedName() + ".name"));
             }
         }
         return ID;
@@ -208,10 +207,8 @@ public class HandlerR {
 
     public static void setStartUpNBT(EntityPlayerMP playerMP, boolean data) {
         NBTTagCompound dataNBT = playerMP.getEntityData();
-        if (dataNBT.getBoolean("startUpNBT") != data) {
-            dataNBT.setBoolean("startUpNBT", data);
-            MainR.NETWORK.sendTo(new ClientPacketPlayerNBTData(HandlerR.createPlayerDataPacketTag("startUpNBT", data)), playerMP);
-        }
+        dataNBT.setBoolean("startUpNBT", data);
+        MainR.NETWORK.sendTo(new ClientPacketPlayerNBTData(HandlerR.createPlayerDataPacketTag("startUpNBT", data)), playerMP);
     }
 
     public static void setTeleportingToHomeNBT(EntityPlayerMP playerMP, boolean data) {
@@ -426,6 +423,7 @@ public class HandlerR {
             IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(player);
             if (knowledge.addResearch(key)) {
                 knowledge.sync(player);
+
                 player.sendStatusMessage(new TextComponentTranslation(translateKey).setStyle(new Style().setColor(formatting)), true);
             }
         }
@@ -549,7 +547,14 @@ public class HandlerR {
     }
 
     @SideOnly(Side.CLIENT)
-    public static void renderTextureAtlas(int posX, int posY, float startDrawX, float startDrawY, float textureSizeX, float textureSizeY, float drawAreaWidth, float drawAreaHeight) {
+    public static void renderTextureAtlas(int posX, int posY, float startDrawX, float startDrawY, float textureSizeX, float textureSizeY, float drawAreaWidth, float drawAreaHeight, float scale) {
+        startDrawX = (scale * startDrawX);
+        startDrawY = (scale * startDrawY);
+        textureSizeX = (scale * textureSizeX);
+        textureSizeY = (scale * textureSizeY);
+        drawAreaWidth = (scale * drawAreaWidth);
+        drawAreaHeight = (scale * drawAreaHeight);
+
         float posX1 = posX + drawAreaWidth;
         float posY1 = posY + drawAreaHeight;
 
@@ -570,6 +575,11 @@ public class HandlerR {
         builder.pos(posX1, posY, 0).tex(endU, startV).endVertex();
         builder.pos(posX, posY, 0).tex(startU, startV).endVertex();
         tessellator.draw();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void renderTextureAtlas(int posX, int posY, float startDrawX, float startDrawY, float textureSizeX, float textureSizeY, float drawAreaWidth, float drawAreaHeight) {
+        renderTextureAtlas(posX, posY, startDrawX, startDrawY, textureSizeX, textureSizeY, drawAreaWidth, drawAreaHeight, 1);
     }
 
     /**
@@ -662,5 +672,109 @@ public class HandlerR {
             localCount /= 1000;
         }
         return "";
+    }
+
+    public static Tuple<Integer, Integer> getTextureSize(ResourceLocation textureRL) {
+        GlStateManager.pushMatrix();
+        Minecraft.getMinecraft().getTextureManager().bindTexture(textureRL);
+        int x = GlStateManager.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
+        int y = GlStateManager.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
+        Tuple<Integer, Integer> size = new Tuple<>(x, y);
+        GlStateManager.popMatrix();
+        return size;
+    }
+
+    public static String createDescriptor(Class<?> returnValue, Class<?>... params) {
+        StringBuilder builder = new StringBuilder("(");
+        for (Class<?> clas : params) {
+            builder.append(formatDescriptor(clas));
+            builder.append(';');
+        }
+        builder.append(')');
+        builder.append(formatDescriptor(returnValue));
+        String res = builder.toString();
+        if (TRAConfigs.Any.debugMode) System.out.println("Descriptor is created {" + res + "}");
+        return res;
+    }
+
+    public static String createDescriptor(Class<?> methodClass, String methodName, Class<?>... params) {
+        Method[] methods = findMethods(methodClass, methodName);
+        if (methods.length == 0) {
+            return "null";
+        }
+
+        Method findMethod = null;
+        if (params.length == 0) {
+            findMethod = methods[0];
+        } else {
+            for (Method method : methods) {
+                if (Arrays.equals(method.getParameterTypes(), params)) {
+                    findMethod = method;
+                    break;
+                }
+            }
+            if (findMethod == null) {
+                return "null";
+            }
+        }
+
+        StringBuilder builder = new StringBuilder("(");
+        for (Class<?> clas : findMethod.getParameterTypes()) {
+            builder.append(formatDescriptor(clas));
+            builder.append(';');
+        }
+        builder.append(')');
+        builder.append(formatDescriptor(findMethod.getReturnType()));
+        String res = builder.toString();
+        if (TRAConfigs.Any.debugMode) System.out.println("Descriptor is created {" + res + "}");
+        return res;
+    }
+
+    public static String formatDescriptor(Class<?> param) {
+        if (param == boolean.class) {
+            return "Z";
+        } else if (param == byte.class) {
+            return "B";
+        } else if (param == char.class) {
+            return "C";
+        } else if (param == double.class) {
+            return "D";
+        } else if (param == float.class) {
+            return "F";
+        } else if (param == int.class) {
+            return "I";
+        } else if (param == long.class) {
+            return "J";
+        } else if (param == short.class) {
+            return "S";
+        } else if (param == void.class) {
+            return "V";
+        }
+
+        String name = param.getName();
+        if (!name.contains("[L")) {
+            name = "L" + name;
+        }
+        name = name.replaceAll("\\.", "/");
+        return name;
+    }
+
+    public static Method[] findMethods(Class<?> methodClass, String methodName) {
+        ArrayList<Method> methods = new ArrayList<>();
+        for (Method method : methodClass.getDeclaredMethods()) {
+            if (method.getName().equals(methodName)) {
+                methods.add(method);
+            }
+        }
+        Class<?> superClass = methodClass.getSuperclass();
+        while (superClass != null) {
+            for (Method method : superClass.getDeclaredMethods()) {
+                if (method.getName().equals(methodName)) {
+                    methods.add(method);
+                }
+            }
+            superClass = superClass.getSuperclass();
+        }
+        return methods.toArray(new Method[0]);
     }
 }

@@ -7,10 +7,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -26,7 +29,9 @@ import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_di
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = Referense.MODID)
 public class ClientEventsHandler {
     protected static final String startUpNBT = "startUpNBT";
-    private static byte cpt = 0;
+    public static float defaultSun = 0.0F;
+    public static byte playerInTaintBiomeTime = 0;
+    public static byte maxPlayerInTaintBiomeTime = 80;
 
     // TODO: Сделать что нибуть с туманом (Починить)
     // TODO: Сделать плавный переход со светом и цветом тумана
@@ -50,24 +55,24 @@ public class ClientEventsHandler {
         }
     }
 
-    @SubscribeEvent
-    public static void onRenderPlayer(RenderPlayerEvent.Pre event) {
-        EntityPlayer player = event.getEntityPlayer();
-        ItemStack heldItem = player.getHeldItemMainhand();
+//    @SubscribeEvent
+//    public static void onRenderPlayer(RenderPlayerEvent.Pre event) {
+//        EntityPlayer player = event.getEntityPlayer();
+//        ItemStack heldItem = player.getHeldItemMainhand();
+//
+//        if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemGavno) {
+//            player.swingProgress = 0.0F;
+//            player.prevSwingProgress = 0.0F;
+//
+//            player.limbSwingAmount = 0.0F;
+//        }
+//    }
 
-        if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemGavno) {
-            player.swingProgress = 0.0F;
-            player.prevSwingProgress = 0.0F;
-
-            player.limbSwingAmount = 0.0F;
-        }
-    }
-
-    @SubscribeEvent
-    public static void renderView(EntityViewRenderEvent.CameraSetup e) {
-
-
-    }
+//    @SubscribeEvent
+//    public static void renderView(EntityViewRenderEvent.CameraSetup e) {
+//
+//
+//    }
 
 //    @SubscribeEvent
 //    public static void renderSpecificHandEvent(RenderSpecificHandEvent e) {
@@ -103,15 +108,29 @@ public class ClientEventsHandler {
             }
         }
         if (e.player.dimension == ancient_world_dim_id) {
-            if (cpt >= 4) {
-                cpt = 0;
-            }
-            cpt++;
             if (e.player.posY > 84 && !e.player.isCreative()) {
                 e.player.fallDistance = 0;
                 e.player.motionY += -1 - e.player.motionY;
             }
         }
+        if (BiomeDictionary.hasType(e.player.world.getBiome(e.player.getPosition()), InitBiome.TAINT_TYPE_L)) {
+            if (playerInTaintBiomeTime < maxPlayerInTaintBiomeTime) {
+                playerInTaintBiomeTime++;
+            }
+        } else {
+            defaultSun = e.player.world.getSunBrightnessBody(1);
+            if (playerInTaintBiomeTime > 0) {
+                playerInTaintBiomeTime--;
+            }
+        }
         CameraShake.updateShake();
+    }
+
+    public static float getSunBrightnessInTaintBiome() {
+        return defaultSun - (defaultSun * ((float) playerInTaintBiomeTime / maxPlayerInTaintBiomeTime));
+    }
+
+    public static boolean isPlayerInTaintBiome() {
+        return playerInTaintBiomeTime != 0;
     }
 }

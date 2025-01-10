@@ -139,7 +139,7 @@ public class BiomeTaint extends BiomeBase {
 
     public void registerBiomeP2() {
         this.topBlock = BlocksTC.taintSoil.getDefaultState();
-        this.fillerBlock = BlocksTC.taintCrust.getDefaultState();
+        this.fillerBlock = InitBlocks.TAINT_VOID_STONE.getDefaultState();
     }
 
     @Override

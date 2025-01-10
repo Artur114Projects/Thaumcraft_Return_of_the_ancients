@@ -4,10 +4,7 @@ import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
@@ -16,7 +13,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +26,21 @@ public class EnergyHandler {
     public final float maxOutput;
     public final float maxEnergy;
     public final float maxInput;
-    private final int syncLine;
+    private final int syncLine0;
+    private final int syncLine1;
+    private final int syncLine2;
+
+    private final FillManager input = new FillManager();
+    private final FillManager output = new FillManager();
 
     @SideOnly(Side.CLIENT)
     private boolean hoveredOutput = false;
     @SideOnly(Side.CLIENT)
     private boolean hoveredInput = false;
+    @SideOnly(Side.CLIENT)
+    private float inputCount = 0.0F;
+    @SideOnly(Side.CLIENT)
+    private float outputCount = 0.0F;
 
 
 
@@ -44,11 +49,13 @@ public class EnergyHandler {
      * @param maxOutput in kW
      * @param maxInput in kW
      */
-    public EnergyHandler(float maxEnergy, float maxOutput, float maxInput, int syncLine) {
+    public EnergyHandler(float maxEnergy, float maxOutput, float maxInput, int syncLine0, int syncLine1, int syncLine2) {
         this.maxOutput = maxOutput / 20.0F;
         this.maxInput = maxInput / 20.0F;
         this.maxEnergy = maxEnergy;
-        this.syncLine = syncLine;
+        this.syncLine0 = syncLine0;
+        this.syncLine1 = syncLine1;
+        this.syncLine2 = syncLine2;
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
@@ -60,11 +67,11 @@ public class EnergyHandler {
         energyCount = nbt.getFloat("EnergyCount");
     }
 
-    public float getMaxInputInkW() {
+    public float getMaxInput() {
         return maxInput;
     }
 
-    public float getMaxOutputInkW() {
+    public float getMaxOutput() {
         return maxOutput;
     }
 
@@ -86,10 +93,12 @@ public class EnergyHandler {
 
     public float add(float count) {
         if (energyCount + count <= maxEnergy) {
+            input.valueChange(count);
             energyCount += count;
             return count;
         } else {
             float localCount = this.energyCount;
+            input.valueChange(maxEnergy - localCount);
             this.energyCount = maxEnergy;
             return maxEnergy - localCount;
         }
@@ -97,18 +106,36 @@ public class EnergyHandler {
 
     public float take(float count) {
         if (energyCount - count >= 0) {
+            input.valueChange(count);
             energyCount -= count;
             return count;
         } else {
             float localCount = this.energyCount;
+            output.valueChange(localCount);
             energyCount = 0;
             return localCount;
         }
     }
 
+    public void update() {
+        input.update();
+        output.update();
+    }
+
     @SideOnly(Side.CLIENT)
-    public void updateOnClient(int data) {
-        energyCount = data / 1000.0F;
+    public void updateDataOnClient(int id, int data) {
+        if (id == syncLine0) {
+            energyCount = data / 1000.0F;
+            return;
+        }
+        if (id == syncLine1) {
+            inputCount = data / 100.0F;
+            return;
+        }
+        if (id == syncLine2) {
+            outputCount = data / 100.0F;
+            return;
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -201,24 +228,69 @@ public class EnergyHandler {
         List<String> list = new ArrayList<>();
         list.add(TextFormatting.AQUA + I18n.format(Referense.MODID + ".energy.local.0") + TextFormatting.RESET + " " + HandlerR.kJToString(energyCount) + "/" + HandlerR.kJToString(maxEnergy));
         if (hoveredInput) {
-            list.add(TextFormatting.YELLOW + I18n.format(Referense.MODID + ".energy.local.1") + TextFormatting.RESET);
+            list.add(TextFormatting.YELLOW + I18n.format(Referense.MODID + ".energy.local.1") + TextFormatting.RESET + " " + HandlerR.kWToString(inputCount) + "/" + HandlerR.kWToString(maxInput * 20));
         }
         if (hoveredOutput) {
-            list.add(TextFormatting.YELLOW + I18n.format(Referense.MODID + ".energy.local.2") + TextFormatting.RESET);
+            list.add(TextFormatting.YELLOW + I18n.format(Referense.MODID + ".energy.local.2") + TextFormatting.RESET + " " + HandlerR.kWToString(outputCount) + "/" + HandlerR.kWToString(maxOutput * 20));
         }
         container.drawHoveringText(list, mouseX, mouseY);
 
         hoveredInput = hoveredOutput = false;
     }
 
-    public void sendWindowProperty(IContainerListener listener, Container container) {
-        listener.sendWindowProperty(container, syncLine, (int) (energyCount * 1000));
+    public void addListener(IContainerListener listener, Container container) {
+        listener.sendWindowProperty(container, syncLine0, (int) (energyCount * 1000));
+        listener.sendWindowProperty(container, syncLine1, (int) (input.getFillCount() * 100));
+        listener.sendWindowProperty(container, syncLine2, (int) (output.getFillCount() * 100));
     }
 
     public void detectAndSendChanges(IContainerListener listener, Container container) {
         if (lastEnergyCount != energyCount) {
-            sendWindowProperty(listener, container);
+            listener.sendWindowProperty(container, syncLine0, (int) (energyCount * 1000));
+        }
+        if (input.isValueChange()) {
+            listener.sendWindowProperty(container, syncLine1, (int) (input.getFillCount() * 100));
+        }
+        if (output.isValueChange()) {
+            listener.sendWindowProperty(container, syncLine2, (int) (output.getFillCount() * 100));
         }
         lastEnergyCount = energyCount;
+    }
+
+    private static class FillManager {
+        private final float[] fillArray = new float[20];
+        private float lastFillEnergyCount = 0.0F;
+        private float changeValue = 0.0F;
+        private float fillCount = 0.0F;
+        private int fillIndex = 0;
+
+        public void update() {
+            if (fillIndex == 20) {
+                fillIndex = 0;
+                fillCount = 0;
+                for (float i : fillArray) {
+                    fillCount += i;
+                }
+                return;
+            }
+            fillArray[fillIndex++] = changeValue;
+            changeValue = 0.0F;
+        }
+
+        public float getFillCount() {
+            return fillCount;
+        }
+
+        public void valueChange(float value) {
+            changeValue = value;
+        }
+
+        public boolean isValueChange() {
+            if (lastFillEnergyCount != fillCount) {
+                lastFillEnergyCount =  fillCount;
+                return true;
+            }
+            return false;
+        }
     }
 }

@@ -1,7 +1,9 @@
 package com.artur.returnoftheancients.client.gui;
 
+import com.artur.returnoftheancients.blocks.TpToAncientWorldBlock;
 import com.artur.returnoftheancients.client.gui.buttons.TRAButton;
 import com.artur.returnoftheancients.client.gui.gif.Gif;
+import com.artur.returnoftheancients.client.gui.gif.GifWithTextureAtlas;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ServerPacketTpToHome;
 import com.artur.returnoftheancients.referense.Referense;
@@ -27,7 +29,8 @@ public class CoolLoadingGui extends GuiScreen {
     private GuiButton button;
 
     protected final ResourceLocation background;
-    private Gif gif = new Gif(Referense.MODID + ":textures/gui/gif/loading/loading", 12, 1, false);
+    private GifWithTextureAtlas gif_2_0 = new GifWithTextureAtlas("loading", 20, 8, 8 * 12, 8, 8);
+//    private Gif gif = new Gif(Referense.MODID + ":textures/gui/gif/loading/loading", 12, 1, false);
     protected static final ResourceLocation blur = new ResourceLocation(Referense.MODID + ":textures/gui/v.png");
     private final int Red = 16711680;
     private final int Yellow = 0xffff40;
@@ -81,10 +84,6 @@ public class CoolLoadingGui extends GuiScreen {
                 }
             }
 
-            if (rand.nextInt(11) != 0) {
-                gif.update();
-            }
-
             if (isOpening) {
                 openingTime += 0.5F;
                 if (openingTime >= 10) {
@@ -119,7 +118,7 @@ public class CoolLoadingGui extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
         drawBackground();
-        drawGif();
+        drawGif_2_0();
         super.drawScreen(mouseX, mouseY, partialTicks);
         drawLore();
 
@@ -241,33 +240,55 @@ public class CoolLoadingGui extends GuiScreen {
     }
 
 
-
-    protected void drawGif() {
-        int x = width - width / 60;
-        int y = height - height / 12;
+    // TODO: Эта штука поплыла, доделать.
+    protected void drawGif_2_0() {
+        int x = width - width / 30;
+        int y = height - height / 10;
+        final int baseSize = 8;
         int size = 16;
         if (resolution.getScaleFactor() == 3) {
-            size = 12;
-            y = height - height / 14;
+            size = 10;
+            y = height - height / 12;
         } else if (resolution.getScaleFactor() == 1) {
             y = height - height / 20;
         }
+        float scale = (float) size / baseSize;
+
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
 
-        gif.bindGifTexture(mc);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
-        bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        bufferBuilder.pos(x - size, y, 0).tex(0, 1).endVertex();
-        bufferBuilder.pos(x, y, 0).tex(1, 1).endVertex();
-        bufferBuilder.pos(x, y - size, 0).tex(1, 0).endVertex();
-        bufferBuilder.pos(x - size, y - size, 0).tex(0, 0).endVertex();
-        tessellator.draw();
+        gif_2_0.draw(mc, x, y, scale);
 
         GlStateManager.disableBlend();
         GlStateManager.disableAlpha();
     }
+
+//    protected void drawGif() {
+//        int x = width - width / 60;
+//        int y = height - height / 12;
+//        int size = 16;
+//        if (resolution.getScaleFactor() == 3) {
+//            size = 12;
+//            y = height - height / 14;
+//        } else if (resolution.getScaleFactor() == 1) {
+//            y = height - height / 20;
+//        }
+//        GlStateManager.enableBlend();
+//        GlStateManager.enableAlpha();
+//
+//        gif.bindGifTexture(mc);
+//        Tessellator tessellator = Tessellator.getInstance();
+//        BufferBuilder bufferBuilder = tessellator.getBuffer();
+//        bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+//        bufferBuilder.pos(x - size, y, 0).tex(0, 1).endVertex();
+//        bufferBuilder.pos(x, y, 0).tex(1, 1).endVertex();
+//        bufferBuilder.pos(x, y - size, 0).tex(1, 0).endVertex();
+//        bufferBuilder.pos(x - size, y - size, 0).tex(0, 0).endVertex();
+//        tessellator.draw();
+//
+//        GlStateManager.disableBlend();
+//        GlStateManager.disableAlpha();
+//    }
 
     protected void drawOnFullScreen(int screenWidth, int screenHeight) {
         drawModalRectWithCustomSizedTexture(0, 0, 0, 0, screenWidth, screenHeight, screenWidth, screenHeight);
@@ -277,4 +298,6 @@ public class CoolLoadingGui extends GuiScreen {
     public boolean doesGuiPauseGame() {
         return false;
     }
+
+
 }

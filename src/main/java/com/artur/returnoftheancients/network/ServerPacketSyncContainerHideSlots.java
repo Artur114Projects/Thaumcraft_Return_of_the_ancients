@@ -72,6 +72,9 @@ public class ServerPacketSyncContainerHideSlots implements IMessage {
         @Override
         public IMessage onMessage(ServerPacketSyncContainerHideSlots message, MessageContext ctx) {
             World world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(message.dimension);
+            if (!world.isBlockLoaded(message.pos)) {
+                return null;
+            }
             TileEntity tileRaw = world.getTileEntity(message.pos);
             if (tileRaw instanceof IContainerWithPages) {
                 IContainerWithPages tile = (IContainerWithPages) tileRaw;

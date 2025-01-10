@@ -124,6 +124,16 @@ public abstract class AncientPortal {
         FreeTeleporter.teleportToDimension(player, dimension, posX + 8.0D, 3, posZ + 8.0D);
     }
 
+    public void tpToHome(EntityPlayerMP player, boolean isTeleporting) {
+        setTpToHomeNBTData(player);
+        if (isTeleporting) {
+            FreeTeleporter.teleportToDimension(player, dimension, posX + 8.0D, 3, posZ + 8.0D);
+        } else {
+            player.getEntityData().setInteger(PortalID, id);
+        }
+    }
+
+
     public void onBlockDestroyedInPortalChunk(BlockEvent.BreakEvent e) {
         if (e.getState().getBlock().equals(InitBlocks.TP_TO_ANCIENT_WORLD_BLOCK)) {
             explosion();

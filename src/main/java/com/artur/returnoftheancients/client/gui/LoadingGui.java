@@ -13,7 +13,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 
-// TODO: Удалить
+// TODO: Удалить!
 @Deprecated
 public class LoadingGui extends GuiScreen {
     private GuiButton button;

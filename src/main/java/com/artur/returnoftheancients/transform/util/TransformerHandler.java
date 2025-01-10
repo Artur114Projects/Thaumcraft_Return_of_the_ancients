@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.transform.util;
 
+import com.artur.returnoftheancients.client.misc.ClientEventsHandler;
 import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -16,17 +17,20 @@ import java.util.Random;
 
 public class TransformerHandler {
 
-    public static boolean isTaintBiome(World world, BlockPos pos) {
+    public static boolean isTaintBiomeInPos(World world, BlockPos pos) {
         return world.getBiome(pos).equals(InitBiome.TAINT);
     }
+
     public static boolean isClientPlayerInTaintBiome() {
         if (Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().world != null) {
-            EntityPlayerSP player = Minecraft.getMinecraft().player;
-            World world = Minecraft.getMinecraft().world;
-            return world.getBiome(player.getPosition()).equals(InitBiome.TAINT);
+            return ClientEventsHandler.isPlayerInTaintBiome();
         } else {
             return false;
         }
+    }
+
+    public static float getSunBrightnessInTaintBiome() {
+        return ClientEventsHandler.getSunBrightnessInTaintBiome();
     }
 
     public static boolean isTaintEdgeBiome(World world, BlockPos pos) {

@@ -1,6 +1,8 @@
 package com.artur.returnoftheancients.transform.transformers;
 
+import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
+import net.minecraft.util.math.BlockPos;
 import org.objectweb.asm.*;
 
 
@@ -32,8 +34,10 @@ public class TransformerTaintHelper implements ITransformer {
     }
 
     public static class VisitorIsNearTaintSeed extends MethodVisitor {
+        String[] desc;
         public VisitorIsNearTaintSeed(MethodVisitor methodVisitor) {
             super(Opcodes.ASM5, methodVisitor);
+            desc = new String[] {HandlerR.createDescriptor(HANDLER_CLASS, "isTaintBiomeInPos")};
         }
 
         @Override
@@ -43,7 +47,7 @@ public class TransformerTaintHelper implements ITransformer {
             mv.visitVarInsn(Opcodes.ALOAD, 0);
             mv.visitVarInsn(Opcodes.ALOAD, 1);
 
-            mv.visitMethodInsn(Opcodes.INVOKESTATIC, HANDLER_PATH, "isTaintBiome", "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)Z", false);
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, HANDLER_PATH, "isTaintBiomeInPos", desc[0], false);
 
             Label continueLabel = new Label();
             mv.visitJumpInsn(Opcodes.IFEQ, continueLabel);

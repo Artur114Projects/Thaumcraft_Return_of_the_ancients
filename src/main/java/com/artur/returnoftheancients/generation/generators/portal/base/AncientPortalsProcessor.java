@@ -18,6 +18,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -71,6 +72,9 @@ public class AncientPortalsProcessor {
 
     @SubscribeEvent
     public static void Tick(TickEvent.ServerTickEvent e) {
+        if (e.phase == TickEvent.Phase.START) {
+            return;
+        }
         t++;
         if (t >= 10) {
             t = 0;
@@ -241,5 +245,15 @@ public class AncientPortalsProcessor {
             }
             new AncientPortalNaturalGeneration(player.getServer(), player.dimension, ((int) player.posX) >> 4,((int) player.posZ) >> 4, HandlerR.calculateGenerationHeight(player.world, ((((int) player.posX) >> 4) << 4) + 8, ((((int) player.posZ) >> 4) << 4) + 8));
         }
+    }
+
+    @Nullable
+    public static AncientPortal getPortalOnPos(BlockPos pos) {
+        for (AncientPortal portal : PORTALS.values()) {
+            if (portal.isCollide(pos)) {
+                return portal;
+            }
+        }
+        return null;
     }
 }

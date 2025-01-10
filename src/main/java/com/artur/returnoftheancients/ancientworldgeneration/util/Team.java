@@ -257,8 +257,8 @@ public class Team {
             team.delete();
         }
 
-        public void remove(EntityPlayerMP playerMP) {
-            players.remove(playerMP);
+        public boolean remove(EntityPlayerMP playerMP) {
+            return players.remove(playerMP);
         }
 
         public Team toTeam() {

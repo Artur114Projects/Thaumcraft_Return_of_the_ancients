@@ -7,10 +7,12 @@ import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.transform.util.MappingsProcessor;
+import com.artur.returnoftheancients.utils.AspectBottle;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -62,35 +64,23 @@ public class Test { //
             }
         }
 
+
         return null; // Если путь не найден
     }
 
     public static void main(String[] args) {
-        int size = 10;
-        int[][] grid = new int[size][size];
+        System.out.println(HandlerR.createDescriptor(AspectBottle.class, "draw"));
 
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                grid[i][j] = Math.random() < 0.7 ? 0 : 1; // 70% клеток проходимы
-            }
-        }
-
-        grid[0][0] = 0;
-        grid[size - 1][size - 1] = 0;
-        for (int[] a : grid) {
-            System.out.println(Arrays.toString(a));
-        }
-        long time = System.nanoTime();
-        List<int[]> path = findPath(grid, 0, 0, size - 1, size - 1);
-        System.out.println("is took:" + ((System.nanoTime() - time) / 1000000.0D) + "ms");
-        if (path != null) {
-            for (int[] pos : path) {
-                System.out.println(Arrays.toString(pos));
-            }
-        } else {
-            System.out.println("Путь не найден");
-        }
     }
+
+    private static int aboba(int i, long b, boolean r, float v, double g, byte e) {
+        return 0;
+    }
+
+    private static int aboba(long b, boolean r, float v, double g, byte e) {
+        return 0;
+    }
+
 
     protected static int packBytes(byte b1, byte b2, byte b3, byte b4) {
         return (b1 << 24) | ((b2 & 0xFF) << 16) | ((b3 & 0xFF) << 8) | (b4 & 0xFF);

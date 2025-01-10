@@ -241,8 +241,10 @@ public class EnergySystemsProvider {
 
     @SubscribeEvent
     public static void tick(TickEvent.ServerTickEvent e) {
-        for (EnergySystem system : ENERGY_SYSTEMS.values()) {
-            system.update();
+        if (e.phase == TickEvent.Phase.END) {
+            for (EnergySystem system : ENERGY_SYSTEMS.values()) {
+                system.update();
+            }
         }
     }
 

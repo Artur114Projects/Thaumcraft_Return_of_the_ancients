@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.client.particle;
+package com.artur.returnoftheancients.client.fx.particle;
 
 import net.minecraft.client.particle.ParticleSmokeNormal;
 import net.minecraft.entity.player.EntityPlayer;

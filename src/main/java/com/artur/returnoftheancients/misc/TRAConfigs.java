@@ -101,6 +101,9 @@ public class TRAConfigs {
 
         @Config.LangKey(Referense.MODID + ".cfg.sub.portal.dwl")
         public int dimensionGenerate = 0;
+
+        @Config.LangKey(Referense.MODID + ".cfg.sub.portal.dg")
+        public int[] dimensionsGenerate = new int[] {0};
     }
 
     public static class Any {

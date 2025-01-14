@@ -2,11 +2,13 @@ package com.artur.returnoftheancients.transform.util;
 
 import com.artur.returnoftheancients.client.misc.ClientEventsHandler;
 import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
+import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.chaosthedude.naturescompass.util.BiomeSearchWorker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.world.biome.Biome;
 import org.objectweb.asm.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumParticleTypes;
@@ -17,8 +19,8 @@ import java.util.Random;
 
 public class TransformerHandler {
 
-    public static boolean isTaintBiomeInPos(World world, BlockPos pos) {
-        return world.getBiome(pos).equals(InitBiome.TAINT);
+    public static boolean isTaintLBiomeInPos(World world, BlockPos pos) {
+        return HandlerR.arrayContainsAny(InitBiome.TAINT_BIOMES_L_ID, world.getChunkFromBlockCoords(pos).getBiomeArray()[(pos.getX() & 15) + (pos.getZ() & 15) * 16]);
     }
 
     public static boolean isClientPlayerInTaintBiome() {
@@ -34,7 +36,7 @@ public class TransformerHandler {
     }
 
     public static boolean isTaintEdgeBiome(World world, BlockPos pos) {
-        return world.getBiome(pos).equals(InitBiome.TAINT_EDGE);
+        return HandlerR.arrayContainsAny(InitBiome.TAINT_BIOMES_EDGE_ID, world.getChunkFromBlockCoords(pos).getBiomeArray()[(pos.getX() & 15) + (pos.getZ() & 15) * 16]);
     }
 
     public static void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
@@ -43,9 +45,8 @@ public class TransformerHandler {
         }
     }
 
-
-    public static boolean isTaintBiome(BiomeSearchWorker bsw) {
-        return !TRAConfigs.Any.debugMode && bsw.biome instanceof BiomeTaint;
+    public static boolean isNotCanSearchBiome(BiomeSearchWorker bsw) {
+        return !TRAConfigs.Any.debugMode && HandlerR.arrayContainsAny(InitBiome.TAINT_BIOMES_ID, (byte) Biome.getIdForBiome(bsw.biome));
     }
 
     public static class ReturnFloatVisitor extends MethodVisitor {

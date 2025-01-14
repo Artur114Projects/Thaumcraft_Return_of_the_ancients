@@ -34,7 +34,6 @@ public abstract class TileEnergyProviderBase extends TileThaumcraft implements I
         energyNetworkId = id;
     }
 
-    // TODO: Решить проблему с не адекватной загрузкой
     @Override
     public void onLoad() {
         if (!isAdding && !world.isRemote) {

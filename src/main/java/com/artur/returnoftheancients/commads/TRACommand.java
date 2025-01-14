@@ -1,11 +1,13 @@
 package com.artur.returnoftheancients.commads;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
+import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
+import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -66,7 +68,17 @@ public class TRACommand extends CommandBase {
                 } else {
                     player.sendMessage(new TextComponentString("you are in a dimension without a portal, a dimension with a portal: " + WorldDataFields.portalDimension).setStyle(new Style().setColor(TextFormatting.RED)));
                 }
-            break;
+                break;
+            case "ultratptoportal":
+                UltraMutableBlockPos pos;
+                if (args.length >= 2) {
+                    pos = new UltraMutableBlockPos(AncientPortalsProcessor.getPortalPos(player.world, Integer.parseInt(args[1])));
+                } else {
+                    pos = new UltraMutableBlockPos(player.getPosition());
+                    pos.setPos(AncientPortalsProcessor.getNearestPortalPos(player.world, pos));
+                }
+                player.connection.setPlayerLocation(pos.getX(), 100, pos.getZ(), player.rotationYaw, player.rotationPitch);
+                break;
             default:
                 player.sendMessage(new TextComponentString(TextFormatting.RED + "Usage: " + I18n.format(USAGE)));
                 break;
@@ -75,6 +87,6 @@ public class TRACommand extends CommandBase {
 
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
     {
-        return args.length == 1 ? getListOfStringsMatchingLastWord(args, "tptoportal", "seed", "help", "updatedropprimalblade") : Collections.emptyList();
+        return args.length == 1 ? getListOfStringsMatchingLastWord(args, "tptoportal", "seed", "help", "updatedropprimalblade", "ultratptoportal") : Collections.emptyList();
     }
 }

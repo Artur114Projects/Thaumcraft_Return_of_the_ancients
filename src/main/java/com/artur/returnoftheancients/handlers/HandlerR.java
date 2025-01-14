@@ -9,6 +9,7 @@ import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
 import com.artur.returnoftheancients.referense.Referense;
+import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -55,16 +56,16 @@ public class HandlerR {
     }
 
     public static int calculateGenerationHeight(World world, int x, int z) {
-        int y = world.getHeight();
+        UltraMutableBlockPos pos = new UltraMutableBlockPos(x, world.getHeight(), z);
 
-        while (y-- >= 0) {
-            Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
+        while (pos.getY() >= 0) {
+            Block block = world.getBlockState(pos).getBlock();
             if (block != Blocks.AIR && block != Blocks.BEDROCK) {
                 break;
             }
+            pos.add(0, -1, 0);
         }
-//        System.out.println("Calculate: " + y);
-        return y;
+        return pos.getY();
     }
 
     public static void SOUT2DArray(byte[][] array) {
@@ -776,5 +777,30 @@ public class HandlerR {
             superClass = superClass.getSuperclass();
         }
         return methods.toArray(new Method[0]);
+    }
+
+    public static boolean arrayContainsAny(byte[] array, byte... params) {
+        for (int i : array) {
+            for (int j : params) {
+                if (i == j) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean arrayContainsAny(byte[] array, byte param) {
+        for (int i : array) {
+            if (i == param) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public static boolean isCollide(int pointX, int pointY, int point1X, int point1Y, int offset) {
+        return Math.abs(point1X - pointX) <= offset && Math.abs(point1Y - pointY) <= offset;
     }
 }

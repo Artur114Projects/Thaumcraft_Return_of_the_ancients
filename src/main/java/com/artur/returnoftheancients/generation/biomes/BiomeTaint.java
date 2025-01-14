@@ -4,12 +4,14 @@ import com.artur.returnoftheancients.generation.generators.WorldGenTaintBigTree;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.init.InitBlocks;
+import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
@@ -31,58 +33,35 @@ public class BiomeTaint extends BiomeBase {
     // TODO: Добавить больше существ в spawnableCreatureList.
     public BiomeTaint(String registryName, BiomeProperties properties, EBiome eBiome, TaintType type) {
         super(registryName, properties, eBiome);
+        this.decorator.generateFalls = false;
         this.spawnableCreatureList.clear();
         this.type = type;
 
-        if (type == TaintType.EDGE) {
-            this.decorator.extraTreeChance = 0F;
+        if (this.type == TaintType.EDGE) {
+            this.decorator.extraTreeChance = -1;
             this.topBlock = Blocks.STONE.getDefaultState();
             this.fillerBlock = Blocks.STONE.getDefaultState();
-            this.decorator.treesPerChunk = 0;
-            this.decorator.deadBushPerChunk = 0;
-            this.decorator.reedsPerChunk = 0;
-            this.decorator.cactiPerChunk = 0;
+            this.decorator.treesPerChunk = -1;
+            this.decorator.deadBushPerChunk = -1;
+            this.decorator.reedsPerChunk = -1;
+            this.decorator.cactiPerChunk = -1;
         } else if (this.type == TaintType.NORMAL) {
-            this.decorator.treesPerChunk = 1;
+            this.decorator.treesPerChunk = -1;
             this.spawnableCreatureList.add(new SpawnListEntry(EntityTaintSeedPrime.class, 4, 1, 1));
         }
     }
 
-
-    @Override
-    public void decorate(World worldIn, Random rand, BlockPos pos) {
-        super.decorate(worldIn, rand, pos);
-        BlockPos.MutableBlockPos currentPos = new BlockPos.MutableBlockPos(pos);
-        for (int x = 0; x != 16; x++) {
-            for (int z = 0; z != 16; z++) {
-                int localX = x + pos.getX();
-                int localZ = z + pos.getZ();
-                currentPos.setPos(localX, HandlerR.calculateGenerationHeight(worldIn, localX, localZ), localZ);
-                if (this.type == TaintType.EDGE) {
-                    decorateEdge(worldIn, rand, currentPos);
-                } else if (this.type == TaintType.NORMAL) {
-                    decorateNormal(worldIn, rand, currentPos);
-                }
-            }
-        }
-    }
-
-
-
     // TODO: Вывести значения в конфиги
     public static void chunkHasBiomeUpdate(Chunk chunk) {
         World world = chunk.getWorld();
-        if (world.rand.nextInt(((80 * taintChunks) + 2000) / 20) == 0) {
-            int chunkArea = 16;
-            ArrayList<Short> taintBiomeArea = new ArrayList<>();
+        if (world.rand.nextInt(((80 * taintChunks) + 2000) / 40) == 0) {
+            ArrayList<Short> taintBiomeArea = new ArrayList<>(16 * 16);
             byte[] biomes = chunk.getBiomeArray();
 
-            for (int i = 0; i < chunkArea; ++i) {
-                for (int j = 0; j < chunkArea; ++j) {
-                    int k = biomes[j + i * chunkArea];
-                    Biome biome = Biome.getBiomeForId(k & 255);
-                    if (biome == null) continue;
-                    if (BiomeDictionary.hasType(biome, InitBiome.TAINT_TYPE_L)) {
+            for (int i = 0; i < 16; ++i) {
+                for (int j = 0; j < 16; ++j) {
+                    byte k = biomes[j + i * 16];
+                    if (HandlerR.arrayContainsAny(InitBiome.TAINT_BIOMES_L_ID, k)) {
                         taintBiomeArea.add((short) ((i << 8) | (j & 0xFF)));
                     }
                 }
@@ -107,34 +86,48 @@ public class BiomeTaint extends BiomeBase {
         }
     }
 
+    public static void decorateCustom(World worldIn, Random random, ChunkPos pos, byte[] biomeArray) {
+        UltraMutableBlockPos blockPos = new UltraMutableBlockPos(pos);
 
-    public void decorateNormal(World worldIn, Random rand, BlockPos.MutableBlockPos pos) {
+        for (int i = 0; i != 16; i++) {
+            for (int j = 0; j != 16; j++) {
+                byte k = biomeArray[i + j * 16];
+                if (HandlerR.arrayContainsAny(InitBiome.TAINT_BIOMES_L_ID, k)) {
+                    blockPos.pushPos();
+                    blockPos.add(i, 0, j);
+                    decorateNormal(worldIn, random, blockPos, k);
+                    blockPos.popPos();
+                } else if (HandlerR.arrayContainsAny(InitBiome.TAINT_BIOMES_EDGE_ID, k)) {
+                    blockPos.pushPos();
+                    blockPos.add(i, 0, j);
+                    decorateEdge(worldIn, random, blockPos, k);
+                    blockPos.popPos();
+                }
+            }
+        }
+    }
+
+    private static void decorateEdge(World worldIn, Random rand, UltraMutableBlockPos blockPos, byte biomeId) {
+        blockPos.setY(HandlerR.calculateGenerationHeight(worldIn, blockPos.getX(), blockPos.getZ()));
+        if (blockPos.getY() >= 100) {
+            if (blockPos.getY() > 90) {
+                worldIn.setBlockState(blockPos.up(), Blocks.SNOW_LAYER.getDefaultState());
+            } else if (rand.nextBoolean()) {
+                worldIn.setBlockState(blockPos.up(), Blocks.SNOW_LAYER.getDefaultState());
+            }
+        }
+    }
+
+    private static void decorateNormal(World worldIn, Random rand, UltraMutableBlockPos blockPos, byte biomeId) {
         if (rand.nextInt(33) == 0) {
-            if (worldIn.getBlockState(pos).getBlock() == BlocksTC.taintSoil) {
+            blockPos.setY(HandlerR.calculateGenerationHeight(worldIn, blockPos.getX(), blockPos.getZ()));
+            if (worldIn.getBlockState(blockPos).getBlock() == BlocksTC.taintSoil) {
                 IBlockState state = BlocksTC.taintFeature.getBlockState().getBaseState();
-                BlockPos posUp = pos.up();
-                worldIn.setBlockState(posUp, state.withProperty(BlockDirectional.FACING, EnumFacing.UP), 3);
-                worldIn.checkLight(posUp);
-                worldIn.checkLight(pos);
+                blockPos.up();
+                worldIn.setBlockState(blockPos, state.withProperty(BlockDirectional.FACING, EnumFacing.UP), 3);
+                worldIn.checkLight(blockPos);
             }
         }
-//        if (worldIn.getBiome(pos).equals(InitBiome.TAINT)) {
-//            worldIn.setBlockState(pos.setPos(pos.getX(), 255, pos.getZ()), InitBlocks.BLOCK_HEAVY_AIR.getDefaultState());
-//        }
-    }
-
-    public void decorateEdge(World worldIn, Random rand, BlockPos pos) {
-        if (pos.getY() >= 100) {
-            if (worldIn.getBlockState(pos).getBlock().equals(Blocks.STONE)) {
-                worldIn.setBlockState(pos.up(), Blocks.SNOW_LAYER.getDefaultState());
-            }
-        }
-    }
-
-
-    @Override
-    public void registerBiome() {
-        super.registerBiome();
     }
 
     public void registerBiomeP2() {
@@ -144,7 +137,7 @@ public class BiomeTaint extends BiomeBase {
 
     @Override
     public int getGrassColorAtPos(BlockPos pos) {
-        return this.type == TaintType.EDGE ? super.getGrassColorAtPos(pos) : 0x563367;
+        return this.type == TaintType.EDGE ? super.getGrassColorAtPos(pos) : 0x16001e;
     }
 
     @Override
@@ -154,17 +147,17 @@ public class BiomeTaint extends BiomeBase {
 
     @Override
     public int getFoliageColorAtPos(BlockPos pos) {
-        return this.type == TaintType.EDGE ? super.getFoliageColorAtPos(pos) : 0x2b003d;
+        return this.type == TaintType.EDGE ? super.getFoliageColorAtPos(pos) : 0x16001e;
     }
 
     @Override
     public int getSkyColorByTemp(float currentTemperature) {
-        return this.type == TaintType.EDGE ? super.getSkyColorByTemp(currentTemperature) : 0x2b003d;
+        return this.type == TaintType.EDGE ? super.getSkyColorByTemp(currentTemperature) : 0x16001e;
     }
 
     @Override
     public WorldGenAbstractTree getRandomTreeFeature(Random rand) {
-        return BIG_TREE_TAINT_FEATURE;
+        return /* this.type == TaintType.NORMAL ? */ BIG_TREE_TAINT_FEATURE;
     }
 
     public enum TaintType {

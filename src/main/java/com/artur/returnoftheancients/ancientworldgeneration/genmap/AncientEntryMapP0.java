@@ -543,13 +543,13 @@ public class AncientEntryMapP0 implements IALGS {
                 e++;
             }
             if (e >= 4) {
-                System.out.println("is took " + exit + " passes to generate");
+                if (TRAConfigs.Any.debugMode) System.out.println("is took " + exit + " passes to generate");
                 if (void0 < 145 || !TRAConfigs.AncientWorldSettings.AncientWorldGenerationSettings.isNeedMoreThan50Fill) {
-                    System.out.println("void structures: " + void0);
+                    if (TRAConfigs.Any.debugMode) System.out.println("void structures: " + void0);
                     return new StructureMap(ANCIENT_LABYRINTH_STRUCTURES, ANCIENT_LABYRINTH_STRUCTURES_ROTATE);
                 } else {
-                    System.out.println("void structures: " + void0);
-                    System.out.println("regenerate");
+                    if (TRAConfigs.Any.debugMode) System.out.println("void structures: " + void0);
+                    if (TRAConfigs.Any.debugMode) System.out.println("regenerate");
                     return genStructuresMap(random);
                 }
             }

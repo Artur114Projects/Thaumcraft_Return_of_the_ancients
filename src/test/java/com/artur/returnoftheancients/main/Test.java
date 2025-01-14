@@ -3,14 +3,17 @@ package com.artur.returnoftheancients.main;
 import com.artur.returnoftheancients.ancientworldgeneration.genmap.AncientEntryMapProvider;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
+import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.transform.util.MappingsProcessor;
 import com.artur.returnoftheancients.utils.AspectBottle;
+import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
@@ -69,8 +72,30 @@ public class Test { //
     }
 
     public static void main(String[] args) {
-        System.out.println(HandlerR.createDescriptor(AspectBottle.class, "draw"));
-
+        System.out.println("Start!");
+//        ChunkPos[] poss = new ChunkPos[8];
+//        for (int i = 0; i != 20; i++) {
+//            AncientPortalsProcessor.initPortalsPosOnWorld(poss, i);
+//        }
+        float[] timeArray = new float[200000];
+        AncientEntryMapProvider.createAncientEntryMap(new Random(1234568798));
+        for (int i = 0; i != 200000; i++) {
+            long time = System.nanoTime();
+            AncientEntryMapProvider.createAncientEntryMap(new Random(i));
+            timeArray[i] = ((System.nanoTime() - time) / 1000000.0F);
+//            System.out.println("Created new map! Is took " + timeArray[i] + "ms");
+        }
+        float resultTime = 0;
+        for (float f : timeArray) {
+            resultTime += f;
+        }
+        resultTime /= timeArray.length;
+        System.out.println("Is took ~" + resultTime + "ms");
+//        ChunkPos chunkPos = new ChunkPos(0, 0);
+//        long time = System.nanoTime();
+//        UltraMutableBlockPos pos = new UltraMutableBlockPos(64, 0 ,0);
+//        System.out.println("Is took " + ((System.nanoTime() - time) / 1000000.0D) + "ms");
+//        System.out.println(pos.distance(chunkPos));
     }
 
     private static int aboba(int i, long b, boolean r, float v, double g, byte e) {

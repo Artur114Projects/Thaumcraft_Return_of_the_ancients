@@ -5,15 +5,15 @@ import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
 import com.artur.returnoftheancients.init.InitBiome;
 import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeBeach;
+import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.biome.BiomeJungle;
 import net.minecraft.world.biome.BiomeMesa;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 import net.minecraftforge.common.BiomeDictionary;
 
-public class GenLayerShoreTaint extends GenLayer {
-    public GenLayerShoreTaint(long seed, GenLayer parent) {
+public class GenLayerShoreTRA extends GenLayer {
+    public GenLayerShoreTRA(long seed, GenLayer parent) {
         super(seed);
         this.parent = parent;
     }
@@ -140,7 +140,8 @@ public class GenLayerShoreTaint extends GenLayer {
     }
 
     private boolean isJungleCompatible(int biomeIDA) {
-        if (Biome.getBiome(biomeIDA) != null && Biome.getBiome(biomeIDA).getBiomeClass() == BiomeJungle.class) {
+        Biome biome = Biome.getBiome(biomeIDA);
+        if (biome != null && biome.getBiomeClass() == BiomeJungle.class) {
             return true;
         } else {
             return biomeIDA == Biome.getIdForBiome(Biomes.JUNGLE_EDGE) || biomeIDA == Biome.getIdForBiome(Biomes.JUNGLE) || biomeIDA == Biome.getIdForBiome(Biomes.JUNGLE_HILLS) || biomeIDA == Biome.getIdForBiome(Biomes.FOREST) || biomeIDA == Biome.getIdForBiome(Biomes.TAIGA) || isBiomeOceanic(biomeIDA);
@@ -152,6 +153,10 @@ public class GenLayerShoreTaint extends GenLayer {
     }
 
     private boolean isTaint(int biomeIDA) {
-        return Biome.getBiome(biomeIDA) instanceof BiomeTaint;
+        Biome biome = Biome.getBiome(biomeIDA);
+        if (biome == null) {
+            return false;
+        }
+        return BiomeDictionary.hasType(biome, InitBiome.TAINT_TYPE);
     }
 }

@@ -1,8 +1,10 @@
 package com.artur.returnoftheancients.client.misc;
 
+import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.items.ItemGavno;
 import com.artur.returnoftheancients.referense.Referense;
+import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,6 +17,7 @@ import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,13 +31,14 @@ import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_di
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = Referense.MODID)
 public class ClientEventsHandler {
+    protected static final UltraMutableBlockPos ultraBlockPos = new UltraMutableBlockPos();
     protected static final String startUpNBT = "startUpNBT";
     public static float defaultSun = 0.0F;
-    public static byte playerInTaintBiomeTime = 0;
-    public static byte maxPlayerInTaintBiomeTime = 80;
+    public static int playerInTaintBiomeTime = 0;
+    public static int maxPlayerInTaintBiomeTime = 160;
 
-    // TODO: Сделать что нибуть с туманом (Починить)
-    // TODO: Сделать плавный переход со светом и цветом тумана
+
+    // TODO: Сделать что нибудь с туманом (Починить)
     @SubscribeEvent
     public static void fogSetColor(EntityViewRenderEvent.FogColors e) {
         if (e.getEntity().getEntityWorld().provider.getDimension() == ancient_world_dim_id) {
@@ -43,60 +47,31 @@ public class ClientEventsHandler {
             e.setGreen(0);
             return;
         }
-        if (e.getEntity().getEntityWorld().getBiome(e.getEntity().getPosition()).equals(InitBiome.TAINT)) {
-            e.setRed((43.0F / 4.0f) / 255.0F);
-            e.setGreen(0.0F / 255.0F);
-            e.setBlue((61.0F / 4.0f) / 255.0F);
+        if (isPlayerInTaintBiome()) {
+            float scaleBase = (float) playerInTaintBiomeTime / maxPlayerInTaintBiomeTime;
+            float r = e.getRed() * 255.0F;
+            float g = e.getGreen() * 255.0F;
+            float b = e.getBlue() * 255.0F;
+
+            e.setRed((r + (43.0F /  4.0f - r) * scaleBase) / 255.0F);
+            e.setGreen((g + (0 - g) * scaleBase) / 255.0F);
+            e.setBlue((b + (61.0F / 4.0f - b) * scaleBase) / 255.0F);
 
             RenderEventHandler.fogFiddled = true;
             if (RenderEventHandler.fogDuration < 40) {
-                RenderEventHandler.fogDuration += 2;
+                RenderEventHandler.fogDuration++;
             }
         }
     }
 
-//    @SubscribeEvent
-//    public static void onRenderPlayer(RenderPlayerEvent.Pre event) {
-//        EntityPlayer player = event.getEntityPlayer();
-//        ItemStack heldItem = player.getHeldItemMainhand();
-//
-//        if (!heldItem.isEmpty() && heldItem.getItem() instanceof ItemGavno) {
-//            player.swingProgress = 0.0F;
-//            player.prevSwingProgress = 0.0F;
-//
-//            player.limbSwingAmount = 0.0F;
-//        }
-//    }
-
-//    @SubscribeEvent
-//    public static void renderView(EntityViewRenderEvent.CameraSetup e) {
-//
-//
-//    }
-
-//    @SubscribeEvent
-//    public static void renderSpecificHandEvent(RenderSpecificHandEvent e) {
-//        Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(Referense.MODID, "aaaaaaaa"));
-//    }
-
-
-//    @SubscribeEvent
-//    public static void fogRender(EntityViewRenderEvent.RenderFogEvent e) {
-//        if (e.getEntity().dimension == ancient_world_dim_id) {
-//            GlStateManager.color(0, 0, 0, 1);
-//        }
-//    }
-
     @SideOnly(Side.CLIENT)
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOW)
     public static void fogDensityEvent(EntityViewRenderEvent.RenderFogEvent event) {
         if (RenderEventHandler.fogDuration < 2 && RenderEventHandler.fogFiddled) {
             GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
-            GL11.glFogf(GL11.GL_FOG_DENSITY, 0.1F);
             RenderEventHandler.fogFiddled = false;
         }
     }
-
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
@@ -113,12 +88,15 @@ public class ClientEventsHandler {
                 e.player.motionY += -1 - e.player.motionY;
             }
         }
-        if (BiomeDictionary.hasType(e.player.world.getBiome(e.player.getPosition()), InitBiome.TAINT_TYPE_L)) {
+        ultraBlockPos.setPos(e.player);
+        if (HandlerR.arrayContainsAny(InitBiome.TAINT_BIOMES_L_ID, e.player.world.getChunkFromBlockCoords(ultraBlockPos).getBiomeArray()[(ultraBlockPos.getX() & 15) + (ultraBlockPos.getZ() & 15) * 16])) {
             if (playerInTaintBiomeTime < maxPlayerInTaintBiomeTime) {
                 playerInTaintBiomeTime++;
             }
         } else {
-            defaultSun = e.player.world.getSunBrightnessBody(1);
+            if (!isPlayerInTaintBiome()) {
+                defaultSun = e.player.world.getSunBrightnessBody(1);
+            }
             if (playerInTaintBiomeTime > 0) {
                 playerInTaintBiomeTime--;
             }

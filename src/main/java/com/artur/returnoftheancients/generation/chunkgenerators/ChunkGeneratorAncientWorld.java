@@ -13,6 +13,7 @@ import net.minecraft.world.gen.IChunkGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ChunkGeneratorAncientWorld implements IChunkGenerator {
@@ -29,11 +30,9 @@ public class ChunkGeneratorAncientWorld implements IChunkGenerator {
     public Chunk generateChunk(int parChunkX, int parChunkZ) {
         Chunk chunk = new Chunk(world, new ChunkPrimer(), parChunkX, parChunkZ);
         byte[] abyte = chunk.getBiomeArray();
+        byte biomeId = (byte) Biome.getIdForBiome(biome);
 
-        for (int i = 0; i < abyte.length; ++i)
-        {
-            abyte[i] = (byte) Biome.getIdForBiome(biome);
-        }
+        Arrays.fill(abyte, biomeId);
         return chunk;
     }
 

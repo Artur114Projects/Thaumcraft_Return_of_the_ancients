@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.tileentity;
 
-import com.artur.returnoftheancients.client.particle.RotateParticleFlame;
-import com.artur.returnoftheancients.client.particle.TrapParticleFlame;
+import com.artur.returnoftheancients.client.fx.particle.RotateParticleFlame;
+import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import net.minecraft.block.state.IBlockState;

@@ -240,7 +240,6 @@ public class CoolLoadingGui extends GuiScreen {
     }
 
 
-    // TODO: Эта штука поплыла, доделать.
     protected void drawGif_2_0() {
         int x = width - width / 30;
         int y = height - height / 10;

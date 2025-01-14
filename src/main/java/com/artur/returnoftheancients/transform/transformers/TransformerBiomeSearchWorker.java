@@ -41,7 +41,7 @@ public class TransformerBiomeSearchWorker implements ITransformer {
             super.visitCode();
 
             mv.visitVarInsn(Opcodes.ALOAD, 0);
-            mv.visitMethodInsn(Opcodes.INVOKESTATIC, HANDLER_PATH, "isTaintBiome", "(Lcom/chaosthedude/naturescompass/util/BiomeSearchWorker;)Z", false);
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, HANDLER_PATH, "isNotCanSearchBiome", "(Lcom/chaosthedude/naturescompass/util/BiomeSearchWorker;)Z", false);
 
             Label continueLabel = new Label();
             mv.visitJumpInsn(Opcodes.IFEQ, continueLabel);

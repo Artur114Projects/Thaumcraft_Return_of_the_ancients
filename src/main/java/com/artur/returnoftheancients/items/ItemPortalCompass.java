@@ -1,9 +1,11 @@
 package com.artur.returnoftheancients.items;
 
+import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.WorldDataFields;
+import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -28,6 +30,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemPortalCompass extends BaseItem {
+    private final UltraMutableBlockPos mutableBlockPos = new UltraMutableBlockPos();
+
     public ItemPortalCompass(String name)
     {
         super(name);
@@ -43,41 +47,37 @@ public class ItemPortalCompass extends BaseItem {
             @SideOnly(Side.CLIENT)
             public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn)
             {
-                if (entityIn == null && !stack.isOnItemFrame())
-                {
+                if (entityIn == null && !stack.isOnItemFrame()) {
                     return 0.0F;
-                }
-                else
-                {
+                } else {
                     boolean flag = entityIn != null;
-                    Entity entity = (Entity)(flag ? entityIn : stack.getItemFrame());
+                    Entity entity = flag ? entityIn : stack.getItemFrame();
 
-                    if (worldIn == null)
-                    {
+                    if (worldIn == null) {
                         worldIn = entity.world;
                     }
 
                     double d0;
 
-                    if (entityIn instanceof EntityPlayer)
-                    {
+                    if (entityIn instanceof EntityPlayer) {
                         EntityPlayer player = (EntityPlayer) entityIn;
-                        if (HandlerR.isHasItem(player, InitItems.COMPASS) && player.dimension == WorldDataFields.portalDimension && !HandlerR.isWithinRadius(player.posX, player.posZ, WorldDataFields.portalX, WorldDataFields.portalZ, 8)) {
-                            double d1 = flag ? (double) entity.rotationYaw : this.getFrameRotation((EntityItemFrame) entity);
+                        boolean hasPortal = AncientPortalsProcessor.hasPortalOnWorld(worldIn);
+                        if (hasPortal) {
+                            setNearestPortalPos(entityIn);
+                        }
+                        if (HandlerR.isHasItem(player, InitItems.COMPASS) && hasPortal && !HandlerR.isWithinRadius(player.posX, player.posZ, mutableBlockPos.getX(), mutableBlockPos.getZ(), 8)) {
+                            double d1 = entity.rotationYaw;
                             d1 = MathHelper.positiveModulo(d1 / 360.0D, 1.0D);
                             double d2 = this.getPortalToAngle(entity) / (Math.PI * 2D);
                             d0 = 0.5D - (d1 - 0.25D - d2);
                         } else {
                             d0 = Math.random();
                         }
-                    }
-                    else
-                    {
+                    } else {
                         d0 = Math.random();
                     }
 
-                    if (flag)
-                    {
+                    if (flag) {
                         d0 = this.wobble(worldIn, d0);
                     }
 
@@ -105,10 +105,14 @@ public class ItemPortalCompass extends BaseItem {
                 return MathHelper.wrapDegrees(180 + p_185094_1_.facingDirection.getHorizontalIndex() * 90);
             }
             @SideOnly(Side.CLIENT)
-            private double getPortalToAngle(Entity entity)
-            {
-                BlockPos blockpos = WorldDataFields.blockPosToCompass;
-                return Math.atan2((double) blockpos.getZ() - entity.posZ, (double) blockpos.getX() - entity.posX);
+            private double getPortalToAngle(Entity entity) {
+                return Math.atan2((double) mutableBlockPos.getZ() - entity.posZ, (double) mutableBlockPos.getX() - entity.posX);
+            }
+
+            @SideOnly(Side.CLIENT)
+            private void setNearestPortalPos(Entity entity) {
+                mutableBlockPos.setPos(entity);
+                mutableBlockPos.setPos(AncientPortalsProcessor.getNearestPortalPos(entity.world, mutableBlockPos)).add(8, 0, 8);
             }
         });
         setCreativeTab(MainR.ReturnOfTheAncientsTab);

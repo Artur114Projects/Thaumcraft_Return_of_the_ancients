@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.client.particle;
+package com.artur.returnoftheancients.client.fx.particle;
 
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.Minecraft;

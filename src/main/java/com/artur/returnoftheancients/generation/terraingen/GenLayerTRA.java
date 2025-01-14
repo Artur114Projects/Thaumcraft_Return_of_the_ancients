@@ -5,7 +5,6 @@ import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.GenLayerAddIsland;
 import net.minecraft.world.gen.layer.GenLayerAddMushroomIsland;
 import net.minecraft.world.gen.layer.GenLayerAddSnow;
-import net.minecraft.world.gen.layer.GenLayerBiome;
 import net.minecraft.world.gen.layer.GenLayerBiomeEdge;
 import net.minecraft.world.gen.layer.GenLayerDeepOcean;
 import net.minecraft.world.gen.layer.GenLayerEdge;
@@ -20,10 +19,10 @@ import net.minecraft.world.gen.layer.GenLayerSmooth;
 import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
 import net.minecraft.world.gen.layer.GenLayerZoom;
 
-public abstract class GenLayerTaint extends GenLayer {
+public abstract class GenLayerTRA extends GenLayer {
 
 
-    public GenLayerTaint(long seed) {
+    public GenLayerTRA(long seed) {
         super(seed);
     }
 
@@ -58,7 +57,7 @@ public abstract class GenLayerTaint extends GenLayer {
         biomeSize = GenLayer.getModdedBiomeSize(worldType, biomeSize);
         GenLayer lvt_7_1_ = GenLayerZoom.magnify(1000L, genlayer4, 0);
         GenLayer genlayerriverinit = new GenLayerRiverInit(100L, lvt_7_1_);
-        GenLayer genlayerbiome = new GenLayerBiome(200L, genlayer4, worldType, null);
+        GenLayer genlayerbiome = new GenLayerBiomeTRA(200L, genlayer4, worldType, null, seed);
         GenLayer ret = GenLayerZoom.magnify(1000L, genlayerbiome, 2);
         GenLayer genlayerbiomeedge = new GenLayerBiomeEdge(1000L, ret);
         GenLayer lvt_9_1_ = GenLayerZoom.magnify(1000L, genlayerriverinit, 2);
@@ -77,12 +76,12 @@ public abstract class GenLayerTaint extends GenLayer {
             }
 
             if (k == 1 || biomeSize == 1) {
-                genlayerhills = new GenLayerShoreTaint(1000L, genlayerhills); // Новый генератор береговых линий и небольших границ
+                genlayerhills = new GenLayerShoreTRA(1000L, genlayerhills); // Новый генератор береговых линий и небольших границ
             }
         }
 
         GenLayer genlayersmooth1 = new GenLayerSmooth(1000L, genlayerhills);
-        GenLayer genlayerrivermix = new GenLayerRiverMixTaint(100L, genlayersmooth1, genlayersmooth); // Новый генератор рек
+        GenLayer genlayerrivermix = new GenLayerRiverMixTRA(100L, genlayersmooth1, genlayersmooth); // Новый генератор рек
         GenLayer genlayer3 = new GenLayerVoronoiZoom(10L, genlayerrivermix);
         genlayerrivermix.initWorldGenSeed(seed);
         genlayer3.initWorldGenSeed(seed);

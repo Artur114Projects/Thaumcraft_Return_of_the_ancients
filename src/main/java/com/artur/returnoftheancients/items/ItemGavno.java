@@ -3,8 +3,8 @@ package com.artur.returnoftheancients.items;
 
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructure;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.TRAStructureEBS;
-import com.artur.returnoftheancients.client.particle.RotateParticleSmokeInPlayer;
-import com.artur.returnoftheancients.client.particle.TrapParticleFlame;
+import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
+import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
 import com.artur.returnoftheancients.generation.generators.portal.AncientPortalNaturalGeneration;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.main.MainR;

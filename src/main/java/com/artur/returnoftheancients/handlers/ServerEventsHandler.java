@@ -355,7 +355,7 @@ public class ServerEventsHandler {
     public static void tick(TickEvent.WorldTickEvent e) {
         if (!e.world.isRemote) {
             bTick++;
-            if (e.world.provider.getDimension() == 0 && bTick >= 20) {
+            if (e.world.provider.getDimension() == 0 && bTick >= 40) {
                 bTick = 0;
                 int taintChunks = 0;
                 for (Chunk chunk : ((WorldServer) e.world).getChunkProvider().getLoadedChunks()) {
@@ -363,25 +363,11 @@ public class ServerEventsHandler {
                         continue;
                     }
 
-                    int chunkArea = 16;
                     byte[] biomes = chunk.getBiomeArray();
-                    boolean ret = false;
 
-                    for (int i = 0; i < chunkArea; ++i) {
-                        for (int j = 0; j < chunkArea; ++j) {
-                            int k = biomes[j + i * chunkArea];
-                            Biome biome = Biome.getBiomeForId(k & 255);
-                            if (biome == null) continue;
-                            if (BiomeDictionary.hasType(biome, InitBiome.TAINT_TYPE_L)) {
-                                BiomeTaint.chunkHasBiomeUpdate(chunk);
-                                taintChunks++;
-                                ret = true;
-                                break;
-                            }
-                        }
-                        if (ret) {
-                            break;
-                        }
+                    if (HandlerR.arrayContainsAny(biomes, InitBiome.TAINT_BIOMES_ID)) {
+                        BiomeTaint.chunkHasBiomeUpdate(chunk);
+                        taintChunks++;
                     }
                 }
                 BiomeTaint.taintChunks = taintChunks;

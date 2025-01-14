@@ -8,11 +8,11 @@ import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 import net.minecraftforge.common.BiomeDictionary;
 
-public class GenLayerRiverMixTaint extends GenLayer {
+public class GenLayerRiverMixTRA extends GenLayer {
     private final GenLayer biomePatternGeneratorChain;
     private final GenLayer riverPatternGeneratorChain;
 
-    public GenLayerRiverMixTaint(long seed, GenLayer biome, GenLayer river) {
+    public GenLayerRiverMixTRA(long seed, GenLayer biome, GenLayer river) {
         super(seed);
         this.biomePatternGeneratorChain = biome;
         this.riverPatternGeneratorChain = river;

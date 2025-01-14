@@ -6,12 +6,13 @@ import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.referense.Referense;
-import net.minecraft.block.BlockGlass;
+import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -24,12 +25,14 @@ import java.util.*;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
-// TODO: добавить систему загрузок выгрузок
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class AncientPortalsProcessor {
 
+    private static final Map<Integer, ChunkPos[]> PORTALS_GENERATION_POS = new HashMap<>();
+    private static ChunkPos[] portalsGenerationPosOverWorld = null;
+    public static final int portalsCount = 8;
 
-    private static final List<Integer> LOAD_DIMENSIONS = new ArrayList<>();
+    private static final Set<Integer> LOAD_DIMENSIONS = new HashSet<>();
     private static final List<Integer> TO_DELETE = new ArrayList<>();
     public static Map<Integer, AncientPortal> PORTALS = new HashMap<>();
 
@@ -43,19 +46,31 @@ public class AncientPortalsProcessor {
 
     @SubscribeEvent
     public static void WorldEventLoad(WorldEvent.Load e) {
-        if (!LOAD_DIMENSIONS.contains(e.getWorld().provider.getDimension()) && !e.getWorld().isRemote) {
+        if (!LOAD_DIMENSIONS.contains(e.getWorld().provider.getDimension())) {
             int dimension = e.getWorld().provider.getDimension();
-            if (TRAConfigs.Any.debugMode) System.out.println("Load portals dim:" + dimension);
-            LOAD_DIMENSIONS.add(dimension);
-            WorldData worldData = WorldData.get();
-            NBTTagCompound portalsPack = worldData.saveData.getCompoundTag("PortalsPack");
-            if (portalsPack.hasKey(dimension + "")) {
-                NBTTagList list = portalsPack.getTagList(dimension + "", 10);
-                for (int i = 0; i != list.tagCount(); i++) {
-                    NBTTagCompound nbt = list.getCompoundTagAt(i);
-                    PORTALS.put(dimension, loadPortal(e.getWorld().getMinecraftServer(), nbt));
+            if (Arrays.stream(TRAConfigs.PortalSettings.dimensionsGenerate).anyMatch((i) -> i == dimension)) {
+                if (dimension == 0) {
+                    portalsGenerationPosOverWorld = new ChunkPos[portalsCount];
+                    initPortalsPosOnWorld(portalsGenerationPosOverWorld, e.getWorld().getWorldInfo().getSeed());
+                } else {
+                    ChunkPos[] poss = new ChunkPos[portalsCount];
+                    initPortalsPosOnWorld(poss, e.getWorld().getSeed());
+                    PORTALS_GENERATION_POS.put(dimension, poss);
                 }
             }
+            if (!e.getWorld().isRemote) {
+                if (TRAConfigs.Any.debugMode) System.out.println("Load portals dim:" + dimension);
+                WorldData worldData = WorldData.get();
+                NBTTagCompound portalsPack = worldData.saveData.getCompoundTag("PortalsPack");
+                if (portalsPack.hasKey(dimension + "")) {
+                    NBTTagList list = portalsPack.getTagList(dimension + "", 10);
+                    for (int i = 0; i != list.tagCount(); i++) {
+                        NBTTagCompound nbt = list.getCompoundTagAt(i);
+                        PORTALS.put(dimension, loadPortal(e.getWorld().getMinecraftServer(), nbt));
+                    }
+                }
+            }
+            LOAD_DIMENSIONS.add(dimension);
         }
     }
 
@@ -198,6 +213,7 @@ public class AncientPortalsProcessor {
     }
 
     public static void unload() {
+        PORTALS_GENERATION_POS.clear();
         LOAD_DIMENSIONS.clear();
         TO_DELETE.clear();
         PORTALS.clear();
@@ -255,5 +271,60 @@ public class AncientPortalsProcessor {
             }
         }
         return null;
+    }
+
+    public static boolean hasPortalOnWorld(World world) {
+        return world.provider.getDimension() == 0 || PORTALS_GENERATION_POS.containsKey(world.provider.getDimension());
+    }
+
+    public static ChunkPos getNearestPortalPos(World world, UltraMutableBlockPos pos) {
+        ChunkPos[] poss = world.provider.getDimension() == 0 ? portalsGenerationPosOverWorld : PORTALS_GENERATION_POS.get(world.provider.getDimension());
+        if (poss == null) {
+            System.out.println("[Warning] (AncientPortalsProcessor::getNearestPortalPos) request portal pos array == null");
+            return new ChunkPos(0, 0);
+        }
+        Optional<ChunkPos> nearestPosOptional = Arrays.stream(poss).min(Comparator.comparingInt(pos::distanceSq));
+        if (!nearestPosOptional.isPresent()) {
+            return new ChunkPos(0, 0);
+        }
+        ChunkPos nearestPos = nearestPosOptional.get();
+        return new ChunkPos(nearestPos.x, nearestPos.z);
+    }
+
+    public static ChunkPos getPortalPos(World world, int id) {
+        ChunkPos[] poss = world.provider.getDimension() == 0 ? portalsGenerationPosOverWorld : PORTALS_GENERATION_POS.get(world.provider.getDimension());
+        if (id > poss.length) {
+            return new ChunkPos(0, 0);
+        }
+        ChunkPos pos = poss[id];
+        return new ChunkPos(pos.x, pos.z);
+    }
+
+    private static int portalGenerateOffset(Random rand) {
+        return ((rand.nextInt(8) - 4) + 1) << 8;
+    }
+
+    public static void initPortalsPosOnWorld(ChunkPos[] portalPos, long seed) {
+        final Random rand = new Random(seed);
+        final double angleOffset = ((Math.PI * 2) / (rand.nextInt(16) + 1));
+        final int defaultDistance = 4000;
+        final int distance = 8000;
+
+        for (int i = 0; i != portalPos.length; i++) {
+            double angle = (((Math.PI * 2) / portalPos.length) * i) + angleOffset;
+            int radius = defaultDistance + (distance * i) + portalGenerateOffset(rand);
+
+            int chunkX = (int) ((radius * Math.cos(angle)) + portalGenerateOffset(rand)) >> 8;
+            int chunkZ = (int) ((radius * Math.sin(angle)) + portalGenerateOffset(rand)) >> 8;
+
+            portalPos[i] = new ChunkPos(chunkX << 4, chunkZ << 4);
+        }
+
+        if (TRAConfigs.Any.debugMode) {
+            System.out.println("Seed:" + seed);
+            for (ChunkPos pos : portalPos) {
+                System.out.println(pos);
+            }
+        }
     }
 }

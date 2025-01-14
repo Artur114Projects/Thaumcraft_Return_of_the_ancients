@@ -37,7 +37,7 @@ public class TransformerTaintHelper implements ITransformer {
         String[] desc;
         public VisitorIsNearTaintSeed(MethodVisitor methodVisitor) {
             super(Opcodes.ASM5, methodVisitor);
-            desc = new String[] {HandlerR.createDescriptor(HANDLER_CLASS, "isTaintBiomeInPos")};
+            desc = new String[] {HandlerR.createDescriptor(HANDLER_CLASS, "isTaintLBiomeInPos")};
         }
 
         @Override
@@ -47,7 +47,7 @@ public class TransformerTaintHelper implements ITransformer {
             mv.visitVarInsn(Opcodes.ALOAD, 0);
             mv.visitVarInsn(Opcodes.ALOAD, 1);
 
-            mv.visitMethodInsn(Opcodes.INVOKESTATIC, HANDLER_PATH, "isTaintBiomeInPos", desc[0], false);
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, HANDLER_PATH, "isTaintLBiomeInPos", desc[0], false);
 
             Label continueLabel = new Label();
             mv.visitJumpInsn(Opcodes.IFEQ, continueLabel);

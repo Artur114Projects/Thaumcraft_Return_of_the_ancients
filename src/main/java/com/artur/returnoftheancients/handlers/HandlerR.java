@@ -34,6 +34,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -790,7 +791,7 @@ public class HandlerR {
         return false;
     }
 
-    public static boolean arrayContainsAny(byte[] array, byte param) {
+    public static boolean arrayContains(byte[] array, byte param) {
         for (int i : array) {
             if (i == param) {
                 return true;
@@ -798,9 +799,21 @@ public class HandlerR {
         }
         return false;
     }
-
-
     public static boolean isCollide(int pointX, int pointY, int point1X, int point1Y, int offset) {
         return Math.abs(point1X - pointX) <= offset && Math.abs(point1Y - pointY) <= offset;
+    }
+
+    public static byte getBiomeIdOnPos(World world, BlockPos pos) {
+        return world.getChunkFromBlockCoords(pos).getBiomeArray()[(pos.getX() & 15) + (pos.getZ() & 15) * 16];
+    }
+
+    public static boolean fastCheckChunkContainsAnyOnBiomeArray(Chunk chunk, byte[] biomeArray) {
+        byte[] chunkBiomeArray = chunk.getBiomeArray();
+        return arrayContainsAny(biomeArray, chunkBiomeArray[0], chunkBiomeArray[15 * 16], chunkBiomeArray[15 + 15 * 16], chunkBiomeArray[15]);
+    }
+
+    public static boolean fullCheckChunkContainsAnyOnBiomeArray(Chunk chunk, byte[] biomeArray) {
+        byte[] chunkBiomeArray = chunk.getBiomeArray();
+        return arrayContainsAny(chunkBiomeArray, biomeArray);
     }
 }

@@ -301,11 +301,13 @@ public class AncientPortalsProcessor {
     }
 
     private static int portalGenerateOffset(Random rand) {
-        return ((rand.nextInt(8) - 4) + 1) << 8;
+        return (((rand.nextInt(8) - 4) + 1) << 8);
     }
 
     public static void initPortalsPosOnWorld(ChunkPos[] portalPos, long seed) {
         final Random rand = new Random(seed);
+        rand.nextInt();
+
         final double angleOffset = ((Math.PI * 2) / (rand.nextInt(16) + 1));
         final int defaultDistance = 4000;
         final int distance = 8000;

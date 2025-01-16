@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.transform;
 
-import com.artur.returnoftheancients.transform.transformers.TransformerBiomeSearchWorker;
-import com.artur.returnoftheancients.transform.transformers.TransformerWorld;
+import com.artur.returnoftheancients.transform.transformers.*;
 import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
 import com.artur.returnoftheancients.transform.transformers.TransformerTaintHelper;
 import net.minecraft.launchwrapper.IClassTransformer;
@@ -11,11 +10,12 @@ import java.util.List;
 
 public class TransformerTRA implements IClassTransformer {
 
-    private static List<ITransformer> TRANSFORMERS = new ArrayList<>();
+    private static final List<ITransformer> TRANSFORMERS = new ArrayList<>();
 
     static {
-        TRANSFORMERS.add(new TransformerTaintHelper());
+        TRANSFORMERS.add(new TransformerRenderEventsHandler());
         TRANSFORMERS.add(new TransformerBiomeSearchWorker());
+        TRANSFORMERS.add(new TransformerTaintHelper());
         TRANSFORMERS.add(new TransformerWorld());
     }
 

@@ -13,10 +13,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
-import net.minecraftforge.common.BiomeDictionary;
 import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.common.entities.monster.tainted.EntityTaintSeedPrime;
 
@@ -61,7 +59,7 @@ public class BiomeTaint extends BiomeBase {
             for (int i = 0; i < 16; ++i) {
                 for (int j = 0; j < 16; ++j) {
                     byte k = biomes[j + i * 16];
-                    if (HandlerR.arrayContainsAny(InitBiome.TAINT_BIOMES_L_ID, k)) {
+                    if (HandlerR.arrayContains(InitBiome.TAINT_BIOMES_L_ID, k)) {
                         taintBiomeArea.add((short) ((i << 8) | (j & 0xFF)));
                     }
                 }
@@ -92,12 +90,12 @@ public class BiomeTaint extends BiomeBase {
         for (int i = 0; i != 16; i++) {
             for (int j = 0; j != 16; j++) {
                 byte k = biomeArray[i + j * 16];
-                if (HandlerR.arrayContainsAny(InitBiome.TAINT_BIOMES_L_ID, k)) {
+                if (HandlerR.arrayContains(InitBiome.TAINT_BIOMES_L_ID, k)) {
                     blockPos.pushPos();
                     blockPos.add(i, 0, j);
                     decorateNormal(worldIn, random, blockPos, k);
                     blockPos.popPos();
-                } else if (HandlerR.arrayContainsAny(InitBiome.TAINT_BIOMES_EDGE_ID, k)) {
+                } else if (HandlerR.arrayContains(InitBiome.TAINT_BIOMES_EDGE_ID, k)) {
                     blockPos.pushPos();
                     blockPos.add(i, 0, j);
                     decorateEdge(worldIn, random, blockPos, k);

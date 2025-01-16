@@ -29,7 +29,7 @@ public class TerrainHandler {
         Chunk chunk = e.getWorld().getChunkFromChunkCoords(e.getChunkPos().x, e.getChunkPos().z);
         byte[] biomeArray = chunk.getBiomeArray();
 
-        if (HandlerR.arrayContainsAny(biomeArray, InitBiome.TAINT_BIOMES_ID)) {
+        if (HandlerR.fullCheckChunkContainsAnyOnBiomeArray(chunk, InitBiome.TAINT_BIOMES_ID)) {
             BiomeTaint.decorateCustom(e.getWorld(), e.getRand(), e.getChunkPos(), biomeArray);
         }
     }
@@ -38,24 +38,17 @@ public class TerrainHandler {
     @SubscribeEvent
     public void decorate(DecorateBiomeEvent.Decorate e) {
         Chunk chunk = e.getWorld().getChunkFromChunkCoords(e.getChunkPos().x, e.getChunkPos().z);
-        byte[] biomeArray = chunk.getBiomeArray();
 
-        notLake(e, biomeArray);
+        notLake(e, chunk);
     }
 
-    private void notLake(DecorateBiomeEvent.Decorate e, byte[] biomeArray) {
+    private void notLake(DecorateBiomeEvent.Decorate e, Chunk chunk) {
         if (e.getType() != DecorateBiomeEvent.Decorate.EventType.LAKE_WATER && e.getType() != DecorateBiomeEvent.Decorate.EventType.LAKE_LAVA) {
             return;
         }
 
-        byte i = biomeArray[0];
-        byte j = biomeArray[15 * 16];
-        byte k = biomeArray[15 + 15 * 16];
-        byte l = biomeArray[15];
-
-        if (HandlerR.arrayContainsAny(InitBiome.TAINT_BIOMES_ID, i) || HandlerR.arrayContainsAny(InitBiome.TAINT_BIOMES_ID, j) || HandlerR.arrayContainsAny(InitBiome.TAINT_BIOMES_ID, k) || HandlerR.arrayContainsAny(InitBiome.TAINT_BIOMES_ID, l)) {
+        if (HandlerR.fastCheckChunkContainsAnyOnBiomeArray(chunk, InitBiome.TAINT_BIOMES_ID)) {
             e.setResult(Event.Result.DENY);
-            System.out.println("Not lake!!!");
         }
     }
 }

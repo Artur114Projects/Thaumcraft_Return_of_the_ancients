@@ -41,9 +41,9 @@ public class InitBiome {
         registerBiomeArrays();
     }
 
-    // TODO: Проверить работает ли!
     public static void registerBiomeInfo() {
         BiomeHandler.registerBiomeInfo(TAINT_TYPE, 0.0F, Aspect.FLUX, false, 0.0F);
+        BiomeHandler.registerBiomeInfo(TAINT_TYPE_L, 0.0F, Aspect.FLUX, false, 0.0F);
     }
 
     public static void registerBiomeArrays() {

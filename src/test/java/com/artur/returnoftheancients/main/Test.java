@@ -73,24 +73,24 @@ public class Test { //
 
     public static void main(String[] args) {
         System.out.println("Start!");
-//        ChunkPos[] poss = new ChunkPos[8];
-//        for (int i = 0; i != 20; i++) {
-//            AncientPortalsProcessor.initPortalsPosOnWorld(poss, i);
+        ChunkPos[] poss = new ChunkPos[8];
+        for (int i = 0; i != 30; i++) {
+            AncientPortalsProcessor.initPortalsPosOnWorld(poss, i);
+        }
+//        float[] timeArray = new float[200000];
+//        AncientEntryMapProvider.createAncientEntryMap(new Random(1234568798));
+//        for (int i = 0; i != 200000; i++) {
+//            long time = System.nanoTime();
+//            AncientEntryMapProvider.createAncientEntryMap(new Random(i));
+//            timeArray[i] = ((System.nanoTime() - time) / 1000000.0F);
+////            System.out.println("Created new map! Is took " + timeArray[i] + "ms");
 //        }
-        float[] timeArray = new float[200000];
-        AncientEntryMapProvider.createAncientEntryMap(new Random(1234568798));
-        for (int i = 0; i != 200000; i++) {
-            long time = System.nanoTime();
-            AncientEntryMapProvider.createAncientEntryMap(new Random(i));
-            timeArray[i] = ((System.nanoTime() - time) / 1000000.0F);
-//            System.out.println("Created new map! Is took " + timeArray[i] + "ms");
-        }
-        float resultTime = 0;
-        for (float f : timeArray) {
-            resultTime += f;
-        }
-        resultTime /= timeArray.length;
-        System.out.println("Is took ~" + resultTime + "ms");
+//        float resultTime = 0;
+//        for (float f : timeArray) {
+//            resultTime += f;
+//        }
+//        resultTime /= timeArray.length;
+//        System.out.println("Is took ~" + resultTime + "ms");
 //        ChunkPos chunkPos = new ChunkPos(0, 0);
 //        long time = System.nanoTime();
 //        UltraMutableBlockPos pos = new UltraMutableBlockPos(64, 0 ,0);

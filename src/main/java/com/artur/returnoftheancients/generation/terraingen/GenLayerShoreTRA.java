@@ -20,7 +20,7 @@ public class GenLayerShoreTRA extends GenLayer {
 
     public int[] getInts(int areaX, int areaY, int areaWidth, int areaHeight) {
         int[] aint = this.parent.getInts(areaX - 1, areaY - 1, areaWidth + 2, areaHeight + 2);
-        int[] aint2P = this.parent.getInts(areaX - 2, areaY - 2, areaWidth + 4, areaHeight + 4);
+        int[] aint2P = this.parent.getInts(areaX - 2, areaY - 2, areaWidth + 4, areaHeight + 4); // TODO: избавится!!!
         int[] aint1 = IntCache.getIntCache(areaWidth * areaHeight);
 
         for (int i = 0; i < areaHeight; ++i) {

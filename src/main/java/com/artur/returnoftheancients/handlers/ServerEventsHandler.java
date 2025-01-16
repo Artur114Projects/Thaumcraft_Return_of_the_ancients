@@ -363,9 +363,7 @@ public class ServerEventsHandler {
                         continue;
                     }
 
-                    byte[] biomes = chunk.getBiomeArray();
-
-                    if (HandlerR.arrayContainsAny(biomes, InitBiome.TAINT_BIOMES_ID)) {
+                    if (HandlerR.fastCheckChunkContainsAnyOnBiomeArray(chunk, InitBiome.TAINT_BIOMES_L_ID)) {
                         BiomeTaint.chunkHasBiomeUpdate(chunk);
                         taintChunks++;
                     }

@@ -22,13 +22,23 @@ public class InitBiome {
 
     public static final List<Biome> BIOMES = new ArrayList<>();
 
-    public static final Biome TAINT_EDGE = new BiomeTaint("taint_edge_r", new Biome.BiomeProperties("Taint edge").setBaseHeight(3.0F).setRainfall(0.7F).setHeightVariation(0.1F).setSnowEnabled(), EBiome.TAINT_EDGE, BiomeTaint.TaintType.EDGE);
-    public static final Biome TAINT = new BiomeTaint("taint_r", new Biome.BiomeProperties("Taint").setWaterColor(0x563367).setBaseHeight(0.1F).setRainfall(1.0F).setHeightVariation(0.0F), EBiome.TAINT, BiomeTaint.TaintType.NORMAL);
+    public static final Biome TAINT_WASTELAND = new BiomeTaint("taint_wasteland_r", new Biome.BiomeProperties("Void Land").setWaterColor(0x310042).setBaseHeight(0.2F).setRainfall(0.0F).setHeightVariation(0.1F).setRainDisabled(), EBiome.TAINT, BiomeTaint.TaintType.NORMAL);
+    public static final Biome TAINT_MOUNTAINS = new BiomeTaint("taint_mountains_r", new Biome.BiomeProperties("Corrupted Rocks").setWaterColor(0x310042).setBaseHeight(1.0F).setRainfall(1.0F).setHeightVariation(0.5F), EBiome.TAINT, BiomeTaint.TaintType.NORMAL);
+    public static final Biome TAINT_SPIRES = new BiomeTaint("taint_spires_r", new Biome.BiomeProperties("Rotten Spires").setWaterColor(0x310042).setBaseHeight(2.0F).setRainfall(1.0F).setHeightVariation(0.1F), EBiome.TAINT, BiomeTaint.TaintType.NORMAL);
+    public static final Biome TAINT_EDGE = new BiomeTaint("taint_edge_r", new Biome.BiomeProperties("Taint Land Edge").setBaseHeight(3.4F).setRainfall(0.7F).setHeightVariation(0.1F).setSnowEnabled(), EBiome.TAINT_EDGE, BiomeTaint.TaintType.EDGE);
+    public static final Biome TAINT_SEA = new BiomeTaint("taint_sea_r", new Biome.BiomeProperties("Rotten Sea").setWaterColor(0x310042).setBaseHeight(-1.2F).setRainfall(1.0F).setHeightVariation(0.2F), EBiome.TAINT, BiomeTaint.TaintType.NORMAL);
+    public static final Biome TAINT = new BiomeTaint("taint_r", new Biome.BiomeProperties("Taint Land").setWaterColor(0x310042).setBaseHeight(0.2F).setRainfall(1.0F).setHeightVariation(0.1F), EBiome.TAINT, BiomeTaint.TaintType.NORMAL);
     public static final Biome ANCIENT_LABYRINTH = new BiomeAncientLabyrinth("ancient_entry", new Biome.BiomeProperties("Ancient entry").setRainDisabled().setWaterColor(0), EBiome.ANCIENT);
 
     public static byte[] TAINT_BIOMES_ID = new byte[0];
     public static byte[] TAINT_BIOMES_L_ID = new byte[0];
     public static byte[] TAINT_BIOMES_EDGE_ID = new byte[0];
+
+    public static int[] TAINT_BIOMES_INT_ID = new int[0];
+    public static int[] TAINT_BIOMES_L_INT_ID = new int[0];
+    public static int[] TAINT_BIOMES_EDGE_INT_ID = new int[0];
+    public static int[] TAINT_BIOMES_L_MUTATION_INT_ID = new int[0];
+
 
     public static void initBiomes() {
         for (Biome biome : BIOMES) {
@@ -38,7 +48,6 @@ public class InitBiome {
         }
 
         registerBiomeInfo();
-        registerBiomeArrays();
     }
 
     public static void registerBiomeInfo() {
@@ -50,6 +59,19 @@ public class InitBiome {
         TAINT_BIOMES_ID = getBiomeArrayWithType(TAINT_TYPE);
         TAINT_BIOMES_L_ID = getBiomeArrayWithType(TAINT_TYPE_L);
         TAINT_BIOMES_EDGE_ID = getBiomeArrayWithType(TAINT_TYPE_EDGE);
+
+        TAINT_BIOMES_INT_ID = getIntBiomeArrayWithType(TAINT_TYPE);
+        TAINT_BIOMES_L_INT_ID = getIntBiomeArrayWithType(TAINT_TYPE_L);
+        TAINT_BIOMES_EDGE_INT_ID = getIntBiomeArrayWithType(TAINT_TYPE_EDGE);
+        TAINT_BIOMES_L_MUTATION_INT_ID = registerTaintBiomeMutations();
+    }
+
+    private static int[] registerTaintBiomeMutations() {
+        int[] array = new int[3];
+        array[0] = Biome.getIdForBiome(TAINT_MOUNTAINS);
+        array[1] = Biome.getIdForBiome(TAINT_SEA);
+        array[2] = Biome.getIdForBiome(TAINT_WASTELAND);
+        return array;
     }
 
     private static byte[] getBiomeArrayWithType(BiomeDictionary.Type type) {
@@ -61,4 +83,15 @@ public class InitBiome {
         }
         return array;
     }
+
+    private static int[] getIntBiomeArrayWithType(BiomeDictionary.Type type) {
+        Set<Biome> biomes = BiomeDictionary.getBiomes(type);
+        Iterator<Biome> iterator = biomes.iterator();
+        int[] array = new int[biomes.size()];
+        for (int i = 0; i != biomes.size(); i++) {
+            array[i] = Biome.getIdForBiome(iterator.next());
+        }
+        return array;
+    }
+
 }

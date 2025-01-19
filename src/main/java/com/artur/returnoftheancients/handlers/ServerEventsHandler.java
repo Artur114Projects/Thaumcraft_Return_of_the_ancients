@@ -7,6 +7,7 @@ import com.artur.returnoftheancients.capabilities.PlayerTimer;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
 import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
 import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
+import com.artur.returnoftheancients.handlers.eventmanagers.PlayerInBiomeManager;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -56,6 +57,10 @@ import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_di
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class ServerEventsHandler {
+
+
+    public static final PlayerInBiomeManager PLAYER_IN_BIOME_MANAGER = new PlayerInBiomeManager();
+
     public static final String tpToHomeNBT = "tpToHomeNBT";
     protected static final String startUpNBT = "startUpNBT";
     protected static final String notNoCollisionNBTTime = "notNoCollisionNBTTime";
@@ -221,8 +226,6 @@ public class ServerEventsHandler {
         if (!AncientWorld.playerLostBus(player.getUniqueID())) AncientPortalsProcessor.tpToHome(player);
     }
 
-
-
     @SubscribeEvent
     public static void LivingDropsEvent(LivingDropsEvent e) {
         if (e.getEntity().dimension == ancient_world_dim_id && !e.getEntity().isNonBoss()) {
@@ -251,6 +254,9 @@ public class ServerEventsHandler {
 
     @SubscribeEvent
     public static void PlayerTickEvent(TickEvent.PlayerTickEvent e) {
+
+        PLAYER_IN_BIOME_MANAGER.tickEventPlayerTickEvent(e);
+
         int playerDimension = e.player.dimension;
         if (!e.player.world.isRemote) {
             if (playerDimension == ancient_world_dim_id) {
@@ -307,6 +313,9 @@ public class ServerEventsHandler {
                 timer.delete("recovery");
                 HandlerR.researchAndSendMessage((EntityPlayerMP) player, "RECOVERY", Referense.MODID + ".text.recovery");
             }
+        }
+        if (timer.hasTimer("poisoning")) {
+            timer.addTime(40, "poisoning");
         }
     }
 

@@ -13,9 +13,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import thaumcraft.api.blocks.BlocksTC;
+import thaumcraft.common.blocks.world.taint.BlockTaint;
 import thaumcraft.common.entities.monster.tainted.EntityTaintSeedPrime;
 
 import java.util.ArrayList;
@@ -31,8 +34,10 @@ public class BiomeTaint extends BiomeBase {
     // TODO: Добавить больше существ в spawnableCreatureList.
     public BiomeTaint(String registryName, BiomeProperties properties, EBiome eBiome, TaintType type) {
         super(registryName, properties, eBiome);
+        this.spawnableWaterCreatureList.clear();
         this.decorator.generateFalls = false;
         this.spawnableCreatureList.clear();
+        this.spawnableMonsterList.clear();
         this.type = type;
 
         if (this.type == TaintType.EDGE) {
@@ -86,6 +91,7 @@ public class BiomeTaint extends BiomeBase {
 
     public static void decorateCustom(World worldIn, Random random, ChunkPos pos, byte[] biomeArray) {
         UltraMutableBlockPos blockPos = new UltraMutableBlockPos(pos);
+        Chunk chunk = worldIn.getChunkFromBlockCoords(blockPos);
 
         for (int i = 0; i != 16; i++) {
             for (int j = 0; j != 16; j++) {
@@ -103,6 +109,10 @@ public class BiomeTaint extends BiomeBase {
                 }
             }
         }
+
+        if (HandlerR.fastCheckChunkContainsAnyOnBiomeArray(chunk, InitBiome.TAINT_BIOMES_L_ID)) {
+            decorateChunkNormal(worldIn, random,  blockPos);
+        }
     }
 
     private static void decorateEdge(World worldIn, Random rand, UltraMutableBlockPos blockPos, byte biomeId) {
@@ -116,31 +126,68 @@ public class BiomeTaint extends BiomeBase {
         }
     }
 
+    private static void decorateChunkNormal(World worldIn, Random rand, UltraMutableBlockPos blockPos) {
+
+    }
+
     private static void decorateNormal(World worldIn, Random rand, UltraMutableBlockPos blockPos, byte biomeId) {
-        if (rand.nextInt(33) == 0) {
-            blockPos.setY(HandlerR.calculateGenerationHeight(worldIn, blockPos.getX(), blockPos.getZ()));
-            if (worldIn.getBlockState(blockPos).getBlock() == BlocksTC.taintSoil) {
-                IBlockState state = BlocksTC.taintFeature.getBlockState().getBaseState();
-                blockPos.up();
-                worldIn.setBlockState(blockPos, state.withProperty(BlockDirectional.FACING, EnumFacing.UP), 3);
-                worldIn.checkLight(blockPos);
+        blockPos.setY(HandlerR.calculateGenerationHeight(worldIn, blockPos.getX(), blockPos.getZ()));
+        if (biomeId != (Biome.getIdForBiome(InitBiome.TAINT_SPIRES) & 255)) {
+            if (rand.nextInt(33) == 0) {
+                if (worldIn.getBlockState(blockPos).getBlock() == BlocksTC.taintSoil) {
+                    blockPos.pushPos();
+                    IBlockState state = BlocksTC.taintFeature.getBlockState().getBaseState();
+                    blockPos.up();
+                    worldIn.setBlockState(blockPos, state.withProperty(BlockDirectional.FACING, EnumFacing.UP), 2);
+                    for (EnumFacing facing : EnumFacing.values()) {
+                        blockPos.pushPos();
+                        blockPos.offset(facing);
+                        worldIn.checkLight(blockPos);
+                        blockPos.popPos();
+                    }
+                    blockPos.popPos();
+                }
+            }
+        } else {
+            if (!worldIn.getBlockState(blockPos).getBlock().equals(Blocks.WATER)) {
+                worldIn.setBlockState(blockPos, InitBlocks.TAINT_VOID_STONE.getDefaultState());
             }
         }
+        for (blockPos.pushPos(); blockPos.getY() > worldIn.getSeaLevel(); blockPos.add(0, -1, 0)) {
+            for (EnumFacing facing : EnumFacing.values()) {
+                blockPos.pushPos();
+                blockPos.offset(facing);
+                if (worldIn.isAirBlock(blockPos)) {
+                    blockPos.popPos();
+                    if (!(worldIn.getBlockState(blockPos).getBlock() instanceof BlockTaint) && !worldIn.isAirBlock(blockPos)) {
+                        worldIn.setBlockState(blockPos, InitBlocks.TAINT_VOID_STONE.getDefaultState());
+                    }
+                    break;
+                }
+                blockPos.popPos();
+            }
+        }
+        blockPos.popPos();
     }
 
     public void registerBiomeP2() {
-        this.topBlock = BlocksTC.taintSoil.getDefaultState();
         this.fillerBlock = InitBlocks.TAINT_VOID_STONE.getDefaultState();
+        this.topBlock = BlocksTC.taintSoil.getDefaultState();
     }
 
-    @Override
-    public int getGrassColorAtPos(BlockPos pos) {
-        return this.type == TaintType.EDGE ? super.getGrassColorAtPos(pos) : 0x16001e;
+    public void registerBiomeP2(IBlockState topBlock, IBlockState fillerBlock) {
+        this.fillerBlock = fillerBlock;
+        this.topBlock = topBlock;
     }
 
     @Override
     public boolean getEnableSnow() {
         return this.type == TaintType.EDGE;
+    }
+
+    @Override
+    public int getGrassColorAtPos(BlockPos pos) {
+        return this.type == TaintType.EDGE ? super.getGrassColorAtPos(pos) : 0x16001e;
     }
 
     @Override

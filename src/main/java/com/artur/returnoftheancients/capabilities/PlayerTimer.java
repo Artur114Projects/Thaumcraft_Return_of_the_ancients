@@ -77,9 +77,7 @@ public class PlayerTimer {
 
         @Override
         public void delete(String titerId) {
-            if (timers.containsKey(titerId)) {
-                timers.remove(titerId, timers.get(titerId));
-            }
+            timers.remove(titerId, timers.get(titerId));
         }
 
         @Override

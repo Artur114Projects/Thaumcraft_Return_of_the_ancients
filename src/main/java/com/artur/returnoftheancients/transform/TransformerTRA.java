@@ -13,16 +13,15 @@ public class TransformerTRA implements IClassTransformer {
     private static final List<ITransformer> TRANSFORMERS = new ArrayList<>();
 
     static {
-        TRANSFORMERS.add(new TransformerRenderEventsHandler());
+        TRANSFORMERS.add(new TransformerWorld());
         TRANSFORMERS.add(new TransformerBiomeSearchWorker());
         TRANSFORMERS.add(new TransformerTaintHelper());
-        TRANSFORMERS.add(new TransformerWorld());
     }
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         for (ITransformer transformer : TRANSFORMERS) {
-            if (transformedName.contains(transformer.getTarget())) {
+            if (transformedName.equals(transformer.getTarget())) {
                 return transformer.transform(name, transformedName, basicClass);
             }
         }

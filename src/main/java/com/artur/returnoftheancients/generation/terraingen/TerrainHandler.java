@@ -34,16 +34,18 @@ public class TerrainHandler {
         }
     }
 
-    // TODO: Не работает, починить!
     @SubscribeEvent
-    public void decorate(DecorateBiomeEvent.Decorate e) {
-        Chunk chunk = e.getWorld().getChunkFromChunkCoords(e.getChunkPos().x, e.getChunkPos().z);
+    public void populate(PopulateChunkEvent.Populate e) {
+        Chunk chunk = e.getWorld().getChunkFromChunkCoords(e.getChunkX(), e.getChunkZ());
 
-        notLake(e, chunk);
+        notPopulateInTaintBiome(e, chunk);
     }
 
-    private void notLake(DecorateBiomeEvent.Decorate e, Chunk chunk) {
-        if (e.getType() != DecorateBiomeEvent.Decorate.EventType.LAKE_WATER && e.getType() != DecorateBiomeEvent.Decorate.EventType.LAKE_LAVA) {
+    private void notPopulateInTaintBiome(PopulateChunkEvent.Populate e, Chunk chunk) {
+        if (e.getType() != PopulateChunkEvent.Populate.EventType.LAKE && e.getType() != PopulateChunkEvent.Populate.EventType.LAVA && e.getType() != PopulateChunkEvent.Populate.EventType.ANIMALS) {
+            return;
+        }
+        if (e.getWorld().provider.getDimension() != 0) {
             return;
         }
 

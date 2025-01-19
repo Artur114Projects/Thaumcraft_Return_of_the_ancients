@@ -47,6 +47,7 @@ public class MainR {
 	@EventHandler
 	public static void Init(FMLInitializationEvent event) {
 		proxy.init(event);
+		InitBiome.registerBiomeArrays();
 	}
 	
 	@EventHandler

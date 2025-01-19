@@ -29,14 +29,14 @@ public class TransformerHandler {
 
     public static boolean isClientPlayerInTaintBiome() {
         if (Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().world != null) {
-            return ClientEventsHandler.isPlayerInTaintBiome();
+            return ClientEventsHandler.PLAYER_IN_BIOME_MANAGER.isPlayerInTaintBiome();
         } else {
             return false;
         }
     }
 
     public static float getSunBrightnessInTaintBiome() {
-        return ClientEventsHandler.getSunBrightnessInTaintBiome();
+        return ClientEventsHandler.PLAYER_IN_BIOME_MANAGER.getSunBrightnessInTaintBiome();
     }
 
     public static boolean isTaintEdgeBiome(World world, BlockPos pos) {

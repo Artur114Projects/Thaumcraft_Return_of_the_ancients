@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.layer.GenLayerZoom;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -73,10 +74,15 @@ public class Test { //
 
     public static void main(String[] args) {
         System.out.println("Start!");
-        ChunkPos[] poss = new ChunkPos[8];
-        for (int i = 0; i != 30; i++) {
-            AncientPortalsProcessor.initPortalsPosOnWorld(poss, i);
+//        ChunkPos[] poss = new ChunkPos[8];
+//        for (int i = 0; i != 30; i++) {
+//            AncientPortalsProcessor.initPortalsPosOnWorld(poss, i);
+//        }
+        for (int i = 0; i < 2; ++i)
+        {
+            System.out.println(i);
         }
+
 //        float[] timeArray = new float[200000];
 //        AncientEntryMapProvider.createAncientEntryMap(new Random(1234568798));
 //        for (int i = 0; i != 200000; i++) {

@@ -799,7 +799,20 @@ public class HandlerR {
         }
         return false;
     }
+
+    public static boolean arrayContains(int[] array, int param) {
+        for (int i : array) {
+            if (i == param) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean isCollide(int pointX, int pointY, int point1X, int point1Y, int offset) {
+        if (offset == 0) {
+            return point1X == pointX && point1Y == pointY;
+        }
         return Math.abs(point1X - pointX) <= offset && Math.abs(point1Y - pointY) <= offset;
     }
 
@@ -815,5 +828,22 @@ public class HandlerR {
     public static boolean fullCheckChunkContainsAnyOnBiomeArray(Chunk chunk, byte[] biomeArray) {
         byte[] chunkBiomeArray = chunk.getBiomeArray();
         return arrayContainsAny(chunkBiomeArray, biomeArray);
+    }
+
+    public static int elementCountOnArray(byte[] array, byte element) {
+        int ret = 0;
+        for (byte b : array) {
+            if (b == element) {
+                ret++;
+            }
+        }
+        return ret;
+    }
+
+    public static byte fastGetMostBiomeInChunk(Chunk chunk) {
+        byte[] chunkBiomeArray = chunk.getBiomeArray();
+        byte[] biomes = new byte[] {chunkBiomeArray[0], chunkBiomeArray[15 * 16], chunkBiomeArray[15 + 15 * 16], chunkBiomeArray[15]};
+        int[] biomesCount = new int[] {elementCountOnArray(biomes, biomes[0]), elementCountOnArray(biomes, biomes[1]), elementCountOnArray(biomes, biomes[2]), elementCountOnArray(biomes, biomes[3])};
+        return 0;
     }
 }

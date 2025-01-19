@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.init.InitBiome;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeDesert;
 import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.GenLayerBiome;
@@ -14,42 +15,40 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Random;
 
 public class GenLayerBiomeTRA extends GenLayerBiome {
-    private ChunkPos[] portalsGenerationPosOverWorld = null;
-    private final long worldSeedBase;
+    private final ChunkPos[] portalsGenerationPos;
 
     public GenLayerBiomeTRA(long p_i45560_1_, GenLayer p_i45560_3_, WorldType p_i45560_4_, ChunkGeneratorSettings p_i45560_5_, long worldSeedBase) {
         super(p_i45560_1_, p_i45560_3_, p_i45560_4_, p_i45560_5_);
-        this.worldSeedBase = worldSeedBase;
+        portalsGenerationPos = new ChunkPos[AncientPortalsProcessor.portalsCount];
+        TerrainGenHandler.initPortalsPosOnWorld(portalsGenerationPos, worldSeedBase);
     }
 
     @Override
-    public int @NotNull [] getInts(int areaX, int areaY, int areaWidth, int areaHeight) {
+    public int @NotNull[] getInts(int areaX, int areaY, int areaWidth, int areaHeight) {
         int[] aint1 = super.getInts(areaX, areaY, areaWidth, areaHeight);
 
         int taintId = Biome.getIdForBiome(InitBiome.TAINT);
 
-        for (int i = 0; i < areaWidth; i++) {
-            for (int j = 0; j < areaHeight; j++) {
+        for (int j = 0; j < areaHeight; j++) {
+            for (int i = 0; i < areaWidth; i++) {
                 int x = (i + areaX);
                 int y = (j + areaY);
-                if (isCollideToAnyPortalOnOverWorld(x, y)) {
-                    aint1[i + j * areaWidth] = taintId;
+                this.initChunkSeed(x, y);
+                if (TerrainGenHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, 4, 2)) {
+                    if (!TerrainGenHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, 4, 0)) {
+                        if (TerrainGenHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, 4, 1)) {
+                            int randId = this.nextInt(InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID.length + 1);
+                            int id = randId >= InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID.length ? this.nextInt(2) : randId;
+                            aint1[i + j * areaWidth] = this.nextInt(4) == 0 ? taintId : InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID[id];
+                        } else {
+                            aint1[i + j * areaWidth] = this.nextInt(4) == 0 ? taintId : TerrainGenHandler.getRandomIntOnArray(InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID, this.nextInt(InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID.length), Biome.getIdForBiome(InitBiome.TAINT_MOUNTAINS));
+                        }
+                    } else {
+                        aint1[i + j * areaWidth] = taintId;
+                    }
                 }
             }
         }
         return aint1;
-    }
-
-    public boolean isCollideToAnyPortalOnOverWorld(int x, int z) {
-        if (portalsGenerationPosOverWorld == null) {
-            portalsGenerationPosOverWorld = new ChunkPos[AncientPortalsProcessor.portalsCount];
-            AncientPortalsProcessor.initPortalsPosOnWorld(portalsGenerationPosOverWorld, worldSeedBase);
-        }
-        for (ChunkPos pos : portalsGenerationPosOverWorld) {
-            if (HandlerR.isCollide(x, z, pos.x >> 4, pos.z >> 4, 1)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

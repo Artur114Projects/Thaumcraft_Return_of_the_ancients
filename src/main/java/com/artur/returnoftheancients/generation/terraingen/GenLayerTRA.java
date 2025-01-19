@@ -26,7 +26,7 @@ public abstract class GenLayerTRA extends GenLayer {
         super(seed);
     }
 
-    // i == x, j == z
+    // TODO: Сделать совместимость с WorldType.LARGE_BIOMES
     public static GenLayer[] initializeAllBiomeGenerators(long seed, WorldType worldType) {
         GenLayer genlayer = new GenLayerIsland(1L);
         genlayer = new GenLayerFuzzyZoom(2000L, genlayer);
@@ -69,19 +69,21 @@ public abstract class GenLayerTRA extends GenLayer {
         genlayerhills = new GenLayerRareBiome(1001L, genlayerhills);
 
         for (int k = 0; k < biomeSize; k++) {
-            genlayerhills = new GenLayerZoom((long) (1000 + k), genlayerhills);
+            genlayerhills = new GenLayerZoom(1000L + k, genlayerhills);
 
             if (k == 0) {
                 genlayerhills = new GenLayerAddIsland(3L, genlayerhills);
             }
 
             if (k == 1 || biomeSize == 1) {
-                genlayerhills = new GenLayerShoreTRA(1000L, genlayerhills); // Новый генератор береговых линий и небольших границ
+                genlayerhills = new GenLayerShoreTRA(1000L, genlayerhills);
+
+                genlayerhills = new GenLayerAddSmallTaintBiomes(1000L, genlayerhills);
             }
         }
 
         GenLayer genlayersmooth1 = new GenLayerSmooth(1000L, genlayerhills);
-        GenLayer genlayerrivermix = new GenLayerRiverMixTRA(100L, genlayersmooth1, genlayersmooth); // Новый генератор рек
+        GenLayer genlayerrivermix = new GenLayerRiverMixTRA(100L, genlayersmooth1, genlayersmooth);
         GenLayer genlayer3 = new GenLayerVoronoiZoom(10L, genlayerrivermix);
         genlayerrivermix.initWorldGenSeed(seed);
         genlayer3.initWorldGenSeed(seed);

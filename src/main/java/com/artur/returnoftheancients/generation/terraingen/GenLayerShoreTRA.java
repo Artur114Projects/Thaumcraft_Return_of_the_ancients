@@ -1,11 +1,11 @@
 package com.artur.returnoftheancients.generation.terraingen;
 
 
-import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
+import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBiome;
 import net.minecraft.init.Biomes;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeDecorator;
 import net.minecraft.world.biome.BiomeJungle;
 import net.minecraft.world.biome.BiomeMesa;
 import net.minecraft.world.gen.layer.GenLayer;
@@ -19,21 +19,23 @@ public class GenLayerShoreTRA extends GenLayer {
     }
 
     public int[] getInts(int areaX, int areaY, int areaWidth, int areaHeight) {
-        int[] aint = this.parent.getInts(areaX - 1, areaY - 1, areaWidth + 2, areaHeight + 2);
-        int[] aint2P = this.parent.getInts(areaX - 2, areaY - 2, areaWidth + 4, areaHeight + 4); // TODO: избавится!!!
+        int[] aint = this.parent.getInts(areaX - 2, areaY - 2, areaWidth + 4, areaHeight + 4);
         int[] aint1 = IntCache.getIntCache(areaWidth * areaHeight);
 
         for (int i = 0; i < areaHeight; ++i) {
             for (int j = 0; j < areaWidth; ++j) {
                 this.initChunkSeed((long) (j + areaX), (long) (i + areaY));
-                int k = aint[j + 1 + (i + 1) * (areaWidth + 2)];
+                int j1 = j + 2;
+                int i1 = i + 2;
+                int areaWidth1 = areaWidth + 4;
+                int k = aint[j1 + i1 * areaWidth1];
                 Biome biome = Biome.getBiome(k);
 
                 if (k == Biome.getIdForBiome(Biomes.MUSHROOM_ISLAND)) {
-                    int j2 = aint[j + 1 + (i + 0) * (areaWidth + 2)];
-                    int i3 = aint[j + 2 + (i + 1) * (areaWidth + 2)];
-                    int l3 = aint[j + 0 + (i + 1) * (areaWidth + 2)];
-                    int k4 = aint[j + 1 + (i + 2) * (areaWidth + 2)];
+                    int j2 = aint[j1 + 0 + (i1 - 1) * areaWidth1];
+                    int i3 = aint[j1 + 1 + (i1 + 0) * areaWidth1];
+                    int l3 = aint[j1 - 1 + (i1 + 0) * areaWidth1];
+                    int k4 = aint[j1 + 0 + (i1 + 1) * areaWidth1];
 
                     if (j2 != Biome.getIdForBiome(Biomes.OCEAN) && i3 != Biome.getIdForBiome(Biomes.OCEAN) && l3 != Biome.getIdForBiome(Biomes.OCEAN) && k4 != Biome.getIdForBiome(Biomes.OCEAN)) {
                         aint1[j + i * areaWidth] = k;
@@ -41,10 +43,10 @@ public class GenLayerShoreTRA extends GenLayer {
                         aint1[j + i * areaWidth] = Biome.getIdForBiome(Biomes.MUSHROOM_ISLAND_SHORE);
                     }
                 } else if (biome != null && biome.getBiomeClass() == BiomeJungle.class) {
-                    int i2 = aint[j + 1 + (i + 0) * (areaWidth + 2)];
-                    int l2 = aint[j + 2 + (i + 1) * (areaWidth + 2)];
-                    int k3 = aint[j + 0 + (i + 1) * (areaWidth + 2)];
-                    int j4 = aint[j + 1 + (i + 2) * (areaWidth + 2)];
+                    int j4 = aint[j1 + 0 + (i1 - 1) * areaWidth1];
+                    int i2 = aint[j1 + 1 + (i1 + 0) * areaWidth1];
+                    int l2 = aint[j1 - 1 + (i1 + 0) * areaWidth1];
+                    int k3 = aint[j1 + 0 + (i1 + 1) * areaWidth1];
 
                     if (this.isJungleCompatible(i2) && this.isJungleCompatible(l2) && this.isJungleCompatible(k3) && this.isJungleCompatible(j4)) {
                         if (!isBiomeOceanic(i2) && !isBiomeOceanic(l2) && !isBiomeOceanic(k3) && !isBiomeOceanic(j4)) {
@@ -60,11 +62,11 @@ public class GenLayerShoreTRA extends GenLayer {
                         this.replaceIfNeighborOcean(aint, aint1, j, i, areaWidth, k, Biome.getIdForBiome(Biomes.COLD_BEACH));
                     } else if (k != Biome.getIdForBiome(Biomes.MESA) && k != Biome.getIdForBiome(Biomes.MESA_ROCK)) {
                         if (k != Biome.getIdForBiome(Biomes.OCEAN) && k != Biome.getIdForBiome(Biomes.DEEP_OCEAN) && k != Biome.getIdForBiome(Biomes.RIVER) && k != Biome.getIdForBiome(Biomes.SWAMPLAND)) {
-                            if (!BiomeDictionary.hasType(Biome.getBiomeForId(k), InitBiome.TAINT_TYPE)) {
-                                int l1 = aint[j + 1 + (i + 0) * (areaWidth + 2)];
-                                int k2 = aint[j + 2 + (i + 1) * (areaWidth + 2)];
-                                int j3 = aint[j + 0 + (i + 1) * (areaWidth + 2)];
-                                int i4 = aint[j + 1 + (i + 2) * (areaWidth + 2)];
+                            if (!HandlerR.arrayContains(InitBiome.TAINT_BIOMES_INT_ID, k)) {
+                                int j3 = aint[j1 + 0 + (i1 - 1) * areaWidth1];
+                                int i4 = aint[j1 + 1 + (i1 + 0) * areaWidth1];
+                                int l1 = aint[j1 - 1 + (i1 + 0) * areaWidth1];
+                                int k2 = aint[j1 + 0 + (i1 + 1) * areaWidth1];
 
                                 if (!isBiomeOceanic(l1) && !isBiomeOceanic(k2) && !isBiomeOceanic(j3) && !isBiomeOceanic(i4)) {
                                     aint1[j + i * areaWidth] = k;
@@ -72,22 +74,7 @@ public class GenLayerShoreTRA extends GenLayer {
                                     aint1[j + i * areaWidth] = Biome.getIdForBiome(Biomes.BEACH);
                                 }
                             } else {
-                                int l1 = aint2P[j + 2 + (i + 1) * (areaWidth + 4)];
-                                int k1 = aint2P[j + 3 + (i + 2) * (areaWidth + 4)];
-                                int j1 = aint2P[j + 1 + (i + 2) * (areaWidth + 4)];
-                                int i1 = aint2P[j + 2 + (i + 3) * (areaWidth + 4)];
-
-                                int l2 = aint2P[j + 3 + (i + 1) * (areaWidth + 4)];
-                                int i2 = aint2P[j + 4 + (i + 2) * (areaWidth + 4)];
-                                int j2 = aint2P[j + 1 + (i + 3) * (areaWidth + 4)];
-                                int k2 = aint2P[j + 0 + (i + 2) * (areaWidth + 4)];
-
-                                int k3 = aint2P[j + 2 + (i + 4) * (areaWidth + 4)];
-                                int l3 = aint2P[j + 2 + (i + 0) * (areaWidth + 4)];
-                                int i3 = aint2P[j + 1 + (i + 1) * (areaWidth + 4)];
-                                int j3 = aint2P[j + 3 + (i + 3) * (areaWidth + 4)];
-
-                                if (isTaint(l1) && isTaint(i1) && isTaint(j1) && isTaint(k1) && isTaint(l2) && isTaint(i2) && isTaint(j2) && isTaint(k2) && isTaint(l3) && isTaint(i3) && isTaint(j3) && isTaint(k3)) {
+                                if (isAllBiomesOnRangeTaint0(aint, i1, j1, areaWidth1, 2)) { // my
                                     aint1[j + i * areaWidth] = k;
                                 } else {
                                     aint1[j + i * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_EDGE);
@@ -97,13 +84,13 @@ public class GenLayerShoreTRA extends GenLayer {
                             aint1[j + i * areaWidth] = k;
                         }
                     } else {
-                        int l1 = aint[j + 1 + (i + 0) * (areaWidth + 2)];
-                        int i1 = aint[j + 2 + (i + 1) * (areaWidth + 2)];
-                        int j1 = aint[j + 0 + (i + 1) * (areaWidth + 2)];
-                        int k1 = aint[j + 1 + (i + 2) * (areaWidth + 2)];
+                        int j2 = aint[j1 + 0 + (i1 - 1) * areaWidth1];
+                        int i3 = aint[j1 + 1 + (i1 + 0) * areaWidth1];
+                        int l3 = aint[j1 - 1 + (i1 + 0) * areaWidth1];
+                        int k4 = aint[j1 + 0 + (i1 + 1) * areaWidth1];
 
-                        if (!isBiomeOceanic(l1) && !isBiomeOceanic(i1) && !isBiomeOceanic(j1) && !isBiomeOceanic(k1)) {
-                            if (this.isMesa(l1) && this.isMesa(i1) && this.isMesa(j1) && this.isMesa(k1)) {
+                        if (!isBiomeOceanic(l3) && !isBiomeOceanic(i3) && !isBiomeOceanic(j2) && !isBiomeOceanic(k4)) {
+                            if (this.isMesa(l3) && this.isMesa(i3) && this.isMesa(j2) && this.isMesa(k4)) {
                                 aint1[j + i * areaWidth] = k;
                             } else {
                                 aint1[j + i * areaWidth] = Biome.getIdForBiome(Biomes.DESERT);
@@ -122,14 +109,56 @@ public class GenLayerShoreTRA extends GenLayer {
         return aint1;
     }
 
+    private boolean isAllBiomesOnRangeTaint0(int[] aint, int i1, int j1, int areaWidth1, int range) {
+        for (int i = i1 - range; i != i1 + range + 1; i++) {
+            for (int j = j1 - range; j != j1 + range + 1; j++) {
+                if (i == i1 && j == j1) {
+                    continue;
+                }
+                if (i == i1 - range && j == j1 - range) {
+                    continue;
+                }
+                if (i == i1 - range && j == j1 + range) {
+                    continue;
+                }
+                if (i == i1 + range && j == j1 - range) {
+                    continue;
+                }
+                if (i == i1 + range && j == j1 + range) {
+                    continue;
+                }
+                if (!isTaint(aint[j + i * areaWidth1])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean isAllBiomesOnRangeTaint1(int[] aint, int i1, int j1, int areaWidth1, int range) {
+        for (int range1 = 1; range1 != range + 1; range1++) {
+            for (int i = 0; i != 4 * range1; i++) {
+                double angle = ((Math.PI * 2) / 4 * range1) * i;
+                if (!isTaint(aint[MathHelper.floor((j1 + range1 * Math.cos(angle)) + (i1 + range1 * Math.sin(angle)) * areaWidth1)])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
     private void replaceIfNeighborOcean(int[] aint, int[] aint1, int j, int i, int areaWidth, int k, int biomeIDA) {
         if (isBiomeOceanic(k)) {
             aint1[j + i * areaWidth] = k;
         } else {
-            int i1 = aint[j + 1 + (i + 0) * (areaWidth + 2)];
-            int j1 = aint[j + 2 + (i + 1) * (areaWidth + 2)];
-            int k1 = aint[j + 0 + (i + 1) * (areaWidth + 2)];
-            int l1 = aint[j + 1 + (i + 2) * (areaWidth + 2)];
+            int j2 = j + 2;
+            int i2 = i + 2;
+            int areaWidth1 = areaWidth + 4;
+            int j1 = aint[j2 + 0 + (i2 - 1) * areaWidth1];
+            int i1 = aint[j2 + 1 + (i2 + 0) * areaWidth1];
+            int l1 = aint[j2 - 1 + (i2 + 0) * areaWidth1];
+            int k1 = aint[j2 + 0 + (i2 + 1) * areaWidth1];
 
             if (!isBiomeOceanic(i1) && !isBiomeOceanic(j1) && !isBiomeOceanic(k1) && !isBiomeOceanic(l1)) {
                 aint1[j + i * areaWidth] = k;

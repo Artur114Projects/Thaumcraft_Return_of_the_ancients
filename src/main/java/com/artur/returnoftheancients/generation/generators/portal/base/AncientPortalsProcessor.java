@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.generation.generators.portal.base;
 
 import com.artur.returnoftheancients.generation.generators.portal.AncientPortalNaturalGeneration;
 import com.artur.returnoftheancients.generation.generators.portal.AncientPortalOpening;
+import com.artur.returnoftheancients.generation.terraingen.TerrainGenHandler;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -51,10 +52,10 @@ public class AncientPortalsProcessor {
             if (Arrays.stream(TRAConfigs.PortalSettings.dimensionsGenerate).anyMatch((i) -> i == dimension)) {
                 if (dimension == 0) {
                     portalsGenerationPosOverWorld = new ChunkPos[portalsCount];
-                    initPortalsPosOnWorld(portalsGenerationPosOverWorld, e.getWorld().getWorldInfo().getSeed());
+                    TerrainGenHandler.initPortalsPosOnWorld(portalsGenerationPosOverWorld, e.getWorld().getWorldInfo().getSeed());
                 } else {
                     ChunkPos[] poss = new ChunkPos[portalsCount];
-                    initPortalsPosOnWorld(poss, e.getWorld().getSeed());
+                    TerrainGenHandler.initPortalsPosOnWorld(poss, e.getWorld().getSeed());
                     PORTALS_GENERATION_POS.put(dimension, poss);
                 }
             }
@@ -298,35 +299,5 @@ public class AncientPortalsProcessor {
         }
         ChunkPos pos = poss[id];
         return new ChunkPos(pos.x, pos.z);
-    }
-
-    private static int portalGenerateOffset(Random rand) {
-        return (((rand.nextInt(8) - 4) + 1) << 8);
-    }
-
-    public static void initPortalsPosOnWorld(ChunkPos[] portalPos, long seed) {
-        final Random rand = new Random(seed);
-        rand.nextInt();
-
-        final double angleOffset = ((Math.PI * 2) / (rand.nextInt(16) + 1));
-        final int defaultDistance = 4000;
-        final int distance = 8000;
-
-        for (int i = 0; i != portalPos.length; i++) {
-            double angle = (((Math.PI * 2) / portalPos.length) * i) + angleOffset;
-            int radius = defaultDistance + (distance * i) + portalGenerateOffset(rand);
-
-            int chunkX = (int) ((radius * Math.cos(angle)) + portalGenerateOffset(rand)) >> 8;
-            int chunkZ = (int) ((radius * Math.sin(angle)) + portalGenerateOffset(rand)) >> 8;
-
-            portalPos[i] = new ChunkPos(chunkX << 4, chunkZ << 4);
-        }
-
-        if (TRAConfigs.Any.debugMode) {
-            System.out.println("Seed:" + seed);
-            for (ChunkPos pos : portalPos) {
-                System.out.println(pos);
-            }
-        }
     }
 }

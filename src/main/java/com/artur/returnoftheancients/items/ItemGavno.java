@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.uti
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.TRAStructureEBS;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
+import com.artur.returnoftheancients.generation.biomes.decorate.WorldGenRottenSpires;
 import com.artur.returnoftheancients.generation.generators.portal.AncientPortalNaturalGeneration;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.main.MainR;
@@ -27,10 +28,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Random;
 
 public class ItemGavno extends BaseItem {
 
-	private ITRAStructure structure = null;
+//	private ITRAStructure structure = null;
 
 	public ItemGavno(String name) {
 		super(name);
@@ -41,9 +43,9 @@ public class ItemGavno extends BaseItem {
 	@Override
 	public @NotNull EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (player instanceof EntityPlayerMP) {
-			if (structure == null) {
-				structure = new TRAStructureEBS("ancient_crossroads", null);
-			}
+//			if (structure == null) {
+//				structure = new TRAStructureEBS("ancient_crossroads", null);
+//			}
 //			PacketHandler.INSTANCE.sendTo(new PacketMiscEvent((byte) 2), (EntityPlayerMP) player);
 //			NBTTagCompound nbt = new NBTTagCompound();
 //			nbt.setString("playSound", InitSounds.RUI_DEAD.NAM);
@@ -65,16 +67,17 @@ public class ItemGavno extends BaseItem {
 //			EntityLightningBolt lightningBolt = new EntityLightningBolt(worldIn, pos.getX(), pos.getY(), pos.getZ(), false);
 //			worldIn.addWeatherEffect(lightningBolt);
 		}
-		if (worldIn.isRemote) {
-			Vec3d vec3d = player.getLook(1.0F);
-			for (int i = 0; i != 10; i++) {
-				spawnCustomParticle(worldIn, player.posX, player.posY + 1, player.posZ, vec3d.x + (i / 20D) / vec3d.x, vec3d.y + (i / 20D) / vec3d.y, vec3d.z + (i / 20D) / vec3d.z);
-//				spawnCustomParticleTM(worldIn, pos.getX() + 1.5, pos.getY() + 1.5, pos.getZ() + 0.6);
-//				spawnCustomParticleTM(worldIn, pos.getX(), pos.getY(), pos.getZ(), 1);
-			}
-//			spawnCustomParticle(worldIn, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.1, 0);
-		}
+//		if (worldIn.isRemote) {
+//			Vec3d vec3d = player.getLook(1.0F);
+//			for (int i = 0; i != 10; i++) {
+//				spawnCustomParticle(worldIn, player.posX, player.posY + 1, player.posZ, vec3d.x + (i / 20D) / vec3d.x, vec3d.y + (i / 20D) / vec3d.y, vec3d.z + (i / 20D) / vec3d.z);
+////				spawnCustomParticleTM(worldIn, pos.getX() + 1.5, pos.getY() + 1.5, pos.getZ() + 0.6);
+////				spawnCustomParticleTM(worldIn, pos.getX(), pos.getY(), pos.getZ(), 1);
+//			}
+////			spawnCustomParticle(worldIn, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.1, 0);
+//		}
 		if (!worldIn.isRemote) {
+			(new WorldGenRottenSpires()).generate(worldIn, new Random(), pos);
 //			BlockPos playerPos = player.getPosition();
 //			long time1 = System.currentTimeMillis();
 //			GenStructure.generateStructure(player.world, playerPos.getX() + 20, playerPos.getY(), playerPos.getZ(), "ancient_turn");
@@ -85,21 +88,21 @@ public class ItemGavno extends BaseItem {
 //			long timeFinish = System.currentTimeMillis() -  time;
 //			player.sendMessage(new TextComponentString("my gen is took:" + timeFinish + "ms"));
 		}
-		if (!worldIn.isRemote) {
-			NBTTagCompound nbt = new NBTTagCompound();
-			nbt.setString("sendMessage", "gavno");
-			MainR.NETWORK.sendToAll(new ClientPacketMisc(nbt));
-
-			new AncientPortalNaturalGeneration(worldIn.getMinecraftServer(), worldIn.provider.getDimension(), pos.getX() >> 4, pos.getZ() >> 4, HandlerR.calculateGenerationHeight(worldIn, pos.getX(), pos.getZ()));
-
-//			worldIn.createExplosion(player, pos.getX(), pos.getY(), pos.getZ(), 12, true);
-		}
-		System.out.println(worldIn.playerEntities);
-		if (worldIn.isRemote) {
-			for (int i = 0; i != 32; i++) {
-				spawnCustomParticleTM(worldIn, 1, 0.4 + (i / 100.0D), player, i / 10.0D);
-			}
-		}
+//		if (!worldIn.isRemote) {
+//			NBTTagCompound nbt = new NBTTagCompound();
+//			nbt.setString("sendMessage", "gavno");
+//			MainR.NETWORK.sendToAll(new ClientPacketMisc(nbt));
+//
+//			new AncientPortalNaturalGeneration(worldIn.getMinecraftServer(), worldIn.provider.getDimension(), pos.getX() >> 4, pos.getZ() >> 4, HandlerR.calculateGenerationHeight(worldIn, pos.getX(), pos.getZ()));
+//
+////			worldIn.createExplosion(player, pos.getX(), pos.getY(), pos.getZ(), 12, true);
+//		}
+//		System.out.println(worldIn.playerEntities);
+//		if (worldIn.isRemote) {
+//			for (int i = 0; i != 32; i++) {
+//				spawnCustomParticleTM(worldIn, 1, 0.4 + (i / 100.0D), player, i / 10.0D);
+//			}
+//		}
 		return EnumActionResult.SUCCESS;
 	}
 

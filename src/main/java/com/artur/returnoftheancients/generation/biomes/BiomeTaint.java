@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.generation.biomes;
 
+import com.artur.returnoftheancients.generation.biomes.decorate.WorldGenRottenSpires;
 import com.artur.returnoftheancients.generation.generators.WorldGenTaintBigTree;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBiome;
@@ -25,8 +26,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BiomeTaint extends BiomeBase {
+    private static final WorldGenRottenSpires ROTTEN_SPIRES = new WorldGenRottenSpires();
 
-    WorldGenAbstractTree BIG_TREE_TAINT_FEATURE = new WorldGenTaintBigTree(false);
+    private final WorldGenAbstractTree BIG_TREE_TAINT_FEATURE = new WorldGenTaintBigTree(false);
+
 
     public final TaintType type;
     public static int taintChunks = 0;
@@ -127,7 +130,14 @@ public class BiomeTaint extends BiomeBase {
     }
 
     private static void decorateChunkNormal(World worldIn, Random rand, UltraMutableBlockPos blockPos) {
-
+        blockPos.pushPos();
+        boolean isRottenSea = HandlerR.getBiomeIdOnPos(worldIn, blockPos.add(8, 0, 8)) == Biome.getIdForBiome(InitBiome.TAINT_SEA);
+        blockPos.popPos();
+        if (isRottenSea) {
+            if (rand.nextInt(8) == 0) {
+                ROTTEN_SPIRES.generate(worldIn, rand, blockPos);
+            }
+        }
     }
 
     private static void decorateNormal(World worldIn, Random rand, UltraMutableBlockPos blockPos, byte biomeId) {

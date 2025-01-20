@@ -319,7 +319,6 @@ public class ServerEventsHandler {
         }
     }
 
-
     static int maxDuration = 999999999;
 
     @SubscribeEvent

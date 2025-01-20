@@ -50,8 +50,8 @@ public class TerrainGenHandler {
     public static int findAnyBiomeOnBAOnRange1(int[] aint, int[] biome, int i1, int j1, int areaWidth1, int range) {
         for (int range1 = 1; range1 != range + 1; range1++) {
             for (int i = 0; i != 4 * range1; i++) {
-                double angle = ((Math.PI * 2) / 4 * range1) * i;
-                int k = aint[MathHelper.floor((i1 + range1 * Math.cos(angle)) + (j1 + range1 * Math.sin(angle)) * areaWidth1)];
+                float angle = (float) (((Math.PI * 2.0F) / (4.0F * range1)) * i);
+                int k = aint[(int)((i1 + range1 * MathHelper.cos(angle)) + (j1 + range1 * MathHelper.sin(angle)) * areaWidth1)];
                 if (HandlerR.arrayContains(biome, k)) {
                     return k;
                 }
@@ -105,8 +105,8 @@ public class TerrainGenHandler {
     public static boolean hasBiomeOnRange1(int[] aint, int biome, int i1, int j1, int areaWidth1, int range) {
         for (int range1 = 1; range1 != range + 1; range1++) {
             for (int i = 0; i != 4 * range1; i++) {
-                double angle = ((Math.PI * 2) / 4 * range1) * i;
-                if (biome == (aint[MathHelper.floor((i1 + range1 * Math.cos(angle)) + (j1 + range1 * Math.sin(angle)) * areaWidth1)])) {
+                float angle = (float) (((Math.PI * 2.0F) / (4.0F * range1)) * i);
+                if (biome == (aint[(int)((i1 + range1 * MathHelper.cos(angle)) + (j1 + range1 * MathHelper.sin(angle)) * areaWidth1)])) {
                     return true;
                 }
             }
@@ -131,8 +131,8 @@ public class TerrainGenHandler {
     public static boolean hasBiomeOnRange1(int[] aint, int[] biome, int i1, int j1, int areaWidth1, int range) {
         for (int range1 = 1; range1 != range + 1; range1++) {
             for (int i = 0; i != 4 * range1; i++) {
-                double angle = ((Math.PI * 2) / 4 * range1) * i;
-                if (HandlerR.arrayContains(biome, (aint[MathHelper.floor((i1 + range1 * Math.cos(angle)) + (j1 + range1 * Math.sin(angle)) * areaWidth1)]))) {
+                float angle = (float) (((Math.PI * 2.0F) / (4.0F * range1)) * i);
+                if (HandlerR.arrayContains(biome, (aint[(int)((i1 + range1 * MathHelper.cos(angle)) + (j1 + range1 * MathHelper.sin(angle)) * areaWidth1)]))) {
                     return true;
                 }
             }
@@ -158,8 +158,8 @@ public class TerrainGenHandler {
     public static boolean isAllBiomesOnRangeContainedOnBA1(int[] aint, int[] biomeArray, int i1, int j1, int areaWidth1, int range) {
         for (int range1 = 1; range1 != range + 1; range1++) {
             for (int i = 0; i != 4 * range1; i++) {
-                double angle = ((Math.PI * 2) / 4 * range1) * i;
-                if (!HandlerR.arrayContains(biomeArray, (aint[MathHelper.floor((i1 + range1 * Math.cos(angle)) + (j1 + range1 * Math.sin(angle)) * areaWidth1)]))) {
+                float angle = (float) (((Math.PI * 2.0F) / (4.0F * range1)) * i);
+                if (!HandlerR.arrayContains(biomeArray, (aint[(int)((i1 + range1 * MathHelper.cos(angle)) + (j1 + range1 * MathHelper.sin(angle)) * areaWidth1)]))) {
                     return false;
                 }
             }
@@ -170,14 +170,16 @@ public class TerrainGenHandler {
     public static boolean isAllBiomesOnRangeEqualsInt1(int[] aint, int biome, int i1, int j1, int areaWidth1, int range) {
         for (int range1 = 1; range1 != range + 1; range1++) {
             for (int i = 0; i != 4 * range1; i++) {
-                double angle = ((Math.PI * 2) / 4 * range1) * i;
-                if (biome != (aint[MathHelper.floor((i1 + range1 * Math.cos(angle)) + (j1 + range1 * Math.sin(angle)) * areaWidth1)])) {
+                float angle = (float) (((Math.PI * 2.0F) / (4.0F * range1)) * i);
+                if (biome != (aint[(int)((i1 + range1 * MathHelper.cos(angle)) + (j1 + range1 * MathHelper.sin(angle)) * areaWidth1)])) {
                     return false;
                 }
             }
         }
         return true;
     }
+
+
 
     public static int getRandomIntOnArray(int[] array, int index, int badResult) {
         if (array[index] == badResult) {

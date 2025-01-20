@@ -78,7 +78,7 @@ public abstract class GenLayerTRA extends GenLayer {
             if (k == 1 || biomeSize == 1) {
                 genlayerhills = new GenLayerShoreTRA(1000L, genlayerhills);
 
-                genlayerhills = new GenLayerAddSmallTaintBiomes(1000L, genlayerhills);
+//                genlayerhills = new GenLayerAddSmallTaintBiomes(1000L, genlayerhills);
             }
         }
 

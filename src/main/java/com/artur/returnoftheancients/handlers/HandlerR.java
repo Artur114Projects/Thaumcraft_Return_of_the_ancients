@@ -57,17 +57,30 @@ public class HandlerR {
     }
 
     public static int calculateGenerationHeight(World world, int x, int z) {
+        return calculateGenerationHeight(world, x, z, Blocks.AIR, Blocks.BEDROCK);
+    }
+
+
+    public static int calculateGenerationHeight(World world, int x, int z, Block... ignoringBlocks) {
         UltraMutableBlockPos pos = new UltraMutableBlockPos(x, world.getHeight(), z);
 
         while (pos.getY() >= 0) {
             Block block = world.getBlockState(pos).getBlock();
-            if (block != Blocks.AIR && block != Blocks.BEDROCK) {
+            boolean flag = true;
+            for (Block ignoring : ignoringBlocks) {
+                if (block == ignoring) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
                 break;
             }
             pos.add(0, -1, 0);
         }
         return pos.getY();
     }
+
 
     public static void SOUT2DArray(byte[][] array) {
         for (byte y = 0; y != array.length; y++) {

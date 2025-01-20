@@ -125,7 +125,8 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
 
     @Override
     public @NotNull UltraMutableBlockPos down() {
-        return this.down(1);
+        this.y--;
+        return this;
     }
 
     @Override

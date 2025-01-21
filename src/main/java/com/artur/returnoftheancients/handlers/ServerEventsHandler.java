@@ -255,6 +255,10 @@ public class ServerEventsHandler {
     @SubscribeEvent
     public static void PlayerTickEvent(TickEvent.PlayerTickEvent e) {
 
+        if (e.phase != TickEvent.Phase.START) {
+            return;
+        }
+
         PLAYER_IN_BIOME_MANAGER.tickEventPlayerTickEvent(e);
 
         int playerDimension = e.player.dimension;
@@ -362,6 +366,9 @@ public class ServerEventsHandler {
     @SubscribeEvent
     public static void tick(TickEvent.WorldTickEvent e) {
         if (!e.world.isRemote) {
+            if (e.phase != TickEvent.Phase.START) {
+                return;
+            }
             bTick++;
             if (e.world.provider.getDimension() == 0 && bTick >= 40) {
                 bTick = 0;

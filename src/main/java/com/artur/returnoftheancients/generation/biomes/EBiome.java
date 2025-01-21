@@ -8,6 +8,7 @@ import thaumcraft.common.world.biomes.BiomeGenMagicalForest;
 
 public enum EBiome {
 
+    TAINT_SEA(InitBiome.TAINT_TYPE, InitBiome.TAINT_TYPE_L, InitBiome.TAINT_TYPE_L_SEA),
     TAINT_EDGE(InitBiome.TAINT_TYPE, InitBiome.TAINT_TYPE_EDGE),
     TAINT(InitBiome.TAINT_TYPE, InitBiome.TAINT_TYPE_L),
     ANCIENT(BiomeDictionary.Type.DEAD, BiomeDictionary.Type.DENSE);

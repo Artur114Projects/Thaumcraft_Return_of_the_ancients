@@ -56,6 +56,11 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         return this;
     }
 
+    public UltraMutableBlockPos addY(int y) {
+        this.y += y;
+        return this;
+    }
+
     @Override
     public @NotNull UltraMutableBlockPos offset(@NotNull EnumFacing facing, int n) {
         return n == 0 ? this : this.setPos(this.getX() + facing.getFrontOffsetX() * n, this.getY() + facing.getFrontOffsetY() * n, this.getZ() + facing.getFrontOffsetZ() * n);
@@ -120,7 +125,8 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
 
     @Override
     public @NotNull UltraMutableBlockPos up() {
-        return this.up(1);
+        this.y++;
+        return this;
     }
 
     @Override

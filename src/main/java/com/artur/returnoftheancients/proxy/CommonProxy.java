@@ -33,7 +33,6 @@ public class CommonProxy {
         ((BiomeTaint) InitBiome.TAINT).registerBiomeP2();
         ((BiomeTaint) InitBiome.TAINT_MOUNTAINS).registerBiomeP2();
         ((BiomeTaint) InitBiome.TAINT_SEA).registerBiomeP2();
-        ((BiomeTaint) InitBiome.TAINT_SPIRES).registerBiomeP2(Blocks.AIR.getDefaultState(), InitBlocks.TAINT_VOID_STONE.getDefaultState());
         ((BiomeTaint) InitBiome.TAINT_WASTELAND).registerBiomeP2(InitBlocks.TAINT_VOID_STONE.getDefaultState(), InitBlocks.TAINT_VOID_STONE.getDefaultState());
         RegisterHandler.registerTCRecipes();
         RegisterHandler.registerResearch();

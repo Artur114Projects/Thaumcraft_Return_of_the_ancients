@@ -1,13 +1,11 @@
 package com.artur.returnoftheancients.generation.biomes.decorate;
 
-import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -17,7 +15,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.Random;
 
-public class WorldGenRottenSpires extends WorldGenerator {
+public class WorldGenInfernalSpires extends WorldGenerator {
     private final IBlockState taintVoidStone = InitBlocks.TAINT_VOID_STONE.getDefaultState();
 
     private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
@@ -26,10 +24,10 @@ public class WorldGenRottenSpires extends WorldGenerator {
     public boolean generate(World worldIn, Random rand, BlockPos position) {
         Chunk chunk = worldIn.getChunkFromBlockCoords(position);
         byte[] biomeArray = chunk.getBiomeArray();
-        byte taintSeaId = (byte) (Biome.getIdForBiome(InitBiome.TAINT_SEA) & 255);
+        byte taintId = (byte) (Biome.getIdForBiome(InitBiome.TAINT_WASTELAND) & 255);
 
         for (byte b : biomeArray) {
-            if (b != taintSeaId) {
+            if (b != taintId) {
                 return false;
             }
         }
@@ -37,30 +35,29 @@ public class WorldGenRottenSpires extends WorldGenerator {
         blockPos.setPos(position).add(8, 0, 8);
         int blockY = calculateGenerationHeight(worldIn, blockPos);
 
-        int finalSpireHeight = 38;
-        int spireHeightOffset = 8;
+        int finalSpireHeight = 28;
+        int spireHeightOffset = 2;
 
-        int spireHeight = blockY + (worldIn.getSeaLevel() - blockY) + (finalSpireHeight - ((rand.nextInt(spireHeightOffset) + 1)));
+        int spireHeight = blockY + (finalSpireHeight - ((rand.nextInt(spireHeightOffset) + 1)));
 
         blockPos.setY(blockY);
 
         for (blockPos.pushPos(); blockPos.getY() < spireHeight; blockPos.up()) {
             int fY = spireHeight - blockPos.getY();
             int radius = getRadius(fY);
-            Random lRand = null;
-            if (radius != getRadius(fY - 1)) {
-                lRand = rand;
-            }
-            genCircle(worldIn, lRand, blockPos, radius);
+            boolean isBreak = radius != getRadius(fY - 1);
+            genCircle(worldIn, rand, blockPos, radius, isBreak);
         }
 
         blockPos.popPos();
         return true;
     }
 
-    private void genCircle(World worldIn, Random rand, UltraMutableBlockPos pos, int radius) {
+    private void genCircle(World worldIn, Random rand, UltraMutableBlockPos pos, int radius, boolean isBreak) {
         if (radius == 0) {
-            worldIn.setBlockState(pos, taintVoidStone);
+            IBlockState state = rand.nextInt(4) == 0 ? InitBlocks.INCANDESCENT_TAINT_VOID_STONE.getDefaultState() : taintVoidStone;
+            worldIn.setBlockState(pos, state);
+
             return;
         }
         for (int range1 = 1; range1 <= radius; range1++) {
@@ -72,8 +69,9 @@ public class WorldGenRottenSpires extends WorldGenerator {
 
                 pos.pushPos();
                 pos.add(xOffset, 0, zOffset);
-                if (range1 != radius || (rand == null || rand.nextInt(4) == 0)) {
-                    worldIn.setBlockState(pos, taintVoidStone);
+                if (range1 != radius || (!isBreak || rand.nextInt(4) == 0)) {
+                    IBlockState state = range1 == radius && rand.nextInt(4) == 0 ? InitBlocks.INCANDESCENT_TAINT_VOID_STONE.getDefaultState() : taintVoidStone;
+                    worldIn.setBlockState(pos, state);
                 }
                 pos.popPos();
             }
@@ -98,7 +96,7 @@ public class WorldGenRottenSpires extends WorldGenerator {
 
     private int getRadius(int y) {
         if (y <= 0) return 0;
-        float g = 20;
+        float g = 16;
         return MathHelper.floor((y * y) / (g * g));
     }
 
@@ -109,7 +107,7 @@ public class WorldGenRottenSpires extends WorldGenerator {
 
         while (pos.getY() >= 0) {
             Block block = world.getBlockState(pos).getBlock();
-            if (block != Blocks.AIR && block != Blocks.WATER) {
+            if (block != Blocks.AIR) {
                 break;
             }
             pos.down();

@@ -21,9 +21,9 @@ public class PlayerInBiomeManager {
             IPlayerTimerCapability timer = TRACapabilities.getTimer(e.player);
             if (e.player.isInWater()) {
                 byte k = HandlerR.getBiomeIdOnPos(e.player.world, blockPos.setPos(e.player));
-                if ((Biome.getIdForBiome(InitBiome.TAINT_SEA) & 255) == k || (Biome.getIdForBiome(InitBiome.TAINT_SPIRES) & 255) == k) {
+                if ((Biome.getIdForBiome(InitBiome.TAINT_SEA) & 255) == k) {
                     if (!e.player.isPotionActive(PotionFluxTaint.instance)) {
-                        e.player.addPotionEffect(new PotionEffect(PotionFluxTaint.instance, 80, (int) (timer.getTime("poisoning") / 160)));
+                        e.player.addPotionEffect(new PotionEffect(PotionFluxTaint.instance, 160, (int) (timer.getTime("poisoning") / 160)));
                     }
                 }
             } else {

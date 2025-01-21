@@ -122,6 +122,10 @@ public class AncientPortalsProcessor {
         if (e.player.dimension == ancient_world_dim_id) {
             return;
         }
+        if (e.phase != TickEvent.Phase.START) {
+            return;
+        }
+
 
         if (e.player.ticksExisted % 4 == 0) {
             if (e.player.getEntityData().hasKey(AncientPortal.PortalID)) {

@@ -39,12 +39,16 @@ public class ClientEventsHandler {
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
+    public static void clientTick(TickEvent.ClientTickEvent e) {
+        PLAYER_IN_BIOME_MANAGER.tickEventClientTickEvent(e);
+        FOG_MANAGER.tickEventClientTickEvent(e);
+    }
+
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public static void PlayerTickEvent(TickEvent.PlayerTickEvent e) {
-
-        PLAYER_IN_BIOME_MANAGER.tickEventPlayerTickEvent(e);
         PLAYER_MOVEMENT_MANAGER.tickEventPlayerTickEvent(e);
-        FOG_MANAGER.tickEventPlayerTickEvent(e);
-
         CameraShake.updateShake();
     }
 }

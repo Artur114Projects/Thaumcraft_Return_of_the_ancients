@@ -258,6 +258,9 @@ public class AncientWorld {
     @SubscribeEvent
     public static void Tick(TickEvent.WorldTickEvent e) {
         if (!e.world.isRemote) {
+            if (e.phase != TickEvent.Phase.START) {
+                return;
+            }
             if (e.world.provider.getDimension() == ancient_world_dim_id) {
                 int bc = buildCount;
                 if (!build.isEmpty()) {

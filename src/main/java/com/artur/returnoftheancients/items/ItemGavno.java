@@ -1,22 +1,15 @@
 package com.artur.returnoftheancients.items;
 
 
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructure;
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.TRAStructureEBS;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
-import com.artur.returnoftheancients.generation.biomes.decorate.WorldGenRottenSpires;
-import com.artur.returnoftheancients.generation.generators.portal.AncientPortalNaturalGeneration;
-import com.artur.returnoftheancients.handlers.HandlerR;
-import com.artur.returnoftheancients.main.MainR;
-import com.artur.returnoftheancients.network.ClientPacketMisc;
+import com.artur.returnoftheancients.generation.biomes.decorate.WorldGenInfernalSpires;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -76,8 +69,15 @@ public class ItemGavno extends BaseItem {
 //			}
 ////			spawnCustomParticle(worldIn, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.1, 0);
 //		}
+		if (worldIn.isRemote) {
+//			if (player.isSneaking()) {
+//				ClientEventsHandler.FOG_MANAGER.setFogParams(new FogManager.FogParams(100, 80, 20, 60));
+//			} else {
+//				ClientEventsHandler.FOG_MANAGER.setFogParams(new FogManager.FogParams(100, 20, 100, 20));
+//			}
+		}
 		if (!worldIn.isRemote) {
-			(new WorldGenRottenSpires()).generate(worldIn, new Random(), pos);
+			System.out.println((new WorldGenInfernalSpires()).generate(worldIn, new Random(), pos));
 //			BlockPos playerPos = player.getPosition();
 //			long time1 = System.currentTimeMillis();
 //			GenStructure.generateStructure(player.world, playerPos.getX() + 20, playerPos.getY(), playerPos.getZ(), "ancient_turn");

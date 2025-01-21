@@ -30,7 +30,7 @@ public class GenLayerAddSmallTaintBiomes extends GenLayer {
                 this.initChunkSeed(x, y);
 
                 if (TerrainGenHandler.isAllBiomesOnRangeEqualsInt1(aint1, Biome.getIdForBiome(InitBiome.TAINT_SEA), i1, j1, areaWidth1, 1) && this.nextInt(6) == 0) {
-                    aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_SPIRES);
+                    aint[i + j * areaWidth] = k;
                 } else {
                     aint[i + j * areaWidth] = k;
                 }

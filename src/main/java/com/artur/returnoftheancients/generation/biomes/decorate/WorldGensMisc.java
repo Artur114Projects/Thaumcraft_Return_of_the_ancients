@@ -65,7 +65,7 @@ public class WorldGensMisc {
                     blockPos.pushPos();
                     IBlockState state = BlocksTC.taintFeature.getBlockState().getBaseState();
                     blockPos.up();
-                    worldIn.setBlockState(blockPos, state.withProperty(BlockDirectional.FACING, EnumFacing.UP), 3);
+                    worldIn.setBlockState(blockPos, state.withProperty(BlockDirectional.FACING, EnumFacing.UP), 4);
                     blockPos.popPos();
                 }
             }

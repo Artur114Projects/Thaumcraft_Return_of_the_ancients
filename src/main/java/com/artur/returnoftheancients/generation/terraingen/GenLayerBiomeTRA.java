@@ -38,7 +38,7 @@ public class GenLayerBiomeTRA extends GenLayerBiome {
                     if (!TerrainGenHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, 4, 0)) {
                         if (TerrainGenHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, 4, 1)) {
                             int randId = this.nextInt(InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID.length + 1);
-                            int id = randId >= InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID.length ? this.nextInt(2) : randId;
+                            int id = randId >= InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID.length ? 0 : randId;
                             aint1[i + j * areaWidth] = this.nextInt(4) == 0 ? taintId : InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID[id];
                         } else {
                             aint1[i + j * areaWidth] = this.nextInt(4) == 0 ? taintId : TerrainGenHandler.getRandomIntOnArray(InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID, this.nextInt(InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID.length), Biome.getIdForBiome(InitBiome.TAINT_MOUNTAINS));

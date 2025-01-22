@@ -4,6 +4,7 @@ package com.artur.returnoftheancients.items;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
 import com.artur.returnoftheancients.generation.biomes.decorate.WorldGenInfernalSpires;
+import com.artur.returnoftheancients.generation.biomes.decorate.WorldGenTaintBigTree;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -77,7 +78,7 @@ public class ItemGavno extends BaseItem {
 //			}
 		}
 		if (!worldIn.isRemote) {
-			System.out.println((new WorldGenInfernalSpires()).generate(worldIn, new Random(), pos));
+			System.out.println((new WorldGenTaintBigTree(false)).generate(worldIn, new Random(), pos));
 //			BlockPos playerPos = player.getPosition();
 //			long time1 = System.currentTimeMillis();
 //			GenStructure.generateStructure(player.world, playerPos.getX() + 20, playerPos.getY(), playerPos.getZ(), "ancient_turn");

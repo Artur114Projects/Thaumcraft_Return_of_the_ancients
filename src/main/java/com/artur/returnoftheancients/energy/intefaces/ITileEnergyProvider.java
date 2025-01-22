@@ -3,7 +3,6 @@ package com.artur.returnoftheancients.energy.intefaces;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public interface ITileEnergyProvider extends ITileEnergy {
     @Override
@@ -41,8 +40,8 @@ public interface ITileEnergyProvider extends ITileEnergy {
 
         for (EnumFacing facing : EnumFacing.values()) {
             if (isCanConnect(facing)) {
-                BlockPos offsetPos = getPos().offset(facing);
-                TileEntity tileRaw = getWorld().getTileEntity(offsetPos);
+                BlockPos offsetPos = getPosE().offset(facing);
+                TileEntity tileRaw = getWorldE().getTileEntity(offsetPos);
                 if (tileRaw instanceof ITileEnergy && ((ITileEnergy) (tileRaw)).isCanConnect(facing.getOpposite())) {
                     if (canTakeFromFacing(facing)) {
                         flag = true;
@@ -59,8 +58,8 @@ public interface ITileEnergyProvider extends ITileEnergy {
 
         for (EnumFacing facing : EnumFacing.values()) {
             if (isCanConnect(facing)) {
-                BlockPos offsetPos = getPos().offset(facing);
-                TileEntity tileRaw = getWorld().getTileEntity(offsetPos);
+                BlockPos offsetPos = getPosE().offset(facing);
+                TileEntity tileRaw = getWorldE().getTileEntity(offsetPos);
                 if (tileRaw instanceof ITileEnergy && ((ITileEnergy) (tileRaw)).isCanConnect(facing.getOpposite())) {
                     if (canAddFromFacing(facing)) {
                         flag = true;

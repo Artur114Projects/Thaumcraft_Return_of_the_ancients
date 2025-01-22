@@ -25,7 +25,9 @@ public class Team {
             for (UUID id : team.uuids) {
                 if (!uniqueIds.add(id)) {
                     team.requestToDelete();
-                    System.out.println("panos!!!");
+                    System.out.println("Warning! This shouldn't happen! Several commands contain the same UUID!");
+                    System.out.println("UUID: " + id);
+                    System.out.println("Deleting team:" + team);
                 }
             }
         }
@@ -56,7 +58,7 @@ public class Team {
                     EntityPlayerMP playerMP = (EntityPlayerMP) entity;
                     if (player.dimension == playerMP.dimension) {
                         List<String> uui = HandlerR.isPlayerUseUnresolvedItems(playerMP);
-                        if (uui.isEmpty()) {
+                        if (uui.isEmpty() || !TRAConfigs.PortalSettings.checkItems) {
                             uuids.add(id);
                             players.put(id, (EntityPlayerMP) entity);
                         } else {
@@ -232,10 +234,10 @@ public class Team {
         if (players.isEmpty()) {
             return "";
         }
-        StringBuilder res = new StringBuilder("{");
+        StringBuilder res = new StringBuilder("[");
         players.forEach((key, value) -> res.append(value.getName()).append(", "));
         res.delete(res.length() - 2, res.length());
-        res.append('}');
+        res.append(']');
         return res.toString();
     }
 

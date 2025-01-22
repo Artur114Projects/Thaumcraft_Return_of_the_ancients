@@ -4,6 +4,8 @@ import com.artur.returnoftheancients.energy.intefaces.ITileEnergy;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class TileEntityEnergyLine extends TileEntity implements ITileEnergy {
     private int energyNetworkId = -1;
@@ -29,6 +31,16 @@ public class TileEntityEnergyLine extends TileEntity implements ITileEnergy {
     @Override
     public void setNetworkId(int id) {
         energyNetworkId = id;
+    }
+
+    @Override
+    public BlockPos getPosE() {
+        return this.pos;
+    }
+
+    @Override
+    public World getWorldE() {
+        return this.world;
     }
 
     @Override

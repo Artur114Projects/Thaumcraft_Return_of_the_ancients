@@ -13,7 +13,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class EnergySystemsProvider {
@@ -115,9 +114,9 @@ public class EnergySystemsProvider {
             return;
         }
         if (!ENERGY_SYSTEMS.containsKey(tile.getNetworkId())) {
-            buildNetwork(tile.getWorld(), tile, foundFreeId(), false);
-        } else if (!ENERGY_SYSTEMS.get(tile.getNetworkId()).containsEnergyProviderPos(tile.getPos())) {
-            buildNetwork(tile.getWorld(), tile, foundFreeId(), false);
+            buildNetwork(tile.getWorldE(), tile, foundFreeId(), false);
+        } else if (!ENERGY_SYSTEMS.get(tile.getNetworkId()).containsEnergyProviderPos(tile.getPosE())) {
+            buildNetwork(tile.getWorldE(), tile, foundFreeId(), false);
         }
     }
 
@@ -144,7 +143,7 @@ public class EnergySystemsProvider {
             energyStorages.add((ITileEnergyProvider) startTile);
         }
 
-        queue.addLast(startTile.getPos());
+        queue.addLast(startTile.getPosE());
 
         while (!queue.isEmpty()) {
             queueSize++;
@@ -159,7 +158,7 @@ public class EnergySystemsProvider {
                     if (lines.contains(tileEnergy)) continue;
                     if (tile != null && tile.isCanConnect(facing) && tileEnergy.isCanConnect(facing.getOpposite())) {
                         if (tileEnergy.isEnergyLine()) {
-                            queue.addLast(tileEnergy.getPos());
+                            queue.addLast(tileEnergy.getPosE());
                             lines.add(tileEnergy);
                         } else {
                             if (energyStorages.contains((ITileEnergyProvider) tileEnergy)) continue;
@@ -195,7 +194,7 @@ public class EnergySystemsProvider {
     public static List<ITileEnergy> getNeighbors(World world, ITileEnergy tile) {
         List<ITileEnergy> list = new ArrayList<>(6);
         for (EnumFacing facing : EnumFacing.values()) {
-            BlockPos offsetPos = tile.getPos().offset(facing);
+            BlockPos offsetPos = tile.getPosE().offset(facing);
             TileEntity tileRaw = world.getTileEntity(offsetPos);
             if (tileRaw instanceof ITileEnergy) {
                 ITileEnergy tileEnergy = (ITileEnergy) tileRaw;

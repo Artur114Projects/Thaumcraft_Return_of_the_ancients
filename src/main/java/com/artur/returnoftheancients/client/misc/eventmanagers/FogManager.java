@@ -16,7 +16,7 @@ public class FogManager {
     private FogParams newfogParams = null;
     public float fogDuration = 0;
     public int maxFogTome = 80;
-    public int fogTime = 0;
+    public int fogTime = 80;
 
     public void entityViewRenderEventFogColors(EntityViewRenderEvent.FogColors e) {
         if (oldfogParams == null && newfogParams == null) {
@@ -53,16 +53,21 @@ public class FogManager {
             return;
         }
 
-        if (RenderEventHandler.fogDuration < (newfogParams != null ? newfogParams.fodDuration : -1)) {
+        if (RenderEventHandler.fogDuration != (newfogParams != null ? newfogParams.fodDuration : -1)) {
             fogDuration += ((float) Math.abs((newfogParams != null ? newfogParams.fodDuration : 0) - (oldfogParams != null ? oldfogParams.fodDuration : 0)) / maxFogTome + 0.0F);
             if (fogDuration >= 1) {
-                RenderEventHandler.fogDuration += (int) fogDuration;
+                if (RenderEventHandler.fogDuration < (newfogParams != null ? newfogParams.fodDuration : -1)) {
+                    RenderEventHandler.fogDuration += (int) fogDuration;
+                } else {
+                    RenderEventHandler.fogDuration -= (int) fogDuration;
+                }
                 fogDuration -= (int) fogDuration;
             }
-            RenderEventHandler.fogDuration += 1;
             RenderEventHandler.fogFiddled = true;
-        } else if (RenderEventHandler.fogDuration == (newfogParams != null ? newfogParams.fodDuration : -1)) {
-            RenderEventHandler.fogDuration++;
+        }
+
+        if (!(newfogParams == null && fogTime == maxFogTome)) {
+            RenderEventHandler.fogDuration += 1;
         }
 
         if (fogTime < maxFogTome) {
@@ -71,7 +76,22 @@ public class FogManager {
     }
 
     public void setFogParams(FogParams fog) {
-        oldfogParams = newfogParams;
+        float scaleBase = (float) fogTime / maxFogTome;
+        FogParams startFog;
+        FogParams endFog;
+
+        if (oldfogParams == null) {
+            startFog = defaultFog;
+        } else {
+            startFog = oldfogParams;
+        }
+        if (newfogParams == null) {
+            endFog = defaultFog;
+        } else {
+            endFog = newfogParams;
+        }
+
+        oldfogParams = new FogParams((startFog.r + (endFog.r - startFog.r) * scaleBase), (startFog.g + (endFog.g - startFog.g) * scaleBase), (startFog.b + (endFog.b - startFog.b) * scaleBase), RenderEventHandler.fogDuration);
         newfogParams = fog;
         fogTime = 0;
     }

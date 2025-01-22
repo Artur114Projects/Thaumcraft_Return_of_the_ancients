@@ -3,9 +3,7 @@ package com.artur.returnoftheancients.energy;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergy;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
 import com.artur.returnoftheancients.misc.TRAConfigs;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -38,7 +36,7 @@ public class EnergySystem {
 
     public boolean containsEnergyProviderPos(BlockPos pos) {
         for (ITileEnergyProvider t : energyStorages) {
-            if (pos.equals(t.getPos())) {
+            if (pos.equals(t.getPosE())) {
                 return true;
             }
         }

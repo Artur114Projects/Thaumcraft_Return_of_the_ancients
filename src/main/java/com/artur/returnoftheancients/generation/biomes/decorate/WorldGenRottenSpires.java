@@ -13,14 +13,19 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.Random;
 
-public class WorldGenRottenSpires extends WorldGenerator {
+public class WorldGenRottenSpires extends WorldGenAbstractTree {
     private final IBlockState taintVoidStone = InitBlocks.TAINT_VOID_STONE.getDefaultState();
 
     private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
+
+    public WorldGenRottenSpires(boolean notify) {
+        super(notify);
+    }
 
     @Override
     public boolean generate(World worldIn, Random rand, BlockPos position) {
@@ -34,7 +39,7 @@ public class WorldGenRottenSpires extends WorldGenerator {
             }
         }
 
-        blockPos.setPos(position).add(8, 0, 8);
+        blockPos.setPos(chunk.getPos()).add(8, 0, 8);
         int blockY = calculateGenerationHeight(worldIn, blockPos);
 
         int finalSpireHeight = 38;

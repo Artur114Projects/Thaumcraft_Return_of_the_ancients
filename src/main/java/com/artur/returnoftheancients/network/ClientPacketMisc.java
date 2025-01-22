@@ -3,7 +3,6 @@ package com.artur.returnoftheancients.network;
 import com.artur.returnoftheancients.client.gui.CoolLoadingGui;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.misc.TRAConfigs;
-import com.artur.returnoftheancients.client.gui.LoadingGui;
 import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.referense.Referense;
 import io.netty.buffer.ByteBuf;
@@ -61,22 +60,9 @@ public class ClientPacketMisc implements IMessage {
                 }
                 if (nbt.hasKey("setGuiState")) {
                     if (nbt.getBoolean("setGuiState")) {
-
-                        LoadingGui.injectPercentages((byte) 0);
-                        LoadingGui.injectPhase((byte) 0);
-
-                        if (TRAConfigs.Any.useOldLoadingGui) {
-                            Minecraft.getMinecraft().displayGuiScreen(new LoadingGui(nbt.getBoolean("isTeam")));
-                        } else {
-                            Minecraft.getMinecraft().displayGuiScreen(new CoolLoadingGui(nbt.getBoolean("isTeam")));
-                        }
-
+                        Minecraft.getMinecraft().displayGuiScreen(new CoolLoadingGui(nbt.getBoolean("isTeam")));
                     } else {
-                        if (TRAConfigs.Any.useOldLoadingGui) {
-                            Minecraft.getMinecraft().displayGuiScreen(null);
-                        } else {
-                            CoolLoadingGui.instance.close();
-                        }
+                        CoolLoadingGui.instance.close();
                     }
                 } else if (nbt.hasKey("sendAncientWorldLoadMessage")) {
                     if (nbt.getBoolean("sendAncientWorldLoadMessage")) {
@@ -88,12 +74,6 @@ public class ClientPacketMisc implements IMessage {
                     playerSP.sendMessage(new TextComponentString(TITLE + nbt.getString("sendMessage")));
                 } else if (nbt.hasKey("sendMessageTranslate")) {
                     playerSP.sendMessage(new TextComponentString(TITLE + I18n.translateToLocal(nbt.getString("sendMessageTranslate"))));
-                }
-                if (nbt.hasKey("injectPhase")) {
-                    LoadingGui.injectPhase(nbt.getByte("injectPhase"));
-                }
-                if (nbt.hasKey("injectPercentages")) {
-                    LoadingGui.injectPercentages(nbt.getByte("injectPercentages"));
                 }
                 if (nbt.hasKey("playSound")) {
                     playerSP.playSound(InitSounds.SOUND_MAP.get(nbt.getString("playSound")), 1, 1);
@@ -110,11 +90,7 @@ public class ClientPacketMisc implements IMessage {
                     for (int i = 0; i != list.tagCount(); i++) {
                         names[i] = list.getStringTagAt(i);
                     }
-                    if (TRAConfigs.Any.useOldLoadingGui) {
-                        LoadingGui.injectPlayers(names);
-                    } else {
-                        CoolLoadingGui.instance.updatePlayersList(names);
-                    }
+                    CoolLoadingGui.instance.updatePlayersList(names);
                 }
             });
             return null;

@@ -7,8 +7,8 @@ import net.minecraft.world.World;
 public interface ITileEnergy {
     int getNetworkId();
     void setNetworkId(int id);
-    BlockPos getPos();
-    World getWorld();
+    BlockPos getPosE();
+    World getWorldE();
     boolean isCanConnect(EnumFacing facing);
     boolean isEnergyLine();
 }

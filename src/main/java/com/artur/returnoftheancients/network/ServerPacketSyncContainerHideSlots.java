@@ -2,7 +2,6 @@ package com.artur.returnoftheancients.network;
 
 import com.artur.returnoftheancients.containers.ContainerWithPages;
 import com.artur.returnoftheancients.containers.IContainerWithPages;
-import com.artur.returnoftheancients.tileentity.TileEntityAncientTeleport;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -13,7 +12,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ServerPacketSyncContainerHideSlots implements IMessage {
@@ -27,7 +25,7 @@ public class ServerPacketSyncContainerHideSlots implements IMessage {
 
     public ServerPacketSyncContainerHideSlots(IContainerWithPages tile, List<Integer> hide, List<Integer> notHide) {
         this.dimension = tile.getDimension();
-        this.pos = tile.getPos();
+        this.pos = tile.getPosC();
         this.notHide = notHide;
         this.hide = hide;
     }

@@ -5,7 +5,7 @@ import net.minecraft.util.math.BlockPos;
 public interface IContainerWithPages {
     ContainerWithPages getContainer();
     void setContainer(ContainerWithPages container);
-    BlockPos getPos();
+    BlockPos getPosC();
     int getDimension();
     boolean isRemote();
 }

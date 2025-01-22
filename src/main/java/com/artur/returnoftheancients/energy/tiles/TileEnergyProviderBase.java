@@ -3,6 +3,8 @@ package com.artur.returnoftheancients.energy.tiles;
 import com.artur.returnoftheancients.energy.EnergySystemsProvider;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import thaumcraft.common.tiles.TileThaumcraft;
 
 public abstract class TileEnergyProviderBase extends TileThaumcraft implements ITileEnergyProvider {
@@ -45,5 +47,15 @@ public abstract class TileEnergyProviderBase extends TileThaumcraft implements I
     @Override
     public void setAdding() {
         isAdding = true;
+    }
+
+    @Override
+    public BlockPos getPosE() {
+        return this.pos;
+    }
+
+    @Override
+    public World getWorldE() {
+        return this.world;
     }
 }

@@ -27,12 +27,12 @@ import java.util.Random;
 
 // TODO: Сделать гнилое море глубже, добавить глубокое гнилое море
 public class BiomeTaint extends BiomeBase {
-    private static final WorldGenerator INFERNAL_SPIRES = new WorldGenInfernalSpires();
-    private static final WorldGenerator ROTTEN_SPIRES = new WorldGenRottenSpires();
     private static final WorldGensMisc WORLD_GENS_MISC = new WorldGensMisc();
 
     private final WorldGenAbstractTree BIG_TREE_TAINT_FEATURE = new WorldGenTaintBigTree(false);
+    private final WorldGenAbstractTree INFERNAL_SPIRES = new WorldGenInfernalSpires(false);
     private final WorldGenAbstractTree TREE_TAINT_FEATURE = new WorldGenTaintTree(false);
+    private final WorldGenAbstractTree ROTTEN_SPIRES = new WorldGenRottenSpires(false);
 
 
     public final TaintType type;
@@ -56,8 +56,23 @@ public class BiomeTaint extends BiomeBase {
             this.decorator.reedsPerChunk = -1;
             this.decorator.cactiPerChunk = -1;
         } else if (type == TaintType.NORMAL || type == TaintType.HILLS) {
+            if (type == TaintType.NORMAL) {
+                this.decorator.extraTreeChance = 0.5F;
+            }
             this.decorator.treesPerChunk = 1;
             this.spawnableCreatureList.add(new SpawnListEntry(EntityTaintSeedPrime.class, 4, 1, 1));
+        } else if (type == TaintType.SEA) {
+            this.decorator.extraTreeChance = 0.8F;
+            this.decorator.treesPerChunk = 0;
+            this.decorator.deadBushPerChunk = -1;
+            this.decorator.reedsPerChunk = -1;
+            this.decorator.cactiPerChunk = -1;
+        } else if (type == TaintType.WASTELAND) {
+            this.decorator.extraTreeChance = 0.2F;
+            this.decorator.treesPerChunk = 0;
+            this.decorator.deadBushPerChunk = -1;
+            this.decorator.reedsPerChunk = -1;
+            this.decorator.cactiPerChunk = -1;
         } else {
             this.decorator.extraTreeChance = -1;
             this.decorator.treesPerChunk = -1;
@@ -142,19 +157,9 @@ public class BiomeTaint extends BiomeBase {
 
     private static void decorateChunkNormal(World worldIn, Random rand, UltraMutableBlockPos blockPos) {
         blockPos.pushPos();
-        boolean isRottenSea = HandlerR.getBiomeIdOnPos(worldIn, blockPos.add(8, 0, 8)) == Biome.getIdForBiome(InitBiome.TAINT_SEA);
-        blockPos.popPos();
-        blockPos.pushPos();
         boolean isTintWasteland = HandlerR.getBiomeIdOnPos(worldIn, blockPos.add(8, 0, 8)) == Biome.getIdForBiome(InitBiome.TAINT_WASTELAND);
         blockPos.popPos();
-        if (isRottenSea) {
-            if (rand.nextInt(8) == 0) {
-                ROTTEN_SPIRES.generate(worldIn, rand, blockPos);
-            }
-        } else if (isTintWasteland) {
-            if (rand.nextInt(12) == 0) {
-                INFERNAL_SPIRES.generate(worldIn, rand, blockPos);
-            }
+        if (isTintWasteland) {
             if (rand.nextInt(6) == 0) {
                 WORLD_GENS_MISC.INFERNAL_CIRCLE.generate(worldIn, rand, blockPos);
             }
@@ -195,6 +200,12 @@ public class BiomeTaint extends BiomeBase {
     public WorldGenAbstractTree getRandomTreeFeature(Random rand) {
         if (type == TaintType.NORMAL) {
             return rand.nextInt(4) == 0 ? BIG_TREE_TAINT_FEATURE : TREE_TAINT_FEATURE;
+        } else if (type == TaintType.HILLS){
+            return TREE_TAINT_FEATURE;
+        } else if (type == TaintType.SEA) {
+            return ROTTEN_SPIRES;
+        } else if (type == TaintType.WASTELAND) {
+            return INFERNAL_SPIRES;
         } else {
             return TREE_TAINT_FEATURE;
         }

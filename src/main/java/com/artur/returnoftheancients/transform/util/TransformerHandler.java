@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.transform.util;
 
-import com.artur.returnoftheancients.client.misc.ClientEventsHandler;
+import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -11,7 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
-import org.lwjgl.opengl.GL11;
 import org.objectweb.asm.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumParticleTypes;

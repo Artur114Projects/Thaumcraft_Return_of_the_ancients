@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.client.misc.eventmanagers;
+package com.artur.returnoftheancients.client.event.managers;
 
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;

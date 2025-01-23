@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.ParticleRain;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -39,6 +40,10 @@ public class WorldGenInfernalSpires extends WorldGenAbstractTree {
 
         blockPos.setPos(chunk.getPos()).add(8, 0, 8);
         int blockY = calculateGenerationHeight(worldIn, blockPos);
+
+        if (blockY > 80) {
+            return false;
+        }
 
         int finalSpireHeight = 28;
         int spireHeightOffset = 2;

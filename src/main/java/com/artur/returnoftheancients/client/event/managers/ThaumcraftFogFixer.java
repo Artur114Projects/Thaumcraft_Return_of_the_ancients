@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.client.misc.eventmanagers;
+package com.artur.returnoftheancients.client.event.managers;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.EntityViewRenderEvent;

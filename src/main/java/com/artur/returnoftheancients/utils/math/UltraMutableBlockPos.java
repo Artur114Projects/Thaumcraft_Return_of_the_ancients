@@ -12,12 +12,37 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayDeque;
 import java.util.LinkedList;
 
 public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
+
+    private static final UltraMutableBlockPos[] stack = new UltraMutableBlockPos[32];
+    private static int stackHead = -1;
+
+    public static UltraMutableBlockPos getBlockPosFromPoll() {
+        if (stackHead != -1) {
+            UltraMutableBlockPos blockPos = stack[stackHead];
+            stack[stackHead] = null;
+            stackHead--;
+            return blockPos;
+        } else {
+            return new UltraMutableBlockPos();
+        }
+    }
+
+    public static void returnBlockPosToPoll(@NotNull UltraMutableBlockPos blockPos) {
+        if (stackHead + 1 >= stack.length) {
+            return;
+        }
+
+        blockPos.setToZero();
+        stack[++stackHead] = blockPos;
+    }
+
+
     protected @Nullable LinkedList<PosContext> contextPos = null;
     protected int contextDeep = -1;
-
 
     public UltraMutableBlockPos() {
         this(0, 0, 0);
@@ -250,6 +275,11 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
     public void clearContext() {
         contextPos = null;
         contextDeep = -1;
+    }
+
+    public void setToZero() {
+        setPos(0, 0, 0);
+        clearContext();
     }
 
     @Override

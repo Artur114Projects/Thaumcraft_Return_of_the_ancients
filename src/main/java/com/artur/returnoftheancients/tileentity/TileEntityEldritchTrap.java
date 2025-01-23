@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.tileentity;
 
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
-import com.artur.returnoftheancients.client.misc.CameraShake;
+import com.artur.returnoftheancients.client.fx.misc.CameraShake;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;

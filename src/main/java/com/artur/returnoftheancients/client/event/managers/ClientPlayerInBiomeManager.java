@@ -1,10 +1,11 @@
-package com.artur.returnoftheancients.client.misc.eventmanagers;
+package com.artur.returnoftheancients.client.event.managers;
 
-import com.artur.returnoftheancients.client.misc.ClientEventsHandler;
+import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -24,6 +25,7 @@ public class ClientPlayerInBiomeManager {
     public Map<Biome, FogManager.FogParams> fogParamsMap = new HashMap<>();
     public boolean isCurrentBiomeTaint = false;
     public int maxPlayerInTaintBiomeTime = 80;
+    public boolean isPrevBiomeTaint = false;
     public int playerInTaintBiomeTime = 0;
     public Biome currentBiome = null;
     public byte currentBiomeId = -1;
@@ -46,8 +48,10 @@ public class ClientPlayerInBiomeManager {
 
     public void tickEventClientTickEvent(TickEvent.ClientTickEvent e) {
         EntityPlayer player = Minecraft.getMinecraft().player;
+        WorldClient world = Minecraft.getMinecraft().world;
+        Minecraft mc = Minecraft.getMinecraft();
 
-        if (e.phase != TickEvent.Phase.START || player == null || e.side == Side.SERVER) {
+        if (e.phase != TickEvent.Phase.START || player == null || e.side == Side.SERVER || mc.isGamePaused()) {
             return;
         }
 
@@ -55,6 +59,7 @@ public class ClientPlayerInBiomeManager {
             byte lastId = currentBiomeId;
             currentBiomeId = HandlerR.getBiomeIdOnPos(player.world, ultraBlockPos.setPos(player));
             currentBiome = Biome.getBiome(currentBiomeId);
+            isPrevBiomeTaint = isCurrentBiomeTaint;
             isCurrentBiomeTaint = HandlerR.arrayContains(InitBiome.TAINT_BIOMES_L_ID, currentBiomeId);
             if (lastId != currentBiomeId) {
                 onBiomeChanged(lastId, currentBiomeId);
@@ -66,7 +71,7 @@ public class ClientPlayerInBiomeManager {
             }
         } else {
             if (!isPlayerInTaintBiome()) {
-                defaultSun = player.world.getSunBrightnessBody(1);
+                defaultSun = world.getSunBrightnessBody(1);
             }
             if (playerInTaintBiomeTime > 0) {
                 playerInTaintBiomeTime--;
@@ -75,6 +80,14 @@ public class ClientPlayerInBiomeManager {
     }
 
     public void onBiomeChanged(byte oldBiome, byte newBiome) {
+        WorldClient world = Minecraft.getMinecraft().world;
+        if (isCurrentBiomeTaint && !isPrevBiomeTaint) {
+            world.setRainStrength(1);
+            world.setThunderStrength(1);
+        } else if (!isCurrentBiomeTaint && isPrevBiomeTaint){
+            world.setRainStrength(0);
+            world.setThunderStrength(0);
+        }
         FogManager.FogParams params = fogParamsMap.get(currentBiome);
         if (params == null && isCurrentBiomeTaint) {
             params = taintFogParams;

@@ -49,7 +49,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class HandlerR {
-    private static final ArrayList<String> ID = new ArrayList<>();
+    private static final List<String> ID = new ArrayList<>();
 
     public static int genRandomIntRange(int min, int max) {
         Random r = new Random();
@@ -108,7 +108,7 @@ public class HandlerR {
         GenStructure.generateStructure(world, fx, 0, fz, "ancient_portal_floor");
     }
 
-    public static ArrayList<String> isPlayerUseUnresolvedItems(EntityPlayer player) {
+    public static List<String> isPlayerUseUnresolvedItems(EntityPlayer player) {
         ID.clear();
         String[] modId = TRAConfigs.PortalSettings.modId;
         boolean is = true;
@@ -121,7 +121,7 @@ public class HandlerR {
                 }
             }
             if (!is) {
-                ID.add(I18n.format(itemStack.getItem().getUnlocalizedName() + ".name"));
+                ID.add(itemStack.getDisplayName());
             }
         }
         for (ItemStack itemStack : player.inventory.armorInventory) {
@@ -132,10 +132,10 @@ public class HandlerR {
                 }
             }
             if (!is) {
-                ID.add(I18n.format(itemStack.getItem().getUnlocalizedName() + ".name"));
+                ID.add(itemStack.getDisplayName());
             }
         }
-        return ID;
+        return ID.stream().distinct().collect(Collectors.toList());
     }
 
     /**

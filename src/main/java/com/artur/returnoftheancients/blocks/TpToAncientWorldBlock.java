@@ -73,7 +73,7 @@ public class TpToAncientWorldBlock extends BaseBlock{
         if (!entityIn.getEntityData().getBoolean(noCollisionNBT)) {
             if (entityIn instanceof EntityPlayerMP) {
                 EntityPlayerMP player = (EntityPlayerMP) entityIn;
-                ArrayList<String> ID = HandlerR.isPlayerUseUnresolvedItems(player);
+                List<String> ID = HandlerR.isPlayerUseUnresolvedItems(player);
                 if ((ID.isEmpty() || !TRAConfigs.PortalSettings.checkItems) && (ServerEventsHandler.getDifficultyId() != 0 || !TRAConfigs.AncientWorldSettings.noPeaceful)) {
                     player.fallDistance = 0;
                     AncientPortalsProcessor.onPlayerCollidePortal(player);

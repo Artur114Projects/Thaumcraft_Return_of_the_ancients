@@ -79,7 +79,7 @@ public class WorldGensMisc {
         @Override
         public boolean generate(World worldIn, Random rand, BlockPos position) {
             blockPos.setPos(position);
-            if (blockPos.getY() >= 100) {
+            if (blockPos.getY() >= 100 && worldIn.getBiome(position) != InitBiome.TAINT_WASTELAND) {
                 if (blockPos.getY() > 110) {
                     if (worldIn.getBlockState(blockPos).getMaterial() == ThaumcraftMaterials.MATERIAL_TAINT) {
                         blockPos.down();

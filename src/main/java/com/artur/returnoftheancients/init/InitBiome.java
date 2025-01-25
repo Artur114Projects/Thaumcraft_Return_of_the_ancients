@@ -23,7 +23,7 @@ public class InitBiome {
 
     public static final List<Biome> BIOMES = new ArrayList<>();
 
-    public static final Biome TAINT_WASTELAND = new BiomeTaint("taint_wasteland_r", new Biome.BiomeProperties("Scorched Land").setWaterColor(0x310042).setBaseHeight(0.2F).setRainfall(0.0F).setHeightVariation(0.1F).setRainDisabled(), EBiome.TAINT, BiomeTaint.TaintType.WASTELAND);
+    public static final Biome TAINT_WASTELAND = new BiomeTaint("taint_wasteland_r", new Biome.BiomeProperties("Scorched Earth").setWaterColor(0x310042).setBaseHeight(0.2F).setRainfall(0.0F).setHeightVariation(0.1F).setRainDisabled(), EBiome.TAINT, BiomeTaint.TaintType.WASTELAND);
     public static final Biome TAINT_MOUNTAINS = new BiomeTaint("taint_mountains_r", new Biome.BiomeProperties("Taint Rocks").setWaterColor(0x310042).setBaseHeight(1.0F).setRainfall(1.0F).setHeightVariation(0.5F), EBiome.TAINT, BiomeTaint.TaintType.HILLS);
     public static final Biome TAINT_EDGE = new BiomeTaint("taint_edge_r", new Biome.BiomeProperties("Taint Land Edge").setBaseHeight(3.4F).setRainfall(0.7F).setHeightVariation(0.1F).setSnowEnabled(), EBiome.TAINT_EDGE, BiomeTaint.TaintType.EDGE);
     public static final Biome TAINT_SEA = new BiomeTaint("taint_sea_r", new Biome.BiomeProperties("Rotten Sea").setWaterColor(0x310042).setBaseHeight(-1.2F).setRainfall(1.0F).setHeightVariation(0.1F), EBiome.TAINT_SEA, BiomeTaint.TaintType.SEA);

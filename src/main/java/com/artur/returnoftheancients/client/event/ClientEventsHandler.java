@@ -14,6 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = Referense.MODID)
 public class ClientEventsHandler {
 
+    public static final PlayerDistanceToPortalManager PLAYER_DISTANCE_TO_PORTAL_MANAGER = new PlayerDistanceToPortalManager();
     public static final ClientPlayerInBiomeManager PLAYER_IN_BIOME_MANAGER = new ClientPlayerInBiomeManager();
     public static final PlayerMovementManager PLAYER_MOVEMENT_MANAGER = new PlayerMovementManager();
     public static final ThaumcraftFogFixer THAUMCRAFT_FOG_FIXER = new ThaumcraftFogFixer();
@@ -36,10 +37,12 @@ public class ClientEventsHandler {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public static void clientTick(TickEvent.ClientTickEvent e) {
+        PLAYER_DISTANCE_TO_PORTAL_MANAGER.tickEventClientTickEvent(e);
         PLAYER_IN_BIOME_MANAGER.tickEventClientTickEvent(e);
         CUSTOM_RAIN_MANAGER.tickEventClientTickEvent(e);
         FOG_MANAGER.tickEventClientTickEvent(e);
     }
+
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public static void PlayerTickEvent(TickEvent.PlayerTickEvent e) {

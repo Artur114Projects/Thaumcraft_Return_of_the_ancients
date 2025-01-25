@@ -81,13 +81,6 @@ public class ClientPlayerInBiomeManager {
 
     public void onBiomeChanged(byte oldBiome, byte newBiome) {
         WorldClient world = Minecraft.getMinecraft().world;
-        if (isCurrentBiomeTaint && !isPrevBiomeTaint) {
-            world.setRainStrength(1);
-            world.setThunderStrength(1);
-        } else if (!isCurrentBiomeTaint && isPrevBiomeTaint){
-            world.setRainStrength(0);
-            world.setThunderStrength(0);
-        }
         FogManager.FogParams params = fogParamsMap.get(currentBiome);
         if (params == null && isCurrentBiomeTaint) {
             params = taintFogParams;

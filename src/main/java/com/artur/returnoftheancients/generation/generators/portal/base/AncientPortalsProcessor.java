@@ -285,7 +285,7 @@ public class AncientPortalsProcessor {
     public static ChunkPos getNearestPortalPos(World world, UltraMutableBlockPos pos) {
         ChunkPos[] poss = world.provider.getDimension() == 0 ? portalsGenerationPosOverWorld : PORTALS_GENERATION_POS.get(world.provider.getDimension());
         if (poss == null) {
-            System.out.println("[Warning] (AncientPortalsProcessor::getNearestPortalPos) request portal pos array == null");
+            System.out.println("[Warning] (AncientPortalsProcessor::getNearestPortalPos) Request portal pos array == null");
             return new ChunkPos(0, 0);
         }
         Optional<ChunkPos> nearestPosOptional = Arrays.stream(poss).min(Comparator.comparingInt(pos::distanceSq));

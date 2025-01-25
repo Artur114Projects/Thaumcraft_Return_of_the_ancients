@@ -18,11 +18,14 @@ import java.util.List;
 public class InitSounds {
     private static final List<SoundEvent> soundEvents = new ArrayList<>();
     public static final HashMap<String, SoundEvent> SOUND_MAP = new HashMap<>();
+
     public static SoundTRA BUM = create("bum");
     public static SoundTRA WHISPER = create("whisper");
     public static SoundTRA RUI_DEAD = create("rui_dead");
     public static SoundTRA HEARTBEAT = create("heartbeat");
+    public static SoundTRA PORTAL_IMPACT = create("portal_impact");
     public static SoundTRA FIRE_TRAP_SOUND = create("fire_trap_sound");
+    public static SoundTRA PORTAL_HEARTBEAT = create("portal_heart_beat");
     public static SoundTRA FIRE_TRAP_START_SOUND = create("fire_trap_sound_start");
 
     @SubscribeEvent

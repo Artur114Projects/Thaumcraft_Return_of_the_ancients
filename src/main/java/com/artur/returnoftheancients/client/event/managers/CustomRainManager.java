@@ -67,7 +67,7 @@ public class CustomRainManager {
                     double d4 = random.nextDouble();
                     AxisAlignedBB axisalignedbb = iblockstate.getBoundingBox(world, blockPos);
 
-                    if (iblockstate.getMaterial() != Material.AIR) {
+                    if (iblockstate.getMaterial() != Material.AIR && !iblockstate.getMaterial().isLiquid()) {
                         mc.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, (double)blockPos.getX() + d3, (double)((float)blockPos.getY() + 0.1F) + axisalignedbb.maxY, (double)blockPos.getZ() + d4, 0.0D, random.nextDouble() / 4, 0.0D);
                     }
 

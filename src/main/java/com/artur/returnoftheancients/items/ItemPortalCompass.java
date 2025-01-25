@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.items;
 
+import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitItems;
@@ -111,8 +112,7 @@ public class ItemPortalCompass extends BaseItem {
 
             @SideOnly(Side.CLIENT)
             private void setNearestPortalPos(Entity entity) {
-                mutableBlockPos.setPos(entity);
-                mutableBlockPos.setPos(AncientPortalsProcessor.getNearestPortalPos(entity.world, mutableBlockPos)).add(8, 0, 8);
+                mutableBlockPos.setPos(ClientEventsHandler.PLAYER_DISTANCE_TO_PORTAL_MANAGER.nearestPortalPos).add(8 ,0, 8);
             }
         });
         setCreativeTab(MainR.ReturnOfTheAncientsTab);

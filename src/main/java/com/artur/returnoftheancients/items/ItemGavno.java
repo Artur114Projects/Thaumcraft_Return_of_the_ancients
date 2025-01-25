@@ -1,11 +1,15 @@
 package com.artur.returnoftheancients.items;
 
 
+import com.artur.returnoftheancients.client.audio.RepeatingSound;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
 import com.artur.returnoftheancients.generation.biomes.decorate.WorldGenInfernalSpires;
 import com.artur.returnoftheancients.generation.biomes.decorate.WorldGenTaintBigTree;
+import com.artur.returnoftheancients.init.InitSounds;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +31,7 @@ import java.util.Random;
 public class ItemGavno extends BaseItem {
 
 //	private ITRAStructure structure = null;
+	private RepeatingSound sound = null;
 
 	public ItemGavno(String name) {
 		super(name);
@@ -71,6 +76,15 @@ public class ItemGavno extends BaseItem {
 ////			spawnCustomParticle(worldIn, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.1, 0);
 //		}
 		if (worldIn.isRemote) {
+			if (sound == null) {
+				sound = new RepeatingSound(InitSounds.HEARTBEAT.SOUND.getSoundName(), SoundCategory.AMBIENT, 10, 1, true, 1, ISound.AttenuationType.LINEAR, 0, 0, 0);
+			}
+
+			if (player.isSneaking()) {
+				sound.stop();
+			} else {
+				Minecraft.getMinecraft().getSoundHandler().playSound(sound);
+			}
 //			if (player.isSneaking()) {
 //				ClientEventsHandler.FOG_MANAGER.setFogParams(new FogManager.FogParams(100, 80, 20, 60));
 //			} else {

@@ -9,12 +9,12 @@
       }
     ]
   },
-  "HeartBeat": {
+  "heartbeat": {
     "category": "ambient",
     "sounds": [
       {
         "name": "returnoftheancients:heartbeat",
-        "stream": true,
+        "stream": false,
         "volume": 4
       }
     ]
@@ -56,6 +56,26 @@
         "name": "returnoftheancients:fire_trap_sound_start",
         "stream": true,
         "volume": 4
+      }
+    ]
+  },
+  "portal_impact": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "returnoftheancients:portal_impact",
+        "stream": true,
+        "volume": 2
+      }
+    ]
+  },
+  "portal_heart_beat": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "returnoftheancients:portal_heart_beat",
+        "stream": true,
+        "volume": 2
       }
     ]
   }

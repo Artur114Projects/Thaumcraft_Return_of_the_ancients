@@ -5,10 +5,9 @@ import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEn
 import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEntryTeam;
 import com.artur.returnoftheancients.ancientworldgeneration.util.Team;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.IBuild;
-import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
+import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
 import com.artur.returnoftheancients.handlers.HandlerR;
-import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.referense.Referense;

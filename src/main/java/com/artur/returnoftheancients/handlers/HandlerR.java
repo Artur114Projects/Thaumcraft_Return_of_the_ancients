@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.handlers;
 
-import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortal;
+import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
 import com.artur.returnoftheancients.items.ItemSoulBinder;
 import com.artur.returnoftheancients.misc.SoundTRA;
 import com.artur.returnoftheancients.misc.TRAConfigs;

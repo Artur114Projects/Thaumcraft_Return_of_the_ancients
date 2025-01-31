@@ -1,7 +1,7 @@
-package com.artur.returnoftheancients.generation.generators.portal;
+package com.artur.returnoftheancients.generation.portal;
 
-import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortal;
-import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
+import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
+import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;

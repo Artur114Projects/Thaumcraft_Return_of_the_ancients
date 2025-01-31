@@ -1,9 +1,7 @@
 package com.artur.returnoftheancients.blocks;
 
-import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
-import com.artur.returnoftheancients.generation.generators.portal.AncientPortalNaturalGeneration;
-import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortal;
-import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
+import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
+import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -15,7 +13,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -29,7 +26,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TpToAncientWorldBlock extends BaseBlock{

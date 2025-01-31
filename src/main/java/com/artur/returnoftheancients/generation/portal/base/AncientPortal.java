@@ -1,17 +1,16 @@
-package com.artur.returnoftheancients.generation.generators.portal.base;
+package com.artur.returnoftheancients.generation.portal.base;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.blocks.TpToAncientWorldBlock;
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
-import com.artur.returnoftheancients.generation.generators.portal.util.interfaces.IExplore;
+import com.artur.returnoftheancients.generation.portal.util.interfaces.IExplore;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
-import net.minecraft.block.BlockAir;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,6 +41,7 @@ public abstract class AncientPortal {
 
     protected final BlockPos.MutableBlockPos mPos = new BlockPos.MutableBlockPos();
     private final List<IExplore> explosionList = new ArrayList<>();
+    private boolean isRequestToUpdateOnClient = false;
     private boolean isExploded = false;
     private int exploreIndex = 0;
 
@@ -73,6 +73,8 @@ public abstract class AncientPortal {
         this.chunkZ = chunkZ;
         this.posY = posY;
         this.id = id;
+
+        this.requestToUpdateOnClient();
     }
 
     public AncientPortal(MinecraftServer server, NBTTagCompound compound) {
@@ -84,12 +86,10 @@ public abstract class AncientPortal {
         this.isExplodes = compound.getBoolean("isExplodes");
         this.posY = compound.getInteger("posY");
         this.world = server.getWorld(dimension);
-        AncientPortalsProcessor.PORTALS.put(id, this);
         this.posX = chunkX << 4;
         this.posZ = chunkZ << 4;
         this.isExploded = false;
     }
-
 
     public abstract void build();
     protected abstract int getPortalTypeID();
@@ -177,6 +177,10 @@ public abstract class AncientPortal {
     }
 
     protected void genAncientPortal() {
+        if (world.isRemote) {
+            return;
+        }
+
         int localX = posX + 5;
         int localZ = posZ + 5;
         CustomGenStructure.gen(world, localX, posY, localZ, "ancient_portal_air_cube");
@@ -206,6 +210,10 @@ public abstract class AncientPortal {
     }
 
     public void explosion() {
+        if (world.isRemote) {
+            return;
+        }
+
         int x =  chunkX << 4;
         int z =  chunkZ << 4;
         double eX = x + 8.0D;
@@ -258,6 +266,18 @@ public abstract class AncientPortal {
         if (TRAConfigs.Any.debugMode) System.out.println("Portal id:" + id + " is explosion!");
     }
 
+    public boolean isNeedUpdateOnClient() {
+        if (isRequestToUpdateOnClient) {
+            isRequestToUpdateOnClient = false;
+            return true;
+        }
+        return false;
+    }
+
+    public void requestToUpdateOnClient() {
+        isRequestToUpdateOnClient = true;
+    }
+
     @Nullable
     public NBTTagCompound writeToNBT() {
         if (isExploded) {
@@ -266,6 +286,21 @@ public abstract class AncientPortal {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setInteger("portalTypeID", getPortalTypeID());
         nbt.setBoolean("isExplodes", isExplodes);
+        nbt.setInteger("dimension", dimension);
+        nbt.setInteger("chunkX", chunkX);
+        nbt.setInteger("chunkZ", chunkZ);
+        nbt.setInteger("posY", posY);
+        nbt.setInteger("id", id);
+        return nbt;
+    }
+
+    @Nullable
+    public NBTTagCompound createClientUpdateNBT() {
+        if (isExploded) {
+            return null;
+        }
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setInteger("portalTypeID", getPortalTypeID());
         nbt.setInteger("dimension", dimension);
         nbt.setInteger("chunkX", chunkX);
         nbt.setInteger("chunkZ", chunkZ);

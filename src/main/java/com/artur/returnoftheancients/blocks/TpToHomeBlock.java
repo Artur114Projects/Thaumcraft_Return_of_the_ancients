@@ -1,11 +1,7 @@
 package com.artur.returnoftheancients.blocks;
 
-import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
-import com.artur.returnoftheancients.handlers.ServerEventsHandler;
-import com.artur.returnoftheancients.misc.TRAConfigs;
-import com.artur.returnoftheancients.misc.WorldData;
+import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.misc.WorldDataFields;
-import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

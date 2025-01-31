@@ -1,8 +1,8 @@
-package com.artur.returnoftheancients.generation.generators.portal.base;
+package com.artur.returnoftheancients.generation.portal.base;
 
-import com.artur.returnoftheancients.generation.generators.portal.AncientPortalNaturalGeneration;
-import com.artur.returnoftheancients.generation.generators.portal.AncientPortalOpening;
-import com.artur.returnoftheancients.generation.terraingen.TerrainGenHandler;
+import com.artur.returnoftheancients.generation.portal.AncientPortalNaturalGeneration;
+import com.artur.returnoftheancients.generation.portal.AncientPortalOpening;
+import com.artur.returnoftheancients.generation.terraingen.GenLayersHandler;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -19,10 +19,12 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
@@ -46,16 +48,24 @@ public class AncientPortalsProcessor {
     }
 
     @SubscribeEvent
+    public static void playerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent e) {
+        if (!e.player.world.isRemote) {
+            updatePortalDataOnClient((EntityPlayerMP) e.player);
+        }
+    }
+
+
+    @SubscribeEvent
     public static void WorldEventLoad(WorldEvent.Load e) {
         if (!LOAD_DIMENSIONS.contains(e.getWorld().provider.getDimension())) {
             int dimension = e.getWorld().provider.getDimension();
             if (Arrays.stream(TRAConfigs.PortalSettings.dimensionsGenerate).anyMatch((i) -> i == dimension)) {
                 if (dimension == 0) {
                     portalsGenerationPosOverWorld = new ChunkPos[portalsCount];
-                    TerrainGenHandler.initPortalsPosOnWorld(portalsGenerationPosOverWorld, e.getWorld().getWorldInfo().getSeed());
+                    GenLayersHandler.initPortalsPosOnWorld(portalsGenerationPosOverWorld, e.getWorld().getWorldInfo().getSeed());
                 } else {
                     ChunkPos[] poss = new ChunkPos[portalsCount];
-                    TerrainGenHandler.initPortalsPosOnWorld(poss, e.getWorld().getSeed());
+                    GenLayersHandler.initPortalsPosOnWorld(poss, e.getWorld().getSeed());
                     PORTALS_GENERATION_POS.put(dimension, poss);
                 }
             }
@@ -95,21 +105,29 @@ public class AncientPortalsProcessor {
         if (t >= 10) {
             t = 0;
             if (PORTALS.isEmpty()) return;
+            AtomicBoolean flag = new AtomicBoolean(false);
 
             PORTALS.forEach((key, value) -> {
                 value.update(e);
                 if (value.isExploded()) {
                     TO_DELETE.add(key);
+                } else if (value.isNeedUpdateOnClient()) {
+                    flag.set(true);
                 }
             });
 
             for (int d : TO_DELETE) {
-                Objects.requireNonNull(PORTALS.remove(d));
+                PORTALS.remove(d);
             }
 
             if (!TO_DELETE.isEmpty()) {
+                updatePortalDataOnClient();
                 TO_DELETE.clear();
                 save();
+            }
+
+            if (flag.get()) {
+                updatePortalDataOnClient();
             }
         }
     }
@@ -304,4 +322,13 @@ public class AncientPortalsProcessor {
         ChunkPos pos = poss[id];
         return new ChunkPos(pos.x, pos.z);
     }
+
+    public static void updatePortalDataOnClient() {
+
+    }
+
+    public static void updatePortalDataOnClient(EntityPlayerMP player) {
+
+    }
+
 }

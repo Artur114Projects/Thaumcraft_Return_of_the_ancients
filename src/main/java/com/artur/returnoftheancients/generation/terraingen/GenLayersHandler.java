@@ -7,7 +7,7 @@ import net.minecraft.util.math.MathHelper;
 
 import java.util.Random;
 
-public class TerrainGenHandler {
+public class GenLayersHandler {
     private static int portalGenerateOffset(Random rand) {
         return (((rand.nextInt(8) - 4) + 1) << 8);
     }
@@ -17,8 +17,8 @@ public class TerrainGenHandler {
         rand.nextInt();
 
         final double angleOffset = ((Math.PI * 2) / (rand.nextInt(16) + 1));
-        final int defaultDistance = 4000;
-        final int distance = 8000;
+        final int defaultDistance = 8000;
+        final int distance = 16000;
 
         for (int i = 0; i != portalPos.length; i++) {
             double angle = (((Math.PI * 2) / portalPos.length) * i) + angleOffset;

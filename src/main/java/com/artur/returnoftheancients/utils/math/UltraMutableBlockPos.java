@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.utils.math;
 
+import com.artur.returnoftheancients.utils.interfaces.RunnableWithParam;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.LinkedList;
+import java.util.concurrent.Callable;
 
 public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
 
@@ -25,6 +27,7 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
             UltraMutableBlockPos blockPos = stack[stackHead];
             stack[stackHead] = null;
             stackHead--;
+
             return blockPos;
         } else {
             return new UltraMutableBlockPos();
@@ -78,6 +81,21 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         this.x += x;
         this.y += y;
         this.z += z;
+        return this;
+    }
+
+    @Override
+    public @NotNull UltraMutableBlockPos add(Vec3i vec) {
+        this.x += vec.getX();
+        this.y += vec.getY();
+        this.z += vec.getZ();
+        return this;
+    }
+
+    public @NotNull UltraMutableBlockPos add(BlockPos vec) {
+        this.x += vec.getX();
+        this.y += vec.getY();
+        this.z += vec.getZ();
         return this;
     }
 
@@ -252,6 +270,14 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         return MathHelper.floor(MathHelper.sqrt(x1 * x1 + y1 * y1 + z1 * z1));
     }
 
+    public UltraMutableBlockPos offsetAndCallRunnable(BlockPos offset, RunnableWithParam<UltraMutableBlockPos> callable) {
+        this.pushPos();
+        this.add(offset);
+        callable.run(this);
+        this.popPos();
+        return this;
+    }
+
     public void pushPos() {
         if (contextPos != null && contextPos.size() > (contextDeep + 1)) {
             contextPos.get(++contextDeep).setPos(this);
@@ -280,6 +306,10 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
     public void setToZero() {
         setPos(0, 0, 0);
         clearContext();
+    }
+
+    public boolean equalsXZ(BlockPos pos) {
+        return this.getX() == pos.getX() && this.getZ() == pos.getZ();
     }
 
     @Override

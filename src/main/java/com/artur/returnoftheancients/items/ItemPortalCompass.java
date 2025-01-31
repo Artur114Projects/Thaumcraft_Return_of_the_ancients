@@ -1,11 +1,10 @@
 package com.artur.returnoftheancients.items;
 
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
-import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
+import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.main.MainR;
-import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,15 +16,12 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
-import thaumcraft.common.blocks.essentia.BlockJarItem;
-import thaumcraft.common.items.consumables.ItemPhial;
 
 import javax.annotation.Nullable;
 import java.util.List;

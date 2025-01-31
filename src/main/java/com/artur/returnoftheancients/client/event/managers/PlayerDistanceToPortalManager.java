@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.client.event.managers;
 
 import com.artur.returnoftheancients.client.audio.AncientPortalSound;
-import com.artur.returnoftheancients.generation.generators.portal.base.AncientPortalsProcessor;
+import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ServerPacketGetWeather;
 import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
@@ -51,7 +51,7 @@ public class PlayerDistanceToPortalManager {
     }
 
     private void calculateDistanceToPortal(Minecraft mc, EntityPlayer player) {
-        if (player.ticksExisted % 8 == 0) {
+        if (player.ticksExisted % 8 == 0 && AncientPortalsProcessor.hasPortalOnWorld(mc.world)) {
             UltraMutableBlockPos playerPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(player);
             UltraMutableBlockPos portalPos = UltraMutableBlockPos.getBlockPosFromPoll();
 
@@ -67,7 +67,7 @@ public class PlayerDistanceToPortalManager {
     }
 
     private void setRain(Minecraft mc, EntityPlayer player) {
-        if (distanceToPortal < 1000) {
+        if (distanceToPortal < 1024) {
             if (!useCustomRain) {
                 isServerRainUpdated = false;
                 updateServerRain();

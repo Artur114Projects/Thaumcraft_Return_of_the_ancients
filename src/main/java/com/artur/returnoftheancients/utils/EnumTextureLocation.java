@@ -9,7 +9,8 @@ public enum EnumTextureLocation {
     GUI_PATH(Referense.MODID, "textures/gui"),
     GUI_BUTTON_PATH(Referense.MODID, "textures/gui/button"),
     GUI_CONTAINER_PATH(Referense.MODID, "textures/gui/container"),
-    GUI_GIF_PATH(Referense.MODID, "textures/gui/gif");
+    GUI_GIF_PATH(Referense.MODID, "textures/gui/gif"),
+    PARTICLE_PATH(Referense.MODID, "textures/particle");
 
     private final String modId;
     private final String path;
@@ -33,5 +34,10 @@ public enum EnumTextureLocation {
         if (!additionalPath.startsWith("/")) additionalPath = "/" + additionalPath;
         if (!additionalPath.endsWith(".png")) additionalPath = additionalPath + ".png";
         return new ResourceLocation(modId, path + additionalPath);
+    }
+
+    public String getPathNotTextures(String additionalPath) {
+        if (!additionalPath.startsWith("/")) additionalPath = "/" + additionalPath;
+        return fullPath.replaceAll("textures/", "") + additionalPath;
     }
 }

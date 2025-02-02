@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.client.event;
 
+import com.artur.returnoftheancients.client.event.managers.movement.PlayerMovementManager;
 import com.artur.returnoftheancients.client.fx.misc.CameraShake;
 import com.artur.returnoftheancients.client.event.managers.*;
 import com.artur.returnoftheancients.referense.Referense;
@@ -38,6 +39,7 @@ public class ClientEventsHandler {
     @SideOnly(Side.CLIENT)
     public static void clientTick(TickEvent.ClientTickEvent e) {
         PLAYER_DISTANCE_TO_PORTAL_MANAGER.tickEventClientTickEvent(e);
+        PLAYER_MOVEMENT_MANAGER.tickEventClientTickEvent(e);
         PLAYER_IN_BIOME_MANAGER.tickEventClientTickEvent(e);
         CUSTOM_RAIN_MANAGER.tickEventClientTickEvent(e);
         FOG_MANAGER.tickEventClientTickEvent(e);

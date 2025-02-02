@@ -13,13 +13,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayDeque;
 import java.util.LinkedList;
-import java.util.concurrent.Callable;
 
 public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
 
-    private static final UltraMutableBlockPos[] stack = new UltraMutableBlockPos[32];
+    private static final UltraMutableBlockPos[] stack = new UltraMutableBlockPos[8];
     private static int stackHead = -1;
 
     public static UltraMutableBlockPos getBlockPosFromPoll() {
@@ -270,12 +268,11 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         return MathHelper.floor(MathHelper.sqrt(x1 * x1 + y1 * y1 + z1 * z1));
     }
 
-    public UltraMutableBlockPos offsetAndCallRunnable(BlockPos offset, RunnableWithParam<UltraMutableBlockPos> callable) {
+    public void offsetAndCallRunnable(BlockPos offset, RunnableWithParam<UltraMutableBlockPos> callable) {
         this.pushPos();
         this.add(offset);
         callable.run(this);
         this.popPos();
-        return this;
     }
 
     public void pushPos() {

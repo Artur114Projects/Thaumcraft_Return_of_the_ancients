@@ -145,14 +145,14 @@ public abstract class AncientPortal {
             NBTTagCompound data = player.getEntityData();
             if (data.getBoolean(tpToHomeNBT)) {
                 if (isCollide(player.getPosition())) {
-                    player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 600, 1));
+//                    player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 600, 1));
                     data.setBoolean(tpToHomeNBT, false);
                     HandlerR.setStartUpNBT(player, true);
                     onPlayerTpToHome(player);
                 }
             }
             if (data.getBoolean(startUpNBT)) {
-                player.motionY += 2 - player.motionY;
+                player.motionY += 0.5 - player.motionY;
                 if (player.posY >= posY || player.posY >= 110) {
                     HandlerR.setStartUpNBT(player, false);
                     player.removePotionEffect(Objects.requireNonNull(Potion.getPotionById(15)));

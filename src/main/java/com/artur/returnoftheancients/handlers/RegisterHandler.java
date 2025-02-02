@@ -3,9 +3,11 @@ package com.artur.returnoftheancients.handlers;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructureIsUseEBS;
 import com.artur.returnoftheancients.blocks.BaseBlockContainer;
+import com.artur.returnoftheancients.client.fx.particle.util.ParticleSprite;
 import com.artur.returnoftheancients.commads.*;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitItems;
+import com.artur.returnoftheancients.init.InitParticleSprite;
 import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -22,12 +24,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
@@ -55,6 +59,20 @@ public class RegisterHandler {
 	@SubscribeEvent
 	public static void onItemRegister(RegistryEvent.Register<Item> event) {
 		event.getRegistry().registerAll(InitItems.ITEMS.toArray(new Item[0]));
+	}
+
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public static void registerParticlesTexture(TextureStitchEvent.Pre e){
+		registerParticleSprites(e);
+	}
+
+	public static void registerParticleSprites(TextureStitchEvent.Pre e) {
+		if (TRAConfigs.Any.debugMode) System.out.println("Registering particles!");
+		for (ParticleSprite sprite : InitParticleSprite.PARTICLES_SPRITES) {
+			sprite.register(e);
+			if (TRAConfigs.Any.debugMode) System.out.println("registered: " + sprite);
+		}
 	}
 
 	public static void registerTileEntity() {

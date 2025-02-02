@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.main;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.referense.Referense;
+import com.artur.returnoftheancients.utils.EnumTextureLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -66,10 +67,12 @@ public class Test { //
 //        for (int i = 0; i != 30; i++) {
 //            AncientPortalsProcessor.initPortalsPosOnWorld(poss, i);
 //        }
-        for (int i = 0; i < 2; ++i)
-        {
-            System.out.println(i);
-        }
+//        for (int i = 0; i < 2; ++i)
+//        {
+//            System.out.println(i);
+//        }
+
+        System.out.println(EnumTextureLocation.PARTICLE_PATH.getPathNotTextures("particle_portal"));
 
 //        float[] timeArray = new float[200000];
 //        AncientEntryMapProvider.createAncientEntryMap(new Random(1234568798));

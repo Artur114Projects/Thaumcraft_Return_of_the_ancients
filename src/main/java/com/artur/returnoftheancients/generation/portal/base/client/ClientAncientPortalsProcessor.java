@@ -34,7 +34,6 @@ public class ClientAncientPortalsProcessor {
             return;
         }
 
-        updatePortalsCollidedToPlayer(player, mc.world);
         updateLoadedPortalsTick(player, mc.world);
         updateLoadedPortals(player, mc.world);
     }
@@ -58,14 +57,6 @@ public class ClientAncientPortalsProcessor {
                 LOADED_PORTALS.put(id, portal);
             }
         });
-    }
-
-    protected static void updatePortalsCollidedToPlayer(EntityPlayer player, World world) {
-        for (ClientAncientPortal portal : LOADED_PORTALS.values()) {
-            if (portal.isCollide(blockPos.setPos(player))) {
-                portal.updateCollidedPlayer(player);
-            }
-        }
     }
 
     protected static void updateLoadedPortals(EntityPlayer player, World world) {

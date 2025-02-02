@@ -1,12 +1,15 @@
 package com.artur.returnoftheancients.generation.portal.base.client;
 
+import com.artur.returnoftheancients.client.event.ClientEventsHandler;
+import com.artur.returnoftheancients.client.event.managers.movement.IMovementTask;
+import com.artur.returnoftheancients.client.fx.particle.ParticleAncientPortal;
 import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,11 +21,13 @@ import java.util.Random;
 @SideOnly(Side.CLIENT)
 public class ClientAncientPortal {
 
+    public static final String[] movementIds = new String[] {"ELEVATOR"};
     public static final BlockPos[] offsetsArray;
 
     private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
 
     public final Random random = new Random(System.currentTimeMillis());
+    private boolean isPlayerCollideToPortal = false;
     public final ChunkPos portalPos;
 
     protected final Minecraft mc;
@@ -56,34 +61,57 @@ public class ClientAncientPortal {
     }
 
     public boolean isCollide(BlockPos pos) {
-        blockPos.setPos(pos);
-        if (blockPos.getChunkX() == chunkX && blockPos.getChunkZ() == chunkZ) {
-            blockPos.setPos(portalPos).setY(0);
+        UltraMutableBlockPos lBlockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        lBlockPos.setPos(pos);
+        if (lBlockPos.getChunkX() == chunkX && blockPos.getChunkZ() == chunkZ) {
+            lBlockPos.setPos(portalPos).setY(0);
             for (BlockPos offset : offsetsArray) {
-                blockPos.pushPos();
-                if (blockPos.add(offset).equalsXZ(pos)) {
+                lBlockPos.pushPos();
+                if (lBlockPos.add(offset).equalsXZ(pos)) {
+                    lBlockPos.popPos();
+                    UltraMutableBlockPos.returnBlockPosToPoll(lBlockPos);
                     return true;
                 }
-                blockPos.popPos();
+                lBlockPos.popPos();
             }
         }
+        UltraMutableBlockPos.returnBlockPosToPoll(lBlockPos);
         return false;
     }
 
-    public void updateCollidedPlayer(EntityPlayer player) {
-
+    public void update(EntityPlayer player, World world) {
+        if (this.isCollide(blockPos.setPos(player))) {
+            this.updateCollidedPlayer(player);
+            isPlayerCollideToPortal = true;
+        } else if (isPlayerCollideToPortal) {
+            ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.removeMovementTask(movementIds);
+            isPlayerCollideToPortal = false;
+        }
+        addParticles(player, world);
     }
 
-    public void update(EntityPlayer player, World world) {
+    public void updateCollidedPlayer(EntityPlayer player) {
+        if (player.isSneaking() && !ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask(movementIds[0])) {
+            ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementElevator(MovementElevator.ElevatingType.DOWN, 3, 0.5F), movementIds[0]);
+        }
+    }
+
+    protected void addParticles(EntityPlayer player, World world) {
         blockPos.setPos(player);
-        if (blockPos.distance(portalPos) < 2) {
+        if (blockPos.distance(portalPos) == 0) {
             blockPos.setPos(portalPos).setY(posY);
-            for (BlockPos offset : offsetsArray) {
-                blockPos.offsetAndCallRunnable(offset, offsetPos -> {
-                    for (int i = 0; i != 4; i++) {
-                        world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, offsetPos.getX() + random.nextDouble(), offsetPos.getY() + random.nextDouble(), offsetPos.getZ() + random.nextDouble(), 0, random.nextDouble() / 4, 0);
+            for (int i = 0; i != (player.posY - 16 < posY ? 32 : 0); i++) {
+                blockPos.setPos(portalPos).setY(MathHelper.floor(player.posY - (i + 1) + 16));
+                if (blockPos.getY() >= posY || blockPos.getY() < 3) {
+                    continue;
+                }
+                for (BlockPos offset : offsetsArray) {
+                    if (random.nextInt(16) == 0) {
+                        blockPos.offsetAndCallRunnable(offset, offsetPos -> {
+                            mc.effectRenderer.addEffect(new ParticleAncientPortal(world, offsetPos.getX() + random.nextDouble(), offsetPos.getY() + random.nextDouble(), offsetPos.getZ() + random.nextDouble()));
+                        });
                     }
-                });
+                }
             }
         }
     }
@@ -109,5 +137,69 @@ public class ClientAncientPortal {
 
         UltraMutableBlockPos.returnBlockPosToPoll(pos);
         offsetsArray = offsets.toArray(new BlockPos[0]);
+    }
+
+    public static class MovementElevator implements IMovementTask {
+        private float speedForSmoothingTicks = -100;
+        private final ElevatingType type;
+        private int smoothingTicks;
+        private final float speed;
+        private int lastY = -100;
+        private float lastSpeed;
+        private final int toY;
+        private int startY;
+
+        public MovementElevator(ElevatingType type, int toY, float speed) {
+            this.speed = type == ElevatingType.UP ? speed : -speed;
+            this.type = type;
+            this.toY = toY;
+        }
+
+        @Override
+        public void move(EntityPlayer player) {
+            final int specificBlocks = 6;
+
+            int currentY = MathHelper.floor(player.posY);
+            float localSpeed = (speed + lastSpeed) / 2;
+
+            if (lastY == -100) {
+                startY = currentY;
+            }
+
+            boolean flag = false;
+            if (startY - currentY < specificBlocks && type == ElevatingType.DOWN) {
+                localSpeed = localSpeed * 1.5F;
+                speedForSmoothingTicks = localSpeed;
+                flag = true;
+            } else if (toY - currentY < specificBlocks && type == ElevatingType.UP) {
+                localSpeed = localSpeed * 0.75F;
+                speedForSmoothingTicks = localSpeed;
+                flag = true;
+            }
+
+            if (!flag && smoothingTicks < 10 && speedForSmoothingTicks != -100) {
+                localSpeed = speedForSmoothingTicks + (localSpeed - speedForSmoothingTicks) * (smoothingTicks / 10.0F);
+                smoothingTicks++;
+            }
+
+            player.motionY += localSpeed - player.motionY;
+
+            lastSpeed = localSpeed;
+            lastY = currentY;
+        }
+
+        @Override
+        public boolean isDoneWork() {
+            return (type == ElevatingType.UP ? lastY >= toY : lastY <= toY) && lastY != -100;
+        }
+
+        @Override
+        public boolean isNeedToWorkAlone() {
+            return true;
+        }
+
+        public enum ElevatingType {
+            UP, DOWN
+        }
     }
 }

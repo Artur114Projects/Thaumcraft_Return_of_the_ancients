@@ -20,8 +20,14 @@
 		}
 	],
 	"display": {
+		"firstperson_righthand": {
+			"rotation": [0, 45, 0]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 225, 0]
+		},
 		"gui": {
-			"rotation": [30, 45, 0],
+			"rotation": [30, 225, 0],
 			"scale": [1.2, 1.2, 1.2]
 		}
 	},

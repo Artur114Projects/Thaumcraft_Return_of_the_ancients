@@ -51,6 +51,11 @@ public class ClientAncientPortalsProcessor {
     }
 
     protected static void updateLoadedPortalsMap() {
+        for (ClientAncientPortal portal : LOADED_PORTALS.values()) {
+            if (!portal.isLoaded()) {
+                portal.onUnload();
+            }
+        }
         LOADED_PORTALS.clear();
         PORTALS.forEach((id, portal) -> {
             if (portal.isLoaded()) {
@@ -63,6 +68,16 @@ public class ClientAncientPortalsProcessor {
         for (ClientAncientPortal portal : LOADED_PORTALS.values()) {
             portal.update(player, world);
         }
+    }
+
+    public static void setNewPortalData(NBTTagCompound nbt) {
+        LOADED_PORTALS.clear();
+        PORTALS.clear();
+        for (int i = 0; nbt.hasKey("Portal:" + i); i++) {
+            ClientAncientPortal portal = createAncientPortal(nbt.getCompoundTag("Portal:" + i));
+            PORTALS.put(portal.id, portal);
+        }
+        updateLoadedPortalsMap();
     }
 
     protected static ClientAncientPortal createAncientPortal(NBTTagCompound data) {

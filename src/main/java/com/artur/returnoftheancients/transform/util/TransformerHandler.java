@@ -4,11 +4,15 @@ import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
+import com.artur.returnoftheancients.network.ServerPacketGetWeather;
 import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
 import com.artur.returnoftheancients.transform.transformers.base.MVWithDescCreator;
 import com.chaosthedude.naturescompass.util.BiomeSearchWorker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import org.objectweb.asm.*;
@@ -16,11 +20,21 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.objectweb.asm.commons.AdviceAdapter;
 import thaumcraft.client.lib.events.RenderEventHandler;
 
 import java.util.Random;
 
 public class TransformerHandler {
+
+
+    public static boolean isEntityLivingBaseInTaintBiome(Item item, ItemStack stack, EntityLivingBase livingBase) {
+        EntityLivingBase mob = null;
+        if (mob.world.getBiome(mob.getPosition()) == InitBiome.TAINT) {
+            return false;
+        }
+        return HandlerR.arrayContains(InitBiome.TAINT_BIOMES_ID, HandlerR.getBiomeIdOnPos(livingBase.world, livingBase.getPosition()));
+    }
 
     public static boolean isTaintLBiomeInPos(World world, BlockPos pos) {
         return HandlerR.arrayContains(InitBiome.TAINT_BIOMES_L_ID, world.getChunkFromBlockCoords(pos).getBiomeArray()[(pos.getX() & 15) + (pos.getZ() & 15) * 16]);

@@ -24,11 +24,11 @@ public class PlayerMovementManager {
             return;
         }
         int playerDimension = e.player.dimension;
-        if (e.player.getEntityData().getBoolean("startUpNBT")) {
-            if (playerDimension != ancient_world_dim_id) {
-                e.player.motionY += 0.5 - e.player.motionY;
-            }
-        }
+//        if (e.player.getEntityData().getBoolean("startUpNBT")) {
+//            if (playerDimension != ancient_world_dim_id) {
+//                e.player.motionY += 0.5 - e.player.motionY;
+//            }
+//        }
         if (e.player.dimension == ancient_world_dim_id) {
             if (e.player.posY > 84 && !e.player.isCreative()) {
                 e.player.fallDistance = 0;

@@ -25,6 +25,11 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 @Mod(modid = Referense.MODID, useMetadata = true, version = Referense.VERSION)
 public class MainR {
 
+	// TODO: Улучшить древний мир
+	// TODO: Сделать зараженный биом
+	// TODO: Сделать систему с новой энергией механизмами и т.д
+	// TODO: Сделать систему генерации мобов
+
 	public static final SimpleNetworkWrapper NETWORK = new SimpleNetworkWrapper(Referense.MODID);
 
 	@Instance

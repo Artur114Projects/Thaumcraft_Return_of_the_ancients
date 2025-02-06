@@ -26,6 +26,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import thaumcraft.api.blocks.BlocksTC;
 
 import java.util.List;
 import java.util.Random;
@@ -33,6 +34,7 @@ import java.util.Random;
 public class ItemGavno extends BaseItem {
 
 //	private ITRAStructure structure = null;
+	private BlockPos blockPos = null;
 	private ClientAncientPortal portal = null;
 	private RepeatingSound sound = null;
 
@@ -79,20 +81,20 @@ public class ItemGavno extends BaseItem {
 ////			spawnCustomParticle(worldIn, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.1, 0);
 //		}
 		if (worldIn.isRemote) {
-			if (player.isSneaking()) {
-				NBTTagCompound data = new NBTTagCompound();
-				data.setInteger("dimension", worldIn.provider.getDimension());
-				data.setInteger("chunkX", pos.getX() >> 4);
-				data.setInteger("chunkZ", pos.getZ() >> 4);
-				data.setInteger("posY", pos.getY());
-				data.setInteger("id", 0);
-				portal = new ClientAncientPortal(data);
-				ClientAncientPortalsProcessor.PORTALS.put(0, portal);
-			} else {
-				if (portal != null) {
-					System.out.println(portal.isCollide(pos));
-				}
-			}
+//			if (player.isSneaking()) {
+//				NBTTagCompound data = new NBTTagCompound();
+//				data.setInteger("dimension", worldIn.provider.getDimension());
+//				data.setInteger("chunkX", pos.getX() >> 4);
+//				data.setInteger("chunkZ", pos.getZ() >> 4);
+//				data.setInteger("posY", pos.getY());
+//				data.setInteger("id", 0);
+//				portal = new ClientAncientPortal(data);
+//				ClientAncientPortalsProcessor.PORTALS.put(0, portal);
+//			} else {
+//				if (portal != null) {
+//					System.out.println(portal.isCollide(pos));
+//				}
+//			}
 //			if (sound == null) {
 //				sound = new RepeatingSound(InitSounds.HEARTBEAT.SOUND.getSoundName(), SoundCategory.AMBIENT, 10, 1, true, 1, ISound.AttenuationType.LINEAR, 0, 0, 0);
 //			}
@@ -111,9 +113,11 @@ public class ItemGavno extends BaseItem {
 		if (!worldIn.isRemote) {
 //			System.out.println((new WorldGenTaintBigTree(false)).generate(worldIn, new Random(), pos));
 			if (player.isSneaking()) {
-//				new GenAncientArch().generate(worldIn, pos, EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, EnumFacing.Axis.X), 128);
+				blockPos = pos;
 			} else {
-//				new GenAncientArch().generate(worldIn, pos, EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, EnumFacing.Axis.X), 64);
+				if (blockPos != null) {
+					new GenAncientArch().generate(worldIn, pos, blockPos);
+				}
 			}
 //			BlockPos playerPos = player.getPosition();
 //			long time1 = System.currentTimeMillis();

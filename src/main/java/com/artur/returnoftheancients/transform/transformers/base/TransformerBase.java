@@ -1,11 +1,6 @@
 package com.artur.returnoftheancients.transform.transformers.base;
 
-import com.artur.returnoftheancients.misc.TRAConfigs;
 import org.objectweb.asm.*;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public abstract class TransformerBase implements ITransformer {
 
@@ -26,6 +21,11 @@ public abstract class TransformerBase implements ITransformer {
                     }
                 }
                 return mv;
+            }
+
+            @Override
+            public void visitEnd() {
+                super.visitEnd();
             }
         }, 0);
 

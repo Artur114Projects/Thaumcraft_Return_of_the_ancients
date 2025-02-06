@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class AncientPortalNaturalGeneration extends AncientPortal {
     public AncientPortalNaturalGeneration(MinecraftServer server, int dimension, int chunkX, int chunkZ, int posY) {
-        super(server, dimension, chunkX, chunkZ, posY >= 4 ? posY : server.getWorld(dimension).getSeaLevel(), HandlerR.foundMostSmallUniqueIntInList(new ArrayList<>(AncientPortalsProcessor.PORTALS.keySet())));
+        super(server, dimension, chunkX, chunkZ, posY >= 4 ? posY : server.getWorld(dimension).getSeaLevel(), AncientPortalsProcessor.getFreeId());
         build();
     }
 

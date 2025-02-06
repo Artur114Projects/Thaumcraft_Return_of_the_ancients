@@ -4,10 +4,13 @@ import com.artur.returnoftheancients.generation.portal.AncientPortalNaturalGener
 import com.artur.returnoftheancients.generation.portal.AncientPortalOpening;
 import com.artur.returnoftheancients.generation.terraingen.GenLayersHandler;
 import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
+import com.artur.returnoftheancients.network.ClientPacketSyncAncientPortals;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
+import net.minecraft.client.renderer.tileentity.TileEntityChestRenderer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -22,6 +25,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.opengl.GL11;
+import thaumcraft.common.blocks.world.taint.TaintHelper;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -37,7 +42,7 @@ public class AncientPortalsProcessor {
 
     private static final Set<Integer> LOAD_DIMENSIONS = new HashSet<>();
     private static final List<Integer> TO_DELETE = new ArrayList<>();
-    public static Map<Integer, AncientPortal> PORTALS = new HashMap<>();
+    private static final Map<Integer, AncientPortal> PORTALS = new HashMap<>();
 
 
     @SubscribeEvent
@@ -77,7 +82,7 @@ public class AncientPortalsProcessor {
                     NBTTagList list = portalsPack.getTagList(dimension + "", 10);
                     for (int i = 0; i != list.tagCount(); i++) {
                         NBTTagCompound nbt = list.getCompoundTagAt(i);
-                        PORTALS.put(dimension, loadPortal(e.getWorld().getMinecraftServer(), nbt));
+                        addNewPortal(loadPortal(e.getWorld().getMinecraftServer(), nbt));
                     }
                 }
             }
@@ -108,6 +113,9 @@ public class AncientPortalsProcessor {
             AtomicBoolean flag = new AtomicBoolean(false);
 
             PORTALS.forEach((key, value) -> {
+                if (!value.isLoaded()) {
+                    return;
+                }
                 value.update(e);
                 if (value.isExploded()) {
                     TO_DELETE.add(key);
@@ -121,7 +129,7 @@ public class AncientPortalsProcessor {
             }
 
             if (!TO_DELETE.isEmpty()) {
-                updatePortalDataOnClient();
+                flag.set(true);
                 TO_DELETE.clear();
                 save();
             }
@@ -159,8 +167,21 @@ public class AncientPortalsProcessor {
         }
     }
 
+    public static void addNewPortal(AncientPortal portal) {
+        if (!PORTALS.containsKey(portal.id)) {
+            PORTALS.put(portal.id, portal);
+        } else {
+            portal.id = getFreeId();
+            addNewPortal(portal);
+        }
+    }
+
     public static AncientPortal getPortal(int ID) {
         return PORTALS.get(ID);
+    }
+
+    public static int getFreeId() {
+        return HandlerR.foundMostSmallUniqueIntInList(new ArrayList<>(AncientPortalsProcessor.PORTALS.keySet()));
     }
 
     public static AncientPortal loadPortal(MinecraftServer server, NBTTagCompound nbt) {
@@ -183,6 +204,16 @@ public class AncientPortalsProcessor {
         }
         return false;
     }
+
+    public static boolean hasPortal(ChunkPos pos, int dimension) {
+        for (AncientPortal portal : PORTALS.values()) {
+            if (portal.chunkX == pos.x && portal.chunkZ == pos.z && portal.dimension == dimension) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public static boolean hasPortal(BlockPos pos, int dimension) {
         return hasPortal(pos.getX() >> 4, pos.getZ() >> 4, dimension);
@@ -324,11 +355,25 @@ public class AncientPortalsProcessor {
     }
 
     public static void updatePortalDataOnClient() {
-
+        MainR.NETWORK.sendToAll(new ClientPacketSyncAncientPortals(crateSyncNBT()));
     }
 
     public static void updatePortalDataOnClient(EntityPlayerMP player) {
+        MainR.NETWORK.sendTo(new ClientPacketSyncAncientPortals(crateSyncNBT()), player);
+    }
 
+    public static NBTTagCompound crateSyncNBT() {
+        NBTTagCompound nbt = new NBTTagCompound();
+        int i = 0;
+        for (AncientPortal portal : PORTALS.values()) {
+            NBTTagCompound data = portal.createClientUpdateNBT();
+            if (data == null) {
+                continue;
+            }
+            nbt.setTag("Portal:" + i, data);
+            i++;
+        }
+        return nbt;
     }
 
 }

@@ -58,4 +58,9 @@ public abstract class TileEnergyProviderBase extends TileThaumcraft implements I
     public World getWorldE() {
         return this.world;
     }
+
+    @Override
+    public boolean isLoaded() {
+        return world.isBlockLoaded(pos);
+    }
 }

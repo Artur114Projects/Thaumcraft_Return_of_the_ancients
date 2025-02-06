@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.energy;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergy;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
 import com.artur.returnoftheancients.misc.TRAConfigs;
+import com.artur.returnoftheancients.utils.interfaces.ISaveToNBT;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
@@ -115,7 +116,7 @@ public class EnergySystem {
 
         boolean flag = false;
         for (ITileEnergyProvider tile : canAdd) {
-            if (tile.isNeedAdd()) {
+            if (tile.isLoaded() && tile.isNeedAdd()) {
                 tile.add(takeFromAll(tile.canAdd(tile.maxInput())));
                 flag = true;
             }
@@ -128,7 +129,7 @@ public class EnergySystem {
         float localCount = count;
         Set<ITileEnergyProvider> localCanTake = new HashSet<>();
         for (ITileEnergyProvider tile : canTake) {
-            if (!tile.isEmpty()) {
+            if (tile.isLoaded() && !tile.isEmpty()) {
                 localCanTake.add(tile);
             }
         }

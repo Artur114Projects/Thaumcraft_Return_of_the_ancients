@@ -11,6 +11,8 @@ import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
+import com.artur.returnoftheancients.utils.interfaces.ISaveToNBT;
+import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,6 +20,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -32,17 +35,18 @@ import java.util.Objects;
 // TODO: Добавить естественную генерацию портала
 // TODO: Разобраться с компасом
 // TODO: Решить не понятный баг с тем что при прерывании возвращает на портал 0
-public abstract class AncientPortal {
+public abstract class AncientPortal implements ISaveToNBT {
 
     public static final String PortalID = "PortalID";
     public static final String tpToHomeNBT = "tpToHomeNBT";
     public static final String startUpNBT = "startUpNBT";
 
 
-    protected final BlockPos.MutableBlockPos mPos = new BlockPos.MutableBlockPos();
+    protected final UltraMutableBlockPos mPos = new UltraMutableBlockPos();
     private final List<IExplore> explosionList = new ArrayList<>();
     private boolean isRequestToUpdateOnClient = false;
     private boolean isExploded = false;
+    public final ChunkPos portalPos;
     private int exploreIndex = 0;
 
     protected final World world;
@@ -58,13 +62,13 @@ public abstract class AncientPortal {
 
     public final int posZ;
 
-    public final int id;
+    protected int id;
 
 
     public AncientPortal(MinecraftServer server, int dimension, int chunkX, int chunkZ, int posY, int id) {
         if (TRAConfigs.Any.debugMode) System.out.println("New portal x:" + chunkX + "z:" + chunkZ + " id:" + id);
         if (AncientPortalsProcessor.hasPortal(chunkX, chunkZ, dimension)) isExploded = true;
-        AncientPortalsProcessor.PORTALS.put(id, this);
+        this.portalPos = new ChunkPos(chunkX, chunkZ);
         this.world = server.getWorld(dimension);
         this.dimension = dimension;
         this.posX = chunkX << 4;
@@ -74,12 +78,14 @@ public abstract class AncientPortal {
         this.posY = posY;
         this.id = id;
 
+        AncientPortalsProcessor.addNewPortal(this);
         this.requestToUpdateOnClient();
     }
 
-    public AncientPortal(MinecraftServer server, NBTTagCompound compound) {
+    protected AncientPortal(MinecraftServer server, NBTTagCompound compound) {
         this.chunkX = compound.getInteger("chunkX");
         this.chunkZ = compound.getInteger("chunkZ");
+        this.portalPos = new ChunkPos(chunkX, chunkZ);
         this.id = compound.getInteger("id");
         if (TRAConfigs.Any.debugMode) System.out.println("Portal load x:" + chunkX + "z:" + chunkZ + " id:" + id);
         this.dimension = compound.getInteger("dimension");
@@ -207,6 +213,21 @@ public abstract class AncientPortal {
 
     public boolean isExplodes() {
         return isExplodes;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public boolean isLoaded() {
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+
+        mPos.setPos(0, 0, 0);
+        boolean flag = world.isAreaLoaded(mPos.setPos(portalPos), blockPos.setPos(portalPos).add(16, 0, 16));
+
+        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+
+        return flag;
     }
 
     public void explosion() {

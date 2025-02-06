@@ -34,6 +34,7 @@ public interface ITileEnergyProvider extends ITileEnergy {
     boolean canTakeFromFacing(EnumFacing facing);
     boolean isEmpty();
     boolean isNeedAdd();
+    boolean isLoaded();
     void setAdding();
     default boolean canTake() {
         boolean flag = false;

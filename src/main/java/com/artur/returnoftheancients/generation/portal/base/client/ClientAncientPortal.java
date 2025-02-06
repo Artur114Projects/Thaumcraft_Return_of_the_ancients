@@ -13,6 +13,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thaumcraft.common.lib.utils.EntityUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +22,15 @@ import java.util.Random;
 @SideOnly(Side.CLIENT)
 public class ClientAncientPortal {
 
-    public static final String[] movementIds = new String[] {"ELEVATOR"};
     public static final BlockPos[] offsetsArray;
 
-    private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
+
+    protected final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
 
     public final Random random = new Random(System.currentTimeMillis());
     private boolean isPlayerCollideToPortal = false;
+    private double particlesSpeed = 0.2D;
+    public final String[] movementIds;
     public final ChunkPos portalPos;
 
     protected final Minecraft mc;
@@ -54,10 +57,16 @@ public class ClientAncientPortal {
         this.mc = Minecraft.getMinecraft();
         this.posX = chunkX << 4;
         this.posZ = chunkZ << 4;
+
+        movementIds = new String[] {"ELEVATOR_" + id, "RETENTION_Y_" + id};
     }
 
     public boolean isLoaded() {
         return !mc.world.getChunkProvider().provideChunk(chunkX, chunkZ).isEmpty();
+    }
+
+    public void onUnload() {
+        ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.removeMovementTask(movementIds);
     }
 
     public boolean isCollide(BlockPos pos) {
@@ -80,19 +89,32 @@ public class ClientAncientPortal {
     }
 
     public void update(EntityPlayer player, World world) {
-        if (this.isCollide(blockPos.setPos(player))) {
+        if (this.isCollide(blockPos.setPos(player)) && player.dimension == dimension) {
             this.updateCollidedPlayer(player);
             isPlayerCollideToPortal = true;
         } else if (isPlayerCollideToPortal) {
             ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.removeMovementTask(movementIds);
             isPlayerCollideToPortal = false;
+            particlesSpeed = 0.2D;
         }
+
         addParticles(player, world);
     }
 
     public void updateCollidedPlayer(EntityPlayer player) {
         if (player.isSneaking() && !ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask(movementIds[0])) {
-            ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementElevator(MovementElevator.ElevatingType.DOWN, 3, 0.5F), movementIds[0]);
+            ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementElevator(MovementElevator.ElevatingType.DOWN, 4, 0.5F), movementIds[0]);
+            particlesSpeed = 0.2D;
+        }
+
+        int currentY = MathHelper.floor(player.posY);
+
+        if (posY > currentY && !ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask(movementIds[0])) {
+            ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementElevator(MovementElevator.ElevatingType.UP, posY, 0.5F), movementIds[0]);
+            particlesSpeed = 0.5D;
+        } else if (posY == currentY && !ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask(movementIds[0]) && !ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask(movementIds[1])) {
+            ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementRetentionY(posY + 1.1), movementIds[1]);
+            particlesSpeed = 0.2D;
         }
     }
 
@@ -108,7 +130,7 @@ public class ClientAncientPortal {
                 for (BlockPos offset : offsetsArray) {
                     if (random.nextInt(16) == 0) {
                         blockPos.offsetAndCallRunnable(offset, offsetPos -> {
-                            mc.effectRenderer.addEffect(new ParticleAncientPortal(world, offsetPos.getX() + random.nextDouble(), offsetPos.getY() + random.nextDouble(), offsetPos.getZ() + random.nextDouble()));
+                            mc.effectRenderer.addEffect(new ParticleAncientPortal(world, offsetPos.getX() + random.nextDouble(), offsetPos.getY() + random.nextDouble(), offsetPos.getZ() + random.nextDouble(), particlesSpeed));
                         });
                     }
                 }
@@ -168,7 +190,7 @@ public class ClientAncientPortal {
 
             boolean flag = false;
             if (startY - currentY < specificBlocks && type == ElevatingType.DOWN) {
-                localSpeed = localSpeed * 1.5F;
+                localSpeed = localSpeed * 1.25F;
                 speedForSmoothingTicks = localSpeed;
                 flag = true;
             } else if (toY - currentY < specificBlocks && type == ElevatingType.UP) {
@@ -198,8 +220,51 @@ public class ClientAncientPortal {
             return true;
         }
 
+        public boolean isUp() {
+            return type == ElevatingType.UP;
+        }
+
         public enum ElevatingType {
             UP, DOWN
+        }
+    }
+
+    public static class MovementRetentionY implements IMovementTask {
+        private boolean isLastPlayerSneaking = false;
+        private final double needY;
+        private int tick = 0;
+
+        public MovementRetentionY(double needY) {
+            this.needY = needY;
+        }
+
+        @Override
+        public void move(EntityPlayer player) {
+            isLastPlayerSneaking = player.isSneaking();
+            double localNeedY = needY;
+
+            if (tick >= 16 + 20) {
+                if (tick >= 32 + 20) {
+                    tick = 0;
+                }
+                localNeedY += 0.2;
+            }
+
+            if (player.posY != localNeedY) {
+                player.motionY = (localNeedY - player.posY) / 8.0D;
+            }
+
+            tick++;
+        }
+
+        @Override
+        public boolean isDoneWork() {
+            return isLastPlayerSneaking;
+        }
+
+        @Override
+        public boolean isNeedToWorkAlone() {
+            return true;
         }
     }
 }

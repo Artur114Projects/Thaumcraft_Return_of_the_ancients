@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.generation.portal.generators;
 
 import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -10,30 +9,48 @@ import thaumcraft.api.blocks.BlocksTC;
 
 public class GenAncientArch {
     private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
-    private final int baseSize = 32;
 
-    public void generate(World world, BlockPos pos, EnumFacing offset, int length) {
-        blockPos.setPos(pos);
+    public void generate(World world, BlockPos start, BlockPos end) {
+        blockPos.setPos(start);
         int prevYOffset = 0;
-        double scale = (double) baseSize / length;
+        int dx = end.getX() - start.getX();
+        int dy = end.getY() - start.getY();
+        int dz = end.getZ() - start.getZ();
+
+        int length = Math.max(Math.abs(dx), Math.abs(dz));
+
+        EnumFacing offset;
+        if (Math.abs(dx) > Math.abs(dz)) {
+            offset = EnumFacing.getFacingFromAxis(dx > 0 ? EnumFacing.AxisDirection.POSITIVE : EnumFacing.AxisDirection.NEGATIVE, EnumFacing.Axis.X);
+        } else {
+            offset = EnumFacing.getFacingFromAxis(dz > 0 ? EnumFacing.AxisDirection.POSITIVE : EnumFacing.AxisDirection.NEGATIVE, EnumFacing.Axis.Z);
+        }
+
 
         for (int i = 0; i <= length; i++) {
             blockPos.pushPos();
-            int yOffset = getYOffsetFromX(i * scale);
+
+            double t = (double) i / length;
+
+            int yOffset = getYOffsetFromX(t, start, end);
+
+            blockPos.offset(offset, i);
 
             if (yOffset != prevYOffset) {
                 blockPos.pushPos();
-                world.setBlockState(blockPos.addY(prevYOffset), BlocksTC.stoneEldritchTile.getDefaultState());
+                blockPos.setY(prevYOffset);
+                world.setBlockState(blockPos, BlocksTC.stoneEldritchTile.getDefaultState());
                 blockPos.popPos();
             }
 
-            if (i != length && yOffset != getYOffsetFromX((i + 1) * scale)) {
+            if (i != length && yOffset != getYOffsetFromX((double) (i + 1) / length, start, end)) {
                 blockPos.pushPos();
-                world.setBlockState(blockPos.addY(getYOffsetFromX((i + 1) * scale)), BlocksTC.stoneEldritchTile.getDefaultState());
+                blockPos.setY(getYOffsetFromX((double) (i + 1) / length, start, end));
+                world.setBlockState(blockPos, BlocksTC.stoneEldritchTile.getDefaultState());
                 blockPos.popPos();
             }
 
-            blockPos.addY(yOffset);
+            blockPos.setY(yOffset);
 
             world.setBlockState(blockPos, BlocksTC.stoneEldritchTile.getDefaultState());
             world.setBlockState(blockPos.addY(1), BlocksTC.stoneAncient.getDefaultState());
@@ -41,21 +58,22 @@ public class GenAncientArch {
             prevYOffset = yOffset;
 
             blockPos.popPos();
-
-            blockPos.offset(offset);
         }
     }
 
+    private int getYOffsetFromX(double t, BlockPos start, BlockPos end) {
+        int dx = end.getX() - start.getX();
+        int dz = end.getZ() - start.getZ();
+        int dy = end.getY() - start.getY();
 
-    private int getYOffsetFromX(double x) {
-        final int[] offsetArray = new int[] {0, 1, 2, 3, 3, 4, 4, 4, 5, 5, 5};
+        int d = Math.max(Math.abs(dx), Math.abs(dz));
 
-        if (x < offsetArray.length) {
-            return offsetArray[MathHelper.floor(x)];
-        } else if (x > baseSize - offsetArray.length) {
-            return offsetArray[MathHelper.floor(baseSize - x)];
-        } else {
-            return 6;
-        }
+        int h = MathHelper.floor(Math.abs(dy) + MathHelper.clamp(d / 16.0D, 0.0D, 16.0D));
+
+        double y = start.getY();
+        y += dy * t;
+        y += h * (4 * t * (1 -  t));
+
+        return MathHelper.floor(y);
     }
 }

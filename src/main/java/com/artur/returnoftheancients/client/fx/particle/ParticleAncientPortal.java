@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 public class ParticleAncientPortal extends Particle {
     private final Minecraft mc = Minecraft.getMinecraft();
 
-    public ParticleAncientPortal(World worldIn, double posXIn, double posYIn, double posZIn) {
+    public ParticleAncientPortal(World worldIn, double posXIn, double posYIn, double posZIn, double ySpeed) {
         super(worldIn, posXIn, posYIn, posZIn);
 
         int randSprite = rand.nextInt(InitParticleSprite.PARTICLE_PORTAL.atlasSize() + 4);
@@ -18,7 +18,7 @@ public class ParticleAncientPortal extends Particle {
         TextureAtlasSprite sprite = mc.getTextureMapBlocks().getAtlasSprite(InitParticleSprite.PARTICLE_PORTAL.iconName(randSprite));
         this.setParticleTexture(sprite);
 
-        this.motionY = 0.2F;
+        this.motionY = ySpeed;
         this.motionX = 0;
         this.motionZ = 0;
         this.particleScale = 4.0F / (16.0F + rand.nextFloat() / 2);

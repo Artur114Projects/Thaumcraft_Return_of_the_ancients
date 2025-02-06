@@ -16,9 +16,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.LinkedList;
 
 public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
-
     private static final UltraMutableBlockPos[] stack = new UltraMutableBlockPos[8];
     private static int stackHead = -1;
+
 
     public static UltraMutableBlockPos getBlockPosFromPoll() {
         if (stackHead != -1) {
@@ -69,8 +69,8 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
     @Override
     public @NotNull UltraMutableBlockPos add(double x, double y, double z) {
         this.x += MathHelper.floor(x);
-        this.y += MathHelper.floor(y);;
-        this.z += MathHelper.floor(z);;
+        this.y += MathHelper.floor(y);
+        this.z += MathHelper.floor(z);
         return this;
     }
 
@@ -284,6 +284,10 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
             }
             contextPos.add(new PosContext(this));
             contextDeep++;
+        }
+
+        if ((contextDeep + 1) % 100 == 0) {
+            System.out.println("Leak? Context deep exceeded [" + (contextDeep + 1) + "] so it should be!?");
         }
     }
 

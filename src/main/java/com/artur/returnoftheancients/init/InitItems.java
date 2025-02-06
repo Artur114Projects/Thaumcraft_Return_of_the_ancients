@@ -8,10 +8,11 @@ import com.artur.returnoftheancients.items.*;
 import net.minecraft.item.Item;
 
 public class InitItems {
-	public static final List<Item> ITEMS = new ArrayList<Item>();
+	public static final List<Item> ITEMS = new ArrayList<>();
 
 	// Items
 	public static final Item PRIMAL_BLADE = new ItemPrimalBlade("itemprimalblade", ReturnOfTheAncientsMaterials.TOOLMAT_PRIMAL);
+	public static final Item IMITATION_ANCIENT_PROTECTOR = new ItemImitationAncientProtector("imitation_ancient_protector");
 	public static final Item SOUL_BINDER = new ItemSoulBinder("soul_binder");
 	public static final Item COMPASS = new ItemPortalCompass("portal_compass");
 	public static final Item GAVNO = new ItemGavno("gavno");

@@ -28,6 +28,10 @@ public abstract class BaseBlock extends Block implements IHasModel {
         InitItems.ITEMS.add(item);
     }
 
+    protected void setTRACreativeTab() {
+        this.setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);
+    }
+
     @Override
     public void registerModels() {
         MainR.proxy.registerItemRenderer(item, 0, "inventory");

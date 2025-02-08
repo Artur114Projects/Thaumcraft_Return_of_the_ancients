@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -42,6 +43,7 @@ public class ItemGavno extends BaseItem {
 		super(name);
 		setMaxStackSize(1);
 		setContainerItem(this);
+		setMaxDamage(2);
 	}
 
 	@Override
@@ -159,8 +161,11 @@ public class ItemGavno extends BaseItem {
 				spawnCustomParticle(worldIn, playerIn.posX + xOff, playerIn.posY + 1, playerIn.posZ + zOff, vec3d.x * ((i / 10.0D) + 1), vec3d.y * ((i / 10.0D) + 1), vec3d.z * ((i / 10.0D) + 1));
 			}
 		}
+
+		playerIn.getHeldItem(handIn).setItemDamage(1);
+
 		playerIn.setActiveHand(handIn);
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -182,4 +187,5 @@ public class ItemGavno extends BaseItem {
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(TextFormatting.UNDERLINE + "M" + TextFormatting.RESET + TextFormatting.OBFUSCATED + "e" + TextFormatting.RESET  + TextFormatting.BOLD + "o" + TextFormatting.RESET  + TextFormatting.STRIKETHROUGH + "w");
 	}
+
 }

@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.blocks;
 
-import com.artur.returnoftheancients.energy.blocks.BlockContainerEnergyBase;
+import com.artur.returnoftheancients.energy.block.BlockContainerEnergyBase;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientTeleport;
@@ -24,18 +24,17 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import thaumcraft.client.gui.GuiResearchTable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class AncientTeleport extends BlockContainerEnergyBase<TileEntityAncientTeleport> {
+public class BlockAncientTeleport extends BlockContainerEnergyBase<TileEntityAncientTeleport> {
     private final Random rand = new Random();
 
-    public AncientTeleport(String name, Material material, float hardness, float resistance, SoundType soundType) {
+    public BlockAncientTeleport(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
-        this.setCreativeTab(MainR.ReturnOfTheAncientsTab);
+        this.setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);
         InitItems.ITEMS.remove(item);
         item = new ItemBlockAncientTeleport(this).setRegistryName(this.getRegistryName());
         InitItems.ITEMS.add(item);

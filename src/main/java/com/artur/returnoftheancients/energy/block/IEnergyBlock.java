@@ -1,15 +1,11 @@
-package com.artur.returnoftheancients.energy.blocks;
+package com.artur.returnoftheancients.energy.block;
 
-import com.artur.returnoftheancients.energy.EnergySystemsProvider;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergy;
-import jdk.internal.dynalink.linker.LinkerServices;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public interface IEnergyBlock {
 

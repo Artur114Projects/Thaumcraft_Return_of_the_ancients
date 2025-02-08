@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.energy.blocks;
+package com.artur.returnoftheancients.energy.block;
 
 import com.artur.returnoftheancients.energy.EnergySystem;
 import com.artur.returnoftheancients.energy.EnergySystemsProvider;

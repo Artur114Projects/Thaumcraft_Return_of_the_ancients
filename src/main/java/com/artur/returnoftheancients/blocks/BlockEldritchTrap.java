@@ -1,29 +1,22 @@
 package com.artur.returnoftheancients.blocks;
 
-import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.tileentity.BlockTileEntity;
 import com.artur.returnoftheancients.tileentity.TileEntityEldritchTrap;
-import com.artur.returnoftheancients.tileentity.TileEntityFireTrap;
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.ParticleManager;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import thaumcraft.api.entities.IEldritchMob;
 
 import java.util.Random;
 
-public class EldritchTrap extends BlockTileEntity<TileEntityEldritchTrap> {
+public class BlockEldritchTrap extends BlockTileEntity<TileEntityEldritchTrap> {
 
 
-    public EldritchTrap(String name, Material material, float hardness, float resistance, SoundType soundType) {
+    public BlockEldritchTrap(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
     }
 

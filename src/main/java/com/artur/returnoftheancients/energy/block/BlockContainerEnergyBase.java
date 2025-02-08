@@ -1,20 +1,14 @@
-package com.artur.returnoftheancients.energy.blocks;
+package com.artur.returnoftheancients.energy.block;
 
 import com.artur.returnoftheancients.blocks.BaseBlockContainer;
-import com.artur.returnoftheancients.energy.EnergySystem;
 import com.artur.returnoftheancients.energy.EnergySystemsProvider;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergy;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
-import com.artur.returnoftheancients.misc.TRAConfigs;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 public abstract class BlockContainerEnergyBase<T extends TileEntity> extends BaseBlockContainer<T> implements IEnergyBlock {

@@ -16,11 +16,10 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class TpToHomeBlock extends BaseBlock {
+public class BlockTpToHome extends BaseBlock {
     protected static final AxisAlignedBB HOME_PORTAL_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D);
-    public TpToHomeBlock(String name, Material material, float hardness, float resistance, SoundType soundType) {
+    public BlockTpToHome(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
-//        this.setCreativeTab(MainR.ReturnOfTheAncientsTab);
     }
 
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)

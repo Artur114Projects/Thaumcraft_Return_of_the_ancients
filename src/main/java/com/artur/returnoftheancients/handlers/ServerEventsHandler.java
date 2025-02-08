@@ -11,19 +11,15 @@ import com.artur.returnoftheancients.handlers.eventmanagers.PlayerInBiomeManager
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
-import com.artur.returnoftheancients.blocks.TpToAncientWorldBlock;
+import com.artur.returnoftheancients.blocks.BlockTpToAncientWorld;
 import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.utils.interfaces.IALGS;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -281,10 +277,10 @@ public class ServerEventsHandler {
             }
         }
         if (playerDimension != ancient_world_dim_id && e.player.ticksExisted % 20 == 0) {
-            if (e.player.getEntityData().getBoolean(TpToAncientWorldBlock.noCollisionNBT)) {
+            if (e.player.getEntityData().getBoolean(BlockTpToAncientWorld.noCollisionNBT)) {
                 e.player.getEntityData().setInteger(notNoCollisionNBTTime, (e.player.getEntityData().getInteger(notNoCollisionNBTTime) + 1));
                 if (e.player.getEntityData().getInteger(notNoCollisionNBTTime) >= 8) {
-                    e.player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, false);
+                    e.player.getEntityData().setBoolean(BlockTpToAncientWorld.noCollisionNBT, false);
                     e.player.getEntityData().setInteger(notNoCollisionNBTTime, 0);
                 }
             }

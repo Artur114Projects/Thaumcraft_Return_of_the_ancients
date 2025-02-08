@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.blocks;
 
-import com.artur.returnoftheancients.energy.blocks.BlockEnergyBase;
+import com.artur.returnoftheancients.energy.block.BlockEnergyBase;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.tileentity.TileEntityEnergyLine;
@@ -22,7 +22,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IRarity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import thaumcraft.common.blocks.essentia.BlockTube;
 
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
         InitItems.ITEMS.remove(item);
         item = new ItemBlockEnergyLine(this).setRegistryName(this.getRegistryName());
         InitItems.ITEMS.add(item);
-        setCreativeTab(MainR.ReturnOfTheAncientsTab);
+        setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);
     }
 
 

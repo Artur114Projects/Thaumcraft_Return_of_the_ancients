@@ -3,10 +3,7 @@ package com.artur.returnoftheancients.items;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.referense.Referense;
-import net.minecraft.block.BlockStructure;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,9 +12,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -25,17 +20,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class ItemSoulBinder extends BaseItem {
     public ItemSoulBinder(String name) {
         super(name);
         setMaxStackSize(1);
-        setCreativeTab(MainR.ReturnOfTheAncientsTab);
+        setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);
         addPropertyOverride(new ResourceLocation("full"), new IItemPropertyGetter() {
             @Override
             @SideOnly(Side.CLIENT)

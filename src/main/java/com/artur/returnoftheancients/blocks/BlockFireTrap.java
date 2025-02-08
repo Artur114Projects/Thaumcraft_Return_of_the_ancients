@@ -2,21 +2,18 @@ package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.tileentity.BlockTileEntity;
 import com.artur.returnoftheancients.tileentity.TileEntityFireTrap;
-import net.minecraft.block.BlockDoor;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FireTrap extends BlockTileEntity<TileEntityFireTrap> {
+public class BlockFireTrap extends BlockTileEntity<TileEntityFireTrap> {
     public static final PropertyBool ACTIVE = PropertyBool.create("active");
-    public FireTrap(String name, Material material, float hardness, float resistance, SoundType soundType) {
+    public BlockFireTrap(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
         this.setDefaultState(this.blockState.getBaseState().withProperty(ACTIVE, false));
     }

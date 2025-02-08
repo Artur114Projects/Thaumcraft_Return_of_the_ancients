@@ -10,7 +10,6 @@ import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -28,19 +27,20 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class TpToAncientWorldBlock extends BaseBlock{
+public class BlockTpToAncientWorld extends BaseBlock{
 
     public static final String noCollisionNBT = "noCollisionNBT";
     protected static final AxisAlignedBB HOME_PORTAL_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D);
-    public TpToAncientWorldBlock(String name, Material material, float hardness, float resistance, SoundType soundType) {
+    public BlockTpToAncientWorld(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
-        this.setCreativeTab(MainR.ReturnOfTheAncientsTab);
+
+        this.setTRACreativeTab();
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        tooltip.add(TextFormatting.RED + I18n.format("tile.tp_to_ancient_world_block.info"));
+        HandlerR.addForCreativeOnlyTooltip(tooltip);
     }
 
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)

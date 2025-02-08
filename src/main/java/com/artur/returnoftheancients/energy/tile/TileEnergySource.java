@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.energy.tiles;
+package com.artur.returnoftheancients.energy.tile;
 
 import net.minecraft.util.EnumFacing;
 

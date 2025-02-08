@@ -5,7 +5,7 @@ import com.artur.returnoftheancients.containers.IContainerWithPages;
 import com.artur.returnoftheancients.containers.util.AspectInputSlotsManager;
 import com.artur.returnoftheancients.containers.util.CustomCraftingGear;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
-import com.artur.returnoftheancients.energy.tiles.TileEnergyProviderBase;
+import com.artur.returnoftheancients.energy.tile.TileEnergyProviderBase;
 import com.artur.returnoftheancients.energy.util.EnergyHandler;
 import com.artur.returnoftheancients.generation.portal.AncientPortalOpening;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortal;

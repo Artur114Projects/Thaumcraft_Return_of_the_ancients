@@ -1,6 +1,6 @@
-package com.artur.returnoftheancients.energy.blocks;
+package com.artur.returnoftheancients.energy.block;
 
-import com.artur.returnoftheancients.energy.tiles.TileEnergySource;
+import com.artur.returnoftheancients.energy.tile.TileEnergySource;
 import com.artur.returnoftheancients.init.InitItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;

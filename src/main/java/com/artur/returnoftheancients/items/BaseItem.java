@@ -14,6 +14,10 @@ public abstract class BaseItem extends Item implements IHasModel {
         InitItems.ITEMS.add(this);
     }
 
+    protected void setTRACreativeTab() {
+        this.setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);
+    }
+
     @Override
     public void registerModels() {
         MainR.proxy.registerItemRenderer(this, 0, "inventory");

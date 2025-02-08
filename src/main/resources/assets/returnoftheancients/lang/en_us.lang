@@ -2,6 +2,7 @@ item.gavno.name=The subject of debugging
 item.soul_binder.name=Soul connection stone
 item.itemprimalblade.name=Primal Blade
 item.portal_compass.name=Void compass
+item.imitation_ancient_fuse.name=Imitation of an ancient fuse
 tile.boss_trigger_block.name=Boss trigger block
 tile.eldritch_trap.name=Trap
 tile.fire_trap.name=Incinerator
@@ -23,7 +24,7 @@ item.soul_binder.info.d.2= to see info.
 item.soul_binder.info.d.3=Players:
 #
 item.portal_compass.info=Points to the nearest ancient portal
-tile.tp_to_ancient_world_block.info=For creativity only
+returnoftheancients.for_creative_only=For creativity only
 returnoftheancients.portal.message=Cant use:
 returnoftheancients.rui.t=put it away
 returnoftheancients.rui.f=you have 30 seconds

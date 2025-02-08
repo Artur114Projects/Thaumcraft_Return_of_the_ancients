@@ -33,17 +33,6 @@ public class BossTriggerBlock extends BaseBlock {
         super(name, material, hardness, resistanse, soundType);
     }
 
-
-    /*
-    EntityCultistPortalGreater
-    EntityEldritchGolem
-    Boss
-    x 11
-    z 16
-    */
-
-
-
     @Override
     public void onBlockAdded(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state) {
         if (!worldIn.isRemote) {

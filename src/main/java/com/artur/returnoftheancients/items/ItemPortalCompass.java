@@ -111,7 +111,7 @@ public class ItemPortalCompass extends BaseItem {
                 mutableBlockPos.setPos(ClientEventsHandler.PLAYER_DISTANCE_TO_PORTAL_MANAGER.nearestPortalPos).add(8 ,0, 8);
             }
         });
-        setCreativeTab(MainR.ReturnOfTheAncientsTab);
+        setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);
     }
 
     public @NotNull EnumRarity getRarity(@NotNull ItemStack stack) {

@@ -26,7 +26,7 @@ public class ItemPrimalBlade extends ItemAxe implements IHasModel {
         setRegistryName(name);
         setUnlocalizedName(name);
         setMaxStackSize(1);
-        setCreativeTab(MainR.ReturnOfTheAncientsTab);
+        setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);
         setNoRepair();
 
         InitItems.ITEMS.add(this);

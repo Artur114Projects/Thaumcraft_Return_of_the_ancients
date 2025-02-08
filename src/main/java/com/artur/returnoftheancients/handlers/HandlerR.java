@@ -859,4 +859,16 @@ public class HandlerR {
         int[] biomesCount = new int[] {elementCountOnArray(biomes, biomes[0]), elementCountOnArray(biomes, biomes[1]), elementCountOnArray(biomes, biomes[2]), elementCountOnArray(biomes, biomes[3])};
         return 0;
     }
+
+    public static void addForCreativeOnlyTooltip(List<String> tooltip) {
+        tooltip.add(TextFormatting.RED + I18n.format("returnoftheancients.for_creative_only"));
+    }
+
+    public static float interpolate(float start, float end, float pct) {
+        return start + (end - start) * pct;
+    }
+
+    public static double interpolate(double start, double end, float pct) {
+        return start + (end - start) * pct;
+    }
 }

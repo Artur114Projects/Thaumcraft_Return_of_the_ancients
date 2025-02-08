@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.generation.portal.base;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
-import com.artur.returnoftheancients.blocks.TpToAncientWorldBlock;
+import com.artur.returnoftheancients.blocks.BlockTpToAncientWorld;
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
 import com.artur.returnoftheancients.generation.portal.util.interfaces.IExplore;
@@ -14,10 +14,8 @@ import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.utils.interfaces.ISaveToNBT;
 import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -178,7 +176,7 @@ public abstract class AncientPortal implements ISaveToNBT {
     }
 
     public static void setTpToHomeNBTData(EntityPlayerMP player) {
-        player.getEntityData().setBoolean(TpToAncientWorldBlock.noCollisionNBT, true);
+        player.getEntityData().setBoolean(BlockTpToAncientWorld.noCollisionNBT, true);
         player.getEntityData().setBoolean(tpToHomeNBT, true);
     }
 

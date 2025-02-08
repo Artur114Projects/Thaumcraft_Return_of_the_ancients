@@ -1,8 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "returnoftheancients:items/imitation_ancient_protector",
-		"particle": "returnoftheancients:items/imitation_ancient_protector"
+		"0": "returnoftheancients:items/imitation_ancient_fuse"
 	},
 	"elements": [
 		{

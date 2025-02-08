@@ -75,6 +75,5 @@ public class MainR {
 	}
 
 
-	// Creative Tabs
-	public static final CreativeTabs ReturnOfTheAncientsTab = new ReturnOfTheAncientsTab("returnoftheancients_tab");
+	public static final CreativeTabs RETURN_OF_ANCIENTS_TAB = new ReturnOfTheAncientsTab("returnoftheancients_tab");
 }

@@ -62,6 +62,9 @@ public class ClientAncientPortal {
     }
 
     public boolean isLoaded() {
+        if (mc.world == null) {
+            return false;
+        }
         return !mc.world.getChunkProvider().provideChunk(chunkX, chunkZ).isEmpty();
     }
 
@@ -109,13 +112,20 @@ public class ClientAncientPortal {
 
         int currentY = MathHelper.floor(player.posY);
 
-        if (posY > currentY && !ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask(movementIds[0])) {
+        boolean hasElevator = ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask(movementIds[0]);
+
+        if (!hasElevator) {
+            particlesSpeed = 0.2D;
+        }
+
+        if (posY > currentY && !hasElevator) {
             ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementElevator(MovementElevator.ElevatingType.UP, posY, 0.5F), movementIds[0]);
             particlesSpeed = 0.5D;
-        } else if (posY == currentY && !ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask(movementIds[0]) && !ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask(movementIds[1])) {
+        } else if (posY == currentY && !hasElevator && !ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask(movementIds[1])) {
             ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementRetentionY(posY + 1.1), movementIds[1]);
             particlesSpeed = 0.2D;
         }
+
     }
 
     protected void addParticles(EntityPlayer player, World world) {
@@ -230,9 +240,10 @@ public class ClientAncientPortal {
     }
 
     public static class MovementRetentionY implements IMovementTask {
-        private boolean isLastPlayerSneaking = false;
+        private boolean isDoneWork = false;
+        private int tickToLevitate = 0;
         private final double needY;
-        private int tick = 0;
+        private float tick = 0;
 
         public MovementRetentionY(double needY) {
             this.needY = needY;
@@ -240,26 +251,30 @@ public class ClientAncientPortal {
 
         @Override
         public void move(EntityPlayer player) {
-            isLastPlayerSneaking = player.isSneaking();
+            isDoneWork = player.isSneaking();
             double localNeedY = needY;
 
-            if (tick >= 16 + 20) {
-                if (tick >= 32 + 20) {
-                    tick = 0;
-                }
-                localNeedY += 0.2;
+
+            if (tickToLevitate >= 20) {
+                localNeedY += (Math.cos((tick % (Math.PI * 2))) / 5.0F) + 0.1;
+            } else {
+                tickToLevitate++;
             }
 
             if (player.posY != localNeedY) {
-                player.motionY = (localNeedY - player.posY) / 8.0D;
+                player.motionY = (localNeedY - player.posY) / 12.0D;
             }
 
-            tick++;
+            if (player.posY - localNeedY > 2) {
+                isDoneWork = true;
+            }
+
+            tick += 0.14F;
         }
 
         @Override
         public boolean isDoneWork() {
-            return isLastPlayerSneaking;
+            return isDoneWork;
         }
 
         @Override

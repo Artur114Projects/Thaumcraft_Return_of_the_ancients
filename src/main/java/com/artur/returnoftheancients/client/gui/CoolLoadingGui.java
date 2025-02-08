@@ -1,9 +1,8 @@
 package com.artur.returnoftheancients.client.gui;
 
-import com.artur.returnoftheancients.blocks.TpToAncientWorldBlock;
 import com.artur.returnoftheancients.client.gui.buttons.TRAButton;
-import com.artur.returnoftheancients.client.gui.gif.Gif;
 import com.artur.returnoftheancients.client.gui.gif.GifWithTextureAtlas;
+import com.artur.returnoftheancients.handlers.RenderHandler;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ServerPacketTpToHome;
 import com.artur.returnoftheancients.referense.Referense;
@@ -44,6 +43,8 @@ public class CoolLoadingGui extends GuiScreen {
     protected boolean isTpToHome = false;
     protected boolean isDrawTeam = false;
     protected boolean isClosing = false;
+    protected float prevOpeningTime = 0;
+    protected float prevClosingTime = 0;
     protected boolean isOpening = true;
     protected boolean isDraw = false;
     protected float closingTime = 10;
@@ -84,6 +85,9 @@ public class CoolLoadingGui extends GuiScreen {
                 }
             }
 
+            prevOpeningTime = openingTime;
+            prevClosingTime = closingTime;
+
             if (isOpening) {
                 openingTime += 0.5F;
                 if (openingTime >= 10) {
@@ -118,7 +122,7 @@ public class CoolLoadingGui extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
         drawBackground();
-        drawGif_2_0();
+        drawGif();
         super.drawScreen(mouseX, mouseY, partialTicks);
         drawLore();
 
@@ -127,13 +131,13 @@ public class CoolLoadingGui extends GuiScreen {
         }
 
         if (isOpening) {
-            drawDark(1.0F - openingTime / 10.0F);
+            drawDark(1.0F - RenderHandler.interpolate(prevOpeningTime, openingTime, partialTicks) / 10.0F);
         } else if (isClosing) {
-            drawDark(1.0F - closingTime / 10.0F);
+            drawDark(1.0F - RenderHandler.interpolate(prevClosingTime, closingTime, partialTicks) / 10.0F);
         }
+
         isDraw = true;
     }
-
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
@@ -240,7 +244,7 @@ public class CoolLoadingGui extends GuiScreen {
     }
 
 
-    protected void drawGif_2_0() {
+    protected void drawGif() {
         int x = width - width / 30;
         int y = height - height / 10;
         final int baseSize = 8;
@@ -262,33 +266,6 @@ public class CoolLoadingGui extends GuiScreen {
         GlStateManager.disableAlpha();
     }
 
-//    protected void drawGif() {
-//        int x = width - width / 60;
-//        int y = height - height / 12;
-//        int size = 16;
-//        if (resolution.getScaleFactor() == 3) {
-//            size = 12;
-//            y = height - height / 14;
-//        } else if (resolution.getScaleFactor() == 1) {
-//            y = height - height / 20;
-//        }
-//        GlStateManager.enableBlend();
-//        GlStateManager.enableAlpha();
-//
-//        gif.bindGifTexture(mc);
-//        Tessellator tessellator = Tessellator.getInstance();
-//        BufferBuilder bufferBuilder = tessellator.getBuffer();
-//        bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-//        bufferBuilder.pos(x - size, y, 0).tex(0, 1).endVertex();
-//        bufferBuilder.pos(x, y, 0).tex(1, 1).endVertex();
-//        bufferBuilder.pos(x, y - size, 0).tex(1, 0).endVertex();
-//        bufferBuilder.pos(x - size, y - size, 0).tex(0, 0).endVertex();
-//        tessellator.draw();
-//
-//        GlStateManager.disableBlend();
-//        GlStateManager.disableAlpha();
-//    }
-
     protected void drawOnFullScreen(int screenWidth, int screenHeight) {
         drawModalRectWithCustomSizedTexture(0, 0, 0, 0, screenWidth, screenHeight, screenWidth, screenHeight);
     }
@@ -297,6 +274,4 @@ public class CoolLoadingGui extends GuiScreen {
     public boolean doesGuiPauseGame() {
         return false;
     }
-
-
 }

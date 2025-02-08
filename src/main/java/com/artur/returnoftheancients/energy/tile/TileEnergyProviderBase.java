@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.energy.tiles;
+package com.artur.returnoftheancients.energy.tile;
 
 import com.artur.returnoftheancients.energy.EnergySystemsProvider;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;

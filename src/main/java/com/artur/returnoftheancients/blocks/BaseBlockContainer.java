@@ -37,6 +37,9 @@ public abstract class BaseBlockContainer<T extends TileEntity> extends BlockCont
         InitItems.ITEMS.add(item);
     }
 
+    protected void setTRACreativeTab() {
+        this.setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);
+    }
 
     public abstract Class<T> getTileEntityClass();
 

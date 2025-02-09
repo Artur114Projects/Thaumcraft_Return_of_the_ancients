@@ -56,13 +56,16 @@ public class HandlerR {
         return r.nextInt((max - min) + 1) + min;
     }
 
+    public static int calculateGenerationHeight(World world, BlockPos pos) {
+        return calculateGenerationHeight(world, pos.getX(), pos.getZ());
+    }
+
     public static int calculateGenerationHeight(World world, int x, int z) {
         return calculateGenerationHeight(world, x, z, Blocks.AIR, Blocks.BEDROCK);
     }
 
-
     public static int calculateGenerationHeight(World world, int x, int z, Block... ignoringBlocks) {
-        UltraMutableBlockPos pos = new UltraMutableBlockPos(x, world.getHeight(), z);
+        UltraMutableBlockPos pos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(x, world.getHeight(), z);
 
         while (pos.getY() >= 0) {
             Block block = world.getBlockState(pos).getBlock();
@@ -76,9 +79,12 @@ public class HandlerR {
             if (flag) {
                 break;
             }
-            pos.add(0, -1, 0);
+            pos.down();
         }
-        return pos.getY();
+
+        int y = pos.getY();
+        UltraMutableBlockPos.returnBlockPosToPoll(pos);
+        return y;
     }
 
 

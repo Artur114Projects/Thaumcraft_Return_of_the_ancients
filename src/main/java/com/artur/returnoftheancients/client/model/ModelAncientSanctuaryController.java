@@ -62,12 +62,12 @@ public class ModelAncientSanctuaryController extends ModelBase {
 	}
 
 	public void renderAll() {
-		columns.render(0.0625F);
-		base.render(0.0625F);
-		door0.render(0.0625F);
-		door1.render(0.0625F);
-		door2.render(0.0625F);
-		door3.render(0.0625F);
+		columns.render(1.0F / 16.0F);
+		base.render(1.0F / 16.0F);
+		door0.render(1.0F / 16.0F);
+		door1.render(1.0F / 16.0F);
+		door2.render(1.0F / 16.0F);
+		door3.render(1.0F / 16.0F);
 	}
 
 	public void setDoorProgress(float prevProgress, float progress, float partialTicks) {

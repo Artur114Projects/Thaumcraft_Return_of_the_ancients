@@ -118,7 +118,7 @@ public class ItemGavno extends BaseItem {
 				blockPos = pos;
 			} else {
 				if (blockPos != null) {
-					new GenAncientArch().generate(worldIn, pos, blockPos);
+					new GenAncientArch().generate(worldIn, pos, blockPos, EnumFacing.AxisDirection.POSITIVE);
 				}
 			}
 //			BlockPos playerPos = player.getPosition();

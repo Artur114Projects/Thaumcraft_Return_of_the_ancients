@@ -178,7 +178,8 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
 
     @Override
     public @NotNull UltraMutableBlockPos down(int n) {
-        return this.offset(EnumFacing.DOWN, n);
+        this.y -= n;
+        return this;
     }
 
     @Override

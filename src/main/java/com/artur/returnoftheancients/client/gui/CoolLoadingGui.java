@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.handlers.RenderHandler;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ServerPacketTpToHome;
 import com.artur.returnoftheancients.referense.Referense;
+import com.artur.returnoftheancients.utils.EnumTextureLocation;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -29,8 +30,7 @@ public class CoolLoadingGui extends GuiScreen {
 
     protected final ResourceLocation background;
     private GifWithTextureAtlas gif_2_0 = new GifWithTextureAtlas("loading", 20, 8, 8 * 12, 8, 8);
-//    private Gif gif = new Gif(Referense.MODID + ":textures/gui/gif/loading/loading", 12, 1, false);
-    protected static final ResourceLocation blur = new ResourceLocation(Referense.MODID + ":textures/gui/v.png");
+    protected static final ResourceLocation blur = EnumTextureLocation.GUI_PATH.getRL("v.png");
     private final int Red = 16711680;
     private final int Yellow = 0xffff40;
     private final int White = 16777215;
@@ -56,7 +56,7 @@ public class CoolLoadingGui extends GuiScreen {
 
     public CoolLoadingGui(boolean isTeam) {
         int id = rand.nextInt(3);
-        background = new ResourceLocation(Referense.MODID + ":textures/gui/loading_gui_backgrounds/background" + id + ".png");
+        background = EnumTextureLocation.GUI_PATH.getRL("/loading_gui_backgrounds/background" + id);
         int loreId = rand.nextInt(2);
         lore = I18n.format("rota.l-gui.lore." + loreId);
         this.isTeam = isTeam;

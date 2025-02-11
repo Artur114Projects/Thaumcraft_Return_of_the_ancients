@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.generation.biomes;
 
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.utils.interfaces.IBiome;
+import com.artur.returnoftheancients.util.interfaces.IBiome;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;

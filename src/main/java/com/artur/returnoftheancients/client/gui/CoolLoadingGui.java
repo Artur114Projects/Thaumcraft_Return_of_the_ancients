@@ -6,7 +6,7 @@ import com.artur.returnoftheancients.handlers.RenderHandler;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ServerPacketTpToHome;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.utils.EnumTextureLocation;
+import com.artur.returnoftheancients.util.EnumTextureLocation;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;

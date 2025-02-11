@@ -9,7 +9,7 @@ import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

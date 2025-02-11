@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.client.fx.particle.util;
 
-import com.artur.returnoftheancients.utils.EnumTextureLocation;
+import com.artur.returnoftheancients.util.EnumTextureLocation;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 

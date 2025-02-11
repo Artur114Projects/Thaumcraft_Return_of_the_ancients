@@ -1,13 +1,12 @@
 package com.artur.returnoftheancients.generation.portal.generators;
 
 import com.artur.returnoftheancients.handlers.HandlerR;
-import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import thaumcraft.api.blocks.BlocksTC;
 

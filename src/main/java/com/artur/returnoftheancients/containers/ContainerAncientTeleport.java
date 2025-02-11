@@ -73,7 +73,7 @@ public class ContainerAncientTeleport extends ContainerWithPages {
         super.addListener(listener);
         listener.sendWindowProperty(this, 0, tile.isActive);
 
-        tile.energyHandler.addListener(listener, this);
+        tile.energyContainerHandler.addListener(listener, this);
         tile.aspectBottles.addListener(listener, this);
     }
 
@@ -87,7 +87,7 @@ public class ContainerAncientTeleport extends ContainerWithPages {
                 icontainerlistener.sendWindowProperty(this, 0, tile.isActive);
             }
 
-            tile.energyHandler.detectAndSendChanges(icontainerlistener, this);
+            tile.energyContainerHandler.detectAndSendChanges(icontainerlistener, this);
             tile.aspectBottles.detectAndSendChanges(icontainerlistener, this);
 
             lastIsActive = tile.isActive;
@@ -103,7 +103,7 @@ public class ContainerAncientTeleport extends ContainerWithPages {
             } break;
         }
 
-        tile.energyHandler.updateDataOnClient(id, data);
+        tile.energyContainerHandler.updateDataOnClient(id, data);
         if (id >= 100) {
             tile.aspectBottles.updateCount(id, data);
         }

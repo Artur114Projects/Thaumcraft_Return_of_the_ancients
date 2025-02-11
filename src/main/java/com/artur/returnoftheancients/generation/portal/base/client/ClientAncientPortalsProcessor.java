@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.generation.portal.base.client;
 
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;

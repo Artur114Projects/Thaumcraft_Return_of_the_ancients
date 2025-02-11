@@ -7,17 +7,13 @@ import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ServerPacketTileAncientTeleportData;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientTeleport;
-import com.artur.returnoftheancients.utils.AspectBottle;
+import com.artur.returnoftheancients.util.AspectBottle;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiRepair;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiFurnace;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.items.SlotItemHandler;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
@@ -119,13 +115,13 @@ public class GuiAncientTeleport extends GuiContainer {
 
     public void drawEnergy(int mouseX, int mouseY) {
         if (pageManager.getCurrentPage() == 0) {
-            tile.energyHandler.drawInput ((width - xSize) / 2 + 8, (height - ySize) / 2 + 84, 48, 6, mouseX, mouseY, ancientEnergyBarTexture);
-            tile.energyHandler.drawOutput((width - xSize) / 2 + xSize - 48 - 8, (height - ySize) / 2 + 84, 48, 6, mouseX, mouseY, ancientEnergyBarTexture);
+            tile.energyContainerHandler.drawInput ((width - xSize) / 2 + 8, (height - ySize) / 2 + 84, 48, 6, mouseX, mouseY, ancientEnergyBarTexture);
+            tile.energyContainerHandler.drawOutput((width - xSize) / 2 + xSize - 48 - 8, (height - ySize) / 2 + 84, 48, 6, mouseX, mouseY, ancientEnergyBarTexture);
         }
     }
 
     public void drawHovered(int mouseX, int mouseY) {
-        this.tile.energyHandler.drawHoveredText(this, mouseX, mouseY);
+        this.tile.energyContainerHandler.drawHoveredText(this, mouseX, mouseY);
         this.renderHoveredToolTip(mouseX, mouseY);
         this.renderMainButtonHoveredToolTip(mouseX, mouseY);
         this.pageManager.renderHoveredText(this, mouseX, mouseY);

@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.utils;
+package com.artur.returnoftheancients.util;
 
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.util.ResourceLocation;

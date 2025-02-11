@@ -4,13 +4,11 @@ import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBiome;
-import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
-import net.minecraft.init.MobEffects;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import thaumcraft.api.potions.PotionFluxTaint;
-import thaumcraft.api.potions.PotionVisExhaust;
 
 public class PlayerInBiomeManager {
     private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();

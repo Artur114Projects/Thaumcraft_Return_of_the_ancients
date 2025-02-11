@@ -6,11 +6,12 @@ import com.artur.returnoftheancients.containers.util.AspectInputSlotsManager;
 import com.artur.returnoftheancients.containers.util.CustomCraftingGear;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
 import com.artur.returnoftheancients.energy.tile.TileEnergyProviderBase;
-import com.artur.returnoftheancients.energy.util.EnergyHandler;
+import com.artur.returnoftheancients.energy.util.EnergyContainerHandler;
+import com.artur.returnoftheancients.energy.util.EnumEnergyType;
 import com.artur.returnoftheancients.generation.portal.AncientPortalOpening;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
-import com.artur.returnoftheancients.utils.AspectBottle;
-import com.artur.returnoftheancients.utils.AspectBottlesList;
+import com.artur.returnoftheancients.util.AspectBottle;
+import com.artur.returnoftheancients.util.AspectBottlesList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -61,7 +62,7 @@ public class TileEntityAncientTeleport extends TileEnergyProviderBase implements
             new int[] {3},
             new int[] {0, 1, 2}
     );
-    public EnergyHandler energyHandler = new EnergyHandler(1000.0F, 0, 400.0F, 1, 2, 3);
+    public EnergyContainerHandler energyContainerHandler = new EnergyContainerHandler(EnumEnergyType.MEGA.format(10.0F), 0, EnumEnergyType.MEGA.format(0.5F), 1, 2, 3);
     private ContainerWithPages currentContainer;
 
     public AncientPortal portal;
@@ -85,7 +86,7 @@ public class TileEntityAncientTeleport extends TileEnergyProviderBase implements
     public void update() {
         if (!world.isRemote) {
             inputSlotsManager.fill();
-            energyHandler.update();
+            energyContainerHandler.update();
             this.fill();
         }
     }
@@ -317,17 +318,17 @@ public class TileEntityAncientTeleport extends TileEnergyProviderBase implements
 
     @Override
     public float canAdd(float count) {
-        return energyHandler.canAdd(count);
+        return energyContainerHandler.canAdd(count);
     }
 
     @Override
     public float add(float count) {
-        return energyHandler.add(count);
+        return energyContainerHandler.add(count);
     }
 
     @Override
     public float take(float count) {
-        return energyHandler.take(count);
+        return energyContainerHandler.take(count);
     }
 
     @Override
@@ -342,21 +343,21 @@ public class TileEntityAncientTeleport extends TileEnergyProviderBase implements
 
     @Override
     public boolean isEmpty() {
-        return energyHandler.isEmpty();
+        return energyContainerHandler.isEmpty();
     }
 
     @Override
     public boolean isNeedAdd() {
-        return energyHandler.isNeedAdd();
+        return energyContainerHandler.isNeedAdd();
     }
 
     @Override
     public float maxInput() {
-        return energyHandler.getMaxInput();
+        return energyContainerHandler.getMaxInput();
     }
 
     @Override
     public float maxOutput() {
-        return energyHandler.getMaxOutput();
+        return energyContainerHandler.getMaxOutput();
     }
 }

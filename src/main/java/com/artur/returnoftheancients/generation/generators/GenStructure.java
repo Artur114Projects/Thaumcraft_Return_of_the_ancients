@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.generation.generators;
 
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.utils.interfaces.IStructure;
+import com.artur.returnoftheancients.util.interfaces.IStructure;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
@@ -10,9 +10,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.gen.structure.template.TemplateManager;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class GenStructure implements IStructure {
 

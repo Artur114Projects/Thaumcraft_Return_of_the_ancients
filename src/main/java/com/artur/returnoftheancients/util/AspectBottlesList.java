@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.utils;
+package com.artur.returnoftheancients.util;
 
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;

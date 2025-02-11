@@ -4,7 +4,7 @@ import com.artur.returnoftheancients.client.audio.AncientPortalSound;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ServerPacketGetWeather;
-import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.ChunkPos;

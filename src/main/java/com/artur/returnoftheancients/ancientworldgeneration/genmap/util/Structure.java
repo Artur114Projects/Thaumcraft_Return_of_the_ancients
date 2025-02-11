@@ -1,7 +1,5 @@
 package com.artur.returnoftheancients.ancientworldgeneration.genmap.util;
 
-import com.artur.returnoftheancients.utils.interfaces.IALGS;
-
 public class Structure {
     private byte deformationOfBoss;
     private byte rotate;

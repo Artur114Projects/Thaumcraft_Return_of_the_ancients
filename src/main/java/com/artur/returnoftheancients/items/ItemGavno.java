@@ -4,33 +4,26 @@ package com.artur.returnoftheancients.items;
 import com.artur.returnoftheancients.client.audio.RepeatingSound;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
-import com.artur.returnoftheancients.generation.biomes.decorate.WorldGenTaintBigTree;
 import com.artur.returnoftheancients.generation.portal.base.client.ClientAncientPortal;
-import com.artur.returnoftheancients.generation.portal.base.client.ClientAncientPortalsProcessor;
-import com.artur.returnoftheancients.generation.portal.generators.GenAncientArch;
-import com.artur.returnoftheancients.init.InitSounds;
+import com.artur.returnoftheancients.util.TerrainAnalyzer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import thaumcraft.api.blocks.BlocksTC;
 
 import java.util.List;
-import java.util.Random;
 
 public class ItemGavno extends BaseItem {
 
@@ -114,13 +107,24 @@ public class ItemGavno extends BaseItem {
 		}
 		if (!worldIn.isRemote) {
 //			System.out.println((new WorldGenTaintBigTree(false)).generate(worldIn, new Random(), pos));
-			if (player.isSneaking()) {
-				blockPos = pos;
-			} else {
-				if (blockPos != null) {
-					new GenAncientArch().generate(worldIn, pos, blockPos, EnumFacing.AxisDirection.POSITIVE);
-				}
-			}
+//			if (player.isSneaking()) {
+//				blockPos = pos;
+//			} else {
+//				if (blockPos != null) {
+//					new GenAncientArch().generate(worldIn, pos, blockPos, EnumFacing.AxisDirection.POSITIVE);
+//				}
+//			}
+			TerrainAnalyzer analyzer = new TerrainAnalyzer(worldIn);
+
+			analyzer.startAnalyzing(worldIn.getChunkFromBlockCoords(pos).getPos());
+
+			player.sendMessage(new TextComponentString("Flow:" + analyzer.getTerrainFlow()));
+			player.sendMessage(new TextComponentString("Height variation:" + analyzer.getHeightVariation()));
+			player.sendMessage(new TextComponentString("The second time!"));
+			player.sendMessage(new TextComponentString("Flow:" + analyzer.getTerrainFlow()));
+			player.sendMessage(new TextComponentString("Height variation:" + analyzer.getHeightVariation()));
+
+
 //			BlockPos playerPos = player.getPosition();
 //			long time1 = System.currentTimeMillis();
 //			GenStructure.generateStructure(player.world, playerPos.getX() + 20, playerPos.getY(), playerPos.getZ(), "ancient_turn");

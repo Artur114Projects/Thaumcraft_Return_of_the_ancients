@@ -3,7 +3,6 @@ package com.artur.returnoftheancients.energy;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergy;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
 import com.artur.returnoftheancients.misc.TRAConfigs;
-import com.artur.returnoftheancients.utils.interfaces.ISaveToNBT;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 

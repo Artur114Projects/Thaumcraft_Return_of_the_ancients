@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.handlers;
 
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructureIsUseEBS;
 import com.artur.returnoftheancients.blocks.BaseBlockContainer;
 import com.artur.returnoftheancients.client.fx.particle.util.ParticleSprite;
 import com.artur.returnoftheancients.commads.*;
@@ -14,11 +13,9 @@ import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.network.*;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.tileentity.BlockTileEntity;
-import com.artur.returnoftheancients.utils.interfaces.IHasModel;
+import com.artur.returnoftheancients.util.interfaces.IHasModel;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

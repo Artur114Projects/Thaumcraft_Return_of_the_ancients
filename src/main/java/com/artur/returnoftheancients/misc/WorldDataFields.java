@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.misc;
 
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
-import com.artur.returnoftheancients.utils.interfaces.IALGS;
+import com.artur.returnoftheancients.util.interfaces.IALGS;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;

@@ -3,7 +3,8 @@ package com.artur.returnoftheancients.client.render.tile;
 import com.artur.returnoftheancients.client.model.ModelAncientSanctuaryController;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientSanctuaryController;
-import com.artur.returnoftheancients.utils.EnumTextureLocation;
+import com.artur.returnoftheancients.util.EnumTextureLocation;
+import com.artur.returnoftheancients.util.TerrainAnalyzer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -50,5 +51,4 @@ public class TileEntityAncientSanctuaryControllerRenderer extends TileEntitySpec
 
         GlStateManager.popMatrix();
     }
-
 }

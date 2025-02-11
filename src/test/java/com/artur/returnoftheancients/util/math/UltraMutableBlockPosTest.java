@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.utils.math;
+package com.artur.returnoftheancients.util.math;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

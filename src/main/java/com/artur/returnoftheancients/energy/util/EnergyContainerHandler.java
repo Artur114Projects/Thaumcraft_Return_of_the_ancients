@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnergyHandler {
+public class EnergyContainerHandler {
 
     public static final ResourceLocation barBaseTexture = new ResourceLocation(Referense.MODID, "textures/gui/container/energy_bar_base.png");
 
@@ -49,7 +49,7 @@ public class EnergyHandler {
      * @param maxOutput in kW
      * @param maxInput in kW
      */
-    public EnergyHandler(float maxEnergy, float maxOutput, float maxInput, int syncLine0, int syncLine1, int syncLine2) {
+    public EnergyContainerHandler(float maxEnergy, float maxOutput, float maxInput, int syncLine0, int syncLine1, int syncLine2) {
         this.maxOutput = maxOutput / 20.0F;
         this.maxInput = maxInput / 20.0F;
         this.maxEnergy = maxEnergy;
@@ -265,16 +265,22 @@ public class EnergyHandler {
         private int fillIndex = 0;
 
         public void update() {
-            if (fillIndex == 20) {
-                fillIndex = 0;
-                fillCount = 0;
-                for (float i : fillArray) {
-                    fillCount += i;
-                }
-                return;
-            }
             fillArray[fillIndex++] = changeValue;
             changeValue = 0.0F;
+
+            this.calculateFillCount();
+        }
+
+        private void calculateFillCount() {
+            fillCount = 0;
+            for (byte i = 0; i != fillIndex; i++) {
+                fillCount += fillArray[i];
+            }
+            fillCount = fillCount * (20.0F / fillIndex);
+
+            if (fillIndex == 20) {
+                fillIndex = 0;
+            }
         }
 
         public float getFillCount() {

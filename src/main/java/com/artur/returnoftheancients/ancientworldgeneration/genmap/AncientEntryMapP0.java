@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.ancientworldgeneration.genmap;
 
 import com.artur.returnoftheancients.ancientworldgeneration.genmap.util.StructureMap;
 import com.artur.returnoftheancients.misc.TRAConfigs;
-import com.artur.returnoftheancients.utils.interfaces.IALGS;
+import com.artur.returnoftheancients.util.interfaces.IALGS;
 
 import java.util.Random;
 

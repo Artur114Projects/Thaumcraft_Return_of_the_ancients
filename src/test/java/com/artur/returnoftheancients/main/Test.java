@@ -3,7 +3,7 @@ package com.artur.returnoftheancients.main;
 import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.utils.EnumTextureLocation;
+import com.artur.returnoftheancients.util.EnumTextureLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;

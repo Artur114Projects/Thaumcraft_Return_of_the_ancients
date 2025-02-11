@@ -3,7 +3,7 @@ package com.artur.returnoftheancients.generation.portal.base.client;
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.client.event.managers.movement.IMovementTask;
 import com.artur.returnoftheancients.client.fx.particle.ParticleAncientPortal;
-import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,7 +13,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thaumcraft.common.lib.utils.EntityUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,7 +3,7 @@ package com.artur.returnoftheancients.blocks;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.main.MainR;
-import com.artur.returnoftheancients.utils.interfaces.IHasModel;
+import com.artur.returnoftheancients.util.interfaces.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

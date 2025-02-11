@@ -9,8 +9,7 @@ import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.network.ClientPacketSyncAncientPortals;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
-import net.minecraft.client.renderer.tileentity.TileEntityChestRenderer;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -25,8 +24,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.opengl.GL11;
-import thaumcraft.common.blocks.world.taint.TaintHelper;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;

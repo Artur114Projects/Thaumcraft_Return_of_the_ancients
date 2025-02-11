@@ -12,7 +12,7 @@ import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.misc.WorldDataFields;
-import com.artur.returnoftheancients.utils.interfaces.IALGS;
+import com.artur.returnoftheancients.util.interfaces.IALGS;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,7 +35,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import static com.artur.returnoftheancients.misc.TRAConfigs.AncientWorldSettings;
-import static com.artur.returnoftheancients.utils.interfaces.IStructure.settings;
+import static com.artur.returnoftheancients.util.interfaces.IStructure.settings;
 
 public abstract class AncientEntry implements IBuild, IALGS {
     protected static final byte MAX_LOADING = 4;

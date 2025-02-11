@@ -2,8 +2,7 @@ package com.artur.returnoftheancients.init;
 
 import com.artur.returnoftheancients.client.fx.particle.util.ParticleAtlasSprite;
 import com.artur.returnoftheancients.client.fx.particle.util.ParticleSprite;
-import com.artur.returnoftheancients.utils.EnumTextureLocation;
-import net.minecraft.util.ResourceLocation;
+import com.artur.returnoftheancients.util.EnumTextureLocation;
 
 import java.util.ArrayList;
 import java.util.List;

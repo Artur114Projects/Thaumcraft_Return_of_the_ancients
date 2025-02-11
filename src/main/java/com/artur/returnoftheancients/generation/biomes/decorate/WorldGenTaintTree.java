@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.generation.biomes.decorate;
 
-import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -8,10 +8,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
-import thaumcraft.api.ThaumcraftMaterials;
 import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.common.blocks.IBlockFacing;
-import thaumcraft.common.blocks.world.taint.BlockTaintFeature;
 import thaumcraft.common.blocks.world.taint.BlockTaintLog;
 
 import java.util.Random;

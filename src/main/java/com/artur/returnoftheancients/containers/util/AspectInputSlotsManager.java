@@ -1,9 +1,8 @@
 package com.artur.returnoftheancients.containers.util;
 
-import com.artur.returnoftheancients.utils.AspectBottle;
-import com.artur.returnoftheancients.utils.AspectBottlesList;
+import com.artur.returnoftheancients.util.AspectBottle;
+import com.artur.returnoftheancients.util.AspectBottlesList;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;

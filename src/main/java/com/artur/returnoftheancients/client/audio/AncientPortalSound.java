@@ -2,12 +2,11 @@ package com.artur.returnoftheancients.client.audio;
 
 import com.artur.returnoftheancients.client.event.managers.PlayerDistanceToPortalManager;
 import com.artur.returnoftheancients.init.InitSounds;
-import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 

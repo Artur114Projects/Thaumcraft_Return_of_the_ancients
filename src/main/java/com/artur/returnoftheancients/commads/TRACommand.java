@@ -5,8 +5,8 @@ import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProces
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.utils.interfaces.IALGS;
-import com.artur.returnoftheancients.utils.math.UltraMutableBlockPos;
+import com.artur.returnoftheancients.util.interfaces.IALGS;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;

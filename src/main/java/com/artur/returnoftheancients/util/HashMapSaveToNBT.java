@@ -1,6 +1,6 @@
-package com.artur.returnoftheancients.utils;
+package com.artur.returnoftheancients.util;
 
-import com.artur.returnoftheancients.utils.interfaces.ISaveToNBT;
+import com.artur.returnoftheancients.util.interfaces.ISaveToNBT;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.HashMap;

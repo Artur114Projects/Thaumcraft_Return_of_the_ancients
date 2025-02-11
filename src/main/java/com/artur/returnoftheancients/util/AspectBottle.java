@@ -1,7 +1,6 @@
-package com.artur.returnoftheancients.utils;
+package com.artur.returnoftheancients.util;
 
 import com.artur.returnoftheancients.handlers.HandlerR;
-import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;

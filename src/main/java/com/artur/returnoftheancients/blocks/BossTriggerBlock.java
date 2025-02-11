@@ -1,31 +1,13 @@
 package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
-import com.artur.returnoftheancients.handlers.ServerEventsHandler;
 import com.artur.returnoftheancients.init.InitDimensions;
-import com.artur.returnoftheancients.init.InitSounds;
-import com.artur.returnoftheancients.main.MainR;
-import com.artur.returnoftheancients.misc.WorldData;
-import com.artur.returnoftheancients.handlers.HandlerR;
-import com.artur.returnoftheancients.network.ClientPacketMisc;
-import com.artur.returnoftheancients.utils.interfaces.IALGS;
-import com.artur.returnoftheancients.utils.interfaces.IStructure;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
-import thaumcraft.api.items.ItemsTC;
-import thaumcraft.common.entities.monster.boss.*;
-
-import java.util.Random;
 
 public class BossTriggerBlock extends BaseBlock {
 

@@ -8,7 +8,7 @@ import java.util.Set;
 import com.artur.returnoftheancients.generation.biomes.BiomeAncientLabyrinth;
 import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
 import com.artur.returnoftheancients.generation.biomes.EBiome;
-import com.artur.returnoftheancients.utils.interfaces.IBiome;
+import com.artur.returnoftheancients.util.interfaces.IBiome;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import thaumcraft.api.aspects.Aspect;

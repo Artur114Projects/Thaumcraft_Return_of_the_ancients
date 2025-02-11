@@ -2,11 +2,10 @@ package com.artur.returnoftheancients.commads;
 
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.init.InitDimensions;
-import com.artur.returnoftheancients.utils.interfaces.IStructure;
+import com.artur.returnoftheancients.util.interfaces.IStructure;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.item.ItemBow;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Rotation;
 

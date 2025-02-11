@@ -1,6 +1,6 @@
-package com.artur.returnoftheancients.utils.math;
+package com.artur.returnoftheancients.util.math;
 
-import com.artur.returnoftheancients.utils.interfaces.RunnableWithParam;
+import com.artur.returnoftheancients.util.interfaces.RunnableWithParam;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
@@ -99,6 +99,13 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
 
     public UltraMutableBlockPos addY(int y) {
         this.y += y;
+        return this;
+    }
+
+    public UltraMutableBlockPos deduct(BlockPos pos) {
+        this.x -= pos.getX();
+        this.y -= pos.getY();
+        this.z -= pos.getZ();
         return this;
     }
 

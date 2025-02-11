@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.utils.math;
+package com.artur.returnoftheancients.util.math;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;

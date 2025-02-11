@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.utils.interfaces;
+package com.artur.returnoftheancients.util.interfaces;
 
 public interface IMobsGen {
 

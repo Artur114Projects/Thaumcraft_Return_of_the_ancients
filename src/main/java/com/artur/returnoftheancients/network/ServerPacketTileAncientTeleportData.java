@@ -53,7 +53,7 @@ public class ServerPacketTileAncientTeleportData implements IMessage {
                 TileEntityAncientTeleport tile = (TileEntityAncientTeleport) tileRaw;
                 switch (message.id) {
                     case 0:{
-                        tile.requestToActivate();
+                        tile.requestToActivate(ctx.getServerHandler().player);
                     } break;
                 }
             }

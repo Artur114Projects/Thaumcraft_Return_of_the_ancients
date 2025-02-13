@@ -20,11 +20,16 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
     private static int stackHead = -1;
 
 
-    public static UltraMutableBlockPos getBlockPosFromPoll() {
+    public static synchronized @NotNull UltraMutableBlockPos getBlockPosFromPoll() {
         if (stackHead != -1) {
             UltraMutableBlockPos blockPos = stack[stackHead];
             stack[stackHead] = null;
             stackHead--;
+
+            if (blockPos == null) {
+                System.out.println("Block pos in " + stackHead + " is null wtf!?");
+                return getBlockPosFromPoll();
+            }
 
             return blockPos;
         } else {
@@ -32,7 +37,7 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         }
     }
 
-    public static void returnBlockPosToPoll(@NotNull UltraMutableBlockPos blockPos) {
+    public static synchronized void returnBlockPosToPoll(@NotNull UltraMutableBlockPos blockPos) {
         if (stackHead + 1 >= stack.length) {
             return;
         }
@@ -133,8 +138,12 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         this.z = context.z;
     }
 
+    public UltraMutableBlockPos setPos(int chunkX, int chunkZ) {
+        return this.setPos(chunkX << 4, this.getY(), chunkZ << 4);
+    }
+
     public UltraMutableBlockPos setPos(ChunkPos pos) {
-        return this.setPos(pos.x << 4, this.getY(), pos.z << 4);
+        return this.setPos(pos.x, pos.z);
     }
 
     @Override

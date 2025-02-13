@@ -65,6 +65,7 @@ public class AncientEntrySolo extends AncientEntry {
 
     @Override
     protected void onBossDead() {
+        if (isSleep) return;
         player.addItemStackToInventory(getPrimordialPearl());
         HandlerR.researchTC(player, "f_!FINAL");
     }

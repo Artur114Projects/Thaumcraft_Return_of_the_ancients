@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.generation.portal.base.client;
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.client.event.managers.movement.IMovementTask;
 import com.artur.returnoftheancients.client.fx.particle.ParticleAncientPortal;
+import com.artur.returnoftheancients.generation.portal.util.PortalUtil;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,9 +21,6 @@ import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class ClientAncientPortal {
-
-    public static final BlockPos[] offsetsArray;
-
 
     protected final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
 
@@ -76,7 +74,7 @@ public class ClientAncientPortal {
         lBlockPos.setPos(pos);
         if (lBlockPos.getChunkX() == chunkX && blockPos.getChunkZ() == chunkZ) {
             lBlockPos.setPos(portalPos).setY(0);
-            for (BlockPos offset : offsetsArray) {
+            for (BlockPos offset : PortalUtil.portalCollideOffsetsArray) {
                 lBlockPos.pushPos();
                 if (lBlockPos.add(offset).equalsXZ(pos)) {
                     lBlockPos.popPos();
@@ -136,7 +134,7 @@ public class ClientAncientPortal {
                 if (blockPos.getY() >= posY || blockPos.getY() < 3) {
                     continue;
                 }
-                for (BlockPos offset : offsetsArray) {
+                for (BlockPos offset : PortalUtil.portalCollideOffsetsArray) {
                     if (random.nextInt(16) == 0) {
                         blockPos.offsetAndCallRunnable(offset, offsetPos -> {
                             mc.effectRenderer.addEffect(new ParticleAncientPortal(world, offsetPos.getX() + random.nextDouble(), offsetPos.getY() + random.nextDouble(), offsetPos.getZ() + random.nextDouble(), particlesSpeed));
@@ -145,29 +143,6 @@ public class ClientAncientPortal {
                 }
             }
         }
-    }
-
-
-    static {
-        List<BlockPos> offsets = new ArrayList<>();
-
-        UltraMutableBlockPos pos = UltraMutableBlockPos.getBlockPosFromPoll();
-        pos.setPos(6, 0, 6);
-
-        for (int x = 0; x != 4; x++) {
-            for (int z = 0; z != 4; z++) {
-                if ((x == 0 && z == 0) || (x == 3 && z == 3) || (x == 3 && z == 0) || (x == 0 && z == 3)) {
-                    continue;
-                }
-
-                pos.pushPos();
-                offsets.add(pos.add(x, 0, z).toImmutable());
-                pos.popPos();
-            }
-        }
-
-        UltraMutableBlockPos.returnBlockPosToPoll(pos);
-        offsetsArray = offsets.toArray(new BlockPos[0]);
     }
 
     public static class MovementElevator implements IMovementTask {

@@ -17,8 +17,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -37,9 +39,10 @@ public class AncientPortalsProcessor {
     private static ChunkPos[] portalsGenerationPosOverWorld = null;
     public static final int portalsCount = 8;
 
-    private static final Set<Integer> LOAD_DIMENSIONS = new HashSet<>();
-    private static final List<Integer> TO_DELETE = new ArrayList<>();
+    private static final Map<Integer, AncientPortal> LOADED_PORTALS = new HashMap<>();
     private static final Map<Integer, AncientPortal> PORTALS = new HashMap<>();
+    private static final Set<Integer> LOADED_DIMENSIONS = new HashSet<>();
+    private static final List<Integer> TO_DELETE = new ArrayList<>();
 
 
     @SubscribeEvent
@@ -59,7 +62,7 @@ public class AncientPortalsProcessor {
 
     @SubscribeEvent
     public static void WorldEventLoad(WorldEvent.Load e) {
-        if (!LOAD_DIMENSIONS.contains(e.getWorld().provider.getDimension())) {
+        if (!LOADED_DIMENSIONS.contains(e.getWorld().provider.getDimension())) {
             int dimension = e.getWorld().provider.getDimension();
             if (Arrays.stream(TRAConfigs.PortalSettings.dimensionsGenerate).anyMatch((i) -> i == dimension)) {
                 if (dimension == 0) {
@@ -83,34 +86,36 @@ public class AncientPortalsProcessor {
                     }
                 }
             }
-            LOAD_DIMENSIONS.add(dimension);
+            LOADED_DIMENSIONS.add(dimension);
         }
     }
 
     @SubscribeEvent
     public static void BreakEvent(BlockEvent.BreakEvent e) {
-        for (AncientPortal portal : PORTALS.values()) {
-            if (portal.isCollide(e.getPos())) {
-                portal.onBlockDestroyedInPortalChunk(e);
+        for (AncientPortal portal : LOADED_PORTALS.values()) {
+            if (portal.isLoaded() && portal.isGenerated() && portal.isOnPortalRange(e.getPos())) {
+                portal.onBlockDestroyedInPortalArea(e);
             }
         }
     }
 
-    private static byte t = 0;
 
     @SubscribeEvent
     public static void Tick(TickEvent.ServerTickEvent e) {
         if (e.phase == TickEvent.Phase.START) {
             return;
         }
-        t++;
-        if (t >= 10) {
-            t = 0;
-            if (PORTALS.isEmpty()) return;
+
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+
+        if (server.getTickCounter() % 10 == 0) {
+            updateLoadedPortalsMap();
+
+            if (LOADED_PORTALS.isEmpty()) return;
             AtomicBoolean flag = new AtomicBoolean(false);
 
-            PORTALS.forEach((key, value) -> {
-                if (!value.isLoaded()) {
+            LOADED_PORTALS.forEach((key, value) -> {
+                if (!value.isGenerated()) {
                     return;
                 }
                 value.update(e);
@@ -126,6 +131,7 @@ public class AncientPortalsProcessor {
             }
 
             if (!TO_DELETE.isEmpty()) {
+                updateLoadedPortalsMap();
                 flag.set(true);
                 TO_DELETE.clear();
                 save();
@@ -164,9 +170,36 @@ public class AncientPortalsProcessor {
         }
     }
 
+
+    @SubscribeEvent
+    public static void populatePre(PopulateChunkEvent.Pre e) {
+        if (e.getWorld().provider.getDimension() == 0) {
+            for (AncientPortal portal : PORTALS.values()) {
+                if (portal.dimension == 0 && !portal.isGenerated()) {
+                    portal.onChunkPopulatePre(e.getChunkX(), e.getChunkZ());
+                }
+            }
+        }
+    }
+
+    public static void updateLoadedPortalsMap() {
+        LOADED_PORTALS.clear();
+        PORTALS.forEach((key, value) -> {
+            if (value.isLoaded()) {
+                LOADED_PORTALS.put(key, value);
+            }
+        });
+    }
+
     public static void addNewPortal(AncientPortal portal) {
         if (!PORTALS.containsKey(portal.id)) {
-            PORTALS.put(portal.id, portal);
+            if (!hasPortal(portal.portalPos, portal.dimension)) {
+                PORTALS.put(portal.id, portal);
+                updateLoadedPortalsMap();
+                updatePortalDataOnClient();
+            } else {
+                System.out.println("An attempt to add a portal to the position of an existing portal!");
+            }
         } else {
             portal.id = getFreeId();
             addNewPortal(portal);
@@ -195,7 +228,7 @@ public class AncientPortalsProcessor {
 
     public static boolean hasPortal(int chunkX, int chunkZ, int dimension) {
         for (AncientPortal portal : PORTALS.values()) {
-            if (portal.chunkX == chunkX && portal.chunkZ == chunkZ && portal.dimension == dimension) {
+            if (portal.isOnPortalRange(chunkX, chunkZ)) {
                 return true;
             }
         }
@@ -203,12 +236,7 @@ public class AncientPortalsProcessor {
     }
 
     public static boolean hasPortal(ChunkPos pos, int dimension) {
-        for (AncientPortal portal : PORTALS.values()) {
-            if (portal.chunkX == pos.x && portal.chunkZ == pos.z && portal.dimension == dimension) {
-                return true;
-            }
-        }
-        return false;
+        return hasPortal(pos.x, pos.z, dimension);
     }
 
 
@@ -222,50 +250,51 @@ public class AncientPortalsProcessor {
         WorldData worldData = WorldData.get();
         NBTTagCompound nbt = worldData.saveData.hasKey("PortalsPack") ? worldData.saveData.getCompoundTag("PortalsPack") : new NBTTagCompound();
 
-        if (!PORTALS.isEmpty()) {
+        if (!LOADED_PORTALS.isEmpty()) {
             Map<Integer, List<AncientPortal>> PORTAL_DIMENSIONS = new HashMap<>();
 
             for (AncientPortal portal : PORTALS.values()) {
                 if (PORTAL_DIMENSIONS.containsKey(portal.dimension)) {
                     PORTAL_DIMENSIONS.get(portal.dimension).add(portal);
                 } else {
-                    List<AncientPortal> portalList = new ArrayList<>();
+                    List<AncientPortal> portalList = new LinkedList<>();
                     portalList.add(portal);
                     PORTAL_DIMENSIONS.put(portal.dimension, portalList);
                 }
             }
 
-            NBTTagCompound finalNbt = nbt;
             PORTAL_DIMENSIONS.forEach((dimension, portals) -> {
-                if (!LOAD_DIMENSIONS.contains(dimension)) {
+                if (!LOADED_DIMENSIONS.contains(dimension)) {
                     return;
                 }
 
-                NBTTagList list = new NBTTagList();
+                NBTTagList list = nbt.getTagList(dimension + "", 10);
 
-                for (AncientPortal portal : portals) {
+                for (int i = 0; i != portals.size(); i++) {
+                    AncientPortal portal = portals.get(i);
                     NBTTagCompound portalData = portal.writeToNBT();
                     if (portalData == null) {
                         continue;
                     }
-                    list.appendTag(portalData);
+                    if (LOADED_PORTALS.containsKey(portal.id)) {
+                        list.set(i, portalData);
+                    }
                 }
-                finalNbt.setTag(dimension + "", list);
+
+                nbt.setTag(dimension + "", list);
             });
-        } else {
-            nbt = new NBTTagCompound();
         }
 
         worldData.saveData.setTag("PortalsPack", nbt);
         worldData.markDirty();
-        if (TRAConfigs.Any.debugMode) System.out.println("Save portals finish " + nbt);
         if (TRAConfigs.Any.debugMode) System.out.println("Is took:" + ((System.nanoTime() - time) / 1000000.0D) + "ms");
-
+        if (TRAConfigs.Any.debugMode) System.out.println("Save portals finish " + nbt);
     }
 
     public static void unload() {
         PORTALS_GENERATION_POS.clear();
-        LOAD_DIMENSIONS.clear();
+        LOADED_DIMENSIONS.clear();
+        LOADED_PORTALS.clear();
         TO_DELETE.clear();
         PORTALS.clear();
     }
@@ -279,11 +308,11 @@ public class AncientPortalsProcessor {
             if (portal != null) {
                 portal.tpToHome(player);
             } else {
-                World world = Objects.requireNonNull(player.getServer()).getWorld(0);
-                Random rand = new Random(world.getSeed());
-                int x = rand.nextInt(TRAConfigs.PortalSettings.generationRange) - TRAConfigs.PortalSettings.generationRange / 2;
-                int z = rand.nextInt(TRAConfigs.PortalSettings.generationRange) - TRAConfigs.PortalSettings.generationRange / 2;
-                new AncientPortalNaturalGeneration(player.getServer(), 0, x, z, HandlerR.calculateGenerationHeight(world, (x << 4) + 8, (z << 4) + 8));
+//                World world = Objects.requireNonNull(player.getServer()).getWorld(0);
+//                Random rand = new Random(world.getSeed());
+//                int x = rand.nextInt(TRAConfigs.PortalSettings.generationRange) - TRAConfigs.PortalSettings.generationRange / 2;
+//                int z = rand.nextInt(TRAConfigs.PortalSettings.generationRange) - TRAConfigs.PortalSettings.generationRange / 2;
+//                new AncientPortalNaturalGeneration(player.getServer(), 0, x, z, HandlerR.calculateGenerationHeight(world, (x << 4) + 8, (z << 4) + 8));
             }
         }
     }
@@ -294,6 +323,7 @@ public class AncientPortalsProcessor {
             if (portal.isCollide(player.getPosition())) {
                 portal.onCollide(player);
                 flag = true;
+                break;
             }
         }
         if (!flag) {
@@ -310,14 +340,13 @@ public class AncientPortalsProcessor {
                 player.world.setBlockToAir(player.getPosition().add(1, i, -1));
                 player.world.setBlockToAir(player.getPosition().add(-1, i, 1));
             }
-            new AncientPortalNaturalGeneration(player.getServer(), player.dimension, ((int) player.posX) >> 4,((int) player.posZ) >> 4, HandlerR.calculateGenerationHeight(player.world, ((((int) player.posX) >> 4) << 4) + 8, ((((int) player.posZ) >> 4) << 4) + 8));
         }
     }
 
     @Nullable
     public static AncientPortal getPortalOnPos(BlockPos pos) {
         for (AncientPortal portal : PORTALS.values()) {
-            if (portal.isCollide(pos)) {
+            if (portal.isOnPortalRange(pos)) {
                 return portal;
             }
         }

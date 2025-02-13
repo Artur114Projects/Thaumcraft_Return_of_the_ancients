@@ -30,7 +30,7 @@ public class ClientAncientPortalsProcessor {
         EntityPlayer player = Minecraft.getMinecraft().player;
         Minecraft mc = Minecraft.getMinecraft();
 
-        if (e.phase != TickEvent.Phase.START || player == null || e.side == Side.SERVER || mc.isGamePaused()) {
+        if (e.phase != TickEvent.Phase.START || player == null || e.side == Side.SERVER || mc.isGamePaused() || mc.world == null) {
             return;
         }
 

@@ -26,7 +26,7 @@ public class AncientPortalOpening extends AncientPortal {
         super(tile.getWorld().getMinecraftServer(), tile.getWorld().provider.getDimension(), tile.getPos().getX() >> 4, tile.getPos().getZ() >> 4, tile.getPos().getY() - 1, AncientPortalsProcessor.getFreeId());
         this.tilePos = tile.getPos();
         this.tile = tile;
-        build();
+        this.build();
     }
 
     public AncientPortalOpening(MinecraftServer server, NBTTagCompound compound) {
@@ -71,7 +71,8 @@ public class AncientPortalOpening extends AncientPortal {
 
     @Override
     public void build() {
-        genAncientPortal();
+        this.genAncientPortal();
+        this.setGenerated();
     }
 
     @Override

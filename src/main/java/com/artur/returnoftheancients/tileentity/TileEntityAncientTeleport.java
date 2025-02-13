@@ -13,6 +13,7 @@ import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
 import com.artur.returnoftheancients.util.AspectBottle;
 import com.artur.returnoftheancients.util.AspectBottlesList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -72,8 +73,8 @@ public class TileEntityAncientTeleport extends TileEnergyProviderBase implements
 
 
     // TODO: Доделать систему с удалением вкладки после активации
-    public void requestToActivate() {
-        if (craftingGear.craft() && aspectBottles.isFull(0, 1, 2)) {
+    public void requestToActivate(EntityPlayerMP player) {
+        if (player.isCreative() || (craftingGear.craft() && aspectBottles.isFull(0, 1, 2))) {
             aspectBottles.empty(0, 1, 2);
             isActive = 1;
             inputSlotsManager.reset(new int[] {0, 1}, new int[] {3});

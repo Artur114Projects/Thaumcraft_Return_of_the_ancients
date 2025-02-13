@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.Cus
 import com.artur.returnoftheancients.blocks.BlockTpToAncientWorld;
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
+import com.artur.returnoftheancients.generation.portal.util.PortalUtil;
 import com.artur.returnoftheancients.generation.portal.util.interfaces.IExplore;
 import com.artur.returnoftheancients.handlers.FreeTeleporter;
 import com.artur.returnoftheancients.handlers.HandlerR;
@@ -14,6 +15,7 @@ import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.util.interfaces.ISaveToNBT;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.server.MinecraftServer;
@@ -37,7 +39,7 @@ public abstract class AncientPortal implements ISaveToNBT {
 
     public static final String PortalID = "PortalID";
     public static final String tpToHomeNBT = "tpToHomeNBT";
-    public static final String startUpNBT = "startUpNBT";
+    public static final String elevatingUp = "startUpNBT";
 
 
     protected final UltraMutableBlockPos mPos = new UltraMutableBlockPos();
@@ -48,12 +50,12 @@ public abstract class AncientPortal implements ISaveToNBT {
     private int exploreIndex = 0;
 
     protected final World world;
+    private boolean isGenerated;
     private boolean isExplodes;
 
     public final int dimension;
     public final int chunkX;
     public final int chunkZ;
-
     public final int posX;
 
     public final int posY;
@@ -77,7 +79,6 @@ public abstract class AncientPortal implements ISaveToNBT {
         this.id = id;
 
         AncientPortalsProcessor.addNewPortal(this);
-        this.requestToUpdateOnClient();
     }
 
     protected AncientPortal(MinecraftServer server, NBTTagCompound compound) {
@@ -86,6 +87,7 @@ public abstract class AncientPortal implements ISaveToNBT {
         this.portalPos = new ChunkPos(chunkX, chunkZ);
         this.id = compound.getInteger("id");
         if (TRAConfigs.Any.debugMode) System.out.println("Portal load x:" + chunkX + "z:" + chunkZ + " id:" + id);
+        this.isGenerated = compound.getBoolean("isGenerated");
         this.dimension = compound.getInteger("dimension");
         this.isExplodes = compound.getBoolean("isExplodes");
         this.posY = compound.getInteger("posY");
@@ -97,7 +99,6 @@ public abstract class AncientPortal implements ISaveToNBT {
 
     public abstract void build();
     protected abstract int getPortalTypeID();
-
     public void update(TickEvent.ServerTickEvent e) {
         if (isExplodes && explosionList.isEmpty()) {
             explosion();
@@ -138,7 +139,7 @@ public abstract class AncientPortal implements ISaveToNBT {
     }
 
 
-    public void onBlockDestroyedInPortalChunk(BlockEvent.BreakEvent e) {
+    public void onBlockDestroyedInPortalArea(BlockEvent.BreakEvent e) {
         if (e.getState().getBlock().equals(InitBlocks.TP_TO_ANCIENT_WORLD_BLOCK)) {
             explosion();
         }
@@ -149,16 +150,13 @@ public abstract class AncientPortal implements ISaveToNBT {
             NBTTagCompound data = player.getEntityData();
             if (data.getBoolean(tpToHomeNBT)) {
                 if (isCollide(player.getPosition())) {
-//                    player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 600, 1));
                     data.setBoolean(tpToHomeNBT, false);
-                    HandlerR.setStartUpNBT(player, true);
                     onPlayerTpToHome(player);
                 }
             }
-            if (data.getBoolean(startUpNBT)) {
+            if (data.getBoolean(elevatingUp)) {
                 player.motionY += 0.5 - player.motionY;
                 if (player.posY >= posY || player.posY >= 110) {
-                    HandlerR.setStartUpNBT(player, false);
                     player.removePotionEffect(Objects.requireNonNull(Potion.getPotionById(15)));
                     player.fallDistance = 0;
                     data.setInteger(PortalID, -1);
@@ -181,10 +179,6 @@ public abstract class AncientPortal implements ISaveToNBT {
     }
 
     protected void genAncientPortal() {
-        if (world.isRemote) {
-            return;
-        }
-
         int localX = posX + 5;
         int localZ = posZ + 5;
         CustomGenStructure.gen(world, localX, posY, localZ, "ancient_portal_air_cube");
@@ -194,15 +188,49 @@ public abstract class AncientPortal implements ISaveToNBT {
         CustomGenStructure.gen(world, localX, 0, localZ, "ancient_portal_floor");
     }
 
+    protected void onChunkPopulatePre(int chunkX, int chunkZ) {}
+
+    public boolean isOnPortalRange(int chunkX, int chunkZ) {
+        return chunkX == this.chunkX && chunkZ == this.chunkZ;
+    }
+
+    public boolean isOnPortalRange(ChunkPos pos) {
+        return isOnPortalRange(pos.x, pos.z);
+    }
+
+    public boolean isOnPortalRange(BlockPos pos) {
+        return isOnPortalRange(pos.getX() >> 4, pos.getZ() >> 4);
+    }
+
     public boolean isCollide(int x, int z) {
         if (x >> 4 == chunkX && z >> 4 == chunkZ) {
-            return true;
+            mPos.pushPos();
+            mPos.setPos(portalPos);
+            for (BlockPos pos : PortalUtil.portalCollideOffsetsArray) {
+                mPos.pushPos();
+                mPos.add(pos);
+                if (mPos.getX() == x && mPos.getZ() == z) {
+                    mPos.popPos();
+                    mPos.popPos();
+                    return true;
+                }
+                mPos.popPos();
+            }
+            mPos.popPos();
         }
         return false;
     }
 
     public boolean isCollide(BlockPos pos) {
         return isCollide(pos.getX(), pos.getZ());
+    }
+
+    protected void setGenerated() {
+        isGenerated = true;
+    }
+
+    public boolean isGenerated() {
+        return isGenerated;
     }
 
     public boolean isExploded() {
@@ -229,10 +257,6 @@ public abstract class AncientPortal implements ISaveToNBT {
     }
 
     public void explosion() {
-        if (world.isRemote) {
-            return;
-        }
-
         int x =  chunkX << 4;
         int z =  chunkZ << 4;
         double eX = x + 8.0D;
@@ -304,6 +328,7 @@ public abstract class AncientPortal implements ISaveToNBT {
         }
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setInteger("portalTypeID", getPortalTypeID());
+        nbt.setBoolean("isGenerated", isGenerated);
         nbt.setBoolean("isExplodes", isExplodes);
         nbt.setInteger("dimension", dimension);
         nbt.setInteger("chunkX", chunkX);

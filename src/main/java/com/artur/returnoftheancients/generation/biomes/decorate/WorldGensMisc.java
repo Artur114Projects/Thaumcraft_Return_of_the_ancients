@@ -4,6 +4,7 @@ import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -16,6 +17,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thaumcraft.api.ThaumcraftMaterials;
 import thaumcraft.api.blocks.BlocksTC;
+import thaumcraft.common.blocks.BlockTC;
 
 import java.util.Random;
 
@@ -27,28 +29,31 @@ public class WorldGensMisc {
 
 
     public static class WorldGenReplaceVisibleBlocks extends WorldGenerator {
-
         private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
 
         @Override
         public boolean generate(World worldIn, Random rand, BlockPos position) {
             blockPos.setPos(position);
-            for (blockPos.pushPos(); blockPos.getY() > worldIn.getSeaLevel() - 10; blockPos.down()) {
+            for (; blockPos.getY() > worldIn.getSeaLevel() - 10; blockPos.down()) {
                 for (EnumFacing facing : EnumFacing.values()) {
-                    blockPos.pushPos();
                     blockPos.offset(facing);
-                    if (worldIn.isAirBlock(blockPos)) {
-                        blockPos.popPos();
+                    IBlockState state = worldIn.getBlockState(blockPos);
+                    boolean isNeedReplace = state.getMaterial() == Material.AIR || !state.getBlock().isOpaqueCube(state);
+
+                    blockPos.offset(facing.getOpposite());
+
+                     if (isNeedReplace) {
                         Material material = worldIn.getBlockState(blockPos).getMaterial();
-                        if (worldIn.getBlockState(blockPos).getMaterial() != ThaumcraftMaterials.MATERIAL_TAINT && !worldIn.isAirBlock(blockPos) && material != Material.SNOW && !material.isLiquid()) {
+                        Block block = worldIn.getBlockState(blockPos).getBlock();
+
+                        if (worldIn.getBlockState(blockPos).getMaterial() != ThaumcraftMaterials.MATERIAL_TAINT && !worldIn.isAirBlock(blockPos) && material != Material.SNOW && !material.isLiquid() && !(block instanceof BlockTC) && !block.hasTileEntity(state)) {
                             worldIn.setBlockState(blockPos, InitBlocks.TAINT_VOID_STONE.getDefaultState());
                         }
+
                         break;
                     }
-                    blockPos.popPos();
                 }
             }
-            blockPos.popPos();
             return true;
         }
     }

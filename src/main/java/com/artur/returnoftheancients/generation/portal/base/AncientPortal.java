@@ -12,10 +12,9 @@ import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.util.interfaces.ISaveToNBT;
+import com.artur.returnoftheancients.util.interfaces.IWriteToNBT;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.server.MinecraftServer;
@@ -35,7 +34,7 @@ import java.util.Objects;
 // TODO: Добавить естественную генерацию портала
 // TODO: Разобраться с компасом
 // TODO: Решить не понятный баг с тем что при прерывании возвращает на портал 0
-public abstract class AncientPortal implements ISaveToNBT {
+public abstract class AncientPortal implements IWriteToNBT {
 
     public static final String PortalID = "PortalID";
     public static final String tpToHomeNBT = "tpToHomeNBT";
@@ -56,13 +55,14 @@ public abstract class AncientPortal implements ISaveToNBT {
     public final int dimension;
     public final int chunkX;
     public final int chunkZ;
-    public final int posX;
 
-    public final int posY;
+    public final int posX;
 
     public final int posZ;
 
     protected int id;
+
+    public int posY;
 
 
     public AncientPortal(MinecraftServer server, int dimension, int chunkX, int chunkZ, int posY, int id) {
@@ -77,8 +77,6 @@ public abstract class AncientPortal implements ISaveToNBT {
         this.chunkZ = chunkZ;
         this.posY = posY;
         this.id = id;
-
-        AncientPortalsProcessor.addNewPortal(this);
     }
 
     protected AncientPortal(MinecraftServer server, NBTTagCompound compound) {
@@ -322,11 +320,10 @@ public abstract class AncientPortal implements ISaveToNBT {
     }
 
     @Nullable
-    public NBTTagCompound writeToNBT() {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         if (isExploded) {
             return null;
         }
-        NBTTagCompound nbt = new NBTTagCompound();
         nbt.setInteger("portalTypeID", getPortalTypeID());
         nbt.setBoolean("isGenerated", isGenerated);
         nbt.setBoolean("isExplodes", isExplodes);

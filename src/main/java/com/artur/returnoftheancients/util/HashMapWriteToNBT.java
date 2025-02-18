@@ -1,13 +1,14 @@
 package com.artur.returnoftheancients.util;
 
-import com.artur.returnoftheancients.util.interfaces.ISaveToNBT;
+import com.artur.returnoftheancients.util.interfaces.IWriteToNBT;
 import net.minecraft.nbt.NBTTagCompound;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-public class HashMapSaveToNBT<K, V extends ISaveToNBT> extends HashMap<K, V> implements ISaveToNBT {
+public class HashMapWriteToNBT<K, V extends IWriteToNBT> extends HashMap<K, V> implements IWriteToNBT {
     private NBTTagCompound currentTag = new NBTTagCompound();
     private boolean isChanged = true;
 
@@ -48,12 +49,17 @@ public class HashMapSaveToNBT<K, V extends ISaveToNBT> extends HashMap<K, V> imp
         super.putAll(m);
     }
 
+
+    /**
+    @param notUse Will not be used, there should be null.
+    @return new NBTTagCompound, do not change it!
+    **/
     @Override
-    public NBTTagCompound writeToNBT() {
+    public NBTTagCompound writeToNBT(@Nullable NBTTagCompound notUse) {
         if (isChanged) {
             NBTTagCompound nbt = new NBTTagCompound();
             this.forEach((key, value) -> {
-                nbt.setTag(key.toString(), value.writeToNBT());
+                nbt.setTag(key.toString(), value.writeToNBT(new NBTTagCompound()));
             });
             currentTag = nbt;
             isChanged = false;

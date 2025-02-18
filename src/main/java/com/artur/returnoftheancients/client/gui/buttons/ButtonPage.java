@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.client.gui.buttons;
 
 import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.RenderHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -37,20 +38,20 @@ public class ButtonPage extends GuiButton {
 
             if (enabled) {
                 mc.getTextureManager().bindTexture(baseTexture);
-                HandlerR.renderQuadTextureAtlas(x, y, 0, 16 * i, 16, 48, scale);
+                RenderHandler.renderQuadTextureAtlas(x, y, 0, 16 * i, 16, 48, scale);
                 if (icon != null) {
                     mc.getTextureManager().bindTexture(icon);
-                    HandlerR.renderQuadTextureAtlas(x, y, 0, 0, 16, 16, scale);
+                    RenderHandler.renderQuadTextureAtlas(x, y, 0, 0, 16, 16, scale);
                 }
             } else {
                 mc.getTextureManager().bindTexture(baseTexture);
-                HandlerR.renderQuadTextureAtlas(x, y, 0, 0, 16, 48, scale);
+                RenderHandler.renderQuadTextureAtlas(x, y, 0, 0, 16, 48, scale);
                 if (icon != null) {
                     mc.getTextureManager().bindTexture(icon);
-                    HandlerR.renderQuadTextureAtlas(x, y, 0, 0, 16, 16, scale);
+                    RenderHandler.renderQuadTextureAtlas(x, y, 0, 0, 16, 16, scale);
                 }
                 mc.getTextureManager().bindTexture(baseTexture);
-                HandlerR.renderQuadTextureAtlas(x, y, 0, 32, 16, 48, scale);
+                RenderHandler.renderQuadTextureAtlas(x, y, 0, 32, 16, 48, scale);
             }
 
             this.mouseDragged(mc, mouseX, mouseY);

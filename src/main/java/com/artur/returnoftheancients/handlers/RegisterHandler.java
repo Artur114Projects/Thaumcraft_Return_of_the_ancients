@@ -137,18 +137,22 @@ public class RegisterHandler {
 
 		CustomGenStructure.put("ancient_way_rotate-1");
 		CustomGenStructure.put("ancient_way_rotate-2");
+
 		CustomGenStructure.put("ancient_turn_rotate-1");
 		CustomGenStructure.put("ancient_turn_rotate-2");
 		CustomGenStructure.put("ancient_turn_rotate-3");
 		CustomGenStructure.put("ancient_turn_rotate-4");
+
 		CustomGenStructure.put("ancient_fork_rotate-1");
 		CustomGenStructure.put("ancient_fork_rotate-2");
 		CustomGenStructure.put("ancient_fork_rotate-3");
 		CustomGenStructure.put("ancient_fork_rotate-4");
+
 		CustomGenStructure.put("ancient_end_rotate-1");
 		CustomGenStructure.put("ancient_end_rotate-2");
 		CustomGenStructure.put("ancient_end_rotate-3");
 		CustomGenStructure.put("ancient_end_rotate-4");
+
 		CustomGenStructure.setUseEBS((x, y, z, state) -> {
             if (state.getBlock().equals(InitBlocks.BOSS_TRIGGER_BLOCK)) return false;
 			if (state.getBlock().equals(InitTileEntity.ELDRITCH_TRAP)) return false;
@@ -159,8 +163,6 @@ public class RegisterHandler {
 		CustomGenStructure.register();
 
 		CustomGenStructure.setUseBinary();
-		CustomGenStructure.put("taint_tree_big");
-		CustomGenStructure.put("taint_tree_small");
 		CustomGenStructure.put("ancient_boss");
 		CustomGenStructure.put("ancient_crossroads_trap");
 		CustomGenStructure.put("ancient_developer_platform");
@@ -173,7 +175,14 @@ public class RegisterHandler {
 		CustomGenStructure.put("ancient_door_rock_rotate-2");
 		CustomGenStructure.put("ancient_portal_floor");
 
+		for (int i = 0; i <= 8; i++) {
+			CustomGenStructure.put("ancient_spire_segment_" + i);
+		}
+
+		CustomGenStructure.put("ancient_sanctuary");
+
 		CustomGenStructure.setUseAir();
+		CustomGenStructure.put("ancient_portal_hub");
 		CustomGenStructure.put("ancient_portal_air_cube");
 		CustomGenStructure.put("ancient_portal");
 		CustomGenStructure.put("ancient_area");

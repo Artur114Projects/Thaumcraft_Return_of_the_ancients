@@ -16,6 +16,7 @@ public class TransformerTRA implements IClassTransformer {
         TRANSFORMERS.add(new TransformerWorld());
         TRANSFORMERS.add(new TransformerBiomeSearchWorker());
         TRANSFORMERS.add(new TransformerTaintHelper());
+        TRANSFORMERS.add(new TransformerItemTaintAmulet());
     }
 
     @Override

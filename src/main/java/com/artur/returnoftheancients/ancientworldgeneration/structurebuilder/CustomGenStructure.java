@@ -120,6 +120,9 @@ public class CustomGenStructure {
         for (byte y = 0; y != chunk.getBlockStorageArray().length; y++) {
             chunk.getBlockStorageArray()[y] = Chunk.NULL_BLOCK_STORAGE;
         }
+
+        chunk.markDirty();
+        world.markBlockRangeForRenderUpdate(chunk.getPos().getBlock(0, 0, 0), chunk.getPos().getBlock(15, 255, 15));
     }
 
 

@@ -6,6 +6,8 @@ public abstract class TransformerBase implements ITransformer {
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
+        System.out.println("Transform class [" + getTarget() + "]");
+
         ClassReader classReader = new ClassReader(basicClass);
         ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
 
@@ -21,11 +23,6 @@ public abstract class TransformerBase implements ITransformer {
                     }
                 }
                 return mv;
-            }
-
-            @Override
-            public void visitEnd() {
-                super.visitEnd();
             }
         }, 0);
 

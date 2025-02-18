@@ -24,8 +24,6 @@ public abstract class MethodParamsBase {
         return false;
     }
 
-
-
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

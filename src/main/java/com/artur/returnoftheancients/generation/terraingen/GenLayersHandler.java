@@ -30,7 +30,7 @@ public class GenLayersHandler {
             portalPos[i] = new ChunkPos(chunkX << 4, chunkZ << 4);
         }
 
-        if (TRAConfigs.Any.debugMode) {
+        if (TRAConfigs.Any.debugMode && false) {
             System.out.println("Seed:" + seed);
             for (ChunkPos pos : portalPos) {
                 System.out.println(pos);
@@ -40,7 +40,7 @@ public class GenLayersHandler {
 
     public static boolean isCollideToAnyPortal(ChunkPos[] portalsPos, int x, int z, int bitShift, int offset) {
         for (ChunkPos pos : portalsPos) {
-            if (HandlerR.isCollide(x, z, pos.x >> bitShift, pos.z >> bitShift, offset)) {
+            if (HandlerR.isCollide(pos.x >> bitShift, pos.z >> bitShift, x, z, offset)) {
                 return true;
             }
         }
@@ -179,6 +179,19 @@ public class GenLayersHandler {
         return true;
     }
 
+    public static boolean isAllBiomesOnRangeEqualsInt0(int[] aint, int biome, int i1, int j1, int areaWidth1, int range) {
+        for (int i = i1 - range; i != i1 + range + 1; i++) {
+            for (int j = j1 - range; j != j1 + range + 1; j++) {
+                if (i == i1 && j == j1) {
+                    continue;
+                }
+                if (aint[i + j * areaWidth1] != biome) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
 
     public static int getRandomIntOnArray(int[] array, int index, int badResult) {

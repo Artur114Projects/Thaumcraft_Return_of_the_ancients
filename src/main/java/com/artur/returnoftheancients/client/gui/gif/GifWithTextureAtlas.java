@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.client.gui.gif;
 
 import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.RenderHandler;
 import com.artur.returnoftheancients.util.EnumTextureLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -60,6 +61,6 @@ public class GifWithTextureAtlas {
         update();
 
         mc.getTextureManager().bindTexture(texturePath);
-        HandlerR.renderTextureAtlas(posX, posY, 0, drawAreaHeight * currentFrame, textureSizeX, textureSizeY, drawAreaWidth, drawAreaHeight, scale);
+        RenderHandler.renderTextureAtlas(posX, posY, 0, drawAreaHeight * currentFrame, textureSizeX, textureSizeY, drawAreaWidth, drawAreaHeight, scale);
     }
 }

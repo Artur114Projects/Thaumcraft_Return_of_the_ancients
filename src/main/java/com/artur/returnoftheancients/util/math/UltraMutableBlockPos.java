@@ -1,22 +1,29 @@
 package com.artur.returnoftheancients.util.math;
 
 import com.artur.returnoftheancients.util.interfaces.RunnableWithParam;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
     private static final UltraMutableBlockPos[] stack = new UltraMutableBlockPos[8];
+    private static long lastTrowTime = 0;
     private static int stackHead = -1;
 
 
@@ -170,6 +177,37 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         return this.setPos(vec.getX(), vec.getY(), vec.getZ());
     }
 
+    public UltraMutableBlockPos setWorldY(World world) {
+        return setWorldY(world, false);
+    }
+
+    public UltraMutableBlockPos setWorldY(World world, boolean ignoringLiquids) {
+        return setWorldY(world, ignoringLiquids, Blocks.AIR, Blocks.BEDROCK);
+    }
+
+    public UltraMutableBlockPos setWorldY(World world, boolean ignoringLiquids, Block... ignoringBlocks) {
+        this.setY(world.getHeight());
+
+        while (this.getY() >= 0) {
+            IBlockState state = world.getBlockState(this);
+            Block block = state.getBlock();
+            Material material = state.getMaterial();
+            boolean flag = true;
+            for (Block ignoring : ignoringBlocks) {
+                if (block == ignoring || (ignoringLiquids && material.isLiquid())) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                break;
+            }
+            this.down();
+        }
+
+        return this;
+    }
+
     @Override
     public @NotNull UltraMutableBlockPos move(@NotNull EnumFacing facing) {
         return this.move(facing, 1);
@@ -231,6 +269,10 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
             case COUNTERCLOCKWISE_90:
                 return this.setPos(this.getZ(), this.getY(), -this.getX());
         }
+    }
+
+    public ChunkPos toChunkPos() {
+        return new ChunkPos(this.getChunkX(), this.getChunkZ());
     }
 
     public int getChunkX() {
@@ -303,8 +345,11 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
             contextDeep++;
         }
 
-        if ((contextDeep + 1) % 100 == 0) {
-            System.out.println("Leak? Context deep exceeded [" + (contextDeep + 1) + "] so it should be!?");
+        if ((contextDeep + 1) % 32 == 0 && System.currentTimeMillis() - lastTrowTime > 1000) {
+            RuntimeException exception = new IllegalStateException("Leak? Context deep exceeded [" + (contextDeep + 1) + "] so it should be!?");
+            exception.printStackTrace(System.out);
+
+            lastTrowTime = System.currentTimeMillis();
         }
     }
 
@@ -312,7 +357,7 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         if (contextPos != null && contextPos.size() > contextDeep && contextDeep != -1) {
             this.setPos(contextPos.get(contextDeep--));
         } else {
-            throw new RuntimeException("Stack is empty! Cannot be fulfilled popPos!");
+            throw new IllegalStateException("Stack is empty! Cannot be fulfilled popPos!");
         }
     }
 

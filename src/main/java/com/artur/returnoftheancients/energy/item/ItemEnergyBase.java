@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.energy.item;
 
+import com.artur.returnoftheancients.energy.util.EnergyTypes;
 import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.items.BaseItem;
 import com.artur.returnoftheancients.referense.Referense;
@@ -83,7 +84,7 @@ public abstract class ItemEnergyBase extends BaseItem implements IEnergyContaine
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
 
-        tooltip.add(TextFormatting.AQUA + I18n.format(Referense.MODID + ".energy.local.0") + TextFormatting.RESET + " " + HandlerR.kJToString(getEnergy(stack)) + "/" + HandlerR.kJToString(getMaxEnergy()));
+        tooltip.add(TextFormatting.AQUA + I18n.format(Referense.MODID + ".energy.local.0") + TextFormatting.RESET + " " + EnergyTypes.kJToString(getEnergy(stack)) + "/" + EnergyTypes.kJToString(getMaxEnergy()));
     }
 
     protected void setMaxChargingSpeed(float maxChargingSpeed) {

@@ -12,11 +12,13 @@ import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -59,24 +61,19 @@ public class AncientPortalsProcessor {
         }
     }
 
-
     @SubscribeEvent
     public static void WorldEventLoad(WorldEvent.Load e) {
-        if (!LOADED_DIMENSIONS.contains(e.getWorld().provider.getDimension())) {
-            int dimension = e.getWorld().provider.getDimension();
-            if (Arrays.stream(TRAConfigs.PortalSettings.dimensionsGenerate).anyMatch((i) -> i == dimension)) {
+        if (!e.getWorld().isRemote) {
+            if (!LOADED_DIMENSIONS.contains(e.getWorld().provider.getDimension())) {
+                int dimension = e.getWorld().provider.getDimension();
+                WorldData worldData = WorldData.get();
+
                 if (dimension == 0) {
                     portalsGenerationPosOverWorld = new ChunkPos[portalsCount];
                     GenLayersHandler.initPortalsPosOnWorld(portalsGenerationPosOverWorld, e.getWorld().getWorldInfo().getSeed());
-                } else {
-                    ChunkPos[] poss = new ChunkPos[portalsCount];
-                    GenLayersHandler.initPortalsPosOnWorld(poss, e.getWorld().getSeed());
-                    PORTALS_GENERATION_POS.put(dimension, poss);
                 }
-            }
-            if (!e.getWorld().isRemote) {
+
                 if (TRAConfigs.Any.debugMode) System.out.println("Load portals dim:" + dimension);
-                WorldData worldData = WorldData.get();
                 NBTTagCompound portalsPack = worldData.saveData.getCompoundTag("PortalsPack");
                 if (portalsPack.hasKey(dimension + "")) {
                     NBTTagList list = portalsPack.getTagList(dimension + "", 10);
@@ -85,8 +82,26 @@ public class AncientPortalsProcessor {
                         addNewPortal(loadPortal(e.getWorld().getMinecraftServer(), nbt));
                     }
                 }
+
+                if (dimension == 0) {
+                    NBTTagList dimList = worldData.saveData.getTagList("generatedPortals", 3);
+                    if (!HandlerR.intTagListContains(dimList, dimension)) {
+                        ChunkPos[] portalsPos = getAllPortalsPosOnDim(dimension);
+
+                        for (ChunkPos pos : portalsPos) {
+                            AncientPortal portal = new AncientPortalNaturalGeneration(e.getWorld().getMinecraftServer(), dimension, pos.x, pos.z);
+                            PORTALS.put(portal.id, portal);
+                        }
+
+                        dimList.appendTag(new NBTTagInt(dimension));
+
+                        worldData.saveData.setTag("generatedPortals", dimList);
+                        worldData.markDirty();
+                    }
+                }
+
+                LOADED_DIMENSIONS.add(dimension);
             }
-            LOADED_DIMENSIONS.add(dimension);
         }
     }
 
@@ -98,7 +113,6 @@ public class AncientPortalsProcessor {
             }
         }
     }
-
 
     @SubscribeEvent
     public static void Tick(TickEvent.ServerTickEvent e) {
@@ -173,7 +187,7 @@ public class AncientPortalsProcessor {
 
     @SubscribeEvent
     public static void populatePre(PopulateChunkEvent.Pre e) {
-        if (e.getWorld().provider.getDimension() == 0) {
+        if (e.getWorld().provider.getDimension() == 0 && !e.getWorld().isRemote) {
             for (AncientPortal portal : PORTALS.values()) {
                 if (portal.dimension == 0 && !portal.isGenerated()) {
                     portal.onChunkPopulatePre(e.getChunkX(), e.getChunkZ());
@@ -248,9 +262,16 @@ public class AncientPortalsProcessor {
     public static void save() {
         long time = System.nanoTime();
         WorldData worldData = WorldData.get();
-        NBTTagCompound nbt = worldData.saveData.hasKey("PortalsPack") ? worldData.saveData.getCompoundTag("PortalsPack") : new NBTTagCompound();
+        NBTTagCompound nbt = worldData.saveData.hasKey("PortalsPack") ? worldData.saveData.getCompoundTag("PortalsPack") : null;
+        boolean needSaveAll;
 
-        if (!LOADED_PORTALS.isEmpty()) {
+        if (!LOADED_PORTALS.isEmpty() || nbt == null) {
+            if (nbt == null) {
+                nbt = new NBTTagCompound();
+                needSaveAll = true;
+            } else {
+                needSaveAll = false;
+            }
             Map<Integer, List<AncientPortal>> PORTAL_DIMENSIONS = new HashMap<>();
 
             for (AncientPortal portal : PORTALS.values()) {
@@ -263,25 +284,31 @@ public class AncientPortalsProcessor {
                 }
             }
 
+            NBTTagCompound finalNbt = nbt;
             PORTAL_DIMENSIONS.forEach((dimension, portals) -> {
                 if (!LOADED_DIMENSIONS.contains(dimension)) {
                     return;
                 }
 
-                NBTTagList list = nbt.getTagList(dimension + "", 10);
+                NBTTagList list = finalNbt.getTagList(dimension + "", 10);
+
 
                 for (int i = 0; i != portals.size(); i++) {
                     AncientPortal portal = portals.get(i);
-                    NBTTagCompound portalData = portal.writeToNBT();
+                    NBTTagCompound portalData = portal.writeToNBT(new NBTTagCompound());
                     if (portalData == null) {
                         continue;
                     }
-                    if (LOADED_PORTALS.containsKey(portal.id)) {
-                        list.set(i, portalData);
+                    if (LOADED_PORTALS.containsKey(portal.id) || needSaveAll) {
+                        if (list.hasNoTags() || needSaveAll) {
+                            list.appendTag(portalData);
+                        } else {
+                            list.set(i, portalData);
+                        }
                     }
                 }
 
-                nbt.setTag(dimension + "", list);
+                finalNbt.setTag(dimension + "", list);
             });
         }
 
@@ -369,6 +396,10 @@ public class AncientPortalsProcessor {
         }
         ChunkPos nearestPos = nearestPosOptional.get();
         return new ChunkPos(nearestPos.x, nearestPos.z);
+    }
+
+    private static ChunkPos[] getAllPortalsPosOnDim(int dim) {
+        return dim == 0 ? portalsGenerationPosOverWorld : PORTALS_GENERATION_POS.get(dim);
     }
 
     public static ChunkPos getPortalPos(World world, int id) {

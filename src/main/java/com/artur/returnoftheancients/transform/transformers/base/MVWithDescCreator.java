@@ -19,4 +19,8 @@ public abstract class MVWithDescCreator extends MethodVisitor {
     public MVWithDescCreator(MethodVisitor mv, String... names) {
         this(mv, ITransformer.HANDLER_CLASS, names);
     }
+
+    protected void invokeStaticDescMethod(int id) {
+        mv.visitMethodInsn(Opcodes.INVOKESTATIC, ITransformer.HANDLER_PATH, names[id], desc[id], false);
+    }
 }

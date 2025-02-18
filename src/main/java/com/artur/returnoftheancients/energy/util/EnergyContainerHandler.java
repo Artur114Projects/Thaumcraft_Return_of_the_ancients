@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.energy.util;
 
 import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.RenderHandler;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -149,13 +150,13 @@ public class EnergyContainerHandler {
         int i = hoveredInput ? 1 : 0;
 
         mc.getTextureManager().bindTexture(texture);
-        HandlerR.renderTextureAtlas(x, y, 0, 12, 48, 18, drawAreaWidth, drawAreaHeight);
+        RenderHandler.renderTextureAtlas(x, y, 0, 12, 48, 18, drawAreaWidth, drawAreaHeight);
 
         mc.getTextureManager().bindTexture(barBaseTexture);
         drawInputBar(x, y, drawAreaWidth, drawAreaHeight);
 
         mc.getTextureManager().bindTexture(texture);
-        HandlerR.renderTextureAtlas(x, y, 0, 6 * i, 48, 18, drawAreaWidth, drawAreaHeight);
+        RenderHandler.renderTextureAtlas(x, y, 0, 6 * i, 48, 18, drawAreaWidth, drawAreaHeight);
 
         GlStateManager.enableLighting();
         GlStateManager.enableDepth();
@@ -171,13 +172,13 @@ public class EnergyContainerHandler {
         int i = hoveredOutput ? 1 : 0;
 
         mc.getTextureManager().bindTexture(texture);
-        HandlerR.renderTextureAtlas(x, y, 0, 12, 48, 18, drawAreaWidth, drawAreaHeight);
+        RenderHandler.renderTextureAtlas(x, y, 0, 12, 48, 18, drawAreaWidth, drawAreaHeight);
 
         mc.getTextureManager().bindTexture(barBaseTexture);
         drawOutputBar(x, y, drawAreaWidth, drawAreaHeight);
 
         mc.getTextureManager().bindTexture(texture);
-        HandlerR.renderTextureAtlas(x, y, 0, 6 * i, 48, 18, drawAreaWidth, drawAreaHeight);
+        RenderHandler.renderTextureAtlas(x, y, 0, 6 * i, 48, 18, drawAreaWidth, drawAreaHeight);
 
         GlStateManager.enableLighting();
         GlStateManager.enableDepth();
@@ -199,7 +200,7 @@ public class EnergyContainerHandler {
         double endV = 1;
         double startV = 0;
 
-        HandlerR.renderPrimitive(x1, x, y, y1, endU, startU, startV, endV);
+        RenderHandler.renderPrimitive(x1, x, y, y1, endU, startU, startV, endV);
     }
 
     @SideOnly(Side.CLIENT)
@@ -218,7 +219,7 @@ public class EnergyContainerHandler {
         double endV = 1;
         double startV = 0;
 
-        HandlerR.renderPrimitive(x, x1, y, y1, startU, endU, startV, endV);
+        RenderHandler.renderPrimitive(x, x1, y, y1, startU, endU, startV, endV);
     }
 
     public void drawHoveredText(GuiContainer container, int mouseX, int mouseY) {
@@ -226,12 +227,12 @@ public class EnergyContainerHandler {
             return;
         }
         List<String> list = new ArrayList<>();
-        list.add(TextFormatting.AQUA + I18n.format(Referense.MODID + ".energy.local.0") + TextFormatting.RESET + " " + HandlerR.kJToString(energyCount) + "/" + HandlerR.kJToString(maxEnergy));
+        list.add(TextFormatting.AQUA + I18n.format(Referense.MODID + ".energy.local.0") + TextFormatting.RESET + " " + EnergyTypes.kJToString(energyCount) + "/" + EnergyTypes.kJToString(maxEnergy));
         if (hoveredInput) {
-            list.add(TextFormatting.YELLOW + I18n.format(Referense.MODID + ".energy.local.1") + TextFormatting.RESET + " " + HandlerR.kWToString(inputCount) + "/" + HandlerR.kWToString(maxInput * 20));
+            list.add(TextFormatting.YELLOW + I18n.format(Referense.MODID + ".energy.local.1") + TextFormatting.RESET + " " + EnergyTypes.kWToString(inputCount) + "/" + EnergyTypes.kWToString(maxInput * 20));
         }
         if (hoveredOutput) {
-            list.add(TextFormatting.YELLOW + I18n.format(Referense.MODID + ".energy.local.2") + TextFormatting.RESET + " " + HandlerR.kWToString(outputCount) + "/" + HandlerR.kWToString(maxOutput * 20));
+            list.add(TextFormatting.YELLOW + I18n.format(Referense.MODID + ".energy.local.2") + TextFormatting.RESET + " " + EnergyTypes.kWToString(outputCount) + "/" + EnergyTypes.kWToString(maxOutput * 20));
         }
         container.drawHoveringText(list, mouseX, mouseY);
 

@@ -5,16 +5,20 @@ import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.network.ServerPacketGetWeather;
+import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
 import com.artur.returnoftheancients.transform.transformers.base.MVWithDescCreator;
 import com.chaosthedude.naturescompass.util.BiomeSearchWorker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumParticleTypes;
@@ -23,16 +27,21 @@ import net.minecraft.world.World;
 import org.objectweb.asm.commons.AdviceAdapter;
 import thaumcraft.client.lib.events.RenderEventHandler;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class TransformerHandler {
 
+    public static void addPatchedTooltip(Item item, ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn, String text) {
+        tooltip.add(TextFormatting.GREEN + "Patched with the mod: " + TextFormatting.RESET + "[" + Referense.MODID + "]" + TextFormatting.GREEN + " Patch list:");
+        String[] textArray = text.split("\n");
+        Collections.addAll(tooltip, textArray);
+        tooltip.add("");
+    }
 
     public static boolean isEntityLivingBaseInTaintBiome(Item item, ItemStack stack, EntityLivingBase livingBase) {
-        EntityLivingBase mob = null;
-        if (mob.world.getBiome(mob.getPosition()) == InitBiome.TAINT) {
-            return false;
-        }
         return HandlerR.arrayContains(InitBiome.TAINT_BIOMES_ID, HandlerR.getBiomeIdOnPos(livingBase.world, livingBase.getPosition()));
     }
 

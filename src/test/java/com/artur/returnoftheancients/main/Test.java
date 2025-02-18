@@ -61,6 +61,8 @@ public class Test { //
         return null; // Если путь не найден
     }
 
+
+
     public static void main(String[] args) {
         System.out.println("Start!");
 //        ChunkPos[] poss = new ChunkPos[8];

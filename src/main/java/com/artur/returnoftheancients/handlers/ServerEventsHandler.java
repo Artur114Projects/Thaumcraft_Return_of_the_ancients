@@ -47,19 +47,14 @@ import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_di
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class ServerEventsHandler {
-
-
     public static final PlayerInBiomeManager PLAYER_IN_BIOME_MANAGER = new PlayerInBiomeManager();
 
-    public static final String tpToHomeNBT = "tpToHomeNBT";
-    protected static final String startUpNBT = "startUpNBT";
-    protected static final String notNoCollisionNBTTime = "notNoCollisionNBTTime";
     private static boolean isAncientAreaSet = false;
     private static byte difficultyId = -1;
     private static boolean newVersion = false;
 
 
-    public  static void unload() {
+    public static void unload() {
         isAncientAreaSet = false;
         newVersion = false;
     }
@@ -101,41 +96,15 @@ public class ServerEventsHandler {
     public static void WorldEventLoad(WorldEvent.Load e) {
         if (!e.getWorld().isRemote) {
             WorldData worldData = WorldData.get();
-
-            if (e.getWorld().provider.getDimension() == TRAConfigs.PortalSettings.dimensionGenerate) {
-                if (TRAConfigs.PortalSettings.isGen) {
-                    if (!worldData.saveData.getBoolean(IALGS.isAncientPortalGenerateKey)) {
-
-                        int x;
-                        int z;
-
-                        if (TRAConfigs.PortalSettings.isRandomGenerate) {
-                            Random rand = new Random(e.getWorld().getSeed());
-                            x = rand.nextInt(TRAConfigs.PortalSettings.generationRange) - TRAConfigs.PortalSettings.generationRange / 2;
-                            z = rand.nextInt(TRAConfigs.PortalSettings.generationRange) - TRAConfigs.PortalSettings.generationRange / 2;
-                        } else {
-                            x = TRAConfigs.PortalSettings.chunkX;
-                            z = TRAConfigs.PortalSettings.chunkZ;
-                        }
-
-                        worldData.saveData.setString("version", Referense.VERSION);
-                        worldData.saveData.setInteger(IALGS.ancientPortalXPosKey, x);
-                        worldData.saveData.setInteger(IALGS.ancientPortalZPosKey, z);
-                        worldData.saveData.setInteger(IALGS.ancientPortalYPosKey, HandlerR.calculateGenerationHeight(e.getWorld(), (16 * x) + 8, (16 * z) + 8));
-                        HandlerR.genAncientPortal(e.getWorld(), x, z, TRAConfigs.PortalSettings.dimensionGenerate == 0);
-                        worldData.saveData.setInteger(IALGS.portalDimension, TRAConfigs.PortalSettings.dimensionGenerate);
-                        worldData.saveData.setBoolean(IALGS.isAncientPortalGenerateKey, true);
-                        worldData.markDirty();
-                        WorldDataFields.reload();
-                    }
-                }
-                checkVersion();
+            if (!worldData.saveData.hasKey("version")) {
+                worldData.saveData.setString("version", Referense.VERSION);
             }
             if (e.getWorld().provider.getDimension() == ancient_world_dim_id) {
                 if (!isAncientAreaSet) {
                     CustomGenStructure.gen(e.getWorld(), -16, 240, -16, "ancient_area");
                     isAncientAreaSet = true;
                 }
+                checkVersion();
             }
             WorldDataFields.reload();
         }
@@ -146,22 +115,6 @@ public class ServerEventsHandler {
 
     public static void checkVersion() {
         WorldData worldData = WorldData.get();
-        if (!worldData.saveData.hasKey("version")) {
-            if (worldData.saveData.getBoolean(IALGS.isAncientPortalGenerateKey)) {
-                worldData.saveData.setInteger(IALGS.ancientPortalXPosKey, 0);
-                worldData.saveData.setInteger(IALGS.ancientPortalZPosKey, 0);
-                worldData.markDirty();
-                WorldDataFields.reload();
-                newVersion = true;
-                System.out.println("new version!");
-            }
-            worldData.saveData.setString("version", "1.2.0-betta");
-            return;
-        }
-        if (worldData.saveData.getString("version").contains("1.3") && !worldData.saveData.getString("version").contains("1.3.5")) {
-            worldData.saveData.setInteger(IALGS.portalDimension, 0);
-            worldData.saveData.setString("version", "1.3.4-betta");
-        }
         if (!worldData.saveData.getString("version").equals(Referense.VERSION)) {
             newVersion(worldData);
         }
@@ -245,21 +198,13 @@ public class ServerEventsHandler {
     @SubscribeEvent
     public static void PlayerTickEvent(TickEvent.PlayerTickEvent e) {
 
-        if (e.phase != TickEvent.Phase.START) {
+        if (e.phase != TickEvent.Phase.START || e.player.world.isRemote) {
             return;
         }
 
         PLAYER_IN_BIOME_MANAGER.tickEventPlayerTickEvent(e);
 
         int playerDimension = e.player.dimension;
-        if (!e.player.world.isRemote) {
-            if (playerDimension == ancient_world_dim_id) {
-                if (e.player.posY > 84 && !e.player.isCreative()) {
-                    e.player.fallDistance = 0;
-                    e.player.motionY += -1 - e.player.motionY;
-                }
-            }
-        }
         if (e.player.ticksExisted % 4 == 0) {
             if (playerDimension == ancient_world_dim_id) {
                 if (TRAConfigs.AncientWorldSettings.noNightVision) {
@@ -276,20 +221,21 @@ public class ServerEventsHandler {
                 }
             }
         }
-        if (playerDimension != ancient_world_dim_id && e.player.ticksExisted % 20 == 0) {
-            if (e.player.getEntityData().getBoolean(BlockTpToAncientWorld.noCollisionNBT)) {
-                e.player.getEntityData().setInteger(notNoCollisionNBTTime, (e.player.getEntityData().getInteger(notNoCollisionNBTTime) + 1));
-                if (e.player.getEntityData().getInteger(notNoCollisionNBTTime) >= 8) {
-                    e.player.getEntityData().setBoolean(BlockTpToAncientWorld.noCollisionNBT, false);
-                    e.player.getEntityData().setInteger(notNoCollisionNBTTime, 0);
+        if (e.player.ticksExisted % 20 == 0) {
+            if (playerDimension != ancient_world_dim_id) {
+                if (e.player.getEntityData().getBoolean(BlockTpToAncientWorld.noCollisionNBT)) {
+                    IPlayerTimerCapability timer = TRACapabilities.getTimer(e.player);
+                    if (timer.getTime("notCollisionTime") >= 8 * 20) {
+                        e.player.getEntityData().setBoolean(BlockTpToAncientWorld.noCollisionNBT, false);
+                        timer.delete("notCollisionTime");
+                    }
+                    timer.addTime(20, "notCollisionTime");
                 }
             }
         }
         if (e.player.ticksExisted % 40 == 0) {
-            if (!e.player.world.isRemote) {
-                checkResearch(e.player);
-                tickTimer(e.player);
-            }
+            checkResearch(e.player);
+            tickTimer(e.player);
         }
     }
 
@@ -313,18 +259,16 @@ public class ServerEventsHandler {
         }
     }
 
-    static int maxDuration = 999999999;
-
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (event.getEntity().dimension == ancient_world_dim_id && !event.getWorld().isRemote) {
             if (!event.getEntity().isNonBoss()) {
                 AncientWorld.bossJoinBus(event);
             }
-            if (event.getEntity() instanceof EntityLiving && !(event.getEntity() instanceof EntityPlayer)) {
+            if (TRAConfigs.DifficultySettings.speedAmplifier > 0 && event.getEntity() instanceof EntityLiving && !(event.getEntity() instanceof EntityPlayer)) {
                 EntityLiving living = (EntityLiving) event.getEntity();
                 if (living.isNonBoss() || TRAConfigs.DifficultySettings.iaAddSpeedEffectToBoss) {
-                    living.addPotionEffect(new PotionEffect(MobEffects.SPEED, maxDuration, TRAConfigs.DifficultySettings.speedAmplifier - 1, false, false));
+                    living.addPotionEffect(new PotionEffect(MobEffects.SPEED, Integer.MAX_VALUE, TRAConfigs.DifficultySettings.speedAmplifier - 1, false, false));
                 }
             }
         }
@@ -359,21 +303,24 @@ public class ServerEventsHandler {
             if (e.phase != TickEvent.Phase.START) {
                 return;
             }
-            bTick++;
-            if (e.world.provider.getDimension() == 0 && bTick >= 40) {
-                bTick = 0;
-                int taintChunks = 0;
-                for (Chunk chunk : ((WorldServer) e.world).getChunkProvider().getLoadedChunks()) {
-                    if (chunk == null) {
-                        continue;
-                    }
 
-                    if (HandlerR.fastCheckChunkContainsAnyOnBiomeArray(chunk, InitBiome.TAINT_BIOMES_L_ID)) {
-                        BiomeTaint.chunkHasBiomeUpdate(chunk);
-                        taintChunks++;
+            if (e.world.provider.getDimension() == 0) {
+                bTick++;
+                if (bTick >= 40) {
+                    bTick = 0;
+                    int taintChunks = 0;
+                    for (Chunk chunk : ((WorldServer) e.world).getChunkProvider().getLoadedChunks()) {
+                        if (chunk == null) {
+                            continue;
+                        }
+
+                        if (HandlerR.fastCheckChunkContainsAnyOnBiomeArray(chunk, InitBiome.TAINT_BIOMES_L_ID)) {
+                            BiomeTaint.chunkHasBiomeUpdate(chunk);
+                            taintChunks++;
+                        }
                     }
+                    BiomeTaint.taintChunks = taintChunks;
                 }
-                BiomeTaint.taintChunks = taintChunks;
             }
         }
     }

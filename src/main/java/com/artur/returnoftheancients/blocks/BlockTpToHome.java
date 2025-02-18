@@ -46,10 +46,9 @@ public class BlockTpToHome extends BaseBlock {
     @Override
     public void onEntityCollidedWithBlock(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull Entity entityIn) {
         if (!entityIn.world.isRemote && entityIn instanceof EntityPlayerMP) {
-            EntityPlayer player = (EntityPlayer) entityIn;
+            EntityPlayerMP player = (EntityPlayerMP) entityIn;
             if (player.getServer() != null && player.world != null) {
-                AncientPortalsProcessor.tpToHome((EntityPlayerMP) player);
-                player.move(MoverType.PLAYER, WorldDataFields.portalX, 3, WorldDataFields.portalZ);
+                AncientPortalsProcessor.tpToHome(player);
             }
         }
     }

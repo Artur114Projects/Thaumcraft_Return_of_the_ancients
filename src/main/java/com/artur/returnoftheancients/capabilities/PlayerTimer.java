@@ -76,8 +76,8 @@ public class PlayerTimer {
         }
 
         @Override
-        public void delete(String titerId) {
-            timers.remove(titerId, timers.get(titerId));
+        public void delete(String timerId) {
+            timers.remove(timerId, timers.get(timerId));
         }
 
         @Override

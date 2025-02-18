@@ -7,9 +7,10 @@ import com.artur.returnoftheancients.containers.util.CustomCraftingGear;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
 import com.artur.returnoftheancients.energy.tile.TileEnergyProviderBase;
 import com.artur.returnoftheancients.energy.util.EnergyContainerHandler;
-import com.artur.returnoftheancients.energy.util.EnumEnergyType;
+import com.artur.returnoftheancients.energy.util.EnergyTypes;
 import com.artur.returnoftheancients.generation.portal.AncientPortalOpening;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
+import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.util.AspectBottle;
 import com.artur.returnoftheancients.util.AspectBottlesList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -63,7 +64,7 @@ public class TileEntityAncientTeleport extends TileEnergyProviderBase implements
             new int[] {3},
             new int[] {0, 1, 2}
     );
-    public EnergyContainerHandler energyContainerHandler = new EnergyContainerHandler(EnumEnergyType.MEGA.format(10.0F), 0, EnumEnergyType.MEGA.format(0.5F), 1, 2, 3);
+    public EnergyContainerHandler energyContainerHandler = new EnergyContainerHandler(EnergyTypes.MEGA.format(10.0F), 0, EnergyTypes.MEGA.format(0.5F), 1, 2, 3);
     private ContainerWithPages currentContainer;
 
     public AncientPortal portal;
@@ -75,10 +76,12 @@ public class TileEntityAncientTeleport extends TileEnergyProviderBase implements
     // TODO: Доделать систему с удалением вкладки после активации
     public void requestToActivate(EntityPlayerMP player) {
         if (player.isCreative() || (craftingGear.craft() && aspectBottles.isFull(0, 1, 2))) {
-            aspectBottles.empty(0, 1, 2);
-            isActive = 1;
-            inputSlotsManager.reset(new int[] {0, 1}, new int[] {3});
-            portal = new AncientPortalOpening(this);
+            this.aspectBottles.empty(0, 1, 2);
+            this.isActive = 1;
+            this.inputSlotsManager.reset(new int[] {0, 1}, new int[] {3});
+            this.portal = new AncientPortalOpening(this);
+
+            AncientPortalsProcessor.addNewPortal(this.portal);
         }
     }
 

@@ -1,8 +1,8 @@
 package com.artur.returnoftheancients.generation.portal.generators;
 
-import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
@@ -28,12 +28,14 @@ public class GenAncientArch {
     private int dy = 0;
     private int dz = 0;
 
-    public void generate(World world, BlockPos start, BlockPos end, EnumFacing.AxisDirection offsetAxis2Arch) {
+    public void generate(World world, BlockPos start, BlockPos end, EnumFacing.AxisDirection offsetAxis2Arch, boolean isBroken) {
         this.initObjectData(world, start, end, offsetAxis2Arch);
         this.initTerrainHeightData();
         this.genArchAndInitSegments();
-        this.initArchChunksCanFall();
-        this.fallRandomArchChunks();
+        if (isBroken) {
+            this.initArchChunksCanFall();
+            this.fallArchChunks();
+        }
         this.resetObjectData();
     }
 
@@ -60,7 +62,7 @@ public class GenAncientArch {
         }
     }
 
-    private void fallRandomArchChunks() {
+    private void fallArchChunks() {
         for (ArchChunk chunk : archChunksCanFall) {
             if (rand.nextBoolean()) {
                 chunk.fall();
@@ -95,8 +97,8 @@ public class GenAncientArch {
 
             blockPos.offset(genOffset, i);
 
-            int y0 = HandlerR.calculateGenerationHeight(world, blockPos);
-            int y1 = HandlerR.calculateGenerationHeight(world, blockPos.offset(offset2Arch));
+            int y0 = blockPos.setWorldY(world, true, Blocks.AIR, BlocksTC.taintFeature, BlocksTC.taintLog).getY();
+            int y1 = blockPos.offset(offset2Arch).setWorldY(world, true, Blocks.AIR, BlocksTC.taintFeature, BlocksTC.taintLog).getY();
 
             terrainHeightArray[i] = new TupleI(y0, y1);
 

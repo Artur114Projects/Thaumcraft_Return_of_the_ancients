@@ -40,6 +40,7 @@ public class WorldGenTaintTree extends WorldGenAbstractTree {
 
         blockPos.pushPos();
         if (!checkPos(worldIn, seed, blockPos)) {
+            blockPos.popPos();
             return false;
         }
         blockPos.popPos();

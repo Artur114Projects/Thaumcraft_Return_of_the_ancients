@@ -33,6 +33,7 @@ public class ClientPlayerInBiomeManager {
 
 
     public ClientPlayerInBiomeManager() {
+        fogParamsMap.put(InitBiome.TAINT_DEEP_SEA, new FogManager.FogParams(70.0F / 7.0F, 90.0F / 8.0F, 100.0F / 7.0F, 40));
         fogParamsMap.put(InitBiome.TAINT_SEA, new FogManager.FogParams(70.0F / 7.0F, 90.0F / 8.0F, 100.0F / 7.0F, 40));
         fogParamsMap.put(InitBiome.TAINT_MOUNTAINS, new FogManager.FogParams(43.0F / 5.0f, 0, 61.0F / 5.0f, 30));
         fogParamsMap.put(InitBiome.TAINT_WASTELAND, new FogManager.FogParams(6, 2, 2, 30));

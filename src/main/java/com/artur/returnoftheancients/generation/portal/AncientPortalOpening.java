@@ -58,8 +58,8 @@ public class AncientPortalOpening extends AncientPortal {
     }
 
     @Override
-    public @Nullable NBTTagCompound writeToNBT() {
-        NBTTagCompound nbt = super.writeToNBT();
+    public @Nullable NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+        super.writeToNBT(nbt);
         if (nbt == null) {
             return null;
         }

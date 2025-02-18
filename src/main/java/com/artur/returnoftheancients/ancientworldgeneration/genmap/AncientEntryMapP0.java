@@ -553,6 +553,7 @@ public class AncientEntryMapP0 implements IALGS {
                     return genStructuresMap(random);
                 }
             }
+
             void1 = getVoidStructures(ANCIENT_LABYRINTH_STRUCTURES);
 
             for (byte y = 0; y != SIZE; y++) {

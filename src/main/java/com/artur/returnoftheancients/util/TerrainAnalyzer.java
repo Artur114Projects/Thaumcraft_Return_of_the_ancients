@@ -4,8 +4,6 @@ import com.artur.returnoftheancients.util.context.MethodContext;
 import com.artur.returnoftheancients.util.context.MethodParams4;
 import com.artur.returnoftheancients.util.context.MethodsContextManager;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -21,6 +19,7 @@ public class TerrainAnalyzer {
 
     private MethodsContextManager<Integer, MethodParams4<Integer, Integer, Integer, Integer>> CONTEXT_4_INT_RES_INT = new MethodsContextManager<>(20);
     private AnalyzingArea analyzingArea = EMPTY_AREA;
+    private int[] heightMapNotLiquids = null;
     private int[] heightMap = null;
 
 
@@ -29,15 +28,39 @@ public class TerrainAnalyzer {
     }
 
     public void startAnalyzing(ChunkPos pos) {
+        AnalyzingArea newArea = new AnalyzingArea(pos);
+
+        if (newArea.equals(this.analyzingArea)) {
+            return;
+        }
+
         this.resetObjectData();
 
-        this.analyzingArea = new AnalyzingArea(pos);
+        this.analyzingArea = newArea;
     }
 
     public void startAnalyzing(BlockPos from, BlockPos to) {
+        AnalyzingArea newArea = new AnalyzingArea(from, to);
+
+        if (newArea.equals(this.analyzingArea)) {
+            return;
+        }
+
         this.resetObjectData();
 
-        this.analyzingArea = new AnalyzingArea(from, to);
+        this.analyzingArea = newArea;
+    }
+
+    public void startAnalyzing(ChunkPos from, ChunkPos to) {
+        AnalyzingArea newArea = new AnalyzingArea(from, to);
+
+        if (newArea.equals(this.analyzingArea)) {
+            return;
+        }
+
+        this.resetObjectData();
+
+        this.analyzingArea = newArea;
     }
 
     @Nullable
@@ -49,11 +72,12 @@ public class TerrainAnalyzer {
         return CONTEXT_4_INT_RES_INT.getMethodContext(name);
     }
 
-    public int getHeight(BlockPos pos) {
+    public int getHeight(BlockPos pos, boolean notLiquids) {
         blockPos.pushPos();
 
         this.analyzingArea.localize(blockPos.setPos(pos));
 
+        int[] heightMap = this.getAndLoadHeightMap(notLiquids);
         int y = heightMap[blockPos.getX() + blockPos.getZ() * analyzingArea.getAreaXSize()];
 
         blockPos.popPos();
@@ -61,9 +85,10 @@ public class TerrainAnalyzer {
         return y;
     }
 
-    public int getHeight(int x, int z) {
+    public int getHeight(int x, int z, boolean notLiquids) {
         this.checkOutOfBound(x, z);
 
+        int[] heightMap = this.getAndLoadHeightMap(notLiquids);
         return heightMap[x + z * analyzingArea.getAreaXSize()];
     }
 
@@ -78,7 +103,7 @@ public class TerrainAnalyzer {
             return this.CONTEXT_4_INT_RES_INT.getMethodContext("getHeightVariation").getResultFromParam(new MethodParams4<>(inX, inZ, toX, toZ));
         }
         if (heightMap == null) {
-            loadHeightMap();
+            loadHeightMap(false);
         }
 
         int areaX = this.analyzingArea.getAreaXSize();
@@ -118,7 +143,7 @@ public class TerrainAnalyzer {
             return this.CONTEXT_4_INT_RES_INT.getMethodContext("getTerrainFlow").getResultFromParam(new MethodParams4<>(inX, inZ, toX, toZ));
         }
         if (heightMap == null) {
-            loadHeightMap();
+            loadHeightMap(false);
         }
 
         int terrainFlow = 0;
@@ -159,12 +184,94 @@ public class TerrainAnalyzer {
         return terrainFlow;
     }
 
-    public void updateHeightMap() {
-        this.loadHeightMap();
+    public int getAverageHeight() {
+        return this.getAverageHeight(0, 0, analyzingArea.getAreaXSize(), analyzingArea.getAreaZSize());
     }
 
-    private void loadHeightMap() {
-        this.heightMap = new int[this.analyzingArea.getSpace()];
+    public int getAverageHeight(int inX, int inZ, int toX, int toZ) {
+        this.checkOutOfBound(inX, inZ, toX, toZ);
+
+        if (this.CONTEXT_4_INT_RES_INT.getMethodContext("getAverageHeight").hasResultFromParam(new MethodParams4<>(inX, inZ, toX, toZ))) {
+            return this.CONTEXT_4_INT_RES_INT.getMethodContext("getAverageHeight").getResultFromParam(new MethodParams4<>(inX, inZ, toX, toZ));
+        }
+        if (heightMap == null) {
+            loadHeightMap(false);
+        }
+
+        int spase = (toX - inX) * (toZ - inZ);
+
+        int ret = 0;
+
+        int areaX = this.analyzingArea.getAreaXSize();
+
+        for (int x = inX; x != toX; x++) {
+            for (int z = inZ; z != toZ; z++) {
+                ret += heightMap[x + z * areaX];
+            }
+        }
+
+        ret = (ret / spase) + 1;
+
+        this.CONTEXT_4_INT_RES_INT.onMethodInvoke("getAverageHeight", new MethodParams4<>(inX, inZ, toX, toZ), ret);
+
+        return ret;
+    }
+
+    public int getMaxHeight() {
+        return this.getAverageHeight(0, 0, analyzingArea.getAreaXSize(), analyzingArea.getAreaZSize());
+    }
+
+    public int getMaxHeight(int inX, int inZ, int toX, int toZ) {
+        this.checkOutOfBound(inX, inZ, toX, toZ);
+
+        if (this.CONTEXT_4_INT_RES_INT.getMethodContext("getMaxHeight").hasResultFromParam(new MethodParams4<>(inX, inZ, toX, toZ))) {
+            return this.CONTEXT_4_INT_RES_INT.getMethodContext("getMaxHeight").getResultFromParam(new MethodParams4<>(inX, inZ, toX, toZ));
+        }
+        if (heightMap == null) {
+            loadHeightMap(false);
+        }
+
+        int ret = -1;
+
+        int areaX = this.analyzingArea.getAreaXSize();
+
+        for (int x = inX; x != toX; x++) {
+            for (int z = inZ; z != toZ; z++) {
+                if (ret < heightMap[x + z * areaX]) {
+                    ret = heightMap[x + z * areaX];
+                }
+            }
+        }
+
+        this.CONTEXT_4_INT_RES_INT.onMethodInvoke("getMaxHeight", new MethodParams4<>(inX, inZ, toX, toZ), ret);
+
+        return ret;
+    }
+
+
+    private int[] getAndLoadHeightMap(boolean notLiquids) {
+        int[] heightMap = notLiquids ? this.heightMapNotLiquids : this.heightMap;
+
+        if (heightMap == null) {
+            this.loadHeightMap(notLiquids);
+
+            return getAndLoadHeightMap(notLiquids);
+        }
+
+        return heightMap;
+    }
+
+    public void updateHeightMap() {
+        this.loadHeightMap(false);
+        this.loadHeightMap(true);
+    }
+
+    private void loadHeightMap(boolean notLiquids) {
+        if (notLiquids) {
+            this.heightMapNotLiquids = new int[this.analyzingArea.getSpace()];
+        } else {
+            this.heightMap = new int[this.analyzingArea.getSpace()];
+        }
 
         int areaX = this.analyzingArea.getAreaXSize();
         int areaZ = this.analyzingArea.getAreaZSize();
@@ -178,9 +285,12 @@ public class TerrainAnalyzer {
                 blockPos.pushPos();
 
                 this.analyzingArea.offset(blockPos, x, z);
-                this.setHeightToUMBP();
 
-                this.heightMap[x + z * areaX] = blockPos.getY();
+                if (notLiquids) {
+                    this.heightMapNotLiquids[x + z * areaX] = blockPos.setWorldY(world, true).getY();
+                } else {
+                    this.heightMap[x + z * areaX] = blockPos.setWorldY(world).getY();
+                }
 
                 blockPos.popPos();
             }
@@ -199,11 +309,11 @@ public class TerrainAnalyzer {
         if (toX < 0 || toX > areaX) {
             throw new IllegalArgumentException("Out of bound area! AreaXSize:" + areaX + "Index:" + toX);
         }
-        if (inZ < 0 || inZ > areaX) {
+        if (inZ < 0 || inZ > areaZ) {
             throw new IllegalArgumentException("Out of bound area! AreaZSize:" + areaZ + "Index:" + inZ);
         }
-        if (toZ < 0 || toZ > areaX) {
-            throw new IllegalArgumentException("Out of bound area! AreaXSize:" + areaX + "Index:" + toZ);
+        if (toZ < 0 || toZ > areaZ) {
+            throw new IllegalArgumentException("Out of bound area! AreaZSize:" + areaZ + "Index:" + toZ);
         }
     }
 
@@ -216,31 +326,6 @@ public class TerrainAnalyzer {
         }
         if (z < 0 || z >= areaX) {
             throw new IllegalArgumentException("Out of bound area! AreaXSize:" + areaX + "Index:" + z);
-        }
-    }
-
-
-    private void setHeightToUMBP() {
-        setHeightToUMBP(Blocks.AIR, Blocks.BEDROCK);
-    }
-
-    private void setHeightToUMBP(Block... ignoringBlocks) {
-
-        blockPos.setY(world.getHeight());
-
-        while (blockPos.getY() >= 0) {
-            Block block = world.getBlockState(blockPos).getBlock();
-            boolean flag = true;
-            for (Block ignoring : ignoringBlocks) {
-                if (block == ignoring) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag) {
-                break;
-            }
-            blockPos.down();
         }
     }
 
@@ -257,6 +342,26 @@ public class TerrainAnalyzer {
         private final int areaXSize;
         private final int areaZSize;
 
+        public AnalyzingArea(ChunkPos fromC, ChunkPos toC) {
+            BlockPos from = fromC.getBlock(0, 0, 0);
+            BlockPos to = toC.getBlock(0, 0, 0);
+            this.xDirection = to.getX() - from.getX() > 0 ? EnumFacing.AxisDirection.POSITIVE : EnumFacing.AxisDirection.NEGATIVE;
+            this.zDirection = to.getZ() - from.getZ() > 0 ? EnumFacing.AxisDirection.POSITIVE : EnumFacing.AxisDirection.NEGATIVE;
+
+            if ((to.getX() - from.getX()) == 0) {
+                this.areaXSize = 16;
+            } else {
+                this.areaXSize = (to.getX() - from.getX());
+            }
+
+            if ((to.getZ() - from.getZ()) == 0) {
+                this.areaZSize = 16;
+            } else {
+                this.areaZSize = (to.getZ() - from.getZ());
+            }
+
+            this.startCords = new BlockPos(from.getX(), 0, from.getZ());
+        }
 
         public AnalyzingArea(ChunkPos pos) {
             this.xDirection = EnumFacing.AxisDirection.POSITIVE;
@@ -313,6 +418,15 @@ public class TerrainAnalyzer {
 
         public int getSpace() {
             return this.getAreaXSize() * this.getAreaZSize();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof AnalyzingArea) {
+                AnalyzingArea area = (AnalyzingArea) obj;
+                return area.areaXSize == this.areaXSize && area.areaZSize == this.areaZSize && area.startCords.equals(this.startCords) && area.xDirection == this.xDirection && area.zDirection == this.zDirection;
+            }
+            return false;
         }
     }
 }

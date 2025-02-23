@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.util;
 
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -123,7 +123,7 @@ public class AspectBottle {
             char s = Character.toUpperCase(aspect.getName().charAt(0));
             String string = s + aspect.getName().replaceAll(String.valueOf(aspect.getName().charAt(0)), "");
             String sColor = "";
-            String chatColor = HandlerR.getAspectChatColor(aspect);
+            String chatColor = MiscHandler.getAspectChatColor(aspect);
             if (chatColor != null) {
                 sColor = chatColor;
             }

@@ -62,6 +62,7 @@ public abstract class GenLayerTRA extends GenLayer {
         GenLayer genlayerbiomeedge = new GenLayerBiomeEdge(1000L, ret);
         GenLayer lvt_9_1_ = GenLayerZoom.magnify(1000L, genlayerriverinit, 2);
         GenLayer genlayerhills = new GenLayerHills(1000L, genlayerbiomeedge, lvt_9_1_);
+        genlayerhills = new GenLayerAddDeepRottenSea(1000L, genlayerhills);
         GenLayer genlayer5 = GenLayerZoom.magnify(1000L, genlayerriverinit, 2);
         genlayer5 = GenLayerZoom.magnify(1000L, genlayer5, riverSize);
         GenLayer genlayerriver = new GenLayerRiver(1L, genlayer5);
@@ -79,6 +80,8 @@ public abstract class GenLayerTRA extends GenLayer {
                 genlayerhills = new GenLayerShoreTRA(1000L, genlayerhills);
 
                 genlayerhills = new GenLayerAddSmallTaintBiomes(1000L, seed, genlayerhills);
+
+                genlayerhills = new GenLayerAddTaintBeach(1000L, genlayerhills);
             }
         }
 

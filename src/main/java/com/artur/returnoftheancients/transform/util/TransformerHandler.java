@@ -1,10 +1,9 @@
 package com.artur.returnoftheancients.transform.util;
 
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
-import com.artur.returnoftheancients.network.ServerPacketGetWeather;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
 import com.artur.returnoftheancients.transform.transformers.base.MVWithDescCreator;
@@ -24,15 +23,14 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.objectweb.asm.commons.AdviceAdapter;
 import thaumcraft.client.lib.events.RenderEventHandler;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class TransformerHandler {
+
+    /*--------------------------START TRANSFORMER METHODS--------------------------*/
 
     public static void addPatchedTooltip(Item item, ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn, String text) {
         tooltip.add(TextFormatting.GREEN + "Patched with the mod: " + TextFormatting.RESET + "[" + Referense.MODID + "]" + TextFormatting.GREEN + " Patch list:");
@@ -42,11 +40,11 @@ public class TransformerHandler {
     }
 
     public static boolean isEntityLivingBaseInTaintBiome(Item item, ItemStack stack, EntityLivingBase livingBase) {
-        return HandlerR.arrayContains(InitBiome.TAINT_BIOMES_ID, HandlerR.getBiomeIdOnPos(livingBase.world, livingBase.getPosition()));
+        return MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_ID, MiscHandler.getBiomeIdOnPos(livingBase.world, livingBase.getPosition()));
     }
 
     public static boolean isTaintLBiomeInPos(World world, BlockPos pos) {
-        return HandlerR.arrayContains(InitBiome.TAINT_BIOMES_L_ID, world.getChunkFromBlockCoords(pos).getBiomeArray()[(pos.getX() & 15) + (pos.getZ() & 15) * 16]);
+        return MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_L_ID, world.getChunkFromBlockCoords(pos).getBiomeArray()[(pos.getX() & 15) + (pos.getZ() & 15) * 16]);
     }
 
     public static boolean isClientPlayerInTaintBiome() {
@@ -62,7 +60,7 @@ public class TransformerHandler {
     }
 
     public static boolean isTaintEdgeBiome(World world, BlockPos pos) {
-        return HandlerR.arrayContains(InitBiome.TAINT_BIOMES_EDGE_ID, world.getChunkFromBlockCoords(pos).getBiomeArray()[(pos.getX() & 15) + (pos.getZ() & 15) * 16]);
+        return MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_EDGE_ID, world.getChunkFromBlockCoords(pos).getBiomeArray()[(pos.getX() & 15) + (pos.getZ() & 15) * 16]);
     }
 
     public static void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
@@ -72,7 +70,7 @@ public class TransformerHandler {
     }
 
     public static boolean isNotCanSearchBiome(BiomeSearchWorker bsw) {
-        return !TRAConfigs.Any.debugMode && HandlerR.arrayContains(InitBiome.TAINT_BIOMES_ID, (byte) Biome.getIdForBiome(bsw.biome));
+        return !TRAConfigs.Any.debugMode && MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_ID, (byte) Biome.getIdForBiome(bsw.biome));
     }
 
     public static void fixedFogDensityEvent(EntityViewRenderEvent.RenderFogEvent event) {
@@ -81,6 +79,8 @@ public class TransformerHandler {
             GlStateManager.setFogDensity(RenderEventHandler.fogTarget);
         }
     }
+
+    /*--------------------------START METHOD VISITORS--------------------------*/
 
     public static class ReturnFloatVisitor extends MethodVisitor {
 
@@ -121,5 +121,101 @@ public class TransformerHandler {
             mv.visitMethodInsn(Opcodes.INVOKESTATIC, ITransformer.HANDLER_PATH, newMethodName, desc[0], false);
             mv.visitInsn(Opcodes.RETURN);
         }
+    }
+
+    /*--------------------------START UTILS--------------------------*/
+
+    public static String createDescriptor(Class<?> returnValue, Class<?>... params) {
+        StringBuilder builder = new StringBuilder("(");
+        for (Class<?> clas : params) {
+            builder.append(formatDescriptor(clas));
+            builder.append(';');
+        }
+        builder.append(')');
+        builder.append(formatDescriptor(returnValue));
+        String res = builder.toString();
+        if (TRAConfigs.Any.debugMode) System.out.println("Descriptor is created {" + res + "}");
+        return res;
+    }
+
+    public static String createDescriptor(Class<?> methodClass, String methodName, Class<?>... params) {
+        Method[] methods = findMethods(methodClass, methodName);
+        if (methods.length == 0) {
+            return "null";
+        }
+
+        Method findMethod = null;
+        if (params.length == 0) {
+            findMethod = methods[0];
+        } else {
+            for (Method method : methods) {
+                if (Arrays.equals(method.getParameterTypes(), params)) {
+                    findMethod = method;
+                    break;
+                }
+            }
+            if (findMethod == null) {
+                return "null";
+            }
+        }
+
+        StringBuilder builder = new StringBuilder("(");
+        for (Class<?> clas : findMethod.getParameterTypes()) {
+            builder.append(formatDescriptor(clas));
+            builder.append(';');
+        }
+        builder.append(')');
+        builder.append(formatDescriptor(findMethod.getReturnType()));
+        String res = builder.toString();
+        if (TRAConfigs.Any.debugMode) System.out.println("Descriptor is created {" + res + "}");
+        return res;
+    }
+
+    public static String formatDescriptor(Class<?> param) {
+        if (param == boolean.class) {
+            return "Z";
+        } else if (param == byte.class) {
+            return "B";
+        } else if (param == char.class) {
+            return "C";
+        } else if (param == double.class) {
+            return "D";
+        } else if (param == float.class) {
+            return "F";
+        } else if (param == int.class) {
+            return "I";
+        } else if (param == long.class) {
+            return "J";
+        } else if (param == short.class) {
+            return "S";
+        } else if (param == void.class) {
+            return "V";
+        }
+
+        String name = param.getName();
+        if (!name.contains("[L")) {
+            name = "L" + name;
+        }
+        name = name.replaceAll("\\.", "/");
+        return name;
+    }
+
+    public static Method[] findMethods(Class<?> methodClass, String methodName) {
+        ArrayList<Method> methods = new ArrayList<>();
+        for (Method method : methodClass.getDeclaredMethods()) {
+            if (method.getName().equals(methodName)) {
+                methods.add(method);
+            }
+        }
+        Class<?> superClass = methodClass.getSuperclass();
+        while (superClass != null) {
+            for (Method method : superClass.getDeclaredMethods()) {
+                if (method.getName().equals(methodName)) {
+                    methods.add(method);
+                }
+            }
+            superClass = superClass.getSuperclass();
+        }
+        return methods.toArray(new Method[0]);
     }
 }

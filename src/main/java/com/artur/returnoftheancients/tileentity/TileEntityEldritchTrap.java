@@ -1,8 +1,8 @@
 package com.artur.returnoftheancients.tileentity;
 
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.client.fx.misc.CameraShake;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleManager;
@@ -50,7 +50,7 @@ public class TileEntityEldritchTrap extends TileEntity implements ITickable {
         if (!players.isEmpty() && phase == 0 && !players.get(0).isCreative()) {
             if (!world.isRemote) {
                 for (EntityPlayer player : players) {
-                    HandlerR.researchTC((EntityPlayerMP) player, "!ELDRITCH_TRAP");
+                    MiscHandler.researchTC((EntityPlayerMP) player, "!ELDRITCH_TRAP");
                     player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 30, 0));
                 }
             }

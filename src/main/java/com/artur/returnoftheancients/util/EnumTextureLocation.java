@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.util;
 
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.util.ResourceLocation;
+import thaumcraft.Thaumcraft;
 
 public enum EnumTextureLocation {
     BLOCKS_PATH(Referense.MODID, "textures/blocks"),
@@ -10,7 +11,8 @@ public enum EnumTextureLocation {
     GUI_BUTTON_PATH(Referense.MODID, "textures/gui/button"),
     GUI_CONTAINER_PATH(Referense.MODID, "textures/gui/container"),
     GUI_GIF_PATH(Referense.MODID, "textures/gui/gif"),
-    PARTICLE_PATH(Referense.MODID, "textures/particle");
+    PARTICLE_PATH(Referense.MODID, "textures/particle"),
+    TC_MODELS_PATH(Thaumcraft.MODID, "textures/models");
 
     private final String modId;
     private final String path;

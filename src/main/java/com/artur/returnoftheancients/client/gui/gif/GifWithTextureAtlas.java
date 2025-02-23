@@ -1,6 +1,5 @@
 package com.artur.returnoftheancients.client.gui.gif;
 
-import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.handlers.RenderHandler;
 import com.artur.returnoftheancients.util.EnumTextureLocation;
 import net.minecraft.client.Minecraft;

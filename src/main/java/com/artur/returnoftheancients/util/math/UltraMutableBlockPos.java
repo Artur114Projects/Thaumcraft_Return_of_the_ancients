@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
-    private static final UltraMutableBlockPos[] stack = new UltraMutableBlockPos[8];
+    private static UltraMutableBlockPos[] stack = new UltraMutableBlockPos[64];
     private static long lastTrowTime = 0;
     private static int stackHead = -1;
 
@@ -46,7 +46,8 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
 
     public static synchronized void returnBlockPosToPoll(@NotNull UltraMutableBlockPos blockPos) {
         if (stackHead + 1 >= stack.length) {
-            return;
+            System.out.println("wow! poll is full!");
+            stack = Arrays.copyOf(stack, stack.length * 2);
         }
 
         blockPos.setToZero();
@@ -327,9 +328,32 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         return MathHelper.floor(MathHelper.sqrt(x1 * x1 + y1 * y1 + z1 * z1));
     }
 
+    public int distance(Entity entity) {
+        return distance(MathHelper.floor(entity.posX), MathHelper.floor(entity.posY), MathHelper.floor(entity.posZ));
+    }
+
+    public void offsetAndCallRunnable(BlockPos[] offsets, RunnableWithParam<UltraMutableBlockPos> callable) {
+        for (BlockPos offset : offsets) {
+            this.offsetAndCallRunnable(offset, callable);
+        }
+    }
+
+    public void offsetAndCallRunnable(EnumFacing[] offsets, RunnableWithParam<UltraMutableBlockPos> callable) {
+        for (EnumFacing offset : offsets) {
+            this.offsetAndCallRunnable(offset, callable);
+        }
+    }
+
     public void offsetAndCallRunnable(BlockPos offset, RunnableWithParam<UltraMutableBlockPos> callable) {
         this.pushPos();
         this.add(offset);
+        callable.run(this);
+        this.popPos();
+    }
+
+    public void offsetAndCallRunnable(EnumFacing offset, RunnableWithParam<UltraMutableBlockPos> callable) {
+        this.pushPos();
+        this.offset(offset);
         callable.run(this);
         this.popPos();
     }
@@ -361,14 +385,16 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         }
     }
 
-    public void clearContext() {
-        contextPos = null;
+    public void clearContext(boolean removeContext) {
+        if (removeContext) {
+            contextPos = null;
+        }
         contextDeep = -1;
     }
 
     public void setToZero() {
-        setPos(0, 0, 0);
-        clearContext();
+        this.setPos(0, 0, 0);
+        this.clearContext(false);
     }
 
     public boolean equalsXZ(BlockPos pos) {

@@ -12,8 +12,8 @@ import thaumcraft.common.blocks.IBlockFacing;
 import thaumcraft.common.blocks.world.taint.BlockTaintLog;
 
 import java.util.Random;
-// TODO: Сделать по нормальному
 
+// TODO: Возможно переделать
 public class WorldGenTaintBigTree extends WorldGenAbstractTree {
     private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
 

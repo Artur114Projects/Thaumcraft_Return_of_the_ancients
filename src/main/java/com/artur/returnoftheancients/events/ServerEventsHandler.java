@@ -1,26 +1,30 @@
-package com.artur.returnoftheancients.handlers;
+package com.artur.returnoftheancients.events;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.handlers.MiscHandler;
+import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.PlayerTimer;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
 import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
-import com.artur.returnoftheancients.handlers.eventmanagers.PlayerInBiomeManager;
+import com.artur.returnoftheancients.events.eventmanagers.PlayerInBiomeManager;
+import com.artur.returnoftheancients.events.eventmanagers.ShortChunkLoadManager;
+import com.artur.returnoftheancients.events.eventmanagers.TimerTasksManager;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.blocks.BlockTpToAncientWorld;
 import com.artur.returnoftheancients.misc.WorldDataFields;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.util.interfaces.IALGS;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -41,23 +45,18 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import thaumcraft.api.blocks.BlocksTC;
 
-import java.util.Random;
-
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class ServerEventsHandler {
+    public static final ShortChunkLoadManager SHORT_CHUNK_LOAD_MANAGER = new ShortChunkLoadManager();
     public static final PlayerInBiomeManager PLAYER_IN_BIOME_MANAGER = new PlayerInBiomeManager();
+    public static final TimerTasksManager TIMER_TASKS_MANAGER = new TimerTasksManager();
 
     private static boolean isAncientAreaSet = false;
     private static byte difficultyId = -1;
     private static boolean newVersion = false;
 
-
-    public static void unload() {
-        isAncientAreaSet = false;
-        newVersion = false;
-    }
 
     public static byte getDifficultyId() {return difficultyId;}
 
@@ -77,7 +76,7 @@ public class ServerEventsHandler {
             if (player.dimension == ancient_world_dim_id) AncientWorld.playerJoinBuss(player);
 
             if (newVersion) {
-                HandlerR.sendMessageTranslate(player, Referense.MODID + ".message.new-version");
+                MiscHandler.sendMessageTranslate(player, Referense.MODID + ".message.new-version");
                 newVersion = false;
             }
         }
@@ -107,9 +106,6 @@ public class ServerEventsHandler {
                 checkVersion();
             }
             WorldDataFields.reload();
-        }
-        for (EntityPlayer player : e.getWorld().playerEntities) {
-            player.getEntityData().setBoolean("isUUI", false);
         }
     }
 
@@ -152,7 +148,7 @@ public class ServerEventsHandler {
                     int baseChange = TRAConfigs.DifficultySettings.baseChange;
 
                     double hurt = player.getEntityData().getDouble("hurt");
-                    if (HandlerR.getIgnoringChance((int) (baseChange + (ignoringOffset * hurt)), player.world.rand)) {
+                    if (MiscHandler.getIgnoringChance((int) (baseChange + (ignoringOffset * hurt)), player.world.rand)) {
                         player.getEntityData().setDouble("hurt", hurt + 1.0D + additionalOffset);
                         player.setHealth(player.getHealth() - e.getAmount());
                         e.setCanceled(true);
@@ -219,6 +215,8 @@ public class ServerEventsHandler {
                         }
                     }
                 }
+
+                e.player.fallDistance = 0;
             }
         }
         if (e.player.ticksExisted % 20 == 0) {
@@ -240,9 +238,14 @@ public class ServerEventsHandler {
     }
 
     protected static void checkResearch(EntityPlayer player) {
-        if (HandlerR.isWithinRadius(player.posX, player.posZ, WorldDataFields.portalX, WorldDataFields.portalZ, 20)) {
-            HandlerR.researchAndSendMessage((EntityPlayerMP) player, "m_FOUND_ANCIENT", Referense.MODID + ".text.found_portal");
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        if (AncientPortalsProcessor.hasPortalOnWorld(player.world)) {
+            blockPos.setPos(AncientPortalsProcessor.getNearestPortalPos(player.world, blockPos.setPos(player))).add(8, 0, 8).setY(MathHelper.floor(player.posY));
+            if (blockPos.distance(player) < 32) {
+                MiscHandler.researchAndSendMessage((EntityPlayerMP) player, "m_FOUND_ANCIENT", Referense.MODID + ".text.found_portal");
+            }
         }
+        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
     }
 
     private static void tickTimer(EntityPlayer player) {
@@ -251,7 +254,7 @@ public class ServerEventsHandler {
             timer.addTime(40, "recovery");
             if (timer.getTime("recovery") >= 10000) {
                 timer.delete("recovery");
-                HandlerR.researchAndSendMessage((EntityPlayerMP) player, "RECOVERY", Referense.MODID + ".text.recovery");
+                MiscHandler.researchAndSendMessage((EntityPlayerMP) player, "RECOVERY", Referense.MODID + ".text.recovery");
             }
         }
         if (timer.hasTimer("poisoning")) {
@@ -314,7 +317,7 @@ public class ServerEventsHandler {
                             continue;
                         }
 
-                        if (HandlerR.fastCheckChunkContainsAnyOnBiomeArray(chunk, InitBiome.TAINT_BIOMES_L_ID)) {
+                        if (MiscHandler.fastCheckChunkContainsAnyOnBiomeArray(chunk, InitBiome.TAINT_BIOMES_L_ID)) {
                             BiomeTaint.chunkHasBiomeUpdate(chunk);
                             taintChunks++;
                         }
@@ -325,8 +328,22 @@ public class ServerEventsHandler {
         }
     }
 
+    @SubscribeEvent
+    public static void serverTick(TickEvent.ServerTickEvent e) {
+        SHORT_CHUNK_LOAD_MANAGER.tickEventServerTickEvent(e);
+        TIMER_TASKS_MANAGER.tickEventServerTickEvent(e);
+    }
 
-//    @SubscribeEvent
-//    public static void ChunkEventLoad(ChunkEvent.Load e) {
-//    }
+    @SubscribeEvent
+    public static void saveEvent(WorldEvent.Save e) {
+        SHORT_CHUNK_LOAD_MANAGER.worldEventSave(e);
+    }
+
+    public static void unload() {
+        isAncientAreaSet = false;
+        newVersion = false;
+
+        SHORT_CHUNK_LOAD_MANAGER.unload();
+        TIMER_TASKS_MANAGER.unload();
+    }
 }

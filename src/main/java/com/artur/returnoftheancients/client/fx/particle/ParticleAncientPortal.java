@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.client.fx.particle;
 
+import com.artur.returnoftheancients.client.fx.particle.util.ParticleAtlasSprite;
 import com.artur.returnoftheancients.init.InitParticleSprite;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -7,16 +8,14 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class ParticleAncientPortal extends Particle {
+public class ParticleAncientPortal extends ParticleBase<ParticleAtlasSprite> {
     private final Minecraft mc = Minecraft.getMinecraft();
 
     public ParticleAncientPortal(World worldIn, double posXIn, double posYIn, double posZIn, double ySpeed) {
         super(worldIn, posXIn, posYIn, posZIn);
 
-        int randSprite = rand.nextInt(InitParticleSprite.PARTICLE_PORTAL.atlasSize() + 4);
-        randSprite = randSprite >= InitParticleSprite.PARTICLE_PORTAL.atlasSize() - 1 ? 0 : randSprite;
-        TextureAtlasSprite sprite = mc.getTextureMapBlocks().getAtlasSprite(InitParticleSprite.PARTICLE_PORTAL.iconName(randSprite));
-        this.setParticleTexture(sprite);
+        this.setSprite(InitParticleSprite.PARTICLE_PORTAL);
+        this.bindSprite(this.getRandSpriteIndex());
 
         this.motionY = ySpeed;
         this.motionX = 0;
@@ -26,6 +25,12 @@ public class ParticleAncientPortal extends Particle {
         this.canCollide = false;
     }
 
+    private int getRandSpriteIndex() {
+        int randSprite = rand.nextInt(InitParticleSprite.PARTICLE_PORTAL.atlasSize() + 4);
+        randSprite = randSprite >= InitParticleSprite.PARTICLE_PORTAL.atlasSize() - 1 ? 0 : randSprite;
+        return randSprite;
+    }
+
     @Override
     public void onUpdate() {
         super.onUpdate();
@@ -33,15 +38,5 @@ public class ParticleAncientPortal extends Particle {
         if (MathHelper.abs((float) (mc.player.posY - posY)) > 16) {
             this.setExpired();
         }
-    }
-
-    @Override
-    public int getFXLayer() {
-        return 1;
-    }
-
-    @Override
-    public int getBrightnessForRender(float partialTicks) {
-        return super.getBrightnessForRender(partialTicks);
     }
 }

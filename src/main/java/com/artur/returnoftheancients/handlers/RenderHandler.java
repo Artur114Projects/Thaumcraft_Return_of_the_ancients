@@ -1,9 +1,12 @@
 package com.artur.returnoftheancients.handlers;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -140,5 +143,16 @@ public class RenderHandler {
     @SideOnly(Side.CLIENT)
     public static void renderQuadTextureAtlas(int posX, int posY, int startDrawX, int startDrawY, int textureSizeX, int textureSizeY) {
         renderQuadTextureAtlas(posX, posY, startDrawX, startDrawY, textureSizeX, textureSizeY, 1);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static Tuple<Integer, Integer> getTextureSize(ResourceLocation textureRL) {
+        GlStateManager.pushMatrix();
+        Minecraft.getMinecraft().getTextureManager().bindTexture(textureRL);
+        int x = GlStateManager.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
+        int y = GlStateManager.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
+        Tuple<Integer, Integer> size = new Tuple<>(x, y);
+        GlStateManager.popMatrix();
+        return size;
     }
 }

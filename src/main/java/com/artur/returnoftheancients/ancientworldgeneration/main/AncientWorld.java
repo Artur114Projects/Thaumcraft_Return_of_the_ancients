@@ -6,8 +6,8 @@ import com.artur.returnoftheancients.ancientworldgeneration.main.entry.AncientEn
 import com.artur.returnoftheancients.ancientworldgeneration.util.Team;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.IBuild;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
-import com.artur.returnoftheancients.handlers.FreeTeleporter;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.TeleportHandler;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.referense.Referense;
@@ -26,6 +26,7 @@ import java.util.*;
 
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
+// TODO: 22.02.2025 Переписать, с клиент северной вот этой вот самой.
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class AncientWorld {
     private static boolean isLoad = false;
@@ -60,10 +61,10 @@ public class AncientWorld {
 
     private static void tpToAncientWorldNotQueue(EntityPlayerMP player) {
         player.setHealth(20);
-        ItemStack stack = HandlerR.getSoulBinder(player);
+        ItemStack stack = MiscHandler.getSoulBinder(player);
 
         if (stack != null) {
-            if (HandlerR.isSoulBinderFull(stack)) {
+            if (MiscHandler.isSoulBinderFull(stack)) {
                 Team team = new Team(stack, player);
                 if (team.size() > 1) {
                     team.setToAll(AncientWorld::telepotToAncientArea);
@@ -82,9 +83,9 @@ public class AncientWorld {
 
     private static void tpToAncientWorldWithQueue(EntityPlayerMP player) {
         player.setHealth(20);
-        ItemStack stack = HandlerR.getSoulBinder(player);
+        ItemStack stack = MiscHandler.getSoulBinder(player);
 
-        if (HandlerR.isSoulBinderFull(stack)) {
+        if (MiscHandler.isSoulBinderFull(stack)) {
             Team team = new Team(stack, player);
             rawTeam.add(team);
             team.delete();
@@ -93,7 +94,7 @@ public class AncientWorld {
         }
 
         telepotToAncientArea(player);
-        HandlerR.setLoadingGuiState(player, true, true);
+        MiscHandler.setLoadingGuiState(player, true, true);
         rawTeam.injectNamesToPlayers();
 
         Team team = rawTeam.toTeam();
@@ -105,7 +106,7 @@ public class AncientWorld {
 
 
     public static void telepotToAncientArea(EntityPlayerMP player) {
-        FreeTeleporter.teleportToDimension(player, ancient_world_dim_id, 0, 244, 0);
+        TeleportHandler.teleportToDimension(player, ancient_world_dim_id, 0, 244, 0);
     }
 
     public static void load() {

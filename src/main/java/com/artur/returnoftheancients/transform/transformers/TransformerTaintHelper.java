@@ -1,8 +1,8 @@
 package com.artur.returnoftheancients.transform.transformers;
 
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
-import net.minecraft.util.math.BlockPos;
+import com.artur.returnoftheancients.transform.util.TransformerHandler;
 import org.objectweb.asm.*;
 
 
@@ -37,7 +37,7 @@ public class TransformerTaintHelper implements ITransformer {
         String[] desc;
         public VisitorIsNearTaintSeed(MethodVisitor methodVisitor) {
             super(Opcodes.ASM5, methodVisitor);
-            desc = new String[] {HandlerR.createDescriptor(HANDLER_CLASS, "isTaintLBiomeInPos")};
+            desc = new String[] {TransformerHandler.createDescriptor(HANDLER_CLASS, "isTaintLBiomeInPos")};
         }
 
         @Override

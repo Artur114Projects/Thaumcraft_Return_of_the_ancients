@@ -2,8 +2,10 @@ package com.artur.returnoftheancients.generation.chunkgenerators;
 
 import com.artur.returnoftheancients.generation.biomes.BiomeAncientLabyrinth;
 import com.artur.returnoftheancients.init.InitBiome;
+import com.artur.returnoftheancients.init.InitItems;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -17,8 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ChunkGeneratorAncientWorld implements IChunkGenerator {
-
-
     private final Biome biome = InitBiome.ANCIENT_LABYRINTH;
     private final World world;
 
@@ -27,7 +27,7 @@ public class ChunkGeneratorAncientWorld implements IChunkGenerator {
     }
 
     @Override
-    public Chunk generateChunk(int parChunkX, int parChunkZ) {
+    public @NotNull Chunk generateChunk(int parChunkX, int parChunkZ) {
         Chunk chunk = new Chunk(world, new ChunkPrimer(), parChunkX, parChunkZ);
         byte[] abyte = chunk.getBiomeArray();
         byte biomeId = (byte) Biome.getIdForBiome(biome);

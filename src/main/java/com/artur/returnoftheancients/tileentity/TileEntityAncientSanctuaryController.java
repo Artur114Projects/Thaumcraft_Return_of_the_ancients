@@ -1,5 +1,9 @@
 package com.artur.returnoftheancients.tileentity;
 
+import com.artur.returnoftheancients.generation.portal.naturalgen.AncientPortalNaturalGeneration;
+import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
+import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
+import com.artur.returnoftheancients.generation.portal.naturalgen.AncientSanctuary;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -7,8 +11,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class TileEntityAncientSanctuaryController extends TileEntity implements ITickable {
+    private @Nullable AncientSanctuary sanctuary = null;
     private final int maxDoorMovingProgress = 40;
     private int prevDoorMovingProgress = 0;
     private int doorMovingOrientation = -1;
@@ -16,6 +22,9 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
     private boolean hasItem = false;
 
 
+    public void bindSanctuary(AncientSanctuary sanctuary) {
+        this.sanctuary = sanctuary;
+    }
 
     public boolean isDone() {
         return hasItem() && isClose();
@@ -44,6 +53,10 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
         return doorMovingProgress == 0;
     }
 
+    private boolean isPrevClose() {
+        return prevDoorMovingProgress == maxDoorMovingProgress;
+    }
+
     public boolean isClose() {
         return doorMovingProgress == maxDoorMovingProgress;
     }
@@ -61,6 +74,35 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
 
         doorMovingProgress += doorMovingOrientation;
         doorMovingProgress = MathHelper.clamp(doorMovingProgress, 0, maxDoorMovingProgress);
+
+        if (!world.isRemote) {
+            if (isDone() && !isPrevClose()) {
+                if (sanctuary != null) {
+                    sanctuary.onTileStateChanged(true);
+                }
+            } else if (isPrevClose() && !isDone()) {
+                if (sanctuary != null) {
+                    sanctuary.onTileStateChanged(false);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onLoad() {
+        if (world.isRemote) {
+            return;
+        }
+
+        AncientPortal portalRaw = AncientPortalsProcessor.getPortalOnPos(pos);
+
+        if (portalRaw instanceof AncientPortalNaturalGeneration) {
+            AncientPortalNaturalGeneration portal = (AncientPortalNaturalGeneration) portalRaw;
+            AncientSanctuary sanctuary = portal.getNotBrokenSanctuary();
+            if (sanctuary != null) {
+                sanctuary.onTileLoad(this.isDone(), pos);
+            }
+        }
     }
 
     @Override
@@ -75,7 +117,6 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-
         doorMovingOrientation = compound.getInteger("doorMovingOrientation");
         doorMovingProgress = compound.getInteger("doorMovingProgress");
         hasItem = compound.getBoolean("hasItem");

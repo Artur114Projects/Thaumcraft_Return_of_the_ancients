@@ -3,7 +3,11 @@ package com.artur.returnoftheancients.items;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.util.interfaces.IHasModel;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
+import net.minecraft.util.text.TextFormatting;
+
+import java.util.List;
 
 public abstract class BaseItem extends Item implements IHasModel {
 
@@ -16,6 +20,10 @@ public abstract class BaseItem extends Item implements IHasModel {
 
     protected void setTRACreativeTab() {
         this.setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);
+    }
+
+    protected void addForCreativeOnlyTooltip(List<String> tooltip) {
+        tooltip.add(TextFormatting.RED + I18n.format("returnoftheancients.for_creative_only"));
     }
 
     @Override

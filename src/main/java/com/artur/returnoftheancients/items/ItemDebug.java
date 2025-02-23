@@ -1,29 +1,31 @@
 package com.artur.returnoftheancients.items;
 
 
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.client.audio.RepeatingSound;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
+import com.artur.returnoftheancients.generation.portal.naturalgen.AncientPortalNaturalGeneration;
 import com.artur.returnoftheancients.generation.portal.base.client.ClientAncientPortal;
-import com.artur.returnoftheancients.util.TerrainAnalyzer;
+import com.artur.returnoftheancients.generation.portal.util.OffsetsUtil;
+import com.artur.returnoftheancients.handlers.RenderHandler;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import thaumcraft.api.blocks.BlocksTC;
 
 import java.util.List;
 
@@ -78,6 +80,7 @@ public class ItemDebug extends BaseItem {
 ////			spawnCustomParticle(worldIn, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.1, 0);
 //		}
 		if (worldIn.isRemote) {
+
 //			if (player.isSneaking()) {
 //				NBTTagCompound data = new NBTTagCompound();
 //				data.setInteger("dimension", worldIn.provider.getDimension());
@@ -108,7 +111,10 @@ public class ItemDebug extends BaseItem {
 //			}
 		}
 		if (!worldIn.isRemote) {
-//			System.out.println((new WorldGenTaintBigTree(false)).generate(worldIn, new Random(), pos));
+//			Class<?> clas = AncientPortalNaturalGeneration.class.getDeclaredClasses()[1];
+//			player.sendMessage(new TextComponentString(clas.getName()));
+//			player.sendMessage(new TextComponentString(AncientPortalNaturalGeneration.class.getDeclaredClasses().length + ""));
+//			System.out.println((new WorldGenTaintBigTree(false)).generate(worldIn, new Random(), pos));`
 //			if (player.isSneaking()) {
 //				blockPos = pos;
 //			} else {
@@ -116,9 +122,9 @@ public class ItemDebug extends BaseItem {
 //					new GenAncientArch().generate(worldIn, pos, blockPos, EnumFacing.AxisDirection.POSITIVE);
 //				}
 //			}
-			TerrainAnalyzer analyzer = new TerrainAnalyzer(worldIn);
+//			TerrainAnalyzer analyzer = new TerrainAnalyzer(worldIn);
 //
-			analyzer.startAnalyzing(worldIn.getChunkFromBlockCoords(pos).getPos());
+//			analyzer.startAnalyzing(worldIn.getChunkFromBlockCoords(pos).getPos());
 //
 //			player.sendMessage(new TextComponentString("Flow:" + analyzer.getTerrainFlow()));
 //			player.sendMessage(new TextComponentString("Height variation:" + analyzer.getHeightVariation()));
@@ -130,38 +136,39 @@ public class ItemDebug extends BaseItem {
 //			player.sendMessage(new TextComponentString("Height variation:" + analyzer.getHeightVariation()));
 //			player.sendMessage(new TextComponentString("Average Height:" + analyzer.getAverageHeight()));
 
-			BlockPos[] sanctuaryPillars = new BlockPos[] {
-					new BlockPos(2, 0, 4),
-					new BlockPos(4, 0, 2),
+//			BlockPos[] sanctuaryPillars = new BlockPos[] {
+//					new BlockPos(2, 0, 4),
+//					new BlockPos(4, 0, 2),
+//
+//					new BlockPos(10, 0, 2),
+//					new BlockPos(12, 0, 4),
+//
+//					new BlockPos(2, 0, 10),
+//					new BlockPos(4, 0, 12),
+//
+//					new BlockPos(10, 0, 12),
+//					new BlockPos(12, 0, 10),
+//			};
+//
+//			UltraMutableBlockPos blockPos = new UltraMutableBlockPos(worldIn.getChunkFromBlockCoords(pos).getPos());
+//
+//			blockPos.setY(analyzer.getMaxHeight());
+//
+//			CustomGenStructure.gen(worldIn, blockPos.addY(16), "ancient_sanctuary");
+//
+//			blockPos.addY(-1);
+//
+//			for (BlockPos offset : sanctuaryPillars) {
+//				blockPos.pushPos();
+//
+//				for (blockPos.add(offset); worldIn.isAirBlock(blockPos); blockPos.down()) {
+//					worldIn.setBlockState(blockPos, BlocksTC.stoneEldritchTile.getDefaultState());
+//				}
+//
+//				blockPos.popPos();
+//			}
 
-					new BlockPos(10, 0, 2),
-					new BlockPos(12, 0, 4),
-
-					new BlockPos(2, 0, 10),
-					new BlockPos(4, 0, 12),
-
-					new BlockPos(10, 0, 12),
-					new BlockPos(12, 0, 10),
-			};
-
-			UltraMutableBlockPos blockPos = new UltraMutableBlockPos(worldIn.getChunkFromBlockCoords(pos).getPos());
-
-			blockPos.setY(analyzer.getMaxHeight());
-
-			CustomGenStructure.gen(worldIn, blockPos.addY(16), "ancient_sanctuary");
-
-			blockPos.addY(-1);
-
-			for (BlockPos offset : sanctuaryPillars) {
-				blockPos.pushPos();
-
-				for (blockPos.add(offset); worldIn.isAirBlock(blockPos); blockPos.down()) {
-					worldIn.setBlockState(blockPos, BlocksTC.stoneEldritchTile.getDefaultState());
-				}
-
-				blockPos.popPos();
-			}
-
+			player.sendMessage(new TextComponentString("[" + (pos.getX() & 15) + ", " + (pos.getZ() & 15) + "]"));
 
 //			new GenAncientSpire().generate(worldIn, worldIn.getChunkFromBlockCoords(pos).getPos(), 255);
 
@@ -231,4 +238,5 @@ public class ItemDebug extends BaseItem {
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(TextFormatting.UNDERLINE + "M" + TextFormatting.RESET + TextFormatting.OBFUSCATED + "e" + TextFormatting.RESET  + TextFormatting.BOLD + "o" + TextFormatting.RESET  + TextFormatting.STRIKETHROUGH + "w");
 	}
+
 }

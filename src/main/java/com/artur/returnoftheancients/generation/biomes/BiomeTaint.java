@@ -1,17 +1,13 @@
 package com.artur.returnoftheancients.generation.biomes;
 
 import com.artur.returnoftheancients.generation.biomes.decorate.*;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
-import net.minecraft.block.BlockFalling;
-import net.minecraft.block.BlockGravel;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -24,7 +20,7 @@ import thaumcraft.common.entities.monster.tainted.EntityTaintSeedPrime;
 import java.util.ArrayList;
 import java.util.Random;
 
-// TODO: Сделать гнилое море глубже, добавить глубокое гнилое море
+// TODO: Сделать так чтобы в биоме не появлялись разломы
 public class BiomeTaint extends BiomeBase {
     private static final WorldGensMisc WORLD_GENS_MISC = new WorldGensMisc();
 
@@ -73,8 +69,8 @@ public class BiomeTaint extends BiomeBase {
             this.decorator.reedsPerChunk = -1;
             this.decorator.cactiPerChunk = -1;
         } else if (type == TaintType.BEACH) {
-            this.topBlock = Blocks.GRAVEL.getDefaultState();
-            this.fillerBlock = Blocks.GRAVEL.getDefaultState();
+            this.topBlock = InitBlocks.TAINT_VOID_STONE.getDefaultState();
+            this.fillerBlock = InitBlocks.TAINT_VOID_STONE.getDefaultState();
             this.decorator.extraTreeChance = -1;
             this.decorator.treesPerChunk = -1;
             this.decorator.deadBushPerChunk = -1;
@@ -99,7 +95,7 @@ public class BiomeTaint extends BiomeBase {
             for (int i = 0; i < 16; ++i) {
                 for (int j = 0; j < 16; ++j) {
                     byte k = biomes[j + i * 16];
-                    if (HandlerR.arrayContains(InitBiome.TAINT_BIOMES_L_ID, k)) {
+                    if (MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_L_ID, k)) {
                         taintBiomeArea.add((short) ((i << 8) | (j & 0xFF)));
                     }
                 }
@@ -116,7 +112,7 @@ public class BiomeTaint extends BiomeBase {
 
                 int x = (chunk.x << 4) + localX;
                 int z = (chunk.z << 4) + localZ;
-                int y = HandlerR.calculateGenerationHeight(world, x, z);
+                int y = MiscHandler.calculateGenerationHeight(world, x, z);
 
                 EntityLightningBolt lightningBolt = new EntityLightningBolt(world, x, y, z, true);
                 world.addWeatherEffect(lightningBolt);
@@ -131,12 +127,12 @@ public class BiomeTaint extends BiomeBase {
         for (int i = 0; i != 16; i++) {
             for (int j = 0; j != 16; j++) {
                 byte k = biomeArray[i + j * 16];
-                if (HandlerR.arrayContains(InitBiome.TAINT_BIOMES_L_ID, k)) {
+                if (MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_L_ID, k)) {
                     blockPos.pushPos();
                     blockPos.add(i, 0, j);
                     decorateNormal(worldIn, random, blockPos, k);
                     blockPos.popPos();
-                } else if (HandlerR.arrayContains(InitBiome.TAINT_BIOMES_EDGE_ID, k)) {
+                } else if (MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_EDGE_ID, k)) {
                     blockPos.pushPos();
                     blockPos.add(i, 0, j);
                     decorateEdge(worldIn, random, blockPos, k);
@@ -145,7 +141,7 @@ public class BiomeTaint extends BiomeBase {
             }
         }
 
-        if (HandlerR.fastCheckChunkContainsAnyOnBiomeArray(chunk, InitBiome.TAINT_BIOMES_L_ID)) {
+        if (MiscHandler.fastCheckChunkContainsAnyOnBiomeArray(chunk, InitBiome.TAINT_BIOMES_L_ID)) {
             decorateChunkNormal(worldIn, random,  blockPos);
         }
 
@@ -153,7 +149,7 @@ public class BiomeTaint extends BiomeBase {
     }
 
     private static void decorateEdge(World worldIn, Random rand, UltraMutableBlockPos blockPos, byte biomeId) {
-        blockPos.setY(HandlerR.calculateGenerationHeight(worldIn, blockPos.getX(), blockPos.getZ()));
+        blockPos.setY(MiscHandler.calculateGenerationHeight(worldIn, blockPos.getX(), blockPos.getZ()));
         WORLD_GENS_MISC.ADD_SNOW.generate(worldIn, rand, blockPos);
     }
 
@@ -161,12 +157,13 @@ public class BiomeTaint extends BiomeBase {
         blockPos.setWorldY(worldIn);
         WORLD_GENS_MISC.REPLACE_VISIBLE_BLOCKS.generate(worldIn, rand, blockPos);
         WORLD_GENS_MISC.ADD_TAINT_FEATURE.generate(worldIn, rand, blockPos);
+        WORLD_GENS_MISC.REMOVE_LIQUIDS.generate(worldIn, rand, blockPos);
         WORLD_GENS_MISC.ADD_SNOW.generate(worldIn, rand, blockPos);
     }
 
     private static void decorateChunkNormal(World worldIn, Random rand, UltraMutableBlockPos blockPos) {
         blockPos.pushPos();
-        boolean isTintWasteland = HandlerR.getBiomeIdOnPos(worldIn, blockPos.add(8, 0, 8)) == Biome.getIdForBiome(InitBiome.TAINT_WASTELAND);
+        boolean isTintWasteland = MiscHandler.getBiomeIdOnPos(worldIn, blockPos.add(8, 0, 8)) == Biome.getIdForBiome(InitBiome.TAINT_WASTELAND);
         blockPos.popPos();
         if (isTintWasteland) {
             if (rand.nextInt(6) == 0) {

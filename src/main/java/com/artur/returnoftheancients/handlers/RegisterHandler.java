@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.handlers;
 
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.blocks.BaseBlockContainer;
 import com.artur.returnoftheancients.client.fx.particle.util.ParticleSprite;
 import com.artur.returnoftheancients.commads.*;
@@ -65,10 +65,8 @@ public class RegisterHandler {
 	}
 
 	public static void registerParticleSprites(TextureStitchEvent.Pre e) {
-		if (TRAConfigs.Any.debugMode) System.out.println("Registering particles!");
 		for (ParticleSprite sprite : InitParticleSprite.PARTICLES_SPRITES) {
 			sprite.register(e);
-			if (TRAConfigs.Any.debugMode) System.out.println("registered: " + sprite);
 		}
 	}
 
@@ -113,8 +111,7 @@ public class RegisterHandler {
 	}
 
 	public static void registerCommands(FMLServerStartingEvent event) {
-		if (TRAConfigs.Any.debugMode) {
-			event.registerServerCommand(new TestCommand());
+		if (TRAConfigs.Any.debugMode) { // TODO: 23.02.2025 Снести!
 			event.registerServerCommand(new TestCommand2());
 			event.registerServerCommand(new DataManager());
 			event.registerServerCommand(new TpToPortal());
@@ -180,6 +177,8 @@ public class RegisterHandler {
 		}
 
 		CustomGenStructure.put("ancient_sanctuary");
+		CustomGenStructure.put("ancient_sanctuary_broken");
+		CustomGenStructure.put("ancient_sanctuary_cultist");
 
 		CustomGenStructure.setUseAir();
 		CustomGenStructure.put("ancient_portal_hub");

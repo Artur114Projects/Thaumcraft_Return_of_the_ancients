@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.transform.transformers.base;
 
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.transform.util.TransformerHandler;
 import org.objectweb.asm.*;
 
 public abstract class MVWithDescCreator extends MethodVisitor {
@@ -12,7 +12,7 @@ public abstract class MVWithDescCreator extends MethodVisitor {
         this.names = names;
         this.desc = new String[names.length];
         for (int i = 0; i != names.length; i++) {
-            this.desc[i] = HandlerR.createDescriptor(methodsClass, names[i]);
+            this.desc[i] = TransformerHandler.createDescriptor(methodsClass, names[i]);
         }
     }
 

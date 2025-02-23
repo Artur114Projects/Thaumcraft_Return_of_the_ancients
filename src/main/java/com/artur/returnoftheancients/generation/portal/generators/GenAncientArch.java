@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.generation.portal.generators;
 
+import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -12,7 +13,7 @@ import thaumcraft.api.blocks.BlocksTC;
 
 import java.util.*;
 
-public class GenAncientArch {
+public class GenAncientArch { // TODO: Улучшить!
     private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
     private ArchChunk[] archChunksCanFall = null;
     private TupleI[] terrainHeightArray = null;
@@ -37,6 +38,8 @@ public class GenAncientArch {
             this.fallArchChunks();
         }
         this.resetObjectData();
+
+        if (TRAConfigs.Any.debugMode) System.out.println("Generated ancient arch! start:" + start + " end:" + end);
     }
 
     private void genArchAndInitSegments() {
@@ -63,10 +66,16 @@ public class GenAncientArch {
     }
 
     private void fallArchChunks() {
+        boolean flag = false;
         for (ArchChunk chunk : archChunksCanFall) {
             if (rand.nextBoolean()) {
+                flag = true;
                 chunk.fall();
             }
+        }
+
+        if (!flag) {
+            this.fallArchChunks();
         }
     }
 

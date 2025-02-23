@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.items;
 
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
@@ -62,7 +62,7 @@ public class ItemPortalCompass extends BaseItem {
                         if (hasPortal) {
                             setNearestPortalPos(entityIn);
                         }
-                        if (HandlerR.isHasItem(player, InitItems.COMPASS) && hasPortal && !HandlerR.isWithinRadius(player.posX, player.posZ, mutableBlockPos.getX(), mutableBlockPos.getZ(), 8)) {
+                        if (MiscHandler.isHasItem(player, InitItems.COMPASS) && hasPortal && !MiscHandler.isWithinRadius(player.posX, player.posZ, mutableBlockPos.getX(), mutableBlockPos.getZ(), 8)) {
                             double d1 = entity.rotationYaw;
                             d1 = MathHelper.positiveModulo(d1 / 360.0D, 1.0D);
                             double d2 = this.getPortalToAngle(entity) / (Math.PI * 2D);

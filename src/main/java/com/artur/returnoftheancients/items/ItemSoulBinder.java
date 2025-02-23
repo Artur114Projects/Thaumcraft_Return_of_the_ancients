@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.items;
 
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.gui.GuiScreen;
@@ -68,7 +68,7 @@ public class ItemSoulBinder extends BaseItem {
             if(!GuiScreen.isShiftKeyDown()) {
                 NBTTagCompound list = nbt.getCompoundTag("players");
                 tooltip.add(TextFormatting.YELLOW + I18n.format("item.soul_binder.info.d.3"));
-                for (String text : HandlerR.uuidKeySetToList(list.getKeySet(), TextFormatting.AQUA)) {
+                for (String text : MiscHandler.uuidKeySetToList(list.getKeySet(), TextFormatting.AQUA)) {
                     tooltip.add(TextFormatting.WHITE + "[" + text + TextFormatting.RESET + "]");
                 }
                 tooltip.add("");

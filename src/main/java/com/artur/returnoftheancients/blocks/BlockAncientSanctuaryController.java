@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.client.render.tile.TileEntityAncientSanctuaryControllerRenderer;
-import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.tileentity.BlockTileEntity;
@@ -113,6 +112,6 @@ public class BlockAncientSanctuaryController extends BlockTileEntity<TileEntityA
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        HandlerR.addForCreativeOnlyTooltip(tooltip);
+        this.addForCreativeOnlyTooltip(tooltip);
     }
 }

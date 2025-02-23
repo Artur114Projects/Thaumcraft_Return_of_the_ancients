@@ -57,7 +57,7 @@ public class BlockAncientTeleport extends BlockContainerEnergyBase<TileEntityAnc
         TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileEntityAncientTeleport)
         {
-            playerIn.openGui(MainR.instance, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
+            playerIn.openGui(MainR.INSTANCE, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
         return false;

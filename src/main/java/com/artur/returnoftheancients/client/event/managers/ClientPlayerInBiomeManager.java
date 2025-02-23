@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.client.event.managers;
 
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
@@ -58,10 +58,10 @@ public class ClientPlayerInBiomeManager {
 
         if (player.ticksExisted % 4 == 0) {
             byte lastId = currentBiomeId;
-            currentBiomeId = HandlerR.getBiomeIdOnPos(player.world, ultraBlockPos.setPos(player));
+            currentBiomeId = MiscHandler.getBiomeIdOnPos(player.world, ultraBlockPos.setPos(player));
             currentBiome = Biome.getBiome(currentBiomeId);
             isPrevBiomeTaint = isCurrentBiomeTaint;
-            isCurrentBiomeTaint = HandlerR.arrayContains(InitBiome.TAINT_BIOMES_L_ID, currentBiomeId);
+            isCurrentBiomeTaint = MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_L_ID, currentBiomeId);
             if (lastId != currentBiomeId) {
                 onBiomeChanged(lastId, currentBiomeId);
             }

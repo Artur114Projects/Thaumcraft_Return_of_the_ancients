@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.energy;
 
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergy;
 import com.artur.returnoftheancients.energy.intefaces.ITileEnergyProvider;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.*;
 
-@Mod.EventBusSubscriber(modid = Referense.MODID)
+@Mod.EventBusSubscriber(modid = Referense.MODID) // TODO: починить проблему с выгрузкой тайлов
 public class EnergySystemsProvider {
 
     public static final Set<Integer> LOADED_NETWORKS = new HashSet<>();
@@ -207,7 +207,7 @@ public class EnergySystemsProvider {
     }
 
     public static int foundFreeId() {
-        return HandlerR.foundMostSmallUniqueIntInSet(ENERGY_SYSTEMS.keySet());
+        return MiscHandler.foundMostSmallUniqueIntInSet(ENERGY_SYSTEMS.keySet());
     }
 
     public static int foundFreeIdWithBlackList(int... not) {
@@ -215,13 +215,13 @@ public class EnergySystemsProvider {
         for (int i : not) {
             set.add(i);
         }
-        return HandlerR.foundMostSmallUniqueIntInSet(set);
+        return MiscHandler.foundMostSmallUniqueIntInSet(set);
     }
 
     public static int foundFreeIdWithBlackList(Set<Integer> not) {
         Set<Integer> set = new HashSet<>(ENERGY_SYSTEMS.keySet());
         set.addAll(not);
-        return HandlerR.foundMostSmallUniqueIntInSet(set);
+        return MiscHandler.foundMostSmallUniqueIntInSet(set);
     }
 
 

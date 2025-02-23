@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.generation.terraingen;
 
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
@@ -40,7 +40,7 @@ public class GenLayersHandler {
 
     public static boolean isCollideToAnyPortal(ChunkPos[] portalsPos, int x, int z, int bitShift, int offset) {
         for (ChunkPos pos : portalsPos) {
-            if (HandlerR.isCollide(pos.x >> bitShift, pos.z >> bitShift, x, z, offset)) {
+            if (MiscHandler.isCollide(pos.x >> bitShift, pos.z >> bitShift, x, z, offset)) {
                 return true;
             }
         }
@@ -52,7 +52,7 @@ public class GenLayersHandler {
             for (int i = 0; i != 4 * range1; i++) {
                 float angle = (float) (((Math.PI * 2.0F) / (4.0F * range1)) * i);
                 int k = aint[(int)((i1 + range1 * MathHelper.cos(angle)) + (j1 + range1 * MathHelper.sin(angle)) * areaWidth1)];
-                if (HandlerR.arrayContains(biome, k)) {
+                if (MiscHandler.arrayContains(biome, k)) {
                     return k;
                 }
             }
@@ -79,7 +79,7 @@ public class GenLayersHandler {
                     continue;
                 }
                 int k = aint[i + j * areaWidth1];
-                if (HandlerR.arrayContains(biome, k)) {
+                if (MiscHandler.arrayContains(biome, k)) {
                     return k;
                 }
             }
@@ -114,13 +114,31 @@ public class GenLayersHandler {
         return false;
     }
 
+    public static boolean hasBiomeOnRange2(int[] aint, int biome, int i1, int j1, int areaWidth1, int range) {
+        for (int i = 0; i != range * 2 + 1; i++) {
+            for (int j = 0; j != range * 2 + 1; j++) {
+                final int r = Math.abs(i - (range)) + Math.abs(j - (range));
+                if (r <= range) {
+                    if (i == i1 && j == j1) {
+                        continue;
+                    }
+                    if (biome == aint[i + j * areaWidth1]) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
     public static boolean hasBiomeOnRange0(int[] aint, int[] biome, int i1, int j1, int areaWidth1, int range) {
         for (int i = i1 - range; i != i1 + range + 1; i++) {
             for (int j = j1 - range; j != j1 + range + 1; j++) {
                 if (i == i1 && j == j1) {
                     continue;
                 }
-                if (HandlerR.arrayContains(biome, aint[i + j * areaWidth1])) {
+                if (MiscHandler.arrayContains(biome, aint[i + j * areaWidth1])) {
                     return true;
                 }
             }
@@ -132,7 +150,7 @@ public class GenLayersHandler {
         for (int range1 = 1; range1 != range + 1; range1++) {
             for (int i = 0; i != 4 * range1; i++) {
                 float angle = (float) (((Math.PI * 2.0F) / (4.0F * range1)) * i);
-                if (HandlerR.arrayContains(biome, (aint[(int)((i1 + range1 * MathHelper.cos(angle)) + (j1 + range1 * MathHelper.sin(angle)) * areaWidth1)]))) {
+                if (MiscHandler.arrayContains(biome, (aint[(int)((i1 + range1 * MathHelper.cos(angle)) + (j1 + range1 * MathHelper.sin(angle)) * areaWidth1)]))) {
                     return true;
                 }
             }
@@ -147,7 +165,7 @@ public class GenLayersHandler {
                 if (i == i1 && j == j1) {
                     continue;
                 }
-                if (!HandlerR.arrayContains(biomeArray, aint[i + j * areaWidth1])) {
+                if (!MiscHandler.arrayContains(biomeArray, aint[i + j * areaWidth1])) {
                     return false;
                 }
             }
@@ -159,7 +177,7 @@ public class GenLayersHandler {
         for (int range1 = 1; range1 != range + 1; range1++) {
             for (int i = 0; i != 4 * range1; i++) {
                 float angle = (float) (((Math.PI * 2.0F) / (4.0F * range1)) * i);
-                if (!HandlerR.arrayContains(biomeArray, (aint[(int)((i1 + range1 * MathHelper.cos(angle)) + (j1 + range1 * MathHelper.sin(angle)) * areaWidth1)]))) {
+                if (!MiscHandler.arrayContains(biomeArray, (aint[(int)((i1 + range1 * MathHelper.cos(angle)) + (j1 + range1 * MathHelper.sin(angle)) * areaWidth1)]))) {
                     return false;
                 }
             }

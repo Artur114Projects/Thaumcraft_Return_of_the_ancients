@@ -88,12 +88,15 @@ public class WorldGenTaintTree extends WorldGenAbstractTree {
             int branchHeight = MathHelper.floor(trunkHeight / 2.0F) + (random.nextInt(3) + 1);
             for (int i = 0; i != branchHeight; i++) {
                 if (!worldIn.isAirBlock(position)) {
+                    position.popPos();
                     return false;
                 }
                 if (i == branchHeight - 1) {
                     position.pushPos();
                     position.offset(facing);
                     if (!worldIn.isAirBlock(position)) {
+                        position.popPos();
+                        position.popPos();
                         return false;
                     }
                     position.popPos();

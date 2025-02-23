@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.network;
 
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -23,17 +23,11 @@ public class ClientPacketPlayerNBTData implements IMessage {
         this.data = data;
     }
 
-    /**
-     * Читает данные пакета из ByteBuf при получении.
-     */
     @Override
     public void fromBytes(ByteBuf buf) {
         data = ByteBufUtils.readTag(buf);
     }
 
-    /**
-     * Записывает данные пакета в ByteBuf перед отправкой.
-     */
     @Override
     public void toBytes(ByteBuf buf) {
         ByteBufUtils.writeTag(buf, data);
@@ -41,19 +35,12 @@ public class ClientPacketPlayerNBTData implements IMessage {
 
     public static class HandlerPND implements IMessageHandler<ClientPacketPlayerNBTData, IMessage> {
 
-        /**
-         * Данный метод вызывается для обработки входящих данных из пакета.
-         */
         @SideOnly(Side.CLIENT)
         @Override
         public IMessage onMessage(ClientPacketPlayerNBTData packet, MessageContext ctx) {
             Minecraft.getMinecraft().addScheduledTask(() -> {
                 System.out.println("ClientPacketPlayerNBTData packet!");
                 EntityPlayerSP playerSP = Minecraft.getMinecraft().player;
-                if (!HandlerR.isGoodNBTTagPND(packet.data)) {
-                    System.out.println("gavnoooooooooooooo");
-                    return;
-                }
                 switch (packet.data.getByte("dataIndex")) {
                     case 1:
                         playerSP.getEntityData().setBoolean(packet.data.getString("tagSetName"), packet.data.getBoolean("data"));

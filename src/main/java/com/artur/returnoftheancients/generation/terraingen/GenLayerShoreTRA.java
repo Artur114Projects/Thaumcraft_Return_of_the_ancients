@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.generation.terraingen;
 
 
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitBiome;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.MathHelper;
@@ -62,7 +62,7 @@ public class GenLayerShoreTRA extends GenLayer {
                         this.replaceIfNeighborOcean(aint, aint1, j, i, areaWidth, k, Biome.getIdForBiome(Biomes.COLD_BEACH));
                     } else if (k != Biome.getIdForBiome(Biomes.MESA) && k != Biome.getIdForBiome(Biomes.MESA_ROCK)) {
                         if (k != Biome.getIdForBiome(Biomes.OCEAN) && k != Biome.getIdForBiome(Biomes.DEEP_OCEAN) && k != Biome.getIdForBiome(Biomes.RIVER) && k != Biome.getIdForBiome(Biomes.SWAMPLAND)) {
-                            if (!HandlerR.arrayContains(InitBiome.TAINT_BIOMES_INT_ID, k)) {
+                            if (!MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_INT_ID, k)) {
                                 int j3 = aint[j1 + 0 + (i1 - 1) * areaWidth1];
                                 int i4 = aint[j1 + 1 + (i1 + 0) * areaWidth1];
                                 int l1 = aint[j1 - 1 + (i1 + 0) * areaWidth1];

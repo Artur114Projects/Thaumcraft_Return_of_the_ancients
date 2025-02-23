@@ -42,6 +42,14 @@ public class PlayerMovementManager {
         WorldClient world = Minecraft.getMinecraft().world;
         Minecraft mc = Minecraft.getMinecraft();
 
+        if (player == null && world == null) {
+            if (!TASKS.isEmpty() || !WORK_ALONE_TASKS.isEmpty()) {
+                System.out.println("Unloading movement tasks");
+                WORK_ALONE_TASKS.clear();
+                TASKS.clear();
+            }
+        }
+
         if (e.phase != TickEvent.Phase.START || player == null || e.side == Side.SERVER || mc.isGamePaused()) {
             return;
         }

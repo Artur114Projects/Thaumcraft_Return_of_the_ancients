@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.ancientworldgeneration.main.entry;
 
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
@@ -67,7 +67,7 @@ public class AncientEntrySolo extends AncientEntry {
     protected void onBossDead() {
         if (isSleep) return;
         player.addItemStackToInventory(getPrimordialPearl());
-        HandlerR.researchTC(player, "f_!FINAL");
+        MiscHandler.researchTC(player, "f_!FINAL");
     }
 
     @Override
@@ -148,14 +148,14 @@ public class AncientEntrySolo extends AncientEntry {
         int dz = ((((int) player.posZ) >> 4) - 8) * -1;
         if (dx >= 0 && dx < map.SIZE && dz >= 0 && dz < map.SIZE) {
             if (map.getDeformation(dx, dz) > 4) {
-                HandlerR.researchAndSendMessage(player, "DEFORMATION", Referense.MODID + ".text.deformation");
+                MiscHandler.researchAndSendMessage(player, "DEFORMATION", Referense.MODID + ".text.deformation");
             }
         }
     }
 
     @Override
     protected void onBossTiger(EntityPlayer player, World world) {
-        HandlerR.researchAndSendMessage((EntityPlayerMP) player, "m_BOSS", Referense.MODID + ".text.boss");
+        MiscHandler.researchAndSendMessage((EntityPlayerMP) player, "m_BOSS", Referense.MODID + ".text.boss");
         Entity boss = getRandomBoss(world, bossPos);
         bossUUID = boss.getUniqueID();
         genBossDoors(world, bossPos);
@@ -163,43 +163,43 @@ public class AncientEntrySolo extends AncientEntry {
 
     @Override
     public void onGen(int x, int y) {
-        HandlerR.injectPercentagesOnClient(player, x, y);
+        MiscHandler.injectPercentagesOnClient(player, x, y);
     }
 
     @Override
     public void onClear(int x, int y) {
-        HandlerR.injectPercentagesOnClient(player, x, y);
+        MiscHandler.injectPercentagesOnClient(player, x, y);
     }
 
     @Override
     public void onStart() {
-        HandlerR.setLoadingGuiState(player, true, false);
-        HandlerR.injectPhaseOnClient(player, (byte) 0);
-        HandlerR.injectPercentagesOnClient(player, 0, 0);
+        MiscHandler.setLoadingGuiState(player, true, false);
+        MiscHandler.injectPhaseOnClient(player, (byte) 0);
+        MiscHandler.injectPercentagesOnClient(player, 0, 0);
     }
 
     @Override
     public void onGenStart() {
-        HandlerR.injectPercentagesOnClient(player, 0, 0);
-        HandlerR.injectPhaseOnClient(player, (byte) 2);
+        MiscHandler.injectPercentagesOnClient(player, 0, 0);
+        MiscHandler.injectPhaseOnClient(player, (byte) 2);
     }
 
     @Override
     public void onClearStart() {
-        HandlerR.injectPercentagesOnClient(player, 0, 0);
-        HandlerR.injectPhaseOnClient(player, (byte) 1);
+        MiscHandler.injectPercentagesOnClient(player, 0, 0);
+        MiscHandler.injectPhaseOnClient(player, (byte) 1);
     }
 
     @Override
     public void onFinalizing() {
-        HandlerR.injectPhaseOnClient(player, (byte) 3);
+        MiscHandler.injectPhaseOnClient(player, (byte) 3);
     }
 
     @Override
     public void onFinal() {
-        HandlerR.researchAndSendMessage(player, "m_ENTRY_ANCIENT", Referense.MODID + ".text.entered_ancient");
-        HandlerR.injectPhaseOnClient(player, (byte) 4);
-        HandlerR.setLoadingGuiState(player, false, false);
+        MiscHandler.researchAndSendMessage(player, "m_ENTRY_ANCIENT", Referense.MODID + ".text.entered_ancient");
+        MiscHandler.injectPhaseOnClient(player, (byte) 4);
+        MiscHandler.setLoadingGuiState(player, false, false);
         player.connection.setPlayerLocation(8 + (10000 * pos), 253, 8, player.rotationYaw, 90);
         player.setHealth(20);
     }

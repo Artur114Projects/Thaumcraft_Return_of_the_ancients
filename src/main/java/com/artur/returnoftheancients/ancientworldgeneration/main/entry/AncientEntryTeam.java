@@ -3,7 +3,7 @@ package com.artur.returnoftheancients.ancientworldgeneration.main.entry;
 import com.artur.returnoftheancients.ancientworldgeneration.util.Team;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.ITeamTask;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.entity.Entity;
@@ -66,7 +66,7 @@ public class AncientEntryTeam extends AncientEntry {
         int dz = ((((int) player.posZ) >> 4) - 8) * -1;
         if (dx >= 0 && dx < map.SIZE && dz >= 0 && dz < map.SIZE) {
             if (map.getDeformation(dx, dz) > 4) {
-                HandlerR.researchAndSendMessage(player, "DEFORMATION", Referense.MODID + ".text.deformation");
+                MiscHandler.researchAndSendMessage(player, "DEFORMATION", Referense.MODID + ".text.deformation");
             }
         }
     };
@@ -105,7 +105,7 @@ public class AncientEntryTeam extends AncientEntry {
     protected void onBossTiger(EntityPlayer player, World world) {
         team.setToAll(playerSet -> {
             playerSet.connection.setPlayerLocation(player.posX, player.posY, player.posZ, playerSet.rotationYaw, playerSet.rotationPitch);
-            HandlerR.researchAndSendMessage(playerSet, "m_BOSS", Referense.MODID + ".text.boss");
+            MiscHandler.researchAndSendMessage(playerSet, "m_BOSS", Referense.MODID + ".text.boss");
         });
         Entity boss = getRandomBoss(world, bossPos);
         bossUUID = boss.getUniqueID();
@@ -139,7 +139,7 @@ public class AncientEntryTeam extends AncientEntry {
     protected void onBossDead() {
         team.setToAll(player -> {
             player.addItemStackToInventory(getPrimordialPearl());
-            HandlerR.researchTC(player, "f_!FINAL");
+            MiscHandler.researchTC(player, "f_!FINAL");
         });
     }
 
@@ -168,18 +168,18 @@ public class AncientEntryTeam extends AncientEntry {
 
     @Override
     public void onGen(int x, int y) {
-        team.setToAll(player -> HandlerR.injectPercentagesOnClient(player, x, y));
+        team.setToAll(player -> MiscHandler.injectPercentagesOnClient(player, x, y));
     }
 
     @Override
     public void onClear(int x, int y) {
-        team.setToAll(player -> HandlerR.injectPercentagesOnClient(player, x, y));
+        team.setToAll(player -> MiscHandler.injectPercentagesOnClient(player, x, y));
     }
 
     @Override
     public void onStart() {
         team.setToAll(player -> {
-            HandlerR.setLoadingGuiState(player, true, true);
+            MiscHandler.setLoadingGuiState(player, true, true);
             team.injectNamesToPlayers();
         });
     }
@@ -187,33 +187,33 @@ public class AncientEntryTeam extends AncientEntry {
     @Override
     public void onGenStart() {
         team.setToAll(player -> {
-            HandlerR.injectPercentagesOnClient(player, 0, 0);
-            HandlerR.injectPhaseOnClient(player, (byte) 2);
+            MiscHandler.injectPercentagesOnClient(player, 0, 0);
+            MiscHandler.injectPhaseOnClient(player, (byte) 2);
         });
     }
 
     @Override
     public void onClearStart() {
         team.setToAll(player -> {
-            HandlerR.injectPercentagesOnClient(player, 0, 0);
-            HandlerR.injectPhaseOnClient(player, (byte) 1);
+            MiscHandler.injectPercentagesOnClient(player, 0, 0);
+            MiscHandler.injectPhaseOnClient(player, (byte) 1);
         });
 
     }
 
     @Override
     public void onFinalizing() {
-        team.setToAll(player -> HandlerR.injectPhaseOnClient(player, (byte) 3));
+        team.setToAll(player -> MiscHandler.injectPhaseOnClient(player, (byte) 3));
     }
 
     @Override
     public void onFinal() {
         team.setToAll(player -> {
-            HandlerR.injectPhaseOnClient(player, (byte) 4);
-            HandlerR.setLoadingGuiState(player, false, true);
+            MiscHandler.injectPhaseOnClient(player, (byte) 4);
+            MiscHandler.setLoadingGuiState(player, false, true);
             player.setHealth(20);
             player.connection.setPlayerLocation(8 + (10000 * pos), 253, 8, -181, 90);
-            HandlerR.researchAndSendMessage(player, "m_ENTRY_ANCIENT", Referense.MODID + ".text.entered_ancient");
+            MiscHandler.researchAndSendMessage(player, "m_ENTRY_ANCIENT", Referense.MODID + ".text.entered_ancient");
         });
     }
 }

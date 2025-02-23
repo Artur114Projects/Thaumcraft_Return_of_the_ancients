@@ -1,7 +1,7 @@
-package com.artur.returnoftheancients.ancientworldgeneration.structurebuilder;
+package com.artur.returnoftheancients.structurebuilder;
 
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructure;
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util.ITRAStructureTask;
+import com.artur.returnoftheancients.structurebuilder.util.ITRAStructure;
+import com.artur.returnoftheancients.structurebuilder.util.ITRAStructureTask;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -17,40 +17,50 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.*;
 
-public class TRAStructureBinary implements ITRAStructure {
+public class TRAStructure implements ITRAStructure {
     protected final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-    protected final int[] blocks;
-    protected final IBlockState[] palette;
-    protected ITRAStructureTask task = null;
 
-    public TRAStructureBinary(String structureName, boolean isUseAir) {
+    protected final ArrayDeque<BlockInfo> blocks;
+
+    public TRAStructure(String structureName) {
         NBTTagCompound structureNBT = readStructureAsName(structureName);
         NBTTagList palette = structureNBT.getTagList("palette", 10);
         NBTTagList blocksNBT = structureNBT.getTagList("blocks", 10);
 
         int air = -1;
-        this.palette = new IBlockState[palette.tagCount()];
+        IBlockState[] blocksNames = new IBlockState[palette.tagCount()];
         for (int i = 0; i != palette.tagCount(); i++) {
-            this.palette[i] = getBlockByString(palette.getCompoundTagAt(i).getString("Name")).getDefaultState();
-            if (getBlockByString(palette.getCompoundTagAt(i).getString("Name")) == Blocks.AIR && air == -1) {
+            blocksNames[i] = getBlockByString(palette.getCompoundTagAt(i).getString("Name")).getDefaultState();
+            if (getBlockByString(palette.getCompoundTagAt(i).getString("Name")) == Blocks.AIR) {
                 air = i;
             }
         }
 
-        ArrayList<Integer> rawBlocks = new ArrayList<>();
-
+        ArrayList<BlockInfo> rawBlocks = new ArrayList<>();
         for (int i = 0; i != blocksNBT.tagCount(); i++) {
             NBTTagCompound compound = blocksNBT.getCompoundTagAt(i);
             NBTTagList pos = compound.getTagList("pos", 3);
             int state = compound.getInteger("state");
-            if (state != air || isUseAir) {
-                rawBlocks.add(packBytes((byte) pos.getIntAt(0), (byte) pos.getIntAt(1), (byte) pos.getIntAt(2), (byte) state));
+            if (state != air || structureName.equals("air_cube") || structureName.equals("ancient_exit")) {
+                rawBlocks.add(new BlockInfo(pos.getIntAt(0), pos.getIntAt(1), pos.getIntAt(2), blocksNames[state]));
             }
         }
+        blocks = new ArrayDeque<>();
+        blocks.addAll(rawBlocks);
+    }
 
-        blocks = rawBlocks.stream().mapToInt(Integer::intValue).toArray();
+    @Override
+    public void gen(World world, int x, int y, int z) {
+        for (BlockInfo block : blocks) {
+            world.setBlockState(mutablePos.setPos(block.x + x, block.y + y, block.z + z), block.state);
+        }
+    }
+
+    @Override
+    public void addDisposableTask(ITRAStructureTask task) {
+
     }
 
     private static NBTTagCompound readStructureAsName(String structureName) {
@@ -74,27 +84,17 @@ public class TRAStructureBinary implements ITRAStructure {
         }
     }
 
-    @Override
-    public void gen(World world, int x, int y, int z) {
-        for (int block : blocks) {
-            byte xC = (byte) (block >> 24);
-            byte yC = (byte) (block >> 16);
-            byte zC = (byte) (block >> 8);
-            byte structure = (byte) block;
-            IBlockState state = palette[structure];
-            if (task != null) {state = task.run(state);}
-            world.setBlockState(mutablePos.setPos(xC + x, yC + y, zC + z), state);
+    protected static class BlockInfo {
+        public final int x;
+        public final int y;
+        public final int z;
+        public final IBlockState state;
+
+        public BlockInfo(int x, int y, int z, IBlockState state) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.state = state;
         }
-        task = null;
-    }
-
-    @Override
-    public void addDisposableTask(ITRAStructureTask task) {
-        this.task = task;
-    }
-
-
-    protected static int packBytes(byte b1, byte b2, byte b3, byte b4) {
-        return (b1 << 24) | ((b2 & 0xFF) << 16) | ((b3 & 0xFF) << 8) | (b4 & 0xFF);
     }
 }

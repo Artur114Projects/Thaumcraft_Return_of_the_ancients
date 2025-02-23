@@ -3,7 +3,7 @@ package com.artur.returnoftheancients.generation.portal.base.client;
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.client.event.managers.movement.IMovementTask;
 import com.artur.returnoftheancients.client.fx.particle.ParticleAncientPortal;
-import com.artur.returnoftheancients.generation.portal.util.PortalUtil;
+import com.artur.returnoftheancients.generation.portal.util.OffsetsUtil;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,8 +15,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 @SideOnly(Side.CLIENT)
@@ -74,7 +72,7 @@ public class ClientAncientPortal {
         lBlockPos.setPos(pos);
         if (lBlockPos.getChunkX() == chunkX && blockPos.getChunkZ() == chunkZ) {
             lBlockPos.setPos(portalPos).setY(0);
-            for (BlockPos offset : PortalUtil.portalCollideOffsetsArray) {
+            for (BlockPos offset : OffsetsUtil.portalCollideOffsetsArray) {
                 lBlockPos.pushPos();
                 if (lBlockPos.add(offset).equalsXZ(pos)) {
                     lBlockPos.popPos();
@@ -102,14 +100,13 @@ public class ClientAncientPortal {
     }
 
     public void updateCollidedPlayer(EntityPlayer player) {
-        if (player.isSneaking() && !ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask(movementIds[0])) {
+        boolean hasElevator = ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask(movementIds[0]);
+        int currentY = MathHelper.floor(player.posY);
+
+        if (player.isSneaking() && !hasElevator && (player.posY - 1.5D) <= posY) {
             ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementElevator(MovementElevator.ElevatingType.DOWN, 4, 0.5F), movementIds[0]);
             particlesSpeed = 0.2D;
         }
-
-        int currentY = MathHelper.floor(player.posY);
-
-        boolean hasElevator = ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask(movementIds[0]);
 
         if (!hasElevator) {
             particlesSpeed = 0.2D;
@@ -122,7 +119,6 @@ public class ClientAncientPortal {
             ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementRetentionY(posY + 1.1), movementIds[1]);
             particlesSpeed = 0.2D;
         }
-
     }
 
     protected void addParticles(EntityPlayer player, World world) {
@@ -134,7 +130,7 @@ public class ClientAncientPortal {
                 if (blockPos.getY() >= posY || blockPos.getY() < 3) {
                     continue;
                 }
-                for (BlockPos offset : PortalUtil.portalCollideOffsetsArray) {
+                for (BlockPos offset : OffsetsUtil.portalCollideOffsetsArray) {
                     if (random.nextInt(16) == 0) {
                         blockPos.offsetAndCallRunnable(offset, offsetPos -> {
                             mc.effectRenderer.addEffect(new ParticleAncientPortal(world, offsetPos.getX() + random.nextDouble(), offsetPos.getY() + random.nextDouble(), offsetPos.getZ() + random.nextDouble(), particlesSpeed));

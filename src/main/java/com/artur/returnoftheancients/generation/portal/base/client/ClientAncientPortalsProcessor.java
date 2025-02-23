@@ -81,6 +81,11 @@ public class ClientAncientPortalsProcessor {
     }
 
     protected static ClientAncientPortal createAncientPortal(NBTTagCompound data) {
-        return new ClientAncientPortal(data);
+        switch (data.getInteger("portalTypeID")) {
+            case 0:
+                return new ClientAncientPortalNaturalGen(data);
+            default:
+                return new ClientAncientPortal(data);
+        }
     }
 }

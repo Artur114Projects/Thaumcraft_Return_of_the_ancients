@@ -2,10 +2,9 @@ package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
-import com.artur.returnoftheancients.handlers.ServerEventsHandler;
-import com.artur.returnoftheancients.main.MainR;
+import com.artur.returnoftheancients.events.ServerEventsHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -27,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class BlockTpToAncientWorld extends BaseBlock{
+public class BlockTpToAncientWorld extends BaseBlock {
 
     public static final String noCollisionNBT = "noCollisionNBT";
     protected static final AxisAlignedBB HOME_PORTAL_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D);
@@ -40,7 +39,7 @@ public class BlockTpToAncientWorld extends BaseBlock{
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        HandlerR.addForCreativeOnlyTooltip(tooltip);
+        this.addForCreativeOnlyTooltip(tooltip);
     }
 
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
@@ -69,13 +68,13 @@ public class BlockTpToAncientWorld extends BaseBlock{
         if (!entityIn.getEntityData().getBoolean(noCollisionNBT)) {
             if (entityIn instanceof EntityPlayerMP) {
                 EntityPlayerMP player = (EntityPlayerMP) entityIn;
-                List<String> ID = HandlerR.isPlayerUseUnresolvedItems(player);
+                List<String> ID = MiscHandler.isPlayerUseUnresolvedItems(player);
                 if ((ID.isEmpty() || !TRAConfigs.PortalSettings.checkItems) && (ServerEventsHandler.getDifficultyId() != 0 || !TRAConfigs.AncientWorldSettings.noPeaceful)) {
                     player.fallDistance = 0;
                     AncientPortalsProcessor.onPlayerCollidePortal(player);
                 } else {
                     if (!ID.isEmpty()) {
-                        HandlerR.sendMessageTranslate(player, Referense.MODID + ".portal.message");
+                        MiscHandler.sendMessageTranslate(player, Referense.MODID + ".portal.message");
                         player.sendMessage(new TextComponentString(ID.toString()));
                         ID.clear();
                     } else {

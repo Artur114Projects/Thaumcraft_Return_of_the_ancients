@@ -2,7 +2,6 @@ package com.artur.returnoftheancients.generation.portal;
 
 import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
-import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientTeleport;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -10,8 +9,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
 
 public class AncientPortalOpening extends AncientPortal {
 

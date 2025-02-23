@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.ancientworldgeneration.util;
 
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.ITeamTask;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
@@ -47,7 +47,7 @@ public class Team {
         players.put(player.getUniqueID(), player);
         NBTTagCompound nbt = stack.getOrCreateSubCompound(Referense.MODID);
         NBTTagCompound list = nbt.getCompoundTag("players");
-        List<String> keys = HandlerR.uuidKeySetToList(list.getKeySet());
+        List<String> keys = MiscHandler.uuidKeySetToList(list.getKeySet());
         MinecraftServer server = player.world.getMinecraftServer();
         for (String key : keys) {
             if (server != null) {
@@ -56,7 +56,7 @@ public class Team {
                 if (entity instanceof EntityPlayerMP && entity.dimension != InitDimensions.ancient_world_dim_id) {
                     EntityPlayerMP playerMP = (EntityPlayerMP) entity;
                     if (player.dimension == playerMP.dimension) {
-                        List<String> uui = HandlerR.isPlayerUseUnresolvedItems(playerMP);
+                        List<String> uui = MiscHandler.isPlayerUseUnresolvedItems(playerMP);
                         if (uui.isEmpty() || !TRAConfigs.PortalSettings.checkItems) {
                             uuids.add(id);
                             players.put(id, (EntityPlayerMP) entity);
@@ -133,7 +133,7 @@ public class Team {
         boolean flag = uuids.remove(uuid);
         if (uuids.isEmpty()) requestToDelete();
         if (flag && playerDead != null) {
-            setToAll(player -> HandlerR.sendMessageString(player, TextFormatting.RED + "Player: " + TextFormatting.AQUA + "[" + playerDead.getName() + "]" + TextFormatting.RED + " is dead :("));
+            setToAll(player -> MiscHandler.sendMessageString(player, TextFormatting.RED + "Player: " + TextFormatting.AQUA + "[" + playerDead.getName() + "]" + TextFormatting.RED + " is dead :("));
             AncientPortalsProcessor.tpToHome(playerDead);
         }
         return flag;
@@ -179,7 +179,7 @@ public class Team {
         players.forEach((key, value) -> {
             names.add(value.getName());
         });
-        players.forEach((key, value) -> HandlerR.injectNamesOnClient(names, value));
+        players.forEach((key, value) -> MiscHandler.injectNamesOnClient(names, value));
     }
     public int size() {
         return uuids.size();
@@ -294,7 +294,7 @@ public class Team {
                 }
             }
             for (EntityPlayerMP player : players) {
-                HandlerR.injectNamesOnClient(names, player);
+                MiscHandler.injectNamesOnClient(names, player);
             }
         }
 

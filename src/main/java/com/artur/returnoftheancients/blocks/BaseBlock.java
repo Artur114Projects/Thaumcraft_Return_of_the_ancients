@@ -7,9 +7,12 @@ import com.artur.returnoftheancients.util.interfaces.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.util.text.TextFormatting;
 
+import java.util.List;
 import java.util.Objects;
 
 public abstract class BaseBlock extends Block implements IHasModel {
@@ -30,6 +33,10 @@ public abstract class BaseBlock extends Block implements IHasModel {
 
     protected void setTRACreativeTab() {
         this.setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);
+    }
+
+    protected void addForCreativeOnlyTooltip(List<String> tooltip) {
+        tooltip.add(TextFormatting.RED + I18n.format("returnoftheancients.for_creative_only"));
     }
 
     @Override

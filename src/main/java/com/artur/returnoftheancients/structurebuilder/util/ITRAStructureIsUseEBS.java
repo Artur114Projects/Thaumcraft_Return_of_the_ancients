@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.util;
+package com.artur.returnoftheancients.structurebuilder.util;
 
 import net.minecraft.block.state.IBlockState;
 

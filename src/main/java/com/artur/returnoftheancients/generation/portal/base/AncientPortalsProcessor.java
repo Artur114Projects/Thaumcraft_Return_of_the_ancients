@@ -1,9 +1,9 @@
 package com.artur.returnoftheancients.generation.portal.base;
 
-import com.artur.returnoftheancients.generation.portal.AncientPortalNaturalGeneration;
+import com.artur.returnoftheancients.generation.portal.naturalgen.AncientPortalNaturalGeneration;
 import com.artur.returnoftheancients.generation.portal.AncientPortalOpening;
 import com.artur.returnoftheancients.generation.terraingen.GenLayersHandler;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -18,7 +18,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldType;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -50,7 +49,7 @@ public class AncientPortalsProcessor {
     @SubscribeEvent
     public static void eventSave(WorldEvent.Save e) {
         if (!e.getWorld().isRemote) {
-            save();
+            save(false);
         }
     }
 
@@ -85,7 +84,7 @@ public class AncientPortalsProcessor {
 
                 if (dimension == 0) {
                     NBTTagList dimList = worldData.saveData.getTagList("generatedPortals", 3);
-                    if (!HandlerR.intTagListContains(dimList, dimension)) {
+                    if (!MiscHandler.intTagListContains(dimList, dimension)) {
                         ChunkPos[] portalsPos = getAllPortalsPosOnDim(dimension);
 
                         for (ChunkPos pos : portalsPos) {
@@ -108,7 +107,7 @@ public class AncientPortalsProcessor {
     @SubscribeEvent
     public static void BreakEvent(BlockEvent.BreakEvent e) {
         for (AncientPortal portal : LOADED_PORTALS.values()) {
-            if (portal.isLoaded() && portal.isGenerated() && portal.isOnPortalRange(e.getPos())) {
+            if (portal.isGenerated() && portal.isOnPortalRange(e.getPos()) && portal.isLoaded()) {
                 portal.onBlockDestroyedInPortalArea(e);
             }
         }
@@ -123,7 +122,9 @@ public class AncientPortalsProcessor {
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
         if (server.getTickCounter() % 10 == 0) {
-            updateLoadedPortalsMap();
+            if (server.getTickCounter() % 20 == 0) {
+                updateLoadedPortalsMap();
+            }
 
             if (LOADED_PORTALS.isEmpty()) return;
             AtomicBoolean flag = new AtomicBoolean(false);
@@ -148,7 +149,7 @@ public class AncientPortalsProcessor {
                 updateLoadedPortalsMap();
                 flag.set(true);
                 TO_DELETE.clear();
-                save();
+                save(true);
             }
 
             if (flag.get()) {
@@ -169,13 +170,12 @@ public class AncientPortalsProcessor {
             return;
         }
 
-
         if (e.player.ticksExisted % 4 == 0) {
             if (e.player.getEntityData().hasKey(AncientPortal.PortalID)) {
                 NBTTagCompound data = e.player.getEntityData();
                 int i = data.getInteger(AncientPortal.PortalID);
                 if (i != -1) {
-                    AncientPortal portal = getPortal(i);
+                    AncientPortal portal = providePortal(i);
                     if (portal != null) {
                         portal.playerHasPortalIdUpdate((EntityPlayerMP) e.player);
                     }
@@ -220,12 +220,8 @@ public class AncientPortalsProcessor {
         }
     }
 
-    public static AncientPortal getPortal(int ID) {
-        return PORTALS.get(ID);
-    }
-
     public static int getFreeId() {
-        return HandlerR.foundMostSmallUniqueIntInList(new ArrayList<>(AncientPortalsProcessor.PORTALS.keySet()));
+        return MiscHandler.foundMostSmallUniqueIntInList(new ArrayList<>(AncientPortalsProcessor.PORTALS.keySet()));
     }
 
     public static AncientPortal loadPortal(MinecraftServer server, NBTTagCompound nbt) {
@@ -259,19 +255,20 @@ public class AncientPortalsProcessor {
     }
 
     // TODO: Оптимизировать, возможно убрать систему с сортировкой по измерениям
-    public static void save() {
+    public static void save(boolean needSaveForcibly) {
         long time = System.nanoTime();
         WorldData worldData = WorldData.get();
         NBTTagCompound nbt = worldData.saveData.hasKey("PortalsPack") ? worldData.saveData.getCompoundTag("PortalsPack") : null;
         boolean needSaveAll;
 
         if (!LOADED_PORTALS.isEmpty() || nbt == null) {
-            if (nbt == null) {
+            if (nbt == null || needSaveForcibly) {
                 nbt = new NBTTagCompound();
                 needSaveAll = true;
             } else {
                 needSaveAll = false;
             }
+
             Map<Integer, List<AncientPortal>> PORTAL_DIMENSIONS = new HashMap<>();
 
             for (AncientPortal portal : PORTALS.values()) {
@@ -327,7 +324,7 @@ public class AncientPortalsProcessor {
     }
 
     public static void tpToHome(EntityPlayerMP player) {
-        AncientPortal portal = PORTALS.get(player.getEntityData().getInteger(AncientPortal.PortalID));
+        AncientPortal portal = providePortal(player.getEntityData().getInteger(AncientPortal.PortalID));
         if (portal != null) {
             portal.tpToHome(player);
         } else {
@@ -374,10 +371,23 @@ public class AncientPortalsProcessor {
     public static AncientPortal getPortalOnPos(BlockPos pos) {
         for (AncientPortal portal : PORTALS.values()) {
             if (portal.isOnPortalRange(pos)) {
+                load(portal);
                 return portal;
             }
         }
         return null;
+    }
+
+    public static AncientPortal providePortal(int id) {
+        AncientPortal portal = PORTALS.get(id);
+        load(portal);
+        return portal;
+    }
+
+    public static void load(AncientPortal portal) {
+        if (!LOADED_PORTALS.containsKey(portal.id)) {
+            LOADED_PORTALS.put(portal.id, portal);
+        }
     }
 
     public static boolean hasPortalOnWorld(World world) {
@@ -391,11 +401,7 @@ public class AncientPortalsProcessor {
             return new ChunkPos(0, 0);
         }
         Optional<ChunkPos> nearestPosOptional = Arrays.stream(poss).min(Comparator.comparingInt(pos::distanceSq));
-        if (!nearestPosOptional.isPresent()) {
-            return new ChunkPos(0, 0);
-        }
-        ChunkPos nearestPos = nearestPosOptional.get();
-        return new ChunkPos(nearestPos.x, nearestPos.z);
+        return nearestPosOptional.orElseGet(() -> new ChunkPos(0, 0));
     }
 
     private static ChunkPos[] getAllPortalsPosOnDim(int dim) {

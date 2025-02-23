@@ -2,11 +2,11 @@ package com.artur.returnoftheancients.ancientworldgeneration.main.entry;
 
 import com.artur.returnoftheancients.ancientworldgeneration.genmap.AncientEntryMapProvider;
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.ancientworldgeneration.util.BuildPhase;
 import com.artur.returnoftheancients.ancientworldgeneration.genmap.util.StructureMap;
 import com.artur.returnoftheancients.ancientworldgeneration.util.interfaces.IBuild;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.misc.TRAConfigs;
@@ -365,7 +365,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
 
                         if (deformation > 0) {
                             CustomGenStructure.addTaskToFirstBuild(state -> {
-                                if (HandlerR.getChance((int) (deformation / 1.5), random)) {
+                                if (MiscHandler.getChance((int) (deformation / 1.5), random)) {
                                     if (state.getBlock().equals(BlocksTC.stoneEldritchTile)) {
                                         return BlocksTC.stoneAncient.getDefaultState();
                                     } else if (state.getBlock().equals(BlocksTC.stoneAncient)) {
@@ -403,7 +403,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                                 buildPhase.bossGen++;
                                 if (buildPhase.bossGen == 4) {
                                     CustomGenStructure.addTaskToFirstBuild(state -> {
-                                        if (HandlerR.getChance(10, random)) {
+                                        if (MiscHandler.getChance(10, random)) {
                                             if (state.getBlock().equals(BlocksTC.stoneEldritchTile)) {
                                                 return BlocksTC.stoneAncient.getDefaultState();
                                             } else if (state.getBlock().equals(BlocksTC.stoneAncient)) {

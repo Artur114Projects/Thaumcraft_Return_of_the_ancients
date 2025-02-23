@@ -13,10 +13,7 @@ import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -36,8 +33,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import thaumcraft.api.aspects.Aspect;
@@ -48,7 +43,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class HandlerR {
+public class MiscHandler {
     private static final List<String> ID = new ArrayList<>();
 
     public static int genRandomIntRange(int min, int max) {
@@ -106,7 +101,7 @@ public class HandlerR {
         int fx = (16 * x) + 5;
         int fz = (16 * z) + 5;
         if (isSetCube) {
-            GenStructure.generateStructure(world, fx, HandlerR.calculateGenerationHeight(world, fx + 3, fz + 3) + 1, fz, "ancient_portal_air_cube");
+            GenStructure.generateStructure(world, fx, MiscHandler.calculateGenerationHeight(world, fx + 3, fz + 3) + 1, fz, "ancient_portal_air_cube");
         }
         while (calculateGenerationHeight(world, fx + 3, fz + 3) > 0) {
             GenStructure.generateStructure(world, fx, calculateGenerationHeight(world, fx + 3, fz + 3) + y, fz, "ancient_portal");
@@ -229,12 +224,12 @@ public class HandlerR {
     public static void setStartUpNBT(EntityPlayerMP playerMP, boolean data) {
         NBTTagCompound dataNBT = playerMP.getEntityData();
         dataNBT.setBoolean("startUpNBT", data);
-        MainR.NETWORK.sendTo(new ClientPacketPlayerNBTData(HandlerR.createPlayerDataPacketTag("startUpNBT", data)), playerMP);
+        MainR.NETWORK.sendTo(new ClientPacketPlayerNBTData(MiscHandler.createPlayerDataPacketTag("startUpNBT", data)), playerMP);
     }
 
     public static void setTeleportingToHomeNBT(EntityPlayerMP playerMP, boolean data) {
         playerMP.getEntityData().setBoolean(AncientPortal.tpToHomeNBT, data);
-        MainR.NETWORK.sendTo(new ClientPacketPlayerNBTData(HandlerR.createPlayerDataPacketTag(AncientPortal.tpToHomeNBT, data)), playerMP);
+        MainR.NETWORK.sendTo(new ClientPacketPlayerNBTData(MiscHandler.createPlayerDataPacketTag(AncientPortal.tpToHomeNBT, data)), playerMP);
     }
 
     public static void setLoadingGuiState(EntityPlayerMP playerMP, boolean state, boolean isTeam) {
@@ -280,7 +275,6 @@ public class HandlerR {
         playerMP.sendMessage(new TextComponentString(message).setStyle(new Style().setColor(formatting)));
     }
 
-
     public static void sendAllMessageStringNoTitle(String message) {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setString("sendMessage", message);
@@ -304,56 +298,17 @@ public class HandlerR {
     }
 
     public static boolean isNumber(char c) {
-        char[] numbers = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-        for (char c1 : numbers) {
-            if (c == c1) {
-                return true;
-            }
-        }
-        return false;
+        return c < 10;
     }
 
     public static boolean isNumber(String s) {
-        char[] numbers = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
         for (int i = 0; i != s.length(); i++) {
-            boolean is = false;
-            for (char c1 : numbers) {
-                if (s.charAt(i) == c1) {
-                    is = true;
-                    break;
-                }
-            }
-            if (!is) {
+            if (s.charAt(i) != '-' && !isNumber(s.charAt(i))) {
                 return false;
             }
         }
         return true;
     }
-
-    public static final String[] defaultCountDifficultyData = new String[]{
-            "players=12, effect=invisibility, amplifier=1r0",
-            "players=12, effect=resistance, amplifier=3p4",
-            "players=12, effect=regeneration, amplifier=3p6",
-            "players=12, effect=strength, amplifier=6p",
-            "players=12, effect=fireResistance, amplifier=0",
-
-            "players=6, effect=resistance, amplifier=3p4",
-            "players=6, effect=regeneration, amplifier=3p6",
-            "players=6, effect=invisibility, amplifier=4r0",
-            "players=6, effect=strength, amplifier=6p",
-            "players=6, effect=fireResistance, amplifier=0",
-
-            "players=3, effect=resistance, amplifier=1",
-            "players=3, effect=regeneration, amplifier=1",
-            "players=3, effect=strength, amplifier=1",
-            "players=3, effect=fireResistance, amplifier=0",
-
-            "players=2, effect=resistance, amplifier=0",
-            "players=2, effect=regeneration, amplifier=0",
-            "players=2, effect=strength, amplifier=0",
-
-            "players=1, effect=speed, amplifier=1"
-    };
 
     public static void playSound(EntityPlayerMP playerMP, SoundTRA sound) {
         NBTTagCompound nbt = new NBTTagCompound();
@@ -407,6 +362,13 @@ public class HandlerR {
             return false;
         }
         return stack.getOrCreateSubCompound(Referense.MODID).getBoolean("isFull");
+    }
+
+    public static void playSoundToTargetPoint(SoundTRA sound, int dimension, BlockPos pos, double range) {
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setString("playSound", sound.NAME);
+//        nbt.setLong("soundPos", pos.toLong());
+        MainR.NETWORK.sendToAllAround(new ClientPacketMisc(nbt), new NetworkRegistry.TargetPoint(dimension, pos.getX(), pos.getY(), pos.getZ(), range));
     }
 
     public static void playSoundToTargetPoint(SoundTRA sound, int dimension, double x, double y, double z, double range) {
@@ -543,110 +505,6 @@ public class HandlerR {
         return null;
     }
 
-    public static Tuple<Integer, Integer> getTextureSize(ResourceLocation textureRL) {
-        GlStateManager.pushMatrix();
-        Minecraft.getMinecraft().getTextureManager().bindTexture(textureRL);
-        int x = GlStateManager.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
-        int y = GlStateManager.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
-        Tuple<Integer, Integer> size = new Tuple<>(x, y);
-        GlStateManager.popMatrix();
-        return size;
-    }
-
-    public static String createDescriptor(Class<?> returnValue, Class<?>... params) {
-        StringBuilder builder = new StringBuilder("(");
-        for (Class<?> clas : params) {
-            builder.append(formatDescriptor(clas));
-            builder.append(';');
-        }
-        builder.append(')');
-        builder.append(formatDescriptor(returnValue));
-        String res = builder.toString();
-        if (TRAConfigs.Any.debugMode) System.out.println("Descriptor is created {" + res + "}");
-        return res;
-    }
-
-    public static String createDescriptor(Class<?> methodClass, String methodName, Class<?>... params) {
-        Method[] methods = findMethods(methodClass, methodName);
-        if (methods.length == 0) {
-            return "null";
-        }
-
-        Method findMethod = null;
-        if (params.length == 0) {
-            findMethod = methods[0];
-        } else {
-            for (Method method : methods) {
-                if (Arrays.equals(method.getParameterTypes(), params)) {
-                    findMethod = method;
-                    break;
-                }
-            }
-            if (findMethod == null) {
-                return "null";
-            }
-        }
-
-        StringBuilder builder = new StringBuilder("(");
-        for (Class<?> clas : findMethod.getParameterTypes()) {
-            builder.append(formatDescriptor(clas));
-            builder.append(';');
-        }
-        builder.append(')');
-        builder.append(formatDescriptor(findMethod.getReturnType()));
-        String res = builder.toString();
-        if (TRAConfigs.Any.debugMode) System.out.println("Descriptor is created {" + res + "}");
-        return res;
-    }
-
-    public static String formatDescriptor(Class<?> param) {
-        if (param == boolean.class) {
-            return "Z";
-        } else if (param == byte.class) {
-            return "B";
-        } else if (param == char.class) {
-            return "C";
-        } else if (param == double.class) {
-            return "D";
-        } else if (param == float.class) {
-            return "F";
-        } else if (param == int.class) {
-            return "I";
-        } else if (param == long.class) {
-            return "J";
-        } else if (param == short.class) {
-            return "S";
-        } else if (param == void.class) {
-            return "V";
-        }
-
-        String name = param.getName();
-        if (!name.contains("[L")) {
-            name = "L" + name;
-        }
-        name = name.replaceAll("\\.", "/");
-        return name;
-    }
-
-    public static Method[] findMethods(Class<?> methodClass, String methodName) {
-        ArrayList<Method> methods = new ArrayList<>();
-        for (Method method : methodClass.getDeclaredMethods()) {
-            if (method.getName().equals(methodName)) {
-                methods.add(method);
-            }
-        }
-        Class<?> superClass = methodClass.getSuperclass();
-        while (superClass != null) {
-            for (Method method : superClass.getDeclaredMethods()) {
-                if (method.getName().equals(methodName)) {
-                    methods.add(method);
-                }
-            }
-            superClass = superClass.getSuperclass();
-        }
-        return methods.toArray(new Method[0]);
-    }
-
     public static boolean arrayContainsAny(byte[] array, byte... params) {
         for (int i : array) {
             for (int j : params) {
@@ -695,27 +553,6 @@ public class HandlerR {
     public static boolean fullCheckChunkContainsAnyOnBiomeArray(Chunk chunk, byte[] biomeArray) {
         byte[] chunkBiomeArray = chunk.getBiomeArray();
         return arrayContainsAny(chunkBiomeArray, biomeArray);
-    }
-
-    public static int elementCountOnArray(byte[] array, byte element) {
-        int ret = 0;
-        for (byte b : array) {
-            if (b == element) {
-                ret++;
-            }
-        }
-        return ret;
-    }
-
-    public static byte fastGetMostBiomeInChunk(Chunk chunk) {
-        byte[] chunkBiomeArray = chunk.getBiomeArray();
-        byte[] biomes = new byte[] {chunkBiomeArray[0], chunkBiomeArray[15 * 16], chunkBiomeArray[15 + 15 * 16], chunkBiomeArray[15]};
-        int[] biomesCount = new int[] {elementCountOnArray(biomes, biomes[0]), elementCountOnArray(biomes, biomes[1]), elementCountOnArray(biomes, biomes[2]), elementCountOnArray(biomes, biomes[3])};
-        return 0;
-    }
-
-    public static void addForCreativeOnlyTooltip(List<String> tooltip) {
-        tooltip.add(TextFormatting.RED + I18n.format("returnoftheancients.for_creative_only"));
     }
 
     public static float interpolate(float start, float end, float pct) {

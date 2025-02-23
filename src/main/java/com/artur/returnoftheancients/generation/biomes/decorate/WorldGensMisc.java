@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.generation.biomes.decorate;
 
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
@@ -14,6 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thaumcraft.api.ThaumcraftMaterials;
 import thaumcraft.api.blocks.BlocksTC;
@@ -22,6 +24,7 @@ import thaumcraft.common.blocks.BlockTC;
 import java.util.Random;
 
 public class WorldGensMisc {
+    public final WorldGenerator REMOVE_LIQUIDS = new WorldGenRemoveLiquids(InitBiome.TAINT_WASTELAND);
     public final WorldGenerator REPLACE_VISIBLE_BLOCKS = new WorldGenReplaceVisibleBlocks();
     public final WorldGenerator ADD_TAINT_FEATURE = new WorldGenAddTaintFeature();
     public final WorldGenerator INFERNAL_CIRCLE = new WorldGenInfernalCircle();
@@ -46,7 +49,7 @@ public class WorldGensMisc {
                         Material material = worldIn.getBlockState(blockPos).getMaterial();
                         Block block = worldIn.getBlockState(blockPos).getBlock();
 
-                        if (worldIn.getBlockState(blockPos).getMaterial() != ThaumcraftMaterials.MATERIAL_TAINT && !worldIn.isAirBlock(blockPos) && material != Material.SNOW && !material.isLiquid() && !(block instanceof BlockTC) && !block.hasTileEntity(state)) {
+                        if (worldIn.getBlockState(blockPos).getMaterial() != ThaumcraftMaterials.MATERIAL_TAINT && !worldIn.isAirBlock(blockPos) && material != Material.SNOW && !material.isLiquid() && !(block instanceof BlockTC) && !block.hasTileEntity(state) && block.isOpaqueCube(state)) {
                             worldIn.setBlockState(blockPos, InitBlocks.TAINT_VOID_STONE.getDefaultState());
                         }
 
@@ -73,7 +76,7 @@ public class WorldGensMisc {
                     blockPos.popPos();
                 }
             }
-            return false;
+            return true;
         }
     }
 
@@ -93,7 +96,7 @@ public class WorldGensMisc {
                     worldIn.setBlockState(blockPos.up(), Blocks.SNOW_LAYER.getDefaultState());
                 }
             }
-            return false;
+            return true;
         }
     }
 
@@ -103,7 +106,7 @@ public class WorldGensMisc {
         @Override
         public boolean generate(World worldIn, Random rand, BlockPos position) {
             blockPos.setPos(position).add(rand.nextInt(16), 0, rand.nextInt(16));
-            if (HandlerR.getBiomeIdOnPos(worldIn, blockPos) != Biome.getIdForBiome(InitBiome.TAINT_WASTELAND)) {
+            if (MiscHandler.getBiomeIdOnPos(worldIn, blockPos) != Biome.getIdForBiome(InitBiome.TAINT_WASTELAND)) {
                 return false;
             }
             genCircle(worldIn, rand, blockPos, 4 + (rand.nextInt(2) + 1));
@@ -120,7 +123,7 @@ public class WorldGensMisc {
 
                     pos.pushPos();
                     pos.add(xOffset, 0, zOffset);
-                    pos.setY(HandlerR.calculateGenerationHeight(worldIn, pos.getX(), pos.getZ()));
+                    pos.setY(MiscHandler.calculateGenerationHeight(worldIn, pos.getX(), pos.getZ()));
                     if (range1 != radius || (rand == null || rand.nextInt(4) == 0)) {
                         if (worldIn.getBlockState(pos).getMaterial() == ThaumcraftMaterials.MATERIAL_TAINT) {
                             worldIn.setBlockState(pos, InitBlocks.INCANDESCENT_TAINT_VOID_STONE.getDefaultState());
@@ -130,6 +133,38 @@ public class WorldGensMisc {
                 }
             }
         }
+    }
 
+    public static class WorldGenRemoveLiquids extends WorldGenerator {
+        private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
+        private final byte[] biomes;
+
+        public WorldGenRemoveLiquids(Biome... biomes) {
+            this.biomes = new byte[biomes.length];
+
+            for (int i = 0; i != biomes.length; i++) {
+                this.biomes[i] = (byte) (Biome.getIdForBiome(biomes[i]) & 255);
+            }
+        }
+
+        @Override
+        public boolean generate(World worldIn, Random rand, BlockPos position) {
+            if (MiscHandler.arrayContains(biomes, MiscHandler.getBiomeIdOnPos(worldIn, position))) {
+                Chunk chunk = worldIn.getChunkFromBlockCoords(position);
+
+                ExtendedBlockStorage[] blockStorages = chunk.getBlockStorageArray();
+                for (blockPos.setPos(position); worldIn.getBlockState(blockPos).getMaterial().isLiquid(); blockPos.down()) {
+                    ExtendedBlockStorage storage = blockStorages[blockPos.getY() >> 4];
+                    if (storage == null) {
+                        continue;
+                    }
+                    storage.set(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15, Blocks.AIR.getDefaultState());
+                }
+
+                chunk.markDirty();
+                return true;
+            }
+            return false;
+        }
     }
 }

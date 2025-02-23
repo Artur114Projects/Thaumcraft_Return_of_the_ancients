@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.proxy;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
 import com.artur.returnoftheancients.capabilities.PlayerTimer;
+import com.artur.returnoftheancients.capabilities.TRACapabilities;
 import com.artur.returnoftheancients.client.gui.GuiHandler;
 import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
 import com.artur.returnoftheancients.handlers.RegisterHandler;
@@ -10,7 +11,6 @@ import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.CraftingRegister;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -23,13 +23,14 @@ public class CommonProxy {
 	public void registerItemRenderer(Item item, int meta, String id) {}
 	
     public void preInit(FMLPreInitializationEvent event) {
-        PlayerTimer.preInit();
+        RegisterHandler.preInitRegistries();
         CraftingRegister.register();
-    	RegisterHandler.preInitRegistries();
+        TRACapabilities.preInit();
+        PlayerTimer.preInit();
     }
     
     public void init(FMLInitializationEvent event) {
-        NetworkRegistry.INSTANCE.registerGuiHandler(MainR.instance, new GuiHandler());
+        NetworkRegistry.INSTANCE.registerGuiHandler(MainR.INSTANCE, new GuiHandler());
         ((BiomeTaint) InitBiome.TAINT).registerBiomeP2();
         ((BiomeTaint) InitBiome.TAINT_MOUNTAINS).registerBiomeP2();
         ((BiomeTaint) InitBiome.TAINT_SEA).registerBiomeP2(InitBlocks.TAINT_VOID_STONE.getDefaultState(), InitBlocks.TAINT_VOID_STONE.getDefaultState());
@@ -43,9 +44,9 @@ public class CommonProxy {
     public void postInit(FMLPostInitializationEvent event) {
         RegisterHandler.registerStructures();
     }
-    public void serverStarting(FMLServerStartingEvent event) {
-        AncientWorld.load();
-        RegisterHandler.registerCommands(event);
-    }
 
+    public void serverStarting(FMLServerStartingEvent event) {
+        RegisterHandler.registerCommands(event);
+        AncientWorld.load();
+    }
 }

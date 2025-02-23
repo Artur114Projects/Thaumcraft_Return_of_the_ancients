@@ -1,17 +1,37 @@
 package com.artur.returnoftheancients.util;
 
 import com.artur.returnoftheancients.util.interfaces.IIsNeedWriteToNBT;
+import com.artur.returnoftheancients.util.interfaces.IReadFromNBT;
 import com.artur.returnoftheancients.util.interfaces.IWriteToNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public class ArrayListWriteToNBT<T extends IIsNeedWriteToNBT> extends ArrayList<T> implements IWriteToNBT {
+public class ArrayListWriteToNBT<T extends IIsNeedWriteToNBT> extends ArrayList<T> implements IWriteToNBT, IReadFromNBT {
     private NBTTagCompound currentTag = new NBTTagCompound();
     private boolean isChanged = true;
+    private Class<T> objClass = null;
+
+    public ArrayListWriteToNBT(Collection<? extends T> c) {
+        super(c);
+    }
+
+    public ArrayListWriteToNBT(int initialCapacity) {
+        super(initialCapacity);
+    }
+
+    public ArrayListWriteToNBT() {
+        super();
+    }
+
+    public ArrayListWriteToNBT(Class<T> objClass) {
+        this.objClass = objClass;
+    }
 
     @Override
     public boolean add(T t) {
@@ -73,5 +93,17 @@ public class ArrayListWriteToNBT<T extends IIsNeedWriteToNBT> extends ArrayList<
             isChanged = false;
         }
         return currentTag;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) throws NullPointerException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        if (objClass == null) throw new NullPointerException();
+        for (int i = 0; nbt.hasKey(String.valueOf(i)); i++) {
+            NBTTagCompound compound = nbt.getCompoundTag(String.valueOf(i));
+            Constructor<T> constructor = objClass.getDeclaredConstructor(NBTTagCompound.class);
+            constructor.setAccessible(true);
+            this.add(constructor.newInstance(compound));
+        }
+        isChanged = true;
     }
 }

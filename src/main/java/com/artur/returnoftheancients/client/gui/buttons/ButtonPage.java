@@ -1,6 +1,5 @@
 package com.artur.returnoftheancients.client.gui.buttons;
 
-import com.artur.returnoftheancients.handlers.HandlerR;
 import com.artur.returnoftheancients.handlers.RenderHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;

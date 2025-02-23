@@ -1,14 +1,14 @@
 package com.artur.returnoftheancients.generation.portal.base;
 
 import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
-import com.artur.returnoftheancients.ancientworldgeneration.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.blocks.BlockTpToAncientWorld;
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
-import com.artur.returnoftheancients.generation.portal.util.PortalUtil;
+import com.artur.returnoftheancients.generation.portal.util.OffsetsUtil;
 import com.artur.returnoftheancients.generation.portal.util.interfaces.IExplore;
-import com.artur.returnoftheancients.handlers.FreeTeleporter;
-import com.artur.returnoftheancients.handlers.HandlerR;
+import com.artur.returnoftheancients.handlers.TeleportHandler;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
@@ -97,6 +97,7 @@ public abstract class AncientPortal implements IWriteToNBT {
 
     public abstract void build();
     protected abstract int getPortalTypeID();
+
     public void update(TickEvent.ServerTickEvent e) {
         if (isExplodes && explosionList.isEmpty()) {
             explosion();
@@ -124,13 +125,13 @@ public abstract class AncientPortal implements IWriteToNBT {
 
     public void tpToHome(EntityPlayerMP player) {
         setTpToHomeNBTData(player);
-        FreeTeleporter.teleportToDimension(player, dimension, posX + 8.0D, 3, posZ + 8.0D);
+        TeleportHandler.teleportToDimension(player, dimension, posX + 8.0D, 3, posZ + 8.0D);
     }
 
     public void tpToHome(EntityPlayerMP player, boolean isTeleporting) {
         setTpToHomeNBTData(player);
         if (isTeleporting) {
-            FreeTeleporter.teleportToDimension(player, dimension, posX + 8.0D, 3, posZ + 8.0D);
+            TeleportHandler.teleportToDimension(player, dimension, posX + 8.0D, 3, posZ + 8.0D);
         } else {
             player.getEntityData().setInteger(PortalID, id);
         }
@@ -149,13 +150,14 @@ public abstract class AncientPortal implements IWriteToNBT {
             if (data.getBoolean(tpToHomeNBT)) {
                 if (isCollide(player.getPosition())) {
                     data.setBoolean(tpToHomeNBT, false);
+                    data.setBoolean(elevatingUp, true);
                     onPlayerTpToHome(player);
                 }
             }
             if (data.getBoolean(elevatingUp)) {
+                player.fallDistance = 0;
                 player.motionY += 0.5 - player.motionY;
                 if (player.posY >= posY || player.posY >= 110) {
-                    player.removePotionEffect(Objects.requireNonNull(Potion.getPotionById(15)));
                     player.fallDistance = 0;
                     data.setInteger(PortalID, -1);
                 }
@@ -165,7 +167,7 @@ public abstract class AncientPortal implements IWriteToNBT {
 
     protected static void onPlayerTpToHome(EntityPlayerMP player) {
         if (!ThaumcraftCapabilities.knowsResearchStrict(player, "DEAD")) {
-            HandlerR.researchAndSendMessage(player, "DEAD", Referense.MODID + ".text.dead");
+            MiscHandler.researchAndSendMessage(player, "DEAD", Referense.MODID + ".text.dead");
             IPlayerTimerCapability timer = TRACapabilities.getTimer(player);
             timer.createTimer("recovery");
         }
@@ -204,7 +206,7 @@ public abstract class AncientPortal implements IWriteToNBT {
         if (x >> 4 == chunkX && z >> 4 == chunkZ) {
             mPos.pushPos();
             mPos.setPos(portalPos);
-            for (BlockPos pos : PortalUtil.portalCollideOffsetsArray) {
+            for (BlockPos pos : OffsetsUtil.portalCollideOffsetsArray) {
                 mPos.pushPos();
                 mPos.add(pos);
                 if (mPos.getX() == x && mPos.getZ() == z) {
@@ -263,7 +265,7 @@ public abstract class AncientPortal implements IWriteToNBT {
         for (byte dX = 0; dX != 4; dX++) {
             for (byte dZ = 0; dZ != 4; dZ++) {
                 mPos.setPos(x + 6, 1, z + 6);
-                world.setBlockToAir(HandlerR.addToMutableBP(mPos, dX, 0, dZ));
+                world.setBlockToAir(MiscHandler.addToMutableBP(mPos, dX, 0, dZ));
             }
         }
 
@@ -272,25 +274,25 @@ public abstract class AncientPortal implements IWriteToNBT {
             int p2offsetX = 0;
             int p2offsetZ = 0;
             if (i == 0) {
-                HandlerR.addToMutableBP(mPos, 5, 0, 7);
+                MiscHandler.addToMutableBP(mPos, 5, 0, 7);
                 p2offsetZ = 1;
             } else if (i == 1) {
-                HandlerR.addToMutableBP(mPos, 10, 0, 7);
+                MiscHandler.addToMutableBP(mPos, 10, 0, 7);
                 p2offsetZ = 1;
             } else if (i == 2) {
-                HandlerR.addToMutableBP(mPos, 7, 0, 5);
+                MiscHandler.addToMutableBP(mPos, 7, 0, 5);
                 p2offsetX = 1;
             } else {
-                HandlerR.addToMutableBP(mPos, 7, 0, 10);
+                MiscHandler.addToMutableBP(mPos, 7, 0, 10);
                 p2offsetX = 1;
             }
             for (byte j = 0; j != 2; j++) {
                 mPos.setPos(mPos.getX(), 0, mPos.getZ());
                 if (j == 1) {
-                    HandlerR.addToMutableBP(mPos, p2offsetX, 0, p2offsetZ);
+                    MiscHandler.addToMutableBP(mPos, p2offsetX, 0, p2offsetZ);
                 }
                 for (int y = 0; y != posY; y++) {
-                    world.setBlockState(HandlerR.addToMutableBP(mPos, 0, 1, 0), BlocksTC.stoneArcane.getDefaultState());
+                    world.setBlockState(MiscHandler.addToMutableBP(mPos, 0, 1, 0), BlocksTC.stoneArcane.getDefaultState());
                 }
             }
         }

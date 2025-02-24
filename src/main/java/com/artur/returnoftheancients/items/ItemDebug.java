@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.items;
 
 
+import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
 import com.artur.returnoftheancients.client.audio.RepeatingSound;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
@@ -111,6 +112,12 @@ public class ItemDebug extends BaseItem {
 //			}
 		}
 		if (!worldIn.isRemote) {
+//			if (player.isSneaking()) {
+//				BlockProtectHandler.protect(worldIn, pos);
+//			} else {
+//				BlockProtectHandler.unProtect(worldIn, pos);
+//			}
+
 //			Class<?> clas = AncientPortalNaturalGeneration.class.getDeclaredClasses()[1];
 //			player.sendMessage(new TextComponentString(clas.getName()));
 //			player.sendMessage(new TextComponentString(AncientPortalNaturalGeneration.class.getDeclaredClasses().length + ""));

@@ -51,8 +51,8 @@ public class ParticleBlockProtect extends ParticleBase<ParticleAtlasSprite> {
             float scale = 1.0F * this.particleScale;
 
             int l = this.getBrightnessForRender(partialTicks);
-            int j = 160;
-            int k = 240;
+            int j = l >> 16 & 65535;
+            int k = l & 65535;
 
             buffer.pos(x + renderFacingOffsets[0].x * scale, y + renderFacingOffsets[0].y * scale, z + renderFacingOffsets[0].z * scale).tex(endU, endV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(j, k).endVertex();
             buffer.pos(x + renderFacingOffsets[1].x * scale, y + renderFacingOffsets[1].y * scale, z + renderFacingOffsets[1].z * scale).tex(endU, startV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(j, k).endVertex();

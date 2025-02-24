@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.generation.portal.naturalgen;
 
+import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
 import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.generation.portal.util.OffsetsUtil;
@@ -11,7 +12,9 @@ import com.artur.returnoftheancients.tileentity.TileEntityAncientSanctuaryContro
 import com.artur.returnoftheancients.util.TerrainAnalyzer;
 import com.artur.returnoftheancients.util.interfaces.IIsNeedWriteToNBT;
 import com.artur.returnoftheancients.util.interfaces.IWriteToNBT;
+import com.artur.returnoftheancients.util.interfaces.RunnableWithParam;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -30,11 +33,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AncientSanctuary implements IIsNeedWriteToNBT {
+    private final Block nitorBlock = BlocksTC.nitor.get(EnumDyeColor.BLACK);
     private AncientPortalNaturalGeneration portal = null;
     private TileEntityAncientSanctuaryController tile;
     private boolean isBuild = false;
     private boolean needSave = true;
-    private boolean active = true;
+    private boolean active = false;
     private final ChunkPos pos;
     private final World world;
     private BlockPos tilePos;
@@ -72,6 +76,7 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
         } else {
             GenStructure.generateStructure(world, blockPos.getX(), blockPos.addY(2).getY(), blockPos.getZ(), type.getStructureName());
         }
+        CustomGenStructure.protect(world, blockPos, type.getStructureName());
 
         if (!type.isBroken()) {
             blockPos.pushPos();
@@ -87,6 +92,7 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
 
             for (blockPos.add(offset); (world.isAirBlock(blockPos) || world.getBlockState(blockPos).getMaterial().isLiquid()); blockPos.down()) {
                 world.setBlockState(blockPos, BlocksTC.stoneEldritchTile.getDefaultState());
+                BlockProtectHandler.protect(world, blockPos);
             }
 
             blockPos.popPos();
@@ -150,13 +156,20 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
     }
 
     public void onTileStateChanged(boolean state) {
-        ServerEventsHandler.TIMER_TASKS_MANAGER.addTask(19, () -> {
+        ServerEventsHandler.TIMER_TASKS_MANAGER.addTask(29, () -> {
             ServerEventsHandler.SHORT_CHUNK_LOAD_MANAGER.loadArea(world, portal.portalPos, 1);
             ServerEventsHandler.SHORT_CHUNK_LOAD_MANAGER.loadArea(world, pos, 1);
             ServerEventsHandler.TIMER_TASKS_MANAGER.addTask(1, () -> {
                 this.updateActiveState(state);
                 this.portal.updateActiveState(state);
-                world.playSound(null, tilePos.add(0, 2, 0), InitSounds.RUI_DEAD.SOUND, SoundCategory.AMBIENT, 1, 1);
+
+                UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+                this.world.playSound(null, blockPos.setPos(tilePos).add(0, 2, 0), InitSounds.ANCIENT_PORTAL_LIGHT_ON.SOUND, SoundCategory.AMBIENT, 1, 1);
+
+                blockPos.setPos(portal.portalPos).setY(portal.posY + 10);
+                blockPos.offsetAndCallRunnable(OffsetsUtil.getCornerOffsets(2, 13), pos -> this.world.playSound(null, pos, InitSounds.ANCIENT_PORTAL_LIGHT_ON.SOUND, SoundCategory.AMBIENT, 1, 1));
+
+                UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
             });
         });
     }
@@ -166,38 +179,59 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
             return;
         }
 
-        IBlockState state = newState ? BlocksTC.nitor.get(EnumDyeColor.BLACK).getDefaultState() : Blocks.AIR.getDefaultState();
+        this.setLightState(newState);
 
+        this.active = newState;
+        this.needSave = true;
+    }
+
+    private void setLightState(boolean state) {
+        if (state) {
+            this.enableLight();
+        } else {
+            this.disableLight();
+        }
+    }
+
+    public void enableLight() {
+        this.callRunnableOnLightOffsets(pos -> {
+            if (world.isAirBlock(pos)) {
+                world.setBlockState(pos, nitorBlock.getDefaultState());
+                BlockProtectHandler.protect(world, pos);
+            }
+        });
+    }
+
+    public void disableLight() {
+        this.callRunnableOnLightOffsets(pos -> {
+            if (world.getBlockState(pos).getBlock() == nitorBlock) {
+                world.setBlockToAir(pos);
+                BlockProtectHandler.unProtect(world, pos);
+            }
+        });
+    }
+
+    private void callRunnableOnLightOffsets(RunnableWithParam<UltraMutableBlockPos> run) {
         UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
 
         blockPos.setPos(tilePos).addY(2);
-
-        for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-            blockPos.offsetAndCallRunnable(facing, (pos) -> world.setBlockState(pos, state));
-        }
+        blockPos.offsetAndCallRunnable(EnumFacing.HORIZONTALS, run);
 
         BlockPos[] backLights = OffsetsUtil.getCornerOffsets(3, 11);
 
         blockPos.setPos(pos);
-
         for (int i = 0; i != 2; i++) {
             int y;
-
             if (i == 0) {
                 y = tilePos.getY() - 1;
             } else {
                 y = tilePos.getY() + 2;
             }
-
             blockPos.setY(y);
-
-            blockPos.offsetAndCallRunnable(backLights, pos -> world.setBlockState(pos, state));
+            blockPos.offsetAndCallRunnable(backLights, run);
         }
 
         UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
-
-        this.active = newState;
-        this.needSave = true;
     }
 
     protected Type getType() {

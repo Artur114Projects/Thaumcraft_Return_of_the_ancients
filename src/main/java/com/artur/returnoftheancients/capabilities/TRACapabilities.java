@@ -1,12 +1,15 @@
 package com.artur.returnoftheancients.capabilities;
 
 import com.artur.returnoftheancients.blockprotect.IProtectedChunk;
+import com.artur.returnoftheancients.blockprotect.client.ClientProtectedChunk;
 import com.artur.returnoftheancients.blockprotect.server.IServerProtectedChunk;
 import com.artur.returnoftheancients.blockprotect.server.ServerProtectedChunk;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -46,7 +49,7 @@ public class TRACapabilities {
 
                 ((IServerProtectedChunk) instance).deserializeNBT((NBTTagCompound) nbt);
             }
-        }, ServerProtectedChunk::new);
+        }, () -> new ServerProtectedChunk(new ChunkPos(0, 0), 0));
 
     }
 }

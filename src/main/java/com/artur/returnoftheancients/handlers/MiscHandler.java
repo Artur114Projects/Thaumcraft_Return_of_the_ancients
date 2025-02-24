@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -580,5 +581,13 @@ public class MiscHandler {
         }
 
         return false;
+    }
+
+    public static long chunkPosAsLong(ChunkPos chunkPos) {
+        return ((long) chunkPos.x << 32) | chunkPos.z;
+    }
+
+    public static ChunkPos chunkPosFromLong(long data) {
+        return new ChunkPos((int) (data >> 32), (int) data);
     }
 }

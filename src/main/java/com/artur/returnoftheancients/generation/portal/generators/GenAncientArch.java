@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.generation.portal.generators;
 
+import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.state.IBlockState;
@@ -256,7 +257,7 @@ public class GenAncientArch { // TODO: Улучшить!
             generatedBlocks.clear();
 
             for (Tuple<BlockPos, IBlockState> tuple : localBlocks) {
-                world.setBlockToAir(tuple.getFirst());
+                setBlockToAir(tuple.getFirst());
 
                 blockPos.setPos(tuple.getFirst()).addY(-yOffset).addY(toY);
                 setBlockState(blockPos, tuple.getSecond());
@@ -321,7 +322,13 @@ public class GenAncientArch { // TODO: Улучшить!
 
         private void setBlockState(BlockPos pos, IBlockState state) {
             generatedBlocks.add(new Tuple<>(pos.toImmutable(), state));
+            BlockProtectHandler.protect(world, pos);
             world.setBlockState(pos, state);
+        }
+
+        private void setBlockToAir(BlockPos pos) {
+            BlockProtectHandler.unProtect(world, pos);
+            world.setBlockToAir(pos);
         }
     }
 
@@ -372,7 +379,7 @@ public class GenAncientArch { // TODO: Улучшить!
                 segment.move();
             }
 
-            if ((!hasSupport(0) || !hasSupport(length - 1) && length > 16)) {
+            if (((!hasSupport(0) || !hasSupport(length - 1)) && length > 16)) {
                 ArchChunkBuilder builder = new ArchChunkBuilder(world, archSegments, terrainHeightArray);
                 List<ArchChunk> archChunks = new ArrayList<>();
                 boolean building = false;

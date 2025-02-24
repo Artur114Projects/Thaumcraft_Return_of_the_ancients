@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.generation.portal.naturalgen;
 
+import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
 import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
@@ -10,7 +11,9 @@ import com.artur.returnoftheancients.util.ArrayListWriteToNBT;
 import com.artur.returnoftheancients.util.TerrainAnalyzer;
 import com.artur.returnoftheancients.util.context.MethodContext;
 import com.artur.returnoftheancients.util.context.MethodParams4;
+import com.artur.returnoftheancients.util.interfaces.RunnableWithParam;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -29,16 +32,17 @@ import java.util.List;
 import java.util.Random;
 
 
-// TODO: 22.02.2025 Сделать защиту чтобы игрок не мог ломать блоки
 // TODO: 22.02.2025 Сделать так чтобы заражение не заражало древний камень
 // TODO: 22.02.2025 Доделать структуры
 // TODO: 22.02.2025 Сделать сломанные контролеры святилища
+// TODO: 25.02.2025 Сделать исследования
 public class AncientPortalNaturalGeneration extends AncientPortal {
     private static final int portalSize = 16;
 
     private ArrayListWriteToNBT<AncientSanctuary> sanctuaries;
     private final PortalGenManager genManager;
-    private boolean isActive = true;
+    private final LightManager lightManager;
+    private boolean isActive = false;
 
     public AncientPortalNaturalGeneration(MinecraftServer server, int dimension, int chunkX, int chunkZ) {
         super(server, dimension, chunkX, chunkZ, 0, AncientPortalsProcessor.getFreeId());
@@ -46,6 +50,8 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
         this.genManager = new PortalGenManager(this, portalSize, 8);
 
         this.posY = genManager.getPortalY();
+
+        this.lightManager = new LightManager(this);
     }
 
     public AncientPortalNaturalGeneration(MinecraftServer server, NBTTagCompound nbt) {
@@ -67,6 +73,8 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
                 this.explosion();
             }
         }
+
+        this.lightManager = new LightManager(this);
     }
 
     public AncientSanctuary getNotBrokenSanctuary() {
@@ -88,69 +96,23 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
             return;
         }
 
-        IBlockState state = newState ? BlocksTC.nitor.get(EnumDyeColor.BLACK).getDefaultState() : Blocks.AIR.getDefaultState();
-        IBlockState capState = !newState ? BlocksTC.stoneEldritchTile.getDefaultState() : Blocks.AIR.getDefaultState();
-
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
-
-        blockPos.setPos(portalPos).setY(posY);
-
-        blockPos.offsetAndCallRunnable(OffsetsUtil.portalCollideOffsetsArray, (pos) -> world.setBlockState(pos, capState));
-
-        blockPos.pushPos();
-        world.setBlockState(blockPos.add(7, 10, 8), state);
-        world.setBlockState(blockPos.add(1, 0, -1), state);
-        blockPos.popPos();
-
-        BlockPos[] lightOffsets = OffsetsUtil.getCornerOffsets(2, 13);
-
-        blockPos.pushPos();
-        for (int i = 0; i != 2; i++) {
-            int y;
-            if (i == 0) {
-                y = posY + 1;
-            } else {
-                y = posY + 10;
-            }
-            blockPos.setY(y);
-
-            blockPos.offsetAndCallRunnable(lightOffsets, pos -> world.setBlockState(pos, state));
-        }
-        blockPos.popPos();
-
-        blockPos.pushPos();
-        blockPos.addY(11).offsetAndCallRunnable(OffsetsUtil.getCornerOffsets(0, 15), pos -> world.setBlockState(pos, state));
-        blockPos.popPos();
-
-        blockPos.pushPos();
-        for (int i = 0; i != 3; i++) {
-            int range;
-            int y;
-
-            switch (i) {
-                case 0:
-                    y = posY + 4;
-                    range = 0;
-                    break;
-                case 1:
-                    y = posY + 13;
-                    range = 4;
-                    break;
-                default:
-                    y = posY + 14;
-                    range = 3;
-                    break;
-            }
-
-            blockPos.setY(y);
-            blockPos.offsetAndCallRunnable(OffsetsUtil.portalLightOffsets[range], pos -> world.setBlockState(pos, state));
-        }
-        blockPos.popPos();
-
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        this.setCapState(newState);
+        this.lightManager.setLightState(newState);
 
         this.isActive = newState;
         this.requestToUpdateOnClient();
+    }
+
+    private void setCapState(boolean state) {
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+
+        blockPos.setPos(portalPos).setY(posY);
+        blockPos.offsetAndCallRunnable(OffsetsUtil.portalCollideOffsetsArray, (pos) -> {
+            world.setBlockState(pos, state ? Blocks.AIR.getDefaultState() : BlocksTC.stoneEldritchTile.getDefaultState());
+            BlockProtectHandler.setProtectState(world, pos, !state);
+        });
+
+        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
     }
 
     @Override
@@ -215,7 +177,6 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
         return 0;
     }
 
-    // TODO: Оптимизировать!
     private boolean isAnyChunkOnRangeLoaded(int range) {
         for (int x = chunkX - range; x != chunkX + range + 1; x++) {
             for (int z = chunkZ - range; z != chunkZ + range + 1; z++) {
@@ -296,6 +257,8 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
             blockPos.pushPos();
             basePosForArch[3] = blockPos.add(7, 0, 15).setWorldY(world).addY(-1).toImmutable();
             blockPos.popPos();
+
+            BlockProtectHandler.protectAllBlocksOnChunk(world, portal.portalPos, BlocksTC.stoneEldritchTile, BlocksTC.stoneAncient, BlocksTC.nitor.get(EnumDyeColor.BLACK));
         }
 
         private void genSanctuary() {
@@ -413,6 +376,115 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
                 new BlockPos(10, 0, 12),
                 new BlockPos(12, 0, 10),
             };
+        }
+    }
+
+    public static class LightManager {
+        private final Block nitorBlock = BlocksTC.nitor.get(EnumDyeColor.BLACK);
+        private final ChunkPos portalPos;
+        private final World world;
+        private final int portalY;
+
+        private LightManager(AncientPortalNaturalGeneration portal) {
+            this.portalPos = portal.portalPos;
+            this.portalY = portal.posY;
+            this.world = portal.world;
+        }
+
+        private void setLightState(boolean state) {
+            if (state) {
+                this.enableLight();
+            } else {
+                this.disableLight();
+            }
+        }
+
+        public void disableLight() {
+            this.callRunnableInLightOffsets((pos) -> {
+                if (world.getBlockState(pos).getBlock() == nitorBlock) {
+                    world.setBlockToAir(pos);
+                    BlockProtectHandler.unProtect(world, pos);
+                }
+            });
+        }
+
+        public void enableLight() {
+            this.callRunnableInLightOffsets((pos) -> {
+                if (world.isAirBlock(pos)) {
+                    world.setBlockState(pos, nitorBlock.getDefaultState());
+                    BlockProtectHandler.protect(world, pos);
+                }
+            });
+        }
+
+        private void callRunnableInLightOffsets(RunnableWithParam<UltraMutableBlockPos> run) {
+            UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+
+            blockPos.setPos(portalPos).setY(portalY);
+
+            this.center2Offsets(blockPos, run);
+            this.inside4CornerOffsets(blockPos, run);
+            this.outside4CornerOffsets(blockPos, run);
+            this.base24LightOffsets(blockPos, run);
+
+            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        }
+
+        private void center2Offsets(UltraMutableBlockPos pos, RunnableWithParam<UltraMutableBlockPos> run) {
+            pos.pushPos();
+            run.run(pos.add(7, 10, 8));
+            run.run(pos.add(1, 0, -1));
+            pos.popPos();
+        }
+
+        private void inside4CornerOffsets(UltraMutableBlockPos pos, RunnableWithParam<UltraMutableBlockPos> run) {
+            pos.pushPos();
+            BlockPos[] lightOffsets = OffsetsUtil.getCornerOffsets(2, 13);
+            for (int i = 0; i != 2; i++) {
+                int y;
+                if (i == 0) {
+                    y = portalY + 1;
+                } else {
+                    y = portalY + 10;
+                }
+                pos.setY(y);
+
+                pos.offsetAndCallRunnable(lightOffsets, run);
+            }
+            pos.popPos();
+        }
+
+        private void outside4CornerOffsets(UltraMutableBlockPos pos, RunnableWithParam<UltraMutableBlockPos> run) {
+            pos.pushPos();
+            pos.addY(11).offsetAndCallRunnable(OffsetsUtil.getCornerOffsets(0, 15), run);
+            pos.popPos();
+        }
+
+        private void base24LightOffsets(UltraMutableBlockPos pos, RunnableWithParam<UltraMutableBlockPos> run) {
+            pos.pushPos();
+            for (int i = 0; i != 3; i++) {
+                int range;
+                int y;
+
+                switch (i) {
+                    case 0:
+                        y = portalY + 4;
+                        range = 0;
+                        break;
+                    case 1:
+                        y = portalY + 13;
+                        range = 4;
+                        break;
+                    default:
+                        y = portalY + 14;
+                        range = 3;
+                        break;
+                }
+
+                pos.setY(y);
+                pos.offsetAndCallRunnable(OffsetsUtil.portalLightOffsets[range], run);
+            }
+            pos.popPos();
         }
     }
 }

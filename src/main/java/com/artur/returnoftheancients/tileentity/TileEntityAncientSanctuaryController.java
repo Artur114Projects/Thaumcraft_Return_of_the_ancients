@@ -4,15 +4,20 @@ import com.artur.returnoftheancients.generation.portal.naturalgen.AncientPortalN
 import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.generation.portal.naturalgen.AncientSanctuary;
+import com.artur.returnoftheancients.init.InitSounds;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import thaumcraft.common.lib.SoundsTC;
 
+// TODO: 25.02.2025 Сделать звук процесса закрытия
 public class TileEntityAncientSanctuaryController extends TileEntity implements ITickable {
     private @Nullable AncientSanctuary sanctuary = null;
     private final int maxDoorMovingProgress = 40;
@@ -20,7 +25,18 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
     private int doorMovingOrientation = -1;
     private int doorMovingProgress = 0;
     private boolean hasItem = false;
+    private int openTimer = 0;
 
+
+    private void onSateChanged(boolean state) {
+        if (sanctuary != null) {
+            sanctuary.onTileStateChanged(state);
+        }
+
+        SoundEvent sound = state ? InitSounds.ANCIENT_CONTROLLER_ACTIVATE.SOUND : InitSounds.ANCIENT_CONTROLLER_DEACTIVATE.SOUND;
+
+        this.world.playSound(null, pos, sound, SoundCategory.BLOCKS, 1, 1);
+    }
 
     public void bindSanctuary(AncientSanctuary sanctuary) {
         this.sanctuary = sanctuary;
@@ -35,18 +51,21 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
     }
 
     public void setHasItem(boolean in) {
-        hasItem = in;
+        this.hasItem = in;
     }
 
     public void open() {
         if (isClose()) {
-            doorMovingOrientation = -1;
+            this.openTimer = 40;
+            if (!world.isRemote) {
+                this.onSateChanged(false);
+            }
         }
     }
 
     public void close() {
         if (isOpen()) {
-            doorMovingOrientation = 1;
+            this.doorMovingOrientation = 1;
         }
     }
     public boolean isOpen() {
@@ -54,11 +73,11 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
     }
 
     private boolean isPrevClose() {
-        return prevDoorMovingProgress == maxDoorMovingProgress;
+        return prevDoorMovingProgress == maxDoorMovingProgress && openTimer == 0;
     }
 
     public boolean isClose() {
-        return doorMovingProgress == maxDoorMovingProgress;
+        return doorMovingProgress == maxDoorMovingProgress && openTimer == 0;
     }
 
     @SideOnly(Side.CLIENT)
@@ -70,6 +89,15 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
 
     @Override
     public void update() {
+        if (openTimer > 0) {
+            openTimer--;
+            if (openTimer == 0) {
+                this.doorMovingOrientation = -1;
+            } else {
+                return;
+            }
+        }
+
         prevDoorMovingProgress = doorMovingProgress;
 
         doorMovingProgress += doorMovingOrientation;
@@ -77,13 +105,7 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
 
         if (!world.isRemote) {
             if (isDone() && !isPrevClose()) {
-                if (sanctuary != null) {
-                    sanctuary.onTileStateChanged(true);
-                }
-            } else if (isPrevClose() && !isDone()) {
-                if (sanctuary != null) {
-                    sanctuary.onTileStateChanged(false);
-                }
+                this.onSateChanged(true);
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.structurebuilder;
 
+import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
 import com.artur.returnoftheancients.structurebuilder.util.ITRAStructure;
 import com.artur.returnoftheancients.structurebuilder.util.ITRAStructureTask;
 import com.artur.returnoftheancients.referense.Referense;
@@ -55,6 +56,15 @@ public class TRAStructure implements ITRAStructure {
     public void gen(World world, int x, int y, int z) {
         for (BlockInfo block : blocks) {
             world.setBlockState(mutablePos.setPos(block.x + x, block.y + y, block.z + z), block.state);
+        }
+    }
+
+    @Override
+    public void protect(World world, int x, int y, int z) {
+        for (BlockInfo block : blocks) {
+            if (block.state.getBlock() != Blocks.AIR) {
+                BlockProtectHandler.protect(world, mutablePos.setPos(block.x + x, block.y + y, block.z + z));
+            }
         }
     }
 

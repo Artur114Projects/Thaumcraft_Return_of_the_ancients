@@ -22,7 +22,7 @@ public interface IWriteToNBT {
         return list;
     }
 
-    static <T> List<T> initObjectsAsNBTList(NBTTagList list, Class<T> objClass) throws NullPointerException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    static <T extends ICanConstructInNBT> List<T> initObjectsAsNBTList(NBTTagList list, Class<T> objClass) throws NullPointerException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         if (list == null || objClass == null) {
             throw new NullPointerException();
         }

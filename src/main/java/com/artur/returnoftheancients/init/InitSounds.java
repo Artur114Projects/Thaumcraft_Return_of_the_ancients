@@ -27,6 +27,9 @@ public class InitSounds {
     public static SoundTRA FIRE_TRAP_SOUND = create("fire_trap_sound");
     public static SoundTRA PORTAL_HEARTBEAT = create("portal_heart_beat");
     public static SoundTRA FIRE_TRAP_START_SOUND = create("fire_trap_sound_start");
+    public static SoundTRA ANCIENT_PORTAL_LIGHT_ON = create("ancient_portal_light_on");
+    public static SoundTRA ANCIENT_CONTROLLER_ACTIVATE = create("ancient_controller_activate");
+    public static SoundTRA ANCIENT_CONTROLLER_DEACTIVATE = create("ancient_controller_deactivate");
 
     @SubscribeEvent
     public static void registerSounds(RegistryEvent.Register<SoundEvent> e) {

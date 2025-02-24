@@ -175,7 +175,7 @@ public class ServerEventsHandler {
     @SubscribeEvent
     public static void BreakEvent(BlockEvent.BreakEvent e) {
         if (e.getPlayer().dimension == ancient_world_dim_id) {
-            if (!e.getPlayer().isCreative() && !e.getState().getBlock().equals(BlocksTC.stoneArcane)) {
+            if (!e.getPlayer().isCreative() && e.getState().getBlock() != BlocksTC.stoneArcane) {
                 e.setCanceled(true);
             }
         }

@@ -86,7 +86,7 @@ public class CustomGenStructure {
             structure.gen(world, x, y, z);
             task = null;
         } else {
-            throw new RuntimeException("invalid structure name: " + name);
+            throw new IllegalArgumentException("invalid structure name: " + name);
         }
     }
 
@@ -94,12 +94,19 @@ public class CustomGenStructure {
         if (structures.containsKey(name)) {
             structures.get(name).gen(world, pos.getX(), pos.getY(), pos.getZ());
         } else {
-            throw new RuntimeException("invalid structure name: " + name);
+            throw new IllegalArgumentException("invalid structure name: " + name);
         }
     }
 
+    public static void protect(World world, BlockPos pos, String name) {
+        if (structures.containsKey(name)) {
+            structures.get(name).protect(world, pos.getX(), pos.getY(), pos.getZ());
+        } else {
+            throw new IllegalArgumentException("invalid structure name: " + name);
+        }
+    }
 
-    public static void registerOrGen(World world, int x, int y, int z, String name) {
+    public static void registerAndGen(World world, int x, int y, int z, String name) {
         if (structures.containsKey(name)) {
             structures.get(name).gen(world, x, y, z);
         } else {
@@ -120,9 +127,6 @@ public class CustomGenStructure {
         for (byte y = 0; y != chunk.getBlockStorageArray().length; y++) {
             chunk.getBlockStorageArray()[y] = Chunk.NULL_BLOCK_STORAGE;
         }
-
-        chunk.markDirty();
-        world.markBlockRangeForRenderUpdate(chunk.getPos().getBlock(0, 0, 0), chunk.getPos().getBlock(15, 255, 15));
     }
 
 

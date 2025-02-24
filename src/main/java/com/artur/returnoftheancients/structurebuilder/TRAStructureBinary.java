@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.structurebuilder;
 
+import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
 import com.artur.returnoftheancients.structurebuilder.util.ITRAStructure;
 import com.artur.returnoftheancients.structurebuilder.util.ITRAStructureTask;
 import com.artur.returnoftheancients.referense.Referense;
@@ -89,12 +90,26 @@ public class TRAStructureBinary implements ITRAStructure {
     }
 
     @Override
+    public void protect(World world, int x, int y, int z) {
+        for (int block : blocks) {
+            byte xC = (byte) (block >> 24);
+            byte yC = (byte) (block >> 16);
+            byte zC = (byte) (block >> 8);
+            byte structure = (byte) block;
+            IBlockState state = palette[structure];
+            if (state.getBlock() != Blocks.AIR) {
+                BlockProtectHandler.protect(world, mutablePos.setPos(xC + x, yC + y, zC + z));
+            }
+        }
+    }
+
+    @Override
     public void addDisposableTask(ITRAStructureTask task) {
         this.task = task;
     }
 
 
     protected static int packBytes(byte b1, byte b2, byte b3, byte b4) {
-        return (b1 << 24) | ((b2 & 0xFF) << 16) | ((b3 & 0xFF) << 8) | (b4 & 0xFF);
+        return ((b1 & 0xFF) << 24) | ((b2 & 0xFF) << 16) | ((b3 & 0xFF) << 8) | (b4 & 0xFF);
     }
 }

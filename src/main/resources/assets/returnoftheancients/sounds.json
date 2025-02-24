@@ -78,5 +78,35 @@
         "volume": 2
       }
     ]
+  },
+  "ancient_controller_activate": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "returnoftheancients:ancient_controller_activate",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  },
+  "ancient_controller_deactivate": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "returnoftheancients:ancient_controller_deactivate",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  },
+  "ancient_portal_light_on": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "returnoftheancients:ancient_portal_light_on",
+        "stream": false,
+        "volume": 1
+      }
+    ]
   }
 }

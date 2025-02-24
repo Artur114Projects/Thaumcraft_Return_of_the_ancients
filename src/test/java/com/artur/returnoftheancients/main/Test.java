@@ -1,11 +1,12 @@
 package com.artur.returnoftheancients.main;
 
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.util.EnumTextureLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -65,36 +66,22 @@ public class Test { //
 
     public static void main(String[] args) {
         System.out.println("Start!");
-//        ChunkPos[] poss = new ChunkPos[8];
-//        for (int i = 0; i != 30; i++) {
-//            AncientPortalsProcessor.initPortalsPosOnWorld(poss, i);
-//        }
-//        for (int i = 0; i < 2; ++i)
-//        {
-//            System.out.println(i);
-//        }
 
-        System.out.println(EnumTextureLocation.PARTICLE_PATH.getPathNotTextures("particle_portal"));
+        ChunkPos pos = new ChunkPos(15324, 23897);
 
-//        float[] timeArray = new float[200000];
-//        AncientEntryMapProvider.createAncientEntryMap(new Random(1234568798));
-//        for (int i = 0; i != 200000; i++) {
-//            long time = System.nanoTime();
-//            AncientEntryMapProvider.createAncientEntryMap(new Random(i));
-//            timeArray[i] = ((System.nanoTime() - time) / 1000000.0F);
-////            System.out.println("Created new map! Is took " + timeArray[i] + "ms");
-//        }
-//        float resultTime = 0;
-//        for (float f : timeArray) {
-//            resultTime += f;
-//        }
-//        resultTime /= timeArray.length;
-//        System.out.println("Is took ~" + resultTime + "ms");
-//        ChunkPos chunkPos = new ChunkPos(0, 0);
-//        long time = System.nanoTime();
-//        UltraMutableBlockPos pos = new UltraMutableBlockPos(64, 0 ,0);
-//        System.out.println("Is took " + ((System.nanoTime() - time) / 1000000.0D) + "ms");
-//        System.out.println(pos.distance(chunkPos));
+        System.out.println(MiscHandler.chunkPosFromLong(MiscHandler.chunkPosAsLong(pos)));
+    }
+
+    private static short pacArray(byte[] array) {
+        int ret = 0;
+
+        for (int i = array.length; i != 0; i--) {
+            byte b = array[i - 1];
+
+            ret |= ((b & 1) << i);
+        }
+
+        return (short) ret;
     }
 
     private static int aboba(int i, long b, boolean r, float v, double g, byte e) {
@@ -135,7 +122,7 @@ public class Test { //
         if (test > 0) {
             BlockPos playerPos = player.getPosition();
             long time = System.currentTimeMillis();
-            CustomGenStructure.registerOrGen(player.world, playerPos.getX() + 2, playerPos.getY(), playerPos.getZ(), "ancient_turn");
+            CustomGenStructure.registerAndGen(player.world, playerPos.getX() + 2, playerPos.getY(), playerPos.getZ(), "ancient_turn");
             myGenTime.add(System.currentTimeMillis() -  time);
             long time1 = System.currentTimeMillis();
             GenStructure.generateStructure(player.world, playerPos.getX() + 2, playerPos.getY() + 20, playerPos.getZ(), "ancient_turn");

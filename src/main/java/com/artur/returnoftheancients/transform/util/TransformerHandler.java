@@ -6,7 +6,8 @@ import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
-import com.artur.returnoftheancients.transform.transformers.base.MVWithDescCreator;
+import com.artur.returnoftheancients.transform.transformers.base.MVBase;
+import com.artur.returnoftheancients.util.EnumTextureLocation;
 import com.chaosthedude.naturescompass.util.BiomeSearchWorker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -14,6 +15,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -31,6 +33,10 @@ import java.util.*;
 public class TransformerHandler {
 
     /*--------------------------START TRANSFORMER METHODS--------------------------*/
+
+    public static ResourceLocation getCustomPlayerArmTex() {
+        return EnumTextureLocation.MISC_PATH.getRL("player_arm");
+    }
 
     public static void addPatchedTooltip(Item item, ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn, String text) {
         tooltip.add(TextFormatting.GREEN + "Patched with the mod: " + TextFormatting.RESET + "[" + Referense.MODID + "]" + TextFormatting.GREEN + " Patch list:");
@@ -100,7 +106,7 @@ public class TransformerHandler {
         }
     }
 
-    public static class PrimitiveOverrideVisitor extends MVWithDescCreator {
+    public static class PrimitiveOverrideVisitor extends MVBase { // TODO: 27.02.2025 Переделать
         private final String newMethodName;
         private final int loadParamsCount;
 
@@ -133,12 +139,13 @@ public class TransformerHandler {
         }
         builder.append(')');
         builder.append(formatDescriptor(returnValue));
-        String res = builder.toString();
-        if (TRAConfigs.Any.debugMode) System.out.println("Descriptor is created {" + res + "}");
-        return res;
+        if (!isPrimitive(returnValue)) {
+            builder.append(";");
+        }
+        return builder.toString();
     }
 
-    public static String createDescriptor(Class<?> methodClass, String methodName, Class<?>... params) {
+    public static String createDescriptor(Class<?> methodClass, String methodName, Class<?>... params) { // TODO: 01.03.2025 Сделать чтобы в конце парамеров метода ставилось [;] если последний парамер не примитивный.
         Method[] methods = findMethods(methodClass, methodName);
         if (methods.length == 0) {
             return "null";
@@ -166,9 +173,10 @@ public class TransformerHandler {
         }
         builder.append(')');
         builder.append(formatDescriptor(findMethod.getReturnType()));
-        String res = builder.toString();
-        if (TRAConfigs.Any.debugMode) System.out.println("Descriptor is created {" + res + "}");
-        return res;
+        if (!isPrimitive(findMethod.getReturnType())) {
+            builder.append(";");
+        }
+        return builder.toString();
     }
 
     public static String formatDescriptor(Class<?> param) {
@@ -198,6 +206,10 @@ public class TransformerHandler {
         }
         name = name.replaceAll("\\.", "/");
         return name;
+    }
+
+    public static boolean isPrimitive(Class<?> param) {
+        return formatDescriptor(param).length() == 1;
     }
 
     public static Method[] findMethods(Class<?> methodClass, String methodName) {

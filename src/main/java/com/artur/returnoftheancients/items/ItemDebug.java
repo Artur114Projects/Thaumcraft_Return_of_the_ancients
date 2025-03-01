@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.items;
 
 import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
 import com.artur.returnoftheancients.client.audio.RepeatingSound;
+import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
 import com.artur.returnoftheancients.generation.portal.naturalgen.AncientPortalNaturalGeneration;
@@ -81,6 +82,8 @@ public class ItemDebug extends BaseItem {
 ////			spawnCustomParticle(worldIn, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 0, 0.1, 0);
 //		}
 		if (worldIn.isRemote) {
+
+			ClientEventsHandler.CAMERA_FX_MANAGER.startShake(20 * 20);
 
 //			if (player.isSneaking()) {
 //				NBTTagCompound data = new NBTTagCompound();

@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.tileentity;
 
 import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
-import com.artur.returnoftheancients.client.fx.misc.CameraShake;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -89,7 +88,7 @@ public class TileEntityEldritchTrap extends TileEntity implements ITickable {
         if (phase == 2) {
             phase = 3;
             if (world.isRemote) {
-                CameraShake.startShake(4);
+
                 spawnParticles(BlocksTC.stoneAncient);
             }
             return;

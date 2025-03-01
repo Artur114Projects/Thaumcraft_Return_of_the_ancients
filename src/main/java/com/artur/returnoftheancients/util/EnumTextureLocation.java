@@ -12,7 +12,8 @@ public enum EnumTextureLocation {
     GUI_CONTAINER_PATH(Referense.MODID, "textures/gui/container"),
     GUI_GIF_PATH(Referense.MODID, "textures/gui/gif"),
     PARTICLE_PATH(Referense.MODID, "textures/particle"),
-    TC_MODELS_PATH(Thaumcraft.MODID, "textures/models");
+    TC_MODELS_PATH(Thaumcraft.MODID, "textures/models"),
+    MISC_PATH(Referense.MODID, "textures/misc");
 
     private final String modId;
     private final String path;

@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.client.event;
 
 import com.artur.returnoftheancients.client.event.managers.movement.PlayerMovementManager;
-import com.artur.returnoftheancients.client.fx.misc.CameraShake;
 import com.artur.returnoftheancients.client.event.managers.*;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -21,6 +20,7 @@ public class ClientEventsHandler {
     public static final PlayerMovementManager PLAYER_MOVEMENT_MANAGER = new PlayerMovementManager();
     public static final ThaumcraftFogFixer THAUMCRAFT_FOG_FIXER = new ThaumcraftFogFixer();
     public static final CustomRainManager CUSTOM_RAIN_MANAGER = new CustomRainManager();
+    public static final CameraFXManager CAMERA_FX_MANAGER = new CameraFXManager();
     public static final FogManager FOG_MANAGER = new FogManager();
 
 
@@ -43,6 +43,7 @@ public class ClientEventsHandler {
         PLAYER_MOVEMENT_MANAGER.tickEventClientTickEvent(e);
         PLAYER_IN_BIOME_MANAGER.tickEventClientTickEvent(e);
         CUSTOM_RAIN_MANAGER.tickEventClientTickEvent(e);
+        CAMERA_FX_MANAGER.tickEventClientTickEvent(e);
         FOG_MANAGER.tickEventClientTickEvent(e);
     }
 
@@ -50,6 +51,11 @@ public class ClientEventsHandler {
     @SideOnly(Side.CLIENT)
     public static void PlayerTickEvent(TickEvent.PlayerTickEvent e) {
         PLAYER_MOVEMENT_MANAGER.tickEventPlayerTickEvent(e);
-        CameraShake.updateShake();
+    }
+
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public static void cameraSetup(EntityViewRenderEvent.CameraSetup e) {
+        CAMERA_FX_MANAGER.entityViewRenderEventCameraSetup(e);
     }
 }

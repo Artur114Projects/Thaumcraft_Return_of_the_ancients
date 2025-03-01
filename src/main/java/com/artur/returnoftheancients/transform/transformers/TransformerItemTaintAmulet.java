@@ -1,12 +1,10 @@
 package com.artur.returnoftheancients.transform.transformers;
 
 import com.artur.returnoftheancients.transform.transformers.base.IMVInstance;
-import com.artur.returnoftheancients.transform.transformers.base.MVWithDescCreator;
+import com.artur.returnoftheancients.transform.transformers.base.MVBase;
 import com.artur.returnoftheancients.transform.transformers.base.TransformerBase;
 import com.artur.returnoftheancients.transform.util.MappingsProcessor;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
 
 public class TransformerItemTaintAmulet extends TransformerBase {
     @Override
@@ -20,24 +18,17 @@ public class TransformerItemTaintAmulet extends TransformerBase {
                 new IMVInstance() {
                     @Override
                     public MethodVisitor getInstance(MethodVisitor mv) {
-                        return new MVWithDescCreator(mv, "isEntityLivingBaseInTaintBiome") {
+                        return new MVBase(mv, "isEntityLivingBaseInTaintBiome") {
 
                             @Override
                             public void visitCode() {
                                 super.visitCode();
 
-                                mv.visitVarInsn(Opcodes.ALOAD, 0);
-                                mv.visitVarInsn(Opcodes.ALOAD, 1);
-                                mv.visitVarInsn(Opcodes.ALOAD, 2);
+                                this.loadVars("A|0", "A|1", "A|2");
 
                                 this.invokeStaticDescMethod(0);
 
-                                Label continueLabel = new Label();
-                                mv.visitJumpInsn(Opcodes.IFEQ, continueLabel);
-
-                                mv.visitInsn(Opcodes.RETURN);
-
-                                mv.visitLabel(continueLabel);
+                                this.createIfReturn(RETURN);
                             }
                         };
                     }
@@ -50,16 +41,12 @@ public class TransformerItemTaintAmulet extends TransformerBase {
                 new IMVInstance() {
                     @Override
                     public MethodVisitor getInstance(MethodVisitor mv) {
-                        return new MVWithDescCreator(mv, "addPatchedTooltip") {
+                        return new MVBase(mv, "addPatchedTooltip") {
                             @Override
                             public void visitCode() {
                                 super.visitCode();
 
-                                mv.visitVarInsn(Opcodes.ALOAD, 0);
-                                mv.visitVarInsn(Opcodes.ALOAD, 1);
-                                mv.visitVarInsn(Opcodes.ALOAD, 2);
-                                mv.visitVarInsn(Opcodes.ALOAD, 3);
-                                mv.visitVarInsn(Opcodes.ALOAD, 4);
+                                this.loadVars("A|0", "A|1", "A|2", "A|3", "A|4");
                                 mv.visitLdcInsn("This item will not work in an taint biome");
 
                                 this.invokeStaticDescMethod(0);

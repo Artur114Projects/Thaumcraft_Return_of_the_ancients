@@ -13,10 +13,12 @@ public class TransformerTRA implements IClassTransformer {
     private static final List<ITransformer> TRANSFORMERS = new ArrayList<>();
 
     static {
-        TRANSFORMERS.add(new TransformerWorld());
         TRANSFORMERS.add(new TransformerBiomeSearchWorker());
-        TRANSFORMERS.add(new TransformerTaintHelper());
         TRANSFORMERS.add(new TransformerItemTaintAmulet());
+        TRANSFORMERS.add(new TransformerEntityFluxRift());
+        TRANSFORMERS.add(new TransformerTaintHelper());
+//        TRANSFORMERS.add(new TransformerItemRender());
+        TRANSFORMERS.add(new TransformerWorld());
     }
 
     @Override

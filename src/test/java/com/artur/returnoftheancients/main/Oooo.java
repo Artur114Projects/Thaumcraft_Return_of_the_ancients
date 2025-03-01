@@ -1,7 +1,15 @@
 package com.artur.returnoftheancients.main;
 
+import net.minecraft.util.math.BlockPos;
+
 public class Oooo {
     public void meow() {
-        System.out.println(new String[] {"This item will not work in an taint biome"});
+        boolean call = false;
+
+        if (!call) {
+            return;
+        }
+
+        BlockPos p = new BlockPos(256, 256, 256);
     }
 }

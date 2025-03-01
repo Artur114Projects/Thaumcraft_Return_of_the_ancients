@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.transform.transformers.base;
 
 import org.objectweb.asm.*;
 
-public abstract class TransformerBase implements ITransformer {
+public abstract class TransformerBase implements ITransformer, Opcodes {
 
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
@@ -11,13 +11,15 @@ public abstract class TransformerBase implements ITransformer {
         ClassReader classReader = new ClassReader(basicClass);
         ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
 
-        classReader.accept(new ClassVisitor(Opcodes.ASM5, classWriter) {
+        classReader.accept(new ClassVisitor(ASM5, classWriter) {
             @Override
             public MethodVisitor visitMethod(int asses, String name, String desc, String signature, String[] exceptions) {
                 MethodVisitor mv = super.visitMethod(asses, name, desc, signature, exceptions);
                 for (IMVInstance imvInstance : getIMVInstances()) {
                     for (String target : imvInstance.getTargets()) {
-                        if (name.contains(target)) {
+                        String[] splitTarget = target.split("\\|");
+                        if (name.equals(splitTarget[0]) && (splitTarget.length == 1 || desc.equals(splitTarget[1]))) {
+                            System.out.println("Transform method [" + name + "], desc:[" + desc + "]");
                             return imvInstance.getInstance(mv);
                         }
                     }

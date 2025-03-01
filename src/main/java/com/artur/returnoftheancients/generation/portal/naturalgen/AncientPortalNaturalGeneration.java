@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Random;
 
 
-// TODO: 22.02.2025 Сделать так чтобы заражение не заражало древний камень
 // TODO: 22.02.2025 Доделать структуры
 // TODO: 22.02.2025 Сделать сломанные контролеры святилища
 // TODO: 25.02.2025 Сделать исследования
@@ -64,9 +63,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
             sanctuaries = new ArrayListWriteToNBT<>(AncientSanctuary.class);
             try {
                 sanctuaries.readFromNBT(nbt.getCompoundTag("sanctuaries"));
-                for (AncientSanctuary sanctuary : sanctuaries) {
-                    sanctuary.bindPortal(this);
-                }
+                for (AncientSanctuary sanctuary : sanctuaries) sanctuary.bindPortal(this);
             } catch (Exception e) {
                 System.out.println("It was not possible to download the portal of the ID:" + id + " disruption...");
                 e.printStackTrace(System.err);

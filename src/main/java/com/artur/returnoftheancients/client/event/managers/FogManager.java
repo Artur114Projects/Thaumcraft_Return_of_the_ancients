@@ -8,7 +8,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thaumcraft.client.lib.events.RenderEventHandler;
 
-// TODO: Добавить ожидание перед изменением тумана
+// TODO: 28.02.2025 Переписать
 @SideOnly(Side.CLIENT)
 public class FogManager {
     private final FogParams defaultFog = new FogParams(0, 0, 0, 0);

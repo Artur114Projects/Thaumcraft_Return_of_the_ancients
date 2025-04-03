@@ -45,10 +45,10 @@ public interface ITileEnergyProvider extends ITileEnergy {
     }
     default boolean can(Predicate<EnumFacing> can) {
         for (EnumFacing facing : EnumFacing.values()) {
-            if (isCanConnect(facing)) {
+            if (canConnect(facing)) {
                 BlockPos offsetPos = this.pos().offset(facing);
                 TileEntity tileRaw = this.world().getTileEntity(offsetPos);
-                if (tileRaw instanceof ITileEnergy && ((ITileEnergy) (tileRaw)).isCanConnect(facing.getOpposite())) {
+                if (tileRaw instanceof ITileEnergy && ((ITileEnergy) (tileRaw)).canConnect(facing.getOpposite())) {
                     if (can.test(facing)) {
                         return true;
                     }

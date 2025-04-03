@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.blocks;
 
-import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
+import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
 import com.artur.returnoftheancients.init.InitDimensions;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

@@ -1,8 +1,7 @@
 package com.artur.returnoftheancients.main;
 
-import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
-import com.artur.returnoftheancients.capabilities.TRACapabilities;
-import com.artur.returnoftheancients.energy.EnergySystemsProvider;
+import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
+import com.artur.returnoftheancients.energylegacy.EnergySystemsProvider;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.generation.terraingen.TerrainHandler;
 import com.artur.returnoftheancients.handlers.RegisterHandler;

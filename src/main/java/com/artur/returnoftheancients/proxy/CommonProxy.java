@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.proxy;
 
-import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
+import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
 import com.artur.returnoftheancients.capabilities.PlayerTimer;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
 import com.artur.returnoftheancients.client.gui.GuiHandler;

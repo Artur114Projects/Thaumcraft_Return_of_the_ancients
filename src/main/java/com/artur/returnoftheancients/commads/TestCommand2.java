@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.commads;
 
-import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
+import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

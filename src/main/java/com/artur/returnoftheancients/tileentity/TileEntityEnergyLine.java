@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.tileentity;
 
-import com.artur.returnoftheancients.energy.intefaces.ITileEnergy;
+import com.artur.returnoftheancients.energylegacy.intefaces.ITileEnergy;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;

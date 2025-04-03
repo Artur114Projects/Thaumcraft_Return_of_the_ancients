@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.network;
 
-import com.artur.returnoftheancients.ancientworldgeneration.main.AncientWorld;
+import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

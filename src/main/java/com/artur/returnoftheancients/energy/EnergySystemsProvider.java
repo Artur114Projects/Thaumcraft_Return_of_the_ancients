@@ -14,7 +14,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.*;
 
-@Mod.EventBusSubscriber(modid = Referense.MODID) // TODO: починить проблему с выгрузкой тайлов
+// TODO: починить проблему с выгрузкой тайлов
+// TODO: 17.03.2025 Сделать чтобы провода по которым идет энергия красиво светились 
+// TODO: 17.03.2025 Сделать новую систему энергии с случайным long id все это в capability при загрузке тайла либо создается новая система либо он добавляется в существующею, при выгрузке тайла он удаляется из системы если ситама пуста то она удаляется 
+@Mod.EventBusSubscriber(modid = Referense.MODID)
 public class EnergySystemsProvider {
 
     public static final Set<Integer> LOADED_NETWORKS = new HashSet<>();

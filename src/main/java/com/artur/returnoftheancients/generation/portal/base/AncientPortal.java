@@ -16,7 +16,6 @@ import com.artur.returnoftheancients.util.interfaces.IWriteToNBT;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -29,14 +28,11 @@ import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-// TODO: Добавить естественную генерацию портала
-// TODO: Разобраться с компасом
 // TODO: Решить не понятный баг с тем что при прерывании возвращает на портал 0
 public abstract class AncientPortal implements IWriteToNBT {
 
-    public static final String PortalID = "PortalID";
+    public static final String portalID = "PortalID";
     public static final String tpToHomeNBT = "tpToHomeNBT";
     public static final String elevatingUp = "startUpNBT";
 
@@ -119,7 +115,7 @@ public abstract class AncientPortal implements IWriteToNBT {
     }
 
     public void tpToAncientWorld(EntityPlayerMP player) {
-        player.getEntityData().setInteger(PortalID, id);
+        player.getEntityData().setInteger(portalID, id);
         AncientWorld.tpToAncientWorld(player);
     }
 
@@ -133,7 +129,7 @@ public abstract class AncientPortal implements IWriteToNBT {
         if (isTeleporting) {
             TeleportHandler.teleportToDimension(player, dimension, posX + 8.0D, 3, posZ + 8.0D);
         } else {
-            player.getEntityData().setInteger(PortalID, id);
+            player.getEntityData().setInteger(portalID, id);
         }
     }
 
@@ -159,7 +155,7 @@ public abstract class AncientPortal implements IWriteToNBT {
                 player.motionY += 0.5 - player.motionY;
                 if (player.posY >= posY || player.posY >= 110) {
                     player.fallDistance = 0;
-                    data.setInteger(PortalID, -1);
+                    data.setInteger(portalID, -1);
                 }
             }
         }

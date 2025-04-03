@@ -165,7 +165,7 @@ public class AncientWorld {
 
     @SubscribeEvent
     public static void eventSave(WorldEvent.Save e) {
-        if (!e.getWorld().isRemote && isLoad) {
+        if (!e.getWorld().isRemote && isLoad && e.getWorld().provider.getDimension() == ancient_world_dim_id) {
             save();
         }
     }

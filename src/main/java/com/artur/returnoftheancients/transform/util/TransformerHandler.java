@@ -38,6 +38,10 @@ public class TransformerHandler {
         return EnumTextureLocation.MISC_PATH.getRL("player_arm");
     }
 
+    public static int getPotionMaxStackSize() {
+        return 32;
+    }
+
     public static void addPatchedTooltip(Item item, ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn, String text) {
         tooltip.add(TextFormatting.GREEN + "Patched with the mod: " + TextFormatting.RESET + "[" + Referense.MODID + "]" + TextFormatting.GREEN + " Patch list:");
         String[] textArray = text.split("\n");

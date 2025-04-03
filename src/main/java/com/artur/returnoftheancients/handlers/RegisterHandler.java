@@ -80,10 +80,6 @@ public class RegisterHandler {
 
 	}
 
-	public static void preInitRegistries()
-    {
-	}
-
 	public static void registerPackets() {
 		int id = 0;
 		MainR.NETWORK.registerMessage(new ServerPacketTpToHome.HandlerTTH(), ServerPacketTpToHome.class, id++, Side.SERVER);

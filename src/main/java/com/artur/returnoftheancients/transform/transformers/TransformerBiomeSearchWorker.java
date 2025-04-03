@@ -3,7 +3,7 @@ package com.artur.returnoftheancients.transform.transformers;
 import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
 import org.objectweb.asm.*;
 
-public class TransformerBiomeSearchWorker implements ITransformer {
+public class TransformerBiomeSearchWorker implements ITransformer { // TODO: 02.03.2025 Улучшить!
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         ClassReader classReader = new ClassReader(basicClass);

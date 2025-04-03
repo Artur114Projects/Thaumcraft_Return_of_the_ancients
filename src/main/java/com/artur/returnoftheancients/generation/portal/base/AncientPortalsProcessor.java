@@ -171,9 +171,9 @@ public class AncientPortalsProcessor {
         }
 
         if (e.player.ticksExisted % 4 == 0) {
-            if (e.player.getEntityData().hasKey(AncientPortal.PortalID)) {
+            if (e.player.getEntityData().hasKey(AncientPortal.portalID)) {
                 NBTTagCompound data = e.player.getEntityData();
-                int i = data.getInteger(AncientPortal.PortalID);
+                int i = data.getInteger(AncientPortal.portalID);
                 if (i != -1) {
                     AncientPortal portal = providePortal(i);
                     if (portal != null) {
@@ -255,6 +255,7 @@ public class AncientPortalsProcessor {
     }
 
     // TODO: Оптимизировать, возможно убрать систему с сортировкой по измерениям
+    // TODO: 26.03.2025 Сделать по адекватному, чтобы сохранялся только тот мир который сохраняется.
     public static void save(boolean needSaveForcibly) {
         long time = System.nanoTime();
         WorldData worldData = WorldData.get();
@@ -324,7 +325,7 @@ public class AncientPortalsProcessor {
     }
 
     public static void tpToHome(EntityPlayerMP player) {
-        AncientPortal portal = providePortal(player.getEntityData().getInteger(AncientPortal.PortalID));
+        AncientPortal portal = providePortal(player.getEntityData().getInteger(AncientPortal.portalID));
         if (portal != null) {
             portal.tpToHome(player);
         } else {

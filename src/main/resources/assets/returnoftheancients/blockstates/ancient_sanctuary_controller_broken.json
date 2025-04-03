@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thaureturnoftheancientsmcraft:ancient_sanctuary_controller_broken",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [
+      { "model": "returnoftheancients:ancient_sanctuary_controller_broken" },
+      { "model": "returnoftheancients:ancient_sanctuary_controller_broken", "y": 90 },
+      { "model": "returnoftheancients:ancient_sanctuary_controller_broken", "y": 180 },
+      { "model": "returnoftheancients:ancient_sanctuary_controller_broken", "y": 270 }
+    ], "inventory": [{}]
+  }
+}

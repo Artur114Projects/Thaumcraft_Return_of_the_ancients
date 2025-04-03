@@ -18,6 +18,7 @@ public class TransformerTRA implements IClassTransformer {
         TRANSFORMERS.add(new TransformerEntityFluxRift());
         TRANSFORMERS.add(new TransformerTaintHelper());
 //        TRANSFORMERS.add(new TransformerItemRender());
+//        TRANSFORMERS.add(new TransformerItemPotion());
         TRANSFORMERS.add(new TransformerWorld());
     }
 

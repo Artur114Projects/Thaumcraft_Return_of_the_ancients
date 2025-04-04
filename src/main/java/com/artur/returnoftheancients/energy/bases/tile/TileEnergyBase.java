@@ -1,7 +1,10 @@
 package com.artur.returnoftheancients.energy.bases.tile;
 
+import com.artur.returnoftheancients.capabilities.TRACapabilities;
+import com.artur.returnoftheancients.energy.system.EnergySystemsManager;
 import com.artur.returnoftheancients.tileentity.TileBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,12 +29,14 @@ public abstract class TileEnergyBase extends TileBase implements ITileEnergy {
 
     @Override
     public void onLoad() {
-
+        EnergySystemsManager manager = this.world.getCapability(TRACapabilities.ENERGY_SYSTEMS_MANAGER, null);
+        if (manager != null) manager.onTileLoad(this);
     }
 
     @Override
     public void onChunkUnload() {
-
+        EnergySystemsManager manager = this.world.getCapability(TRACapabilities.ENERGY_SYSTEMS_MANAGER, null);
+        if (manager != null) manager.onTileUnload(this);
     }
 
     @Override

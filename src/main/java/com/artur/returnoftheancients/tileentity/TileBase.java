@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.tileentity;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -29,6 +30,11 @@ public abstract class TileBase extends TileEntity {
     @Override
     public void handleUpdateTag(NBTTagCompound tag) {
         this.readSyncNBT(tag);
+    }
+
+    public void syncTile(boolean render) {
+        IBlockState state = this.world.getBlockState(this.pos);
+        this.world.notifyBlockUpdate(this.pos, state, state, 2 + (render ? 4 : 0));
     }
 
     public void readSyncNBT(NBTTagCompound nbt) {}

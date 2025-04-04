@@ -7,11 +7,11 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import org.jetbrains.annotations.*;
 
 
-public class GenericCapabilityProvider<C> implements ICapabilitySerializable<NBTTagCompound> {
+public class GenericCapProviderS<C> implements ICapabilitySerializable<NBTTagCompound> {
     protected Capability<C> capability;
     protected C instance;
 
-    public GenericCapabilityProvider(C instance, Capability<C> capability) {
+    public GenericCapProviderS(C instance, Capability<C> capability) {
         this.capability = capability;
         this.instance = instance;
     }

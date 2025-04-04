@@ -1,16 +1,13 @@
 package com.artur.returnoftheancients.blockprotect.client;
 
 import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
-import com.artur.returnoftheancients.blockprotect.IProtectedChunk;
-import com.artur.returnoftheancients.capabilities.GenericCapabilityProvider;
+import com.artur.returnoftheancients.capabilities.GenericCapProviderS;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
 import com.artur.returnoftheancients.client.fx.particle.ParticleBlockProtect;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -19,7 +16,6 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import thaumcraft.api.blocks.BlocksTC;
-import thaumcraft.common.lib.SoundsTC;
 
 public class ClientBlockProtectManager {
     private final Minecraft mc = Minecraft.getMinecraft();
@@ -51,7 +47,7 @@ public class ClientBlockProtectManager {
     }
 
     public void attachCapabilitiesEventChunk(AttachCapabilitiesEvent<Chunk> e) {
-        e.addCapability(new ResourceLocation(Referense.MODID, "protected_chunk"), new GenericCapabilityProvider<>(new ClientProtectedChunk(e.getObject().getPos(), e.getObject().getWorld().provider.getDimension()), TRACapabilities.PROTECTED_CHUNK));
+        e.addCapability(new ResourceLocation(Referense.MODID, "protected_chunk"), new GenericCapProviderS<>(new ClientProtectedChunk(e.getObject().getPos(), e.getObject().getWorld().provider.getDimension()), TRACapabilities.PROTECTED_CHUNK));
     }
 
     /*--------------------------------------UTILS--------------------------------------*/

@@ -1,8 +1,11 @@
 package com.artur.returnoftheancients.blocks;
 
-import com.artur.returnoftheancients.energylegacy.block.BlockEnergyBase;
+
+import com.artur.returnoftheancients.energy.bases.block.BlockEnergyBase;
+import com.artur.returnoftheancients.energy.bases.tile.ITileEnergy;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.main.MainR;
+import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.tileentity.TileEntityEnergyLine;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -11,12 +14,16 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IRarity;
@@ -144,6 +151,28 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
     @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         super.onBlockAdded(worldIn, pos, state);
+    }
+
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!TRAConfigs.Any.debugMode) {
+            return false;
+        }
+
+        TileEntity tileRaw = worldIn.getTileEntity(pos);
+        if (!(tileRaw instanceof ITileEnergy)) {
+            return false;
+        }
+
+        ITileEnergy tile = (ITileEnergy) tileRaw;
+        playerIn.sendMessage(new TextComponentString("Network:" + tile.networkId() + " is client:" + worldIn.isRemote));
+        return true;
+    }
+
+    private boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing facing){
+        TileEntity tileOffset = world.getTileEntity(pos.offset(facing));
+        TileEntity tile = world.getTileEntity(pos);
+        return tileOffset instanceof ITileEnergy && ((ITileEnergy) (tileOffset)).canConnect(facing.getOpposite()) && tile instanceof ITileEnergy && ((ITileEnergy) (tile)).canConnect(facing);
     }
 
     private static class ItemBlockEnergyLine extends ItemBlock {

@@ -5,6 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public interface ITileEnergy {
+    default float transferEnergy(float count) {return count;}
     boolean canConnect(EnumFacing facing);
     void setNetworkId(long id);
     boolean isEnergyLine();

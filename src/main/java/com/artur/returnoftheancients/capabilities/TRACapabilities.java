@@ -4,6 +4,8 @@ import com.artur.returnoftheancients.blockprotect.IProtectedChunk;
 import com.artur.returnoftheancients.blockprotect.client.ClientProtectedChunk;
 import com.artur.returnoftheancients.blockprotect.server.IServerProtectedChunk;
 import com.artur.returnoftheancients.blockprotect.server.ServerProtectedChunk;
+import com.artur.returnoftheancients.energy.system.EnergySystemsEventsHandler;
+import com.artur.returnoftheancients.energy.system.EnergySystemsManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,6 +25,8 @@ public class TRACapabilities {
     public static final Capability<IPlayerTimerCapability> TIMER = null;
     @CapabilityInject(IProtectedChunk.class)
     public static final Capability<IProtectedChunk> PROTECTED_CHUNK = null;
+    @CapabilityInject(EnergySystemsManager.class)
+    public static final Capability<EnergySystemsManager> ENERGY_SYSTEMS_MANAGER = null;
 
 
     public static IPlayerTimerCapability getTimer(@Nonnull EntityPlayer player) {
@@ -40,7 +44,6 @@ public class TRACapabilities {
 
                 return ((IServerProtectedChunk) instance).serializeNBT();
             }
-
             @Override
             public void readNBT(Capability<IProtectedChunk> capability, IProtectedChunk instance, EnumFacing side, NBTBase nbt) {
                 if (!(instance instanceof IServerProtectedChunk) || !(nbt instanceof NBTTagCompound)) {
@@ -50,6 +53,12 @@ public class TRACapabilities {
                 ((IServerProtectedChunk) instance).deserializeNBT((NBTTagCompound) nbt);
             }
         }, () -> new ServerProtectedChunk(new ChunkPos(0, 0), 0));
-
+        CapabilityManager.INSTANCE.register(EnergySystemsManager.class, new Capability.IStorage<EnergySystemsManager>() {
+            @Nullable
+            @Override
+            public NBTBase writeNBT(Capability<EnergySystemsManager> capability, EnergySystemsManager instance, EnumFacing side) {return null;}
+            @Override
+            public void readNBT(Capability<EnergySystemsManager> capability, EnergySystemsManager instance, EnumFacing side, NBTBase nbt) {}
+        }, () -> new EnergySystemsManager(null));
     }
 }

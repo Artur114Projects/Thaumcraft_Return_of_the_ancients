@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.energylegacy.util;
+package com.artur.returnoftheancients.energy.util;
 
 import com.artur.returnoftheancients.handlers.RenderHandler;
 import com.artur.returnoftheancients.referense.Referense;
@@ -114,6 +114,14 @@ public class EnergyContainerHandler {
             output.valueChange(localCount);
             energyCount = 0;
             return localCount;
+        }
+    }
+
+    public float canTake(float count) {
+        if (energyCount - count >= 0) {
+            return count;
+        } else {
+            return this.energyCount;
         }
     }
 

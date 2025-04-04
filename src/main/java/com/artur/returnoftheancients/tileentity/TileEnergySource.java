@@ -1,12 +1,11 @@
-package com.artur.returnoftheancients.energylegacy.tile;
+package com.artur.returnoftheancients.tileentity;
 
+import com.artur.returnoftheancients.energy.bases.tile.ITileEnergyProvider;
+import com.artur.returnoftheancients.energy.bases.tile.TileEnergyBase;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 
-public class TileEnergySource extends TileEnergyProviderBase {
-    @Override
-    public boolean isCanConnect(EnumFacing facing) {
-        return true;
-    }
+public class TileEnergySource extends TileEnergyBase implements ITileEnergyProvider {
 
     @Override
     public float canAdd(float count) {
@@ -20,6 +19,11 @@ public class TileEnergySource extends TileEnergyProviderBase {
 
     @Override
     public float take(float count) {
+        return count;
+    }
+
+    @Override
+    public float canTake(float count) {
         return count;
     }
 
@@ -52,5 +56,10 @@ public class TileEnergySource extends TileEnergyProviderBase {
     @Override
     public boolean isNeedAdd() {
         return false;
+    }
+
+    @Override
+    public boolean canConnect(EnumFacing facing) {
+        return true;
     }
 }

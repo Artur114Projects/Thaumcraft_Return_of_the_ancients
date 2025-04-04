@@ -4,10 +4,10 @@ import com.artur.returnoftheancients.containers.ContainerWithPages;
 import com.artur.returnoftheancients.containers.IContainerWithPages;
 import com.artur.returnoftheancients.containers.util.AspectInputSlotsManager;
 import com.artur.returnoftheancients.containers.util.CustomCraftingGear;
-import com.artur.returnoftheancients.energylegacy.intefaces.ITileEnergyProvider;
-import com.artur.returnoftheancients.energylegacy.tile.TileEnergyProviderBase;
-import com.artur.returnoftheancients.energylegacy.util.EnergyContainerHandler;
-import com.artur.returnoftheancients.energylegacy.util.EnergyTypes;
+import com.artur.returnoftheancients.energy.bases.tile.ITileEnergyProvider;
+import com.artur.returnoftheancients.energy.bases.tile.TileEnergyBase;
+import com.artur.returnoftheancients.energy.util.EnergyContainerHandler;
+import com.artur.returnoftheancients.energy.util.EnergyTypes;
 import com.artur.returnoftheancients.generation.portal.AncientPortalOpening;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
@@ -33,7 +33,7 @@ import thaumcraft.api.items.ItemsTC;
 
 import java.util.Objects;
 
-public class TileEntityAncientTeleport extends TileEnergyProviderBase implements IAspectContainer, IEssentiaTransport, ITickable, IContainerWithPages, ITileEnergyProvider {
+public class TileEntityAncientTeleport extends TileEnergyBase implements IAspectContainer, IEssentiaTransport, ITickable, IContainerWithPages, ITileEnergyProvider {
     public static final int SIZE = 9;
 
 
@@ -316,11 +316,6 @@ public class TileEntityAncientTeleport extends TileEnergyProviderBase implements
     }
 
     @Override
-    public boolean isCanConnect(EnumFacing facing) {
-        return facing != EnumFacing.DOWN && facing != EnumFacing.UP;
-    }
-
-    @Override
     public float canAdd(float count) {
         return energyContainerHandler.canAdd(count);
     }
@@ -333,6 +328,11 @@ public class TileEntityAncientTeleport extends TileEnergyProviderBase implements
     @Override
     public float take(float count) {
         return energyContainerHandler.take(count);
+    }
+
+    @Override
+    public float canTake(float count) {
+        return energyContainerHandler.canTake(count);
     }
 
     @Override
@@ -363,5 +363,10 @@ public class TileEntityAncientTeleport extends TileEnergyProviderBase implements
     @Override
     public float maxOutput() {
         return energyContainerHandler.getMaxOutput();
+    }
+
+    @Override
+    public boolean canConnect(EnumFacing facing) {
+        return facing != EnumFacing.DOWN && facing != EnumFacing.UP;
     }
 }

@@ -1,6 +1,6 @@
-package com.artur.returnoftheancients.energylegacy.item;
+package com.artur.returnoftheancients.energy.bases.item;
 
-import com.artur.returnoftheancients.energylegacy.util.EnergyTypes;
+import com.artur.returnoftheancients.energy.util.EnergyTypes;
 import com.artur.returnoftheancients.items.BaseItem;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.resources.I18n;
@@ -27,36 +27,6 @@ public abstract class ItemEnergyBase extends BaseItem implements IEnergyContaine
     @Override
     public float getMaxEnergy() {
         return maxEnergy;
-    }
-
-    @Override
-    public float charge(ItemStack stack, float count) {
-        float energyCount = this.getEnergy(stack);
-
-        if (energyCount + count <= this.getMaxEnergy()) {
-            energyCount += count;
-            this.setEnergy(stack, energyCount);
-            return count;
-        } else {
-            float localCount = energyCount;
-            energyCount = this.getMaxEnergy();
-            this.setEnergy(stack, energyCount);
-            return this.getMaxEnergy() - localCount;
-        }
-    }
-
-    @Override
-    public float discharge(ItemStack stack, float count) {
-        float energyCount = this.getEnergy(stack);
-
-        if (energyCount - count >= 0) {
-            energyCount -= count;
-            this.setEnergy(stack, energyCount);
-            return count;
-        } else {
-            this.setEnergy(stack, 0);
-            return energyCount;
-        }
     }
 
     @Override

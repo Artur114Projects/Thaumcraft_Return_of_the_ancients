@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.blocks;
 
-import com.artur.returnoftheancients.energylegacy.block.BlockContainerEnergyBase;
+import com.artur.returnoftheancients.energy.bases.block.BlockContainerEnergyBase;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientTeleport;

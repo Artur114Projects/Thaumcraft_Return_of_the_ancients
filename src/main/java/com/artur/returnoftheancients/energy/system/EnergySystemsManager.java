@@ -37,43 +37,6 @@ public class EnergySystemsManager {
         }
     }
 
-    public void update() {
-        Iterator<EnergySystem> iterator = ENERGY_SYSTEMS.values().iterator();
-
-        while (iterator.hasNext()) {
-            EnergySystem system = iterator.next();
-
-            if (system.isEmpty()) {
-                iterator.remove();
-            }
-
-            system.update();
-        }
-    }
-
-    @Nullable
-    private List<ITileEnergy> getNeighbors(ITileEnergy tile) {
-        List<ITileEnergy> list = null;
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(tile.pos());
-        for (EnumFacing facing : EnumFacing.VALUES) {
-            if (tile.canConnect(facing)) {
-                blockPos.pushPos();
-                TileEntity tileRaw = world.getTileEntity(blockPos.offset(facing));
-                blockPos.popPos();
-                if (tileRaw instanceof ITileEnergy) {
-                    ITileEnergy neighbor = (ITileEnergy) tileRaw;
-                    if (neighbor.canConnect(facing.getOpposite())) {
-                        if (list == null) {
-                            list = new ArrayList<>(6);
-                        }
-                        list.add(neighbor);
-                    }
-                }
-            }
-        }
-        return list;
-    }
-
     public void onBlockDestroyed(ITileEnergy tile) {
         List<ITileEnergy> connectedTiles = this.getNeighbors(tile);
 
@@ -101,6 +64,43 @@ public class EnergySystemsManager {
                 ids.add(buildNetwork(tileN).id);
             }
         }
+    }
+
+    public void update(boolean isStart) {
+        Iterator<EnergySystem> iterator = ENERGY_SYSTEMS.values().iterator();
+
+        while (iterator.hasNext()) {
+            EnergySystem system = iterator.next();
+
+            if (system.isEmpty()) {
+                iterator.remove();
+            }
+
+            system.update(isStart);
+        }
+    }
+
+    @Nullable
+    private List<ITileEnergy> getNeighbors(ITileEnergy tile) {
+        List<ITileEnergy> list = null;
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(tile.pos());
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            if (tile.canConnect(facing)) {
+                blockPos.pushPos();
+                TileEntity tileRaw = world.getTileEntity(blockPos.offset(facing));
+                blockPos.popPos();
+                if (tileRaw instanceof ITileEnergy) {
+                    ITileEnergy neighbor = (ITileEnergy) tileRaw;
+                    if (neighbor.canConnect(facing.getOpposite())) {
+                        if (list == null) {
+                            list = new ArrayList<>(6);
+                        }
+                        list.add(neighbor);
+                    }
+                }
+            }
+        }
+        return list;
     }
 
     private void onBlockAdded(ITileEnergy tile) {
@@ -210,7 +210,7 @@ public class EnergySystemsManager {
                         ITileEnergy tileEnergy = (ITileEnergy) tileRaw;
 
                         if (lines.contains(tileEnergy)) continue;
-                        if (storages.contains((ITileEnergyProvider) tileEnergy)) continue;
+                        if (!tileEnergy.isEnergyLine() && storages.contains((ITileEnergyProvider) tileEnergy)) continue;
 
                         if (tileEnergy.canConnect(facing.getOpposite())) {
                             if (tileEnergy.isEnergyLine()) {
@@ -235,6 +235,6 @@ public class EnergySystemsManager {
     }
 
     private void mergeAll(EnergySystem base, Collection<Long> ids) {
-        for (long id : ids) base.merge(ENERGY_SYSTEMS.get(id));
+        for (long id : ids) if (ENERGY_SYSTEMS.containsKey(id)) base.merge(ENERGY_SYSTEMS.get(id));
     }
 }

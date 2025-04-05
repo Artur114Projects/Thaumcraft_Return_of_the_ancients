@@ -50,7 +50,6 @@ public class RegisterHandler {
 	@SubscribeEvent
 	public static void onBlockRegister(RegistryEvent.Register<Block> event) {
 		event.getRegistry().registerAll(InitBlocks.BLOCKS.toArray(new Block[0]));
-		System.out.println("Blocks is registry! " + InitBlocks.BLOCKS);
 	}
 
 	@SubscribeEvent
@@ -97,12 +96,12 @@ public class RegisterHandler {
 	public static void onModelRegister(ModelRegistryEvent event) {
 		for (Block block : InitBlocks.BLOCKS) {
 			if (block instanceof IHasModel) {
-				((IHasModel)block).registerModels();
+				((IHasModel) block).registerModels();
 			}
 		}
 		for(Item item : InitItems.ITEMS) {
 			if(item instanceof IHasModel) {
-				((IHasModel)item).registerModels();
+				((IHasModel)  item).registerModels();
 			}
 		}
 	}

@@ -1,8 +1,10 @@
 package com.artur.returnoftheancients.energy.system;
 
+import com.artur.returnoftheancients.capabilities.TRACapabilities;
 import com.artur.returnoftheancients.energy.bases.tile.ITileEnergy;
 import com.artur.returnoftheancients.energy.bases.tile.ITileEnergyProvider;
 import com.artur.returnoftheancients.handlers.CollectionsHandler;
+import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -35,6 +37,7 @@ public class EnergySystemsManager {
         if (system != null) {
             system.remove(tile);
         }
+        if (TRAConfigs.Any.debugMode) System.out.println("Unloaded tile, system id:" + tile.networkId());
     }
 
     public void onBlockDestroyed(ITileEnergy tile) {
@@ -74,6 +77,7 @@ public class EnergySystemsManager {
 
             if (system.isEmpty()) {
                 iterator.remove();
+                if (TRAConfigs.Any.debugMode) System.out.println("Removed system:" + system.id);
             }
 
             system.update(isStart);
@@ -106,6 +110,8 @@ public class EnergySystemsManager {
     private void onBlockAdded(ITileEnergy tile) {
         List<ITileEnergy> connectedTiles = this.getNeighbors(tile);
 
+        if (TRAConfigs.Any.debugMode) System.out.println("New tile!");
+
         if (connectedTiles == null) {
             this.newSystem().bindTile(tile);
             return;
@@ -131,6 +137,7 @@ public class EnergySystemsManager {
 
     private void loadTile(ITileEnergy tile) {
         this.getSystem(tile.networkId(), () -> this.newSystem(tile.networkId())).bindTile(tile);
+        if (TRAConfigs.Any.debugMode) System.out.println("Loaded tile, system id:" + tile.networkId());
     }
 
     private void addSystem(EnergySystem system) {
@@ -164,6 +171,7 @@ public class EnergySystemsManager {
     private EnergySystem newSystem(Set<ITileEnergyProvider> storages, Set<ITileEnergy> lines, long id) {
         EnergySystem system = new EnergySystem(storages, lines, id);
         this.addSystem(system);
+        if (TRAConfigs.Any.debugMode) System.out.println("New system id:" + system.id);
         return system;
     }
 
@@ -230,6 +238,8 @@ public class EnergySystemsManager {
                 }
             }
         }
+
+        if (TRAConfigs.Any.debugMode) System.out.println("Build network:" + id);
 
         return this.newSystem(storages, lines, id);
     }

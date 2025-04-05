@@ -133,7 +133,7 @@ public class EnergySystem {
         private static EnergyWayBuilder[] STACK = new EnergyWayBuilder[128];
         private static int stackHead = -1;
 
-        private static @NotNull EnergyWayBuilder getBuilderFromPoll() {
+        private synchronized static @NotNull EnergyWayBuilder getBuilderFromPoll() {
             if (stackHead != -1) {
                 EnergyWayBuilder builder = STACK[stackHead];
                 STACK[stackHead] = null;
@@ -150,13 +150,13 @@ public class EnergySystem {
             }
         }
 
-        private static EnergyWayBuilder copy(EnergyWayBuilder parent) {
+        private synchronized static EnergyWayBuilder copy(EnergyWayBuilder parent) {
             EnergyWayBuilder builder = getBuilderFromPoll();
             builder.setData(parent);
             return builder;
         }
 
-        private static void returnBuilderToPoll(@NotNull EnergyWayBuilder builder) {
+        private synchronized static void returnBuilderToPoll(@NotNull EnergyWayBuilder builder) {
             if (stackHead + 1 >= STACK.length) {
                 System.out.println("wow! poll is full!");
                 STACK = Arrays.copyOf(STACK, STACK.length * 2);
@@ -175,7 +175,7 @@ public class EnergySystem {
             return this;
         }
 
-        private @NotNull ITileEnergy getLastTile() {
+        private ITileEnergy getLastTile() {
             return this.lastTile;
         }
 
@@ -272,6 +272,11 @@ public class EnergySystem {
                 }
 
                 if (foundInputs == inputs.size()) {
+                    EnergyWayBuilder.returnBuilderToPoll(builder);
+                    continue;
+                }
+
+                if (builder.getLastTile() == null) {
                     EnergyWayBuilder.returnBuilderToPoll(builder);
                     continue;
                 }

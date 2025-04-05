@@ -15,28 +15,23 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.Objects;
 
 
-public class ClientProxy extends CommonProxy
-{
-	
+public class ClientProxy extends CommonProxy {
 	public void registerItemRenderer(Item item, int meta, String id) {
 		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(Objects.requireNonNull(item.getRegistryName()), id));
 	}
 	
     @Override
-    public void preInit(FMLPreInitializationEvent event)
-    {
+    public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
     }
 
     @Override
-    public void init(FMLInitializationEvent event)
-    {
+    public void init(FMLInitializationEvent event) {
         super.init(event);
     }
 
     @Override
-    public void postInit(FMLPostInitializationEvent event)
-    {
+    public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
     }
 }

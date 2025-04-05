@@ -16,15 +16,28 @@ public abstract class TileEnergyBase extends TileBase implements ITileEnergy {
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
         if (nbt.hasKey("networkId")) {
-            networkId = nbt.getLong("networkId");
+            this.networkId = nbt.getLong("networkId");
         }
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         NBTTagCompound compound = super.writeToNBT(nbt);
-        compound.setLong("networkId", networkId);
+        compound.setLong("networkId", this.networkId);
         return compound;
+    }
+
+    @Override
+    public NBTTagCompound writeSyncNBT(NBTTagCompound nbt) {
+        nbt.setLong("networkId", this.networkId);
+        return nbt;
+    }
+
+    @Override
+    public void readSyncNBT(NBTTagCompound nbt) {
+        if (nbt.hasKey("networkId")) {
+            this.networkId = nbt.getLong("networkId");
+        }
     }
 
     @Override
@@ -46,7 +59,7 @@ public abstract class TileEnergyBase extends TileBase implements ITileEnergy {
 
     @Override
     public long networkId() {
-        return networkId;
+        return this.networkId;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.blocks;
 
 
+import com.artur.returnoftheancients.client.render.tile.TileEntityEnergyLineRenderer;
 import com.artur.returnoftheancients.energy.bases.block.BlockEnergyBase;
 import com.artur.returnoftheancients.energy.bases.tile.ITileEnergy;
 import com.artur.returnoftheancients.init.InitItems;
@@ -19,6 +20,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -27,6 +29,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IRarity;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -115,12 +118,12 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         return state
-                .withProperty(DOWN, canConnectTo(world, pos, EnumFacing.DOWN))
-                .withProperty(UP, canConnectTo(world, pos, EnumFacing.UP))
-                .withProperty(NORTH, canConnectTo(world, pos, EnumFacing.NORTH))
-                .withProperty(SOUTH, canConnectTo(world, pos, EnumFacing.SOUTH))
-                .withProperty(WEST, canConnectTo(world, pos, EnumFacing.WEST))
-                .withProperty(EAST, canConnectTo(world, pos, EnumFacing.EAST));
+                .withProperty(UP, this.canConnectTo(world, pos, EnumFacing.UP))
+                .withProperty(DOWN, this.canConnectTo(world, pos, EnumFacing.DOWN))
+                .withProperty(WEST, this.canConnectTo(world, pos, EnumFacing.WEST))
+                .withProperty(EAST, this.canConnectTo(world, pos, EnumFacing.EAST))
+                .withProperty(NORTH, this.canConnectTo(world, pos, EnumFacing.NORTH))
+                .withProperty(SOUTH, this.canConnectTo(world, pos, EnumFacing.SOUTH));
     }
 
     @Override
@@ -167,6 +170,12 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
         ITileEnergy tile = (ITileEnergy) tileRaw;
         playerIn.sendMessage(new TextComponentString("Network:" + tile.networkId() + " is client:" + worldIn.isRemote));
         return true;
+    }
+
+    @Override
+    public void registerModels() {
+        super.registerModels();
+        ClientRegistry.bindTileEntitySpecialRenderer(this.getTileEntityClass(), new TileEntityEnergyLineRenderer());
     }
 
     private boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing facing){

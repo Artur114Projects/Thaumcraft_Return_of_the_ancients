@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.energy.bases.tile.ITileEnergy;
 import com.artur.returnoftheancients.energy.bases.tile.ITileEnergyProvider;
 import com.artur.returnoftheancients.handlers.CollectionsHandler;
 import com.artur.returnoftheancients.misc.TRAConfigs;
+import com.artur.returnoftheancients.network.ClientPacketSyncEnergySystem;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -41,6 +42,7 @@ public class EnergySystemsManager {
     }
 
     public void onBlockDestroyed(ITileEnergy tile) {
+        ClientPacketSyncEnergySystem.sendOnBlockDestroyed(tile);
         List<ITileEnergy> connectedTiles = this.getNeighbors(tile);
 
         if (connectedTiles == null) {

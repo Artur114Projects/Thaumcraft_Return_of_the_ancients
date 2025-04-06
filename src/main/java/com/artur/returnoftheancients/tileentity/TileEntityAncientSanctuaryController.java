@@ -15,7 +15,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import thaumcraft.common.lib.SoundsTC;
 
 // TODO: 25.02.2025 Сделать звук процесса закрытия
 public class TileEntityAncientSanctuaryController extends TileEntity implements ITickable {
@@ -81,7 +80,7 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
     }
 
     @SideOnly(Side.CLIENT)
-    public float getDoorMovingProgress(boolean prev) {
+    public float doorMovingProgress(boolean prev) {
         float localDoorMovingProgress = prev ? prevDoorMovingProgress : doorMovingProgress;
 
         return 1 - MathHelper.cos((float) ((Math.PI / 2) * (localDoorMovingProgress / maxDoorMovingProgress)));

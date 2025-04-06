@@ -10,6 +10,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public abstract class TileEnergyBase extends TileBase implements ITileEnergy {
+    private boolean isLoaded = false;
+    private boolean isAdded = false;
     private long networkId = -1L;
 
     @Override
@@ -29,7 +31,14 @@ public abstract class TileEnergyBase extends TileBase implements ITileEnergy {
 
     @Override
     public NBTTagCompound writeSyncNBT(NBTTagCompound nbt) {
-        nbt.setLong("networkId", this.networkId);
+        if (this.isAdded) {
+            nbt.setLong("networkId", -1L);
+        } else {
+            nbt.setLong("networkId", this.networkId);
+        }
+        nbt.setBoolean("isLoaded", this.isLoaded);
+        this.isLoaded = false;
+        this.isAdded = false;
         return nbt;
     }
 
@@ -38,12 +47,21 @@ public abstract class TileEnergyBase extends TileBase implements ITileEnergy {
         if (nbt.hasKey("networkId")) {
             this.networkId = nbt.getLong("networkId");
         }
+
+        if (nbt.getBoolean("isLoaded")) {
+            EnergySystemsManager manager = this.world.getCapability(TRACapabilities.ENERGY_SYSTEMS_MANAGER, null);
+            if (manager != null) manager.onTileLoad(this);
+        }
     }
 
     @Override
     public void onLoad() {
-        EnergySystemsManager manager = this.world.getCapability(TRACapabilities.ENERGY_SYSTEMS_MANAGER, null);
-        if (manager != null) manager.onTileLoad(this);
+        if (!this.world.isRemote) {
+            if (this.networkId == -1) this.isAdded = true;
+            EnergySystemsManager manager = this.world.getCapability(TRACapabilities.ENERGY_SYSTEMS_MANAGER, null);
+            if (manager != null) manager.onTileLoad(this);
+            this.isLoaded = true;
+        }
     }
 
     @Override

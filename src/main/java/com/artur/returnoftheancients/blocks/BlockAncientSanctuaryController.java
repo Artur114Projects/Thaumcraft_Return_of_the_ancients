@@ -92,7 +92,7 @@ public class BlockAncientSanctuaryController extends BlockTileEntity<TileEntityA
     @Override
     public void registerModels() {
         super.registerModels();
-        ClientRegistry.bindTileEntitySpecialRenderer(getTileEntityClass(), new TileEntityAncientSanctuaryControllerRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(this.getTileEntityClass(), new TileEntityAncientSanctuaryControllerRenderer());
     }
 
     @Override

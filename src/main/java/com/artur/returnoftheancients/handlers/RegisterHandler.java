@@ -90,6 +90,7 @@ public class RegisterHandler {
 		MainR.NETWORK.registerMessage(new ClientPacketSendWeather.HandlerSW(), ClientPacketSendWeather.class, id++, Side.CLIENT);
 		MainR.NETWORK.registerMessage(new ClientPacketSyncAncientPortals.HandlerSAP(), ClientPacketSyncAncientPortals.class, id++, Side.CLIENT);
 		MainR.NETWORK.registerMessage(new ClientPacketSyncProtectedChunk.HandlerSPC(), ClientPacketSyncProtectedChunk.class, id++, Side.CLIENT);
+		MainR.NETWORK.registerMessage(new ClientPacketSyncEnergySystem.HandlerSES(), ClientPacketSyncEnergySystem.class, id++, Side.CLIENT);
 	}
 
 	@SubscribeEvent

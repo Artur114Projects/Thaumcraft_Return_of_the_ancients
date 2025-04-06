@@ -77,7 +77,7 @@ public class EnergySystem {
     public void update(boolean isStart) {
         Map<OutputInput, EnergyWay> map = this.waysMap.get();
 
-        map.forEach((oi, way) -> way.transfer(1));
+        map.forEach((oi, way) -> way.transfer(1 + new Random().nextFloat()));
     }
 
     private static class OutputInput {

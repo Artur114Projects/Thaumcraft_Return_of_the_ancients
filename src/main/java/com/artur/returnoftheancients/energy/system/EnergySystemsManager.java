@@ -42,7 +42,9 @@ public class EnergySystemsManager {
     }
 
     public void onBlockDestroyed(ITileEnergy tile) {
-        ClientPacketSyncEnergySystem.sendOnBlockDestroyed(tile);
+        if (!world.isRemote) {
+            ClientPacketSyncEnergySystem.sendOnBlockDestroyed(tile);
+        }
         List<ITileEnergy> connectedTiles = this.getNeighbors(tile);
 
         if (connectedTiles == null) {

@@ -224,6 +224,7 @@ public class EnergySystem {
                     this.outputs.add(provider);
                 }
             }
+            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
         }
 
         private void fillMap() {
@@ -302,6 +303,7 @@ public class EnergySystem {
                 EnergyWayBuilder.returnBuilderToPoll(builder);
             }
 
+            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
             return map;
         }
 

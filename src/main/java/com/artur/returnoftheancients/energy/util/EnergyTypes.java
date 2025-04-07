@@ -18,15 +18,21 @@ public enum EnergyTypes {
         this.parent = parent;
     }
 
-    public float format(float count) {
+    public float formatJ(float count) {
         if (parent != null) {
-            return parent.format(count) * multiplier;
+            return parent.formatJ(count) * multiplier;
         } else {
             return count * multiplier;
         }
     }
 
-
+    public float formatW(float count) {
+        if (parent != null) {
+            return parent.formatW(count) * multiplier;
+        } else {
+            return (count * multiplier) / 20.0F;
+        }
+    }
 
     public static String kJToString(float count) {
         String[] prefixes = I18n.format(Referense.MODID + ".kJ.prefixes").split("/");

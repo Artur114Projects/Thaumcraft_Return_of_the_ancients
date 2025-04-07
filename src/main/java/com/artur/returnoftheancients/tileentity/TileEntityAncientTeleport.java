@@ -64,7 +64,7 @@ public class TileEntityAncientTeleport extends TileEnergyBase implements IAspect
             new int[] {3},
             new int[] {0, 1, 2}
     );
-    public EnergyContainerHandler energyContainerHandler = new EnergyContainerHandler(EnergyTypes.MEGA.format(10.0F), 0, EnergyTypes.MEGA.format(0.5F), 1, 2, 3);
+    public EnergyContainerHandler energyContainerHandler = new EnergyContainerHandler(EnergyTypes.MEGA.formatJ(10.0F), 0, EnergyTypes.MEGA.formatJ(0.5F), 1, 2, 3);
     private ContainerWithPages currentContainer;
 
     public AncientPortal portal;
@@ -139,12 +139,13 @@ public class TileEntityAncientTeleport extends TileEnergyBase implements IAspect
 
     @Override
     public void readSyncNBT(NBTTagCompound nbt) {
+        super.readSyncNBT(nbt);
         aspectBottles.readFromNBT(nbt);
     }
 
     @Override
     public NBTTagCompound writeSyncNBT(NBTTagCompound nbt) {
-        return aspectBottles.writeToNBT(nbt);
+        return aspectBottles.writeToNBT(super.writeSyncNBT(nbt));
     }
 
     @Override

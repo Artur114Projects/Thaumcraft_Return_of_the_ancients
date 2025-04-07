@@ -4,14 +4,52 @@ import com.artur.returnoftheancients.energy.system.EnergySystem;
 
 import java.util.Objects;
 
-public class Tuple<A, B> extends net.minecraft.util.Tuple<A, B> {
+public class Tuple<A, B> {
+    private final boolean immutable;
+    private A a;
+    private B b;
+
+    public Tuple(A aIn, B bIn, boolean immutable) {
+        this.immutable = immutable;
+        this.a = aIn;
+        this.b = bIn;
+    }
+
     public Tuple(A aIn, B bIn) {
-        super(aIn, bIn);
+        this(aIn, bIn, true);
+    }
+
+    public A getFirst() {
+        return this.a;
+    }
+
+    public B getSecond() {
+        return this.b;
+    }
+
+    public void setFirst(A aIn) {
+        if (!this.immutable) {
+            this.a = aIn;
+        } else {
+            throw new IllegalStateException("Attempt mutable immutable object!");
+        }
+    }
+
+    public void setSecond(B bIn) {
+        if (!this.immutable) {
+            this.b = bIn;
+        } else {
+            throw new IllegalStateException("Attempt mutable immutable object!");
+        }
+    }
+
+    public boolean isImmutable() {
+        return immutable;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.getFirst(), this.getSecond());
+        return Objects.hash(this.a, this.b);
     }
 
     @Override

@@ -71,6 +71,15 @@ public abstract class TileEnergyBase extends TileBase implements ITileEnergy {
     }
 
     @Override
+    public void invalidate() {
+        super.invalidate();
+        if (this.world.isRemote) {
+            EnergySystemsManager manager = this.world.getCapability(TRACapabilities.ENERGY_SYSTEMS_MANAGER, null);
+            if (manager != null) manager.onBlockDestroyed(this);
+        }
+    }
+
+    @Override
     public void setNetworkId(long id) {
         this.networkId = id;
     }

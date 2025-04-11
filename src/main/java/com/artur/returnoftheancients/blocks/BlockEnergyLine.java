@@ -8,6 +8,7 @@ import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.tileentity.TileEntityEnergyLine;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -55,6 +56,17 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
         setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);
     }
 
+    @Override
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+        super.onNeighborChange(world, pos, neighbor);
+
+        this.getTileAndCallRunnable((World) world, pos, TileEntityEnergyLine::notifyAboutNeighborChanged);
+    }
+
+    @Override
+    public boolean getWeakChanges(IBlockAccess world, BlockPos pos) {
+        return true;
+    }
 
     @Override
     public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {

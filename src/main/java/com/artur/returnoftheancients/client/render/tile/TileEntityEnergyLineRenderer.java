@@ -4,9 +4,13 @@ import com.artur.returnoftheancients.client.model.ModelEnergyLine;
 import com.artur.returnoftheancients.energy.bases.tile.ITileEnergy;
 import com.artur.returnoftheancients.tileentity.TileEntityEnergyLine;
 import com.artur.returnoftheancients.util.Tuple;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
+import org.lwjgl.opengl.GL11;
 
 public class TileEntityEnergyLineRenderer extends TileEntitySpecialRenderer<TileEntityEnergyLine> {
 
@@ -24,8 +28,10 @@ public class TileEntityEnergyLineRenderer extends TileEntitySpecialRenderer<Tile
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
         this.setLightmapDisabled(true);
+
         float lineAlpha = te.alphaForRender(partialTicks);
         GlStateManager.color(192.0F / 255.0F, 1.0F, 1.0F, lineAlpha);
+
         modelBase.renderBase();
 
         for (Tuple<Boolean, Tuple<EnumFacing, ITileEnergy>> neighbor : te.neighbors) {

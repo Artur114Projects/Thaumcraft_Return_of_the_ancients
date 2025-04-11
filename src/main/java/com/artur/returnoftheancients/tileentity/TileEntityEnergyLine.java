@@ -7,6 +7,7 @@ import com.artur.returnoftheancients.energy.util.EnergyTypes;
 import com.artur.returnoftheancients.handlers.RenderHandler;
 import com.artur.returnoftheancients.util.Tuple;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -20,6 +21,7 @@ public class TileEntityEnergyLine extends TileEnergyBase implements ITickable {
     @SideOnly(Side.CLIENT)
     public final ArrayList<Tuple<Boolean, Tuple<EnumFacing, ITileEnergy>>> neighbors = new ArrayList<>(6);
     protected float maxTransferredEnergy = EnergyTypes.KILO.formatW(400.0F);
+    protected NBTTagCompound actionsData = new NBTTagCompound();
     protected float currentTransferredEnergy = 0;
     protected float transferredEnergyBuffer = 0;
     @SideOnly(Side.CLIENT)
@@ -43,8 +45,22 @@ public class TileEntityEnergyLine extends TileEnergyBase implements ITickable {
         super.onLoad();
 
         if (this.world.isRemote) {
-            this.compileNeighbors();
+            this.compileNeighborsForAll();
         }
+    }
+
+    @Override
+    public void readSyncNBT(NBTTagCompound nbt) {
+        super.readSyncNBT(nbt);
+
+        this.processActions(nbt.getCompoundTag("actionsData"));
+    }
+
+    @Override
+    public NBTTagCompound writeSyncNBT(NBTTagCompound nbt) {
+        nbt.setTag("actionsData", this.actionsData); this.actionsData =  new NBTTagCompound();
+
+        return super.writeSyncNBT(nbt);
     }
 
     @Override
@@ -61,6 +77,11 @@ public class TileEntityEnergyLine extends TileEnergyBase implements ITickable {
     public float transferEnergy(float count) {
         this.transferredEnergyBuffer += count;
         return count * this.currentEfficiency();
+    }
+
+    public void notifyAboutNeighborChanged() {
+        this.actionsData.setBoolean("compileNeighbors", true);
+        this.syncTile(false);
     }
 
     public boolean isWorking() {
@@ -89,6 +110,20 @@ public class TileEntityEnergyLine extends TileEnergyBase implements ITickable {
     private float currentEfficiency() {
         return 0.9998F;
     }
+
+    @SideOnly(Side.CLIENT)
+    public void compileNeighborsForAll() {
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            TileEntity tileRaw = this.world.getTileEntity(blockPos.setPos(this.pos).offset(facing));
+            if (tileRaw instanceof TileEntityEnergyLine) {
+                ((TileEntityEnergyLine) tileRaw).compileNeighbors();
+            }
+        }
+        this.compileNeighbors();
+        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+    }
+
 
     @SideOnly(Side.CLIENT)
     public void compileNeighbors() {
@@ -121,6 +156,12 @@ public class TileEntityEnergyLine extends TileEnergyBase implements ITickable {
             if (tile instanceof TileEntityEnergyLine) {
                 neighbor.setFirst(((TileEntityEnergyLine) tile).isWorking());
             }
+        }
+    }
+
+    private void processActions(NBTTagCompound nbt) {
+        if (nbt.getBoolean("compileNeighbors")) {
+            this.compileNeighbors();
         }
     }
 }

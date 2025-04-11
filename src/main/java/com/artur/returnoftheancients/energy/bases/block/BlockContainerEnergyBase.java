@@ -25,4 +25,12 @@ public abstract class BlockContainerEnergyBase<T extends TileEntity> extends Bas
         }
         super.breakBlock(worldIn, pos, state);
     }
+
+
+    @Override
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        super.onBlockAdded(worldIn, pos, state);
+
+        worldIn.updateComparatorOutputLevel(pos, this);
+    }
 }

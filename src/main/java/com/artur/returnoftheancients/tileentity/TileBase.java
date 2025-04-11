@@ -6,6 +6,8 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -52,6 +54,7 @@ public abstract class TileBase extends TileEntity {
         this.world.notifyBlockUpdate(this.pos, state, state, 2 + (render ? 4 : 0));
     }
 
+    @SideOnly(Side.CLIENT)
     public void readSyncNBT(NBTTagCompound nbt) {}
     public NBTTagCompound writeSyncNBT(NBTTagCompound nbt) {return nbt;}
 }

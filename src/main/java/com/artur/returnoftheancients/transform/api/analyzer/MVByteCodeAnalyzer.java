@@ -1,9 +1,9 @@
-package com.artur.returnoftheancients.transform.util.analyzer;
+package com.artur.returnoftheancients.transform.api.analyzer;
 
-import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
-import com.artur.returnoftheancients.transform.transformers.base.MVBase;
-import com.artur.returnoftheancients.transform.util.analyzer.operation.IOperation;
-import com.artur.returnoftheancients.transform.util.analyzer.operation.OperationWorkType;
+import com.artur.returnoftheancients.transform.api.base.ITransformer;
+import com.artur.returnoftheancients.transform.api.base.MVBase;
+import com.artur.returnoftheancients.transform.api.analyzer.operation.IOperation;
+import com.artur.returnoftheancients.transform.api.analyzer.operation.OperationWorkType;
 import org.objectweb.asm.MethodVisitor;
 
 public abstract class MVByteCodeAnalyzer extends MVBase {

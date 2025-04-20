@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.main;
 
 import com.artur.returnoftheancients.transform.TransformerTRA;
-import com.artur.returnoftheancients.transform.util.MappingsProcessor;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.jetbrains.annotations.Nullable;
 

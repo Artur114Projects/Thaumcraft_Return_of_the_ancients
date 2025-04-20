@@ -1,6 +1,4 @@
-package com.artur.returnoftheancients.transform.util.analyzer.operation;
-
-import com.artur.returnoftheancients.transform.util.analyzer.Operations;
+package com.artur.returnoftheancients.transform.api.analyzer.operation;
 
 public class OVisitVarInsn extends OperationBase {
     private int var = -1;

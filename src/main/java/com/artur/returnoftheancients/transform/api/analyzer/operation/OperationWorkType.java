@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.transform.util.analyzer.operation;
+package com.artur.returnoftheancients.transform.api.analyzer.operation;
 
 public enum OperationWorkType {
     NON,

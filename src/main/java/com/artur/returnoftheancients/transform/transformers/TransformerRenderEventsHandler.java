@@ -1,8 +1,8 @@
 package com.artur.returnoftheancients.transform.transformers;
 
-import com.artur.returnoftheancients.transform.transformers.base.IMVInstance;
-import com.artur.returnoftheancients.transform.transformers.base.TransformerBase;
-import com.artur.returnoftheancients.transform.util.TransformerHandler;
+import com.artur.returnoftheancients.transform.transformers.util.TransformerHandler;
+import com.artur.returnoftheancients.transform.api.base.IMVInstance;
+import com.artur.returnoftheancients.transform.api.base.TransformerBase;
 import org.objectweb.asm.MethodVisitor;
 
 public class TransformerRenderEventsHandler extends TransformerBase {

@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.transform.util;
+package com.artur.returnoftheancients.transform.api;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;

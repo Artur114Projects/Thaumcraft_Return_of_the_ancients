@@ -1,12 +1,12 @@
-package com.artur.returnoftheancients.transform.util;
+package com.artur.returnoftheancients.transform.transformers.util;
 
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
-import com.artur.returnoftheancients.transform.transformers.base.MVBase;
+import com.artur.returnoftheancients.transform.api.base.ITransformer;
+import com.artur.returnoftheancients.transform.api.base.MVBase;
 import com.artur.returnoftheancients.util.EnumTextureLocation;
 import com.chaosthedude.naturescompass.util.BiomeSearchWorker;
 import net.minecraft.client.Minecraft;
@@ -29,7 +29,6 @@ import thaumcraft.client.lib.events.RenderEventHandler;
 
 import java.lang.reflect.Method;
 import java.util.*;
-
 public class TransformerHandler {
 
     /*--------------------------START TRANSFORMER METHODS--------------------------*/

@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.transform.transformers;
 
-import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
+import com.artur.returnoftheancients.transform.api.base.ITransformer;
 import org.objectweb.asm.*;
 
 public class TransformerBiomeSearchWorker implements ITransformer { // TODO: 02.03.2025 Улучшить!

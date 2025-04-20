@@ -1,6 +1,6 @@
-package com.artur.returnoftheancients.transform.transformers.base;
+package com.artur.returnoftheancients.transform.api.base;
 
-import com.artur.returnoftheancients.transform.util.TransformerHandler;
+import com.artur.returnoftheancients.transform.transformers.util.TransformerHandler;
 import org.objectweb.asm.*;
 
 public abstract class MVBase extends MethodVisitor implements Opcodes {
@@ -8,10 +8,10 @@ public abstract class MVBase extends MethodVisitor implements Opcodes {
     protected final String[] names;
     protected final String[] desc;
 
-    public MVBase(MethodVisitor mv, Class<?>[] methodsClass, String... names) {
+    public MVBase(MethodVisitor mv, Class<?>[] methodsClasses, String... names) {
         super(Opcodes.ASM5, mv);
         this.names = names;
-        this.classes = methodsClass;
+        this.classes = methodsClasses;
         this.desc = new String[names.length];
         for (int i = 0; i != names.length; i++) {
             Class<?> clas = this.getClass(i);

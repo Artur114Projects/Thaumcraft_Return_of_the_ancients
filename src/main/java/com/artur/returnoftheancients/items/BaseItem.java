@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.util.interfaces.IHasModel;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public abstract class BaseItem extends Item implements IHasModel {
 
         InitItems.ITEMS.add(this);
     }
+
 
     protected void setTRACreativeTab() {
         this.setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);

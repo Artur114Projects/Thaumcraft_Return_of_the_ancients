@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.transform.util.analyzer.operation;
+package com.artur.returnoftheancients.transform.api.analyzer.operation;
 
 public interface IOperationBuilder<O extends IOperation, B extends IOperationBuilder<O, B>> {
     B workType(OperationWorkType type);

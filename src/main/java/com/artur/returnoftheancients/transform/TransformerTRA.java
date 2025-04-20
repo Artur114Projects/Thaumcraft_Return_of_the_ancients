@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.transform;
 
 import com.artur.returnoftheancients.transform.transformers.*;
-import com.artur.returnoftheancients.transform.transformers.base.ITransformer;
+import com.artur.returnoftheancients.transform.api.base.ITransformer;
 import com.artur.returnoftheancients.transform.transformers.TransformerTaintHelper;
 import net.minecraft.launchwrapper.IClassTransformer;
 
@@ -25,8 +25,8 @@ public class TransformerTRA implements IClassTransformer {
     @Override
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         for (ITransformer transformer : TRANSFORMERS) {
-            if (transformedName.equals(transformer.getTarget())) {
-                return transformer.transform(name, transformedName, basicClass);
+            if (transformer.isTarget(transformedName)) {
+                basicClass = transformer.transform(name, transformedName, basicClass);
             }
         }
         return basicClass;

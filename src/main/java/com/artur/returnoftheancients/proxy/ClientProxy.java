@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.proxy;
 
+import com.artur.returnoftheancients.client.fx.shader.InitShaders;
 import com.artur.returnoftheancients.handlers.RegisterHandler;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
@@ -23,6 +24,8 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
+
+        InitShaders.init();
     }
 
     @Override

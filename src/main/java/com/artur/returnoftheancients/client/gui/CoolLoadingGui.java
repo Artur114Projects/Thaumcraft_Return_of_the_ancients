@@ -1,12 +1,13 @@
 package com.artur.returnoftheancients.client.gui;
 
+import com.artur.returnoftheancients.client.fx.shader.InitShaders;
 import com.artur.returnoftheancients.client.gui.buttons.TRAButton;
 import com.artur.returnoftheancients.client.gui.gif.GifWithTextureAtlas;
 import com.artur.returnoftheancients.handlers.RenderHandler;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ServerPacketTpToHome;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.util.EnumTextureLocation;
+import com.artur.returnoftheancients.util.EnumAssetLocation;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -30,7 +31,7 @@ public class CoolLoadingGui extends GuiScreen {
 
     protected final ResourceLocation background;
     private GifWithTextureAtlas gif_2_0 = new GifWithTextureAtlas("loading", 20, 8, 8 * 12, 8, 8);
-    protected static final ResourceLocation blur = EnumTextureLocation.GUI_PATH.getRL("v.png");
+    protected static final ResourceLocation blur = EnumAssetLocation.TEXTURES_GUI.getPngRL("v.png");
     private final int Red = 16711680;
     private final int Yellow = 0xffff40;
     private final int White = 16777215;
@@ -56,7 +57,7 @@ public class CoolLoadingGui extends GuiScreen {
 
     public CoolLoadingGui(boolean isTeam) {
         int id = rand.nextInt(3);
-        background = EnumTextureLocation.GUI_PATH.getRL("/loading_gui_backgrounds/background" + id);
+        background = EnumAssetLocation.TEXTURES_GUI.getPngRL("/loading_gui_backgrounds/background" + id);
         int loreId = rand.nextInt(2);
         lore = I18n.format("rota.l-gui.lore." + loreId);
         this.isTeam = isTeam;
@@ -120,6 +121,7 @@ public class CoolLoadingGui extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        InitShaders.BLACK_WHITE.shader().enable();
         drawDefaultBackground();
         drawBackground();
         drawGif();
@@ -137,6 +139,7 @@ public class CoolLoadingGui extends GuiScreen {
         }
 
         isDraw = true;
+        InitShaders.BLACK_WHITE.shader().disable();
     }
 
     @Override

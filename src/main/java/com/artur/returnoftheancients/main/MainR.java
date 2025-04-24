@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.main;
 
 import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
+import com.artur.returnoftheancients.client.fx.shader.HeatShader;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.generation.terraingen.TerrainHandler;
 import com.artur.returnoftheancients.handlers.RegisterHandler;

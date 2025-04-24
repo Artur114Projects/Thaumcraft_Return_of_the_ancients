@@ -1,0 +1,17 @@
+package com.artur.returnoftheancients.client.fx.shader;
+
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+@Mod.EventBusSubscriber
+public class HeatShader {
+
+    @SubscribeEvent
+    public static void renderShaders(RenderGameOverlayEvent.Pre evt) {
+        if (evt.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
+
+        ShaderProgram.renderFullScreen(InitShaders.HEAT.shader());
+    }
+}

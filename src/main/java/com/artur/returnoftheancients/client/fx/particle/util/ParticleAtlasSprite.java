@@ -1,17 +1,15 @@
 package com.artur.returnoftheancients.client.fx.particle.util;
 
-import com.artur.returnoftheancients.util.EnumTextureLocation;
+import com.artur.returnoftheancients.util.EnumAssetLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
-
-import java.util.Random;
 
 public class ParticleAtlasSprite extends ParticleSprite {
     protected final TextureAtlasSprite[] atlasSprites;
     protected final ResourceLocation[] sprites;
 
-    public ParticleAtlasSprite(EnumTextureLocation textureLocation, String... names) {
+    public ParticleAtlasSprite(EnumAssetLocation textureLocation, String... names) {
         super(null, null);
         this.sprites = new ResourceLocation[names.length];
         this.atlasSprites = new TextureAtlasSprite[names.length];

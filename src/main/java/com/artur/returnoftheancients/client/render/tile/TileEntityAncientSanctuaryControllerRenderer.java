@@ -3,7 +3,7 @@ package com.artur.returnoftheancients.client.render.tile;
 import com.artur.returnoftheancients.client.model.ModelAncientSanctuaryController;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientSanctuaryController;
-import com.artur.returnoftheancients.util.EnumTextureLocation;
+import com.artur.returnoftheancients.util.EnumAssetLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class TileEntityAncientSanctuaryControllerRenderer extends TileEntitySpecialRenderer<TileEntityAncientSanctuaryController> {
     private final EntityItem FUSE_IMITATION_ENTITY_TO_RENDER = new EntityItem(Minecraft.getMinecraft().world, 0.0, 0.0, 0.0, new ItemStack(InitItems.IMITATION_ANCIENT_FUSE));
-    private static final ResourceLocation TEXTURE_BASE = EnumTextureLocation.BLOCKS_PATH.getRL("ancient_sanctuary_controller");
+    private static final ResourceLocation TEXTURE_BASE = EnumAssetLocation.TEXTURES_BLOCKS.getPngRL("ancient_sanctuary_controller");
     private final ModelAncientSanctuaryController modelBase = new ModelAncientSanctuaryController();
 
     public TileEntityAncientSanctuaryControllerRenderer() {

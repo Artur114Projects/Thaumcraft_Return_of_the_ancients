@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.client.gui.gif;
 
 import com.artur.returnoftheancients.handlers.RenderHandler;
-import com.artur.returnoftheancients.util.EnumTextureLocation;
+import com.artur.returnoftheancients.util.EnumAssetLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,7 +24,7 @@ public class GifWithTextureAtlas {
 
 
     public GifWithTextureAtlas(String fileName, int fps, float textureSizeX, float textureSizeY, float drawAreaWidth, float drawAreaHeight) {
-        this.texturePath = EnumTextureLocation.GUI_GIF_PATH.getRL(fileName);
+        this.texturePath = EnumAssetLocation.TEXTURES_GUI_GIF.getPngRL(fileName);
         this.framesCount = (int) Math.ceil(textureSizeY / drawAreaHeight);
         this.drawAreaHeight = drawAreaHeight;
         this.drawAreaWidth = drawAreaWidth;

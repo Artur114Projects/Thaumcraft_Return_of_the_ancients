@@ -7,7 +7,7 @@ import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.transform.api.base.ITransformer;
 import com.artur.returnoftheancients.transform.api.base.MVBase;
-import com.artur.returnoftheancients.util.EnumTextureLocation;
+import com.artur.returnoftheancients.util.EnumAssetLocation;
 import com.chaosthedude.naturescompass.util.BiomeSearchWorker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -34,7 +34,7 @@ public class TransformerHandler {
     /*--------------------------START TRANSFORMER METHODS--------------------------*/
 
     public static ResourceLocation getCustomPlayerArmTex() {
-        return EnumTextureLocation.MISC_PATH.getRL("player_arm");
+        return EnumAssetLocation.TEXTURES_MISC.getPngRL("player_arm");
     }
 
     public static int getPotionMaxStackSize() {

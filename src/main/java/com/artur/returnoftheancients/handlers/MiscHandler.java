@@ -45,7 +45,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class MiscHandler {
-    private static final List<String> ID = new ArrayList<>();
 
     public static int genRandomIntRange(int min, int max) {
         Random r = new Random();
@@ -111,7 +110,7 @@ public class MiscHandler {
     }
 
     public static List<String> isPlayerUseUnresolvedItems(EntityPlayer player) {
-        ID.clear();
+        List<String> ID = new ArrayList<>();
         String[] modId = TRAConfigs.PortalSettings.modId;
         boolean is = true;
 

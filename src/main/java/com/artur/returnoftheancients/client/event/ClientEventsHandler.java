@@ -30,6 +30,11 @@ public class ClientEventsHandler {
         FOG_MANAGER.entityViewRenderEventFogColors(e);
     }
 
+    @SubscribeEvent
+    public static void fogRender(EntityViewRenderEvent.RenderFogEvent e) {
+        PLAYER_IN_BIOME_MANAGER.entityViewRenderEventRenderFogEvent(e);
+    }
+
     @SideOnly(Side.CLIENT)
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void fogDensityEvent(EntityViewRenderEvent.RenderFogEvent e) {

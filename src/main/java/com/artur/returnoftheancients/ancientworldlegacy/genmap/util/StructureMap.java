@@ -69,7 +69,7 @@ public class StructureMap implements IALGS {
     }
 
     public byte getStructure(StructurePos pos) {
-        return getStructure(pos.x, pos.y);
+        return getStructure(pos.getX(), pos.getY());
     }
 
 
@@ -113,7 +113,7 @@ public class StructureMap implements IALGS {
 //    }
 
     public List<StructurePos> getConnectedStructures(StructurePos pos) {
-        return getConnectedStructures(pos.x, pos.y);
+        return getConnectedStructures(pos.getX(), pos.getY());
     }
 
     public List<StructurePos> getConnectedStructures(int x, int y) {

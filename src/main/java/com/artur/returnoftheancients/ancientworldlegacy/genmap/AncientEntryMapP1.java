@@ -33,8 +33,8 @@ public class AncientEntryMapP1 implements IALGS {
             for (byte x = 0; x != map.SIZE; x++) {
                 if (map.getStructure(x, y) == BOSS_ID) {
                     for (StructurePos pos : map.getConnectedStructures(x, y)) {
-                        if (map.getStructure(pos.x, pos.y) != BOSS_ID) {
-                            addBossDeformation(map, (byte) 14, pos.x, pos.y);
+                        if (map.getStructure(pos.getX(), pos.getY()) != BOSS_ID) {
+                            addBossDeformation(map, (byte) 14, pos.getX(), pos.getY());
                         }
                     }
                     break;
@@ -52,11 +52,11 @@ public class AncientEntryMapP1 implements IALGS {
 
         List<StructurePos> posList = map.getConnectedStructures(x, y);
         for (StructurePos pos : posList) {
-            byte deformation = map.getDeformation(pos.x, pos.y);
-            byte structure = map.getStructure(pos.x, pos.y);
+            byte deformation = map.getDeformation(pos.getX(), pos.getY());
+            byte structure = map.getStructure(pos.getX(), pos.getY());
             if (structure != BOSS_ID && structure != BOSS_N_ID) {
                 if (deformation < value - 1 && value - 1 > 0) {
-                    addBossDeformation(map, (byte) (value - 1), pos.x, pos.y);
+                    addBossDeformation(map, (byte) (value - 1), pos.getX(), pos.getY());
                 }
             }
         }
@@ -70,10 +70,10 @@ public class AncientEntryMapP1 implements IALGS {
         while (!queue.isEmpty()) {
             StructurePos currentPos = queue.poll();
             if (map.getStructure(currentPos) == IALGS.ENTRY_ID) return true;
-            checked[currentPos.x + currentPos.y * map.SIZE] = true;
+            checked[currentPos.getX() + currentPos.getY() * map.SIZE] = true;
             for (StructurePos connected : map.getConnectedStructures(currentPos)) {
                 if (map.getStructure(connected) == IALGS.ENTRY_ID) return true;
-                if (checked[connected.x + connected.y * map.SIZE]) continue;
+                if (checked[connected.getX() + connected.getY() * map.SIZE]) continue;
                 byte structure = map.getStructure(connected);
                 if (structure != BOSS_ID && structure != BOSS_N_ID) {
                     queue.addLast(connected);

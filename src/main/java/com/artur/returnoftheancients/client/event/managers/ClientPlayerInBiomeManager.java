@@ -6,12 +6,14 @@ import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thaumcraft.client.lib.events.RenderEventHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,9 +43,17 @@ public class ClientPlayerInBiomeManager {
 
     public void entityViewRenderEventFogColors(EntityViewRenderEvent.FogColors e) {
         if (e.getEntity().getEntityWorld().provider.getDimension() == ancient_world_dim_id) {
-            e.setRed(0);
-            e.setBlue(0);
-            e.setGreen(0);
+            e.setRed(0.8F);
+            e.setBlue(0.0F);
+            e.setGreen(0.16F);
+        }
+    }
+
+    public void entityViewRenderEventRenderFogEvent(EntityViewRenderEvent.RenderFogEvent e) {
+        if (e.getEntity().getEntityWorld().provider.getDimension() == ancient_world_dim_id) {
+            GlStateManager.setFog(GlStateManager.FogMode.EXP2);
+            GlStateManager.setFogDensity(0.04F);
+            GlStateManager.setFogStart(8);
         }
     }
 

@@ -6,10 +6,12 @@ import com.artur.returnoftheancients.client.audio.RepeatingSound;
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
+import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.generation.portal.naturalgen.AncientPortalNaturalGeneration;
 import com.artur.returnoftheancients.generation.portal.base.client.ClientAncientPortal;
 import com.artur.returnoftheancients.generation.portal.util.OffsetsUtil;
 import com.artur.returnoftheancients.handlers.RenderHandler;
+import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
@@ -83,7 +85,7 @@ public class ItemDebug extends BaseItem {
 //		}
 		if (worldIn.isRemote) {
 
-			ClientEventsHandler.CAMERA_FX_MANAGER.startShake(20 * 20);
+//			ClientEventsHandler.CAMERA_FX_MANAGER.startShake(20 * 20);
 
 //			if (player.isSneaking()) {
 //				NBTTagCompound data = new NBTTagCompound();
@@ -115,6 +117,12 @@ public class ItemDebug extends BaseItem {
 //			}
 		}
 		if (!worldIn.isRemote) {
+			if (player.isSneaking()) {
+				for (int i = 1; i != 5; i++) {
+					GenStructure.generateStructure(worldIn, pos.getX() + 16 * (i - 1), 100, pos.getZ(), "ancient_turn_rotate-" + i);
+				}
+			}
+
 //			if (player.isSneaking()) {
 //				BlockProtectHandler.protect(worldIn, pos);
 //			} else {

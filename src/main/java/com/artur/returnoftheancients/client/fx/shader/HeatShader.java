@@ -9,9 +9,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class HeatShader {
 
     @SubscribeEvent
-    public static void renderShaders(RenderGameOverlayEvent.Pre evt) {
-        if (evt.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
+    public static void renderShaders(RenderWorldLastEvent evt) {
+//        if (evt.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
 
-        ShaderProgram.renderFullScreen(InitShaders.HEAT.shader());
+        ShaderProgram.renderFullScreen(InitShaders.HEAT.shader(), () -> InitShaders.HEAT.shader().uniform("Time", (System.currentTimeMillis() % 100000L) / 20000.0F));
     }
 }

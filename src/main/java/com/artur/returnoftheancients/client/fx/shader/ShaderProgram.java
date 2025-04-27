@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
@@ -24,53 +25,60 @@ public class ShaderProgram {
     private final int programID;
 
     public ShaderProgram() {
-        this.programID = ARBShaderObjects.glCreateProgramObjectARB();
+        this.programID = GL20.glCreateProgram();
     }
 
     public ShaderProgram addFragment(String path) {
-        return add(path, ARBFragmentShader.GL_FRAGMENT_SHADER_ARB);
+        return add(path, GL20.GL_FRAGMENT_SHADER);
     }
 
     public ShaderProgram addVertex(String path) {
-        return add(path, ARBVertexShader.GL_VERTEX_SHADER_ARB);
+        return add(path, GL20.GL_VERTEX_SHADER);
     }
 
     public ShaderProgram add(String path, int shaderType) {
-        int shaderID = ARBShaderObjects.glCreateShaderObjectARB(shaderType);
-        ARBShaderObjects.glShaderSourceARB(shaderID, readFile(path));
-        ARBShaderObjects.glCompileShaderARB(shaderID);
+        int shaderID = GL20.glCreateShader(shaderType);
+        GL20.glShaderSource(shaderID, readFile(path));
+        GL20.glCompileShader(shaderID);
 
-        if (ARBShaderObjects.glGetObjectParameteriARB(shaderID, ARBShaderObjects.GL_OBJECT_COMPILE_STATUS_ARB) == GL11.GL_FALSE) {
-            throw new RuntimeException("Shader compilation error!\n" + ARBShaderObjects.glGetInfoLogARB(shaderID, ARBShaderObjects.glGetObjectParameteriARB(shaderID, ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB)));
+
+        if (GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
+            System.err.println("Compilation error: " + GL20.glGetShaderInfoLog(shaderID, Short.MAX_VALUE));
         }
 
-        ARBShaderObjects.glAttachObjectARB(this.programID, shaderID);
+
+        GL20.glAttachShader(this.programID, shaderID);
         return this;
     }
 
     public ShaderProgram compile() {
-        ARBShaderObjects.glLinkProgramARB(this.programID);
+        GL20.glLinkProgram(this.programID);
         return this;
     }
 
     public void enable() {
-        ARBShaderObjects.glUseProgramObjectARB(this.programID);
+        GL20.glUseProgram(this.programID);
         this.isEnabled = true;
     }
 
     public void disable() {
-        ARBShaderObjects.glUseProgramObjectARB(0);
+        GL20.glUseProgram(0);
         this.isEnabled = false;
     }
 
     public int uniformId(String name) {
         if (!isEnabled) throw new IllegalStateException("Attempt to get uniform id on disabled shader!");
-        return ARBShaderObjects.glGetUniformLocationARB(this.programID, name);
+        return GL20.glGetUniformLocation(this.programID, name);
     }
 
     public void uniform(String name, float value) {
         if (!isEnabled) throw new IllegalStateException("Attempt to set uniform on disabled shader!");
-        ARBShaderObjects.glUniform1fARB(this.uniformId(name), value);
+        GL20.glUniform1f(this.uniformId(name), value);
+    }
+
+    public void uniform(String name, int value) {
+        if (!isEnabled) throw new IllegalStateException("Attempt to set uniform on disabled shader!");
+        GL20.glUniform1i(this.uniformId(name), value);
     }
 
     private String readFile(String path) {
@@ -98,18 +106,32 @@ public class ShaderProgram {
                 || mc.displayHeight != framebuffer.framebufferHeight)
             framebuffer.createBindFramebuffer(mc.displayWidth, mc.displayHeight);
 
+        shaderProgram.enable();
+        onShaderEnabled.run();
+        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 0);
+        GlStateManager.enableTexture2D();
+        GlStateManager.bindTexture(mc.getFramebuffer().framebufferTexture);
+        shaderProgram.uniform("screenTexture", 0);
+
+        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 1);
+        GlStateManager.enableTexture2D();
+        GlStateManager.bindTexture(mc.getFramebuffer().depthBuffer);
+        shaderProgram.uniform("depthTexture", 1);
+
         framebuffer.bindFramebuffer(false);
         GL11.glPushMatrix();
-        GL11.glBindTexture(GL_TEXTURE_2D, mc.getFramebuffer().framebufferTexture);
+        GlStateManager.bindTexture(mc.getFramebuffer().framebufferTexture);
         GL11.glMatrixMode(GL_PROJECTION);
         GL11.glLoadIdentity();
         GL11.glMatrixMode(GL_MODELVIEW);
         GL11.glLoadIdentity();
-
-        shaderProgram.enable();
-        onShaderEnabled.run();
         drawQuad();
         shaderProgram.disable();
+        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 1);
+        GlStateManager.bindTexture(0);
+        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 0);
+        GlStateManager.bindTexture(0);
+
         GL11.glPopMatrix();
         mc.getFramebuffer().bindFramebuffer(false);
 

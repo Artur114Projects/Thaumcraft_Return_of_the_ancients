@@ -65,11 +65,15 @@ public class Test { //
 
 
     public static void main(String[] args) {
-        System.out.println("Start!");
+//        System.out.println("Start!");
+//
+//        ChunkPos pos = new ChunkPos(15324, 23897);
+//
+//        System.out.println(MiscHandler.chunkPosFromLong(MiscHandler.chunkPosAsLong(pos)));
 
-        ChunkPos pos = new ChunkPos(15324, 23897);
-
-        System.out.println(MiscHandler.chunkPosFromLong(MiscHandler.chunkPosAsLong(pos)));
+        for (int i = 0; i < 10; ++i) {
+            System.out.println(i);
+        }
     }
 
     private static short pacArray(byte[] array) {

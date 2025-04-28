@@ -1,5 +1,7 @@
 package com.artur.returnoftheancients.ancientworldlegacy.genmap.util;
 
+import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructure;
+
 import java.util.Objects;
 
 public class StructurePos {
@@ -56,8 +58,32 @@ public class StructurePos {
 
     public enum Face {
         UP,
-        DOWN,
         RIGHT,
-        LEFT
+        DOWN,
+        LEFT;
+
+         public Face rotate(EnumStructure.Rotate rotate) {
+             switch (rotate) {
+                 case NON:
+                     return this;
+                 case C90:
+                     return values()[offsetIndex(this.ordinal(), 1)];
+                 case C180:
+                     return values()[offsetIndex(this.ordinal(), 2)];
+                 case C270:
+                     return values()[offsetIndex(this.ordinal(), 3)];
+                 default:
+                     throw new RuntimeException("Someone forged the universe!");
+             }
+         }
+
+         private int offsetIndex(int index, int count) {
+             for (int i = 0; i != count; count++) index = offsetIndex(index);
+             return index;
+         }
+
+         private int offsetIndex(int index) {
+             return index + 1 >= values().length ? 0 : index + 1;
+         }
     }
 }

@@ -12,6 +12,6 @@ public class HeatShader {
     public static void renderShaders(RenderWorldLastEvent evt) {
 //        if (evt.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
 
-        ShaderProgram.renderFullScreen(InitShaders.HEAT.shader(), () -> InitShaders.HEAT.shader().uniform("Time", (System.currentTimeMillis() % 100000L) / 20000.0F));
+        ShaderProgram.renderFullScreen(InitShaders.HEAT.shader(), () -> InitShaders.HEAT.shader().uniform("Time", (System.currentTimeMillis() % 100000L) / 30000.0F));
     }
 }

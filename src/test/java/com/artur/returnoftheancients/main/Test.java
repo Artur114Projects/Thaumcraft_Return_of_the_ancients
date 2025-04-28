@@ -1,5 +1,8 @@
 package com.artur.returnoftheancients.main;
 
+import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructure;
+import com.artur.returnoftheancients.ancientworld.map.utils.StructurePos;
+import com.artur.returnoftheancients.ancientworldlegacy.genmap.util.StructureMap;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
@@ -65,15 +68,11 @@ public class Test { //
 
 
     public static void main(String[] args) {
-//        System.out.println("Start!");
-//
-//        ChunkPos pos = new ChunkPos(15324, 23897);
-//
-//        System.out.println(MiscHandler.chunkPosFromLong(MiscHandler.chunkPosAsLong(pos)));
-
-        for (int i = 0; i < 10; ++i) {
-            System.out.println(i);
-        }
+        StructureMap map = new StructureMap(new byte[17][17], new byte[17][17]);
+        map.setStructure(8, 8, (byte) 10);
+        System.out.println(map.getStructure(8, 8));
+        map.swapBuffers();
+        System.out.println(map.getStructure(8, 8));
     }
 
     private static short pacArray(byte[] array) {

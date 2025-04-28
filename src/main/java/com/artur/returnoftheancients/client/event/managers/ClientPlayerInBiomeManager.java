@@ -43,17 +43,17 @@ public class ClientPlayerInBiomeManager {
 
     public void entityViewRenderEventFogColors(EntityViewRenderEvent.FogColors e) {
         if (e.getEntity().getEntityWorld().provider.getDimension() == ancient_world_dim_id) {
-            e.setRed(0.8F);
+            e.setRed(1.0F);
             e.setBlue(0.0F);
-            e.setGreen(0.16F);
+            e.setGreen(0.48F);
         }
     }
 
     public void entityViewRenderEventRenderFogEvent(EntityViewRenderEvent.RenderFogEvent e) {
         if (e.getEntity().getEntityWorld().provider.getDimension() == ancient_world_dim_id) {
-            GlStateManager.setFog(GlStateManager.FogMode.EXP2);
+            GlStateManager.setFog(GlStateManager.FogMode.EXP);
             GlStateManager.setFogDensity(0.03F);
-            GlStateManager.setFogStart(8);
+            GlStateManager.setFogStart(10);
         }
     }
 

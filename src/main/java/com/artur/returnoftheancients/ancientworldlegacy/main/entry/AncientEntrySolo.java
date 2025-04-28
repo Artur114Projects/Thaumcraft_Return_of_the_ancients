@@ -144,6 +144,7 @@ public class AncientEntrySolo extends AncientEntry {
         if (player.dimension != InitDimensions.ancient_world_dim_id) {
             requestToDelete();
         }
+
         int dx = ((((int) player.posX - (10000 * pos)) >> 4) - 8) * -1;
         int dz = ((((int) player.posZ) >> 4) - 8) * -1;
         if (dx >= 0 && dx < map.SIZE && dz >= 0 && dz < map.SIZE) {

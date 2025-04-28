@@ -6,7 +6,7 @@ uniform float Time;
 varying vec2 texcoord;
 
 float interpolate(float start, float end) {
-    return (start + (end - start) * 0.1) * 1.12;
+    return (start + (end - start) * 0.14) * 1.2;
 }
 
 vec3 interpolate(vec3 start, vec3 end) {
@@ -15,12 +15,12 @@ vec3 interpolate(vec3 start, vec3 end) {
 
 void main() {
     vec2 uv = texcoord;
-    float d = clamp(texture2D(depthTexture, uv).r - 0.2, 0.0, 1.0);
-    float radius = d * 0.008;
+    float d = clamp(texture2D(depthTexture, uv).r - 0.06, 0.0, 1.0);
+    float radius = (d * 0.8) * 0.008;
 
     if (d > 0) {
-        float dx = sin((uv.y + Time * 0.5) * 100) * (0.006 * d);
-        float dy = sin((uv.x + Time)         * 100) * (0.006 * d);
+        float dx = sin((uv.x + Time) * 100) * (0.006 * clamp(d + 0.06, 0.0, 0.6));
+        float dy = sin((uv.y + Time * 0.5) * 100) * (0.006 * clamp(d + 0.06, 0.0, 0.6));
         uv += vec2(dx, dy);
     }
 
@@ -34,7 +34,7 @@ void main() {
     }
     col /= count;
 
-    vec3 orange = vec3(1.0, 0.4, 0.0);
+    vec3 orange = vec3(1.0, 0.5, 0.0);
 
     gl_FragColor = vec4(interpolate(col, orange), 1.0);
 }

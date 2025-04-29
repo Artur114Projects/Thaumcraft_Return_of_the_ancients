@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.handlers;
 
-import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
 import com.artur.returnoftheancients.blocks.BaseBlockContainer;
 import com.artur.returnoftheancients.client.fx.particle.util.ParticleSprite;
 import com.artur.returnoftheancients.commads.*;

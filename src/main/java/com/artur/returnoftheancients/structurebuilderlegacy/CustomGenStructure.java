@@ -1,8 +1,8 @@
-package com.artur.returnoftheancients.structurebuilder;
+package com.artur.returnoftheancients.structurebuilderlegacy;
 
-import com.artur.returnoftheancients.structurebuilder.util.ITRAStructure;
-import com.artur.returnoftheancients.structurebuilder.util.ITRAStructureIsUseEBS;
-import com.artur.returnoftheancients.structurebuilder.util.ITRAStructureTask;
+import com.artur.returnoftheancients.structurebuilderlegacy.util.ITRAStructure;
+import com.artur.returnoftheancients.structurebuilderlegacy.util.ITRAStructureIsUseEBS;
+import com.artur.returnoftheancients.structurebuilderlegacy.util.ITRAStructureTask;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;

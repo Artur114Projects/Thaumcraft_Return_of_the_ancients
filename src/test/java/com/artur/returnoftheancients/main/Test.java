@@ -1,15 +1,11 @@
 package com.artur.returnoftheancients.main;
 
-import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructure;
-import com.artur.returnoftheancients.ancientworld.map.utils.StructurePos;
 import com.artur.returnoftheancients.ancientworldlegacy.genmap.util.StructureMap;
-import com.artur.returnoftheancients.handlers.MiscHandler;
-import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

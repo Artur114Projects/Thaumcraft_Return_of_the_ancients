@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.ancientworld.map.utils;
 
+import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructure;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -74,16 +75,18 @@ public class StructuresMap {
 
     public void insetStructure(int x, int y, IStructure structure) {
         if (x < 0 || y < 0 || x >= size || y >= size) return;
-        this.structures[this.index(x, y)] = structure.copy();
+        IStructure copy = structure.copy();
+        copy.bindMap(this);
+        this.structures[this.index(x, y)] = copy;
     }
 
     public List<StructurePos> connectedStructures(int x, int y) {
-        return null;
+        return this.connectedStructures(new StructurePos(x, y));
     }
 
     public List<StructurePos> connectedStructures(StructurePos pos) {
         List<StructurePos> ret = new ArrayList<>(4);
-        if (pos.isOutOfBounds(size)) return ret;
+        if (pos.isOutOfBounds(this.size)) return ret;
         IStructure structure = this.structurePrivate(pos);
         if (structure == null) return ret;
 

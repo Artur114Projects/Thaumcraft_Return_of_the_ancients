@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.generation.portal.generators;
 
-import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;

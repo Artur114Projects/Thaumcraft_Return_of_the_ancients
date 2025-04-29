@@ -1,5 +1,8 @@
-package com.artur.returnoftheancients.ancientworld.map.utils;
+package com.artur.returnoftheancients.ancientworld.map.utils.structures;
 
+import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructure;
+import com.artur.returnoftheancients.ancientworld.map.utils.StructurePos;
+import com.artur.returnoftheancients.ancientworld.map.utils.StructuresMap;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;

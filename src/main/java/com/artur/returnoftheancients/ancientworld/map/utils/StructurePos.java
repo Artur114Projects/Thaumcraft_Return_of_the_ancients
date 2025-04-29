@@ -99,5 +99,13 @@ public class StructurePos {
         private int offsetIndex(int index) {
             return index + 1 >= values().length ? 0 : index + 1;
         }
+
+        public static Face[] rotateAll(EnumStructure.Rotate rotate, Face... faces) {
+            Face[] ret = new Face[faces.length];
+            for (int i = 0; i != ret.length; i++) {
+                ret[i] = faces[i].rotate(rotate);
+            }
+            return ret;
+        }
     }
 }

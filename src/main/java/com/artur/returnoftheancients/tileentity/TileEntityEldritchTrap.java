@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.tileentity;
 
-import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;

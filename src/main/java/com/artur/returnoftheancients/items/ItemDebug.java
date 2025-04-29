@@ -1,24 +1,16 @@
 package com.artur.returnoftheancients.items;
 
 
-import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
 import com.artur.returnoftheancients.client.audio.RepeatingSound;
-import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
-import com.artur.returnoftheancients.generation.portal.naturalgen.AncientPortalNaturalGeneration;
 import com.artur.returnoftheancients.generation.portal.base.client.ClientAncientPortal;
-import com.artur.returnoftheancients.generation.portal.util.OffsetsUtil;
-import com.artur.returnoftheancients.handlers.RenderHandler;
-import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
-import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;

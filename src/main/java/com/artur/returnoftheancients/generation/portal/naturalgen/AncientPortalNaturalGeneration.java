@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.generation.portal.naturalgen;
 
 import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
-import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.generation.portal.generators.GenAncientArch;
@@ -14,7 +14,6 @@ import com.artur.returnoftheancients.util.context.MethodParams4;
 import com.artur.returnoftheancients.util.interfaces.RunnableWithParam;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.nbt.NBTTagCompound;

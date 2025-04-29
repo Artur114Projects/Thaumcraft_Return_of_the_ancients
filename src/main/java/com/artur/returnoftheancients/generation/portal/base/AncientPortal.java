@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.generation.portal.base;
 
 import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
-import com.artur.returnoftheancients.structurebuilder.CustomGenStructure;
+import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
 import com.artur.returnoftheancients.blocks.BlockTpToAncientWorld;
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;

@@ -11,6 +11,7 @@ import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.CraftingRegister;
+import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -42,6 +43,7 @@ public class CommonProxy {
 
     public void postInit(FMLPostInitializationEvent event) {
         RegisterHandler.registerStructures();
+        StructureBuildersManager.init();
     }
 
     public void serverStarting(FMLServerStartingEvent event) {

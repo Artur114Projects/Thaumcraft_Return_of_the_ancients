@@ -26,6 +26,7 @@ public class MappingsProcessor {
             System.out.println("Loading mappings complete!");
             LOADED = true;
         } catch (IOException e) {
+            methods.clear();
             e.printStackTrace(System.err);
         }
     }

@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.transform.transformers;
 
-import com.artur.returnoftheancients.transform.transformers.util.TransformerHandler;
+import com.artur.returnoftheancients.transform.TransformerHandler;
 import com.artur.returnoftheancients.transform.api.base.IMVInstance;
 import com.artur.returnoftheancients.transform.api.base.TransformerBase;
 import org.objectweb.asm.MethodVisitor;

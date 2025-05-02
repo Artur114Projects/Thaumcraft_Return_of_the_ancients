@@ -13,6 +13,7 @@ public class TransformerTRA implements IClassTransformer {
     private static final List<ITransformer> TRANSFORMERS = new ArrayList<>();
 
     static {
+        TransformerHandler.init();
         TRANSFORMERS.add(new TransformerBiomeSearchWorker());
         TRANSFORMERS.add(new TransformerItemTaintAmulet());
         TRANSFORMERS.add(new TransformerEntityFluxRift());
@@ -26,7 +27,12 @@ public class TransformerTRA implements IClassTransformer {
     public byte[] transform(String name, String transformedName, byte[] basicClass) {
         for (ITransformer transformer : TRANSFORMERS) {
             if (transformer.isTarget(transformedName)) {
-                basicClass = transformer.transform(name, transformedName, basicClass);
+                try {
+                    return transformer.transform(name, transformedName, basicClass);
+                } catch (Exception e) {
+                    new RuntimeException(e).printStackTrace(System.err);
+                    return basicClass;
+                }
             }
         }
         return basicClass;

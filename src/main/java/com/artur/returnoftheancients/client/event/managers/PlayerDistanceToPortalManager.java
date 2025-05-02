@@ -1,6 +1,5 @@
 package com.artur.returnoftheancients.client.event.managers;
 
-import com.artur.returnoftheancients.client.audio.AncientPortalSound;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ServerPacketGetWeather;
@@ -12,8 +11,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class PlayerDistanceToPortalManager {
-    private final Sound portalHeartbeat = new Sound(AncientPortalSound.Type.HEARTBEAT, this);
-    private final Sound portalImpact = new Sound(AncientPortalSound.Type.IMPACT, this);
     public ChunkPos nearestPortalPos = new ChunkPos(0, 0);
     public float worldPrevPrevRainingStrength = 0;
     public boolean isServerRainUpdated = false;
@@ -36,18 +33,6 @@ public class PlayerDistanceToPortalManager {
         calculateDistanceToPortal(mc, player);
         updateServerRainTck(mc, player);
         setRain(mc, player);
-    }
-
-    private void addSound(Minecraft mc, EntityPlayer player) {
-        final int minDistanceToPlaySound = 128;
-
-        if (distanceToPortal < minDistanceToPlaySound) {
-            portalHeartbeat.init();
-            portalImpact.init();
-        } else {
-            portalHeartbeat.stop();
-            portalImpact.stop();
-        }
     }
 
     private void calculateDistanceToPortal(Minecraft mc, EntityPlayer player) {
@@ -129,35 +114,5 @@ public class PlayerDistanceToPortalManager {
         this.serverThunderStrength = thunder;
         this.serverRainStrength = rain;
         this.isServerRainUpdated = true;
-    }
-
-    private static class Sound {
-        private final Minecraft mc = Minecraft.getMinecraft();
-        private final PlayerDistanceToPortalManager manager;
-        private final AncientPortalSound.Type type;
-        private AncientPortalSound sound;
-
-
-        private Sound(AncientPortalSound.Type type, PlayerDistanceToPortalManager manager) {
-            this.manager = manager;
-            this.sound = null;
-            this.type = type;
-        }
-
-        public void init() {
-            if (sound == null || sound.isStopped()) {
-                sound = new AncientPortalSound(type, manager, mc);
-                Minecraft.getMinecraft().getSoundHandler().playSound(sound);
-            }
-        }
-
-        public void stop() {
-            if (sound == null) {
-                return;
-            }
-            mc.getSoundHandler().stopSound(sound);
-            sound.stop();
-            sound = null;
-        }
     }
 }

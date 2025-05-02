@@ -68,7 +68,7 @@ public class AncientPortalOpening extends AncientPortal {
 
     @Override
     public void build() {
-        this.genAncientPortal();
+        this.genAncientPortal(false);
         this.setGenerated();
     }
 

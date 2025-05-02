@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.transform.transformers.util;
+package com.artur.returnoftheancients.transform;
 
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.handlers.MiscHandler;
@@ -149,8 +149,13 @@ public class TransformerHandler {
     }
 
     public static String createDescriptor(Class<?> methodClass, String methodName, Class<?>... params) { // TODO: 01.03.2025 Сделать чтобы в конце парамеров метода ставилось [;] если последний парамер не примитивный.
+        if (methodClass == ITransformer.HANDLER_CLASS) {
+            return desc(methodName, params);
+        }
+        System.out.println(methodClass + ", " + methodName + ", " + Arrays.toString(params));
         Method[] methods = findMethods(methodClass, methodName);
         if (methods.length == 0) {
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
             return "null";
         }
 
@@ -217,6 +222,7 @@ public class TransformerHandler {
 
     public static Method[] findMethods(Class<?> methodClass, String methodName) {
         ArrayList<Method> methods = new ArrayList<>();
+        System.out.println(methodClass + ", " + methodName);
         for (Method method : methodClass.getDeclaredMethods()) {
             if (method.getName().equals(methodName)) {
                 methods.add(method);
@@ -232,5 +238,31 @@ public class TransformerHandler {
             superClass = superClass.getSuperclass();
         }
         return methods.toArray(new Method[0]);
+    }
+
+    public static void init() {}
+
+    public static String desc(String methodName, Class<?>... params) {
+        switch (methodName) {
+            case "getCustomPlayerArmTex":
+                return "()Lnet/minecraft/util/ResourceLocation;";
+            case "getPotionMaxStackSize":
+                return "()I";
+            case "addPatchedTooltip":
+                return "(Lnet/minecraft/item/Item;Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Ljava/util/List;Lnet/minecraft/client/util/ITooltipFlag;Ljava/lang/String;)V";
+            case "isEntityLivingBaseInTaintBiome":
+                return "(Lnet/minecraft/item/Item;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityLivingBase;)Z";
+            case "isTaintLBiomeInPos":
+            case "isTaintEdgeBiome":
+                return "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)Z";
+            case "isClientPlayerInTaintBiome":
+                return "()Z";
+            case "randomDisplayTick":
+                return "(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Ljava/util/Random;)V";
+            case "isNotCanSearchBiome":
+                return "(Lcom/chaosthedude/naturescompass/util/BiomeSearchWorker;)Z";
+            default:
+                return "";
+        }
     }
 }

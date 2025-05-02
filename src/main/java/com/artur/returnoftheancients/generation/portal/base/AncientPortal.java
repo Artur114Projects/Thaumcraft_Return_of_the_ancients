@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.generation.portal.base;
 
 import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
-import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
+import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.blocks.BlockTpToAncientWorld;
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
@@ -174,14 +174,15 @@ public abstract class AncientPortal implements IWriteToNBT {
         player.getEntityData().setBoolean(tpToHomeNBT, true);
     }
 
-    protected void genAncientPortal() {
+    protected void genAncientPortal(boolean needProtect) {
         int localX = posX + 5;
         int localZ = posZ + 5;
-        CustomGenStructure.gen(world, localX, posY, localZ, "ancient_portal_air_cube");
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        StructureBuildersManager.createBuildRequest(world, blockPos.setPos(localX, posY, localZ), "ancient_portal_air_cube").setNeedProtect(needProtect).build();
         for (int y = posY + 32; y > 0; y -= 31) {
-            CustomGenStructure.gen(world, localX, y - (31 + 32), localZ, "ancient_portal");
+            StructureBuildersManager.createBuildRequest(world, blockPos.setPos(localX, y - (31 + 32), localZ), "ancient_portal").setNeedProtect(needProtect).build();
         }
-        CustomGenStructure.gen(world, localX, 0, localZ, "ancient_portal_floor");
+        StructureBuildersManager.createBuildRequest(world, blockPos.setPos(localX, 0, localZ), "ancient_portal_floor").setNeedProtect(needProtect).build();
     }
 
     protected void onChunkPopulatePre(int chunkX, int chunkZ) {}

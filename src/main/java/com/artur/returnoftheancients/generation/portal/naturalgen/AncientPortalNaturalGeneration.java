@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.generation.portal.naturalgen;
 
 import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
-import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
+import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.generation.portal.generators.GenAncientArch;
@@ -234,8 +234,8 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
 
             blockPos.setY(analyzer.getAverageHeight());
 
-            portal.genAncientPortal();
-            CustomGenStructure.gen(world, blockPos, "ancient_portal_hub");
+            portal.genAncientPortal(true);
+            StructureBuildersManager.createBuildRequest(world, blockPos, "ancient_portal_hub").setNeedProtect().build();
             genSpire.generate(world, portal.portalPos, 255);
 
             blockPos.pushPos();
@@ -253,8 +253,6 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
             blockPos.pushPos();
             basePosForArch[3] = blockPos.add(7, 0, 15).setWorldY(world).addY(-1).toImmutable();
             blockPos.popPos();
-
-            BlockProtectHandler.protectAllBlocksOnChunk(world, portal.portalPos, BlocksTC.stoneEldritchTile, BlocksTC.stoneAncient, BlocksTC.nitor.get(EnumDyeColor.BLACK));
         }
 
         private void genSanctuary() {

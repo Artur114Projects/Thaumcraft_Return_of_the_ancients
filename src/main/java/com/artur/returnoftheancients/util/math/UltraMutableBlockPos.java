@@ -13,6 +13,8 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -356,6 +358,16 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         this.offset(offset);
         callable.run(this);
         this.popPos();
+    }
+
+    public ExtendedBlockStorage ebs(World world) {
+        Chunk chunk = world.getChunkFromBlockCoords(this);
+        ExtendedBlockStorage storage = chunk.getBlockStorageArray()[this.getY() >> 4];
+        return storage == null ? chunk.getBlockStorageArray()[this.getY() >> 4] = new ExtendedBlockStorage(this.getY() >> 4 << 4, world.provider.hasSkyLight()) : storage;
+    }
+
+    public void normalizeToEBS() {
+        this.setPos(this.getX() & 15, this.getY() & 15, this.getZ() & 15);
     }
 
     public void pushPos() {

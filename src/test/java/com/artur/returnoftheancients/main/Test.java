@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.main;
 
 import com.artur.returnoftheancients.ancientworldlegacy.genmap.util.StructureMap;
-import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.entity.player.EntityPlayer;
@@ -92,61 +91,4 @@ public class Test { //
         return (b1 << 24) | ((b2 & 0xFF) << 16) | ((b3 & 0xFF) << 8) | (b4 & 0xFF);
     }
 
-    private static List<UUID> list = new ArrayList<>();
-
-    public static void startTest(EntityPlayer player) {
-        startTest = true;
-        Test.player = player;
-        p = 0;
-    }
-
-    private static EntityPlayer player = null;
-    private static byte p = 0;
-    private static int test = 0;
-    private static boolean startTest = false;
-    private static final List<Long> templateTime = new ArrayList<>();
-    private static final List<Long> myGenTime = new ArrayList<>();
-
-
-    @SubscribeEvent
-    public static void Tick(TickEvent.WorldTickEvent e) {
-        if (startTest) {
-            test = 200;
-            startTest = false;
-        }
-        if (test > 0) {
-            BlockPos playerPos = player.getPosition();
-            long time = System.currentTimeMillis();
-            CustomGenStructure.registerAndGen(player.world, playerPos.getX() + 2, playerPos.getY(), playerPos.getZ(), "ancient_turn");
-            myGenTime.add(System.currentTimeMillis() -  time);
-            long time1 = System.currentTimeMillis();
-            GenStructure.generateStructure(player.world, playerPos.getX() + 2, playerPos.getY() + 20, playerPos.getZ(), "ancient_turn");
-            templateTime.add(System.currentTimeMillis() -  time1);
-            GenStructure.generateStructure(player.world, playerPos.getX() + 2, playerPos.getY(), playerPos.getZ(), "air_cube");
-            test--;
-            if (test % 50 == 0) {
-                p += 25;
-                player.sendMessage(new TextComponentString(p + "%"));
-            }
-            if (test <= 0) {
-                postProcessing();
-            }
-        }
-    }
-
-    private static void postProcessing() {
-        long templateResult = 0;
-        long myGenResult = 0;
-        for (long i : templateTime) {
-            templateResult += i;
-        }
-        for (long i : myGenTime) {
-            myGenResult += i;
-        }
-        templateResult /= templateTime.size();
-        myGenResult /= myGenTime.size();
-
-        player.sendMessage(new TextComponentString("template is took:" + templateResult + "ms"));
-        player.sendMessage(new TextComponentString("my gen is took:" + myGenResult + "ms"));
-    }
 }

@@ -1,11 +1,11 @@
 package com.artur.returnoftheancients.items;
 
 
-import com.artur.returnoftheancients.client.audio.RepeatingSound;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.generation.portal.base.client.ClientAncientPortal;
+import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -30,7 +30,6 @@ public class ItemDebug extends BaseItem {
 //	private ITRAStructure structure = null;
 	private BlockPos blockPos = null;
 	private ClientAncientPortal portal = null;
-	private RepeatingSound sound = null;
 
 	public ItemDebug(String name) {
 		super(name);
@@ -111,7 +110,7 @@ public class ItemDebug extends BaseItem {
 		if (!worldIn.isRemote) {
 			if (player.isSneaking()) {
 				for (int i = 1; i != 5; i++) {
-					GenStructure.generateStructure(worldIn, pos.getX() + 16 * (i - 1), 100, pos.getZ(), "ancient_turn_rotate-" + i);
+					StructureBuildersManager.createBuildRequest(worldIn, new BlockPos(pos.getX() + 16 * (i - 1), 100, pos.getZ()), "ancient_turn_rotate-" + i).setNeedProtect().build();
 				}
 			}
 

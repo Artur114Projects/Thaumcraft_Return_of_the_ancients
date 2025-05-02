@@ -1,8 +1,7 @@
 package com.artur.returnoftheancients.generation.portal.naturalgen;
 
 import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
-import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
-import com.artur.returnoftheancients.generation.generators.GenStructure;
+import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.generation.portal.util.OffsetsUtil;
 import com.artur.returnoftheancients.events.ServerEventsHandler;
 import com.artur.returnoftheancients.init.InitSounds;
@@ -69,12 +68,7 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
         UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
 
         blockPos.setPos(pos).setY(analyzer.getMaxHeight());
-        if (!type.isNeedTemplate()) {
-            CustomGenStructure.gen(world, blockPos.addY(2), type.getStructureName());
-        } else {
-            GenStructure.generateStructure(world, blockPos.getX(), blockPos.addY(2).getY(), blockPos.getZ(), type.getStructureName());
-        }
-        CustomGenStructure.protect(world, blockPos, type.getStructureName());
+        StructureBuildersManager.createBuildRequest(world, blockPos.addY(2), type.getStructureName()).setIgnoreAir().setNeedProtect().build();
 
         if (!type.isBroken()) {
             blockPos.pushPos();
@@ -257,19 +251,17 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
     }
 
     protected enum Type implements IWriteToNBT {
-        NORMAL("ancient_sanctuary", false, false, false),
-        BROKEN("ancient_sanctuary_broken", true, true, false),
-        CULTIST("ancient_sanctuary_cultist", true, false, true),
-        SCORCHED("ancient_sanctuary_broken", true, true, false);
+        NORMAL("ancient_sanctuary", false, false),
+        BROKEN("ancient_sanctuary_broken", true, true),
+        CULTIST("ancient_sanctuary_cultist", true, false),
+        SCORCHED("ancient_sanctuary_broken", true, true);
 
         private final String structureName;
-        private final boolean needTemplate;
         private final boolean isBrokenArch;
         private final boolean isBroken;
 
-        Type(String structureName, boolean isBroken, boolean isBrokenArch, boolean needTemplate) {
+        Type(String structureName, boolean isBroken, boolean isBrokenArch) {
             this.structureName = structureName;
-            this.needTemplate = needTemplate;
             this.isBrokenArch = isBrokenArch;
             this.isBroken = isBroken;
         }
@@ -284,10 +276,6 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
 
         public boolean isBrokenArch() {
             return isBrokenArch;
-        }
-
-        public boolean isNeedTemplate() {
-            return needTemplate;
         }
 
         @Override

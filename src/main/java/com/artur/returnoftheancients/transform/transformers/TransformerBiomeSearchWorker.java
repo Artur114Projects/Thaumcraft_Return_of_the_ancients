@@ -22,7 +22,6 @@ public class TransformerBiomeSearchWorker implements ITransformer { // TODO: 02.
         }, 0);
 
         return classWriter.toByteArray();
-
     }
 
     @Override

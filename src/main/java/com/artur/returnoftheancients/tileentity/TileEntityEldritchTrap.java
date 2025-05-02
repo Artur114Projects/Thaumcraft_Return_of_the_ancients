@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.tileentity;
 
-import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
+import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -72,10 +72,10 @@ public class TileEntityEldritchTrap extends TileEntity implements ITickable {
                 world.setBlockState(pos.add(-5, 4, 0), Blocks.AIR.getDefaultState());
                 world.setBlockState(pos.add(-5, 4, -1), Blocks.AIR.getDefaultState());
 
-                CustomGenStructure.gen(world, pos.add(-3, 1, -8), "ancient_door_rock_rotate-1");
-                CustomGenStructure.gen(world, pos.add(-3, 1, 7), "ancient_door_rock_rotate-1");
-                CustomGenStructure.gen(world, pos.add(-8, 1, -3), "ancient_door_rock_rotate-2");
-                CustomGenStructure.gen(world, pos.add(7, 1, -3), "ancient_door_rock_rotate-2");
+                StructureBuildersManager.createBuildRequest(world, pos.add(-3, 1, -8), "ancient_door_rock_rotate-1").setIgnoreAir().build();
+                StructureBuildersManager.createBuildRequest(world, pos.add(-3, 1, 7), "ancient_door_rock_rotate-1").setIgnoreAir().build();
+                StructureBuildersManager.createBuildRequest(world, pos.add(-8, 1, -3), "ancient_door_rock_rotate-2").setIgnoreAir().build();
+                StructureBuildersManager.createBuildRequest(world, pos.add(7, 1, -3), "ancient_door_rock_rotate-2").setIgnoreAir().build();
             }
             if (world.isRemote) {
                 for (EntityPlayer player : players) {

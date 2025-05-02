@@ -1,13 +1,13 @@
 package com.artur.returnoftheancients.transform.api.base;
 
-import com.artur.returnoftheancients.transform.transformers.util.TransformerHandler;
+import com.artur.returnoftheancients.transform.TransformerHandler;
 
 public interface ITransformer {
 
     default boolean isTarget(String transformedName) {return transformedName.equals(this.getTarget());}
-    byte[] transform(String name, String transformedName, byte[] basicClass);
+    byte[] transform(String name, String transformedName, byte[] basicClass) throws Exception;
     String getTarget();
 
-    String HANDLER_PATH = "com/artur/returnoftheancients/transform/transformers/util/TransformerHandler";
+    String HANDLER_PATH = "com/artur/returnoftheancients/transform/TransformerHandler";
     Class<?> HANDLER_CLASS = TransformerHandler.class;
 }

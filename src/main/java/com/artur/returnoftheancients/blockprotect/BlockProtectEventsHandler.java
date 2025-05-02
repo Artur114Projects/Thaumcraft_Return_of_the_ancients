@@ -39,8 +39,8 @@ public class BlockProtectEventsHandler {
 
     @SubscribeEvent
     public static void attachCapabilitiesChunk(AttachCapabilitiesEvent<Chunk> e) {
-        if ( e.getObject().getWorld().isRemote) CLIENT_MANAGER.attachCapabilitiesEventChunk(e);
-        if (!e.getObject().getWorld().isRemote) SERVER_MANAGER.attachCapabilitiesEventChunk(e);
+        if (e.getObject() != null &&  e.getObject().getWorld().isRemote) CLIENT_MANAGER.attachCapabilitiesEventChunk(e);
+        if (e.getObject() != null && !e.getObject().getWorld().isRemote) SERVER_MANAGER.attachCapabilitiesEventChunk(e);
     }
 
     @SubscribeEvent

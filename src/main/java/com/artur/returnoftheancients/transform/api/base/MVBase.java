@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.transform.api.base;
 
-import com.artur.returnoftheancients.transform.transformers.util.TransformerHandler;
+import com.artur.returnoftheancients.transform.TransformerHandler;
 import org.objectweb.asm.*;
 
 public abstract class MVBase extends MethodVisitor implements Opcodes {

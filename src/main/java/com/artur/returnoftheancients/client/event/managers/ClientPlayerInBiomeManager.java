@@ -55,9 +55,7 @@ public class ClientPlayerInBiomeManager {
             GlStateManager.setFogDensity(0.03F);
             GlStateManager.setFogStart(10);
 
-            RenderEventHandler.fogFiddled = false;
             RenderEventHandler.fogDuration = 0;
-            RenderEventHandler.fogTarget = 0;
         }
     }
 

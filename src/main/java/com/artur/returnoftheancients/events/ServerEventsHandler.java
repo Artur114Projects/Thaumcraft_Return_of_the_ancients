@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.events;
 
 import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
 import com.artur.returnoftheancients.handlers.MiscHandler;
-import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
+import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.PlayerTimer;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
@@ -24,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -100,7 +101,7 @@ public class ServerEventsHandler {
             }
             if (e.getWorld().provider.getDimension() == ancient_world_dim_id) {
                 if (!isAncientAreaSet) {
-                    CustomGenStructure.gen(e.getWorld(), -16, 240, -16, "ancient_area");
+                    StructureBuildersManager.createBuildRequest(e.getWorld(), new BlockPos(-16, 240, -16), "ancient_area").setNeedProtect().setIgnoreAir().build();
                     isAncientAreaSet = true;
                 }
                 checkVersion();

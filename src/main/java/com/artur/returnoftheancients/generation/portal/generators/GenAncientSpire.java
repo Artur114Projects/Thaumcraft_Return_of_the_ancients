@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.generation.portal.generators;
 
-import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
+import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
@@ -27,7 +27,7 @@ public class GenAncientSpire {
                 radius = 7;
             }
 
-            CustomGenStructure.gen(world, blockPos, "ancient_spire_segment_" + radius);
+            StructureBuildersManager.createBuildRequest(world, blockPos, "ancient_spire_segment_" + radius).setIgnoreAir().setNeedProtect().build();
 
             blockPos.down();
         }

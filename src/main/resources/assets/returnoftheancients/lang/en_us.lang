@@ -10,9 +10,9 @@ tile.tp_to_home_block.name=Portal to overworld
 tile.taint_ancient_stone.name=Taint ancient stone
 tile.tp_to_ancient_world_block.name=Portal to Ancient World
 itemGroup.returnoftheancients_tab=Thaumcraft: Return of the ancients
-tile.energy_line.name=Energy line
-tile.energy_source.name=Energy source
-tile.ancient_teleport.name=Ancient portal
+tile.energy_line.name=Energy line [WIP]
+tile.energy_source.name=Energy source [WIP]
+tile.ancient_teleport.name=Ancient portal [WIP]
 ################################################################################
 # Any
 ################################################################################
@@ -29,7 +29,7 @@ returnoftheancients.portal.message=Cant use:
 returnoftheancients.rui.t=put it away
 returnoftheancients.rui.f=you have 30 seconds
 returnoftheancients.gui.esc=Press ESC again to exit.
-returnoftheancients.message.new-version=Welcome to Thaumcraft: Return of the ancients v1.4.0-betta!
+returnoftheancients.message.new-version=Welcome to Thaumcraft: Return of the ancients v1.4.0-alpha build!
 returnoftheancients.command.main.usage=/returnoftheancients <updatedropprimalblade|seed|help|tptoportal>
 returnoftheancients.kJ.prefixes=J/kJ/MJ/GJ/TJ
 returnoftheancients.kW.prefixes=W/kW/MW/GW/TW

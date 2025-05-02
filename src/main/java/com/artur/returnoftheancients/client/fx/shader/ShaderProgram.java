@@ -97,8 +97,8 @@ public class ShaderProgram {
         renderFullScreen(shaderProgram, () -> {});
     }
 
-    public static void renderFullScreen(ShaderProgram shaderProgram, Runnable onShaderEnabled) {
-        int current = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D); // в 1.12 нужно сохранять текстур атлас
+    public static void renderFullScreen(ShaderProgram shaderProgram, Runnable onShaderEnabled) {  // TODO: 02.05.2025 Override!
+        int current = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
         if (framebuffer == null)
             framebuffer = new Framebuffer(mc.displayWidth, mc.displayHeight, false);
 

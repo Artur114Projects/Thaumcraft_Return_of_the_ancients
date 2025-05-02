@@ -59,14 +59,6 @@ public class TRACommand extends CommandBase {
                 }
                 break;
             case "tptoportal":
-                if (player.dimension == WorldDataFields.portalDimension) {
-                    player.connection.setPlayerLocation(WorldDataFields.portalX, 100, WorldDataFields.portalZ, player.rotationYaw, player.rotationPitch);
-                    player.sendMessage(new TextComponentString("Teleport complete!").setStyle(new Style().setColor(TextFormatting.GREEN)));
-                } else {
-                    player.sendMessage(new TextComponentString("you are in a dimension without a portal, a dimension with a portal: " + WorldDataFields.portalDimension).setStyle(new Style().setColor(TextFormatting.RED)));
-                }
-                break;
-            case "ultratptoportal":
                 UltraMutableBlockPos pos;
                 if (args.length >= 2) {
                     pos = new UltraMutableBlockPos(AncientPortalsProcessor.getPortalPos(player.world, Integer.parseInt(args[1])));
@@ -74,6 +66,7 @@ public class TRACommand extends CommandBase {
                     pos = new UltraMutableBlockPos(player.getPosition());
                     pos.setPos(AncientPortalsProcessor.getNearestPortalPos(player.world, pos));
                 }
+                player.sendMessage(new TextComponentString("Teleport complete!").setStyle(new Style().setColor(TextFormatting.GREEN)));
                 player.connection.setPlayerLocation(pos.getX(), 100, pos.getZ(), player.rotationYaw, player.rotationPitch);
                 break;
             default:
@@ -84,6 +77,6 @@ public class TRACommand extends CommandBase {
 
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
     {
-        return args.length == 1 ? getListOfStringsMatchingLastWord(args, "tptoportal", "seed", "help", "updatedropprimalblade", "ultratptoportal") : Collections.emptyList();
+        return args.length == 1 ? getListOfStringsMatchingLastWord(args, "tptoportal", "seed", "help", "updatedropprimalblade") : Collections.emptyList();
     }
 }

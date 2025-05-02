@@ -64,11 +64,7 @@ public class Test { //
 
 
     public static void main(String[] args) {
-        StructureMap map = new StructureMap(new byte[17][17], new byte[17][17]);
-        map.setStructure(8, 8, (byte) 10);
-        System.out.println(map.getStructure(8, 8));
-        map.swapBuffers();
-        System.out.println(map.getStructure(8, 8));
+
     }
 
     private static short pacArray(byte[] array) {

@@ -10,9 +10,9 @@ tile.tp_to_home_block.name=Портал в верхний мир
 tile.taint_ancient_stone.name=Заражённый древний камень
 tile.tp_to_ancient_world_block.name=Портал в древний мир
 itemGroup.returnoftheancients_tab=Thaumcraft: Return of the ancients
-tile.energy_line.name=Энерго трасса
-tile.energy_source.name=Источник энергии
-tile.ancient_teleport.name=Древний портал
+tile.energy_line.name=Энерго трасса [WIP]
+tile.energy_source.name=Источник энергии [WIP]
+tile.ancient_teleport.name=Древний портал [WIP]
 ###################################################################################
 # Any
 ###################################################################################
@@ -29,7 +29,7 @@ returnoftheancients.portal.message=Нельзя использовать:
 returnoftheancients.rui.t=убери это
 returnoftheancients.rui.f=у тебя 30 секунд
 returnoftheancients.gui.esc=Нажмите ESC еще раз чтобы выйти.
-returnoftheancients.message.new-version=Добро пожаловать в Thaumcraft: Return of the ancients v1.4.0-betta!
+returnoftheancients.message.new-version=Добро пожаловать в Thaumcraft: Return of the ancients v1.4.0-alpha build!
 returnoftheancients.kJ.prefixes=Дж/кДж/МДж/ГДж/ТДж
 returnoftheancients.kW.prefixes=Вт/кВт/МВт/ГВт/ТВт
 returnoftheancients.energy.local.0=Энергия:

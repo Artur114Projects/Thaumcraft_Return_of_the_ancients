@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.generation.portal.base.client.ClientAncientPortal;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -26,10 +27,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class ItemDebug extends BaseItem {
-
-//	private ITRAStructure structure = null;
-	private BlockPos blockPos = null;
-	private ClientAncientPortal portal = null;
 
 	public ItemDebug(String name) {
 		super(name);
@@ -109,8 +106,11 @@ public class ItemDebug extends BaseItem {
 		}
 		if (!worldIn.isRemote) {
 			if (player.isSneaking()) {
-				for (int i = 1; i != 5; i++) {
-					StructureBuildersManager.createBuildRequest(worldIn, new BlockPos(pos.getX() + 16 * (i - 1), 100, pos.getZ()), "ancient_turn_rotate-" + i).setNeedProtect().build();
+				for (int i = 0; i != 2; i++) {
+					UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(pos.getX() + 16 * (i - 1), 100, pos.getZ());
+					blockPos.setPos(blockPos.toChunkPos()).add(8, 0, 8);
+					StructureBuildersManager.createBuildRequest(worldIn, blockPos, "ancient_way_rotate-" + 1).setNeedProtect().setPosAsXZCenter().build();
+					UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
 				}
 			}
 

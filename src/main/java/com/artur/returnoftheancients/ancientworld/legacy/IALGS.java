@@ -48,6 +48,7 @@ public interface IALGS {
 
     byte[] ROTATE_MAX = new byte[] {WAY_ROTATE_MAX, TURN_ROTATE_MAX, FORK_ROTATE_MAX, CROSSROADS_ROTATE_MAX, END_ROTATE_MAX, ENTRY_ROTATE_MAX, BOSS_ROTATE_MAX};
 
+    byte LADDER_ID = 8;
 
     @Deprecated
     String isBossSpawn = "IBSK";

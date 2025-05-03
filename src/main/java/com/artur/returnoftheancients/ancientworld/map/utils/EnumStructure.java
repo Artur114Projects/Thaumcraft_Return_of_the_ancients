@@ -7,7 +7,8 @@ public enum EnumStructure {
     CROSSROADS("ancient_crossroads", false, false, StructurePos.Face.values()),
     END("ancient_end_rotate-", true, false, StructurePos.Face.LEFT),
     ENTRY("ancient_entry", false, false, StructurePos.Face.values()),
-    BOSS("ancient_boss", false, true);
+    BOSS("ancient_boss", false, true),
+    LADDER("ancient_ladder_rotate-", true, false, StructurePos.Face.RIGHT, StructurePos.Face.LEFT);
 
 
     private final StructurePos.Face[] portsOnDefRotate;
@@ -40,13 +41,13 @@ public enum EnumStructure {
         C180;
 
         public static Rotate asId(int id) {
-            if (id > values().length) throw new IndexOutOfBoundsException();
+            if (id > values().length || id < 0) throw new IndexOutOfBoundsException();
             return values()[id - 1];
         }
     }
 
     public static EnumStructure asId(int id) {
-        if (id > values().length) throw new IndexOutOfBoundsException();
+        if (id > values().length || id < 0) throw new IndexOutOfBoundsException();
         return values()[id - 1];
     }
 }

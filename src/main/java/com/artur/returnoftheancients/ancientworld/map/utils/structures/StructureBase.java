@@ -3,6 +3,8 @@ package com.artur.returnoftheancients.ancientworld.map.utils.structures;
 import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructure;
 import com.artur.returnoftheancients.ancientworld.map.utils.StructurePos;
 import com.artur.returnoftheancients.ancientworld.map.utils.StructuresMap;
+import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +56,11 @@ public class StructureBase implements IStructure {
     }
 
     @Override
+    public @NotNull StructurePos.Face[] ports() {
+        return this.ports.toArray(new StructurePos.Face[0]);
+    }
+
+    @Override
     public @NotNull EnumStructure.Rotate rotate() {
         return this.rotate;
     }
@@ -65,7 +72,10 @@ public class StructureBase implements IStructure {
 
     @Override
     public void build(World world, ChunkPos pos, Random rand) {
-
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        blockPos.setPos(pos).setY(this.y);
+        StructureBuildersManager.createBuildRequest(world, blockPos, this.type.getStringId(this.rotate)).build();
+        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
     }
 
     @Override

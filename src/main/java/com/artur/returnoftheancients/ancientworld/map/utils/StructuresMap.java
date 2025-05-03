@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.ancientworld.map.utils;
 
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructure;
+import com.artur.returnoftheancients.ancientworld.map.utils.structures.StructureBase;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -17,6 +18,10 @@ public class StructuresMap {
 
     private int index(int x, int y) {
         return x + y * this.size;
+    }
+
+    private int index(StructurePos pos) {
+        return index(pos.getX(), pos.getY());
     }
 
     public @Nullable EnumStructure structureType(StructurePos pos) {
@@ -80,6 +85,17 @@ public class StructuresMap {
         this.structures[this.index(x, y)] = copy;
     }
 
+    public void createBaseStructure(StructurePos pos, EnumStructure type, EnumStructure.Rotate rotate) {
+        if (pos.isOutOfBounds(this.size)) return;
+        IStructure structure = new StructureBase(rotate, type, pos);
+        structure.bindMap(this);
+        this.structures[this.index(pos)] = structure;
+    }
+
+    public void createBaseStructure(int x, int y, EnumStructure type, EnumStructure.Rotate rotate) {
+        this.createBaseStructure(new StructurePos(x, y), type, rotate);
+    }
+
     public List<StructurePos> connectedStructures(int x, int y) {
         return this.connectedStructures(new StructurePos(x, y));
     }
@@ -100,5 +116,9 @@ public class StructuresMap {
         }
 
         return ret;
+    }
+
+    public int size() {
+        return this.size;
     }
 }

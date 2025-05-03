@@ -8,4 +8,5 @@ public interface IBuildProperties {
     boolean isUseEBSHook(IBlockState state);
     boolean isNeedMarkRenderUpdate();
     IBlockState blockStateHook(IBlockState state);
+    boolean isPosAsXZCenter();
 }

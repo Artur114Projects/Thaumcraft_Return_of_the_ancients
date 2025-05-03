@@ -13,6 +13,7 @@ public interface IStructure {
     @NotNull IStructure copy();
     @NotNull StructurePos pos();
     @NotNull EnumStructure type();
+    @NotNull StructurePos.Face[] ports();
     @NotNull EnumStructure.Rotate rotate();
     boolean canConnect(StructurePos.Face face);
     void build(World world, ChunkPos pos, Random rand);

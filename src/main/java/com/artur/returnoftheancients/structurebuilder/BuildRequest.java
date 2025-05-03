@@ -19,6 +19,7 @@ public class BuildRequest implements IBuildProperties {
     protected Function<IBlockState, Boolean> isUseEBSHook = null;
     protected boolean isNeedMarkRenderUpdate = true;
     protected Function<IBlockState, IBlockState> blockStateHook = null;
+    protected boolean isPosAsXZCenter = false;
 
     protected BuildRequest(World world, BlockPos pos, IStructureBuilder builder) {
         this.builder = builder;
@@ -82,6 +83,15 @@ public class BuildRequest implements IBuildProperties {
     }
     public BuildRequest addBlockStateHook(Function<IBlockState, IBlockState> hook) {
         this.blockStateHook = hook;
+        return this;
+    }
+
+    @Override
+    public boolean isPosAsXZCenter() {
+        return this.isPosAsXZCenter;
+    }
+    public BuildRequest setPosAsXZCenter() {
+        this.isPosAsXZCenter = true;
         return this;
     }
 }

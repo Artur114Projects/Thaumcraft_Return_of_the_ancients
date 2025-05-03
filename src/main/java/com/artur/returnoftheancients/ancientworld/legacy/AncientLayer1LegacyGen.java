@@ -6,8 +6,7 @@ import java.util.Random;
 
 
 public class AncientLayer1LegacyGen implements IALGS {
-
-    private static final int SIZE = 17;
+    public static int SIZE = 17;
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES = new byte[SIZE][SIZE];
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE = new byte[SIZE][SIZE];
     private static byte[][] ANCIENT_LABYRINTH_STRUCTURES_IN_WORK = new byte[SIZE][SIZE];
@@ -464,8 +463,31 @@ public class AncientLayer1LegacyGen implements IALGS {
             }
         }
 
-        ANCIENT_LABYRINTH_STRUCTURES[8][8] = ENTRY_ID;
-        ANCIENT_LABYRINTH_STRUCTURES_ROTATE[8][8] = ROTATE_MAX[ENTRY_ID - 1];
+        ANCIENT_LABYRINTH_STRUCTURES[SIZE / 2][SIZE / 2] = ENTRY_ID;
+        ANCIENT_LABYRINTH_STRUCTURES_ROTATE[SIZE / 2][SIZE / 2] = ROTATE_MAX[ENTRY_ID - 1];
+
+//        setStructure(8, 8, ENTRY_ID);
+//
+//        setStructure(8, 8 + 1, ENTRY_ID);
+//        setStructure(8, 8 - 1, ENTRY_ID);
+//        setStructure(8 + 1, 8, ENTRY_ID);
+//        setStructure(8 - 1, 8, ENTRY_ID);
+//
+//        setStructure(8 - 1, 8 - 1, (byte) -ENTRY_ID);
+//        setStructure(8 + 1, 8 + 1, (byte) -ENTRY_ID);
+//        setStructure(8 - 1, 8 + 1, (byte) -ENTRY_ID);
+//        setStructure(8 + 1, 8 - 1, (byte) -ENTRY_ID);
+//
+//        setStructure(8, 8 + 2, LADDER_ID, (byte) 2);
+//        setStructure(8, 8 - 2, LADDER_ID, (byte) 2);
+//        setStructure(8 + 2, 8, LADDER_ID, (byte) 1);
+//        setStructure(8 - 2, 8, LADDER_ID, (byte) 1);
+//
+//        setStructure(8, 8 + 3, LADDER_ID, (byte) 2);
+//        setStructure(8, 8 - 3, LADDER_ID, (byte) 2);
+//        setStructure(8 + 3, 8, LADDER_ID, (byte) 1);
+//        setStructure(8 - 3, 8, LADDER_ID, (byte) 1);
+
 
         boolean foundRandom = false;
         byte x = 0;
@@ -490,17 +512,20 @@ public class AncientLayer1LegacyGen implements IALGS {
             }
         }
 
-        ANCIENT_LABYRINTH_STRUCTURES[y][x] = BOSS_ID;
+        ANCIENT_LABYRINTH_STRUCTURES_IN_WORK = ANCIENT_LABYRINTH_STRUCTURES;
+        ANCIENT_LABYRINTH_STRUCTURES_ROTATE_IN_WORK = ANCIENT_LABYRINTH_STRUCTURES_ROTATE;
 
-        ANCIENT_LABYRINTH_STRUCTURES[y + 1][x] = BOSS_ID;
-        ANCIENT_LABYRINTH_STRUCTURES[y - 1][x] = BOSS_ID;
-        ANCIENT_LABYRINTH_STRUCTURES[y][x + 1] = BOSS_ID;
-        ANCIENT_LABYRINTH_STRUCTURES[y][x - 1] = BOSS_ID;
+        setStructure(x, y, BOSS_ID);
 
-        ANCIENT_LABYRINTH_STRUCTURES[y - 1][x - 1] = BOSS_N_ID;
-        ANCIENT_LABYRINTH_STRUCTURES[y + 1][x + 1] = BOSS_N_ID;
-        ANCIENT_LABYRINTH_STRUCTURES[y + 1][x - 1] = BOSS_N_ID;
-        ANCIENT_LABYRINTH_STRUCTURES[y - 1][x + 1] = BOSS_N_ID;
+        setStructure(x, y + 1, BOSS_ID);
+        setStructure(x, y - 1, BOSS_ID);
+        setStructure(x + 1, y, BOSS_ID);
+        setStructure(x - 1, y, BOSS_ID);
+
+        setStructure(x - 1, y - 1, BOSS_N_ID);
+        setStructure(x + 1, y + 1, BOSS_N_ID);
+        setStructure(x - 1, y + 1, BOSS_N_ID);
+        setStructure(x + 1, y - 1, BOSS_N_ID);
 
         return new byte[][][] {ANCIENT_LABYRINTH_STRUCTURES, ANCIENT_LABYRINTH_STRUCTURES_ROTATE};
     } // Gen Random Structures
@@ -520,6 +545,9 @@ public class AncientLayer1LegacyGen implements IALGS {
 
 
     public static byte[][][] genStructuresMap(Random rand) {
+        if (SIZE % 2 == 0) {
+            throw new IllegalStateException("The size must not be even!");
+        }
         random = rand;
         int void0 = 0;
         int void1 = 0;
@@ -927,4 +955,14 @@ public class AncientLayer1LegacyGen implements IALGS {
         }
         return i;
     }
+
+    public static void setStructure(int x, int y, byte structure, byte rotate) {
+        ANCIENT_LABYRINTH_STRUCTURES_IN_WORK[y][x] = structure;
+        ANCIENT_LABYRINTH_STRUCTURES_ROTATE_IN_WORK[y][x] = rotate;
+    }
+
+    public static void setStructure(int x, int y, byte structure) {
+        setStructure(x, y, structure, (byte) 1);
+    }
+
 }

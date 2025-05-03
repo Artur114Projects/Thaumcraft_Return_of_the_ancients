@@ -30,6 +30,7 @@ public class StructureBuilder implements IStructureBuilder {
     protected final Map<Integer, NBTTagCompound> tilesData = new HashMap<>();
     protected final IBlockState[] palette;
     protected final boolean[] blocksUseEbs;
+    protected final BlockPos halfSizeXZ;
     protected final BlockPos size;
     protected final int[] blocks;
     protected final String name;
@@ -40,6 +41,7 @@ public class StructureBuilder implements IStructureBuilder {
         NBTTagList blocksNBT = structureNBT.getTagList("blocks", 10);
         NBTTagList nbttaglist = structureNBT.getTagList("size", 3);
         this.size = new BlockPos(nbttaglist.getIntAt(0), nbttaglist.getIntAt(1), nbttaglist.getIntAt(2));
+        this.halfSizeXZ = new BlockPos(nbttaglist.getIntAt(0) / 2, 0, nbttaglist.getIntAt(2) / 2);
 
         this.name = name;
 
@@ -51,8 +53,7 @@ public class StructureBuilder implements IStructureBuilder {
             this.blocksUseEbs[i] = (state.isFullBlock() && !state.canProvidePower() && state.isFullCube() && state.getLightValue() == 0 && !state.getBlock().hasTileEntity(state)) || state.getMaterial() == Material.AIR;
         }
 
-        ArrayList<Integer> rawBlocks = new ArrayList<>();
-
+        ArrayList<Integer> rawBlocks = new ArrayList<>(blocksNBT.tagCount());
         for (int i = 0; i != blocksNBT.tagCount(); i++) {
             NBTTagCompound compound = blocksNBT.getCompoundTagAt(i);
             NBTTagList pos = compound.getTagList("pos", 3);
@@ -82,6 +83,7 @@ public class StructureBuilder implements IStructureBuilder {
             IBlockState state = properties.blockStateHook(this.palette[type]);
             if (state == null) return;
             this.blockPos.setPos(pos).add(x, y, z);
+            if (properties.isPosAsXZCenter()) this.blockPos.deduct(this.halfSizeXZ);
             if (state.getMaterial() == Material.AIR && properties.isIgnoreAir()) continue;
             if (this.blockPos.getY() >> 4 >= 16 || this.blockPos.getY() >> 4 < 0) continue;
 

@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.main;
 
+import com.artur.returnoftheancients.ancientworld.map.gen.GenPhase;
 import com.artur.returnoftheancients.ancientworldlegacy.genmap.util.StructureMap;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.referense.Referense;
@@ -63,7 +64,13 @@ public class Test { //
 
 
     public static void main(String[] args) {
-
+        GenPhase genPhase = GenPhase.initAllGenPhases();
+        for (int i = 0; i != 20; i++) {
+            System.out.println("Started");
+            long time = System.nanoTime();
+            genPhase.getMap(System.currentTimeMillis(), 17);
+            System.out.println("Is took:" + (System.nanoTime() - time) / 1000000F + "ms");
+        }
     }
 
     private static short pacArray(byte[] array) {

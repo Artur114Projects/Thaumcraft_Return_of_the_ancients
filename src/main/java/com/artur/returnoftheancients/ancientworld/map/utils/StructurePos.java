@@ -14,9 +14,9 @@ public class StructurePos {
     public StructurePos offset(StructurePos.Face face) {
         switch (face) {
             case UP:
-                return new StructurePos(this.getX(), this.getY() + 1);
-            case DOWN:
                 return new StructurePos(this.getX(), this.getY() - 1);
+            case DOWN:
+                return new StructurePos(this.getX(), this.getY() + 1);
             case RIGHT:
                 return new StructurePos(this.getX() + 1, this.getY());
             case LEFT:
@@ -90,6 +90,29 @@ public class StructurePos {
         public Face getOppose() {
             return this.rotate(EnumStructure.Rotate.C180);
         }
+
+        public int xOffset() {
+            switch (this) {
+                case RIGHT:
+                    return 1;
+                case LEFT:
+                    return -1;
+                default:
+                    return 0;
+            }
+        }
+
+        public int yOffset() {
+            switch (this) {
+                case UP:
+                    return -1;
+                case DOWN:
+                    return 1;
+                default:
+                    return 0;
+            }
+        }
+
 
         private int offsetIndex(int index, int count) {
             for (int i = 0; i != count; i++) index = offsetIndex(index);

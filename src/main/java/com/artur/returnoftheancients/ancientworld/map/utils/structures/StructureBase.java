@@ -15,12 +15,14 @@ public class StructureBase implements IStructure {
     protected final Set<StructurePos.Face> ports = new HashSet<>();
     protected EnumStructure.Rotate rotate;
     protected StructuresMap map = null;
-    protected final EnumStructure type;
-    protected final StructurePos pos;
+    protected EnumStructure type;
+    protected StructurePos pos;
     protected int y = 80;
 
+    protected StructureBase() {}
+
     public StructureBase(EnumStructure.Rotate rotate, EnumStructure type, StructurePos pos) {
-        if (type.isMultiChunk()) {
+        if (type.isMultiChunk() && this.getClass() == StructureBase.class) {
             throw new IllegalArgumentException();
         }
 

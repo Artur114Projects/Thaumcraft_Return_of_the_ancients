@@ -16,7 +16,7 @@ public class GenLayersHandler {
         final Random rand = new Random(seed);
         rand.nextInt();
 
-        final double angleOffset = ((Math.PI * 2) / (rand.nextInt(16) + 1));
+        final double angleOffset = ((Math.PI * 2) * ((double) (rand.nextInt(16) + 1) / 16));
         final int defaultDistance = 8000;
         final int distance = 16000;
 
@@ -28,13 +28,6 @@ public class GenLayersHandler {
             int chunkZ = (int) ((radius * Math.sin(angle)) + portalGenerateOffset(rand)) >> 8;
 
             portalPos[i] = new ChunkPos(chunkX << 4, chunkZ << 4);
-        }
-
-        if (TRAConfigs.Any.debugMode && false) {
-            System.out.println("Seed:" + seed);
-            for (ChunkPos pos : portalPos) {
-                System.out.println(pos);
-            }
         }
     }
 

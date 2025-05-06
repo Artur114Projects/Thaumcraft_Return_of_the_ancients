@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.ancientworld.map.utils;
 
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructure;
+import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructureMultiChunk;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.StructureBase;
 import org.jetbrains.annotations.Nullable;
 
@@ -74,15 +75,27 @@ public class StructuresMap {
         }
     }
 
-    public void insetStructure(StructurePos pos, IStructure structure) {
-        this.insetStructure(pos.getX(), pos.getY(), structure);
+    public void insetStructure(IStructure structure) {
+        if (structure.type().isMultiChunk()) {
+            this.privateInsetMultiChunkStructure((IStructureMultiChunk) structure.copy());
+        } else {
+            this.privateInsetStructure(structure.copy());
+        }
     }
 
-    public void insetStructure(int x, int y, IStructure structure) {
-        if (x < 0 || y < 0 || x >= size || y >= size) return;
-        IStructure copy = structure.copy();
-        copy.bindMap(this);
-        this.structures[this.index(x, y)] = copy;
+    private void privateInsetStructure(IStructure structure) {
+        StructurePos pos = structure.pos();
+        if (pos.isOutOfBounds(this.size)) return;
+        structure.bindMap(this);
+        this.structures[this.index(pos)] = structure;
+    }
+
+    private void privateInsetMultiChunkStructure(IStructureMultiChunk structure) {
+        StructurePos pos = structure.pos();
+        if (pos.isOutOfBounds(this.size)) return;
+        structure.bindMap(this);
+        this.structures[this.index(pos)] = structure;
+        structure.insertSegments(this::privateInsetStructure);
     }
 
     public void createBaseStructure(StructurePos pos, EnumStructure type, EnumStructure.Rotate rotate) {
@@ -109,7 +122,7 @@ public class StructuresMap {
         for (StructurePos.Face face : StructurePos.Face.values()) {
             if (!structure.canConnect(face)) continue;
             StructurePos offsetPos = pos.offset(face);
-            IStructure neighbor = this.structurePrivate(pos);
+            IStructure neighbor = this.structurePrivate(offsetPos);
             if (neighbor != null && neighbor.canConnect(face.getOppose())) {
                 ret.add(offsetPos);
             }

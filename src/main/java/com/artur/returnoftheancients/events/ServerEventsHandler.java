@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.events;
 
 import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
+import com.artur.returnoftheancients.events.eventmanagers.SlowBuildManager;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
@@ -49,10 +50,11 @@ import thaumcraft.api.blocks.BlocksTC;
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
-public class ServerEventsHandler {
+public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
     public static final ShortChunkLoadManager SHORT_CHUNK_LOAD_MANAGER = new ShortChunkLoadManager();
     public static final PlayerInBiomeManager PLAYER_IN_BIOME_MANAGER = new PlayerInBiomeManager();
     public static final TimerTasksManager TIMER_TASKS_MANAGER = new TimerTasksManager();
+    public static final SlowBuildManager SLOW_BUILD_MANAGER = new SlowBuildManager();
 
     private static boolean isAncientAreaSet = false;
     private static byte difficultyId = -1;
@@ -333,6 +335,7 @@ public class ServerEventsHandler {
     public static void serverTick(TickEvent.ServerTickEvent e) {
         SHORT_CHUNK_LOAD_MANAGER.tickEventServerTickEvent(e);
         TIMER_TASKS_MANAGER.tickEventServerTickEvent(e);
+        SLOW_BUILD_MANAGER.tickEventServerTickEvent(e);
     }
 
     @SubscribeEvent

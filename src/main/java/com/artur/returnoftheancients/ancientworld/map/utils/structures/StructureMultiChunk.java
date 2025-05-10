@@ -60,13 +60,15 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
     @Override
     public void setRotate(EnumStructure.Rotate rotate) {}
 
-    protected abstract String[] structureForm();
+    @Override
+    public abstract @NotNull IStructure copy();
+    protected abstract char[][] structureForm();
 
     protected void compileSegments() {
-        String[] form = this.structureForm();
+        char[][] form = this.structureForm();
 
         for (int i = 0; i != form.length; i++) {
-            if (form[0].length() != form[i].length()) {
+            if (form[0].length != form[i].length) {
                 throw new IllegalArgumentException();
             }
         }
@@ -74,8 +76,8 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
         int centerX = -1;
         int centerY = -1;
         for (int y = 0; y != form.length; y++) {
-            for (int x = 0; x != form[y].length(); x++) {
-                if (form[y].charAt(x) == 'c') {
+            for (int x = 0; x != form[y].length; x++) {
+                if (form[y][x] == 'c') {
                     if (centerY == -1) {
                         centerX = x;
                         centerY = y;
@@ -87,8 +89,8 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
         }
 
         for (int y = 0; y != form.length; y++) {
-            for (int x = 0; x != form[y].length(); x++) {
-                if (form[y].charAt(x) == 's') {
+            for (int x = 0; x != form[y].length; x++) {
+                if (form[y][x] == 's') {
                     List<StructurePos.Face> ports = this.getPortsFromForm(x, y, form);
                     StructurePos pos = new StructurePos(this.pos.getX() + (x - centerX), this.pos.getY() + (y - centerY));
                     IStructureSegment segment = new StructureSegment(this, ports, pos);
@@ -101,18 +103,18 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
         }
     }
 
-    protected List<StructurePos.Face> getPortsFromForm(int x, int y, String[] form) {
+    protected List<StructurePos.Face> getPortsFromForm(int x, int y, char[][] form) {
         List<StructurePos.Face> faces = new ArrayList<>(4);
-        if (x - 1 >= 0 && form[y].charAt(x - 1) == 'p') {
+        if (x - 1 >= 0 && form[y][x - 1] == 'p') {
             faces.add(StructurePos.Face.LEFT);
         }
-        if (x + 1 < form[y].length() && form[y].charAt(x + 1) == 'p') {
+        if (x + 1 < form[y].length && form[y][x + 1] == 'p') {
             faces.add(StructurePos.Face.RIGHT);
         }
-        if (y - 1 >= 0 && form[y - 1].charAt(x) == 'p') {
+        if (y - 1 >= 0 && form[y - 1][x] == 'p') {
             faces.add(StructurePos.Face.UP);
         }
-        if (y + 1 < form.length && form[y + 1].charAt(x) == 'p') {
+        if (y + 1 < form.length && form[y + 1][x] == 'p') {
             faces.add(StructurePos.Face.DOWN);
         }
         return faces;

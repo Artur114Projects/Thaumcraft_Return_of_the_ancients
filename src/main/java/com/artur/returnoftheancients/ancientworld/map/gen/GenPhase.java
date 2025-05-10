@@ -3,13 +3,11 @@ package com.artur.returnoftheancients.ancientworld.map.gen;
 import com.artur.returnoftheancients.ancientworld.map.utils.StructuresMap;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
-
 public abstract class GenPhase {
     public static GenPhase initAllGenPhases() {
-        GenPhase adaptLegacy = new GenPhaseAdaptLegacy();
-        GenPhase checked = new GenPhaseCheckLegacy(adaptLegacy);
-        return checked;
+        GenPhase adaptedLegacy = new GenPhaseAdaptLegacy();
+        GenPhase checkedLegacy = new GenPhaseCheckLegacy(adaptedLegacy);
+        return checkedLegacy;
     }
 
     protected GenPhase parent = null;

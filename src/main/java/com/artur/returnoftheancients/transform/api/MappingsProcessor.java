@@ -1,5 +1,7 @@
 package com.artur.returnoftheancients.transform.api;
 
+import com.artur.returnoftheancients.main.MainR;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +40,7 @@ public class MappingsProcessor {
     }
 
     private static void loadCSVMappings(Map<String, String> map, String fileName) throws IOException {
-        InputStream stream = MinecraftServer.class.getResourceAsStream("/assets/returnoftheancients/transform/mappings/" + fileName);
+        InputStream stream = MainR.class.getResourceAsStream("/assets/returnoftheancients/transform/mappings/" + fileName);
         if (stream == null) {
             new NullPointerException().printStackTrace(System.err);
             return;

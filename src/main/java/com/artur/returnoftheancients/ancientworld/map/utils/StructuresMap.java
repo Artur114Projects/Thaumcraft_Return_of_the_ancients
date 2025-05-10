@@ -3,10 +3,13 @@ package com.artur.returnoftheancients.ancientworld.map.utils;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructure;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructureMultiChunk;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.StructureBase;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class StructuresMap {
     private final IStructure[] structures;
@@ -55,6 +58,12 @@ public class StructuresMap {
         return structure.copy();
     }
 
+    public void build(int index, World world, ChunkPos pos, Random rand) {
+        IStructure structure = this.structurePrivate(index);
+        if (structure == null) return;
+        structure.build(world, pos, rand);
+    }
+
     private @Nullable IStructure structurePrivate(StructurePos pos) {
         return this.structure(pos.getX(), pos.getY());
     }
@@ -62,6 +71,11 @@ public class StructuresMap {
     private @Nullable IStructure structurePrivate(int x, int y) {
         if (x < 0 || y < 0 || x >= size || y >= size) return null;
         return this.structures[this.index(x, y)];
+    }
+
+    private @Nullable IStructure structurePrivate(int index) {
+        if (index >= this.area() || index < 0) return null;
+        return this.structures[index];
     }
 
     public void insetRotate(StructurePos pos, EnumStructure.Rotate rotate) {
@@ -133,5 +147,9 @@ public class StructuresMap {
 
     public int size() {
         return this.size;
+    }
+
+    public int area() {
+        return this.size * this.size;
     }
 }

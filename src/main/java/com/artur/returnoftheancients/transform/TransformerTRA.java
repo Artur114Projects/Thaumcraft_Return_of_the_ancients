@@ -30,7 +30,7 @@ public class TransformerTRA implements IClassTransformer {
                 try {
                     return transformer.transform(name, transformedName, basicClass);
                 } catch (Exception e) {
-                    new RuntimeException(e).printStackTrace(System.err);
+                    e.printStackTrace(System.err);
                     return basicClass;
                 }
             }

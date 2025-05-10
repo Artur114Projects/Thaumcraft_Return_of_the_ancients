@@ -39,29 +39,29 @@ public class StructureBuildersManager {
     }
 
     public static void init() {
-        register("ancient_way_rotate-", 1, 2);
+        register("ancient_door_rock_rotate-", 1, 2);
+        register("ancient_spire_segment_", 0, 8);
         register("ancient_turn_rotate-", 1, 4);
         register("ancient_fork_rotate-", 1, 4);
         register("ancient_end_rotate-", 1,  4);
-        register("ancient_spire_segment_", 0, 8);
-        register("ancient_door_rock_rotate-", 1, 2);
+        register("ancient_way_rotate-", 1, 2);
 
         register("ancient_crossroads");
         register("ancient_entry");
         register("ancient_exit");
         register("ancient_boss");
 
-        register("ancient_entry_way");
         register("ancient_door");
+        register("ancient_area");
         register("ancient_door1");
+        register("ancient_portal");
+        register("ancient_sanctuary");
+        register("ancient_entry_way");
+        register("ancient_portal_hub");
         register("ancient_border_cap");
         register("ancient_portal_floor");
-        register("ancient_sanctuary");
+        register("ancient_portal_air_cube");
         register("ancient_sanctuary_broken");
         register("ancient_sanctuary_cultist");
-        register("ancient_portal_hub");
-        register("ancient_portal_air_cube");
-        register("ancient_portal");
-        register("ancient_area");
     }
 }

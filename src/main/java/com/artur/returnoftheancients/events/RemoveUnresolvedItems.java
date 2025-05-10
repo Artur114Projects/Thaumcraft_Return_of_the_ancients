@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
-public class RemoveUnresolvedItems {
+public class RemoveUnresolvedItems { // TODO: 10.05.2025 Переписать!
     public static final String isUUI = Referense.MODID + "isUseUnresolvedItems";
     public static final String time = Referense.MODID + "RemoveItemsTime";
     public static final String PRI = Referense.MODID + "phaseRemoveItems";

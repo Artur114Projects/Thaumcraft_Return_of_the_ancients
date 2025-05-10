@@ -1,8 +1,11 @@
 package com.artur.returnoftheancients.items;
 
 
+import com.artur.returnoftheancients.ancientworld.map.build.AncientLayer1Builder;
+import com.artur.returnoftheancients.ancientworld.map.gen.GenPhase;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
+import com.artur.returnoftheancients.events.ServerEventsHandler;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.generation.portal.base.client.ClientAncientPortal;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
@@ -25,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Random;
 
 public class ItemDebug extends BaseItem {
 
@@ -106,12 +110,9 @@ public class ItemDebug extends BaseItem {
 		}
 		if (!worldIn.isRemote) {
 			if (player.isSneaking()) {
-				for (int i = 0; i != 2; i++) {
-					UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(pos.getX() + 16 * (i - 1), 100, pos.getZ());
-					blockPos.setPos(blockPos.toChunkPos()).add(8, 0, 8);
-					StructureBuildersManager.createBuildRequest(worldIn, blockPos, "ancient_way_rotate-" + 1).setNeedProtect().setPosAsXZCenter().build();
-					UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
-				}
+				GenPhase phase = GenPhase.initAllGenPhases();
+				AncientLayer1Builder builder = new AncientLayer1Builder(phase.getMap(System.currentTimeMillis(), 17), worldIn, new Random(), worldIn.getChunkFromBlockCoords(pos).getPos());
+				ServerEventsHandler.SLOW_BUILD_MANAGER.newBuilder(builder);
 			}
 
 //			if (player.isSneaking()) {

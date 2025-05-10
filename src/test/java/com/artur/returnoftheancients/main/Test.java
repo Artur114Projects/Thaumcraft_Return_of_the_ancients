@@ -64,13 +64,20 @@ public class Test { //
 
 
     public static void main(String[] args) {
-        GenPhase genPhase = GenPhase.initAllGenPhases();
-        for (int i = 0; i != 20; i++) {
-            System.out.println("Started");
-            long time = System.nanoTime();
-            genPhase.getMap(System.currentTimeMillis(), 17);
-            System.out.println("Is took:" + (System.nanoTime() - time) / 1000000F + "ms");
-        }
+        int x = 10;
+        int y = 6;
+        int size = 17;
+
+        int index = x + y * size;
+
+        x = index % size;
+        y = index / size;
+        System.out.println(x);
+        System.out.println(y);
+        System.out.println();
+
+        System.out.println(x++);
+        System.out.println(x++);
     }
 
     private static short pacArray(byte[] array) {

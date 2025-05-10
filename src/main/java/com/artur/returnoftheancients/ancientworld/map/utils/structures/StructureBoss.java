@@ -19,13 +19,13 @@ public class StructureBoss extends StructureMultiChunk {
     }
 
     @Override
-    protected String[] structureForm() {
-        return new String[] {
-                "  p  ",
-                " sss ",
-                "pscsp",
-                " sss ",
-                "  p  "
+    protected char[][] structureForm() {
+        return new char[][] {
+            {' ',' ','p',' ',' '},
+            {' ','s','s','s',' '},
+            {'p','s','c','s','p'},
+            {' ','s','s','s',' '},
+            {' ',' ','p',' ',' '}
         };
     }
 }

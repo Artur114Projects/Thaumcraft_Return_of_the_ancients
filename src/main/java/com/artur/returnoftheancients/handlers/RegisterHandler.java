@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.handlers;
 
+import com.artur.returnoftheancients.blocks.BlockStairsBase;
 import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
 import com.artur.returnoftheancients.blocks.BaseBlockContainer;
 import com.artur.returnoftheancients.client.fx.particle.util.ParticleSprite;
@@ -25,6 +26,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,6 +52,11 @@ public class RegisterHandler {
 	@SubscribeEvent
 	public static void onBlockRegister(RegistryEvent.Register<Block> event) {
 		event.getRegistry().registerAll(InitBlocks.BLOCKS.toArray(new Block[0]));
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public static void onBlockRegisterLater(RegistryEvent.Register<Block> event) {
+		event.getRegistry().register(InitBlocks.ANCIENT_STAIRS = new BlockStairsBase(BlocksTC.stoneAncient.getDefaultState(), "ancient_stairs").setForCreative().setTRACreativeTab());
 	}
 
 	@SubscribeEvent

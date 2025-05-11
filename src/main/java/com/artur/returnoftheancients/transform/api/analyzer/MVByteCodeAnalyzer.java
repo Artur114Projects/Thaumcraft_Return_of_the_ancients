@@ -21,8 +21,6 @@ public abstract class MVByteCodeAnalyzer extends MVBase {
 
     protected abstract IOperation[] operations();
 
-    protected boolean onOperationWork(int operationId) {return true;}
-
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
         manager.processOperation(new IOperationProcessor() {
@@ -66,7 +64,21 @@ public abstract class MVByteCodeAnalyzer extends MVBase {
                 mv.mv.visitInsn(opcode);
             }
         });
+    }
 
+    @Override
+    public void visitIntInsn(int opcode, int operand) {
+        manager.processOperation(new IOperationProcessor() {
+            @Override
+            public boolean invokeOperation(IOperation operation) {
+                return operation.visitIntInsn(opcode, operand);
+            }
+
+            @Override
+            public void invokeSuper(MVByteCodeAnalyzer mv) {
+                mv.mv.visitIntInsn(opcode, operand);
+            }
+        });
     }
 
     protected static class OperationsManager {

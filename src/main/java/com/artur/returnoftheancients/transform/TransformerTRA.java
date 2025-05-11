@@ -14,6 +14,10 @@ public class TransformerTRA implements IClassTransformer {
 
     static {
         TransformerHandler.init();
+
+        TRANSFORMERS.add(new TransformerNetHandlerPlayServer()); // <- only for dev
+        TRANSFORMERS.add(new TransformerTileEntityStructure()); // <- only for dev
+
         TRANSFORMERS.add(new TransformerBiomeSearchWorker());
         TRANSFORMERS.add(new TransformerItemTaintAmulet());
         TRANSFORMERS.add(new TransformerEntityFluxRift());

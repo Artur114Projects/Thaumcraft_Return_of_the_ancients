@@ -41,6 +41,6 @@ public abstract class BaseBlock extends Block implements IHasModel {
 
     @Override
     public void registerModels() {
-        MainR.proxy.registerItemRenderer(item, 0, "inventory");
+        MainR.proxy.registerItemRenderer(this.item, 0, "inventory");
     }
 }

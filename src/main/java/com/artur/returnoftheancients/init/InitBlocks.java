@@ -21,4 +21,5 @@ public class InitBlocks {
     public static final Block TAINT_VOID_STONE = new BlockTaintVoidStone("taint_void_stone", ThaumcraftMaterials.MATERIAL_TAINT, 1.4F, 10, SoundType.STONE);
     public static final Block INCANDESCENT_TAINT_VOID_STONE = new BlockIncandescentTaintVoidStone("incandescent_taint_void_stone", ThaumcraftMaterials.MATERIAL_TAINT, 1.4F, 10, SoundType.STONE);
     public static final Block ANCIENT_SANCTUARY_CONTROLLER_BROKEN = new BlockAncientSanctuaryControllerBroken("ancient_sanctuary_controller_broken", Material.ROCK, -1, Integer.MAX_VALUE, SoundType.STONE);
+    public static Block ANCIENT_STAIRS = null;
 }

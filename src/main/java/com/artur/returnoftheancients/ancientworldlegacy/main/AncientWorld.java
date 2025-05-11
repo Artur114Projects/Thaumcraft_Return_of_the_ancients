@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.ancientworldlegacy.main;
 
+import baubles.api.BaubleType;
 import com.artur.returnoftheancients.ancientworldlegacy.main.entry.AncientEntry;
 import com.artur.returnoftheancients.ancientworldlegacy.main.entry.AncientEntrySolo;
 import com.artur.returnoftheancients.ancientworldlegacy.main.entry.AncientEntryTeam;

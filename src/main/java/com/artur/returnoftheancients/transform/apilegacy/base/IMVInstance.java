@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.transform.api.base;
+package com.artur.returnoftheancients.transform.apilegacy.base;
 
 import org.objectweb.asm.MethodVisitor;
 

@@ -1,6 +1,6 @@
-package com.artur.returnoftheancients.transform.api.analyzer;
+package com.artur.returnoftheancients.transform.apilegacy.analyzer;
 
-import com.artur.returnoftheancients.transform.api.analyzer.operation.*;
+import com.artur.returnoftheancients.transform.apilegacy.analyzer.operation.*;
 
 public class Operations {
 

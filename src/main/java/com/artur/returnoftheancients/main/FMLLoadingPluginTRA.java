@@ -7,12 +7,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 @IFMLLoadingPlugin.MCVersion("1.12.2")
-@IFMLLoadingPlugin.SortingIndex(1001)
 @IFMLLoadingPlugin.Name("Thaumcraft: Return of the Ancients core")
 public class FMLLoadingPluginTRA implements IFMLLoadingPlugin {
     @Override
     public String[] getASMTransformerClass() {
-        return new String[] {TransformerTRA.class.getName()};
+        return new String[] {"com.artur.returnoftheancients.transform.TransformerTRA"};
     }
 
     @Override

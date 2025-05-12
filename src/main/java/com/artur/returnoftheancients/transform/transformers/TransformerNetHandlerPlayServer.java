@@ -1,12 +1,14 @@
 package com.artur.returnoftheancients.transform.transformers;
 
-import com.artur.returnoftheancients.transform.api.MappingsProcessor;
-import com.artur.returnoftheancients.transform.api.analyzer.MVByteCodeAnalyzer;
-import com.artur.returnoftheancients.transform.api.analyzer.Operations;
-import com.artur.returnoftheancients.transform.api.analyzer.operation.IOperation;
-import com.artur.returnoftheancients.transform.api.analyzer.operation.OperationWorkType;
-import com.artur.returnoftheancients.transform.api.base.IMVInstance;
-import com.artur.returnoftheancients.transform.api.base.TransformerBase;
+import com.artur.returnoftheancients.transform.apilegacy.MappingsProcessor;
+import com.artur.returnoftheancients.transform.apilegacy.analyzer.MVByteCodeAnalyzer;
+import com.artur.returnoftheancients.transform.apilegacy.analyzer.Operations;
+import com.artur.returnoftheancients.transform.apilegacy.analyzer.operation.IOperation;
+import com.artur.returnoftheancients.transform.apilegacy.analyzer.operation.OperationWorkType;
+import com.artur.returnoftheancients.transform.apilegacy.base.IMVInstance;
+import com.artur.returnoftheancients.transform.apilegacy.base.TransformerBase;
+import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.objectweb.asm.MethodVisitor;
 
 public class TransformerNetHandlerPlayServer extends TransformerBase {
@@ -30,16 +32,12 @@ public class TransformerNetHandlerPlayServer extends TransformerBase {
                                     Operations.VISIT_VAR_INSN.startBuild(ILOAD).var(12).build(),
 
                                     Operations.VISIT_METHOD_INSN.startBuild(INVOKESPECIAL)
-                                        .owner("net/minecraft/util/math/BlockPos")
-                                        .name("<init>")
-                                        .desc("(III)V")
+                                        .owner(FMLDeobfuscatingRemapper.INSTANCE.unmap("net/minecraft/util/math/BlockPos"))
                                         .itf(false)
                                         .build(),
 
                                     Operations.VISIT_METHOD_INSN.startBuild(INVOKEVIRTUAL)
-                                        .owner("net/minecraft/tileentity/TileEntityStructure")
-                                        .name("setPosition")
-                                        .desc("(Lnet/minecraft/util/math/BlockPos;)V")
+                                        .owner(FMLDeobfuscatingRemapper.INSTANCE.unmap("net/minecraft/tileentity/TileEntityStructure"))
                                         .itf(false)
                                         .build(),
 
@@ -47,41 +45,35 @@ public class TransformerNetHandlerPlayServer extends TransformerBase {
 
                                     Operations.VISIT_VAR_INSN.startBuild(ALOAD).var(3).build(),
                                     Operations.VISIT_METHOD_INSN.startBuild(INVOKEVIRTUAL)
-                                        .owner("net/minecraft/network/PacketBuffer")
-                                        .name("readInt")
-                                        .desc("()I")
+                                        .owner(FMLDeobfuscatingRemapper.INSTANCE.unmap("net/minecraft/network/PacketBuffer"))
                                         .itf(false)
                                         .build(),
 
                                     Operations.VISIT_INSN.startBuild(ICONST_0).workType(OperationWorkType.REMOVE).build(),
                                     Operations.VISIT_INT_INSN.startBuild(BIPUSH).operand(32).workType(OperationWorkType.REMOVE).build(),
-                                    Operations.VISIT_METHOD_INSN.startBuild(INVOKESTATIC).name("clamp").workType(OperationWorkType.REMOVE).build(),
+                                    Operations.VISIT_METHOD_INSN.startBuild(INVOKESTATIC).workType(OperationWorkType.REMOVE).build(),
 
                                     Operations.VISIT_VAR_INSN.startBuild(ISTORE).var(13).build(),
                                     Operations.VISIT_VAR_INSN.startBuild(ALOAD).var(3).build(),
                                     Operations.VISIT_METHOD_INSN.startBuild(INVOKEVIRTUAL)
-                                        .owner("net/minecraft/network/PacketBuffer")
-                                        .name("readInt")
-                                        .desc("()I")
+                                        .owner(FMLDeobfuscatingRemapper.INSTANCE.unmap("net/minecraft/network/PacketBuffer"))
                                         .itf(false)
                                         .build(),
 
                                     Operations.VISIT_INSN.startBuild(ICONST_0).workType(OperationWorkType.REMOVE).build(),
                                     Operations.VISIT_INT_INSN.startBuild(BIPUSH).operand(32).workType(OperationWorkType.REMOVE).build(),
-                                    Operations.VISIT_METHOD_INSN.startBuild(INVOKESTATIC).name("clamp").workType(OperationWorkType.REMOVE).build(),
+                                    Operations.VISIT_METHOD_INSN.startBuild(INVOKESTATIC).workType(OperationWorkType.REMOVE).build(),
 
                                     Operations.VISIT_VAR_INSN.startBuild(ISTORE).var(14).build(),
                                     Operations.VISIT_VAR_INSN.startBuild(ALOAD).var(3).build(),
                                     Operations.VISIT_METHOD_INSN.startBuild(INVOKEVIRTUAL)
-                                        .owner("net/minecraft/network/PacketBuffer")
-                                        .name("readInt")
-                                        .desc("()I")
+                                        .owner(FMLDeobfuscatingRemapper.INSTANCE.unmap("net/minecraft/network/PacketBuffer"))
                                         .itf(false)
                                         .build(),
 
                                     Operations.VISIT_INSN.startBuild(ICONST_0).workType(OperationWorkType.REMOVE).build(),
                                     Operations.VISIT_INT_INSN.startBuild(BIPUSH).operand(32).workType(OperationWorkType.REMOVE).build(),
-                                    Operations.VISIT_METHOD_INSN.startBuild(INVOKESTATIC).name("clamp").workType(OperationWorkType.REMOVE).build(),
+                                    Operations.VISIT_METHOD_INSN.startBuild(INVOKESTATIC).workType(OperationWorkType.REMOVE).build(),
                                 };
                             }
                         };
@@ -89,7 +81,7 @@ public class TransformerNetHandlerPlayServer extends TransformerBase {
 
                     @Override
                     public String[] getTargets() {
-                        return new String[] {MappingsProcessor.getObfuscateMethodName("processCustomPayload")};
+                        return new String[] {!FMLLaunchHandler.isDeobfuscatedEnvironment() ? "a|(Llh;)V" : "processCustomPayload"};
                     }
                 }
         };

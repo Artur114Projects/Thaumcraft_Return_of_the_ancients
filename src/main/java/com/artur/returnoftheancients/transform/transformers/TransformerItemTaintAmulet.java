@@ -1,9 +1,9 @@
 package com.artur.returnoftheancients.transform.transformers;
 
-import com.artur.returnoftheancients.transform.api.base.IMVInstance;
-import com.artur.returnoftheancients.transform.api.base.MVBase;
-import com.artur.returnoftheancients.transform.api.base.TransformerBase;
-import com.artur.returnoftheancients.transform.api.MappingsProcessor;
+import com.artur.returnoftheancients.transform.apilegacy.base.IMVInstance;
+import com.artur.returnoftheancients.transform.apilegacy.base.MVBase;
+import com.artur.returnoftheancients.transform.apilegacy.base.TransformerBase;
+import com.artur.returnoftheancients.transform.apilegacy.MappingsProcessor;
 import org.objectweb.asm.MethodVisitor;
 
 public class TransformerItemTaintAmulet extends TransformerBase {

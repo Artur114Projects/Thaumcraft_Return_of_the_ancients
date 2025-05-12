@@ -1,9 +1,6 @@
-package com.artur.returnoftheancients.transform.api;
+package com.artur.returnoftheancients.transform.apilegacy;
 
 import com.artur.returnoftheancients.main.MainR;
-import net.minecraft.client.Minecraft;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -55,9 +52,9 @@ public class MappingsProcessor {
 
     @NotNull
     public static String getObfuscateMethodName(String name) {
-        if (FMLLaunchHandler.isDeobfuscatedEnvironment()) {
-            return name;
-        }
+//        if (FMLLaunchHandler.isDeobfuscatedEnvironment()) {
+//            return name;
+//        }
         load();
         String obfuscatedName = methods.get(name);
         if (obfuscatedName == null) {

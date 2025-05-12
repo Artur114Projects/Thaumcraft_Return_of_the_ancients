@@ -1,12 +1,14 @@
 package com.artur.returnoftheancients.transform.transformers;
 
-import com.artur.returnoftheancients.transform.api.analyzer.MVByteCodeAnalyzer;
-import com.artur.returnoftheancients.transform.api.analyzer.Operations;
-import com.artur.returnoftheancients.transform.api.analyzer.operation.IOperation;
-import com.artur.returnoftheancients.transform.api.analyzer.operation.OperationWorkType;
-import com.artur.returnoftheancients.transform.api.base.IMVInstance;
-import com.artur.returnoftheancients.transform.api.base.TransformerBase;
-import com.sun.org.apache.regexp.internal.RE;
+import com.artur.returnoftheancients.transform.apilegacy.MappingsProcessor;
+import com.artur.returnoftheancients.transform.apilegacy.analyzer.MVByteCodeAnalyzer;
+import com.artur.returnoftheancients.transform.apilegacy.analyzer.Operations;
+import com.artur.returnoftheancients.transform.apilegacy.analyzer.operation.IOperation;
+import com.artur.returnoftheancients.transform.apilegacy.analyzer.operation.OperationWorkType;
+import com.artur.returnoftheancients.transform.apilegacy.base.IMVInstance;
+import com.artur.returnoftheancients.transform.apilegacy.base.TransformerBase;
+import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.objectweb.asm.MethodVisitor;
 
 public class TransformerTileEntityStructure extends TransformerBase {
@@ -26,14 +28,12 @@ public class TransformerTileEntityStructure extends TransformerBase {
                             protected IOperation[] operations() {
                                 return new IOperation[] {
                                         Operations.VISIT_METHOD_INSN.startBuild(INVOKEVIRTUAL)
-                                            .owner("net/minecraft/nbt/NBTTagCompound")
-                                            .name("getInteger")
-                                            .desc("(Ljava/lang/String;)I")
+                                            .owner(FMLDeobfuscatingRemapper.INSTANCE.unmap("net/minecraft/nbt/NBTTagCompound"))
                                             .itf(false)
                                             .build(),
                                         Operations.VISIT_INSN.startBuild(ICONST_0).workType(OperationWorkType.REMOVE).build(),
                                         Operations.VISIT_INT_INSN.startBuild(BIPUSH).operand(32).workType(OperationWorkType.REMOVE).build(),
-                                        Operations.VISIT_METHOD_INSN.startBuild(INVOKESTATIC).name("clamp").workType(OperationWorkType.REMOVE).build(),
+                                        Operations.VISIT_METHOD_INSN.startBuild(INVOKESTATIC).workType(OperationWorkType.REMOVE).build(),
                                 };
                             }
                         };
@@ -41,7 +41,7 @@ public class TransformerTileEntityStructure extends TransformerBase {
 
                     @Override
                     public String[] getTargets() {
-                        return new String[] {"readFromNBT"};
+                        return new String[] {!FMLLaunchHandler.isDeobfuscatedEnvironment() ? "a|(Lfy;)V" : "readFromNBT"};
                     }
                 }
         };

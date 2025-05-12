@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.transform.api.analyzer.operation;
+package com.artur.returnoftheancients.transform.apilegacy.analyzer.operation;
 
 public class OVisitMethodInsn extends OperationBase {
     private final String owner;

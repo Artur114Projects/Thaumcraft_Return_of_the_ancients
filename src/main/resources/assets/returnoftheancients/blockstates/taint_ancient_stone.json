@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "thaureturnoftheancientsmcraft:taint_ancient_stone",
+        "model": "returnoftheancients:taint_ancient_stone",
         "transform": "forge:default-block"
      },
     "variants": {

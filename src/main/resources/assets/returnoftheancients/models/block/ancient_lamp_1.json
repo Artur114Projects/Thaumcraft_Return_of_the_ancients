@@ -1,0 +1,116 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "returnoftheancients:blocks/ancient_lamp_1",
+		"1": "thaumcraft:blocks/ancient_stone_1",
+		"3": "thaumcraft:blocks/ancient_stone_3",
+		"4": "thaumcraft:blocks/ancient_stone_4",
+		"5": "returnoftheancients:blocks/lava_flow",
+		"particle": "thaumcraft:blocks/ancient_stone_1"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 2],
+			"to": [16, 16, 14],
+			"faces": {
+				"north": {"uv": [15, 15, 16, 16], "texture": "#0"},
+				"east": {"uv": [2, 0, 14, 16], "texture": "#4"},
+				"south": {"uv": [15, 15, 16, 16], "texture": "#0"},
+				"west": {"uv": [2, 0, 14, 16], "texture": "#1"},
+				"up": {"uv": [0, 2, 16, 14], "texture": "#3"},
+				"down": {"uv": [0, 2, 16, 14], "texture": "#1"}
+			}
+		},
+		{
+			"from": [0.1, 0.1, 2.1],
+			"to": [15.9, 15.9, 4.1],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 2]},
+			"faces": {
+				"north": {"uv": [0.1, 0.1, 15.9, 15.9], "rotation": 90, "texture": "#5"},
+				"east": {"uv": [0, 0, 1, 1], "texture": "#missing"},
+				"south": {"uv": [0, 0, 1, 1], "texture": "#missing"},
+				"west": {"uv": [0, 0, 1, 1], "texture": "#missing"},
+				"up": {"uv": [0, 0, 1, 1], "texture": "#missing"},
+				"down": {"uv": [15, 0, 16, 1], "texture": "#missing"}
+			}
+		},
+		{
+			"from": [0.1, 0.1, 11.9],
+			"to": [15.9, 15.9, 13.9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [16, 0, 14]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 1], "texture": "#missing"},
+				"east": {"uv": [0, 0, 1, 1], "texture": "#missing"},
+				"south": {"uv": [0.1, 0.1, 15.9, 15.9], "rotation": 90, "texture": "#5"},
+				"west": {"uv": [0, 0, 1, 1], "texture": "#missing"},
+				"up": {"uv": [0, 0, 1, 1], "rotation": 180, "texture": "#missing"},
+				"down": {"uv": [15, 0, 16, 1], "rotation": 180, "texture": "#missing"}
+			}
+		},
+		{
+			"from": [0, 0, 14],
+			"to": [16, 2, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 14]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 2], "texture": "#missing"},
+				"east": {"uv": [0, 14, 2, 16], "texture": "#4"},
+				"south": {"uv": [0, 2, 16, 0], "texture": "#0"},
+				"west": {"uv": [14, 14, 16, 16], "texture": "#1"},
+				"up": {"uv": [0, 2, 16, 4], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 2], "texture": "#1"}
+			}
+		},
+		{
+			"from": [0, 14, 14],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 14, 14]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 2], "texture": "#missing"},
+				"east": {"uv": [0, 0, 2, 2], "texture": "#4"},
+				"south": {"uv": [0, 0, 16, 2], "texture": "#0"},
+				"west": {"uv": [14, 0, 16, 2], "texture": "#1"},
+				"up": {"uv": [0, 14, 16, 16], "texture": "#3"},
+				"down": {"uv": [0, 2, 16, 4], "texture": "#0"}
+			}
+		},
+		{
+			"from": [0, 3, 14],
+			"to": [16, 5, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 3, 14]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 2], "texture": "#0"},
+				"east": {"uv": [0, 0, 2, 2], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 2], "texture": "#0"},
+				"west": {"uv": [0, 0, 2, 2], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 2], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 2], "texture": "#0"}
+			}
+		},
+		{
+			"from": [0, 7, 14],
+			"to": [16, 9, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 7, 14]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 2], "texture": "#0"},
+				"east": {"uv": [0, 0, 2, 2], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 2], "texture": "#0"},
+				"west": {"uv": [0, 0, 2, 2], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 2], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 2], "texture": "#0"}
+			}
+		},
+		{
+			"from": [0, 11, 14],
+			"to": [16, 13, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 11, 14]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 2], "texture": "#0"},
+				"east": {"uv": [0, 0, 2, 2], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 2], "texture": "#0"},
+				"west": {"uv": [0, 0, 2, 2], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 2], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 2], "texture": "#0"}
+			}
+		}
+	]
+}

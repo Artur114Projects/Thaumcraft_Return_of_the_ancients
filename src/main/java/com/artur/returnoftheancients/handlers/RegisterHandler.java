@@ -56,6 +56,7 @@ public class RegisterHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onBlockRegisterLater(RegistryEvent.Register<Block> event) {
+		event.getRegistry().register(InitBlocks.ELDRITCH_STAIRS = new BlockStairsBase(BlocksTC.stoneEldritchTile.getDefaultState(), "eldritch_stairs").setForCreative().setTRACreativeTab());
 		event.getRegistry().register(InitBlocks.ANCIENT_STAIRS = new BlockStairsBase(BlocksTC.stoneAncient.getDefaultState(), "ancient_stairs").setForCreative().setTRACreativeTab());
 	}
 

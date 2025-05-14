@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "returnoftheancients:ancient_lamp_0",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [
+      { "model": "returnoftheancients:ancient_lamp_0" },
+      { "model": "returnoftheancients:ancient_lamp_0", "y": 90 },
+      { "model": "returnoftheancients:ancient_lamp_0", "y": 180 },
+      { "model": "returnoftheancients:ancient_lamp_0", "y": 270 }
+    ], "inventory": [{"model": "returnoftheancients:ancient_lamp_0"}]
+  }
+}

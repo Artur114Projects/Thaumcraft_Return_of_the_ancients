@@ -34,7 +34,7 @@ void main() {
     }
     col /= count;
 
-    vec3 orange = vec3(1.0, 0.5, 0.0);
+    vec3 orange = vec3(1.0, 0.4, 0.0);
 
     gl_FragColor = vec4(interpolate(col, orange), 1.0);
 }

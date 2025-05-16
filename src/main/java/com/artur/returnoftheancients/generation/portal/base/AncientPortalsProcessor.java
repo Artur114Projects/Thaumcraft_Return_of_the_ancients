@@ -4,6 +4,7 @@ import com.artur.returnoftheancients.generation.portal.naturalgen.AncientPortalN
 import com.artur.returnoftheancients.generation.portal.AncientPortalOpening;
 import com.artur.returnoftheancients.generation.terraingen.GenLayersHandler;
 import com.artur.returnoftheancients.handlers.MiscHandler;
+import com.artur.returnoftheancients.handlers.TeleportHandler;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -333,11 +334,7 @@ public class AncientPortalsProcessor {
             if (portal != null) {
                 portal.tpToHome(player);
             } else {
-//                World world = Objects.requireNonNull(player.getServer()).getWorld(0);
-//                Random rand = new Random(world.getSeed());
-//                int x = rand.nextInt(TRAConfigs.PortalSettings.generationRange) - TRAConfigs.PortalSettings.generationRange / 2;
-//                int z = rand.nextInt(TRAConfigs.PortalSettings.generationRange) - TRAConfigs.PortalSettings.generationRange / 2;
-//                new AncientPortalNaturalGeneration(player.getServer(), 0, x, z, HandlerR.calculateGenerationHeight(world, (x << 4) + 8, (z << 4) + 8));
+                TeleportHandler.teleportToDimension(player, 0, player.getBedLocation(0));
             }
         }
     }
@@ -386,7 +383,7 @@ public class AncientPortalsProcessor {
     }
 
     public static void load(AncientPortal portal) {
-        if (!LOADED_PORTALS.containsKey(portal.id)) {
+        if (portal != null && !LOADED_PORTALS.containsKey(portal.id)) {
             LOADED_PORTALS.put(portal.id, portal);
         }
     }

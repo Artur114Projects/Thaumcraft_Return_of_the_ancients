@@ -58,6 +58,16 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
     }
 
     @Override
+    public @NotNull List<IStructureSegment> segments() {
+        return new ArrayList<>(this.segments);
+    }
+
+    @Override
+    public @NotNull List<IStructureSegment> segmentsWithPorts() {
+        return new ArrayList<>(this.segmentsWithPorts);
+    }
+
+    @Override
     public void setRotate(EnumStructure.Rotate rotate) {}
 
     @Override

@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
@@ -29,6 +30,10 @@ public class TeleportHandler extends Teleporter
 
     public TeleportHandler(WorldServer world) {
         super(world);
+    }
+
+    public static void teleportToDimension(EntityPlayer player, int dimension, BlockPos pos) {
+        teleportToDimension(player, dimension, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
     }
 
     public static void teleportToDimension(EntityPlayer player, int dimension, double x, double y, double z) {

@@ -2,7 +2,8 @@ package com.artur.returnoftheancients.ancientworld.map.utils.structures;
 
 import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructure;
 import com.artur.returnoftheancients.ancientworld.map.utils.StructurePos;
-import com.artur.returnoftheancients.ancientworld.map.utils.StructuresMap;
+import com.artur.returnoftheancients.ancientworld.map.utils.maps.AbstractMap;
+import com.artur.returnoftheancients.ancientworld.map.utils.maps.ImmutableMap;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -14,7 +15,7 @@ import java.util.*;
 public class StructureBase implements IStructure {
     protected final Set<StructurePos.Face> ports = new HashSet<>();
     protected EnumStructure.Rotate rotate;
-    protected StructuresMap map = null;
+    protected AbstractMap map = null;
     protected EnumStructure type;
     protected StructurePos pos;
     protected int y = 80;
@@ -87,8 +88,13 @@ public class StructureBase implements IStructure {
     }
 
     @Override
-    public void bindMap(StructuresMap map) {
+    public void bindMap(AbstractMap map) {
         this.map = map;
+    }
+
+    public StructureBase setY(int yIn) {
+        this.y = yIn;
+        return this;
     }
 
     private void compilePorts() {

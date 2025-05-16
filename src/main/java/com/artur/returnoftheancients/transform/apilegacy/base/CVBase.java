@@ -25,8 +25,8 @@ public class CVBase extends ClassVisitor {
                     System.out.println("Transform method [" + FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(FMLDeobfuscatingRemapper.INSTANCE.unmap(owner), name, desc) + "], desc:[" + desc + "]");
                     return imvInstance.getInstance(mv);
                 }
-                System.out.println(FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(FMLDeobfuscatingRemapper.INSTANCE.unmap(owner), name, desc));
-                System.out.println("name: " + name + ", desc: " + desc);
+//                System.out.println(FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(FMLDeobfuscatingRemapper.INSTANCE.unmap(owner), name, desc));
+//                System.out.println("name: " + name + ", desc: " + desc);
             }
         }
         return mv;

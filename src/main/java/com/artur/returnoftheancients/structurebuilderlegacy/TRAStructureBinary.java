@@ -57,8 +57,11 @@ public class TRAStructureBinary implements ITRAStructure {
     private static NBTTagCompound readStructureAsName(String structureName) {
         InputStream inputstream = MinecraftServer.class.getResourceAsStream("/assets/" + Referense.MODID + "/structures/" + structureName + ".nbt");
         try {
-            assert inputstream != null;
-            return CompressedStreamTools.readCompressed(inputstream);
+            if (inputstream != null) {
+                return CompressedStreamTools.readCompressed(inputstream);
+            } else {
+                throw new IllegalArgumentException("Structures do not exist! " + structureName);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {

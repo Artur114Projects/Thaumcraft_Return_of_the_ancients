@@ -1,18 +1,17 @@
 package com.artur.returnoftheancients.util;
 
 import com.artur.returnoftheancients.util.interfaces.IIsNeedWriteToNBT;
-import com.artur.returnoftheancients.util.interfaces.IReadFromNBT;
+import com.artur.returnoftheancients.util.interfaces.IDangerReadFromNBT;
 import com.artur.returnoftheancients.util.interfaces.IWriteToNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public class ArrayListWriteToNBT<T extends IIsNeedWriteToNBT> extends ArrayList<T> implements IWriteToNBT, IReadFromNBT {
+public class ArrayListWriteToNBT<T extends IIsNeedWriteToNBT> extends ArrayList<T> implements IWriteToNBT, IDangerReadFromNBT {
     private NBTTagCompound currentTag = new NBTTagCompound();
     private boolean isChanged = true;
     private Class<T> objClass = null;
@@ -96,7 +95,7 @@ public class ArrayListWriteToNBT<T extends IIsNeedWriteToNBT> extends ArrayList<
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) throws NullPointerException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public void readFromNBT(NBTTagCompound nbt) throws Exception {
         if (objClass == null) throw new NullPointerException();
         for (int i = 0; nbt.hasKey(String.valueOf(i)); i++) {
             NBTTagCompound compound = nbt.getCompoundTag(String.valueOf(i));

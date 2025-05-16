@@ -41,6 +41,7 @@ public class StructureBuildersManager {
     public static void init() {
         register("ancient_door_rock_rotate-", 1, 2);
         register("ancient_spire_segment_", 0, 8);
+        register("ancient_ladder_rotate-", 1, 4);
         register("ancient_turn_rotate-", 1, 4);
         register("ancient_fork_rotate-", 1, 4);
         register("ancient_end_rotate-", 1,  4);

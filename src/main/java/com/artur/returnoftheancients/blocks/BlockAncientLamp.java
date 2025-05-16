@@ -14,9 +14,4 @@ public class BlockAncientLamp extends BaseBlock {
 
         this.setLightLevel(light);
     }
-
-    @SideOnly(Side.CLIENT)
-    public int getPackedLightmapCoords(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return 15728880;
-    }
 }

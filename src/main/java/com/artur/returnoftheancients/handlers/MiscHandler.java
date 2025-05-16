@@ -239,22 +239,16 @@ public class MiscHandler {
         MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
     }
 
-    public static void sendAllWorldLoadMessage(boolean state) {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setBoolean("sendAncientWorldLoadMessage", state);
-        MainR.NETWORK.sendToAll(new ClientPacketMisc(nbt));
-    }
-
     public static void injectPercentagesOnClient(EntityPlayerMP playerMP, int x, int y) {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setByte("injectPercentages", (byte) Math.round(((16 * y) + (x + 1)) / 2.89D));
-        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
+//        NBTTagCompound nbt = new NBTTagCompound();
+//        nbt.setByte("injectPercentages", (byte) Math.round(((16 * y) + (x + 1)) / 2.89D));
+//        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
     }
 
     public static void injectPhaseOnClient(EntityPlayerMP playerMP, byte PHASE) {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setByte("injectPhase", PHASE);
-        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
+//        NBTTagCompound nbt = new NBTTagCompound();
+//        nbt.setByte("injectPhase", PHASE);
+//        MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
     }
 
     public static void injectNamesOnClient(List<String> names, EntityPlayerMP player) {

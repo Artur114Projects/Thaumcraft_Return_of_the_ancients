@@ -6,7 +6,7 @@ public enum EnumStructure {
     FORK("ancient_fork_rotate-", true, false, StructurePos.Face.UP, StructurePos.Face.LEFT, StructurePos.Face.RIGHT),
     CROSSROADS("ancient_crossroads", false, false, StructurePos.Face.values()),
     END("ancient_end_rotate-", true, false, StructurePos.Face.LEFT),
-    ENTRY("ancient_entry", false, false, StructurePos.Face.values()),
+    ENTRY("ancient_entry", false, true, StructurePos.Face.values()),
     BOSS("ancient_boss", false, true),
     LADDER("ancient_ladder_rotate-", true, false, StructurePos.Face.RIGHT, StructurePos.Face.LEFT);
 

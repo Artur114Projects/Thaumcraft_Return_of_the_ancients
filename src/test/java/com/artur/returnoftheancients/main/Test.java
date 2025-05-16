@@ -64,20 +64,7 @@ public class Test { //
 
 
     public static void main(String[] args) {
-        int x = 10;
-        int y = 6;
-        int size = 17;
-
-        int index = x + y * size;
-
-        x = index % size;
-        y = index / size;
-        System.out.println(x);
-        System.out.println(y);
-        System.out.println();
-
-        System.out.println(x++);
-        System.out.println(x++);
+        GenPhase.initAllGenPhases().getMap(System.currentTimeMillis(), 17);
     }
 
     private static short pacArray(byte[] array) {

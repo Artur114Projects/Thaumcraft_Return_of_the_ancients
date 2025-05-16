@@ -108,12 +108,14 @@ public class ItemDebug extends BaseItem {
 //				ClientEventsHandler.FOG_MANAGER.setFogParams(new FogManager.FogParams(100, 20, 100, 20));
 //			}
 		}
+		worldIn.getChunkFromBlockCoords(pos).checkLight();
 		if (!worldIn.isRemote) {
 			if (player.isSneaking()) {
 				GenPhase phase = GenPhase.initAllGenPhases();
-				AncientLayer1Builder builder = new AncientLayer1Builder(phase.getMap(System.currentTimeMillis(), 17), worldIn, new Random(), worldIn.getChunkFromBlockCoords(pos).getPos());
+				AncientLayer1Builder builder = new AncientLayer1Builder(phase.getMap(System.currentTimeMillis(), 17).toInteractive(worldIn), worldIn, new Random(), worldIn.getChunkFromBlockCoords(pos).getPos());
 				ServerEventsHandler.SLOW_BUILD_MANAGER.newBuilder(builder);
 			}
+
 
 //			if (player.isSneaking()) {
 //				BlockProtectHandler.protect(worldIn, pos);

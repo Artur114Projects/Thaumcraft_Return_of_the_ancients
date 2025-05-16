@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.generation.portal.naturalgen;
 
 import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
+import com.artur.returnoftheancients.handlers.TeleportHandler;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
@@ -14,6 +15,7 @@ import com.artur.returnoftheancients.util.context.MethodParams4;
 import com.artur.returnoftheancients.util.interfaces.RunnableWithParam;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.nbt.NBTTagCompound;
@@ -143,6 +145,15 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
     @Override
     public void build() {
         this.genManager.generate();
+    }
+
+    @Override
+    public void tpToHome(EntityPlayerMP player) {
+        if (this.isActive) {
+            super.tpToHome(player);
+        } else {
+            TeleportHandler.teleportToDimension(player, 0, player.getBedLocation(0));
+        }
     }
 
     @Override

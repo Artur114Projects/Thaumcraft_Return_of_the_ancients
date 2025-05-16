@@ -167,7 +167,6 @@ public class RegisterHandler {
 		CustomGenStructure.setUseBinary();
 		CustomGenStructure.put("ancient_boss");
 		CustomGenStructure.put("ancient_crossroads_trap");
-		CustomGenStructure.put("ancient_developer_platform");
 
 		CustomGenStructure.put("ancient_entry_way");
 		CustomGenStructure.put("ancient_door");

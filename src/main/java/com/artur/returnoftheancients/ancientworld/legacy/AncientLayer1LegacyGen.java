@@ -454,8 +454,8 @@ public class AncientLayer1LegacyGen implements IALGS {
     }
 
     protected static byte[][][] genRandomStructures() {
-        byte[][] ANCIENT_LABYRINTH_STRUCTURES = new byte[17][17];
-        byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE = new byte[17][17];
+        byte[][] ANCIENT_LABYRINTH_STRUCTURES = new byte[SIZE][SIZE];
+        byte[][] ANCIENT_LABYRINTH_STRUCTURES_ROTATE = new byte[SIZE][SIZE];
         for (byte y = 0; y != SIZE; y++) {
             for (byte x = 0; x != SIZE; x++) {
                 ANCIENT_LABYRINTH_STRUCTURES[y][x] = 0;
@@ -463,35 +463,34 @@ public class AncientLayer1LegacyGen implements IALGS {
             }
         }
 
-        ANCIENT_LABYRINTH_STRUCTURES[SIZE / 2][SIZE / 2] = ENTRY_ID;
-        ANCIENT_LABYRINTH_STRUCTURES_ROTATE[SIZE / 2][SIZE / 2] = ROTATE_MAX[ENTRY_ID - 1];
+        ANCIENT_LABYRINTH_STRUCTURES_IN_WORK = ANCIENT_LABYRINTH_STRUCTURES;
+        ANCIENT_LABYRINTH_STRUCTURES_ROTATE_IN_WORK = ANCIENT_LABYRINTH_STRUCTURES_ROTATE;
 
-//        setStructure(8, 8, ENTRY_ID);
-//
-//        setStructure(8, 8 + 1, ENTRY_ID);
-//        setStructure(8, 8 - 1, ENTRY_ID);
-//        setStructure(8 + 1, 8, ENTRY_ID);
-//        setStructure(8 - 1, 8, ENTRY_ID);
-//
-//        setStructure(8 - 1, 8 - 1, (byte) -ENTRY_ID);
-//        setStructure(8 + 1, 8 + 1, (byte) -ENTRY_ID);
-//        setStructure(8 - 1, 8 + 1, (byte) -ENTRY_ID);
-//        setStructure(8 + 1, 8 - 1, (byte) -ENTRY_ID);
-//
-//        setStructure(8, 8 + 2, LADDER_ID, (byte) 2);
-//        setStructure(8, 8 - 2, LADDER_ID, (byte) 2);
-//        setStructure(8 + 2, 8, LADDER_ID, (byte) 1);
-//        setStructure(8 - 2, 8, LADDER_ID, (byte) 1);
-//
-//        setStructure(8, 8 + 3, LADDER_ID, (byte) 2);
-//        setStructure(8, 8 - 3, LADDER_ID, (byte) 2);
-//        setStructure(8 + 3, 8, LADDER_ID, (byte) 1);
-//        setStructure(8 - 3, 8, LADDER_ID, (byte) 1);
+        int x = SIZE / 2;
+        int y = SIZE / 2;
+
+        setStructure(x, y, ENTRY_ID);
+
+        setStructure(x, y + 1, ENTRY_ID);
+        setStructure(x, y - 1, ENTRY_ID);
+        setStructure(x + 1, y, ENTRY_ID);
+        setStructure(x - 1, y, ENTRY_ID);
+
+        setStructure(x - 1, y - 1, (byte) -ENTRY_ID);
+        setStructure(x + 1, y + 1, (byte) -ENTRY_ID);
+        setStructure(x - 1, y + 1, (byte) -ENTRY_ID);
+        setStructure(x + 1, y - 1, (byte) -ENTRY_ID);
+
+        setStructure(x + 2, y, LADDER_ID, (byte) 1);
+        setStructure(x - 2, y, LADDER_ID, (byte) 4);
+        setStructure(x, y + 2, LADDER_ID, (byte) 2);
+        setStructure(x, y - 2, LADDER_ID, (byte) 3);
+
 
 
         boolean foundRandom = false;
-        byte x = 0;
-        byte y = 0;
+        x = 0;
+        y = 0;
         while (!foundRandom) {
             x = (byte) random.nextInt(17);
             y = (byte) random.nextInt(17);
@@ -512,8 +511,6 @@ public class AncientLayer1LegacyGen implements IALGS {
             }
         }
 
-        ANCIENT_LABYRINTH_STRUCTURES_IN_WORK = ANCIENT_LABYRINTH_STRUCTURES;
-        ANCIENT_LABYRINTH_STRUCTURES_ROTATE_IN_WORK = ANCIENT_LABYRINTH_STRUCTURES_ROTATE;
 
         setStructure(x, y, BOSS_ID);
 
@@ -530,6 +527,10 @@ public class AncientLayer1LegacyGen implements IALGS {
         return new byte[][][] {ANCIENT_LABYRINTH_STRUCTURES, ANCIENT_LABYRINTH_STRUCTURES_ROTATE};
     } // Gen Random Structures
 
+
+    private static int randomIntRange(int min, int max) {
+        return random.nextInt(max - min) + min;
+    }
 
     /*
     [[0][1][2][3][4][5][6][7][8]] 0
@@ -651,7 +652,7 @@ public class AncientLayer1LegacyGen implements IALGS {
                         }
                     }
 
-                    if (upYStructure == WAY_ID && upYStructureRotate == 2) {
+                    if ((upYStructure == WAY_ID || upYStructure == LADDER_ID) && upYStructureRotate == 2) {
                         if (structure == 0) {
                             setUpWay(y, x, is_u, false);
                         } else {
@@ -659,7 +660,7 @@ public class AncientLayer1LegacyGen implements IALGS {
                         }
                     }
 
-                    if (belowYStructure == WAY_ID && belowYStructureRotate == 2) {
+                    if ((belowYStructure == WAY_ID || belowYStructure == LADDER_ID) && belowYStructureRotate == 2) {
                         if (structure == 0) {
                             setBelowWay(y, x, is_bl, false);
                         } else {
@@ -667,7 +668,7 @@ public class AncientLayer1LegacyGen implements IALGS {
                         }
                     }
 
-                    if (backStructure == WAY_ID && backStructureRotate == 1) {
+                    if ((backStructure == WAY_ID || backStructure == LADDER_ID) && backStructureRotate == 1) {
                         if (structure == 0) {
                             setBackWay(y, x, is_b, false);
                         } else {
@@ -675,7 +676,7 @@ public class AncientLayer1LegacyGen implements IALGS {
                         }
                     }
 
-                    if (forwardStructure == WAY_ID && forwardStructureRotate == 1) {
+                    if ((forwardStructure == WAY_ID || forwardStructure == LADDER_ID) && forwardStructureRotate == 1) {
                         if (structure == 0) {
                             setForwardWay(y, x, is_f, false);
                         } else {

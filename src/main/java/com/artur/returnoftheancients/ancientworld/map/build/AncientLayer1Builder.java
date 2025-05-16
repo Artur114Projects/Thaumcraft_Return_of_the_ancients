@@ -1,24 +1,24 @@
 package com.artur.returnoftheancients.ancientworld.map.build;
 
-import com.artur.returnoftheancients.ancientworld.map.utils.StructuresMap;
+import com.artur.returnoftheancients.ancientworld.map.utils.maps.ImmutableMap;
+import com.artur.returnoftheancients.ancientworld.map.utils.maps.InteractiveMap;
 import com.artur.returnoftheancients.structurebuilder.slowbuild.SlowBuildResult;
 import com.artur.returnoftheancients.structurebuilder.slowbuild.SlowBuilder;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Random;
 
 public class AncientLayer1Builder extends SlowBuilder {
-    private final StructuresMap map;
+    private final InteractiveMap map;
     private final Random buildRand;
     private final ChunkPos center;
     private final World world;
     private int currentIndex;
 
-    public AncientLayer1Builder(StructuresMap map, World world, Random buildRand, ChunkPos center) {
+    public AncientLayer1Builder(InteractiveMap map, World world, Random buildRand, ChunkPos center) {
         super(5);
         this.buildRand = buildRand;
         this.center = center;

@@ -2,16 +2,24 @@ package com.artur.returnoftheancients.generation.generators;
 
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.util.interfaces.IStructure;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.gen.structure.template.TemplateManager;
 
-public class GenStructure implements IStructure {
+public class GenStructure {
+    public static final PlacementSettings settings = (new PlacementSettings()).setChunk(null)
+            .setIgnoreEntities(false)
+            .setIgnoreStructureBlock(false)
+            .setMirror(Mirror.NONE)
+            .setRotation(Rotation.NONE);
 
     public static void generateStructure(World world, int x, int y, int z, String structureName)
     {
@@ -20,7 +28,7 @@ public class GenStructure implements IStructure {
         }
         BlockPos pos = new BlockPos(x, y, z);
         MinecraftServer mcServer = world.getMinecraftServer();
-        TemplateManager manager = worldServer.getStructureTemplateManager();
+        TemplateManager manager = ((WorldServer) world).getStructureTemplateManager();
         ResourceLocation location = new ResourceLocation(Referense.MODID, structureName);
         Template template = manager.get(mcServer, location);
 

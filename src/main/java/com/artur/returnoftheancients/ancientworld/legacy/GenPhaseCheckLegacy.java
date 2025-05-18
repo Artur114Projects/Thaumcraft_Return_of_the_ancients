@@ -1,8 +1,7 @@
-package com.artur.returnoftheancients.ancientworld.map.gen;
+package com.artur.returnoftheancients.ancientworld.legacy;
 
-import com.artur.returnoftheancients.ancientworld.legacy.AncientLayer1LegacyGen;
-import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructure;
-import com.artur.returnoftheancients.ancientworld.map.utils.StructurePos;
+import com.artur.returnoftheancients.ancientworld.map.gen.GenPhase;
+import com.artur.returnoftheancients.ancientworld.map.utils.StrPos;
 import com.artur.returnoftheancients.ancientworld.map.utils.maps.ImmutableMap;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructure;
 import com.artur.returnoftheancients.handlers.GraphHandler;
@@ -26,11 +25,11 @@ public class GenPhaseCheckLegacy extends GenPhase {
     }
 
     private boolean checkWayToBoss(ImmutableMap map) {
-        StructurePos start = new StructurePos(AncientLayer1LegacyGen.SIZE / 2, AncientLayer1LegacyGen.SIZE / 2);
+        StrPos start = new StrPos(AncientLayer1LegacyGen.SIZE / 2, AncientLayer1LegacyGen.SIZE / 2);
         AtomicBoolean found = new AtomicBoolean();
         GraphHandler.startBFS(start, (map::connectedStructures), (pos -> true), (pos -> {
             IStructure structure = map.structure(pos);
-            found.set(structure != null && structure.type() == EnumStructure.BOSS);
+//            found.set(structure != null);
             return found.get();
         }));
         return found.get();

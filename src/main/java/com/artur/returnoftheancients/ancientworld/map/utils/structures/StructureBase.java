@@ -1,9 +1,7 @@
 package com.artur.returnoftheancients.ancientworld.map.utils.structures;
 
-import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructure;
-import com.artur.returnoftheancients.ancientworld.map.utils.StructurePos;
+import com.artur.returnoftheancients.ancientworld.map.utils.*;
 import com.artur.returnoftheancients.ancientworld.map.utils.maps.AbstractMap;
-import com.artur.returnoftheancients.ancientworld.map.utils.maps.ImmutableMap;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -13,19 +11,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class StructureBase implements IStructure {
-    protected final Set<StructurePos.Face> ports = new HashSet<>();
-    protected EnumStructure.Rotate rotate;
+    protected final Set<EnumFace> ports = new HashSet<>();
     protected AbstractMap map = null;
-    protected EnumStructure type;
-    protected StructurePos pos;
+    protected EnumStructureType type;
+    protected EnumRotate rotate;
+    protected StrPos pos;
     protected int y = 80;
 
     protected StructureBase() {}
 
-    public StructureBase(EnumStructure.Rotate rotate, EnumStructure type, StructurePos pos) {
-        if (type.isMultiChunk() && this.getClass() == StructureBase.class) {
-            throw new IllegalArgumentException();
-        }
+    public StructureBase(EnumRotate rotate, EnumStructureType type, StrPos pos) {
 
         this.rotate = rotate;
         this.type = type;
@@ -49,27 +44,27 @@ public class StructureBase implements IStructure {
     }
 
     @Override
-    public @NotNull StructurePos pos() {
+    public @NotNull StrPos pos() {
         return this.pos;
     }
 
     @Override
-    public @NotNull EnumStructure type() {
+    public @NotNull IStructureType type() {
         return this.type;
     }
 
     @Override
-    public @NotNull StructurePos.Face[] ports() {
-        return this.ports.toArray(new StructurePos.Face[0]);
+    public @NotNull EnumFace[] ports() {
+        return this.ports.toArray(new EnumFace[0]);
     }
 
     @Override
-    public @NotNull EnumStructure.Rotate rotate() {
+    public @NotNull EnumRotate rotate() {
         return this.rotate;
     }
 
     @Override
-    public boolean canConnect(StructurePos.Face face) {
+    public boolean canConnect(EnumFace face) {
         return this.ports.contains(face);
     }
 
@@ -77,12 +72,12 @@ public class StructureBase implements IStructure {
     public void build(World world, ChunkPos pos, Random rand) {
         UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
         blockPos.setPos(pos).setY(this.y);
-        StructureBuildersManager.createBuildRequest(world, blockPos, this.type.getStringId(this.rotate)).build();
+        StructureBuildersManager.createBuildRequest(world, blockPos, this.type.stringId(this.rotate)).build();
         UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
     }
 
     @Override
-    public void setRotate(EnumStructure.Rotate rotate) {
+    public void setRotate(EnumRotate rotate) {
         this.rotate = rotate;
         this.compilePorts();
     }
@@ -92,13 +87,14 @@ public class StructureBase implements IStructure {
         this.map = map;
     }
 
-    public StructureBase setY(int yIn) {
+    @Override
+    public IStructure setY(int yIn) {
         this.y = yIn;
         return this;
     }
 
     private void compilePorts() {
         this.ports.clear();
-        Collections.addAll(this.ports, this.type.ports(this.rotate));
+        this.ports.addAll(this.type.ports(this.rotate));
     }
 }

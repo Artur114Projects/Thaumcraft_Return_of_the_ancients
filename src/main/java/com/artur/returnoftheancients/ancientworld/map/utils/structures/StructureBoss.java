@@ -1,12 +1,14 @@
 package com.artur.returnoftheancients.ancientworld.map.utils.structures;
 
-import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructure;
-import com.artur.returnoftheancients.ancientworld.map.utils.StructurePos;
+import com.artur.returnoftheancients.ancientworld.map.utils.EnumMultiChunkStrType;
+import com.artur.returnoftheancients.ancientworld.map.utils.EnumRotate;
+import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructureType;
+import com.artur.returnoftheancients.ancientworld.map.utils.StrPos;
 import org.jetbrains.annotations.NotNull;
 
 public class StructureBoss extends StructureMultiChunk {
-    public StructureBoss(EnumStructure.Rotate rotate, StructurePos pos) {
-        super(rotate, EnumStructure.BOSS, pos);
+    public StructureBoss(EnumRotate rotate, StrPos pos) {
+        super(rotate, EnumMultiChunkStrType.BOSS, pos);
     }
 
     protected StructureBoss(StructureMultiChunk parent) {

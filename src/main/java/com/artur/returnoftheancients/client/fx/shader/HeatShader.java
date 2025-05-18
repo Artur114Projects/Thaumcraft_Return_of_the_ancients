@@ -5,12 +5,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber
 public class HeatShader {
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void renderShaders(RenderWorldLastEvent evt) { // TODO: 02.05.2025 Override!
         if (Minecraft.getMinecraft().player == null || Minecraft.getMinecraft().player.dimension != InitDimensions.ancient_world_dim_id) {
             return;

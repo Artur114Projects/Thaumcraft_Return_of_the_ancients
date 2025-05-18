@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.ancientworldlegacy.genmap.util;
 
-import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructure;
+import com.artur.returnoftheancients.ancientworld.map.utils.EnumRotate;
 
 import java.util.Objects;
 
@@ -62,7 +62,7 @@ public class StructurePos {
         DOWN,
         LEFT;
 
-         public Face rotate(EnumStructure.Rotate rotate) {
+         public Face rotate(EnumRotate rotate) {
              switch (rotate) {
                  case NON:
                      return this;

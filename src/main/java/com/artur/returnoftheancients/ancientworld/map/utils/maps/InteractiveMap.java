@@ -1,7 +1,8 @@
 package com.artur.returnoftheancients.ancientworld.map.utils.maps;
 
-import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructure;
-import com.artur.returnoftheancients.ancientworld.map.utils.StructurePos;
+import com.artur.returnoftheancients.ancientworld.map.utils.EnumRotate;
+import com.artur.returnoftheancients.ancientworld.map.utils.IStructureType;
+import com.artur.returnoftheancients.ancientworld.map.utils.StrPos;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructure;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructureInteractive;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructureMultiChunk;
@@ -38,31 +39,31 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
     }
 
     @Override
-    public @Nullable EnumStructure structureType(StructurePos pos) {
+    public @Nullable IStructureType structureType(StrPos pos) {
         return this.structureType(pos.getX(), pos.getY());
     }
 
     @Override
-    public @Nullable EnumStructure structureType(int x, int y) {
+    public @Nullable IStructureType structureType(int x, int y) {
         IStructure structure = this.structure(x, y);
         if (structure == null) return null;
         return structure.type();
     }
 
     @Override
-    public @Nullable EnumStructure.Rotate structureRotate(StructurePos pos) {
+    public @Nullable EnumRotate structureRotate(StrPos pos) {
         return this.structureRotate(pos.getX(), pos.getY());
     }
 
     @Override
-    public @Nullable EnumStructure.Rotate structureRotate(int x, int y) {
+    public @Nullable EnumRotate structureRotate(int x, int y) {
         IStructure structure = this.structure(x, y);
         if (structure == null) return null;
         return structure.rotate();
     }
 
     @Override
-    public @Nullable IStructure structure(StructurePos pos) {
+    public @Nullable IStructure structure(StrPos pos) {
         return this.structure(pos.getX(), pos.getY());
     }
 
@@ -73,12 +74,12 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
     }
 
     @Override
-    public void insetRotate(StructurePos pos, EnumStructure.Rotate rotate) {
+    public void insetRotate(StrPos pos, EnumRotate rotate) {
         this.insetRotate(pos.getX(), pos.getY(), rotate);
     }
 
     @Override
-    public void insetRotate(int x, int y, EnumStructure.Rotate rotate) {
+    public void insetRotate(int x, int y, EnumRotate rotate) {
         IStructure structure = this.structure(x, y);
         if (structure == null) return;
         structure.setRotate(rotate);
@@ -86,7 +87,7 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
 
     @Override
     public void insetStructure(IStructure structure) {
-        StructurePos pos = structure.pos();
+        StrPos pos = structure.pos();
         if (pos.isOutOfBounds(this.size)) return;
         structure.bindMap(this);
         this.structures[this.index(pos)] = structure;

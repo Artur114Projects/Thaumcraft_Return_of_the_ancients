@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.ancientworldlegacy.main.entry;
 
 import com.artur.returnoftheancients.ancientworldlegacy.genmap.AncientEntryMapProvider;
 import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
+import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
 import com.artur.returnoftheancients.ancientworldlegacy.util.BuildPhase;
 import com.artur.returnoftheancients.ancientworldlegacy.genmap.util.StructureMap;
@@ -35,7 +36,6 @@ import java.util.Random;
 import java.util.UUID;
 
 import static com.artur.returnoftheancients.misc.TRAConfigs.AncientWorldSettings;
-import static com.artur.returnoftheancients.util.interfaces.IStructure.settings;
 
 public abstract class AncientEntry implements IBuild, IALGS {
     protected static final byte MAX_LOADING = 4;
@@ -333,7 +333,7 @@ public abstract class AncientEntry implements IBuild, IALGS {
                         if (buildPhase.ytg == map.SIZE) {
                             buildPhase.ytg = 0;
                             buildPhase.xtg = 0;
-                            settings.setRotation(Rotation.NONE);
+                            GenStructure.settings.setRotation(Rotation.NONE);
                             buildPhase.gen = false;
                             onFinalizing();
                             System.out.println("Finalizing pos:" + pos);

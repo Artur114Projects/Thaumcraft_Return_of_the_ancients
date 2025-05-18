@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.ancientworld.map.utils.maps;
 
-import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructure;
-import com.artur.returnoftheancients.ancientworld.map.utils.StructurePos;
+import com.artur.returnoftheancients.ancientworld.map.utils.*;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructure;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructureMultiChunk;
 import org.jetbrains.annotations.Nullable;
@@ -22,26 +21,26 @@ public abstract class AbstractMap {
         return x + y * this.size;
     }
 
-    protected int index(StructurePos pos) {
+    protected int index(StrPos pos) {
         return index(pos.getX(), pos.getY());
     }
 
-    public abstract @Nullable EnumStructure structureType(StructurePos pos);
-    public abstract @Nullable EnumStructure structureType(int x, int y);
-    public abstract @Nullable EnumStructure.Rotate structureRotate(StructurePos pos);
-    public abstract @Nullable EnumStructure.Rotate structureRotate(int x, int y);
-    public abstract @Nullable IStructure structure(StructurePos pos);
+    public abstract @Nullable IStructureType structureType(StrPos pos);
+    public abstract @Nullable IStructureType structureType(int x, int y);
+    public abstract @Nullable EnumRotate structureRotate(StrPos pos);
+    public abstract @Nullable EnumRotate structureRotate(int x, int y);
+    public abstract @Nullable IStructure structure(StrPos pos);
     public abstract @Nullable IStructure structure(int x, int y);
-    public abstract void insetRotate(StructurePos pos, EnumStructure.Rotate rotate);
-    public abstract void insetRotate(int x, int y, EnumStructure.Rotate rotate);
+    public abstract void insetRotate(StrPos pos, EnumRotate rotate);
+    public abstract void insetRotate(int x, int y, EnumRotate rotate);
     public abstract void insetStructure(IStructure structure);
 
-    public List<StructurePos> connectedStructures(int x, int y) {
-        return this.connectedStructures(new StructurePos(x, y));
+    public List<StrPos> connectedStructures(int x, int y) {
+        return this.connectedStructures(new StrPos(x, y));
     }
 
-    public List<StructurePos> connectedStructures(StructurePos pos) {
-        List<StructurePos> ret = new ArrayList<>(4);
+    public List<StrPos> connectedStructures(StrPos pos) {
+        List<StrPos> ret = new ArrayList<>(4);
         if (pos.isOutOfBounds(this.size)) return ret;
         IStructure structure = this.structure(pos);
         if (structure == null) return ret;
@@ -53,9 +52,9 @@ public abstract class AbstractMap {
             return ret;
         }
 
-        for (StructurePos.Face face : StructurePos.Face.values()) {
+        for (EnumFace face : EnumFace.values()) {
             if (!structure.canConnect(face)) continue;
-            StructurePos offsetPos = pos.offset(face);
+            StrPos offsetPos = pos.offset(face);
             IStructure neighbor = this.structure(offsetPos);
             if (neighbor != null && neighbor.canConnect(face.getOppose())) {
                 ret.add(offsetPos);

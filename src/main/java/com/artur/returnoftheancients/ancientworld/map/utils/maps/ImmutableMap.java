@@ -1,49 +1,49 @@
 package com.artur.returnoftheancients.ancientworld.map.utils.maps;
 
-import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructure;
-import com.artur.returnoftheancients.ancientworld.map.utils.StructurePos;
+import com.artur.returnoftheancients.ancientworld.map.utils.*;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructure;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructureMultiChunk;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.StructureBase;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class ImmutableMap extends AbstractMap {
+    private final List<Runnable> frozenChanges = new ArrayList<>();
+    private boolean isChangesFrozen = false;
+
     public ImmutableMap(int size) {
         super(size);
     }
 
     @Override
-    public @Nullable EnumStructure structureType(StructurePos pos) {
+    public @Nullable IStructureType structureType(StrPos pos) {
         return this.structureType(pos.getX(), pos.getY());
     }
 
     @Override
-    public @Nullable EnumStructure structureType(int x, int y) {
+    public @Nullable IStructureType structureType(int x, int y) {
         IStructure structure = this.structurePrivate(x, y);
         if (structure == null) return null;
         return structure.type();
     }
 
     @Override
-    public @Nullable EnumStructure.Rotate structureRotate(StructurePos pos) {
+    public @Nullable EnumRotate structureRotate(StrPos pos) {
         return this.structureRotate(pos.getX(), pos.getY());
     }
 
     @Override
-    public @Nullable EnumStructure.Rotate structureRotate(int x, int y) {
+    public @Nullable EnumRotate structureRotate(int x, int y) {
         IStructure structure = this.structurePrivate(x, y);
         if (structure == null) return null;
         return structure.rotate();
     }
 
     @Override
-    public @Nullable IStructure structure(StructurePos pos) {
+    public @Nullable IStructure structure(StrPos pos) {
         return this.structure(pos.getX(), pos.getY());
     }
 
@@ -55,12 +55,16 @@ public class ImmutableMap extends AbstractMap {
     }
 
     @Override
-    public void insetRotate(StructurePos pos, EnumStructure.Rotate rotate) {
+    public void insetRotate(StrPos pos, EnumRotate rotate) {
         this.insetRotate(pos.getX(), pos.getY(), rotate);
     }
 
     @Override
-    public void insetRotate(int x, int y, EnumStructure.Rotate rotate) {
+    public void insetRotate(int x, int y, EnumRotate rotate) {
+        if (this.isChangesFrozen) {
+            this.frozenChanges.add(() -> this.insetRotate(x, y, rotate));
+            return;
+        }
         IStructure structure = this.structurePrivate(x, y);
         if (structure != null) {
             structure.setRotate(rotate);
@@ -69,7 +73,11 @@ public class ImmutableMap extends AbstractMap {
 
     @Override
     public void insetStructure(IStructure structure) {
-        if (structure.type().isMultiChunk()) {
+        if (this.isChangesFrozen) {
+            this.frozenChanges.add(() -> this.insetStructure(structure));
+            return;
+        }
+        if (structure instanceof IStructureMultiChunk) {
             this.privateInsetMultiChunkStructure((IStructureMultiChunk) structure.copy());
         } else {
             this.privateInsetStructure(structure.copy());
@@ -77,8 +85,8 @@ public class ImmutableMap extends AbstractMap {
     }
 
     @Override
-    public List<StructurePos> connectedStructures(StructurePos pos) {
-        List<StructurePos> ret = new ArrayList<>(4);
+    public List<StrPos> connectedStructures(StrPos pos) {
+        List<StrPos> ret = new ArrayList<>(4);
         if (pos.isOutOfBounds(this.size)) return ret;
         IStructure structure = this.structurePrivate(pos);
         if (structure == null) return ret;
@@ -90,9 +98,9 @@ public class ImmutableMap extends AbstractMap {
             return ret;
         }
 
-        for (StructurePos.Face face : StructurePos.Face.values()) {
+        for (EnumFace face : EnumFace.values()) {
             if (!structure.canConnect(face)) continue;
-            StructurePos offsetPos = pos.offset(face);
+            StrPos offsetPos = pos.offset(face);
             IStructure neighbor = this.structurePrivate(offsetPos);
             if (neighbor != null && neighbor.canConnect(face.getOppose())) {
                 ret.add(offsetPos);
@@ -102,37 +110,49 @@ public class ImmutableMap extends AbstractMap {
         return ret;
     }
 
-    public void createBaseStructure(StructurePos pos, EnumStructure type, EnumStructure.Rotate rotate) {
+    public void createBaseStructure(StrPos pos, EnumStructureType type, EnumRotate rotate) {
         if (pos.isOutOfBounds(this.size)) return;
         IStructure structure = new StructureBase(rotate, type, pos);
         structure.bindMap(this);
         this.structures[this.index(pos)] = structure;
     }
 
-    public void createBaseStructure(int x, int y, EnumStructure type, EnumStructure.Rotate rotate) {
-        this.createBaseStructure(new StructurePos(x, y), type, rotate);
+    public void createBaseStructure(int x, int y, EnumStructureType type, EnumRotate rotate) {
+        this.createBaseStructure(new StrPos(x, y), type, rotate);
     }
 
     public InteractiveMap toInteractive(World world) {
         return new InteractiveMap(this, world);
     }
 
+    public void freezeChanges() {
+        this.isChangesFrozen = true;
+    }
+
+    public void acceptChanges() {
+        this.isChangesFrozen = false;
+
+        for (Runnable run : this.frozenChanges) run.run();
+
+        this.frozenChanges.clear();
+    }
+
     private void privateInsetStructure(IStructure structure) {
-        StructurePos pos = structure.pos();
+        StrPos pos = structure.pos();
         if (pos.isOutOfBounds(this.size)) return;
         structure.bindMap(this);
         this.structures[this.index(pos)] = structure;
     }
 
     private void privateInsetMultiChunkStructure(IStructureMultiChunk structure) {
-        StructurePos pos = structure.pos();
+        StrPos pos = structure.pos();
         if (pos.isOutOfBounds(this.size)) return;
         structure.bindMap(this);
         this.structures[this.index(pos)] = structure;
         structure.insertSegments(this::privateInsetStructure);
     }
 
-    private @Nullable IStructure structurePrivate(StructurePos pos) {
+    private @Nullable IStructure structurePrivate(StrPos pos) {
         return this.structure(pos.getX(), pos.getY());
     }
 

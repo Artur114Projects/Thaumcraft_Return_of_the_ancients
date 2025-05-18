@@ -5,9 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class GenPhase {
     public static GenPhase initAllGenPhases() {
-        GenPhase adaptedLegacy = new GenPhaseAdaptLegacy();
-        GenPhase checkedLegacy = new GenPhaseCheckLegacy(adaptedLegacy);
-        return checkedLegacy;
+        return null;
     }
 
     protected GenPhase parent = null;

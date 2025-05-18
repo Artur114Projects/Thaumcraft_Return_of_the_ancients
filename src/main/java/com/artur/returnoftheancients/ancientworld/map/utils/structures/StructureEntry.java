@@ -1,27 +1,29 @@
 package com.artur.returnoftheancients.ancientworld.map.utils.structures;
 
-import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructure;
-import com.artur.returnoftheancients.ancientworld.map.utils.StructurePos;
+import com.artur.returnoftheancients.ancientworld.map.utils.EnumMultiChunkStrType;
+import com.artur.returnoftheancients.ancientworld.map.utils.EnumRotate;
+import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructureType;
+import com.artur.returnoftheancients.ancientworld.map.utils.StrPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
-public class StructureAncientEntry extends StructureMultiChunk {
-    public StructureAncientEntry(EnumStructure.Rotate rotate, StructurePos pos) {
-        super(rotate, EnumStructure.ENTRY, pos);
+public class StructureEntry extends StructureMultiChunk {
+    public StructureEntry(EnumRotate rotate, StrPos pos) {
+        super(rotate, EnumMultiChunkStrType.ENTRY, pos);
 
         this.y = 87;
     }
 
-    protected StructureAncientEntry(StructureAncientEntry parent) {
+    protected StructureEntry(StructureEntry parent) {
         super(parent);
     }
 
     @Override
     public @NotNull IStructure copy() {
-        return new StructureAncientEntry(this);
+        return new StructureEntry(this);
     }
 
     @Override

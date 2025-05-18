@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.ancientworld.map.utils.structures;
 
-import com.artur.returnoftheancients.ancientworld.map.utils.EnumStructure;
-import com.artur.returnoftheancients.ancientworld.map.utils.StructurePos;
+import com.artur.returnoftheancients.ancientworld.map.utils.*;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -11,20 +10,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 public abstract class StructureMultiChunk extends StructureBase implements IStructureMultiChunk {
     protected final List<IStructureSegment> segmentsWithPorts = new ArrayList<>();
     protected final List<IStructureSegment> segments = new ArrayList<>();
+    protected EnumMultiChunkStrType type;
 
-    public StructureMultiChunk(EnumStructure.Rotate rotate, EnumStructure type, StructurePos pos) {
-        if (!type.isMultiChunk()) {
-            throw new IllegalArgumentException();
-        }
-
-        this.rotate = rotate;
+    public StructureMultiChunk(EnumRotate rotate, EnumMultiChunkStrType type, StrPos pos) {
         this.type = type;
+        this.rotate = rotate;
         this.pos = pos;
 
         this.compileSegments();
@@ -40,13 +35,15 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
                 this.segmentsWithPorts.add(copy);
             }
         }
+
+        this.type = parent.type;
     }
 
     @Override
     public void build(World world, ChunkPos pos, Random rand) {
         UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
         blockPos.setPos(pos).add(8, 0, 8).setY(this.y);
-        StructureBuildersManager.createBuildRequest(world, blockPos, this.type.getStringId(this.rotate)).setPosAsXZCenter().build();
+        StructureBuildersManager.createBuildRequest(world, blockPos, this.type.stringId(this.rotate)).setPosAsXZCenter().build();
         UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
     }
 
@@ -68,7 +65,12 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
     }
 
     @Override
-    public void setRotate(EnumStructure.Rotate rotate) {}
+    public @NotNull IStructureType type() {
+        return this.type;
+    }
+
+    @Override
+    public void setRotate(EnumRotate rotate) {}
 
     @Override
     public abstract @NotNull IStructure copy();
@@ -101,8 +103,8 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
         for (int y = 0; y != form.length; y++) {
             for (int x = 0; x != form[y].length; x++) {
                 if (form[y][x] == 's') {
-                    List<StructurePos.Face> ports = this.getPortsFromForm(x, y, form);
-                    StructurePos pos = new StructurePos(this.pos.getX() + (x - centerX), this.pos.getY() + (y - centerY));
+                    List<EnumFace> ports = this.getPortsFromForm(x, y, form);
+                    StrPos pos = new StrPos(this.pos.getX() + (x - centerX), this.pos.getY() + (y - centerY));
                     IStructureSegment segment = new StructureSegment(this, ports, pos);
                     if (!ports.isEmpty()) {
                         this.segmentsWithPorts.add(segment);
@@ -113,26 +115,27 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
         }
     }
 
-    protected List<StructurePos.Face> getPortsFromForm(int x, int y, char[][] form) {
-        List<StructurePos.Face> faces = new ArrayList<>(4);
+    protected List<EnumFace> getPortsFromForm(int x, int y, char[][] form) {
+        List<EnumFace> faces = new ArrayList<>(4);
         if (x - 1 >= 0 && form[y][x - 1] == 'p') {
-            faces.add(StructurePos.Face.LEFT);
+            faces.add(EnumFace.LEFT);
         }
         if (x + 1 < form[y].length && form[y][x + 1] == 'p') {
-            faces.add(StructurePos.Face.RIGHT);
+            faces.add(EnumFace.RIGHT);
         }
         if (y - 1 >= 0 && form[y - 1][x] == 'p') {
-            faces.add(StructurePos.Face.UP);
+            faces.add(EnumFace.UP);
         }
         if (y + 1 < form.length && form[y + 1][x] == 'p') {
-            faces.add(StructurePos.Face.DOWN);
+            faces.add(EnumFace.DOWN);
         }
         return faces;
     }
 
     public static class StructureSegment extends StructureBase implements IStructureMultiChunk.IStructureSegment {
         protected IStructureMultiChunk parent;
-        public StructureSegment(StructureMultiChunk parent, List<StructurePos.Face> ports, StructurePos pos) {
+        protected EnumMultiChunkStrType type;
+        public StructureSegment(StructureMultiChunk parent, List<EnumFace> ports, StrPos pos) {
             this.rotate = parent.rotate;
             this.type = parent.type;
             this.pos = pos;
@@ -146,6 +149,7 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
             super(parent);
 
             this.parent = parent.parent;
+            this.type = parent.type;
         }
 
         @Override
@@ -162,7 +166,12 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
         public void build(World world, ChunkPos pos, Random rand) {}
 
         @Override
-        public void setRotate(EnumStructure.Rotate rotate) {
+        public @NotNull IStructureType type() {
+            return this.type;
+        }
+
+        @Override
+        public void setRotate(EnumRotate rotate) {
             this.rotate = parent.rotate();
         }
     }

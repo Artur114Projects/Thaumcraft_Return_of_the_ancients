@@ -120,7 +120,6 @@ public class RegisterHandler {
 			event.registerServerCommand(new TestCommand2());
 			event.registerServerCommand(new DataManager());
 			event.registerServerCommand(new TpToPortal());
-			event.registerServerCommand(new Command());
 		}
 		event.registerServerCommand(new TRACommand());
 	}

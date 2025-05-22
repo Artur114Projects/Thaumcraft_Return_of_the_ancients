@@ -47,6 +47,18 @@ public enum EnumFace {
         }
     }
 
+    public Axis axis() {
+        switch (this) {
+            case UP:
+            case DOWN:
+                return Axis.Y;
+            case LEFT:
+            case RIGHT:
+                return Axis.X;
+            default:
+                throw new IllegalArgumentException("Wtf?!");
+        }
+    }
 
     private int offsetIndex(int index, int count) {
         for (int i = 0; i != count; i++) index = offsetIndex(index);
@@ -63,5 +75,32 @@ public enum EnumFace {
             ret[i] = faces[i].rotate(rotate);
         }
         return ret;
+    }
+
+    public static EnumFace[] allFromAxis(Axis axis) {
+        switch (axis) {
+            case X:
+                return new EnumFace[] {LEFT, RIGHT};
+            case Y:
+                return new EnumFace[] {UP, DOWN};
+            default:
+                throw new IllegalArgumentException("Wtf?!");
+        }
+    }
+
+    public enum Axis {
+        X,
+        Y;
+
+        public Axis opposite() {
+            switch (this) {
+                case X:
+                    return Y;
+                case Y:
+                    return X;
+                default:
+                    throw new IllegalStateException("Wtf?!");
+            }
+        }
     }
 }

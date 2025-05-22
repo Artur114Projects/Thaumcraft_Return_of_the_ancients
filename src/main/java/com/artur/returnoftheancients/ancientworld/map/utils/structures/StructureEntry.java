@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Random;
 
 public class StructureEntry extends StructureMultiChunk {
-    public StructureEntry(EnumRotate rotate, StrPos pos) {
-        super(rotate, EnumMultiChunkStrType.ENTRY, pos);
+    public StructureEntry(StrPos pos) {
+        super(EnumRotate.NON, EnumMultiChunkStrType.ENTRY, pos);
 
         this.y = 87;
     }

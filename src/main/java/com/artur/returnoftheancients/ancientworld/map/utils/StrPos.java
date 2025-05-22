@@ -38,6 +38,10 @@ public class StrPos {
         return this.getX() < xSizeMin || this.getX() > xSizeMax || this.getY() < ySizeMin || this.getY() > ySizeMax;
     }
 
+    public StrPos toImmutable() {
+        return this;
+    }
+
     public int getX() {
         return x;
     }
@@ -82,6 +86,10 @@ public class StrPos {
             this.y = y;
         }
 
+        public MutableStrPos() {
+            this(0, 0);
+        }
+
         @Override
         public int getX() {
             return x;
@@ -116,6 +124,11 @@ public class StrPos {
 
         public MutableStrPos setPos(StrPos pos) {
             return this.setPos(pos.getX(), pos.getY());
+        }
+
+        @Override
+        public StrPos toImmutable() {
+            return new StrPos(this.getX(), this.getY());
         }
     }
 }

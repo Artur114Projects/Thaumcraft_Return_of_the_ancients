@@ -22,9 +22,9 @@ public class StructureBase implements IStructure {
 
     public StructureBase(EnumRotate rotate, EnumStructureType type, StrPos pos) {
 
+        this.pos = pos.toImmutable();
         this.rotate = rotate;
         this.type = type;
-        this.pos = pos;
 
         this.compilePorts();
     }

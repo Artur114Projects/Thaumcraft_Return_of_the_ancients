@@ -9,8 +9,8 @@ import com.artur.returnoftheancients.util.interfaces.Function3;
 import java.util.*;
 
 public enum EnumMultiChunkStrType implements IStructureType {
-    ENTRY("ancient_entry", ((rotate, strPos, iStructureType) -> new StructureEntry(rotate, strPos))),
-    BOSS("ancient_boss", ((rotate, strPos, iStructureType) -> new StructureBoss(rotate, strPos)));
+    ENTRY("ancient_entry", ((rotate, strPos, iStructureType) -> new StructureEntry(strPos))),
+    BOSS("ancient_boss", ((rotate, strPos, iStructureType) -> new StructureBoss(strPos)));
 
     private final Function3<EnumRotate, StrPos, IStructureType, IStructureMultiChunk> creator;
     private final String id;

@@ -7,8 +7,8 @@ import com.artur.returnoftheancients.ancientworld.map.utils.StrPos;
 import org.jetbrains.annotations.NotNull;
 
 public class StructureBoss extends StructureMultiChunk {
-    public StructureBoss(EnumRotate rotate, StrPos pos) {
-        super(rotate, EnumMultiChunkStrType.BOSS, pos);
+    public StructureBoss(StrPos pos) {
+        super(EnumRotate.NON, EnumMultiChunkStrType.BOSS, pos);
     }
 
     protected StructureBoss(StructureMultiChunk parent) {

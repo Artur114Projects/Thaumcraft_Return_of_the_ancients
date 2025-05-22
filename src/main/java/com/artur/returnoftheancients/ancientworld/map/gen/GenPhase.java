@@ -5,7 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class GenPhase {
     public static GenPhase initAllGenPhases() {
-        return null;
+        GenPhase baseMap = new GenPhaseCreateBaseMap();
+        GenPhase build = new GenPhaseBuildWays(baseMap);
+        return build;
     }
 
     protected GenPhase parent = null;

@@ -44,7 +44,7 @@ public enum EnumStructureType implements IStructureType {
         AtomicReference<EnumRotate> ret = new AtomicReference<>(null);
 
         this.ports.forEach(((rotate, enumFaces) -> {
-            if (enumFaces.containsAll(ports)) {
+            if (ret.get() == null && enumFaces.containsAll(ports)) {
                 ret.set(rotate);
             }
         }));

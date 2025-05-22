@@ -18,9 +18,9 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
     protected EnumMultiChunkStrType type;
 
     public StructureMultiChunk(EnumRotate rotate, EnumMultiChunkStrType type, StrPos pos) {
-        this.type = type;
+        this.pos = pos.toImmutable();
         this.rotate = rotate;
-        this.pos = pos;
+        this.type = type;
 
         this.compileSegments();
     }
@@ -136,9 +136,9 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
         protected IStructureMultiChunk parent;
         protected EnumMultiChunkStrType type;
         public StructureSegment(StructureMultiChunk parent, List<EnumFace> ports, StrPos pos) {
+            this.pos = pos.toImmutable();
             this.rotate = parent.rotate;
             this.type = parent.type;
-            this.pos = pos;
 
             this.parent = parent;
             this.ports.addAll(ports);

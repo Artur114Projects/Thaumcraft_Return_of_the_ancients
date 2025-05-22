@@ -4,6 +4,7 @@ import com.artur.returnoftheancients.ancientworld.map.utils.*;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructure;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructureMultiChunk;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.StructureBase;
+import com.artur.returnoftheancients.ancientworld.map.utils.structures.StructureMapBorder;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +27,7 @@ public class ImmutableMap extends AbstractMap {
     @Override
     public @Nullable IStructureType structureType(int x, int y) {
         IStructure structure = this.structurePrivate(x, y);
-        if (structure == null) return null;
+        if (structure == null) return StructureMapBorder.MAP_BORDER_TYPE;
         return structure.type();
     }
 
@@ -38,7 +39,7 @@ public class ImmutableMap extends AbstractMap {
     @Override
     public @Nullable EnumRotate structureRotate(int x, int y) {
         IStructure structure = this.structurePrivate(x, y);
-        if (structure == null) return null;
+        if (structure == null) return EnumRotate.NON;
         return structure.rotate();
     }
 
@@ -50,6 +51,7 @@ public class ImmutableMap extends AbstractMap {
     @Override
     public @Nullable IStructure structure(int x, int y) {
         IStructure structure = this.structurePrivate(x, y);
+        if (x < 0 || y < 0 || x >= size || y >= size) return new StructureMapBorder(new StrPos(x, y));
         if (structure == null) return null;
         return structure.copy();
     }
@@ -112,7 +114,7 @@ public class ImmutableMap extends AbstractMap {
 
     public void createBaseStructure(StrPos pos, EnumStructureType type, EnumRotate rotate) {
         if (pos.isOutOfBounds(this.size)) return;
-        IStructure structure = new StructureBase(rotate, type, pos);
+        IStructure structure = type.create(rotate, pos);
         structure.bindMap(this);
         this.structures[this.index(pos)] = structure;
     }

@@ -18,6 +18,11 @@ public class ParticleSprite {
         InitParticleSprite.PARTICLES_SPRITES.add(this);
     }
 
+    public ParticleSprite(String name) {
+        this(EnumAssetLocation.TEXTURES_PARTICLE, name);
+    }
+
+
     public void register(TextureStitchEvent.Pre e) {
         this.atlasSprite = e.getMap().registerSprite(sprite);
     }

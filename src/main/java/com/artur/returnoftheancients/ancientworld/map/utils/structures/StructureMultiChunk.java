@@ -70,6 +70,11 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
     }
 
     @Override
+    public boolean canReplace() {
+        return false;
+    }
+
+    @Override
     public void setRotate(EnumRotate rotate) {}
 
     @Override
@@ -173,6 +178,11 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
         @Override
         public void setRotate(EnumRotate rotate) {
             this.rotate = parent.rotate();
+        }
+
+        @Override
+        public boolean canReplace() {
+            return false;
         }
     }
 }

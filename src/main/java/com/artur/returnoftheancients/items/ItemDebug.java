@@ -77,6 +77,8 @@ public class ItemDebug extends BaseItem {
 //		}
 		if (worldIn.isRemote) {
 
+			System.out.println(worldIn.getCombinedLight(pos, 0));
+
 //			ClientEventsHandler.CAMERA_FX_MANAGER.startShake(20 * 20);
 
 //			if (player.isSneaking()) {

@@ -14,7 +14,7 @@ public class StructureEntry extends StructureMultiChunk {
     public StructureEntry(StrPos pos) {
         super(EnumRotate.NON, EnumMultiChunkStrType.ENTRY, pos);
 
-        this.y = 87;
+//        this.y = 88;
     }
 
     protected StructureEntry(StructureEntry parent) {

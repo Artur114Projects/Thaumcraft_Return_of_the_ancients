@@ -55,8 +55,7 @@ public class RotateParticleFlame extends ParticleFlame {
 
     @Override
     public void onUpdate() {
-        if (this.particleAge++ >= this.particleMaxAge)
-        {
+        if (this.particleAge++ >= this.particleMaxAge) {
             world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX, posY, posZ, motionX / 40, 0.1, motionZ / 40);
         }
 

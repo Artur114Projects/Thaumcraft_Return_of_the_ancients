@@ -29,16 +29,16 @@ public class ShaderProgram {
     }
 
     public ShaderProgram addFragment(String path) {
-        return add(path, GL20.GL_FRAGMENT_SHADER);
+        return this.add(path, GL20.GL_FRAGMENT_SHADER);
     }
 
     public ShaderProgram addVertex(String path) {
-        return add(path, GL20.GL_VERTEX_SHADER);
+        return this.add(path, GL20.GL_VERTEX_SHADER);
     }
 
     public ShaderProgram add(String path, int shaderType) {
         int shaderID = GL20.glCreateShader(shaderType);
-        GL20.glShaderSource(shaderID, readFile(path));
+        GL20.glShaderSource(shaderID, this.readFile(path));
         GL20.glCompileShader(shaderID);
 
 
@@ -90,15 +90,16 @@ public class ShaderProgram {
         return "";
     }
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
     private static Framebuffer framebuffer;
 
     public static void renderFullScreen(ShaderProgram shaderProgram) {
         renderFullScreen(shaderProgram, () -> {});
     }
 
-    public static void renderFullScreen(ShaderProgram shaderProgram, Runnable onShaderEnabled) {  // TODO: 02.05.2025 Override!
+    public static void renderFullScreen(ShaderProgram shaderProgram, Runnable onShaderEnabled) {  // TODO: 02.05.2025 Rewrite!
         int current = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
+        Minecraft mc = Minecraft.getMinecraft();
+
         if (framebuffer == null) {
             framebuffer = new Framebuffer(mc.displayWidth, mc.displayHeight, false);
         }
@@ -107,8 +108,12 @@ public class ShaderProgram {
             framebuffer.createBindFramebuffer(mc.displayWidth, mc.displayHeight);
         }
 
+        framebuffer.framebufferClear();
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
         shaderProgram.enable();
         onShaderEnabled.run();
+
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 0);
         GlStateManager.enableTexture2D();
         GlStateManager.bindTexture(mc.getFramebuffer().framebufferTexture);
@@ -150,7 +155,7 @@ public class ShaderProgram {
         GL11.glBindTexture(GL_TEXTURE_2D, current);
     }
 
-    private static void drawQuad(){
+    private static void drawQuad() {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.getBuffer();
         buffer.begin(7, DefaultVertexFormats.POSITION_TEX);

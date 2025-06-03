@@ -16,6 +16,7 @@ public interface IStructure {
     @NotNull EnumRotate rotate();
     boolean canConnect(EnumFace face);
     void build(World world, ChunkPos pos, Random rand);
+    default boolean canReplace() {return true;}
     void setRotate(EnumRotate rotate);
     void bindMap(AbstractMap map);
     IStructure setY(int yIn);

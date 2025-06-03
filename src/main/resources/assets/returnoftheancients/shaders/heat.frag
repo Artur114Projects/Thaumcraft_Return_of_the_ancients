@@ -6,7 +6,7 @@ uniform float Time;
 varying vec2 texcoord;
 
 float interpolate(float start, float end) {
-    return (start + (end - start) * 0.14) * 1.2;
+    return (start + (end - start) * 0.1) * 1.2;
 }
 
 vec3 interpolate(vec3 start, vec3 end) {
@@ -15,7 +15,7 @@ vec3 interpolate(vec3 start, vec3 end) {
 
 void main() {
     vec2 uv = texcoord;
-    float d = clamp(texture2D(depthTexture, uv).r - 0.06, 0.0, 1.0);
+    float d = clamp(texture2D(depthTexture, uv).r - 0.2, 0.0, 1.0);
     float radius = (d * 0.8) * 0.008;
 
     if (d > 0) {

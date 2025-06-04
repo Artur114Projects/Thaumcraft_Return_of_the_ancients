@@ -21,4 +21,6 @@ public class InitTileEntity {
     public static final BlockTileEntity<TileEnergySource> ENERGY_SOURCE = new BlockEnergySource("energy_source", Material.CLAY, 1.0F, 10, SoundType.METAL);
     public static final BlockTileEntity<TileEntityEnergyLine> ENERGY_LINE = new BlockEnergyLine("energy_line", Material.CLAY, 0.2F, 8, SoundType.METAL);
     public static final BlockTileEntity<TileEntityFireTrap> FIRE_TRAP = new BlockFireTrap("fire_trap", Material.ROCK, 100, 999999999, SoundType.STONE);
+    public static final BlockTileEntity<TileEntityAncientDoor4X3> ANCIENT_DOOR_4_X_3 = new BlockAncientDoor4X3("ancient_door_4x3");
+
 }

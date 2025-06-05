@@ -274,6 +274,19 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         }
     }
 
+    public int getCoordinate(EnumFacing.Axis axis) {
+        switch (axis) {
+            case X:
+                return this.getX();
+            case Y:
+                return this.getY();
+            case Z:
+                return this.getZ();
+            default:
+                return 0;
+        }
+    }
+
     public ChunkPos toChunkPos() {
         return new ChunkPos(this.getChunkX(), this.getChunkZ());
     }

@@ -7,8 +7,11 @@ import com.artur.returnoftheancients.tileentity.TileEntityAncientSanctuaryContro
 import com.artur.returnoftheancients.util.EnumAssetLocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 
 public class TileEntityAncientDoor4X3Render extends TileEntitySpecialRenderer<TileEntityAncientDoor4X3>  {
+    private static final ResourceLocation TEXTURE_BASE = EnumAssetLocation.TEXTURES_BLOCKS.getPngRL("ancient_door_4x3");
     private final ModelAncientDoor4X3 modelBase = new ModelAncientDoor4X3();
 
     @Override
@@ -17,19 +20,28 @@ public class TileEntityAncientDoor4X3Render extends TileEntitySpecialRenderer<Ti
         GlStateManager.pushAttrib();
         GlStateManager.translate(x + 0.5, y + 1.5, z + 0.5);
 
-        GlStateManager.enableLighting();
         GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-//        GlStateManager.disableAlpha();
+        if (te.axis() == EnumFacing.Axis.X) GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.disableAlpha();
 
-        this.bindTexture(EnumAssetLocation.TEXTURES_BLOCKS.getPngRL("texture"));
+        this.bindTexture(TEXTURE_BASE);
 
         modelBase.renderArch();
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0, 0, -1.5F * (1 - te.doorMoveProgress(partialTicks)));
         modelBase.renderDoor1();
+        GlStateManager.popMatrix();
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0, 0, 1.5F * (1 - te.doorMoveProgress(partialTicks)));
         modelBase.renderDoor2();
+        GlStateManager.popMatrix();
 
         GlStateManager.popMatrix();
         GlStateManager.popAttrib();
+        GlStateManager.enableAlpha();
     }
 }

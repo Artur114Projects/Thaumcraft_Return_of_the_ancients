@@ -26,6 +26,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import thaumcraft.client.fx.FXDispatcher;
 
 import java.util.List;
 import java.util.Random;
@@ -77,7 +78,9 @@ public class ItemDebug extends BaseItem {
 //		}
 		if (worldIn.isRemote) {
 
-			System.out.println(worldIn.getCombinedLight(pos, 0));
+			for (int i = 0; i != 10; i++) {
+				FXDispatcher.INSTANCE.drawVentParticles(pos.getX() + 0.5, pos.getY() + 2, pos.getZ() + 0.5, 0.0, 0.001, 0.0, 0x999999, 1.0F);
+			}
 
 //			ClientEventsHandler.CAMERA_FX_MANAGER.startShake(20 * 20);
 

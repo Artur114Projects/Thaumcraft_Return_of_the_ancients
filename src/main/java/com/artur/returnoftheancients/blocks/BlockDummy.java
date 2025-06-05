@@ -21,6 +21,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Random;
 
 public class BlockDummy extends BlockTileEntity<TileEntityDummy> {
+    public static boolean SAFE_BREAK = false;
+
     public BlockDummy(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
     }
@@ -60,11 +62,14 @@ public class BlockDummy extends BlockTileEntity<TileEntityDummy> {
     }
 
     @Override
-    public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
-        TileEntity dummy = worldIn.getTileEntity(pos);
-        if (dummy instanceof TileEntityDummy) {
-            ((TileEntityDummy) dummy).onBreak();
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        if (!SAFE_BREAK) {
+            TileEntity dummy = worldIn.getTileEntity(pos);
+            if (dummy instanceof TileEntityDummy) {
+                ((TileEntityDummy) dummy).onBreak();
+            }
         }
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override

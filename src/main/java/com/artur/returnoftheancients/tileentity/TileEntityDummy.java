@@ -13,6 +13,8 @@ public class TileEntityDummy extends TileBase {
 
     public void setAlignedBB(AxisAlignedBB alignedBB) {
         this.alignedBB = alignedBB;
+
+        this.markDirty();
     }
 
     public AxisAlignedBB alignedBB() {
@@ -42,23 +44,23 @@ public class TileEntityDummy extends TileBase {
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
+        super.readFromNBT(compound);
+
         if (compound.hasKey("alignedBBData")) {
             NBTTagCompound data = compound.getCompoundTag("alignedBBData");
 
             this.alignedBB = new AxisAlignedBB(data.getDouble("minX"), data.getDouble("minY"), data.getDouble("minZ"), data.getDouble("maxX"), data.getDouble("maxY"), data.getDouble("maxZ"));
         }
 
-        if (this.parent == null && compound.hasKey("parent")) {
-            TileEntity tile = this.world.getTileEntity(BlockPos.fromLong(compound.getLong("parent")));
-
-            if (tile instanceof ITileMultiBlock) {
-                this.parent = BlockPos.fromLong(compound.getLong("parent"));
-            }
+        if (compound.hasKey("parent")) {
+            this.parent = BlockPos.fromLong(compound.getLong("parent"));
         }
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+        nbt = super.writeToNBT(nbt);
+
         if (this.alignedBB != Block.FULL_BLOCK_AABB) {
             NBTTagCompound alignedBBData = new NBTTagCompound();
 

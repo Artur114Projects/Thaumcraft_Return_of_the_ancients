@@ -78,7 +78,7 @@ public class ItemDebug extends BaseItem {
 //		}
 		if (worldIn.isRemote) {
 
-			for (int i = 0; i != 10; i++) {
+			for (int i = 0; i != 2; i++) {
 				FXDispatcher.INSTANCE.drawVentParticles(pos.getX() + 0.5, pos.getY() + 2, pos.getZ() + 0.5, 0.0, 0.001, 0.0, 0x999999, 1.0F);
 			}
 

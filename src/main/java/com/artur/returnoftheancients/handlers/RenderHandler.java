@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.handlers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
@@ -22,29 +23,47 @@ public class RenderHandler {
     public static double interpolate(double start, double end, float pct) {
         return start + (end - start) * pct;
     }
-
+    
     @SideOnly(Side.CLIENT)
-    private void renderBox(Tessellator tessellator, BufferBuilder bufferBuilder, double x, double y, double z, double x1, double y1, double z1, int a, int b, int c) {
+    public static int rgbToInt(int red, int green, int blue) {
+        red = (red << 16) & 0x00FF0000;
+        green = (green << 8) & 0x0000FF00;
+        blue = blue & 0x000000FF;
+
+        return 0xFF000000 | red | green | blue;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public static int[] intToRgb(int color) {
+        int red = ((color >> 16) & 0xFF);
+        int green = ((color >> 8) & 0xFF);
+        int blue = (color & 0xFF);
+        
+        return new int[] {red, green, blue};
+    }
+
+    @SideOnly(Side.CLIENT) // It's better to use: RenderGlobal:drawSelectionBoundingBox
+    private void renderBox(Tessellator tessellator, BufferBuilder bufferBuilder, double x, double y, double z, double x1, double y1, double z1, float r, float g, float b, float a) {
         GlStateManager.glLineWidth(2.0F);
         bufferBuilder.begin(3, DefaultVertexFormats.POSITION_COLOR);
-        bufferBuilder.pos(x, y, z).color((float) b, (float) b, (float) b, 0.0F).endVertex();
-        bufferBuilder.pos(x, y, z).color(b, b, b, a).endVertex();
-        bufferBuilder.pos(x1, y, z).color(b, c, c, a).endVertex();
-        bufferBuilder.pos(x1, y, z1).color(b, b, b, a).endVertex();
-        bufferBuilder.pos(x, y, z1).color(b, b, b, a).endVertex();
-        bufferBuilder.pos(x, y, z).color(c, c, b, a).endVertex();
-        bufferBuilder.pos(x, y1, z).color(c, b, c, a).endVertex();
-        bufferBuilder.pos(x1, y1, z).color(b, b, b, a).endVertex();
-        bufferBuilder.pos(x1, y1, z1).color(b, b, b, a).endVertex();
-        bufferBuilder.pos(x, y1, z1).color(b, b, b, a).endVertex();
-        bufferBuilder.pos(x, y1, z).color(b, b, b, a).endVertex();
-        bufferBuilder.pos(x, y1, z1).color(b, b, b, a).endVertex();
-        bufferBuilder.pos(x, y, z1).color(b, b, b, a).endVertex();
-        bufferBuilder.pos(x1, y, z1).color(b, b, b, a).endVertex();
-        bufferBuilder.pos(x1, y1, z1).color(b, b, b, a).endVertex();
-        bufferBuilder.pos(x1, y1, z).color(b, b, b, a).endVertex();
-        bufferBuilder.pos(x1, y, z).color(b, b, b, a).endVertex();
-        bufferBuilder.pos(x1, y, z).color((float) b, (float) b, (float) b, 0.0F).endVertex();
+        bufferBuilder.pos(x, y, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y1, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y1, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y1, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y1, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y1, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y1, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y1, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y1, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y, z).color(r, g, b, a).endVertex();
         tessellator.draw();
         GlStateManager.glLineWidth(1.0F);
     }

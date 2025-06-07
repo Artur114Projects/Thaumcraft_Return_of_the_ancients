@@ -24,6 +24,8 @@ import org.jetbrains.annotations.Nullable;
 public class BlockAncientDoor4X3 extends BlockTileEntity<TileEntityAncientDoor4X3> {
     public BlockAncientDoor4X3(String name) {
         super(name, Material.ROCK, 2.0F, 10.0F, SoundType.STONE);
+
+        this.bindTESR(new TileEntityAncientDoor4X3Render());
     }
 
     @Override
@@ -93,7 +95,7 @@ public class BlockAncientDoor4X3 extends BlockTileEntity<TileEntityAncientDoor4X
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         TileEntity tile = source.getTileEntity(pos);
         if (tile instanceof TileEntityAncientDoor4X3) {
-            return ((TileEntityAncientDoor4X3) tile).alignedBB;
+            return ((TileEntityAncientDoor4X3) tile).alignedBB();
         }
 
         return FULL_BLOCK_AABB;
@@ -107,12 +109,6 @@ public class BlockAncientDoor4X3 extends BlockTileEntity<TileEntityAncientDoor4X
     @Override
     public Class<TileEntityAncientDoor4X3> getTileEntityClass() {
         return TileEntityAncientDoor4X3.class;
-    }
-
-    @Override
-    public void registerModels() {
-        super.registerModels();
-        ClientRegistry.bindTileEntitySpecialRenderer(this.getTileEntityClass(), new TileEntityAncientDoor4X3Render());
     }
 
     @Override

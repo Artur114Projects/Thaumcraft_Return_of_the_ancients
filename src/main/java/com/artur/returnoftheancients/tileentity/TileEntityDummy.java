@@ -32,7 +32,11 @@ public class TileEntityDummy extends TileBase {
         }
     }
 
-    private ITileMultiBlock parent() {
+    public BlockPos parentPos() {
+        return this.parent;
+    }
+
+    public ITileMultiBlock parent() {
         TileEntity tile = this.world.getTileEntity(this.parent);
 
         if (tile instanceof ITileMultiBlock) {

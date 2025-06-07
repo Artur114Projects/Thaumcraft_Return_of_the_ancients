@@ -1,6 +1,5 @@
 package com.artur.returnoftheancients.ancientworld.map.build;
 
-import com.artur.returnoftheancients.ancientworld.map.utils.maps.ImmutableMap;
 import com.artur.returnoftheancients.ancientworld.map.utils.maps.InteractiveMap;
 import com.artur.returnoftheancients.structurebuilder.slowbuild.SlowBuildResult;
 import com.artur.returnoftheancients.structurebuilder.slowbuild.SlowBuilder;
@@ -16,10 +15,11 @@ public class AncientLayer1Builder extends SlowBuilder {
     private final Random buildRand;
     private final ChunkPos center;
     private final World world;
+    private boolean isCleared;
     private int currentIndex;
 
     public AncientLayer1Builder(InteractiveMap map, World world, Random buildRand, ChunkPos center) {
-        super(5);
+        super(1);
         this.buildRand = buildRand;
         this.center = center;
         this.world = world;
@@ -28,6 +28,10 @@ public class AncientLayer1Builder extends SlowBuilder {
 
     @Override
     public @NotNull SlowBuildResult build() {
+        if (!this.isCleared) {
+            this.clearAll(this.world); this.isCleared = true; // TODO: 08.06.2025 Rewrite!!!
+        }
+
         int x = this.center.x + (this.map.size() / 2) - (this.currentIndex % this.map.size());
         int z = this.center.z + (this.map.size() / 2) - (this.currentIndex / this.map.size());
 
@@ -36,14 +40,27 @@ public class AncientLayer1Builder extends SlowBuilder {
         this.map.build(this.currentIndex++, this.world, pos, this.buildRand);
 
         if (this.currentIndex >= this.map.area()) {
+            System.out.println("Build ancient layer is finish! " + this.center);
             return SlowBuildResult.FINISH;
         } else {
             return SlowBuildResult.SUCCESSFULLY;
         }
     }
 
+    private void clearChunk(World world, int x, int z) {
+        Arrays.fill(world.getChunkFromChunkCoords(x, z).getBlockStorageArray(), null);
+    }
+
     private void clearChunk(World world, ChunkPos pos) {
-        Arrays.fill(world.getChunkFromChunkCoords(pos.x, pos.z).getBlockStorageArray(), null);
-        world.markBlockRangeForRenderUpdate(pos.getXStart(), 0, pos.getZStart(), pos.getXEnd(), 255, pos.getZEnd());
+        this.clearChunk(world, pos.x, pos.z);
+    }
+
+    private void clearAll(World world) {
+        for (int i = 0; i != this.map.area(); i++) {
+            int x = this.center.x + (this.map.size() / 2) - (i % this.map.size());
+            int z = this.center.z + (this.map.size() / 2) - (i / this.map.size());
+
+            this.clearChunk(world, x, z);
+        }
     }
 }

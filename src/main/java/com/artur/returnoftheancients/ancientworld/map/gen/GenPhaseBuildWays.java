@@ -32,9 +32,10 @@ public class GenPhaseBuildWays extends GenPhase {
 
     private RandomReplacingManager initWayBuildReplacer() {
         return new RandomReplacingManager(
-            new ReplacerFork(0.1F),
-            new ReplacerTurn(0.3F),
-            new ReplacerNothing(0.6F)
+            new ReplacerCrossroads(0.05F),
+            new ReplacerFork(0.10F),
+            new ReplacerTurn(0.35F),
+            new ReplacerNothing(0.50F)
         );
     }
 
@@ -131,7 +132,7 @@ public class GenPhaseBuildWays extends GenPhase {
             percentages = Math.round((percentages * 100));
 
             if (percentages != 100) {
-                throw new IllegalArgumentException("The amount of chance is not equal to one");
+                throw new IllegalArgumentException("The amount of chance is not equal to one, value:" + percentages);
             }
 
             this.replacerBases = replacerBases;
@@ -381,6 +382,23 @@ public class GenPhaseBuildWays extends GenPhase {
             if (rotate != null) {
                 map.insetStructure(EnumStructureType.FORK.create(rotate, pos));
             }
+        }
+    }
+
+    private static class ReplacerCrossroads extends RandomReplacerBase {
+
+        protected ReplacerCrossroads(float chance) {
+            super(chance);
+        }
+
+        @Override
+        protected boolean canReplace(ImmutableMap map, StrPos pos, EnumFace buildDirection) {
+            return this.foundPorts(map, pos).size() == 4;
+        }
+
+        @Override
+        protected void replace(ImmutableMap map, StrPos pos, EnumFace buildDirection, Random rand) {
+            map.insetStructure(EnumStructureType.CROSSROADS.create(EnumRotate.NON, pos));
         }
     }
 }

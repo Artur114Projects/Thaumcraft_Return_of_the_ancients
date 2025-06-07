@@ -53,7 +53,7 @@ public class ImmutableMap extends AbstractMap {
         IStructure structure = this.structurePrivate(x, y);
         if (x < 0 || y < 0 || x >= size || y >= size) return new StructureMapBorder(new StrPos(x, y));
         if (structure == null) return null;
-        return structure.copy();
+        return structure;
     }
 
     @Override
@@ -80,9 +80,9 @@ public class ImmutableMap extends AbstractMap {
             return;
         }
         if (structure instanceof IStructureMultiChunk) {
-            this.privateInsetMultiChunkStructure((IStructureMultiChunk) structure.copy());
+            this.privateInsetMultiChunkStructure((IStructureMultiChunk) structure);
         } else {
-            this.privateInsetStructure(structure.copy());
+            this.privateInsetStructure(structure);
         }
     }
 

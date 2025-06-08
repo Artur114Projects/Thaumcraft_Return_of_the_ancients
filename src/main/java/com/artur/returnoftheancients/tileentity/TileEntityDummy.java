@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.tileentity;
 
+import com.artur.returnoftheancients.tileentity.interf.ITileBBProvider;
 import com.artur.returnoftheancients.tileentity.interf.ITileMultiBlock;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -7,17 +8,17 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityDummy extends TileBase {
+public class TileEntityDummy extends TileBase implements ITileBBProvider {
     protected AxisAlignedBB alignedBB = Block.FULL_BLOCK_AABB;
     protected BlockPos parent = null;
 
-    public void setAlignedBB(AxisAlignedBB alignedBB) {
+    public void setBoundingBox(AxisAlignedBB alignedBB) {
         this.alignedBB = alignedBB;
 
         this.markDirty();
     }
 
-    public AxisAlignedBB alignedBB() {
+    public AxisAlignedBB boundingBox() {
         return this.alignedBB;
     }
 

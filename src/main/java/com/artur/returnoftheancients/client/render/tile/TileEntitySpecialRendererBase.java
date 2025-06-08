@@ -21,7 +21,7 @@ public class TileEntitySpecialRendererBase<T extends TileEntity> extends TileEnt
         GlStateManager.popAttrib();
     }
 
-    public void doRender(T te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {}
+    public void doRender(T tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {}
 
     @Override
     public void render(@NotNull T te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {

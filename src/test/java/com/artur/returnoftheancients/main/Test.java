@@ -4,6 +4,9 @@ import com.artur.returnoftheancients.ancientworld.map.gen.GenPhase;
 import com.artur.returnoftheancients.ancientworldlegacy.genmap.util.StructureMap;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.referense.Referense;
+import com.artur.returnoftheancients.tileentity.TileBase;
+import com.artur.returnoftheancients.tileentity.TileEntityDummy;
+import com.artur.returnoftheancients.tileentity.interf.ITileBBProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -64,7 +67,9 @@ public class Test { //
 
 
     public static void main(String[] args) {
-        GenPhase.initAllGenPhases().getMap(System.currentTimeMillis(), 17);
+//        GenPhase.initAllGenPhases().getMap(System.currentTimeMillis(), 17);
+
+        System.out.println(ITileBBProvider.class.isAssignableFrom(TileBase.class));
     }
 
     private static short pacArray(byte[] array) {

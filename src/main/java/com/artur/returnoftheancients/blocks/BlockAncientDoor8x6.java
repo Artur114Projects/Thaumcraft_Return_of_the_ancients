@@ -1,8 +1,8 @@
 package com.artur.returnoftheancients.blocks;
 
-import com.artur.returnoftheancients.client.render.tile.TileEntityAncientDoor4X3Render;
+import com.artur.returnoftheancients.client.render.tile.TileEntityAncientDoor8x6Render;
 import com.artur.returnoftheancients.tileentity.BlockTileEntity;
-import com.artur.returnoftheancients.tileentity.TileEntityAncientDoor4X3;
+import com.artur.returnoftheancients.tileentity.TileEntityAncientDoor8X6;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -17,15 +17,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockAncientDoor4X3 extends BlockTileEntity<TileEntityAncientDoor4X3> {
-    public BlockAncientDoor4X3(String name) {
+public class BlockAncientDoor8x6 extends BlockTileEntity<TileEntityAncientDoor8X6> {
+    public BlockAncientDoor8x6(String name) {
         super(name, Material.ROCK, 2.0F, 10.0F, SoundType.STONE);
 
-        this.bindTESR(new TileEntityAncientDoor4X3Render());
+        this.bindTESR(new TileEntityAncientDoor8x6Render());
     }
 
     @Override
@@ -41,8 +40,8 @@ public class BlockAncientDoor4X3 extends BlockTileEntity<TileEntityAncientDoor4X
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileEntity tileRaw = worldIn.getTileEntity(pos);
-        if (tileRaw instanceof TileEntityAncientDoor4X3) {
-            TileEntityAncientDoor4X3 tile = ((TileEntityAncientDoor4X3) tileRaw);
+        if (tileRaw instanceof TileEntityAncientDoor8X6) {
+            TileEntityAncientDoor8X6 tile = ((TileEntityAncientDoor8X6) tileRaw);
 
             if (tile.isOpen()) {
                 tile.close();
@@ -64,7 +63,7 @@ public class BlockAncientDoor4X3 extends BlockTileEntity<TileEntityAncientDoor4X
             return;
         }
 
-        TileEntityAncientDoor4X3 tile = this.createTileEntity(worldIn, state);
+        TileEntityAncientDoor8X6 tile = this.createTileEntity(worldIn, state);
         if (tile != null) {
             worldIn.setTileEntity(pos, tile);
             tile.fillDummy();
@@ -73,7 +72,7 @@ public class BlockAncientDoor4X3 extends BlockTileEntity<TileEntityAncientDoor4X
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        TileEntityAncientDoor4X3 tile = this.createTileEntity(worldIn, state);
+        TileEntityAncientDoor8X6 tile = this.createTileEntity(worldIn, state);
         if (tile != null) {
             worldIn.setTileEntity(pos, tile);
             tile.setAxis(placer.getHorizontalFacing().rotateY().getAxis());
@@ -84,8 +83,8 @@ public class BlockAncientDoor4X3 extends BlockTileEntity<TileEntityAncientDoor4X
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileEntityAncientDoor4X3) {
-            ((TileEntityAncientDoor4X3) tile).onBlockBreak();
+        if (tile instanceof TileEntityAncientDoor8X6) {
+            ((TileEntityAncientDoor8X6) tile).onBlockBreak();
         }
 
         super.breakBlock(worldIn, pos, state);
@@ -97,12 +96,12 @@ public class BlockAncientDoor4X3 extends BlockTileEntity<TileEntityAncientDoor4X
     }
 
     @Override
-    public Class<TileEntityAncientDoor4X3> getTileEntityClass() {
-        return TileEntityAncientDoor4X3.class;
+    public Class<TileEntityAncientDoor8X6> getTileEntityClass() {
+        return TileEntityAncientDoor8X6.class;
     }
 
     @Override
-    public @Nullable TileEntityAncientDoor4X3 createTileEntity(@NotNull World world, @NotNull IBlockState blockState) {
-        return new TileEntityAncientDoor4X3();
+    public @Nullable TileEntityAncientDoor8X6 createTileEntity(@NotNull World world, @NotNull IBlockState blockState) {
+        return new TileEntityAncientDoor8X6();
     }
 }

@@ -4,6 +4,7 @@ import com.artur.returnoftheancients.blocks.BlockDummy;
 import com.artur.returnoftheancients.handlers.NBTHandler;
 import com.artur.returnoftheancients.handlers.RenderHandler;
 import com.artur.returnoftheancients.init.InitBlocks;
+import com.artur.returnoftheancients.tileentity.interf.ITileBBProvider;
 import com.artur.returnoftheancients.tileentity.interf.ITileDoor;
 import com.artur.returnoftheancients.tileentity.interf.ITileMultiBlock;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class TileEntityDoorBase extends TileBase implements ITickable, ITileDoor, ITileMultiBlock {
+public abstract class TileEntityDoorBase extends TileBase implements ITickable, ITileDoor, ITileMultiBlock, ITileBBProvider {
     protected AxisAlignedBB alignedBB = Block.FULL_BLOCK_AABB;
     protected EnumFacing.Axis axis = EnumFacing.Axis.Z;
     protected EnumDoorState currentState;
@@ -49,10 +50,6 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
     }
 
     protected abstract Map<EnumDoorState, Map<EnumFacing.Axis, Map<EnumDummyType, AxisAlignedBB>>> staticAxisAlignedBBMap();
-
-    public AxisAlignedBB alignedBB() {
-        return this.alignedBB;
-    }
 
     @Override
     public void update() {
@@ -152,10 +149,11 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
 
     protected boolean replaceDummy(BlockPos pos, AxisAlignedBB alignedBB) {
         if (alignedBB == Block.NULL_AABB) {
-            BlockDummy.SAFE_BREAK = true;
-            this.world.setBlockToAir(pos);
-            BlockDummy.SAFE_BREAK = false;
-
+            if (this.world.getTileEntity(pos) instanceof TileEntityDummy) {
+                BlockDummy.SAFE_BREAK = true;
+                this.world.setBlockToAir(pos);
+                BlockDummy.SAFE_BREAK = false;
+            }
             return true;
         } else {
             TileEntity dummy = this.world.getTileEntity(pos);
@@ -166,7 +164,7 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
 
             if (dummy instanceof TileEntityDummy) {
                 if (((TileEntityDummy) dummy).parentPos().equals(this.pos)) {
-                    ((TileEntityDummy) dummy).setAlignedBB(alignedBB);
+                    ((TileEntityDummy) dummy).setBoundingBox(alignedBB);
                     return true;
                 } else {
                     this.breakAll();
@@ -198,7 +196,7 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
         TileEntity dummy = this.world.getTileEntity(pos);
         if (dummy instanceof TileEntityDummy) {
             ((TileEntityDummy) dummy).bindParent(this.pos);
-            ((TileEntityDummy) dummy).setAlignedBB(alignedBB);
+            ((TileEntityDummy) dummy).setBoundingBox(alignedBB);
         }
         return true;
     }
@@ -325,6 +323,16 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
     @SideOnly(Side.CLIENT)
     public float doorMoveProgress(float partialTicks) {
         return 1 - MathHelper.cos((float) ((Math.PI / 2) * (RenderHandler.interpolate(this.prevMoveTick, this.moveTick, partialTicks) / this.maxMoveTick)));
+    }
+
+    @Override
+    public void setBoundingBox(AxisAlignedBB bb) {
+        this.alignedBB = bb;
+    }
+
+    @Override
+    public AxisAlignedBB boundingBox() {
+        return this.alignedBB;
     }
 
     public enum EnumDummyType {

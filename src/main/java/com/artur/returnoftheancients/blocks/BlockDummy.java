@@ -43,15 +43,6 @@ public class BlockDummy extends BlockTileEntity<TileEntityDummy> {
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        TileEntity dummy = source.getTileEntity(pos);
-        if (dummy instanceof TileEntityDummy) {
-            return ((TileEntityDummy) dummy).alignedBB();
-        }
-        return FULL_BLOCK_AABB;
-    }
-
-    @Override
     protected ItemStack getSilkTouchDrop(IBlockState state) {
         return new ItemStack(Blocks.AIR);
     }

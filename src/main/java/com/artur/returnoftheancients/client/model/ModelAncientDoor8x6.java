@@ -95,11 +95,11 @@ public class ModelAncientDoor8x6 extends ModelBase {
 	}
 
 	public void renderDoor1() {
-		door.render(1.0F / 16.0F);
+		door1.render(1.0F / 16.0F);
 	}
 
 	public void renderDoor2() {
-		door1.render(1.0F / 16.0F);
+		door.render(1.0F / 16.0F);
 	}
 
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {

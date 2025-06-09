@@ -13,8 +13,6 @@ import java.util.Random;
 public class StructureEntry extends StructureMultiChunk {
     public StructureEntry(StrPos pos) {
         super(EnumRotate.NON, EnumMultiChunkStrType.ENTRY, pos);
-
-//        this.y = 88;
     }
 
     protected StructureEntry(StructureEntry parent) {

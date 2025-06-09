@@ -64,6 +64,18 @@ public class StructureBase implements IStructure {
     }
 
     @Override
+    public @NotNull IStructure up(int n) {
+        this.y += n;
+        return this;
+    }
+
+    @Override
+    public @NotNull IStructure down(int n) {
+        this.y -= n;
+        return this;
+    }
+
+    @Override
     public boolean canConnect(EnumFace face) {
         return this.ports.contains(face);
     }
@@ -72,7 +84,7 @@ public class StructureBase implements IStructure {
     public void build(World world, ChunkPos pos, Random rand) {
         UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
         blockPos.setPos(pos).setY(this.y);
-        StructureBuildersManager.createBuildRequest(world, blockPos, this.type.stringId(this.rotate)).build();
+        StructureBuildersManager.createBuildRequest(world, blockPos, this.type.stringId(this.rotate)).setIgnoreAir().build();
         UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
     }
 
@@ -85,12 +97,6 @@ public class StructureBase implements IStructure {
     @Override
     public void bindMap(AbstractMap map) {
         this.map = map;
-    }
-
-    @Override
-    public IStructure setY(int yIn) {
-        this.y = yIn;
-        return this;
     }
 
     private void compilePorts() {

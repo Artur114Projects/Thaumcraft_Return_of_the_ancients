@@ -45,6 +45,16 @@ public class StructureMapBorder implements IStructure {
     }
 
     @Override
+    public @NotNull IStructure up(int n) {
+        return this;
+    }
+
+    @Override
+    public @NotNull IStructure down(int n) {
+        return this;
+    }
+
+    @Override
     public boolean canConnect(EnumFace face) {
         return false;
     }
@@ -57,11 +67,6 @@ public class StructureMapBorder implements IStructure {
 
     @Override
     public void bindMap(AbstractMap map) {}
-
-    @Override
-    public IStructure setY(int yIn) {
-        return this;
-    }
 
     public static class StructureMapBorderType implements IStructureType {
 

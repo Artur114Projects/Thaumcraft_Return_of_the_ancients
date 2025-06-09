@@ -110,7 +110,11 @@ public class StructureBuilder implements IStructureBuilder {
         }
 
         if (properties.isNeedMarkRenderUpdate()) {
-            world.markBlockRangeForRenderUpdate(pos, this.blockPos.setPos(pos).add(this.size));
+            if (properties.isPosAsXZCenter()) {
+                world.markBlockRangeForRenderUpdate(pos.toImmutable().add(-this.size.getX() / 2, -this.size.getY() / 2, -this.size.getZ() / 2), this.blockPos.setPos(pos).add(this.size.getX() / 2, this.size.getY() / 2, this.size.getZ() / 2));
+            } else {
+                world.markBlockRangeForRenderUpdate(pos, this.blockPos.setPos(pos).add(this.size));
+            }
         }
     }
 

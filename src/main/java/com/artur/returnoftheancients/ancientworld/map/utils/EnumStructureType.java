@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public enum EnumStructureType implements IStructureType {
     FORK("ancient_fork_rotate-", EnumRotate.C270, EnumFace.UP, EnumFace.LEFT, EnumFace.RIGHT),
-    LADDER("ancient_ladder_rotate-", EnumRotate.C90, (rot, pos, type) -> new StructureLadder(rot, pos), EnumFace.RIGHT, EnumFace.LEFT),
+    LADDER("ancient_ladder_rotate-", EnumRotate.C270, (rot, pos, type) -> new StructureLadder(rot, pos), EnumFace.RIGHT, EnumFace.LEFT),
     WAY("ancient_way_rotate-", EnumRotate.C90, EnumFace.RIGHT, EnumFace.LEFT),
     TURN("ancient_turn_rotate-", EnumRotate.C270, EnumFace.UP, EnumFace.RIGHT),
     CROSSROADS("ancient_crossroads", EnumRotate.NON, EnumFace.values()),

@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class TileEntityAncientDoor8X6 extends TileEntityDoorBase {
     public TileEntityAncientDoor8X6() {
-        super(30, 8, 6, InitBlocks.DUMMY_ANCIENT_STONE);
+        super(20, 8, 6, InitBlocks.DUMMY_ANCIENT_STONE);
     }
 
     @Override

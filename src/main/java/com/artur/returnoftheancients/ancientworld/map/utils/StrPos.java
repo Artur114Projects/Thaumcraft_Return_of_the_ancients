@@ -12,15 +12,19 @@ public class StrPos {
     }
 
     public StrPos offset(EnumFace face) {
+        return this.offset(face, 1);
+    }
+
+    public StrPos offset(EnumFace face, int n) {
         switch (face) {
             case UP:
-                return new StrPos(this.getX(), this.getY() - 1);
+                return new StrPos(this.getX(), this.getY() - n);
             case DOWN:
-                return new StrPos(this.getX(), this.getY() + 1);
+                return new StrPos(this.getX(), this.getY() + n);
             case RIGHT:
-                return new StrPos(this.getX() + 1, this.getY());
+                return new StrPos(this.getX() + n, this.getY());
             case LEFT:
-                return new StrPos(this.getX() - 1, this.getY());
+                return new StrPos(this.getX() - n, this.getY());
             default:
                 return this;
         }
@@ -102,15 +106,20 @@ public class StrPos {
 
         @Override
         public MutableStrPos offset(EnumFace face) {
+            return this.offset(face, 1);
+        }
+
+        @Override
+        public MutableStrPos offset(EnumFace face, int n) {
             switch (face) {
                 case UP:
-                    return this.setPos(this.getX(), this.getY() - 1);
+                    return this.setPos(this.getX(), this.getY() - n);
                 case DOWN:
-                    return this.setPos(this.getX(), this.getY() + 1);
+                    return this.setPos(this.getX(), this.getY() + n);
                 case RIGHT:
-                    return this.setPos(this.getX() + 1, this.getY());
+                    return this.setPos(this.getX() + n, this.getY());
                 case LEFT:
-                    return this.setPos(this.getX() - 1, this.getY());
+                    return this.setPos(this.getX() - n, this.getY());
                 default:
                     return this;
             }

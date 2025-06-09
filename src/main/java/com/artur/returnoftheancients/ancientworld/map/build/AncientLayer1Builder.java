@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.structurebuilder.slowbuild.SlowBuildResult;
 import com.artur.returnoftheancients.structurebuilder.slowbuild.SlowBuilder;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -48,7 +49,9 @@ public class AncientLayer1Builder extends SlowBuilder {
     }
 
     private void clearChunk(World world, int x, int z) {
-        Arrays.fill(world.getChunkFromChunkCoords(x, z).getBlockStorageArray(), null);
+        Chunk chunk = world.getChunkFromChunkCoords(x, z);
+        Arrays.fill(chunk.getBlockStorageArray(), null);
+        chunk.markDirty();
     }
 
     private void clearChunk(World world, ChunkPos pos) {

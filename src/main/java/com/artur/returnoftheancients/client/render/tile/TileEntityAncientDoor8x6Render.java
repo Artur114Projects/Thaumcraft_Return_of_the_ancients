@@ -23,12 +23,12 @@ public class TileEntityAncientDoor8x6Render extends TileEntitySpecialRendererBas
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, -3.5 * (1 - tile.doorMoveProgress(partialTicks)));
-        modelBase.renderDoor2();
+        modelBase.renderDoor1();
         GlStateManager.popMatrix();
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(0, 0, 3.5 * (1 - tile.doorMoveProgress(partialTicks)));
-        modelBase.renderDoor1();
+        modelBase.renderDoor2();
         GlStateManager.popMatrix();
 
         GlStateManager.enableAlpha();

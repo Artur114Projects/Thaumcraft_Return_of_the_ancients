@@ -13,8 +13,6 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import thaumcraft.common.lib.network.PacketHandler;
-import thaumcraft.common.lib.network.misc.PacketMiscEvent;
 
 import java.util.UUID;
 
@@ -45,7 +43,7 @@ public class AncientEntrySolo extends AncientEntry {
         }
         if (id.equals(playerId)) {
             requestToDelete();
-            AncientPortalsProcessor.tpToHome(player);
+            AncientPortalsProcessor.teleportToOverworld(player);
             return true;
         }
         return false;
@@ -100,7 +98,7 @@ public class AncientEntrySolo extends AncientEntry {
         if (id.equals(playerId)) {
             requestToDelete();
             if (TRAConfigs.Any.debugMode) System.out.println("build is interrupt!");
-            AncientPortalsProcessor.tpToHome(player);
+            AncientPortalsProcessor.teleportToOverworld(player);
             return true;
         }
         return false;

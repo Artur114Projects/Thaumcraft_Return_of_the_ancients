@@ -29,6 +29,8 @@ import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld.tpToAncientWorld;
+
 // TODO: Решить не понятный баг с тем что при прерывании возвращает на портал 0
 public abstract class AncientPortal implements IWriteToNBT {
 
@@ -114,17 +116,17 @@ public abstract class AncientPortal implements IWriteToNBT {
         tpToAncientWorld(player);
     }
 
-    public void tpToAncientWorld(EntityPlayerMP player) {
+    public void teleportToAncientWorld(EntityPlayerMP player) {
         player.getEntityData().setInteger(portalID, id);
-        AncientWorld.tpToAncientWorld(player);
+        tpToAncientWorld(player);
     }
 
-    public void tpToHome(EntityPlayerMP player) {
+    public void teleportToOverworld(EntityPlayerMP player) {
         setTpToHomeNBTData(player);
         TeleportHandler.teleportToDimension(player, dimension, posX + 8.0D, 3, posZ + 8.0D);
     }
 
-    public void tpToHome(EntityPlayerMP player, boolean isTeleporting) {
+    public void teleportToOverworld(EntityPlayerMP player, boolean isTeleporting) {
         setTpToHomeNBTData(player);
         if (isTeleporting) {
             TeleportHandler.teleportToDimension(player, dimension, posX + 8.0D, 3, posZ + 8.0D);

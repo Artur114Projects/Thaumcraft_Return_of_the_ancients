@@ -59,19 +59,6 @@ public class BlockAncientDoor4X3 extends BlockTileEntity<TileEntityAncientDoor4X
     }
 
     @Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        if (worldIn.getTileEntity(pos) != null) {
-            return;
-        }
-
-        TileEntityAncientDoor4X3 tile = this.createTileEntity(worldIn, state);
-        if (tile != null) {
-            worldIn.setTileEntity(pos, tile);
-            tile.fillDummy();
-        }
-    }
-
-    @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileEntityAncientDoor4X3 tile = this.createTileEntity(worldIn, state);
         if (tile != null) {

@@ -82,7 +82,7 @@ public class BlockTpToAncientWorld extends BaseBlock {
                     }
                     AncientPortal portal = AncientPortalsProcessor.getPortalOnPos(pos);
                     if (portal != null) {
-                        portal.tpToHome(player, false);
+                        portal.teleportToOverworld(player, false);
                     }
                 }
             }

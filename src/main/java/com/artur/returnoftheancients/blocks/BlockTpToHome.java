@@ -1,13 +1,10 @@
 package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
-import com.artur.returnoftheancients.misc.WorldDataFields;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -48,7 +45,7 @@ public class BlockTpToHome extends BaseBlock {
         if (!entityIn.world.isRemote && entityIn instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) entityIn;
             if (player.getServer() != null && player.world != null) {
-                AncientPortalsProcessor.tpToHome(player);
+                AncientPortalsProcessor.teleportToOverworld(player);
             }
         }
     }

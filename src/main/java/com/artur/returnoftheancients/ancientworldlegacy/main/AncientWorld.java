@@ -1,6 +1,5 @@
 package com.artur.returnoftheancients.ancientworldlegacy.main;
 
-import baubles.api.BaubleType;
 import com.artur.returnoftheancients.ancientworldlegacy.main.entry.AncientEntry;
 import com.artur.returnoftheancients.ancientworldlegacy.main.entry.AncientEntrySolo;
 import com.artur.returnoftheancients.ancientworldlegacy.main.entry.AncientEntryTeam;
@@ -182,7 +181,7 @@ public class AncientWorld {
         for (AncientEntry entry : ANCIENT_ENTRIES) {
             if (entry.wakeUp(player)) return;
         }
-        if (!player.isCreative()) AncientPortalsProcessor.tpToHome(player);
+        if (!player.isCreative()) AncientPortalsProcessor.teleportToOverworld(player);
     }
 
     public static void playerLoggedOutBus(UUID id) {

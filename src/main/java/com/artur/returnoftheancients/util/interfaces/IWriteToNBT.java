@@ -38,4 +38,14 @@ public interface IWriteToNBT {
 
         return ret;
     }
+
+    static <T extends IWriteToNBT> NBTTagList objectsToNBT(Collection<T> objects) {
+        NBTTagList list = new NBTTagList();
+
+        for (T obj : objects) {
+            list.appendTag(obj.writeToNBT(new NBTTagCompound()));
+        }
+
+        return list;
+    }
 }

@@ -325,14 +325,14 @@ public class AncientPortalsProcessor {
         PORTALS.clear();
     }
 
-    public static void tpToHome(EntityPlayerMP player) {
+    public static void teleportToOverworld(EntityPlayerMP player) {
         AncientPortal portal = providePortal(player.getEntityData().getInteger(AncientPortal.portalID));
         if (portal != null) {
-            portal.tpToHome(player);
+            portal.teleportToOverworld(player);
         } else {
             portal = PORTALS.get(0);
             if (portal != null) {
-                portal.tpToHome(player);
+                portal.teleportToOverworld(player);
             } else {
                 TeleportHandler.teleportToDimension(player, 0, player.getBedLocation(0));
             }

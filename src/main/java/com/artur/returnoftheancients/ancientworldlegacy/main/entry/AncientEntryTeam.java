@@ -52,7 +52,7 @@ public class AncientEntryTeam extends AncientEntry {
             return;
         }
         if (team.isRequestDelete()) {
-            team.setToAll(AncientPortalsProcessor::tpToHome);
+            team.setToAll(AncientPortalsProcessor::teleportToOverworld);
             requestToDelete();
         }
         if (!team.isActive()) isSleep = true;

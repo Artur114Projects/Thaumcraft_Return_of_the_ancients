@@ -148,9 +148,9 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
     }
 
     @Override
-    public void tpToHome(EntityPlayerMP player) {
+    public void teleportToOverworld(EntityPlayerMP player) {
         if (this.isActive) {
-            super.tpToHome(player);
+            super.teleportToOverworld(player);
         } else {
             TeleportHandler.teleportToDimension(player, 0, player.getBedLocation(0));
         }

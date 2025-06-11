@@ -134,7 +134,7 @@ public class Team {
         if (uuids.isEmpty()) requestToDelete();
         if (flag && playerDead != null) {
             setToAll(player -> MiscHandler.sendMessageString(player, TextFormatting.RED + "Player: " + TextFormatting.AQUA + "[" + playerDead.getName() + "]" + TextFormatting.RED + " is dead :("));
-            AncientPortalsProcessor.tpToHome(playerDead);
+            AncientPortalsProcessor.teleportToOverworld(playerDead);
         }
         return flag;
     }

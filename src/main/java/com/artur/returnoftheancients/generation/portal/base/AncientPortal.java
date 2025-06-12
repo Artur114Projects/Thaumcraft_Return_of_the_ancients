@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.generation.portal.base;
 
+import com.artur.returnoftheancients.ancientworld.system.base.AncientLayer1StaticManager;
 import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.blocks.BlockTpToAncientWorld;
@@ -113,12 +114,12 @@ public abstract class AncientPortal implements IWriteToNBT {
     }
 
     public void onCollide(EntityPlayerMP player) {
-        tpToAncientWorld(player);
+        this.teleportToAncientWorld(player);
     }
 
     public void teleportToAncientWorld(EntityPlayerMP player) {
         player.getEntityData().setInteger(portalID, id);
-        tpToAncientWorld(player);
+        AncientLayer1StaticManager.intoAncientWorld(player);
     }
 
     public void teleportToOverworld(EntityPlayerMP player) {

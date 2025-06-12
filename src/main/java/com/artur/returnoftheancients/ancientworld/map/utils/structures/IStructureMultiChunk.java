@@ -12,8 +12,8 @@ public interface IStructureMultiChunk extends IStructure {
     void insertSegments(Consumer<IStructureSegment> inserter);
 
     interface IStructureSegment extends IStructure {
+        void bindParent(IStructureMultiChunk parent);
         @NotNull IStructureMultiChunk parent();
-
         @Override
         @NotNull IStructureSegment copy();
     }

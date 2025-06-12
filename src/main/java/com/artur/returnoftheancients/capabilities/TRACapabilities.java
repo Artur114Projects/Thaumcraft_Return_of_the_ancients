@@ -1,22 +1,21 @@
 package com.artur.returnoftheancients.capabilities;
 
+import com.artur.returnoftheancients.ancientworld.system.base.IAncientLayer1Manager;
+import com.artur.returnoftheancients.ancientworld.system.server.ServerAncientLayer1Manager;
+import com.artur.returnoftheancients.ancientworld.system.server.IServerAncientLayer1Manager;
 import com.artur.returnoftheancients.blockprotect.IProtectedChunk;
-import com.artur.returnoftheancients.blockprotect.client.ClientProtectedChunk;
 import com.artur.returnoftheancients.blockprotect.server.IServerProtectedChunk;
 import com.artur.returnoftheancients.blockprotect.server.ServerProtectedChunk;
-import com.artur.returnoftheancients.energy.system.EnergySystemsEventsHandler;
 import com.artur.returnoftheancients.energy.system.EnergySystemsManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import org.jetbrains.annotations.Nullable;
-import thaumcraft.api.capabilities.IPlayerWarp;
 
 import javax.annotation.Nonnull;
 
@@ -27,6 +26,8 @@ public class TRACapabilities {
     public static final Capability<IProtectedChunk> PROTECTED_CHUNK = null;
     @CapabilityInject(EnergySystemsManager.class)
     public static final Capability<EnergySystemsManager> ENERGY_SYSTEMS_MANAGER = null;
+    @CapabilityInject(IAncientLayer1Manager.class)
+    public static final Capability<IAncientLayer1Manager> ANCIENT_LAYER_1_MANAGER = null;
 
 
     public static IPlayerTimerCapability getTimer(@Nonnull EntityPlayer player) {
@@ -53,6 +54,7 @@ public class TRACapabilities {
                 ((IServerProtectedChunk) instance).deserializeNBT((NBTTagCompound) nbt);
             }
         }, () -> new ServerProtectedChunk(new ChunkPos(0, 0), 0));
+
         CapabilityManager.INSTANCE.register(EnergySystemsManager.class, new Capability.IStorage<EnergySystemsManager>() {
             @Nullable
             @Override
@@ -60,5 +62,25 @@ public class TRACapabilities {
             @Override
             public void readNBT(Capability<EnergySystemsManager> capability, EnergySystemsManager instance, EnumFacing side, NBTBase nbt) {}
         }, () -> new EnergySystemsManager(null));
+
+        CapabilityManager.INSTANCE.register(IAncientLayer1Manager.class, new Capability.IStorage<IAncientLayer1Manager>() {
+            @Nullable
+            @Override
+            public NBTBase writeNBT(Capability<IAncientLayer1Manager> capability, IAncientLayer1Manager instance, EnumFacing side) {
+                if (!(instance instanceof IServerAncientLayer1Manager)) {
+                    return null;
+                }
+
+                return ((IServerAncientLayer1Manager) instance).serializeNBT();
+            }
+            @Override
+            public void readNBT(Capability<IAncientLayer1Manager> capability, IAncientLayer1Manager instance, EnumFacing side, NBTBase nbt) {
+                if (!(instance instanceof IServerAncientLayer1Manager) || !(nbt instanceof NBTTagCompound)) {
+                    return;
+                }
+
+                ((IServerAncientLayer1Manager) instance).deserializeNBT((NBTTagCompound) nbt);
+            }
+        }, () -> new ServerAncientLayer1Manager(null));
     }
 }

@@ -27,6 +27,7 @@ public class SlowBuildManager {
                     case FALL:
                         System.out.println("SlowBuilder is fall build! " + slowBuilder);
                     case FINISH:
+                        slowBuilder.onFinish();
                         iterator.remove();
                 }
             }

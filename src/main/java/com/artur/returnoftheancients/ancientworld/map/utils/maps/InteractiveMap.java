@@ -24,8 +24,8 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
 
         for (int i = 0; i != map.structures.length; i++) {
             IStructure structure = map.structures[i];
-            if (structure != null) {
-                this.structures[i] = structure.copy();
+            if (structure != null && !(structure instanceof IStructureMultiChunk.IStructureSegment)) {
+                this.insetStructure(structure.copy());
             }
         }
 

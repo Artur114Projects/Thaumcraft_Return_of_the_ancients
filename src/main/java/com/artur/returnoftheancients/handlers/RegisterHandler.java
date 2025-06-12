@@ -99,6 +99,7 @@ public class RegisterHandler {
 		MainR.NETWORK.registerMessage(new ClientPacketSyncAncientPortals.HandlerSAP(), ClientPacketSyncAncientPortals.class, id++, Side.CLIENT);
 		MainR.NETWORK.registerMessage(new ClientPacketSyncProtectedChunk.HandlerSPC(), ClientPacketSyncProtectedChunk.class, id++, Side.CLIENT);
 		MainR.NETWORK.registerMessage(new ClientPacketSyncEnergySystem.HandlerSES(), ClientPacketSyncEnergySystem.class, id++, Side.CLIENT);
+		MainR.NETWORK.registerMessage(new ClientPacketSyncAncientLayer1s.HandlerSAL(), ClientPacketSyncAncientLayer1s.class, id++, Side.CLIENT);
 	}
 
 	@SubscribeEvent

@@ -28,18 +28,15 @@ import java.util.Random;
 public class CoolLoadingGui extends GuiScreen {
     public static CoolLoadingGui instance;
     private GuiButton button;
-
     protected final ResourceLocation background;
-    private GifWithTextureAtlas gif_2_0 = new GifWithTextureAtlas("loading", 20, 8, 8 * 12, 8, 8);
+    private final GifWithTextureAtlas gif_2_0 = new GifWithTextureAtlas("loading", 20, 8, 8 * 12, 8, 8);
     protected static final ResourceLocation blur = EnumAssetLocation.TEXTURES_GUI.getPngRL("v.png");
     private final int Red = 16711680;
     private final int Yellow = 0xffff40;
     private final int White = 16777215;
     private final int Aqua = 0x00ffff;
     private String[] players = new String[0];
-
     protected ScaledResolution resolution;
-
     protected Random rand = new Random();
     protected boolean isTpToHome = false;
     protected boolean isDrawTeam = false;
@@ -158,6 +155,7 @@ public class CoolLoadingGui extends GuiScreen {
 
     public void close() {
         isClosing = true;
+        instance = null;
     }
 
     protected void drawLore() {

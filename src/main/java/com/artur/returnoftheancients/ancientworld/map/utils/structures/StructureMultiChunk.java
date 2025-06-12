@@ -30,6 +30,7 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
 
         for (IStructureSegment segment : parent.segments) {
             IStructureSegment copy = segment.copy();
+            copy.bindParent(this);
             this.segments.add(copy);
             if (copy.ports().length != 0) {
                 this.segmentsWithPorts.add(copy);
@@ -153,13 +154,18 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
         public StructureSegment(StructureSegment parent) {
             super(parent);
 
-            this.parent = parent.parent;
             this.type = parent.type;
+            this.parent = null;
         }
 
         @Override
         public @NotNull IStructureMultiChunk.IStructureSegment copy() {
             return new StructureSegment(this);
+        }
+
+        @Override
+        public void bindParent(IStructureMultiChunk parent) {
+            this.parent = parent;
         }
 
         @Override

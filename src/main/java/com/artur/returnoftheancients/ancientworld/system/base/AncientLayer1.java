@@ -1,12 +1,14 @@
 package com.artur.returnoftheancients.ancientworld.system.base;
 
 import com.artur.returnoftheancients.ancientworld.map.gen.GenPhase;
+import com.artur.returnoftheancients.ancientworld.map.utils.StrPos;
 import com.artur.returnoftheancients.ancientworld.map.utils.maps.InteractiveMap;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructure;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructureInteractive;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructureMultiChunk;
 import com.artur.returnoftheancients.ancientworld.system.utils.AncientWorldPlayer;
 import com.artur.returnoftheancients.handlers.MiscHandler;
+import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.util.interfaces.IReadFromNBT;
 import com.artur.returnoftheancients.util.interfaces.IWriteToNBT;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +29,12 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
     protected ChunkPos pos;
     protected World world;
     private boolean requestToDelete = false;
+
+    public void constructFinish() {}
+
+    public boolean hasPlayer(EntityPlayer player) {
+        return this.foundAncientWorldPlayer(player) != null;
+    }
 
     public void requestToDelete() {
         this.requestToDelete = true;
@@ -104,11 +112,20 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
     public void update() {
         Map<IStructure, List<AncientWorldPlayer>> listMap = null;
 
+        this.players.removeIf((v) -> v.player.dimension != InitDimensions.ancient_world_dim_id);
+
         for (AncientWorldPlayer player : this.players) {
 
             if (!player.isSleep()) {
-                IStructure str = this.map.structure(player.calculatePosOnMap(this.pos, this.size));
-                player.setCurrentRoom(str instanceof IStructureMultiChunk.IStructureSegment ? ((IStructureMultiChunk.IStructureSegment) str).parent() : str);
+                StrPos pos = player.calculatePosOnMap(this.pos, this.size);
+                if (!pos.isOutOfBounds(this.size)) {
+                    IStructure str = this.map.structure(pos);
+                    player.setCurrentRoom(str instanceof IStructureMultiChunk.IStructureSegment ? ((IStructureMultiChunk.IStructureSegment) str).parent() : str);
+                }
+
+                if (player.currentRoom() == null) {
+                    continue;
+                }
 
                 if (listMap == null) {
                     listMap = new HashMap<>();

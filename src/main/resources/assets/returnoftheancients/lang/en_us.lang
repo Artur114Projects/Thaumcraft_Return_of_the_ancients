@@ -36,6 +36,13 @@ returnoftheancients.kW.prefixes=W/kW/MW/GW/TW
 returnoftheancients.energy.local.0=Energy:
 returnoftheancients.energy.local.1=Input:
 returnoftheancients.energy.local.2=Output:
+#
+returnoftheancients.team_state.interrupt=The player interrupted the wait.
+returnoftheancients.team_state.has_unresolved_items=The player has unresolved items.
+returnoftheancients.team_state.in_other_world=The player is in another dimension.
+returnoftheancients.team_state.in_ancient_world=The player is in the ancient world.
+returnoftheancients.team_state.out_of_game=Player not in the game.
+returnoftheancients.team_state.not_player=The player is not a player... Wtf!?
 ###################################################################################
 # Loading gui
 ###################################################################################

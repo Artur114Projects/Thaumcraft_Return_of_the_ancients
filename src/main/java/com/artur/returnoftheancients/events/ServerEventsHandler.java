@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.events;
 
+import com.artur.returnoftheancients.ancientworld.system.base.AncientLayer1EventsHandler;
 import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
 import com.artur.returnoftheancients.events.eventmanagers.SlowBuildManager;
 import com.artur.returnoftheancients.handlers.MiscHandler;
@@ -165,7 +166,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
 
     protected static void onPlayerLost(EntityPlayerMP player) {
         player.setHealth(20);
-        if (!AncientWorld.playerLostBus(player.getUniqueID())) AncientPortalsProcessor.teleportToOverworld(player);
+        if (!AncientLayer1EventsHandler.SERVER_MANAGER.playerLost(player)) AncientPortalsProcessor.teleportToOverworld(player);
     }
 
     @SubscribeEvent
@@ -206,11 +207,6 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
         int playerDimension = e.player.dimension;
         if (e.player.ticksExisted % 4 == 0) {
             if (playerDimension == ancient_world_dim_id) {
-                if (TRAConfigs.AncientWorldSettings.noNightVision) {
-                    if (e.player.getActivePotionEffect(MobEffects.NIGHT_VISION) != null && !e.player.isCreative()) {
-                        e.player.removePotionEffect(MobEffects.NIGHT_VISION);
-                    }
-                }
                 if (TRAConfigs.AncientWorldSettings.noPeaceful) {
                     if (difficultyId == 0) {
                         if (!e.player.world.isRemote) {
@@ -280,12 +276,12 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
         }
     }
 
-    @SubscribeEvent
-    public void canDeSpawn(LivingSpawnEvent.AllowDespawn event) {
-//        if (event.getEntity().dimension == ancient_world_dim_id) {
-//            event.setResult(Event.Result.DENY);
-//        }
-    }
+//    @SubscribeEvent
+//    public void canDeSpawn(LivingSpawnEvent.AllowDespawn event) {
+////        if (event.getEntity().dimension == ancient_world_dim_id) {
+////            event.setResult(Event.Result.DENY);
+////        }
+//    }
 
     @SubscribeEvent
     public static void canSpawn(LivingSpawnEvent.CheckSpawn e) {
@@ -349,5 +345,6 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
 
         SHORT_CHUNK_LOAD_MANAGER.unload();
         TIMER_TASKS_MANAGER.unload();
+        SLOW_BUILD_MANAGER.unload();
     }
 }

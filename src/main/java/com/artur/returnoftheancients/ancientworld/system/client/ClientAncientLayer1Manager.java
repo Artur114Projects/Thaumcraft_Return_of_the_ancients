@@ -31,8 +31,7 @@ public class ClientAncientLayer1Manager implements IClientAncientLayer1Manager {
     public void createAncientLayer(NBTTagCompound data) {
         this.layerClient = new AncientLayer1Client(mc.player);
         this.layerClient.setWorld(this.world);
-        this.layerClient.setPos(MiscHandler.chunkPosFromLong(data.getLong("pos")));
-        this.layerClient.setSize(data.getInteger("size"));
+        this.layerClient.readFromNBT(data);
         this.layerClient.constructFinish();
     }
 
@@ -47,6 +46,9 @@ public class ClientAncientLayer1Manager implements IClientAncientLayer1Manager {
             } else {
                 this.finisBuild();
             }
+        }
+        if (data.hasKey("playersState")) {
+            this.layerClient.updatePlayersState(data.getTagList("playersState", 8));
         }
     }
 

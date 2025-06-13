@@ -1,6 +1,5 @@
 package com.artur.returnoftheancients.network;
 
-import com.artur.returnoftheancients.client.gui.CoolLoadingGui;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldDataFields;
@@ -58,13 +57,7 @@ public class ClientPacketMisc implements IMessage {
                 if (nbt.hasKey("changeTitle")) {
                     TITLE = nbt.getString("changeTitle");
                 }
-                if (nbt.hasKey("setGuiState")) {
-                    if (nbt.getBoolean("setGuiState")) {
-                        Minecraft.getMinecraft().displayGuiScreen(new CoolLoadingGui(nbt.getBoolean("isTeam")));
-                    } else {
-                        CoolLoadingGui.instance.close();
-                    }
-                } else if (nbt.hasKey("sendAncientWorldLoadMessage")) {
+                if (nbt.hasKey("sendAncientWorldLoadMessage")) {
                     if (nbt.getBoolean("sendAncientWorldLoadMessage")) {
                         playerSP.sendMessage(new TextComponentString(TITLE + I18n.translateToLocal(Referense.MODID + ".message.ancientworldload.start")));
                     } else {
@@ -80,14 +73,6 @@ public class ClientPacketMisc implements IMessage {
                 }
                 if (nbt.hasKey("syncWorldDataFields")) {
                     WorldDataFields.readOnClient(nbt.getCompoundTag("syncWorldDataFields"));
-                }
-                if (nbt.hasKey("injectNamesOnClient")) {
-                    NBTTagList list = nbt.getTagList("injectNamesOnClient", 8);
-                    String[] names = new String[list.tagCount()];
-                    for (int i = 0; i != list.tagCount(); i++) {
-                        names[i] = list.getStringTagAt(i);
-                    }
-                    CoolLoadingGui.instance.updatePlayersList(names);
                 }
             });
             return null;

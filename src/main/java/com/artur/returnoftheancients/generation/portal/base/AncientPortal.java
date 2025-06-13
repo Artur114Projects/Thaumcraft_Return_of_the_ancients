@@ -118,21 +118,21 @@ public abstract class AncientPortal implements IWriteToNBT {
     }
 
     public void teleportToAncientWorld(EntityPlayerMP player) {
-        player.getEntityData().setInteger(portalID, id);
+        player.getEntityData().setInteger(portalID, this.id);
         AncientLayer1StaticManager.intoAncientWorld(player);
     }
 
     public void teleportToOverworld(EntityPlayerMP player) {
         setTpToHomeNBTData(player);
-        TeleportHandler.teleportToDimension(player, dimension, posX + 8.0D, 3, posZ + 8.0D);
+        TeleportHandler.teleportToDimension(player, this.dimension, posX + 8.0D, 3, posZ + 8.0D);
     }
 
     public void teleportToOverworld(EntityPlayerMP player, boolean isTeleporting) {
         setTpToHomeNBTData(player);
         if (isTeleporting) {
-            TeleportHandler.teleportToDimension(player, dimension, posX + 8.0D, 3, posZ + 8.0D);
+            TeleportHandler.teleportToDimension(player, this.dimension, posX + 8.0D, 3, posZ + 8.0D);
         } else {
-            player.getEntityData().setInteger(portalID, id);
+            player.getEntityData().setInteger(portalID, this.id);
         }
     }
 

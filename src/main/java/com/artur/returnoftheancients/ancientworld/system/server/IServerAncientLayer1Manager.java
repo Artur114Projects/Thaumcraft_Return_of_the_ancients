@@ -8,7 +8,8 @@ import net.minecraftforge.common.util.INBTSerializable;
 public interface IServerAncientLayer1Manager extends IAncientLayer1Manager, INBTSerializable<NBTTagCompound> {
     void onPlayerLoginIn(EntityPlayerMP player);
     void onPlayerLoginOut(EntityPlayerMP player);
-    void onPlayerLost(EntityPlayerMP player);
-    void onPlayerElope(EntityPlayerMP player);
+    boolean onPlayerLost(EntityPlayerMP player);
+    boolean onPlayerElope(EntityPlayerMP player);
+    boolean onPlayerInterruptBuild(EntityPlayerMP player);
     void intoAncientWorld(EntityPlayerMP player);
 }

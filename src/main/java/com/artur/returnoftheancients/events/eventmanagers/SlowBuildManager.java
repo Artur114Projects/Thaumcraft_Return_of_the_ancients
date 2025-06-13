@@ -38,7 +38,21 @@ public class SlowBuildManager {
         }
     }
 
+    public void unload() {
+        for (SlowBuilder builder : BUILDERS) {
+            builder.onFinish();
+        }
+
+        BUILDERS.clear();
+    }
+
     public void newBuilder(SlowBuilder builder) {
         this.BUILDERS.add(builder);
+    }
+
+    public void finishBuilder(SlowBuilder builder) {
+        if (this.BUILDERS.remove(builder)) {
+            builder.onFinish();
+        }
     }
 }

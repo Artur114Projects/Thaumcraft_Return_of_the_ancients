@@ -27,7 +27,9 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
     protected int loadCount;
     protected int size = 17;
     protected ChunkPos pos;
+    protected int posIndex;
     protected World world;
+
     private boolean requestToDelete = false;
 
     public void constructFinish() {}
@@ -38,6 +40,7 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
 
     public void requestToDelete() {
         this.requestToDelete = true;
+        this.onRequestToDelete();
     }
 
     public boolean isRequestToDelete() {
@@ -54,9 +57,14 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
         return this;
     }
 
-    public AncientLayer1 setPos(ChunkPos pos) {
+    public AncientLayer1 setPos(ChunkPos pos, int index) {
+        this.posIndex = index;
         this.pos = pos;
         return this;
+    }
+
+    public int posIndex() {
+        return posIndex;
     }
 
     public ChunkPos pos() {
@@ -107,18 +115,19 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
     }
 
     protected void onPlayersListChanged() {}
+    protected void onRequestToDelete() {}
 
     @Override
     public void update() {
         Map<IStructure, List<AncientWorldPlayer>> listMap = null;
 
-        this.players.removeIf((v) -> v.player.dimension != InitDimensions.ancient_world_dim_id);
+        this.players.removeIf((v) -> v.player != null && v.player.dimension != InitDimensions.ancient_world_dim_id);
 
         for (AncientWorldPlayer player : this.players) {
 
             if (!player.isSleep()) {
                 StrPos pos = player.calculatePosOnMap(this.pos, this.size);
-                if (!pos.isOutOfBounds(this.size)) {
+                if (!pos.isOutOfBounds(this.size) && this.map != null) {
                     IStructure str = this.map.structure(pos);
                     player.setCurrentRoom(str instanceof IStructureMultiChunk.IStructureSegment ? ((IStructureMultiChunk.IStructureSegment) str).parent() : str);
                 }
@@ -152,6 +161,7 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
         for (int i = 0; i != list.tagCount(); i++) this.players.add(new AncientWorldPlayer(list.getCompoundTagAt(i).getUniqueId("playerID")));
         this.pos = MiscHandler.chunkPosFromLong(nbt.getLong("pos"));
         this.loadCount = nbt.getInteger("loadCount") + 1;
+        this.posIndex = nbt.getInteger("posIndex");
         this.size = nbt.getInteger("size");
         this.seed = nbt.getLong("seed");
     }
@@ -160,6 +170,7 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         nbt.setTag("players", IWriteToNBT.objectsToNBT(this.players));
         nbt.setLong("pos", MiscHandler.chunkPosAsLong(this.pos));
+        nbt.setInteger("posIndex", this.posIndex);
         nbt.setInteger("loadCount", loadCount);
         nbt.setInteger("size", this.size);
         nbt.setLong("seed", this.seed);

@@ -44,19 +44,33 @@ public class ServerAncientLayer1EM {
         }
     }
 
-    public void playerLost(EntityPlayerMP player) {
+    public boolean playerLost(EntityPlayerMP player) {
         IAncientLayer1Manager managerServer = player.world.getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
 
         if (managerServer != null) {
-            ((IServerAncientLayer1Manager) managerServer).onPlayerLost(player);
+            return ((IServerAncientLayer1Manager) managerServer).onPlayerLost(player);
         }
+
+        return false;
     }
 
-    public void playerElope(EntityPlayerMP player) {
+    public boolean playerElope(EntityPlayerMP player) {
         IAncientLayer1Manager managerServer = player.world.getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
 
         if (managerServer != null) {
-            ((IServerAncientLayer1Manager) managerServer).onPlayerElope(player);
+            return ((IServerAncientLayer1Manager) managerServer).onPlayerElope(player);
         }
+
+        return false;
+    }
+
+    public boolean playerInterruptBuild(EntityPlayerMP player) {
+        IAncientLayer1Manager managerServer = player.world.getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+
+        if (managerServer != null) {
+            return ((IServerAncientLayer1Manager) managerServer).onPlayerInterruptBuild(player);
+        }
+
+        return false;
     }
 }

@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.network;
 
+import com.artur.returnoftheancients.ancientworld.system.base.AncientLayer1EventsHandler;
 import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import io.netty.buffer.ByteBuf;
@@ -20,7 +21,7 @@ public class ServerPacketTpToHome implements IMessage {
     public static class HandlerTTH implements IMessageHandler<ServerPacketTpToHome, IMessage> {
         @Override
         public IMessage onMessage(ServerPacketTpToHome message, MessageContext ctx) {
-            if (AncientWorld.interrupt(ctx.getServerHandler().player)) AncientPortalsProcessor.teleportToOverworld(ctx.getServerHandler().player);
+            if (!AncientLayer1EventsHandler.SERVER_MANAGER.playerInterruptBuild(ctx.getServerHandler().player)) AncientPortalsProcessor.teleportToOverworld(ctx.getServerHandler().player);
             return null;
         }
     }

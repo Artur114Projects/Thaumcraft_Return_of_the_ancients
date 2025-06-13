@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class AncientLayer1Builder extends SlowBuilder {
+    private static int buildersCount = 0;
+
     private final InteractiveMap map;
     private final Random buildRand;
     private final ChunkPos center;
@@ -25,6 +27,8 @@ public class AncientLayer1Builder extends SlowBuilder {
         this.center = center;
         this.world = world;
         this.map = map;
+
+        buildersCount++;
     }
 
     @Override
@@ -41,11 +45,23 @@ public class AncientLayer1Builder extends SlowBuilder {
         this.map.build(this.currentIndex++, this.world, pos, this.buildRand);
 
         if (this.currentIndex >= this.map.area()) {
-            System.out.println("Build ancient layer is finish! " + this.center);
+
             return SlowBuildResult.FINISH;
         } else {
             return SlowBuildResult.SUCCESSFULLY;
         }
+    }
+
+    @Override
+    public void onFinish() {
+        super.onFinish();
+
+        buildersCount--;
+    }
+
+    @Override
+    public boolean isReady(long tickCount) {
+        return tickCount % buildersCount == 0;
     }
 
     private void clearChunk(World world, int x, int z) {

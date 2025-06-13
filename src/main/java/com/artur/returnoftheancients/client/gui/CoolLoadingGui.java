@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.client.gui;
 
+import com.artur.returnoftheancients.ancientworld.system.client.AncientLayer1Client;
 import com.artur.returnoftheancients.client.fx.shader.InitShaders;
 import com.artur.returnoftheancients.client.gui.buttons.TRAButton;
 import com.artur.returnoftheancients.client.gui.gif.GifWithTextureAtlas;
@@ -21,21 +22,21 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 // TODO: Сделать картинку не изменяемой в зависимости от соотношения сторон
 public class CoolLoadingGui extends GuiScreen {
-    public static CoolLoadingGui instance;
     private GuiButton button;
     protected final ResourceLocation background;
     private final GifWithTextureAtlas gif_2_0 = new GifWithTextureAtlas("loading", 20, 8, 8 * 12, 8, 8);
     protected static final ResourceLocation blur = EnumAssetLocation.TEXTURES_GUI.getPngRL("v.png");
+    protected final AncientLayer1Client layer1Client;
     private final int Red = 16711680;
     private final int Yellow = 0xffff40;
     private final int White = 16777215;
     private final int Aqua = 0x00ffff;
-    private String[] players = new String[0];
     protected ScaledResolution resolution;
     protected Random rand = new Random();
     protected boolean isTpToHome = false;
@@ -52,13 +53,13 @@ public class CoolLoadingGui extends GuiScreen {
     protected String lore;
 
 
-    public CoolLoadingGui(boolean isTeam) {
+    public CoolLoadingGui(AncientLayer1Client layer1Client) {
+        this.layer1Client = layer1Client;
         int id = rand.nextInt(3);
         background = EnumAssetLocation.TEXTURES_GUI.getPngRL("/loading_gui_backgrounds/background" + id);
         int loreId = rand.nextInt(2);
         lore = I18n.format("rota.l-gui.lore." + loreId);
-        this.isTeam = isTeam;
-        instance = this;
+        this.isTeam = layer1Client.playersState().size() > 1;
     }
 
     @Override
@@ -118,7 +119,6 @@ public class CoolLoadingGui extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        InitShaders.BLACK_WHITE.shader().enable();
         drawDefaultBackground();
         drawBackground();
         drawGif();
@@ -136,7 +136,6 @@ public class CoolLoadingGui extends GuiScreen {
         }
 
         isDraw = true;
-        InitShaders.BLACK_WHITE.shader().disable();
     }
 
     @Override
@@ -149,13 +148,8 @@ public class CoolLoadingGui extends GuiScreen {
         super.keyTyped(typedChar, keyCode);
     }
 
-    public void updatePlayersList(String[] players) {
-        this.players = players;
-    }
-
     public void close() {
         isClosing = true;
-        instance = null;
     }
 
     protected void drawLore() {
@@ -195,19 +189,30 @@ public class CoolLoadingGui extends GuiScreen {
     }
 
     private void drawTeamList() {
-        for (byte i = 0; i != players.length ; i++) {
+        List<String> players = this.layer1Client.playersState();
+
+        for (byte i = 0; i != players.size() ; i++) {
             String text = (i + 1) + ": ";
             int color0 = White;
-            if (players[i].isEmpty()) {
+            int color1 = Aqua;
+            int color2 = White;
+            String[] split = players.get(i).split("\\|");
+            if (players.get(i).isEmpty() || split.length > 1) {
                 color0 = Red;
+                color1 = Red;
+                color2 = Red;
             }
             int x = 1;
             int y = 28;
+            String resText = split[0];
             fontRenderer.drawStringWithShadow(text, x, y + (10 * i), color0);
             int w = fontRenderer.getStringWidth(text);
-            fontRenderer.drawStringWithShadow(players[i], x + w + fontRenderer.getStringWidth(" ") + 1, y + (10 * i), Aqua);
-            fontRenderer.drawStringWithShadow("[",x + w, y + (10 * i), White);
-            fontRenderer.drawStringWithShadow("]",x + w + 2 + fontRenderer.getStringWidth(" " + players[i]), y + (10 * i), White);
+            fontRenderer.drawStringWithShadow(resText, x + w + fontRenderer.getStringWidth(" ") + 1, y + (10 * i), color1);
+            fontRenderer.drawStringWithShadow("[",x + w, y + (10 * i), color2);
+            fontRenderer.drawStringWithShadow("]",x + w + 2 + fontRenderer.getStringWidth(" " + resText), y + (10 * i), color2);
+            if (split.length == 2) {
+                fontRenderer.drawStringWithShadow(": " + I18n.format(split[1]), x + w + 2 + fontRenderer.getStringWidth("  " + resText), y + (10 * i), color0);
+            }
         }
     }
 

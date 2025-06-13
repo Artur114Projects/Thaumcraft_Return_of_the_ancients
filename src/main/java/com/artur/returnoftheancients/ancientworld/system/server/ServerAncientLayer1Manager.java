@@ -1,17 +1,19 @@
 package com.artur.returnoftheancients.ancientworld.system.server;
 
 import com.artur.returnoftheancients.ancientworld.system.base.AncientLayer1;
+import com.artur.returnoftheancients.ancientworldlegacy.main.entry.AncientEntry;
 import com.artur.returnoftheancients.handlers.TeleportHandler;
 import com.artur.returnoftheancients.init.InitDimensions;
+import com.artur.returnoftheancients.items.ItemSoulBinder;
 import com.artur.returnoftheancients.network.ClientPacketSyncAncientLayer1s;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
 public class ServerAncientLayer1Manager implements IServerAncientLayer1Manager {
@@ -57,21 +59,33 @@ public class ServerAncientLayer1Manager implements IServerAncientLayer1Manager {
     }
 
     @Override
-    public void onPlayerLost(EntityPlayerMP player) {
+    public boolean onPlayerLost(EntityPlayerMP player) {
         for (AncientLayer1Server layer1Server : this.ancientLayer1s) {
             if (layer1Server.onPlayerLost(player)) {
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     @Override
-    public void onPlayerElope(EntityPlayerMP player) {
+    public boolean onPlayerElope(EntityPlayerMP player) {
         for (AncientLayer1Server layer1Server : this.ancientLayer1s) {
             if (layer1Server.onPlayerElope(player)) {
-                return;
+                return true;
             }
         }
+        return false;
+    }
+
+    @Override
+    public boolean onPlayerInterruptBuild(EntityPlayerMP player) {
+        for (AncientLayer1Server layer1Server : this.ancientLayer1s) {
+            if (layer1Server.onPlayerInterruptBuild(player)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -80,11 +94,16 @@ public class ServerAncientLayer1Manager implements IServerAncientLayer1Manager {
             return;
         }
 
-        this.teleportToPlatform(player);
+        Tuple<List<EntityPlayerMP>, Map<UUID, String>> compiled = ItemSoulBinder.compileTeam(player);
 
-        AncientLayer1Server layer1Server = new AncientLayer1Server(player);
+        List<EntityPlayerMP> players = compiled.getFirst();
+
+        for (EntityPlayerMP playerMP : players) this.teleportToPlatform(playerMP);
+
+        AncientLayer1Server layer1Server = new AncientLayer1Server(players);
+        layer1Server.setPlayersState(compiled.getSecond());
         layer1Server.setWorld(this.world);
-        layer1Server.setPos(new ChunkPos(512 * (this.ancientLayer1s.size() + 1), 0));
+        this.setFreePos(layer1Server);
         layer1Server.setSize(17);
         layer1Server.constructFinish();
 
@@ -104,13 +123,54 @@ public class ServerAncientLayer1Manager implements IServerAncientLayer1Manager {
         TeleportHandler.teleportToDimension(player, InitDimensions.ancient_world_dim_id, 0, 244, 0);
     }
 
+    private void setFreePos(AncientLayer1Server layer1Server) {
+        int index = 1;
+        boolean isFound;
+        while (true) {
+            isFound = true;
+            for (AncientLayer1Server entry : this.ancientLayer1s) {
+                if (entry.posIndex() == index) {
+                    isFound = false;
+                    break;
+                }
+            }
+            if (isFound) {
+                break;
+            }
+            index++;
+        }
+
+        layer1Server.setPos(new ChunkPos(512 * (index), 0), index);
+    }
+
     @Override
     public NBTTagCompound serializeNBT() {
-        return new NBTTagCompound();
+        NBTTagCompound nbt = new NBTTagCompound();
+        NBTTagList list = new NBTTagList();
+        for (AncientLayer1Server layer1Server : this.ancientLayer1s) {
+            if (!layer1Server.isRequestToDelete()) {
+                list.appendTag(layer1Server.writeToNBT(new NBTTagCompound()));
+            }
+        }
+        nbt.setTag("ancientLayer1s", list);
+        return nbt;
     }
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
+        NBTTagList list = nbt.getTagList("ancientLayer1s", 10);
 
+        for (int i = 0; i != list.tagCount(); i++) {
+            AncientLayer1Server layer1Server = new AncientLayer1Server();
+            layer1Server.readFromNBT(list.getCompoundTagAt(i));
+            layer1Server.setWorld(this.world);
+            layer1Server.constructFinish();
+
+            if (layer1Server.isRequestToDelete()) {
+                continue;
+            }
+
+            this.ancientLayer1s.add(layer1Server);
+        }
     }
 }

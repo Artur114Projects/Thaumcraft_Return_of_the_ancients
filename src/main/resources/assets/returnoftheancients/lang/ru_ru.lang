@@ -35,6 +35,13 @@ returnoftheancients.kW.prefixes=Вт/кВт/МВт/ГВт/ТВт
 returnoftheancients.energy.local.0=Энергия:
 returnoftheancients.energy.local.1=Вход:
 returnoftheancients.energy.local.2=Выход:
+#
+returnoftheancients.team_state.interrupt=Игрок прервал ожидание.
+returnoftheancients.team_state.has_unresolved_items=Игрок имеет запрещённые предметы.
+returnoftheancients.team_state.in_other_world=Игрок находится в другом изменении.
+returnoftheancients.team_state.in_ancient_world=Игрок находится в древнем мире.
+returnoftheancients.team_state.out_of_game=Игрок не в игре.
+returnoftheancients.team_state.not_player=Игрок не является игроком... Так стоп. Что!?
 ###################################################################################
 # Loading gui
 ###################################################################################

@@ -68,14 +68,14 @@ public class ServerProtectedChunk extends ProtectedChunk implements IServerProte
 
     @Override
     public void syncToClient(EntityPlayerMP clientIn) {
-        if (!this.isEmpty()) {
+        if (!this.isEmpty() && clientIn != null) {
             MainR.NETWORK.sendTo(new ClientPacketSyncProtectedChunk(this.dimension, this.pos, this.serializeNBT()), clientIn);
         }
     }
 
     @Override
     public boolean isChanged() {
-        return isChanged;
+        return this.isChanged;
     }
 
     @Override

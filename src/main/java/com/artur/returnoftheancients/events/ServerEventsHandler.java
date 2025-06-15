@@ -165,7 +165,9 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
     }
 
     protected static void onPlayerLost(EntityPlayerMP player) {
-        player.setHealth(20);
+        player.setFire(0);
+        player.setHealth(2);
+        player.clearActivePotions();
         if (!AncientLayer1EventsHandler.SERVER_MANAGER.playerLost(player)) AncientPortalsProcessor.teleportToOverworld(player);
     }
 

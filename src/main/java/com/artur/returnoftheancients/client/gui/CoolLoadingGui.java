@@ -46,7 +46,7 @@ public class CoolLoadingGui extends GuiScreen {
     protected float prevClosingTime = 0;
     protected boolean isOpening = true;
     protected boolean isDraw = false;
-    protected float closingTime = 10;
+    protected float closingTime = 5;
     protected float openingTime = 0;
     protected int buttonTime = 0;
     protected boolean isTeam;
@@ -132,7 +132,7 @@ public class CoolLoadingGui extends GuiScreen {
         if (isOpening) {
             drawDark(1.0F - RenderHandler.interpolate(prevOpeningTime, openingTime, partialTicks) / 10.0F);
         } else if (isClosing) {
-            drawDark(1.0F - RenderHandler.interpolate(prevClosingTime, closingTime, partialTicks) / 10.0F);
+            drawDark(1.0F - RenderHandler.interpolate(prevClosingTime, closingTime, partialTicks) / 5.0F);
         }
 
         isDraw = true;

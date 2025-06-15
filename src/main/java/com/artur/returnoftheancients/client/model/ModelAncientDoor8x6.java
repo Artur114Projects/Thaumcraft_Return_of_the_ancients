@@ -35,7 +35,6 @@ public class ModelAncientDoor8x6 extends ModelBase {
 		arch.cubeList.add(new ModelBox(arch, 260, 152, 4.0F, -1.0F, 16.0F, 2, 6, 3, 0.0F, false));
 		arch.cubeList.add(new ModelBox(arch, 260, 161, 4.0F, -1.0F, 109.0F, 2, 6, 3, 0.0F, false));
 		arch.cubeList.add(new ModelBox(arch, 260, 170, -6.0F, -1.0F, 109.0F, 2, 6, 3, 0.0F, false));
-		arch.cubeList.add(new ModelBox(arch, 202, 244, -8.0F, -1.0F, 0.0F, 5, 16, 16, 0.0F, false));
 		arch.cubeList.add(new ModelBox(arch, 218, 148, -8.0F, -1.0F, 0.0F, 5, 16, 16, 0.0F, false));
 		arch.cubeList.add(new ModelBox(arch, 176, 212, 3.0F, -1.0F, 0.0F, 5, 16, 16, 0.0F, false));
 		arch.cubeList.add(new ModelBox(arch, 218, 212, -8.0F, -1.0F, 112.0F, 5, 16, 16, 0.0F, false));
@@ -89,7 +88,6 @@ public class ModelAncientDoor8x6 extends ModelBase {
 		door1.cubeList.add(new ModelBox(door1, 260, 132, 1.0F, -88.0F, -4.0F, 2, 8, 12, 0.0F, false));
 		door1.cubeList.add(new ModelBox(door1, 248, 48, 1.0F, -16.0F, -4.0F, 2, 12, 12, 0.0F, false));
 	}
-
 	public void renderArch() {
 		arch.render(1.0F / 16.0F);
 	}

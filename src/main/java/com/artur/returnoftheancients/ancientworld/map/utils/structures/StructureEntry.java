@@ -4,6 +4,9 @@ import com.artur.returnoftheancients.ancientworld.map.utils.EnumMultiChunkStrTyp
 import com.artur.returnoftheancients.ancientworld.map.utils.EnumRotate;
 import com.artur.returnoftheancients.ancientworld.map.utils.StrPos;
 import com.artur.returnoftheancients.ancientworld.system.utils.AncientWorldPlayer;
+import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
+import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -29,6 +32,16 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
     @Override
     public void build(World world, ChunkPos pos, Random rand) {
         super.build(world, pos, rand);
+
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        blockPos.setPos(pos).add(8, 0, 8).setY(this.y);
+        for (int y = this.y + 32; y < world.getHeight(); y += 11) {
+            blockPos.setY(y);
+            StructureBuildersManager.createBuildRequest(world, blockPos, "ancient_entry_way").setIgnoreAir().setPosAsXZCenter().build();
+        }
+        blockPos.setY(255);
+        StructureBuildersManager.createBuildRequest(world, blockPos, "ancient_border_cap").setIgnoreAir().setPosAsXZCenter().build();
+        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
     }
 
     @Override

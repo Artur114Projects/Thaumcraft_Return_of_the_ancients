@@ -1,6 +1,5 @@
 package com.artur.returnoftheancients.client.render.tile;
 
-import com.artur.returnoftheancients.client.model.ModelAncientDoor4X3;
 import com.artur.returnoftheancients.client.model.ModelAncientDoor8x6;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientDoor8X6;
 import com.artur.returnoftheancients.util.EnumAssetLocation;
@@ -22,12 +21,12 @@ public class TileEntityAncientDoor8x6Render extends TileEntitySpecialRendererBas
         modelBase.renderArch();
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(0, 0, -3.5 * (1 - tile.doorMoveProgress(partialTicks)));
+        GlStateManager.translate(0, 0, -(3.5 - (2.0F / 16.0F)) * (1 - tile.doorMoveProgress(partialTicks)));
         modelBase.renderDoor1();
         GlStateManager.popMatrix();
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(0, 0, 3.5 * (1 - tile.doorMoveProgress(partialTicks)));
+        GlStateManager.translate(0, 0, (3.5 - (2.0F / 16.0F)) * (1 - tile.doorMoveProgress(partialTicks)));
         modelBase.renderDoor2();
         GlStateManager.popMatrix();
 

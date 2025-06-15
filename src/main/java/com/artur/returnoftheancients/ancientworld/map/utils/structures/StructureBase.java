@@ -16,7 +16,7 @@ public class StructureBase implements IStructure {
     protected EnumStructureType type;
     protected EnumRotate rotate;
     protected StrPos pos;
-    protected int y = 80;
+    protected int y = 40;
 
     protected StructureBase() {}
 

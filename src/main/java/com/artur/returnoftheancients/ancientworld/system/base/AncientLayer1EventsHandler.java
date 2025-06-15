@@ -5,9 +5,7 @@ import com.artur.returnoftheancients.ancientworld.system.server.ServerAncientLay
 import com.artur.returnoftheancients.init.InitDimensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;

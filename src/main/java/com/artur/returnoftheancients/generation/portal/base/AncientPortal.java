@@ -32,7 +32,6 @@ import java.util.List;
 
 import static com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld.tpToAncientWorld;
 
-// TODO: Решить не понятный баг с тем что при прерывании возвращает на портал 0
 public abstract class AncientPortal implements IWriteToNBT {
 
     public static final String portalID = "PortalID";

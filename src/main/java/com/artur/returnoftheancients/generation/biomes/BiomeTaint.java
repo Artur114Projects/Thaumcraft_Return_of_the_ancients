@@ -20,7 +20,6 @@ import thaumcraft.common.entities.monster.tainted.EntityTaintSeedPrime;
 import java.util.ArrayList;
 import java.util.Random;
 
-// TODO: Сделать так чтобы в биоме не появлялись разломы
 public class BiomeTaint extends BiomeBase {
     private static final WorldGensMisc WORLD_GENS_MISC = new WorldGensMisc();
 

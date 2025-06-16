@@ -117,6 +117,8 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
                 }
             }
         }
+
+        UltraMutableBlockPos.returnBlockPosToPoll(pos);
     }
 
     @Override
@@ -127,10 +129,14 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
     protected void doReplace() {
         for (int i = this.width / 2; i != 0; i--) {
             if (this.moveTick == (this.maxMoveTick / (this.width / 2)) * i - ((this.maxMoveTick / (this.width / 2)) / 2)) {
-                this.replaceColumn(i - 1);
-                this.replaceColumn((this.width - 1) - (i - 1));
+                this.replaceSection(i - 1);
+                this.replaceSection((this.width - 1) - (i - 1));
             }
         }
+    }
+
+    protected void replaceSection(int index) {
+        this.replaceColumn(index);
     }
 
     protected void replaceColumn(int index) {
@@ -145,6 +151,8 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
             pos.setPos(this.pos).offset(offsetFacing, index).up(h);
             this.replaceDummy(pos, this.staticAxisAlignedBBMap().get(this.currentState.toBinary()).get(this.axis).get(this.getDummyType(pos)));
         }
+
+        UltraMutableBlockPos.returnBlockPosToPoll(pos);
     }
 
     protected boolean replaceDummy(BlockPos pos, AxisAlignedBB alignedBB) {
@@ -228,6 +236,7 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
                 }
             }
         }
+        UltraMutableBlockPos.returnBlockPosToPoll(pos);
 
         this.world.destroyBlock(this.pos, true);
     }

@@ -57,11 +57,9 @@ public class ClientPacketSyncProtectedChunk implements IMessage {
                 Minecraft mc = Minecraft.getMinecraft();
                 if (mc.world.provider.getDimension() == message.dimension) {
                     Chunk chunk = mc.world.getChunkFromChunkCoords(message.chunk.x, message.chunk.z);
-                    if (!chunk.isEmpty()) {
-                        IProtectedChunk protectedChunk = chunk.getCapability(TRACapabilities.PROTECTED_CHUNK, null);
-                        if (protectedChunk instanceof IClientProtectedChunk) {
-                            ((IClientProtectedChunk) protectedChunk).processSyncData(message.data);
-                        }
+                    IProtectedChunk protectedChunk = chunk.getCapability(TRACapabilities.PROTECTED_CHUNK, null);
+                    if (protectedChunk instanceof IClientProtectedChunk) {
+                        ((IClientProtectedChunk) protectedChunk).processSyncData(message.data);
                     }
                 }
             });

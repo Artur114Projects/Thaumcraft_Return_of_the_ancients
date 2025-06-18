@@ -26,14 +26,14 @@ public class InitBiome {
     public static final List<Biome> BIOMES = new ArrayList<>();
 
     public static final Biome TAINT_WASTELAND = new BiomeTaint("taint_wasteland_r", new Biome.BiomeProperties("Scorched Earth").setWaterColor(0x310042).setBaseHeight(0.2F).setRainfall(0.0F).setHeightVariation(0.1F).setRainDisabled(), EBiome.TAINT, BiomeTaint.TaintType.WASTELAND);
+    public static final Biome TAINT_EDGE = new BiomeTaint("taint_edge_r", new Biome.BiomeProperties("Taint Land Edge").setWaterColor(0x310042).setBaseHeight(3.4F).setRainfall(0.7F).setHeightVariation(0.1F).setSnowEnabled(), EBiome.TAINT_EDGE, BiomeTaint.TaintType.EDGE);
     public static final Biome TAINT_DEEP_SEA = new BiomeTaint("taint_deep_sea_r", new Biome.BiomeProperties("Deep rotten Sea").setWaterColor(0x310042).setBaseHeight(-1.99F).setRainfall(1.0F).setHeightVariation(0.25F), EBiome.TAINT_SEA, BiomeTaint.TaintType.SEA);
     public static final Biome TAINT_MOUNTAINS = new BiomeTaint("taint_mountains_r", new Biome.BiomeProperties("Taint Rocks").setWaterColor(0x310042).setBaseHeight(1.0F).setRainfall(1.0F).setHeightVariation(0.5F), EBiome.TAINT, BiomeTaint.TaintType.HILLS);
     public static final Biome TAINT_PLATEAU = new BiomeTaint("taint_plateau_r", new Biome.BiomeProperties("Taint Plateau").setWaterColor(0x310042).setBaseHeight(0.1F).setRainfall(1.0F).setHeightVariation(0.0F), EBiome.TAINT, BiomeTaint.TaintType.NORMAL);
     public static final Biome TAINT_BEACH = new BiomeTaint("taint_beach_r", new Biome.BiomeProperties("Rotten Beach").setWaterColor(0x310042).setBaseHeight(0.0F).setRainfall(1.0F).setHeightVariation(0.025F), EBiome.TAINT, BiomeTaint.TaintType.BEACH);
-    public static final Biome TAINT_EDGE = new BiomeTaint("taint_edge_r", new Biome.BiomeProperties("Taint Land Edge").setBaseHeight(3.4F).setRainfall(0.7F).setHeightVariation(0.1F).setSnowEnabled(), EBiome.TAINT_EDGE, BiomeTaint.TaintType.EDGE);
     public static final Biome TAINT_SEA = new BiomeTaint("taint_sea_r", new Biome.BiomeProperties("Rotten Sea").setWaterColor(0x310042).setBaseHeight(-1.2F).setRainfall(1.0F).setHeightVariation(0.1F), EBiome.TAINT_SEA, BiomeTaint.TaintType.SEA);
     public static final Biome TAINT = new BiomeTaint("taint_r", new Biome.BiomeProperties("Taint Plains").setWaterColor(0x310042).setBaseHeight(0.2F).setRainfall(1.0F).setHeightVariation(0.1F), EBiome.TAINT, BiomeTaint.TaintType.NORMAL);
-    public static final Biome ANCIENT_LABYRINTH = new BiomeAncientLabyrinth("ancient_entry", new Biome.BiomeProperties("Ancient entry").setRainDisabled().setWaterColor(0), EBiome.ANCIENT);
+    public static final Biome ANCIENT_LABYRINTH = new BiomeAncientLabyrinth("ancient_layer1", new Biome.BiomeProperties("Ancient layer 1").setRainDisabled().setWaterColor(0), EBiome.ANCIENT);
 
     public static byte[] TAINT_BIOMES_ID = new byte[0];
     public static byte[] TAINT_BIOMES_L_ID = new byte[0];

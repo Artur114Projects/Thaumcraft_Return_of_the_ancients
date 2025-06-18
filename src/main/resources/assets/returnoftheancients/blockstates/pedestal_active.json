@@ -1,0 +1,20 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "returnoftheancients:pedestal_active"
+  },
+  "variants": {
+    "inventory": [{"model": "returnoftheancients:pedestal_active"}],
+    "normal": [{"model": "returnoftheancients:pedestal_active"}],
+
+    "facing=east,rotate=false": [{"model": "returnoftheancients:pedestal_active"}],
+    "facing=west,rotate=false": [{"model": "returnoftheancients:pedestal_active"}],
+    "facing=north,rotate=false": [{"model": "returnoftheancients:pedestal_active"}],
+    "facing=south,rotate=false": [{"model": "returnoftheancients:pedestal_active"}],
+
+    "facing=north,rotate=true": [{"model": "returnoftheancients:pedestal_active"}],
+    "facing=south,rotate=true": [{"model": "returnoftheancients:pedestal_active"}],
+    "facing=west,rotate=true": [{"model": "returnoftheancients:pedestal_active"}],
+    "facing=east,rotate=true": [{"model": "returnoftheancients:pedestal_active"}]
+  }
+}

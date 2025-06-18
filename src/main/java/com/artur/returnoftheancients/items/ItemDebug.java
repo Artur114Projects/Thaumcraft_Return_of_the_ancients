@@ -27,6 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.client.fx.FXDispatcher;
+import thaumcraft.common.blocks.world.taint.TaintHelper;
 
 import java.util.List;
 import java.util.Random;
@@ -113,13 +114,7 @@ public class ItemDebug extends BaseItem {
 //				ClientEventsHandler.FOG_MANAGER.setFogParams(new FogManager.FogParams(100, 20, 100, 20));
 //			}
 		}
-		worldIn.getChunkFromBlockCoords(pos).checkLight();
 		if (!worldIn.isRemote) {
-			if (player.isSneaking()) {
-				GenPhase phase = GenPhase.initAllGenPhases();
-				AncientLayer1Builder builder = new AncientLayer1Builder(phase.getMap(System.currentTimeMillis(), 17).toInteractive(worldIn), worldIn, new Random(), worldIn.getChunkFromBlockCoords(pos).getPos());
-				ServerEventsHandler.SLOW_BUILD_MANAGER.newBuilder(builder);
-			}
 
 
 //			if (player.isSneaking()) {

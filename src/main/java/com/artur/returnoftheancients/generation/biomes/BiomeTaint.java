@@ -188,24 +188,24 @@ public class BiomeTaint extends BiomeBase {
 
     @Override
     public int getGrassColorAtPos(BlockPos pos) {
-        return this.type == TaintType.EDGE ? super.getGrassColorAtPos(pos) : 0x16001e;
+        return 0x16001e;
     }
 
     @Override
     public int getFoliageColorAtPos(BlockPos pos) {
-        return this.type == TaintType.EDGE ? super.getFoliageColorAtPos(pos) : 0x16001e;
+        return 0x16001e;
     }
 
     @Override
     public int getSkyColorByTemp(float currentTemperature) {
-        return this.type == TaintType.EDGE ? super.getSkyColorByTemp(currentTemperature) : this.type != TaintType.WASTELAND ? 0x16001e : 0;
+        return this.type != TaintType.WASTELAND ? 0x16001e : 0;
     }
 
     @Override
     public WorldGenAbstractTree getRandomTreeFeature(Random rand) {
         if (type == TaintType.NORMAL) {
             return rand.nextInt(4) == 0 ? BIG_TREE_TAINT_FEATURE : TREE_TAINT_FEATURE;
-        } else if (type == TaintType.HILLS){
+        } else if (type == TaintType.HILLS) {
             return TREE_TAINT_FEATURE;
         } else if (type == TaintType.SEA) {
             return ROTTEN_SPIRES;

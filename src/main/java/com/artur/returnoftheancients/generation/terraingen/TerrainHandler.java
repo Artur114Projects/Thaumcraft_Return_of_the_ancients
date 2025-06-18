@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitBiome;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
@@ -18,8 +19,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class TerrainHandler {
     @SubscribeEvent
     public void initializeAllBiomeGenerators(InitBiomeGens event) {
-        GenLayer[] genlayer = GenLayerTRA.initializeAllBiomeGenerators(event.getSeed(), event.getWorldType());
-        event.setNewBiomeGens(genlayer);
+        if (event.getWorldType() == WorldType.DEFAULT || event.getWorldType() == WorldType.LARGE_BIOMES) {
+            GenLayer[] genlayer = GenLayerTRA.initializeAllBiomeGenerators(event.getSeed(), event.getWorldType());
+            event.setNewBiomeGens(genlayer);
+        }
     }
 
     @SubscribeEvent

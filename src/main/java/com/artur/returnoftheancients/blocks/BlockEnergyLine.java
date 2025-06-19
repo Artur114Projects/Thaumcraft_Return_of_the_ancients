@@ -53,7 +53,8 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
         InitItems.ITEMS.remove(item);
         item = new ItemBlockEnergyLine(this).setRegistryName(this.getRegistryName());
         InitItems.ITEMS.add(item);
-        setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);
+
+        this.setForCreative().setTRACreativeTab();
     }
 
     @Override

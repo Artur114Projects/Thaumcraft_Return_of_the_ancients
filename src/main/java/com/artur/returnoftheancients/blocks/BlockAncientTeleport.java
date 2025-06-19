@@ -34,10 +34,11 @@ public class BlockAncientTeleport extends BlockContainerEnergyBase<TileEntityAnc
 
     public BlockAncientTeleport(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
-        this.setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);
         InitItems.ITEMS.remove(item);
         item = new ItemBlockAncientTeleport(this).setRegistryName(this.getRegistryName());
         InitItems.ITEMS.add(item);
+
+        this.setForCreative().setTRACreativeTab();
     }
 
     @Override

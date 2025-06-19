@@ -14,8 +14,6 @@ public class TileEntityAncientDoor8x6Render extends TileEntitySpecialRendererBas
     @Override
     public void doRender(TileEntityAncientDoor8X6 tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if (tile.axis() == EnumFacing.Axis.X) GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
-        GlStateManager.disableAlpha();
-
         this.bindTexture(TEXTURE_BASE);
 
         modelBase.renderArch();
@@ -29,7 +27,5 @@ public class TileEntityAncientDoor8x6Render extends TileEntitySpecialRendererBas
         GlStateManager.translate(0, 0, (3.5 - (2.0F / 16.0F)) * (1 - tile.doorMoveProgress(partialTicks)));
         modelBase.renderDoor2();
         GlStateManager.popMatrix();
-
-        GlStateManager.enableAlpha();
     }
 }

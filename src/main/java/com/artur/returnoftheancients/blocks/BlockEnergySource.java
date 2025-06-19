@@ -21,6 +21,8 @@ public class BlockEnergySource extends BlockEnergyBase<TileEnergySource> {
         InitItems.ITEMS.remove(item);
         item = new ItemBlockEnergySource(this).setRegistryName(this.getRegistryName());
         InitItems.ITEMS.add(item);
+
+        this.setForCreative().setTRACreativeTab();
     }
 
     @Override

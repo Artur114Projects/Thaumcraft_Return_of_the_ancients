@@ -12,8 +12,6 @@ public class TileEntityAncientDoorH4x4Render extends TileEntitySpecialRendererBa
     private final ModelAncientDoorH4x4 modelBase = new ModelAncientDoorH4x4();
     @Override
     public void doRender(TileEntityAncientDoorH4x4 tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        GlStateManager.disableAlpha();
-
         this.bindTexture(TEXTURE_BASE);
 
         modelBase.renderArch();
@@ -27,7 +25,5 @@ public class TileEntityAncientDoorH4x4Render extends TileEntitySpecialRendererBa
         GlStateManager.translate(0, 0, 1.5F * (1 - tile.doorMoveProgress(partialTicks)));
         modelBase.renderDoor2();
         GlStateManager.popMatrix();
-
-        GlStateManager.enableAlpha();
     }
 }

@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL11;
 
 public class TileEntitySpecialRendererBase<T extends TileEntity> extends TileEntitySpecialRenderer<T> {
     public void defaultTransform(double x, double y, double z) {
@@ -14,6 +15,7 @@ public class TileEntitySpecialRendererBase<T extends TileEntity> extends TileEnt
 
         GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     public void defaultEnd() {

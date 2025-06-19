@@ -16,13 +16,16 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.BiomeDictionary;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockPedestalActive extends BlockTileEntity<TileEntityPedestalActive> {
+    public static final AxisAlignedBB BB_BASE = new AxisAlignedBB(1.0F / 16.0F, 0, 1.0F / 16.0F, 15.0F / 16.0F, 20.4F / 16.0F, 15.0F / 16.0F);
     public final static PropertyDirection DIRECTION = PropertyDirection.create("facing", (f) -> f.getAxis().isHorizontal());
     public final static PropertyBool ROTATE = PropertyBool.create("rotate");
 
@@ -85,6 +88,11 @@ public class BlockPedestalActive extends BlockTileEntity<TileEntityPedestalActiv
     @Override
     public @Nullable TileEntityPedestalActive createTileEntity(@NotNull World world, @NotNull IBlockState blockState) {
         return new TileEntityPedestalActive();
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return BB_BASE;
     }
 
     @Override

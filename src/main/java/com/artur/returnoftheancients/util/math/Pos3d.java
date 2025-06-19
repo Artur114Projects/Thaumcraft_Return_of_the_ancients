@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.util.math;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import org.jetbrains.annotations.NotNull;
@@ -56,8 +57,8 @@ public class Pos3d extends Vec3d {
         double xPos = x;
         double zPos = z;
         if (yaw != 0) {
-            double sin = Math.sin(yawRadians);
-            double cos = Math.cos(yawRadians);
+            double sin = MathHelper.sin((float) yawRadians);
+            double cos = MathHelper.cos((float) yawRadians);
             xPos = x * cos - z * sin;
             zPos = z * cos + x * sin;
         }
@@ -70,8 +71,8 @@ public class Pos3d extends Vec3d {
         double yPos = y;
         double zPos = z;
         if (pitch != 0) {
-            double sin = Math.sin(pitchRadians);
-            double cos = Math.cos(pitchRadians);
+            double sin = MathHelper.sin((float) pitchRadians);
+            double cos = MathHelper.cos((float) pitchRadians);
             yPos = y * cos - z * sin;
             zPos = z * cos + y * sin;
         }

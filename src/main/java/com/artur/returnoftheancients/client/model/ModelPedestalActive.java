@@ -38,8 +38,12 @@ public class ModelPedestalActive extends ModelBase {
 		tablet = new ModelRenderer(this);
 		tablet.setRotationPoint(1.0F, 10.0F, -6.0F);
 		setRotationAngle(tablet, 0.0F, 0.0F, -0.7854F);
-		tablet.cubeList.add(new ModelBox(tablet, 36, 20, -5.0F, -4.0F, 3.0F, 8, 1, 6, 0.0F, false));
-		tablet.cubeList.add(new ModelBox(tablet, 55, 54, -2.6F, -4.1F, 4.5F, 3, 0, 3, 0.0F, false));
+		tablet.cubeList.add(new ModelBox(tablet, 36, 20, -5.0F, -4.1F, 3.0F, 8, 1, 6, 0.0F, false));
+		tablet.cubeList.add(new ModelBox(tablet, 41, 26, -5.0F, -4.1F, 9.0F, 8, 0, 1, 0.0F, false));
+		tablet.cubeList.add(new ModelBox(tablet, 41, 26, -5.0F, -4.1F, 2.0F, 8, 0, 1, 0.0F, false));
+		tablet.cubeList.add(new ModelBox(tablet, 44, 20, 3.0F, -4.1F, 3.0F, 1, 0, 6, 0.0F, false));
+		tablet.cubeList.add(new ModelBox(tablet, 44, 20, -6.0F, -4.1F, 3.0F, 1, 0, 6, 0.0F, false));
+		tablet.cubeList.add(new ModelBox(tablet, 55, 54, -2.6F, -4.2F, 4.5F, 3, 0, 3, 0.0F, false));
 	}
 
 	public void renderAll() {

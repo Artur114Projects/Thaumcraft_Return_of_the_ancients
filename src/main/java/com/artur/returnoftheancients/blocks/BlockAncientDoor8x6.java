@@ -39,6 +39,10 @@ public class BlockAncientDoor8x6 extends BlockTileEntity<TileEntityAncientDoor8X
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (!playerIn.isCreative()) {
+            return false;
+        }
+
         TileEntity tileRaw = worldIn.getTileEntity(pos);
         if (tileRaw instanceof TileEntityAncientDoor8X6) {
             TileEntityAncientDoor8X6 tile = ((TileEntityAncientDoor8X6) tileRaw);
@@ -79,7 +83,7 @@ public class BlockAncientDoor8x6 extends BlockTileEntity<TileEntityAncientDoor8X
 
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.INVISIBLE;
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @Override

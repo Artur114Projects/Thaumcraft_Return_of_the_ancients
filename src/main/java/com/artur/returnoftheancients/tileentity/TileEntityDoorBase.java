@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class TileEntityDoorBase extends TileBase implements ITickable, ITileDoor, ITileMultiBlock, ITileBBProvider {
+public abstract class TileEntityDoorBase extends TileBase implements ITickable, ITileDoor, ITileMultiBlock, ITileBBProvider, TileEntityPedestalActive.ITileActivatedWithPedestal {
     protected AxisAlignedBB alignedBB = Block.FULL_BLOCK_AABB;
     protected EnumFacing.Axis axis = EnumFacing.Axis.Z;
     protected EnumDoorState currentState;
@@ -70,6 +70,11 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
         if (this.moveTick == this.maxMoveTick) {
             this.currentState = EnumDoorState.CLOSE;
         }
+    }
+
+    @Override
+    public void activate(TileEntityPedestalActive tile) {
+        this.open();
     }
 
     @Override

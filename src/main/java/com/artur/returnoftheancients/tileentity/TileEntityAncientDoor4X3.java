@@ -73,7 +73,9 @@ public class TileEntityAncientDoor4X3 extends TileEntityDoorBase {
 
     @Override
     public void open() {
-        this.startOpenTimer = 8;
+        if (this.currentState == EnumDoorState.CLOSE) {
+            this.startOpenTimer = 8;
+        }
     }
 
     @Override

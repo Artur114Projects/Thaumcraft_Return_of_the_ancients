@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.tileentity.TileEntityPedestalActive;
 import com.artur.returnoftheancients.util.EnumAssetLocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
 public class TileEntityPedestalActiveRender extends TileEntitySpecialRendererBase<TileEntityPedestalActive> {
     private static final ResourceLocation TEXTURE_BASE = EnumAssetLocation.TEXTURES_BLOCKS.getPngRL("pedestal_active");
@@ -18,15 +19,17 @@ public class TileEntityPedestalActiveRender extends TileEntitySpecialRendererBas
 
         modelBase.renderAll();
 
-        GlStateManager.enableAlpha();
-        GlStateManager.enableBlend();
-        GlStateManager.disableLighting();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, (float) Math.abs(Math.cos(System.currentTimeMillis() / 1000.0D)));
+        if (tile.isActive()) {
+            GlStateManager.enableAlpha();
+            GlStateManager.enableBlend();
+            GlStateManager.disableLighting();
+            GlStateManager.color(1.0F, 1.0F, 1.0F, (float) MathHelper.clamp((Math.abs(Math.cos(System.currentTimeMillis() / 250.0D)) * 0.4) + 0.6, 0.0F, 1.0F));
 
-        modelBase.renderTablet();
+            modelBase.renderTablet();
 
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.enableLighting();
-        GlStateManager.disableBlend();
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.enableLighting();
+            GlStateManager.disableBlend();
+        }
     }
 }

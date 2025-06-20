@@ -47,6 +47,17 @@ public class TileEntityDummy extends TileBase implements ITileBBProvider {
         return null;
     }
 
+    public TileEntity parentTile() {
+        TileEntity tile = this.world.getTileEntity(this.parent);
+
+        if (tile instanceof ITileMultiBlock) {
+            return tile;
+        }
+
+        return null;
+    }
+
+
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);

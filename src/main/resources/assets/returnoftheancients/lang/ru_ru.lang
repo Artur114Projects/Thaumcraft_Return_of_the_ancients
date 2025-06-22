@@ -9,6 +9,7 @@ tile.ancient_door_h_4x4.name=Древняя горизонтальная две�
 tile.ancient_door_4x3.name=Древняя дверь 4 на 3
 tile.ancient_door_8x6.name=Древняя дверь 8 на 6
 tile.ancient_sanctuary_controller_broken.name=Сломанный древний контроллер святилища
+tile.ancient_sanctuary_controller.name=Древний контроллер святилища
 tile.taint_void_stone.name=Заражённый пустотный камень
 tile.incandescent_taint_void_stone.name=Раскалённый заражённый пустотный камень
 tile.ancient_lamp_1.name=Древнее устройство

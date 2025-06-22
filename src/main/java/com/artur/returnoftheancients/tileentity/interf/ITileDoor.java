@@ -6,4 +6,5 @@ public interface ITileDoor {
     boolean isOpen();
     boolean isClose();
     boolean isMoving();
+    boolean isOpenOrOpening();
 }

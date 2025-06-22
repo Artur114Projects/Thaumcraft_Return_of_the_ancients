@@ -128,5 +128,35 @@
         "volume": 1
       }
     ]
+  },
+  "door_open_1": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "returnoftheancients:door_open_1",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  },
+  "pedestal_activated": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "returnoftheancients:pedestal_activated",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  },
+  "pneumatic_puff_long": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "returnoftheancients:pneumatic_puff_long",
+        "stream": false,
+        "volume": 1
+      }
+    ]
   }
 }

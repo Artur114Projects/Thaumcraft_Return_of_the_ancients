@@ -97,6 +97,11 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
     }
 
     @Override
+    public boolean isOpenOrOpening() {
+        return this.currentState.toBinary() == EnumDoorState.OPEN;
+    }
+
+    @Override
     public boolean isClose() {
         return this.currentState == EnumDoorState.CLOSE;
     }

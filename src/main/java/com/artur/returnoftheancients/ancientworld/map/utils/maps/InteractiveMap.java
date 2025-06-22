@@ -17,24 +17,21 @@ import java.util.*;
 
 public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFromNBT {
     private final Map<Class<IStructure>, List<IStructure>> structuresDictionary = new HashMap<>();
+    private final ChunkPos center;
     private final World world;
 
-    public InteractiveMap(AbstractMap map, World world) {
-        this(map.size, world);
+    public InteractiveMap(AbstractMap map, World world, ChunkPos center) {
+        this(map.size, world, center);
 
-        for (int i = 0; i != map.structures.length; i++) {
-            IStructure structure = map.structures[i];
-            if (structure != null && !(structure instanceof IStructureMultiChunk.IStructureSegment)) {
-                this.insetStructure(structure.copy());
-            }
-        }
+        this.copyFromMap(map);
 
-        this.foundAndBindWorldInteractiveS();
+        this.foundAndBindInteractiveS();
     }
 
-    public InteractiveMap(int size, World world) {
+    public InteractiveMap(int size, World world, ChunkPos center) {
         super(size);
 
+        this.center = center;
         this.world = world;
     }
 
@@ -119,7 +116,7 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
 
         for (int i = 0; i != this.structures.length; i++) {
             IStructure structure = this.structures[i];
-            if (structure != null && structureClass.isInstance(structure.getClass())) {
+            if (structureClass.isInstance(structure)) {
                 ret.add(structureClass.cast(structure));
             }
         }
@@ -139,9 +136,25 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
         return this.structures[index];
     }
 
-    public void foundAndBindWorldInteractiveS() {
+    private void foundAndBindInteractiveS() {
         for (IStructureInteractive interactive : this.foundStructures(IStructureInteractive.class)) {
             interactive.bindWorld(this.world);
+            this.bindRealPos(interactive);
+        }
+    }
+
+    private void bindRealPos(IStructureInteractive interactive) {
+        int x = this.center.x + (this.size() / 2) - (interactive.pos().getX());
+        int z = this.center.z + (this.size() / 2) - (interactive.pos().getY());
+        interactive.bindRealPos(new ChunkPos(x, z));
+    }
+
+    private void copyFromMap(AbstractMap map) {
+        for (int i = 0; i != map.structures.length; i++) {
+            IStructure structure = map.structures[i];
+            if (structure != null && !(structure instanceof IStructureMultiChunk.IStructureSegment)) {
+                this.insetStructure(structure.copy());
+            }
         }
     }
 }

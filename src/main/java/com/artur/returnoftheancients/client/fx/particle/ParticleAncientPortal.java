@@ -32,6 +32,11 @@ public class ParticleAncientPortal extends ParticleBase<ParticleAtlasSprite> {
     }
 
     @Override
+    public int getBrightnessForRender(float p_189214_1_) {
+        return 240;
+    }
+
+    @Override
     public void onUpdate() {
         super.onUpdate();
 

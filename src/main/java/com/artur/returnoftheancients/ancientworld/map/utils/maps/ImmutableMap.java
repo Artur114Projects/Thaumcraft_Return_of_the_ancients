@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructur
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructureMultiChunk;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.StructureBase;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.StructureMapBorder;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -123,8 +124,8 @@ public class ImmutableMap extends AbstractMap {
         this.createBaseStructure(new StrPos(x, y), type, rotate);
     }
 
-    public InteractiveMap toInteractive(World world) {
-        return new InteractiveMap(this, world);
+    public InteractiveMap toInteractive(World world, ChunkPos center) {
+        return new InteractiveMap(this, world, center);
     }
 
     public void freezeChanges() {

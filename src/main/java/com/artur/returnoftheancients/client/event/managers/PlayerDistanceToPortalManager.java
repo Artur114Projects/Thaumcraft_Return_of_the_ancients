@@ -52,7 +52,7 @@ public class PlayerDistanceToPortalManager {
     }
 
     private void setRain(Minecraft mc, EntityPlayer player) { // TODO: 23.04.2025 Переделать!
-        if (distanceToPortal < 1024) {
+        if (distanceToPortal < 1024 && player.dimension == 0) {
             if (!useCustomRain) {
                 isServerRainUpdated = false;
                 updateServerRain();

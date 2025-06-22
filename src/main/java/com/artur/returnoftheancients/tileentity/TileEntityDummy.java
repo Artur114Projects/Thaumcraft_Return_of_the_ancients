@@ -23,7 +23,7 @@ public class TileEntityDummy extends TileBase implements ITileBBProvider {
     }
 
     public void bindParent(BlockPos pos) {
-        this.parent = pos;
+        this.parent = new BlockPos(pos.getX() - this.pos.getX(), pos.getY() - this.pos.getY(), pos.getZ() - this.pos.getZ());
     }
 
     public void onBreak() {
@@ -34,11 +34,11 @@ public class TileEntityDummy extends TileBase implements ITileBBProvider {
     }
 
     public BlockPos parentPos() {
-        return this.parent;
+        return this.pos.add(this.parent);
     }
 
     public ITileMultiBlock parent() {
-        TileEntity tile = this.world.getTileEntity(this.parent);
+        TileEntity tile = this.world.getTileEntity(this.parentPos());
 
         if (tile instanceof ITileMultiBlock) {
             return (ITileMultiBlock) tile;
@@ -48,7 +48,7 @@ public class TileEntityDummy extends TileBase implements ITileBBProvider {
     }
 
     public TileEntity parentTile() {
-        TileEntity tile = this.world.getTileEntity(this.parent);
+        TileEntity tile = this.world.getTileEntity(this.parentPos());
 
         if (tile instanceof ITileMultiBlock) {
             return tile;

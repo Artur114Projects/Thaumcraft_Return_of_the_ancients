@@ -2,20 +2,26 @@ package com.artur.returnoftheancients.tileentity;
 
 import com.artur.returnoftheancients.blocks.BlockDummy;
 import com.artur.returnoftheancients.init.InitBlocks;
+import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
+import thaumcraft.client.fx.FXDispatcher;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class TileEntityAncientDoorH4x4 extends TileEntityDoorBase implements TileEntityPedestalActive.ITileActivatedWithPedestal {
     private static final Map<EnumDoorState, Map<EnumFacing.Axis, Map<EnumDummyType, AxisAlignedBB>>> axisAlignedBBMap;
+    private int startOpenTimer = 0;
     private int activesCount = 0;
+
     public TileEntityAncientDoorH4x4() {
         super(40, 4, 4, InitBlocks.DUMMY_ANCIENT_STONE);
     }
@@ -31,6 +37,40 @@ public class TileEntityAncientDoorH4x4 extends TileEntityDoorBase implements Til
         if (this.activesCount == 4) {
             this.activesCount = 0;
             this.open();
+        }
+    }
+
+    @Override
+    public void update() {
+        super.update();
+
+        if (this.startOpenTimer > 0) {
+
+            if (this.world.isRemote) {
+                if (this.startOpenTimer == 40) {
+                    ((WorldClient) this.world).playSound(this.pos, InitSounds.PNEUMATIC_PUFF_LONG.SOUND, SoundCategory.BLOCKS, 0.25F, 1, false);
+                }
+
+                if (this.startOpenTimer == 2) {
+                    ((WorldClient) this.world).playSound(this.pos, InitSounds.DOOR_OPEN_1.SOUND, SoundCategory.BLOCKS, 0.5F, 1, false);
+                }
+
+                FXDispatcher.INSTANCE.drawVentParticles(pos.getX() + 4.0F / 16.0F, pos.getY() + (12.0F / 16.0F), pos.getZ() + 2, 0.0, 0.001, 0.0, 0x999999, 1.0F);
+                FXDispatcher.INSTANCE.drawVentParticles(pos.getX() + 3 + (12.0F / 16.0F), pos.getY() + (12.0F / 16.0F), pos.getZ() + 2, 0.0, 0.001, 0.0, 0x999999, 1.0F);
+            }
+
+            this.startOpenTimer--;
+
+            if (this.startOpenTimer == 0) {
+                super.open();
+            }
+        }
+    }
+
+    @Override
+    public void open() {
+        if (this.currentState == EnumDoorState.CLOSE) {
+            this.startOpenTimer = 40;
         }
     }
 

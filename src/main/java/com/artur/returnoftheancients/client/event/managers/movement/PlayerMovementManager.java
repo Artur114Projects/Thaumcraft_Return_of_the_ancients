@@ -24,17 +24,6 @@ public class PlayerMovementManager {
             return;
         }
         int playerDimension = e.player.dimension;
-//        if (e.player.getEntityData().getBoolean("startUpNBT")) {
-//            if (playerDimension != ancient_world_dim_id) {
-//                e.player.motionY += 0.5 - e.player.motionY;
-//            }
-//        }
-        if (e.player.dimension == ancient_world_dim_id) {
-            if (e.player.posY > 84 && !e.player.isCreative()) {
-                e.player.fallDistance = 0;
-                e.player.motionY += -1 - e.player.motionY;
-            }
-        }
     }
 
     public void tickEventClientTickEvent(TickEvent.ClientTickEvent e) {
@@ -80,6 +69,7 @@ public class PlayerMovementManager {
             IMovementTask task = tasks.get(key);
             if (task.isDoneWork()) {
                 TO_DELETE.add(key);
+                return;
             }
             task.move(player);
             if (task.isNeedToWorkAlone()) {

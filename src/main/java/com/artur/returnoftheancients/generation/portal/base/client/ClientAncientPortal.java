@@ -4,6 +4,7 @@ import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.client.event.managers.movement.IMovementTask;
 import com.artur.returnoftheancients.client.fx.particle.ParticleAncientPortal;
 import com.artur.returnoftheancients.generation.portal.util.OffsetsUtil;
+import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -70,7 +71,7 @@ public class ClientAncientPortal {
     public boolean isCollide(BlockPos pos) {
         UltraMutableBlockPos lBlockPos = UltraMutableBlockPos.getBlockPosFromPoll();
         lBlockPos.setPos(pos);
-        if (lBlockPos.getChunkX() == chunkX && blockPos.getChunkZ() == chunkZ) {
+        if (lBlockPos.getChunkX() == chunkX && lBlockPos.getChunkZ() == chunkZ) {
             lBlockPos.setPos(portalPos).setY(0);
             for (BlockPos offset : OffsetsUtil.portalCollideOffsetsArray) {
                 lBlockPos.pushPos();
@@ -104,7 +105,7 @@ public class ClientAncientPortal {
         int currentY = MathHelper.floor(player.posY);
 
         if (player.isSneaking() && !hasElevator && (player.posY - 1.5D) <= posY) {
-            ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementElevator(MovementElevator.ElevatingType.DOWN, 4, 0.5F), movementIds[0]);
+            ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementElevator(MovementElevator.ElevatingType.DOWN, 4, 1.25F).setFastEnd(), movementIds[0]);
             particlesSpeed = 0.2D;
         }
 
@@ -113,7 +114,7 @@ public class ClientAncientPortal {
         }
 
         if (posY > currentY && !hasElevator) {
-            ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementElevator(MovementElevator.ElevatingType.UP, posY, 0.5F), movementIds[0]);
+            ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementElevator(MovementElevator.ElevatingType.UP, posY, 1.25F), movementIds[0]);
             particlesSpeed = 0.5D;
         } else if (posY == currentY && !hasElevator && !ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask(movementIds[1])) {
             ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementRetentionY(posY + 1.1), movementIds[1]);
@@ -142,14 +143,13 @@ public class ClientAncientPortal {
     }
 
     public static class MovementElevator implements IMovementTask {
-        private float speedForSmoothingTicks = -100;
+        private float speedPercent = 0.25F;
         private final ElevatingType type;
-        private int smoothingTicks;
+        private boolean fastEnd = false;
         private final float speed;
         private int lastY = -100;
-        private float lastSpeed;
         private final int toY;
-        private int startY;
+
 
         public MovementElevator(ElevatingType type, int toY, float speed) {
             this.speed = type == ElevatingType.UP ? speed : -speed;
@@ -159,35 +159,27 @@ public class ClientAncientPortal {
 
         @Override
         public void move(EntityPlayer player) {
-            final int specificBlocks = 6;
-
             int currentY = MathHelper.floor(player.posY);
-            float localSpeed = (speed + lastSpeed) / 2;
 
-            if (lastY == -100) {
-                startY = currentY;
+            if (Math.abs(toY - currentY) <= 20 && !this.fastEnd) {
+                speedPercent = MiscHandler.interpolate(speedPercent, 0.25F, 0.12F);
+            } else {
+                speedPercent = MiscHandler.interpolate(speedPercent, 1.0F, 0.05F);
             }
 
-            boolean flag = false;
-            if (startY - currentY < specificBlocks && type == ElevatingType.DOWN) {
-                localSpeed = localSpeed * 1.25F;
-                speedForSmoothingTicks = localSpeed;
-                flag = true;
-            } else if (toY - currentY < specificBlocks && type == ElevatingType.UP) {
-                localSpeed = localSpeed * 0.75F;
-                speedForSmoothingTicks = localSpeed;
-                flag = true;
-            }
+            player.motionY = speed * speedPercent;
 
-            if (!flag && smoothingTicks < 10 && speedForSmoothingTicks != -100) {
-                localSpeed = speedForSmoothingTicks + (localSpeed - speedForSmoothingTicks) * (smoothingTicks / 10.0F);
-                smoothingTicks++;
-            }
-
-            player.motionY += localSpeed - player.motionY;
-
-            lastSpeed = localSpeed;
             lastY = currentY;
+        }
+
+        public MovementElevator setFastStart() {
+            this.speedPercent = 1.0F;
+            return this;
+        }
+
+        public MovementElevator setFastEnd() {
+            this.fastEnd = true;
+            return this;
         }
 
         @Override
@@ -225,18 +217,19 @@ public class ClientAncientPortal {
             double localNeedY = needY;
 
 
-            if (tickToLevitate >= 20) {
+            if (tickToLevitate >= 0) {
                 localNeedY += (Math.cos((tick % (Math.PI * 2))) / 5.0F) + 0.1;
             } else {
                 tickToLevitate++;
             }
 
-            if (player.posY != localNeedY) {
-                player.motionY = (localNeedY - player.posY) / 12.0D;
+            if (Math.abs(player.posY - localNeedY) > 2) {
+                isDoneWork = true;
+                return;
             }
 
-            if (player.posY - localNeedY > 2) {
-                isDoneWork = true;
+            if (player.posY != localNeedY) {
+                player.motionY = (localNeedY - player.posY) / 12.0D;
             }
 
             tick += 0.14F;

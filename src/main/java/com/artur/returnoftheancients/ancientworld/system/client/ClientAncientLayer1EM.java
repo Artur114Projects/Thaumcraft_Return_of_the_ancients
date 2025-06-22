@@ -9,6 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class ClientAncientLayer1EM {
     public void attachCapabilitiesEventWorld(AttachCapabilitiesEvent<World> e) {
@@ -16,7 +17,7 @@ public class ClientAncientLayer1EM {
     }
 
     public void tickEventClientTickEvent(TickEvent.ClientTickEvent e) {
-        if (e.phase != TickEvent.Phase.START) {
+        if (e.phase != TickEvent.Phase.START || Minecraft.getMinecraft().isGamePaused()) {
             return;
         }
 

@@ -2,12 +2,14 @@ package com.artur.returnoftheancients.tileentity;
 
 import com.artur.returnoftheancients.blocks.BlockPedestalActive;
 import com.artur.returnoftheancients.client.fx.particle.ParticlePhantom;
+import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.items.ItemPhantomTablet;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockUseListener;
 import com.artur.returnoftheancients.util.math.Pos3d;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -45,6 +48,7 @@ public class TileEntityPedestalActive extends TileBase implements ITileBlockUseL
                 Pos3d vec = new Pos3d(0.1, 0, 0).rotateYaw(this.rotate);
                 Minecraft.getMinecraft().effectRenderer.addEffect(new ParticlePhantom(world, this.pos.getX() + 6.0F / 16.0F + (world.rand.nextFloat() * 4.0F / 16.0F), this.pos.getY() + 12.0F / 16.0F, this.pos.getZ() + 6.0F / 16.0F + (world.rand.nextFloat() * 4.0F / 16.0F), vec, -1));
             }
+            ((WorldClient) this.world).playSound(this.pos, InitSounds.PEDESTAL_ACTIVATED.SOUND, SoundCategory.BLOCKS, 0.5F, 1.0F, false);
         }
 
         if (this.parent != null) {

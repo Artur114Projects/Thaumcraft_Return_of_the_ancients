@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.client.event.managers;
 
+import com.artur.returnoftheancients.ancientworld.map.utils.structures.StructureBase;
 import com.artur.returnoftheancients.client.fx.particle.ParticleHeat;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.init.InitDimensions;

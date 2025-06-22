@@ -22,12 +22,14 @@ public class TileEntityPedestalActiveRender extends TileEntitySpecialRendererBas
         if (tile.isActive()) {
             GlStateManager.enableAlpha();
             GlStateManager.enableBlend();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.SRC_ALPHA);
             GlStateManager.disableLighting();
             GlStateManager.color(1.0F, 1.0F, 1.0F, (float) MathHelper.clamp((Math.abs(Math.cos(System.currentTimeMillis() / 250.0D)) * 0.4) + 0.6, 0.0F, 1.0F));
 
             modelBase.renderTablet();
 
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.enableLighting();
             GlStateManager.enableLighting();
             GlStateManager.disableBlend();
         }

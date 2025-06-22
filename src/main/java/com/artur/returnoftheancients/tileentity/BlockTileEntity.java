@@ -1,6 +1,8 @@
 package com.artur.returnoftheancients.tileentity;
 
 import com.artur.returnoftheancients.blocks.BaseBlock;
+import com.artur.returnoftheancients.client.render.item.TileEntityItemStackRendererTRA;
+import com.artur.returnoftheancients.client.render.tile.IItemStackRenderer;
 import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.tileentity.interf.ITileBBProvider;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockUseListener;
@@ -33,10 +35,16 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
 
         this.isBBProvider = ITileBBProvider.class.isAssignableFrom(this.getTileEntityClass());
         this.isUseListener = ITileBlockUseListener.class.isAssignableFrom(this.getTileEntityClass());
+
     }
 
     protected void bindTESR(TileEntitySpecialRenderer<T> tileRender) {
         this.tileRender = tileRender;
+
+        if (tileRender instanceof IItemStackRenderer) {
+            this.item.setTileEntityItemStackRenderer(TileEntityItemStackRendererTRA.INSTANCE);
+            TileEntityItemStackRendererTRA.INSTANCE.register(this.item, ((IItemStackRenderer) tileRender));
+        }
     }
 
     public abstract Class<T> getTileEntityClass();

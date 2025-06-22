@@ -10,6 +10,7 @@ import java.util.List;
 
 public class SlowBuildManager {
     protected final List<SlowBuilder> BUILDERS = new ArrayList<>();
+    protected final List<SlowBuilder> toRemove = new ArrayList<>();
     protected long tickCounter = 0;
 
     public void tickEventServerTickEvent(TickEvent.ServerTickEvent e) {
@@ -33,6 +34,14 @@ public class SlowBuildManager {
             }
         }
 
+        if (!this.toRemove.isEmpty()) {
+            for (SlowBuilder builder : toRemove) {
+                if (this.BUILDERS.remove(builder)) {
+                    builder.onFinish();
+                }
+            }
+        }
+
         if (++this.tickCounter < 0) {
             tickCounter = 0;
         }
@@ -51,8 +60,6 @@ public class SlowBuildManager {
     }
 
     public void finishBuilder(SlowBuilder builder) {
-        if (this.BUILDERS.remove(builder)) {
-            builder.onFinish();
-        }
+        this.toRemove.add(builder);
     }
 }

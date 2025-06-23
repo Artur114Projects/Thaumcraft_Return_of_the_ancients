@@ -1,5 +1,6 @@
 package com.artur.returnoftheancients.generation.portal.base.client;
 
+import com.artur.returnoftheancients.client.audio.MovementElevatorSound;
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.client.event.managers.movement.IMovementTask;
 import com.artur.returnoftheancients.client.fx.particle.ParticleAncientPortal;
@@ -7,6 +8,8 @@ import com.artur.returnoftheancients.generation.portal.util.OffsetsUtil;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ElytraSound;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -105,7 +108,7 @@ public class ClientAncientPortal {
         int currentY = MathHelper.floor(player.posY);
 
         if (player.isSneaking() && !hasElevator && (player.posY - 1.5D) <= posY) {
-            ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementElevator(MovementElevator.ElevatingType.DOWN, 4, 1.25F).setFastEnd(), movementIds[0]);
+            ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new MovementElevator(MovementElevator.ElevatingType.DOWN, 4, 1.5F).setFastEnd(), movementIds[0]);
             particlesSpeed = 0.2D;
         }
 
@@ -144,6 +147,7 @@ public class ClientAncientPortal {
 
     public static class MovementElevator implements IMovementTask {
         private float speedPercent = 0.25F;
+        private boolean firstTick = true;
         private final ElevatingType type;
         private boolean fastEnd = false;
         private final float speed;
@@ -155,10 +159,20 @@ public class ClientAncientPortal {
             this.speed = type == ElevatingType.UP ? speed : -speed;
             this.type = type;
             this.toY = toY;
+
+
         }
 
         @Override
         public void move(EntityPlayer player) {
+            if (this.firstTick) {
+                this.firstTick = false;
+
+                if (player instanceof EntityPlayerSP) {
+                    Minecraft.getMinecraft().getSoundHandler().playSound(new MovementElevatorSound((EntityPlayerSP) player, this));
+                }
+            }
+
             int currentY = MathHelper.floor(player.posY);
 
             if (Math.abs(toY - currentY) <= 20 && !this.fastEnd) {
@@ -167,6 +181,7 @@ public class ClientAncientPortal {
                 speedPercent = MiscHandler.interpolate(speedPercent, 1.0F, 0.05F);
             }
 
+            player.fallDistance = this.type == ElevatingType.UP ? 0 : 100;
             player.motionY = speed * speedPercent;
 
             lastY = currentY;

@@ -10,20 +10,11 @@ import thaumcraft.common.entities.monster.EntityMindSpider;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BiomeAncientLabyrinth extends BiomeBase {
-
-    public static List<SpawnListEntry> spawnListEntryList = new ArrayList<>();
-
-    public BiomeAncientLabyrinth(String registryName, Biome.BiomeProperties properties, EBiome eBiome) {
+public class BiomeAncientLayer1 extends BiomeBase {
+    public BiomeAncientLayer1(String registryName, Biome.BiomeProperties properties, EBiome eBiome) {
         super(registryName, properties, eBiome);
         this.topBlock = Blocks.AIR.getDefaultState();
         this.fillerBlock = Blocks.AIR.getDefaultState();
-
-        spawnListEntryList.add(new SpawnListEntry(EntityEldritchGuardian.class, 100, 4, 14));
-        spawnListEntryList.add(new SpawnListEntry(EntityMindSpider.class, 30, 20, 100));
-        spawnListEntryList.add(new SpawnListEntry(EntityInhabitedZombie.class, 50, 4, 8));
-
-        this.spawnableCaveCreatureList = spawnListEntryList;
     }
 
     @Override

@@ -577,10 +577,10 @@ public class MiscHandler {
     }
 
     public static long chunkPosAsLong(ChunkPos chunkPos) {
-        return ((long) chunkPos.x << 32) | chunkPos.z;
+        return (long) chunkPos.x | ((long) chunkPos.z) << 32;
     }
 
     public static ChunkPos chunkPosFromLong(long data) {
-        return new ChunkPos((int) (data >> 32), (int) data);
+        return new ChunkPos((int) (data), (int) (data >> 32));
     }
 }

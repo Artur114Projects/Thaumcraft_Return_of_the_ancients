@@ -116,7 +116,13 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
     }
 
     protected void updateServer(List<AncientWorldPlayer> players) {
-
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        for (AncientWorldPlayer player : players) {
+            if (this.isCollideToWay(blockPos.setPos(player.player))) {
+                player.player.fallDistance = 0;
+            }
+        }
+        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
     }
 
     @SideOnly(Side.CLIENT)
@@ -146,14 +152,14 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
             boolean hasElevator = ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask("ELEVATOR_" + this.chunkPos);
 
             if (player.posY > this.y + 16 && !hasElevator) {
-                ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new ClientAncientPortal.MovementElevator(ClientAncientPortal.MovementElevator.ElevatingType.DOWN, this.y + 4, 1.25F).setFastStart(), "ELEVATOR_" + this.chunkPos);
+                ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new ClientAncientPortal.MovementElevator(ClientAncientPortal.MovementElevator.ElevatingType.DOWN, this.y + 4, 1.5F).setFastStart(), "ELEVATOR_" + this.chunkPos);
             }
 
             if (player.isSneaking() && player.posY < this.y + 4 && !hasElevator && this.isDoorOpen()) {
-                ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new ClientAncientPortal.MovementElevator(ClientAncientPortal.MovementElevator.ElevatingType.DOWN, 0, 1.25F).setFastEnd(), "ELEVATOR_" + this.chunkPos);
+                ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new ClientAncientPortal.MovementElevator(ClientAncientPortal.MovementElevator.ElevatingType.DOWN, 0, 1.5F).setFastEnd(), "ELEVATOR_" + this.chunkPos);
             }
 
-            if (!hasElevator && Math.floor(player.posY) == this.y + 3 && this.isDoorOpen() && !ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask("RETENTION_Y_" + this.chunkPos)) {
+            if (!hasElevator && Math.floor(player.posY) == this.y + 2 && this.isDoorOpen() && !ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask("RETENTION_Y_" + this.chunkPos)) {
                 ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new ClientAncientPortal.MovementRetentionY(this.y + 3.1), "RETENTION_Y_" + this.chunkPos);
             }
 

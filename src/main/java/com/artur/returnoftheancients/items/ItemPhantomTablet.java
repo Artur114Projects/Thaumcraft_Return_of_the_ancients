@@ -33,6 +33,7 @@ public class ItemPhantomTablet extends BaseItem {
         super(name);
 
         this.setTRACreativeTab();
+        this.setMaxStackSize(1);
     }
 
     @Override

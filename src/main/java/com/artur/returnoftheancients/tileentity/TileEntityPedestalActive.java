@@ -65,7 +65,7 @@ public class TileEntityPedestalActive extends TileBase implements ITileBlockUseL
         ItemStack stack = playerIn.getHeldItem(hand);
         Item item = stack.getItem();
         if (item instanceof ItemPhantomTablet) {
-            if (this.isActive) {
+            if (this.isActive || playerIn.getCooldownTracker().hasCooldown(item)) {
                 return false;
             }
             playerIn.getCooldownTracker().setCooldown(item, 20);

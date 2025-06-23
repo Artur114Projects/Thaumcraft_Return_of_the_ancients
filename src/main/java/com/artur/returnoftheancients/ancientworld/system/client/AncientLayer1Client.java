@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.client.gui.CoolLoadingGui;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
@@ -15,14 +16,29 @@ import java.util.List;
 public class AncientLayer1Client extends AncientLayer1 {
     protected List<String> playersState = new ArrayList<>();
     private final Minecraft mc = Minecraft.getMinecraft();
+    protected boolean isPlayerWasHigh = false;
+    private final AncientWorldPlayer player;
 
     public AncientLayer1Client(EntityPlayerSP player) {
         this.addPlayer(new AncientWorldPlayer(player));
+
+        this.player = this.players.get(0);
     }
 
     @Override
     public void constructFinish() {
         this.createMap();
+    }
+
+    @Override
+    public void update() {
+        super.update();
+
+        if (this.player.player.posY > 100) {
+            this.isPlayerWasHigh = true;
+        } else if (this.player.player.onGround && this.isPlayerWasHigh) {
+            this.player.player.playSound(SoundEvents.ENTITY_PLAYER_BIG_FALL, 1.0F, 1.0F); this.isPlayerWasHigh = false;
+        }
     }
 
     protected void onBuildFinish() {

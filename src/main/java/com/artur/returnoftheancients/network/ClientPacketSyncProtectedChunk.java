@@ -27,6 +27,8 @@ public class ClientPacketSyncProtectedChunk implements IMessage {
         this.dimension = dimensionIn;
         this.chunk = chunkIn;
         this.data = dataIn;
+
+        this.data.setLong("chunkPos", MiscHandler.chunkPosAsLong(chunkIn));
     }
 
     @Override
@@ -35,7 +37,7 @@ public class ClientPacketSyncProtectedChunk implements IMessage {
 
         this.data = ByteBufUtils.readTag(buf);
 
-        this.chunk = MiscHandler.chunkPosFromLong(buf.readLong());
+        this.chunk = MiscHandler.chunkPosFromLong(this.data.getLong("chunkPos"));
     }
 
     @Override
@@ -43,8 +45,6 @@ public class ClientPacketSyncProtectedChunk implements IMessage {
         buf.writeInt(this.dimension);
 
         ByteBufUtils.writeTag(buf, this.data);
-
-        buf.writeLong(MiscHandler.chunkPosAsLong(this.chunk));
     }
 
     @SideOnly(Side.CLIENT)

@@ -1,6 +1,8 @@
 package com.artur.returnoftheancients.blocks;
 
+import com.artur.returnoftheancients.ancientworld.system.base.AncientLayer1EventsHandler;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
+import com.artur.returnoftheancients.init.InitDimensions;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -19,8 +21,7 @@ public class BlockTpToHome extends BaseBlock {
         super(name, material, hardness, resistance, soundType);
     }
 
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return HOME_PORTAL_AABB;
     }
 
@@ -41,11 +42,10 @@ public class BlockTpToHome extends BaseBlock {
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull Entity entityIn) {
-        if (!entityIn.world.isRemote && entityIn instanceof EntityPlayerMP) {
-            EntityPlayerMP player = (EntityPlayerMP) entityIn;
-            if (player.getServer() != null && player.world != null) {
-                AncientPortalsProcessor.teleportToOverworld(player);
+    public void onEntityCollidedWithBlock(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull Entity entityIn) {
+        if (entityIn instanceof EntityPlayerMP && entityIn.dimension == InitDimensions.ancient_world_dim_id) {
+            if (!AncientLayer1EventsHandler.SERVER_MANAGER.playerElope((EntityPlayerMP) entityIn)) {
+                AncientPortalsProcessor.teleportToOverworld((EntityPlayerMP) entityIn);
             }
         }
     }

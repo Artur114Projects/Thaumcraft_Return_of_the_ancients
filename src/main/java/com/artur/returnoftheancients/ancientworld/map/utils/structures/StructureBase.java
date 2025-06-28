@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 public class StructureBase implements IStructure {
-    public static final int baseY = 40;
+    public static final int baseY = 80;
     protected final Set<EnumFace> ports = new HashSet<>();
     protected AbstractMap map = null;
     protected EnumStructureType type;

@@ -244,7 +244,7 @@ public class ClientAncientPortal {
             }
 
             if (player.posY != localNeedY) {
-                player.motionY = (localNeedY - player.posY) / 12.0D;
+                player.motionY = (localNeedY - player.posY) / 16.0D;
             }
 
             tick += 0.14F;

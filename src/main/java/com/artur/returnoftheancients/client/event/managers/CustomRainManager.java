@@ -89,7 +89,7 @@ public class CustomRainManager {
         blockPos.setPos(Objects.requireNonNull(mc.getRenderViewEntity()));
         World world = mc.world;
 
-        int particlesCount = 40;
+        int particlesCount = 30;
 
         if (mc.gameSettings.particleSetting == 1) {
             particlesCount >>= 1;

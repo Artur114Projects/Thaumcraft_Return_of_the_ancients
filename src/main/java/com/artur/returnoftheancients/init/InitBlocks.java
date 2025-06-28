@@ -21,7 +21,7 @@ public class InitBlocks {
     public static final Block TAINT_VOID_STONE = new BlockTaintVoidStone("taint_void_stone", ThaumcraftMaterials.MATERIAL_TAINT, 1.4F, 10, SoundType.STONE).setTRACreativeTab();
     public static final Block INCANDESCENT_TAINT_VOID_STONE = new BlockIncandescentTaintVoidStone("incandescent_taint_void_stone", ThaumcraftMaterials.MATERIAL_TAINT, 1.4F, 10, SoundType.STONE).setTRACreativeTab();
     public static final Block ANCIENT_SANCTUARY_CONTROLLER_BROKEN = new BlockAncientSanctuaryControllerBroken("ancient_sanctuary_controller_broken", Material.ROCK, -1, Integer.MAX_VALUE, SoundType.STONE);
-    public static final Block ANCIENT_LAMP_1 = new BlockAncientLamp1("ancient_lamp_1", 1.0F).setNotFullCube().setNotOpaqueCube().setTRACreativeTab().setForCreative();
+    public static final Block ANCIENT_LAMP_1 = new BlockAncientLamp1("ancient_lamp_1", 1.0F).setNotFillAndOpaqueCube().setTRACreativeTab().setForCreative();
     public static final Block ANCIENT_LAMP_0 = new BlockAncientLamp("ancient_lamp_0", 1.0F).setTRACreativeTab().setForCreative();
     public static final Block DUMMY_ANCIENT_STONE = new BlockDummy("dummy_ancient_stone", Material.ROCK, 2.0F, 10.0F, SoundType.STONE);
     public static Block ELDRITCH_STAIRS = null;

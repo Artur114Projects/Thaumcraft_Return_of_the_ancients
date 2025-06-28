@@ -34,7 +34,7 @@ public class AncientLayer1Client extends AncientLayer1 {
     public void update() {
         super.update();
 
-        if (this.player.player.posY > 100) {
+        if (this.player.player.posY > 140) {
             this.isPlayerWasHigh = true;
         } else if (this.player.player.onGround && this.isPlayerWasHigh) {
             this.player.player.playSound(SoundEvents.ENTITY_PLAYER_BIG_FALL, 1.0F, 1.0F); this.isPlayerWasHigh = false;

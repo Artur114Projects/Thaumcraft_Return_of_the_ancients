@@ -8,6 +8,7 @@ tile.pedestal_active.name=Активируемый древний пьедест
 tile.ancient_door_h_4x4.name=Древняя горизонтальная дверь 4 на 4
 tile.ancient_door_4x3.name=Древняя дверь 4 на 3
 tile.ancient_door_8x6.name=Древняя дверь 8 на 6
+tile.pedestal_phantom.name=Фантомный пьедестал
 tile.ancient_sanctuary_controller_broken.name=Сломанный древний контроллер святилища
 tile.ancient_sanctuary_controller.name=Древний контроллер святилища
 tile.taint_void_stone.name=Заражённый пустотный камень
@@ -37,6 +38,7 @@ item.soul_binder.info.d.1=Нажмите
 item.soul_binder.info.d.2=для дополнительной информации.
 item.soul_binder.info.d.3=Игроки:
 #
+returnoftheancients.pedestal_active.need_tablet=Для активации необходима фантомная скрижаль
 item.phantom_tablet.info.1=Распадается за пределами древнего мира
 item.phantom_tablet.info.2=Если вы не в креативе
 item.portal_compass.info=Показывает на ближайший древний портал

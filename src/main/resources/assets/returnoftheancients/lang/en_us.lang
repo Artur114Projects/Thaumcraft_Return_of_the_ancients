@@ -13,6 +13,7 @@ tile.ancient_sanctuary_controller.name=Ancient controller of the sanctuary
 tile.eldritch_stairs.name=Eldritch stone stairs
 tile.ancient_stairs.name=Ancient stone stairs
 tile.taint_void_stone.name=Infected void stone
+tile.pedestal_phantom.name=Phantom pedestal
 tile.incandescent_taint_void_stone.name=Incandescent infected void stone
 tile.ancient_lamp_1.name=Ancient device
 tile.ancient_lamp_0.name=Ancient device
@@ -37,6 +38,7 @@ item.soul_binder.info.d.1=Hold
 item.soul_binder.info.d.2= to see info.
 item.soul_binder.info.d.3=Players:
 #
+returnoftheancients.pedestal_active.need_tablet=Для активации необходима фантомная скрижаль
 item.phantom_tablet.info.1=Decaying outside the ancient world
 item.phantom_tablet.info.2=If you are not in creative
 item.portal_compass.info=Points to the nearest ancient portal

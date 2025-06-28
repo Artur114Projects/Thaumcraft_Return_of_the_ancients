@@ -56,13 +56,16 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
             StructureBuildersManager.createBuildRequest(world, blockPos, "ancient_entry_way").setIgnoreAir().setPosAsXZCenter().build();
         }
 
-        for (int y = this.y - 10; y > 0; y -= 11) {
+        for (int y = this.y - 10; y > -12; y -= 11) {
             blockPos.setY(y);
             StructureBuildersManager.createBuildRequest(world, blockPos, "ancient_entry_way").setIgnoreAir().setPosAsXZCenter().build();
         }
 
         blockPos.setY(255);
         StructureBuildersManager.createBuildRequest(world, blockPos, "ancient_border_cap").setIgnoreAir().setPosAsXZCenter().build();
+        blockPos.setY(0);
+        StructureBuildersManager.createBuildRequest(world, blockPos, "ancient_exit").setIgnoreAir().setPosAsXZCenter().build();
+
         UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
     }
 
@@ -156,7 +159,7 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
             }
 
             if (player.isSneaking() && player.posY < this.y + 4 && !hasElevator && this.isDoorOpen()) {
-                ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new ClientAncientPortal.MovementElevator(ClientAncientPortal.MovementElevator.ElevatingType.DOWN, 0, 1.5F).setFastEnd(), "ELEVATOR_" + this.chunkPos);
+                ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.addMovementTask(new ClientAncientPortal.MovementElevator(ClientAncientPortal.MovementElevator.ElevatingType.DOWN, 4, 1.5F).setFastEnd(), "ELEVATOR_" + this.chunkPos);
             }
 
             if (!hasElevator && Math.floor(player.posY) == this.y + 2 && this.isDoorOpen() && !ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask("RETENTION_Y_" + this.chunkPos)) {

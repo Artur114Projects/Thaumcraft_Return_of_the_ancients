@@ -17,11 +17,11 @@ public class TileEntityPhantomPedestalRender extends TileEntitySpecialRendererBa
         GlStateManager.disableTexture2D();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        GlStateManager.color(0.0F, 0.0F, 0.0F, (float) MathHelper.clamp((Math.abs(Math.cos(System.currentTimeMillis() / 250.0D)) * 0.4) + 0.4, 0.0F, 1.0F));
+        GlStateManager.color(0.0F, 0.0F, 0.0F, (float) MathHelper.clamp((Math.abs(Math.cos(System.currentTimeMillis())) * 0.1) + 0.8, 0.0F, 1.0F));
         modelBase.renderBase();
 
         GlStateManager.pushMatrix();
-        GlStateManager.color(0.0F, 0.0F, 0.0F, (float) MathHelper.clamp((Math.abs(Math.cos((System.currentTimeMillis() + 1000) / 250.0D)) * 0.4) + 0.4, 0.0F, 1.0F));
+        GlStateManager.color(0.0F, 0.0F, 0.0F, (float) MathHelper.clamp((Math.abs(Math.cos((System.currentTimeMillis() + 1000))) * 0.1) + 0.8, 0.0F, 1.0F));
         GlStateManager.translate(0.0F, Math.cos(System.currentTimeMillis() / 250.0D) * 0.1F, 0.0F);
         modelBase.setClotRotationAngle(0.0F, (float) ((System.currentTimeMillis() / 1000.0D + Math.toRadians(120)) % (Math.PI * 2)), 0.0F);
         modelBase.renderClot();

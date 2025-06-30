@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.client.render.tile.IItemStackRenderer;
 import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.tileentity.interf.ITileBBProvider;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockUseListener;
+import com.artur.returnoftheancients.util.MaterialArray;
 import com.artur.returnoftheancients.util.interfaces.RunnableWithParam;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -35,7 +36,10 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
 
         this.isBBProvider = ITileBBProvider.class.isAssignableFrom(this.getTileEntityClass());
         this.isUseListener = ITileBlockUseListener.class.isAssignableFrom(this.getTileEntityClass());
+    }
 
+    public BlockTileEntity(String name, MaterialArray array) {
+        this(name, array.material(), array.hardness(), array.resistance(), array.soundType());
     }
 
     protected void bindTESR(TileEntitySpecialRenderer<T> tileRender) {

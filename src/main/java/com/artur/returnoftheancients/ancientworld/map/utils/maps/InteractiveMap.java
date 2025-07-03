@@ -6,9 +6,11 @@ import com.artur.returnoftheancients.ancientworld.map.utils.StrPos;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructure;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructureInteractive;
 import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructureMultiChunk;
+import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructureSerializable;
 import com.artur.returnoftheancients.util.interfaces.IReadFromNBT;
 import com.artur.returnoftheancients.util.interfaces.IWriteToNBT;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -98,12 +100,30 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
+        NBTTagList list = nbt.getTagList("strSerializable", 10);
+        StrPos.MutableStrPos pos = new StrPos.MutableStrPos();
 
+        for (int i = 0; i != list.tagCount(); i++) {
+            NBTTagCompound data = list.getCompoundTagAt(i);
+            IStructure str = this.structure(pos.fromLong(data.getLong("pos")));
+
+            if (str instanceof IStructureSerializable) {
+                ((IStructureSerializable) str).readFromNBT(data.getCompoundTag("data"));
+            }
+        }
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        return null;
+        NBTTagList list = new NBTTagList();
+        for (IStructureSerializable serializable : this.foundStructures(IStructureSerializable.class)) {
+            NBTTagCompound str = new NBTTagCompound();
+            str.setTag("data", serializable.writeToNBT(new NBTTagCompound()));
+            str.setLong("pos", serializable.pos().asLong());
+            list.appendTag(str);
+        }
+        nbt.setTag("strSerializable", list);
+        return nbt;
     }
 
     @SuppressWarnings("unchecked")

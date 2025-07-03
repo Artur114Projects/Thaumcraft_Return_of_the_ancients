@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.client.render.item.TileEntityItemStackRende
 import com.artur.returnoftheancients.client.render.tile.IItemStackRenderer;
 import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.tileentity.interf.ITileBBProvider;
+import com.artur.returnoftheancients.tileentity.interf.ITileBlockPlaceListener;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockUseListener;
 import com.artur.returnoftheancients.util.MaterialArray;
 import com.artur.returnoftheancients.util.interfaces.RunnableWithParam;
@@ -12,7 +13,9 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -29,6 +32,7 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
     private TileEntitySpecialRenderer<T> tileRender = null;
     private final boolean isBBProvider;
     private final boolean isUseListener;
+    private final boolean isPlaceListener;
 
     public BlockTileEntity(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
@@ -36,6 +40,7 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
 
         this.isBBProvider = ITileBBProvider.class.isAssignableFrom(this.getTileEntityClass());
         this.isUseListener = ITileBlockUseListener.class.isAssignableFrom(this.getTileEntityClass());
+        this.isPlaceListener = ITileBlockPlaceListener.class.isAssignableFrom(this.getTileEntityClass());
     }
 
     public BlockTileEntity(String name, MaterialArray array) {
@@ -98,9 +103,22 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
     }
 
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        if (this.isPlaceListener) {
+            T tile = this.createTileEntity(worldIn, state);
+            if (tile != null) {
+                worldIn.setTileEntity(pos, tile);
+                ((ITileBlockPlaceListener) tile).onBlockPlacedBy(worldIn, pos, state, placer, stack);
+            }
+        }
+
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+    }
+
     protected void getTileAndCallRunnable(World world, BlockPos pos, RunnableWithParam<T> run) {
         TileEntity tile = world.getTileEntity(pos);
-        if (tile != null && this.getTileEntityClass().isAssignableFrom(tile.getClass())) {
+        if (tile != null && this.getTileEntityClass().isInstance(tile)) {
             run.run(this.getTileEntityClass().cast(tile));
         }
     }

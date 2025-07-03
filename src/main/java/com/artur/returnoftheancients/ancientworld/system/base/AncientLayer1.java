@@ -23,6 +23,7 @@ import java.util.*;
 public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITickable {
     protected final List<AncientWorldPlayer> players = new ArrayList<>();
     protected long seed = System.nanoTime();
+    protected NBTTagCompound mapData = null;
     protected InteractiveMap map = null;
     protected int loadCount;
     protected int size = 17;
@@ -112,6 +113,18 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
 
     protected void createMap() {
         this.map = GenPhase.InstanceAllGenPhases().getMap(this.seed, this.size).toInteractive(this.world, this.pos);
+
+        if (this.mapData != null) {
+            this.map.readFromNBT(this.mapData);
+        }
+    }
+
+    protected void deSerialiseMap(NBTTagCompound data) {
+        if (this.map != null) {
+            this.map.readFromNBT(data);
+        } else {
+            this.mapData = data;
+        }
     }
 
     protected void onPlayersListChanged() {}
@@ -164,6 +177,10 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
         this.posIndex = nbt.getInteger("posIndex");
         this.size = nbt.getInteger("size");
         this.seed = nbt.getLong("seed");
+
+        if (nbt.hasKey("mapData") && this.map != null) {
+            this.deSerialiseMap(nbt.getCompoundTag("mapData"));
+        }
     }
 
     @Override
@@ -174,6 +191,11 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
         nbt.setInteger("loadCount", loadCount);
         nbt.setInteger("size", this.size);
         nbt.setLong("seed", this.seed);
+
+        if (this.map != null) {
+            nbt.setTag("mapData", this.map.writeToNBT(new NBTTagCompound()));
+        }
+
         return nbt;
     }
 }

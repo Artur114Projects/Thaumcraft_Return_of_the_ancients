@@ -11,6 +11,10 @@ public class StrPos {
         this.y = y;
     }
 
+    public StrPos(long data) {
+        this((int) (data), (int) (data >> 32));
+    }
+
     public StrPos offset(EnumFace face) {
         return this.offset(face, 1);
     }
@@ -44,6 +48,10 @@ public class StrPos {
 
     public StrPos toImmutable() {
         return this;
+    }
+
+    public long asLong() {
+        return (long) this.getX() | ((long) this.getY()) << 32;
     }
 
     public int getX() {
@@ -133,6 +141,10 @@ public class StrPos {
 
         public MutableStrPos setPos(StrPos pos) {
             return this.setPos(pos.getX(), pos.getY());
+        }
+
+        public MutableStrPos fromLong(long data) {
+            return this.setPos((int) (data), (int) (data >> 32));
         }
 
         @Override

@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.client.render.tile;
 
 import com.artur.returnoftheancients.client.model.ModelAncientProjector;
-import com.artur.returnoftheancients.client.model.ModelPedestalActive;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientProjector;
 import com.artur.returnoftheancients.util.EnumAssetLocation;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -34,6 +33,10 @@ public class TileEntityAncientProjectorRender extends TileEntitySpecialRendererB
 
 
     private void renderProject(TileEntityAncientProjector tile) {
+        if (!tile.isEnabled()) {
+            return;
+        }
+
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.enableAlpha();
@@ -43,34 +46,35 @@ public class TileEntityAncientProjectorRender extends TileEntitySpecialRendererB
 
         GlStateManager.translate(0, 1.5, 0);
 
-        float alpha = (float) MathHelper.clamp(Math.abs(Math.cos(System.currentTimeMillis()) * 0.1) + 0.8, 0.0F, 1.0F);
+        float alphaStart = (float) MathHelper.clamp(Math.abs(Math.cos(System.currentTimeMillis()) * 0.3) + 0.6, 0.0F, 1.0F);
+        float toY = tile.distanceToPedestal();
+        float alphaEnd = 0.1F;
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
 
         bufferBuilder.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
-        bufferBuilder.pos((0.5 + (1.0F / 16.0F)), 12.5F, -(0.5 + (1.0F / 16.0F))).color(0, 0, 0, 0).endVertex();
-        bufferBuilder.pos(-(0.5 + (1.0F / 16.0F)), 12.5F, -(0.5 + (1.0F / 16.0F))).color(0, 0, 0, 0).endVertex();
-        bufferBuilder.pos(0, -(4.0F / 16.0F), 0).color(0, 0, 0, alpha).endVertex();
+        bufferBuilder.pos((0.5 + (1.0F / 16.0F)), toY, -(0.5 + (1.0F / 16.0F))).color(0, 0, 0, alphaEnd).endVertex();
+        bufferBuilder.pos(-(0.5 + (1.0F / 16.0F)), toY, -(0.5 + (1.0F / 16.0F))).color(0, 0, 0, alphaEnd).endVertex();
+        bufferBuilder.pos(0, -(8.0F / 16.0F), 0).color(0, 0, 0, alphaStart).endVertex();
         tessellator.draw();
 
         bufferBuilder.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
-        bufferBuilder.pos((0.5 + (1.0F / 16.0F)), 12.5F, 0.5 + (1.0F / 16.0F)).color(0, 0, 0, 0).endVertex();
-        bufferBuilder.pos(-(0.5 + (1.0F / 16.0F)), 12.5F, 0.5 + (1.0F / 16.0F)).color(0, 0, 0, 0).endVertex();
-        bufferBuilder.pos(0, -(4.0F / 16.0F), 0).color(0, 0, 0, alpha).endVertex();
-        tessellator.draw();
-
-
-        bufferBuilder.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
-        bufferBuilder.pos(0.5 + (1.0F / 16.0F), 12.5F, -(0.5 + (1.0F / 16.0F))).color(0, 0, 0, 0).endVertex();
-        bufferBuilder.pos(0.5 + (1.0F / 16.0F), 12.5F, (0.5 + (1.0F / 16.0F))).color(0, 0, 0, 0).endVertex();
-        bufferBuilder.pos(0, -(4.0F / 16.0F), 0).color(0, 0, 0, alpha).endVertex();
+        bufferBuilder.pos((0.5 + (1.0F / 16.0F)), toY, 0.5 + (1.0F / 16.0F)).color(0, 0, 0, alphaEnd).endVertex();
+        bufferBuilder.pos(-(0.5 + (1.0F / 16.0F)), toY, 0.5 + (1.0F / 16.0F)).color(0, 0, 0, alphaEnd).endVertex();
+        bufferBuilder.pos(0, -(8.0F / 16.0F), 0).color(0, 0, 0, alphaStart).endVertex();
         tessellator.draw();
 
         bufferBuilder.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
-        bufferBuilder.pos(-(0.5 + (1.0F / 16.0F)), 12.5F, -(0.5 + (1.0F / 16.0F))).color(0, 0, 0, 0).endVertex();
-        bufferBuilder.pos(-(0.5 + (1.0F / 16.0F)), 12.5F, (0.5 + (1.0F / 16.0F))).color(0, 0, 0, 0).endVertex();
-        bufferBuilder.pos(0, -(4.0F / 16.0F), 0).color(0, 0, 0, alpha).endVertex();
+        bufferBuilder.pos(0.5 + (1.0F / 16.0F), toY, -(0.5 + (1.0F / 16.0F))).color(0, 0, 0, alphaEnd).endVertex();
+        bufferBuilder.pos(0.5 + (1.0F / 16.0F), toY, (0.5 + (1.0F / 16.0F))).color(0, 0, 0, alphaEnd).endVertex();
+        bufferBuilder.pos(0, -(8.0F / 16.0F), 0).color(0, 0, 0, alphaStart).endVertex();
+        tessellator.draw();
+
+        bufferBuilder.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
+        bufferBuilder.pos(-(0.5 + (1.0F / 16.0F)), toY, -(0.5 + (1.0F / 16.0F))).color(0, 0, 0, alphaEnd).endVertex();
+        bufferBuilder.pos(-(0.5 + (1.0F / 16.0F)), toY, (0.5 + (1.0F / 16.0F))).color(0, 0, 0, alphaEnd).endVertex();
+        bufferBuilder.pos(0, -(8.0F / 16.0F), 0).color(0, 0, 0, alphaStart).endVertex();
         tessellator.draw();
 
         GL11.glShadeModel(7424);

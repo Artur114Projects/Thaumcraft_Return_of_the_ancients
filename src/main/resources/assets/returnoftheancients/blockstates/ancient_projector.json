@@ -1,7 +1,11 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "thaumcraft:empty"
+    "model": "thaumcraft:empty",
+    "textures": {
+      "particle": "thaumcraft:blocks/ancient_stone_0",
+      "all": "thaumcraft:blocks/ancient_stone_0"
+    }
   },
   "variants": {
     "normal": [{}]

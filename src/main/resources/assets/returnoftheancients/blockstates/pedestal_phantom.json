@@ -1,7 +1,11 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "thaumcraft:empty"
+    "model": "thaumcraft:empty",
+    "textures": {
+      "particle": "returnoftheancients:blocks/portal_block",
+      "all": "returnoftheancients:blocks/portal_block"
+    }
   },
   "variants": {
     "normal": [{}]

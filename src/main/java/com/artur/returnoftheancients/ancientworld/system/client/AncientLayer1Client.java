@@ -74,5 +74,7 @@ public class AncientLayer1Client extends AncientLayer1 {
         for (int i = 0; i != list.tagCount(); i++) {
             this.playersState.add(list.getStringTagAt(i));
         }
+
+        this.mapData = nbt.getCompoundTag("map");
     }
 }

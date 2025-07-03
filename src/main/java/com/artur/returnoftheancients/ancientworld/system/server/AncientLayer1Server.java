@@ -212,6 +212,7 @@ public class AncientLayer1Server extends AncientLayer1 {
     }
 
     public NBTTagCompound writeClientCreateNBT(NBTTagCompound nbt) {
+        nbt.setTag("map", this.map.writeToNBT(new NBTTagCompound()));
         nbt.setLong("pos", MiscHandler.chunkPosAsLong(this.pos));
         nbt.setInteger("posIndex", this.posIndex);
         nbt.setInteger("size", this.size);

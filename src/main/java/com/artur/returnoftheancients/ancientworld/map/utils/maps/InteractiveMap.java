@@ -13,12 +13,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFromNBT {
     private final Map<Class<IStructure>, List<IStructure>> structuresDictionary = new HashMap<>();
+    private NBTTagCompound syncData = null;
     private final ChunkPos center;
     private final World world;
 
@@ -126,6 +129,43 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
         return nbt;
     }
 
+    @SideOnly(Side.CLIENT)
+    public void handleServerSyncData(NBTTagCompound syncData) {
+        NBTTagList list = syncData.getTagList("data", 10);
+
+        for (int i = 0; i != list.tagCount(); i++) {
+            NBTTagCompound data = list.getCompoundTagAt(i);
+            StrPos pos = new StrPos(data.getLong("strPos"));
+            IStructure str = this.structure(pos);
+
+            if (str instanceof IStructureInteractive) {
+                ((IStructureInteractive) str).handleServerSyncData(data);
+            }
+        }
+    }
+
+    public boolean hasStructuresSyncData() {
+        return this.syncData != null;
+    }
+
+    public NBTTagCompound structuresSyncData() {
+        if (this.syncData != null) {
+            NBTTagCompound data = this.syncData;
+            this.syncData = null;
+            return data;
+        }
+
+        return null;
+    }
+
+    public void addStructuresSyncData(IStructure str, NBTTagCompound data) {
+        if (str == null || this.structure(str.pos()) != str) return;
+
+        data.setLong("strPos", str.pos().asLong());
+
+        this.addSyncData(data);
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends IStructure> List<T> foundStructures(Class<T> structureClass) {
         if (this.structuresDictionary.containsKey(structureClass)) {
@@ -154,6 +194,17 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
     public @Nullable IStructure structure(int index) {
         if (index >= this.area() || index < 0) return null;
         return this.structures[index];
+    }
+
+    private void addSyncData(NBTTagCompound data) {
+        if (this.syncData == null) {
+            this.syncData = new NBTTagCompound();
+            NBTTagList list = new NBTTagList();
+            list.appendTag(data);
+            this.syncData.setTag("data", list);
+        } else {
+            this.syncData.getTagList("data", 10).appendTag(data);
+        }
     }
 
     private void foundAndBindInteractiveS() {

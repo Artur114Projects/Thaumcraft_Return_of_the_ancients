@@ -1,12 +1,16 @@
 package com.artur.returnoftheancients.ancientworld.system.server;
 
 import com.artur.returnoftheancients.ancientworld.map.build.AncientLayer1Builder;
+import com.artur.returnoftheancients.ancientworld.map.utils.StrPos;
+import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructure;
+import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructureEntityManager;
 import com.artur.returnoftheancients.ancientworld.system.base.AncientLayer1;
 import com.artur.returnoftheancients.ancientworld.system.utils.AncientWorldPlayer;
 import com.artur.returnoftheancients.events.ServerEventsHandler;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.network.ClientPacketSyncAncientLayer1s;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -17,6 +21,7 @@ import java.util.*;
 
 public class AncientLayer1Server extends AncientLayer1 {
     protected Map<UUID, String> playersState = new HashMap<>();
+    protected long sessionId = System.nanoTime();
     protected AncientLayer1Builder builder;
     protected boolean isBuilding = false;
     protected boolean isBuild = false;
@@ -62,6 +67,20 @@ public class AncientLayer1Server extends AncientLayer1 {
                 this.build();
             }
         }
+    }
+
+    @Override
+    public void update() {
+        super.update();
+
+        this.checkNeedSyncMap();
+    }
+
+    @Override
+    protected void createMap() {
+        super.createMap();
+
+        this.map.foundStructures(IStructureEntityManager.class).forEach((s) -> s.bindSessionId(this.sessionId));
     }
 
     public void setPlayersState(Map<UUID, String> playersState) {
@@ -145,6 +164,35 @@ public class AncientLayer1Server extends AncientLayer1 {
         return ancientPlayer != null;
     }
 
+    public boolean loadEntity(EntityLiving entity) {
+        StrPos pos = new StrPos(entity.getEntityData().getCompoundTag("AncientSystemData").getLong("pos"));
+        IStructure structure = this.map.structure(pos);
+
+        if (structure instanceof IStructureEntityManager) {
+            return ((IStructureEntityManager) structure).loadEntity(entity);
+        }
+
+        return false;
+    }
+
+    public void unloadEntity(EntityLiving entity) {
+        StrPos pos = new StrPos(entity.getEntityData().getCompoundTag("AncientSystemData").getLong("pos"));
+        IStructure structure = this.map.structure(pos);
+
+        if (structure instanceof IStructureEntityManager) {
+            ((IStructureEntityManager) structure).unloadEntity(entity);
+        }
+    }
+
+    public void onEntityDead(EntityLiving entity) {
+        StrPos pos = new StrPos(entity.getEntityData().getCompoundTag("AncientSystemData").getLong("pos"));
+        IStructure structure = this.map.structure(pos);
+
+        if (structure instanceof IStructureEntityManager) {
+            ((IStructureEntityManager) structure).onEntityDead(entity);
+        }
+    }
+
     protected void onWakeUp() {
         this.createMap();
         if (!this.isBuild && !this.isBuilding) {
@@ -199,14 +247,28 @@ public class AncientLayer1Server extends AncientLayer1 {
         }
     }
 
+    private void checkNeedSyncMap() {
+        if (this.map != null && this.map.hasStructuresSyncData()) {
+            NBTTagCompound data = this.map.structuresSyncData();
+
+            for (AncientWorldPlayer player : this.players) {
+                if (!player.isSleep()) {
+                    ClientPacketSyncAncientLayer1s.sendSyncStructures((EntityPlayerMP) player.player, data);
+                }
+            }
+        }
+    }
+
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+        nbt.setLong("sessionId", this.sessionId);
         nbt.setBoolean("isBuild", this.isBuild);
         return super.writeToNBT(nbt);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
+        this.sessionId = nbt.getLong("sessionId");
         this.isBuild = nbt.getBoolean("isBuild");
         super.readFromNBT(nbt);
     }

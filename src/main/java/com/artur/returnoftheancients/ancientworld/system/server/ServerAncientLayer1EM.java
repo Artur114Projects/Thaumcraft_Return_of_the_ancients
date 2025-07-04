@@ -4,10 +4,16 @@ import com.artur.returnoftheancients.ancientworld.system.base.IAncientLayer1Mana
 import com.artur.returnoftheancients.capabilities.GenericCapProviderS;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
 import com.artur.returnoftheancients.referense.Referense;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.ClassInheritanceMultiMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -72,5 +78,35 @@ public class ServerAncientLayer1EM {
         }
 
         return false;
+    }
+
+    public void chunkEventUnload(ChunkEvent.Unload e) {
+        IAncientLayer1Manager managerServer = e.getWorld().getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+
+        if (managerServer != null) {
+            for (ClassInheritanceMultiMap<Entity> entity : e.getChunk().getEntityLists()) {
+                for (EntityLiving living : entity.getByClass(EntityLiving.class)) {
+                    ((IServerAncientLayer1Manager) managerServer).unloadEntity(living);
+                }
+            }
+        }
+    }
+
+    public boolean entityJoinWorldEvent(EntityJoinWorldEvent e) {
+        IAncientLayer1Manager managerServer = e.getWorld().getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+
+        if (managerServer != null && e.getEntity() instanceof EntityLiving) {
+            return ((IServerAncientLayer1Manager) managerServer).loadEntity((EntityLiving) e.getEntity());
+        }
+
+        return false;
+    }
+
+    public void livingDeathEvent(LivingDeathEvent e) {
+        IAncientLayer1Manager managerServer = e.getEntity().getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+
+        if (managerServer != null && e.getEntity() instanceof EntityLiving) {
+            ((IServerAncientLayer1Manager) managerServer).onEntityDead((EntityLiving) e.getEntityLiving());
+        }
     }
 }

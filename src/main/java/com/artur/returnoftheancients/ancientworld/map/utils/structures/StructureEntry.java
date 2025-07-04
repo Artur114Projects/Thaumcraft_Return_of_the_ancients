@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.ancientworld.map.utils.structures;
 import com.artur.returnoftheancients.ancientworld.map.utils.EnumMultiChunkStrType;
 import com.artur.returnoftheancients.ancientworld.map.utils.EnumRotate;
 import com.artur.returnoftheancients.ancientworld.map.utils.StrPos;
+import com.artur.returnoftheancients.ancientworld.map.utils.maps.InteractiveMap;
 import com.artur.returnoftheancients.ancientworld.system.utils.AncientWorldPlayer;
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.client.fx.particle.ParticleAncientPortal;
@@ -13,6 +14,7 @@ import com.artur.returnoftheancients.tileentity.interf.ITileDoor;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -78,6 +80,11 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
             {' ','s','s','s',' '},
             {' ',' ','p',' ',' '}
         };
+    }
+
+    @Override
+    public InteractiveMap map() {
+        return (InteractiveMap) this.map;
     }
 
     @Override

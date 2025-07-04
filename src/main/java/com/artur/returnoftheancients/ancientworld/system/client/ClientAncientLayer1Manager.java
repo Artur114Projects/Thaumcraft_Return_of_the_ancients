@@ -50,6 +50,9 @@ public class ClientAncientLayer1Manager implements IClientAncientLayer1Manager {
         if (data.hasKey("playersState")) {
             this.layerClient.updatePlayersState(data.getTagList("playersState", 8));
         }
+        if (data.hasKey("structuresSync")) {
+            this.layerClient.handleStructuresUpdate(data.getCompoundTag("structuresSync"));
+        }
     }
 
     @Override

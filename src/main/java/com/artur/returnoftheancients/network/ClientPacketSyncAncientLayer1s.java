@@ -84,4 +84,12 @@ public class ClientPacketSyncAncientLayer1s extends NBTPacketBase {
 
         MainR.NETWORK.sendTo(new ClientPacketSyncAncientLayer1s(nbt), player);
     }
+
+    public static void sendSyncStructures(EntityPlayerMP player, NBTTagCompound data) {
+        NBTTagCompound nbt = new NBTTagCompound();
+
+        nbt.setTag("structuresSync", data);
+
+        MainR.NETWORK.sendTo(new ClientPacketSyncAncientLayer1s(nbt), player);
+    }
 }

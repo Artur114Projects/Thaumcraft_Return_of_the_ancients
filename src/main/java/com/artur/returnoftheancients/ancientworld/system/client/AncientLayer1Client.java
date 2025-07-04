@@ -59,6 +59,10 @@ public class AncientLayer1Client extends AncientLayer1 {
         }
     }
 
+    protected void handleStructuresUpdate(NBTTagCompound data) {
+        this.map.handleServerSyncData(data);
+    }
+
     public List<String> playersState() {
         return this.playersState;
     }

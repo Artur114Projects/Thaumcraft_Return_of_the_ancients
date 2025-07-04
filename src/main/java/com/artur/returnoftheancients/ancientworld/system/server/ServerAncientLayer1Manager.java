@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.handlers.TeleportHandler;
 import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.items.ItemSoulBinder;
 import com.artur.returnoftheancients.network.ClientPacketSyncAncientLayer1s;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -108,6 +109,37 @@ public class ServerAncientLayer1Manager implements IServerAncientLayer1Manager {
         layer1Server.constructFinish();
 
         this.ancientLayer1s.add(layer1Server);
+    }
+
+    @Override
+    public boolean loadEntity(EntityLiving entity) {
+        long sessionId = entity.getEntityData().getCompoundTag("AncientSystemData").getLong("sessionId");
+        for (AncientLayer1Server layer1Server : this.ancientLayer1s) {
+            if (layer1Server.sessionId == sessionId) {
+                return layer1Server.loadEntity(entity);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void onEntityDead(EntityLiving entity) {
+        long sessionId = entity.getEntityData().getCompoundTag("AncientSystemData").getLong("sessionId");
+        for (AncientLayer1Server layer1Server : this.ancientLayer1s) {
+            if (layer1Server.sessionId == sessionId) {
+                layer1Server.onEntityDead(entity);
+            }
+        }
+    }
+
+    @Override
+    public void unloadEntity(EntityLiving entity) {
+        long sessionId = entity.getEntityData().getCompoundTag("AncientSystemData").getLong("sessionId");
+        for (AncientLayer1Server layer1Server : this.ancientLayer1s) {
+            if (layer1Server.sessionId == sessionId) {
+                layer1Server.unloadEntity(entity);
+            }
+        }
     }
 
     private boolean hasPlayer(EntityPlayerMP player) {

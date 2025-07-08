@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
@@ -105,16 +106,20 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
                 }
             }
         }
+        if (centerY == -1) {
+            throw new IllegalArgumentException();
+        }
+
+
 
         for (int y = 0; y != form.length; y++) {
             for (int x = 0; x != form[y].length; x++) {
                 if (form[y][x] == 's') {
-                    List<EnumFace> ports = this.getPortsFromForm(x, y, form);
-                    StrPos pos = new StrPos(this.pos.getX() + (x - centerX), this.pos.getY() + (y - centerY));
+                    List<EnumFace> ports = Arrays.asList(EnumFace.rotateAll(this.rotate(), this.getPortsFromForm(x, y, form).toArray(new EnumFace[0])));
+                    StrPos rotatedPos = new StrPos(x - centerX, y - centerY).rotate(this.rotate());
+                    StrPos pos = new StrPos(this.pos.getX() + rotatedPos.getX(), this.pos.getY() + rotatedPos.getY());
                     IStructureSegment segment = new StructureSegment(this, ports, pos);
-                    if (!ports.isEmpty()) {
-                        this.segmentsWithPorts.add(segment);
-                    }
+                    if (!ports.isEmpty()) this.segmentsWithPorts.add(segment);
                     this.segments.add(segment);
                 }
             }

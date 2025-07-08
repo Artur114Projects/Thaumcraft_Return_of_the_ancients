@@ -19,5 +19,5 @@ public interface IStructureInteractive extends IStructure {
     void onPlayerWentOut(EntityPlayer player);
     void update(List<AncientWorldPlayer> players);
     @SideOnly(Side.CLIENT) default void handleServerSyncData(NBTTagCompound data) {}
-    default void syncToClient(NBTTagCompound data) { this.map().addStructuresSyncData(this, data); }
+    default void sendToClient(NBTTagCompound data) { this.map().addStructuresSyncData(this, data); }
 }

@@ -1,5 +1,8 @@
 package com.artur.returnoftheancients.ancientworld.map.utils;
 
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
+
 import java.util.Objects;
 
 public class StrPos {
@@ -31,6 +34,20 @@ public class StrPos {
                 return new StrPos(this.getX() - n, this.getY());
             default:
                 return this;
+        }
+    }
+
+    public StrPos rotate(EnumRotate rotate) {
+        switch (rotate) {
+            case NON:
+            default:
+                return this;
+            case C90:
+                return new StrPos(-this.getY(), this.getX());
+            case C180:
+                return new StrPos(-this.getX(), -this.getY());
+            case C270:
+                return new StrPos(this.getY(), -this.getX());
         }
     }
 

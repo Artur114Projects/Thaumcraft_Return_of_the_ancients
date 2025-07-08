@@ -26,6 +26,10 @@ public class TileEntityAncientProjector extends TileBase implements ITileBlockPl
         this.updatePedestal(this.enabled = false);
     }
 
+    public void setState(boolean state) {
+        this.updatePedestal(this.enabled = state);
+    }
+
     public boolean isEnabled() {
         return this.enabled;
     }
@@ -59,6 +63,7 @@ public class TileEntityAncientProjector extends TileBase implements ITileBlockPl
         compound = super.writeToNBT(compound);
 
         compound.setInteger("distanceToPedestal", this.distanceToPedestal);
+        compound.setBoolean("enabled", this.enabled);
 
         return compound;
     }
@@ -68,6 +73,7 @@ public class TileEntityAncientProjector extends TileBase implements ITileBlockPl
         super.readFromNBT(compound);
 
         this.distanceToPedestal = compound.getInteger("distanceToPedestal");
+        this.enabled = compound.getBoolean("enabled");
     }
 
     @Override

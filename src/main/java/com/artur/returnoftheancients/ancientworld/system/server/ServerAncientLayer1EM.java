@@ -103,7 +103,7 @@ public class ServerAncientLayer1EM {
     }
 
     public void livingDeathEvent(LivingDeathEvent e) {
-        IAncientLayer1Manager managerServer = e.getEntity().getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+        IAncientLayer1Manager managerServer = e.getEntity().world.getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
 
         if (managerServer != null && e.getEntity() instanceof EntityLiving) {
             ((IServerAncientLayer1Manager) managerServer).onEntityDead((EntityLiving) e.getEntityLiving());

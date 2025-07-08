@@ -35,6 +35,10 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
 
     public void constructFinish() {}
 
+    public boolean isRemote() {
+        return this.world.isRemote;
+    }
+
     public boolean hasPlayer(EntityPlayer player) {
         return this.foundAncientWorldPlayer(player) != null;
     }

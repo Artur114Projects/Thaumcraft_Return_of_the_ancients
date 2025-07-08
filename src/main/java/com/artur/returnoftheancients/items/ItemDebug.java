@@ -13,11 +13,14 @@ import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -28,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.client.fx.FXDispatcher;
 import thaumcraft.common.blocks.world.taint.TaintHelper;
+import thaumcraft.common.entities.monster.boss.EntityEldritchWarden;
 
 import java.util.List;
 import java.util.Random;
@@ -115,6 +119,18 @@ public class ItemDebug extends BaseItem {
 //			}
 		}
 		if (!worldIn.isRemote) {
+
+			if (player.isSneaking()) {
+                EntityLiving entity = new EntityEldritchWarden(worldIn);
+                entity.setLocationAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
+                entity.rotationYawHead = entity.rotationYaw;
+                entity.renderYawOffset = entity.rotationYaw;
+                entity.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entity)), null);
+                NBTTagCompound nbt = new NBTTagCompound();
+                entity.getEntityData().setTag("AncientSystemData", nbt);
+                worldIn.spawnEntity(entity);
+                entity.playLivingSound();
+            }
 
 
 //			if (player.isSneaking()) {

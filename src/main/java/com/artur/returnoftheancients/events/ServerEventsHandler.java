@@ -266,9 +266,6 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (event.getEntity().dimension == ancient_world_dim_id && !event.getWorld().isRemote) {
-            if (!event.getEntity().isNonBoss()) {
-                AncientWorld.bossJoinBus(event);
-            }
             if (TRAConfigs.DifficultySettings.speedAmplifier > 0 && event.getEntity() instanceof EntityLiving && !(event.getEntity() instanceof EntityPlayer)) {
                 EntityLiving living = (EntityLiving) event.getEntity();
                 if (living.isNonBoss() || TRAConfigs.DifficultySettings.iaAddSpeedEffectToBoss) {

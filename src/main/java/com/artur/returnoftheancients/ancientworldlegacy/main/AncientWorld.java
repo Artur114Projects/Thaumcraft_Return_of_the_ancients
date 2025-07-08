@@ -27,7 +27,6 @@ import java.util.*;
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
 // TODO: 22.02.2025 Переписать, с клиент северной вот этой вот самой.
-@Mod.EventBusSubscriber(modid = Referense.MODID)
 public class AncientWorld {
     private static boolean isLoad = false;
     private static final int buildCount = 2;

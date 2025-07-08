@@ -44,8 +44,9 @@ public class AncientLayer1Builder extends SlowBuilder {
 
         this.map.build(this.currentIndex++, this.world, pos, this.buildRand);
 
-        if (this.currentIndex >= this.map.area()) {
+        this.finishBuildChunk(this.world, x, z);
 
+        if (this.currentIndex >= this.map.area()) {
             return SlowBuildResult.FINISH;
         } else {
             return SlowBuildResult.SUCCESSFULLY;
@@ -62,6 +63,12 @@ public class AncientLayer1Builder extends SlowBuilder {
     @Override
     public boolean isReady(long tickCount) {
         return tickCount % buildersCount == 0;
+    }
+
+    private void finishBuildChunk(World world, int x, int z) {
+        Chunk chunk = this.world.getChunkFromChunkCoords(x, z);
+        chunk.resetRelightChecks();
+        chunk.markDirty();
     }
 
     private void clearChunk(World world, int x, int z) {

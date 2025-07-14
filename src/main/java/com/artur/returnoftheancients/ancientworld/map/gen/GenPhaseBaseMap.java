@@ -2,12 +2,13 @@ package com.artur.returnoftheancients.ancientworld.map.gen;
 
 import com.artur.returnoftheancients.ancientworld.map.utils.*;
 import com.artur.returnoftheancients.ancientworld.map.utils.maps.ImmutableMap;
-import com.artur.returnoftheancients.ancientworld.map.utils.structures.StructureEntry;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-public class GenPhaseCreateBaseMap extends GenPhase {
+public class GenPhaseBaseMap extends GenPhase {
     @Override
     public @NotNull ImmutableMap getMap(long seed, int size) {
         if (size % 2 == 0) {
@@ -26,14 +27,33 @@ public class GenPhaseCreateBaseMap extends GenPhase {
             map.insetStructure(EnumStructureType.LADDER.create(EnumRotate.values()[i], center.offset(EnumFace.values()[i + 1 >= 4 ? 0 : i + 1], 3)));
         }
 
+        List<Integer> indexes = new ArrayList<>(size * size);
+        int minDistance = (size / 2) / 2 + 1;
         int maxDistance = (size / 2) - 1;
-        int minDistance = 4;
 
-        int bossX = (rand.nextInt((maxDistance - minDistance) + 1) + minDistance) * (rand.nextBoolean() ? 1 : -1) + size / 2;
-        int bossY = (rand.nextInt((maxDistance - minDistance) + 1) + minDistance) * (rand.nextBoolean() ? 1 : -1) + size / 2;
-        // ^ Говно, переделать!
+        for (int i = 0; i != size * size; i++) {
+            int x = i % size;
+            int y = i / size;
+
+            if (x >= (size / 2) - minDistance && y >= (size / 2) - minDistance && x <= (size / 2) + minDistance && y <= (size / 2) + minDistance) {
+                continue;
+            }
+
+            if (x <= (size / 2) - maxDistance || y <= (size / 2) - maxDistance || x >= (size / 2) + maxDistance || y >= (size / 2) + maxDistance) {
+                continue;
+            }
+
+            indexes.add(i);
+        }
+
+        int index = indexes.get(rand.nextInt(indexes.size()));
+
+        int bossX = index % size;
+        int bossY = index / size;
+
+        EnumFace face = EnumFace.fromVector(center.getX() - bossX, center.getY() - bossY);
         
-        map.insetStructure(EnumMultiChunkStrType.BOSS.create(EnumRotate.NON, new StrPos(bossX, bossY)));
+        map.insetStructure(EnumMultiChunkStrType.BOSS.create(face.rotateFromDefFace(EnumFace.RIGHT), new StrPos(bossX, bossY)));
 
         return map;
     }

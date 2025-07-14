@@ -8,9 +8,12 @@ import com.artur.returnoftheancients.ancientworld.system.utils.AncientWorldPlaye
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientProjector;
+import com.artur.returnoftheancients.tileentity.TileEntityDoorBase;
+import com.artur.returnoftheancients.tileentity.interf.ITileDoor;
 import com.artur.returnoftheancients.util.math.BoundingBox;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -22,9 +25,10 @@ import thaumcraft.common.entities.monster.boss.EntityEldritchWarden;
 
 import java.util.List;
 
-public class StructureBoss extends StructureMultiChunk implements IStructureInteractive, IStructureEntityManager {
+public class StructureBoss extends StructureMultiChunk implements IStructureInteractive, IStructureEntityManager, IStructureSerializable {
     private BoundingBox boundingBox = null;
     private boolean isBossSpawn = false;
+    private boolean isBossDead = false;
     private ChunkPos chunkPos = null;
     private World world = null;
     private long sessionId;
@@ -74,7 +78,7 @@ public class StructureBoss extends StructureMultiChunk implements IStructureInte
 
     @Override
     public void update(List<AncientWorldPlayer> players) {
-        if (!this.isBossSpawn && !this.world.isRemote) {
+        if (!this.isBossSpawn && !this.isBossDead && !this.world.isRemote) {
             for (AncientWorldPlayer player : this.boundingBox.sortCollided(players, (p) -> p.player)) {
                 if (!player.isSleep() && player.player.inventory.hasItemStack(new ItemStack(InitItems.PHANTOM_TABLET))) {
                     this.closeDoor();
@@ -107,12 +111,19 @@ public class StructureBoss extends StructureMultiChunk implements IStructureInte
 
     private void closeDoor() {
         ChunkPos pos = new ChunkPos(this.chunkPos.x - 1, this.chunkPos.z - 1);
+        TileEntity tile = this.world.getTileEntity(pos.getBlock(1, this.y + 2, 4));
+
+        if (tile instanceof TileEntityDoorBase) {
+            ((TileEntityDoorBase) tile).close();
+            ((TileEntityDoorBase) tile).syncTile(false);
+        }
     }
 
     private void onBossDead() {
         if (!this.world.isRemote) {
             this.updateProjectorState(true);
         }
+        this.isBossSpawn = true;
     }
 
     @Override
@@ -155,4 +166,15 @@ public class StructureBoss extends StructureMultiChunk implements IStructureInte
 
     @Override
     public void onPlayerWentOut(EntityPlayer player) {}
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        this.isBossDead = nbt.getBoolean("isBossDead");
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+        nbt.setBoolean("isBossDead", this.isBossDead);
+        return nbt;
+    }
 }

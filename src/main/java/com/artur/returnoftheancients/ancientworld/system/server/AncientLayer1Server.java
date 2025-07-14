@@ -21,6 +21,7 @@ import java.util.*;
 
 public class AncientLayer1Server extends AncientLayer1 {
     protected Map<UUID, String> playersState = new HashMap<>();
+    protected List<Runnable> delayedTasks = new ArrayList<>();
     protected long sessionId = System.nanoTime();
     protected AncientLayer1Builder builder;
     protected boolean isBuilding = false;
@@ -165,6 +166,10 @@ public class AncientLayer1Server extends AncientLayer1 {
     }
 
     public boolean loadEntity(EntityLiving entity) {
+        if (this.isSleep()) {
+            this.delayedTasks.add(() -> {if (!this.loadEntity(entity)) entity.setDead();}); return true;
+        }
+
         StrPos pos = new StrPos(entity.getEntityData().getCompoundTag("AncientSystemData").getLong("pos"));
         IStructure structure = this.map.structure(pos);
 
@@ -176,6 +181,10 @@ public class AncientLayer1Server extends AncientLayer1 {
     }
 
     public void unloadEntity(EntityLiving entity) {
+        if (this.isSleep()) {
+            this.delayedTasks.add(() -> this.unloadEntity(entity)); return;
+        }
+
         StrPos pos = new StrPos(entity.getEntityData().getCompoundTag("AncientSystemData").getLong("pos"));
         IStructure structure = this.map.structure(pos);
 
@@ -185,6 +194,10 @@ public class AncientLayer1Server extends AncientLayer1 {
     }
 
     public void onEntityDead(EntityLiving entity) {
+        if (this.isSleep()) {
+            this.delayedTasks.add(() -> this.onEntityDead(entity)); return;
+        }
+
         StrPos pos = new StrPos(entity.getEntityData().getCompoundTag("AncientSystemData").getLong("pos"));
         IStructure structure = this.map.structure(pos);
 
@@ -198,6 +211,8 @@ public class AncientLayer1Server extends AncientLayer1 {
         if (!this.isBuild && !this.isBuilding) {
             this.build();
         }
+
+        for (Runnable run : this.delayedTasks) run.run();
     }
 
     protected void onBuildFinish() {

@@ -68,6 +68,11 @@ public class StructureMapBorder implements IStructure {
     @Override
     public void bindMap(AbstractMap map) {}
 
+    @Override
+    public boolean canReplace() {
+        return false;
+    }
+
     public static class StructureMapBorderType implements IStructureType {
 
         @Override

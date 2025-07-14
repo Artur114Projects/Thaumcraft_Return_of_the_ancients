@@ -53,7 +53,6 @@ public class ClientPlayerInBiomeManager {
         if (e.getEntity().getEntityWorld().provider.getDimension() == ancient_world_dim_id) {
             GlStateManager.setFog(GlStateManager.FogMode.EXP);
             GlStateManager.setFogDensity(0.026F);
-            GlStateManager.setFogStart(16);
 
             if (RenderEventHandler.fogTarget > 0) {
                 RenderEventHandler.fogTarget = 0;

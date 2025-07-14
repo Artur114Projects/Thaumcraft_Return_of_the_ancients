@@ -68,8 +68,33 @@ public class Test { //
 
     public static void main(String[] args) {
 //        GenPhase.initAllGenPhases().getMap(System.currentTimeMillis(), 17);
+        Random rand = new Random();
+        int size = 17;
 
-        System.out.println(ITileBBProvider.class.isAssignableFrom(TileBase.class));
+        for (int j = 0; j != 20; j++) {
+            List<Integer> indexes = new ArrayList<>(size * size);
+            int maxDistance = (size / 2) - 1;
+            int minDistance = 4;
+
+            for (int i = 0; i != size * size; i++) {
+                int x = i % size;
+                int y = i / size;
+
+                if (x >= (size / 2) - minDistance && y >= (size / 2) - minDistance && x <= (size / 2) + minDistance && y <= (size / 2) + minDistance) {
+                    continue;
+                }
+
+                if (x < (size / 2) - maxDistance || y < (size / 2) - maxDistance || x > (size / 2) + maxDistance || y > (size / 2) + maxDistance) {
+                    continue;
+                }
+
+                indexes.add(i);
+            }
+
+            int index = indexes.get(rand.nextInt(indexes.size()));
+
+            System.out.println("[" + index % size + ", " + index / size + "]");
+        }
     }
 
     private static short pacArray(byte[] array) {

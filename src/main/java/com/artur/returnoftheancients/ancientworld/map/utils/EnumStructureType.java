@@ -19,6 +19,7 @@ public enum EnumStructureType implements IStructureType {
     private final Function3<EnumRotate, StrPos, EnumStructureType, IStructure> creator;
     private final Map<EnumRotate, Set<EnumFace>> ports;
     private final String id;
+
     EnumStructureType(String id, EnumRotate maxRotate, Function3<EnumRotate, StrPos, EnumStructureType, IStructure> creator, EnumFace... ports) {
         this.creator = creator;
         this.id = id;
@@ -29,7 +30,6 @@ public enum EnumStructureType implements IStructureType {
     EnumStructureType(String id, EnumRotate rotate, EnumFace... ports) {
         this(id, rotate, (rot, pos, type) -> new StructureBase(rot, type, pos), ports);
     }
-
 
     @Override
     public IStructure create(EnumRotate rotate, StrPos pos) {

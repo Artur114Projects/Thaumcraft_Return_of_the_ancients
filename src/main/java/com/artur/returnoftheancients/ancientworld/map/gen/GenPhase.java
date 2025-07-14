@@ -7,9 +7,10 @@ public abstract class GenPhase {
     private static GenPhase instance;
 
     public static GenPhase initAllGenPhases() {
-        GenPhase baseMap = new GenPhaseCreateBaseMap();
+        GenPhase baseMap = new GenPhaseBaseMap();
         GenPhase build = new GenPhaseBuildWays(baseMap);
-        return build;
+        GenPhase polished = new GenPhasePolishing(build);
+        return polished;
     }
 
     public static GenPhase InstanceAllGenPhases() {

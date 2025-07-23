@@ -1,13 +1,12 @@
 package com.artur.returnoftheancients.generation.terraingen;
 
 import com.artur.returnoftheancients.init.InitBiome;
-import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
 
-public class GenLayerAddTaintBeach extends GenLayer {
-    public GenLayerAddTaintBeach(long seed, GenLayer parent) {
+public class GenLayerAddTaintBiomes extends GenLayer {
+    public GenLayerAddTaintBiomes(long seed, GenLayer parent) {
         super(seed);
 
         this.parent = parent;
@@ -15,17 +14,18 @@ public class GenLayerAddTaintBeach extends GenLayer {
 
     @Override
     public int[] getInts(int areaX, int areaY, int areaWidth, int areaHeight) {
-        int[] aint1 = this.parent.getInts(areaX - 1, areaY - 1, areaWidth + 2, areaHeight + 2);
+        int[] aint1 = this.parent.getInts(areaX - 2, areaY - 2, areaWidth + 4, areaHeight + 4);
         int[] aint = IntCache.getIntCache(areaWidth * areaHeight);
 
+        int mountainsId = Biome.getIdForBiome(InitBiome.TAINT_MOUNTAINS);
         int taintId = Biome.getIdForBiome(InitBiome.TAINT);
         int seaId = Biome.getIdForBiome(InitBiome.TAINT_SEA);
 
         for (int j = 0; j < areaHeight; j++) {
             for (int i = 0; i < areaWidth; i++) {
-                int areaWidth1 = areaWidth + 2;
-                int i1 = i + 1;
-                int j1 = j + 1;
+                int areaWidth1 = areaWidth + 4;
+                int i1 = i + 2;
+                int j1 = j + 2;
 
                 int k = aint1[i1 + j1 * areaWidth1];
 
@@ -35,14 +35,18 @@ public class GenLayerAddTaintBeach extends GenLayer {
                 aint[i + j * areaWidth] = k;
 
                 if (k == taintId) {
-                    int j3 = aint[j1 + 0 + (i1 - 1) * areaWidth1];
-                    int i4 = aint[j1 + 1 + (i1 + 0) * areaWidth1];
-                    int l1 = aint[j1 - 1 + (i1 + 0) * areaWidth1];
-                    int k2 = aint[j1 + 0 + (i1 + 1) * areaWidth1];
+                    int j3 = aint1[i1 + 0 + (j1 - 1) * areaWidth1];
+                    int i4 = aint1[i1 + 1 + (j1 + 0) * areaWidth1];
+                    int l1 = aint1[i1 - 1 + (j1 + 0) * areaWidth1];
+                    int k2 = aint1[i1 + 0 + (j1 + 1) * areaWidth1];
 
                     if (isBiomeSea(l1) || isBiomeSea(k2) || isBiomeSea(j3) || isBiomeSea(i4)) {
-                        aint1[j + i * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_BEACH);
+                        aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_BEACH);
                     }
+                }
+
+                if (k == mountainsId && GenLayersHandler.isAllBiomesOnRangeEqualsInt0(aint1, mountainsId, i1, j1, areaWidth1, 2)) {
+                    aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_MOUNTAINS_EXTREME);
                 }
 
                 if (k == seaId && GenLayersHandler.hasBiomeOnRange0(aint1, Biome.getIdForBiome(InitBiome.TAINT_PLATEAU), i1, j1, areaWidth1, 1)) {
@@ -56,5 +60,9 @@ public class GenLayerAddTaintBeach extends GenLayer {
 
     private boolean isBiomeSea(int biome) {
         return biome == Biome.getIdForBiome(InitBiome.TAINT_SEA);
+    }
+
+    private boolean isBiomeMountains(int biome) {
+        return biome == Biome.getIdForBiome(InitBiome.TAINT_MOUNTAINS);
     }
 }

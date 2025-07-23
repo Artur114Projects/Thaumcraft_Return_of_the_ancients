@@ -38,6 +38,14 @@ public class WorldGensMisc {
         public boolean generate(World worldIn, Random rand, BlockPos position) {
             blockPos.setPos(position);
             for (; blockPos.getY() > worldIn.getSeaLevel() - 10; blockPos.down()) {
+                IBlockState replacingState = worldIn.getBlockState(blockPos);
+                Material material = replacingState.getMaterial();
+                Block block = replacingState.getBlock();
+
+                if (replacingState.getMaterial() == ThaumcraftMaterials.MATERIAL_TAINT || block.isAir(replacingState, worldIn, blockPos) || material == Material.SNOW || material.isLiquid() || block instanceof BlockTC || block.hasTileEntity(replacingState) || !block.isOpaqueCube(replacingState)) {
+                    continue;
+                }
+
                 for (EnumFacing facing : EnumFacing.values()) {
                     blockPos.offset(facing);
                     IBlockState state = worldIn.getBlockState(blockPos);
@@ -46,14 +54,9 @@ public class WorldGensMisc {
                     blockPos.offset(facing.getOpposite());
 
                      if (isNeedReplace) {
-                        Material material = worldIn.getBlockState(blockPos).getMaterial();
-                        Block block = worldIn.getBlockState(blockPos).getBlock();
-
-                        if (worldIn.getBlockState(blockPos).getMaterial() != ThaumcraftMaterials.MATERIAL_TAINT && !worldIn.isAirBlock(blockPos) && material != Material.SNOW && !material.isLiquid() && !(block instanceof BlockTC) && !block.hasTileEntity(state) && block.isOpaqueCube(state)) {
-                            worldIn.setBlockState(blockPos, InitBlocks.TAINT_VOID_STONE.getDefaultState());
-                        }
-
-                        break;
+                         ExtendedBlockStorage storage = blockPos.ebs(worldIn);
+                         storage.set(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15, InitBlocks.TAINT_VOID_STONE.getDefaultState());
+                         break;
                     }
                 }
             }

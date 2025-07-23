@@ -68,6 +68,7 @@ public abstract class GenLayerTRA extends GenLayer {
         GenLayer genlayerriver = new GenLayerRiver(1L, genlayer5);
         GenLayer genlayersmooth = new GenLayerSmooth(1000L, genlayerriver);
         genlayerhills = new GenLayerRareBiome(1001L, genlayerhills);
+        genlayerhills = new GenLayerAddTaintBiomes(1000L, genlayerhills);
 
         for (int k = 0; k < biomeSize; k++) {
             genlayerhills = new GenLayerZoom(1000L + k, genlayerhills);
@@ -80,8 +81,6 @@ public abstract class GenLayerTRA extends GenLayer {
                 genlayerhills = new GenLayerShoreTRA(1000L, genlayerhills);
 
                 genlayerhills = new GenLayerAddSmallTaintBiomes(1000L, seed, genlayerhills);
-
-                genlayerhills = new GenLayerAddTaintBeach(1000L, genlayerhills);
             }
         }
 

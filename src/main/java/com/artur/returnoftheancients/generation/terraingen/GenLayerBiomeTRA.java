@@ -32,7 +32,7 @@ public class GenLayerBiomeTRA extends GenLayerBiome {
                 this.initChunkSeed(x, y);
                 if (GenLayersHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, 4, 2)) {
                     if (GenLayersHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, 4, 1)) {
-                        int randId = this.nextInt(InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID.length + 1);
+                        int randId = this.nextInt(InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID.length + 10);
                         int id = randId >= InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID.length ? 0 : randId;
                         aint1[i + j * areaWidth] = this.nextInt(4) == 0 ? taintId : InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID[id];
                     } else {

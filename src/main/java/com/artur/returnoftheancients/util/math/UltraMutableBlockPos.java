@@ -180,6 +180,11 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         return this.setPos(vec.getX(), vec.getY(), vec.getZ());
     }
 
+    public UltraMutableBlockPos setWorldYFromHM(World world) {
+        this.setY(world.getChunkFromChunkCoords(this.getChunkX(), this.getChunkZ()).getHeight(this));
+        return this.down();
+    }
+
     public UltraMutableBlockPos setWorldY(World world) {
         return setWorldY(world, false);
     }

@@ -577,7 +577,7 @@ public class MiscHandler {
     }
 
     public static long chunkPosAsLong(ChunkPos chunkPos) {
-        return (long) chunkPos.x | ((long) chunkPos.z) << 32;
+        return (long) chunkPos.x & 4294967295L | ((long) chunkPos.z & 4294967295L) << 32;
     }
 
     public static ChunkPos chunkPosFromLong(long data) {

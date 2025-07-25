@@ -23,7 +23,7 @@ import java.util.Random;
 public class BiomeTaint extends BiomeBase {
     private static final WorldGensMisc WORLD_GENS_MISC = new WorldGensMisc();
 
-    private final WorldGenAbstractTree BIG_TREE_TAINT_FEATURE = new WorldGenTaintBigTreeLegacy(false);
+    private final WorldGenAbstractTree BIG_TREE_TAINT_FEATURE = new WorldGenTaintBigTree(false);
     private final WorldGenAbstractTree INFERNAL_SPIRES = new WorldGenInfernalSpires(false);
     private final WorldGenAbstractTree TREE_TAINT_FEATURE = new WorldGenTaintTree(false);
     private final WorldGenAbstractTree ROTTEN_SPIRES = new WorldGenRottenSpires(false);
@@ -51,7 +51,7 @@ public class BiomeTaint extends BiomeBase {
             this.decorator.cactiPerChunk = -1;
         } else if (type == TaintType.NORMAL || type == TaintType.HILLS) {
             if (type == TaintType.NORMAL) {
-                this.decorator.extraTreeChance = 0.5F;
+                this.decorator.extraTreeChance = 0.8F;
             }
             this.decorator.treesPerChunk = 1;
             this.spawnableCreatureList.add(new SpawnListEntry(EntityTaintSeedPrime.class, 4, 1, 1));
@@ -68,8 +68,6 @@ public class BiomeTaint extends BiomeBase {
             this.decorator.reedsPerChunk = -1;
             this.decorator.cactiPerChunk = -1;
         } else if (type == TaintType.BEACH) {
-            this.topBlock = Blocks.GRAVEL.getDefaultState();
-            this.fillerBlock = Blocks.GRAVEL.getDefaultState();
             this.decorator.extraTreeChance = -1;
             this.decorator.treesPerChunk = -1;
             this.decorator.deadBushPerChunk = -1;
@@ -204,7 +202,7 @@ public class BiomeTaint extends BiomeBase {
     @Override
     public WorldGenAbstractTree getRandomTreeFeature(Random rand) {
         if (type == TaintType.NORMAL) {
-            return rand.nextInt(4) == 0 ? BIG_TREE_TAINT_FEATURE : TREE_TAINT_FEATURE;
+            return rand.nextFloat() < 0.25F ? BIG_TREE_TAINT_FEATURE : TREE_TAINT_FEATURE;
         } else if (type == TaintType.HILLS) {
             return TREE_TAINT_FEATURE;
         } else if (type == TaintType.SEA) {

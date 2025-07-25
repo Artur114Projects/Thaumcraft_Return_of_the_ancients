@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.ancientworld.map.gen.GenPhase;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
 import com.artur.returnoftheancients.events.ServerEventsHandler;
+import com.artur.returnoftheancients.generation.biomes.decorate.WorldGenTaintBigTree;
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.generation.portal.base.client.ClientAncientPortal;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
@@ -121,15 +122,7 @@ public class ItemDebug extends BaseItem {
 		if (!worldIn.isRemote) {
 
 			if (player.isSneaking()) {
-                EntityLiving entity = new EntityEldritchWarden(worldIn);
-                entity.setLocationAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, MathHelper.wrapDegrees(worldIn.rand.nextFloat() * 360.0F), 0.0F);
-                entity.rotationYawHead = entity.rotationYaw;
-                entity.renderYawOffset = entity.rotationYaw;
-                entity.onInitialSpawn(worldIn.getDifficultyForLocation(new BlockPos(entity)), null);
-                NBTTagCompound nbt = new NBTTagCompound();
-                entity.getEntityData().setTag("AncientSystemData", nbt);
-                worldIn.spawnEntity(entity);
-                entity.playLivingSound();
+				new WorldGenTaintBigTree(false).generate(worldIn, new Random(), pos.up());
             }
 
 

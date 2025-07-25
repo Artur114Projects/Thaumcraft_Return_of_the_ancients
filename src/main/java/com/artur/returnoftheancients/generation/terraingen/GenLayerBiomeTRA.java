@@ -12,11 +12,13 @@ import org.jetbrains.annotations.NotNull;
 
 public class GenLayerBiomeTRA extends GenLayerBiome {
     private final ChunkPos[] portalsGenerationPos;
+    private final int biomeSize;
 
-    public GenLayerBiomeTRA(long p_i45560_1_, GenLayer p_i45560_3_, WorldType p_i45560_4_, ChunkGeneratorSettings p_i45560_5_, long worldSeedBase) {
+    public GenLayerBiomeTRA(long p_i45560_1_, GenLayer p_i45560_3_, WorldType p_i45560_4_, ChunkGeneratorSettings p_i45560_5_, long worldSeedBase, int biomeSize) {
         super(p_i45560_1_, p_i45560_3_, p_i45560_4_, p_i45560_5_);
         portalsGenerationPos = new ChunkPos[AncientPortalsProcessor.portalsCount];
         GenLayersHandler.initPortalsPosOnWorld(portalsGenerationPos, worldSeedBase);
+        this.biomeSize = biomeSize;
     }
 
     @Override
@@ -30,8 +32,8 @@ public class GenLayerBiomeTRA extends GenLayerBiome {
                 int x = (i + areaX);
                 int y = (j + areaY);
                 this.initChunkSeed(x, y);
-                if (GenLayersHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, 4, 2)) {
-                    if (GenLayersHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, 4, 1)) {
+                if (GenLayersHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, biomeSize, 2)) {
+                    if (GenLayersHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, biomeSize, 1)) {
                         int randId = this.nextInt(InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID.length + 10);
                         int id = randId >= InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID.length ? 0 : randId;
                         aint1[i + j * areaWidth] = this.nextInt(4) == 0 ? taintId : InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID[id];

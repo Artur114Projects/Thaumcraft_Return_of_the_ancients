@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockSnow;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -72,11 +73,11 @@ public class WorldGensMisc {
             if (rand.nextInt(33) == 0) {
                 blockPos.setPos(position);
                 if (blockPos.getY() < 100 && worldIn.getBlockState(blockPos).getBlock() == BlocksTC.taintSoil) {
-                    blockPos.pushPos();
                     IBlockState state = BlocksTC.taintFeature.getBlockState().getBaseState();
                     blockPos.up();
-                    worldIn.setBlockState(blockPos, state.withProperty(BlockDirectional.FACING, EnumFacing.UP), 4);
-                    blockPos.popPos();
+                    if (worldIn.isAirBlock(blockPos)) {
+                        worldIn.setBlockState(blockPos, state.withProperty(BlockDirectional.FACING, EnumFacing.UP), 4);
+                    }
                 }
             }
             return true;
@@ -94,7 +95,7 @@ public class WorldGensMisc {
                     if (worldIn.getBlockState(blockPos).getMaterial() == ThaumcraftMaterials.MATERIAL_TAINT) {
                         blockPos.down();
                     }
-                    worldIn.setBlockState(blockPos.up(), Blocks.SNOW_LAYER.getDefaultState());
+                    worldIn.setBlockState(blockPos.up(), Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, MathHelper.clamp((int) MiscHandler.interpolate(1, 8, (blockPos.getY() - 110.0F) / (148.0F - 110.0F)), 1, 8)));
                 } else if (rand.nextBoolean()) {
                     worldIn.setBlockState(blockPos.up(), Blocks.SNOW_LAYER.getDefaultState());
                 }

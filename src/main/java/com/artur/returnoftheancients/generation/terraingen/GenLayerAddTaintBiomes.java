@@ -46,7 +46,7 @@ public class GenLayerAddTaintBiomes extends GenLayer {
                 }
 
                 if (k == mountainsId && GenLayersHandler.isAllBiomesOnRangeEqualsInt0(aint1, mountainsId, i1, j1, areaWidth1, 2)) {
-                    aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_MOUNTAINS_EXTREME);
+                    aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_EXTREME_MOUNTAINS);
                 }
 
                 if (k == seaId && GenLayersHandler.hasBiomeOnRange0(aint1, Biome.getIdForBiome(InitBiome.TAINT_PLATEAU), i1, j1, areaWidth1, 1)) {

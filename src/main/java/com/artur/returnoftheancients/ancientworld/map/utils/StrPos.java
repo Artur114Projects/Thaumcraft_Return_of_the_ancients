@@ -68,7 +68,7 @@ public class StrPos {
     }
 
     public long asLong() {
-        return (long) this.getX() | ((long) this.getY()) << 32;
+        return ((long) this.getX() & 4294967295L) | ((long) this.getY() & 4294967295L) << 32;
     }
 
     public int getX() {

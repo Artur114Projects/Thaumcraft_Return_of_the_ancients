@@ -32,6 +32,7 @@ public class GenLayerAddTaintBiomes extends GenLayer {
                 int x = (i + areaX);
                 int y = (j + areaY);
 
+
                 aint[i + j * areaWidth] = k;
 
                 if (k == taintId) {
@@ -45,7 +46,8 @@ public class GenLayerAddTaintBiomes extends GenLayer {
                     }
                 }
 
-                if (k == mountainsId && GenLayersHandler.isAllBiomesOnRangeEqualsInt0(aint1, mountainsId, i1, j1, areaWidth1, 2)) {
+                this.initChunkSeed(x, y);
+                if (k == mountainsId && GenLayersHandler.isAllBiomesOnRangeEqualsInt0(aint1, mountainsId, i1, j1, areaWidth1, 1) && this.nextInt(7) == 0) {
                     aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_EXTREME_MOUNTAINS);
                 }
 

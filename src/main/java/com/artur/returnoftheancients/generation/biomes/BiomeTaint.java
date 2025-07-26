@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -15,7 +16,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import thaumcraft.api.blocks.BlocksTC;
-import thaumcraft.common.entities.monster.tainted.EntityTaintSeedPrime;
+import thaumcraft.common.entities.monster.tainted.*;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -32,10 +33,10 @@ public class BiomeTaint extends BiomeBase {
     public final TaintType type;
     public static int taintChunks = 0;
 
-    // TODO: Добавить больше существ в spawnableCreatureList.
     public BiomeTaint(String registryName, BiomeProperties properties, EBiome eBiome, TaintType type) {
         super(registryName, properties, eBiome);
         this.spawnableWaterCreatureList.clear();
+        this.spawnableCaveCreatureList.clear();
         this.decorator.generateFalls = false;
         this.spawnableCreatureList.clear();
         this.spawnableMonsterList.clear();
@@ -54,7 +55,16 @@ public class BiomeTaint extends BiomeBase {
                 this.decorator.extraTreeChance = 0.8F;
             }
             this.decorator.treesPerChunk = 1;
-            this.spawnableCreatureList.add(new SpawnListEntry(EntityTaintSeedPrime.class, 4, 1, 1));
+            this.spawnableCreatureList.add(new SpawnListEntry(EntityTaintSeedPrime.class, 3, 1, 1));
+            this.spawnableMonsterList.add(new SpawnListEntry(EntityTaintSeedPrime.class, 3, 1, 1));
+            this.spawnableCreatureList.add(new SpawnListEntry(EntityTaintSeed.class, 6, 1, 1));
+            this.spawnableMonsterList.add(new SpawnListEntry(EntityTaintSeed.class, 6, 1, 1));
+            this.spawnableCreatureList.add(new SpawnListEntry(EntityTaintSwarm.class, 4, 1, 2));
+            this.spawnableMonsterList.add(new SpawnListEntry(EntityTaintSwarm.class, 4, 1, 2));
+            this.spawnableCreatureList.add(new SpawnListEntry(EntityTaintacle.class, 12, 1, 2));
+            this.spawnableMonsterList.add(new SpawnListEntry(EntityTaintacle.class, 12, 1, 2));
+            this.spawnableCreatureList.add(new SpawnListEntry(EntityTaintCrawler.class, 4, 1, 6));
+            this.spawnableMonsterList.add(new SpawnListEntry(EntityTaintCrawler.class, 4, 1, 6));
         } else if (type == TaintType.SEA) {
             this.decorator.extraTreeChance = 0.8F;
             this.decorator.treesPerChunk = 0;
@@ -117,6 +127,10 @@ public class BiomeTaint extends BiomeBase {
         }
     }
 
+    public static boolean canSpawn(Entity entity, BiomeTaint biome) {
+        return biome.type != TaintType.HILLS || !(entity.posY > 100);
+    }
+
     public static void decorateCustom(World worldIn, Random random, ChunkPos pos, byte[] biomeArray) {
         UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(pos);
         Chunk chunk = worldIn.getChunkFromBlockCoords(blockPos);
@@ -146,12 +160,12 @@ public class BiomeTaint extends BiomeBase {
     }
 
     private static void decorateEdge(World worldIn, Random rand, UltraMutableBlockPos blockPos, byte biomeId) {
-        blockPos.setWorldYFromHM(worldIn);
+        blockPos.setWorldY(worldIn);
         WORLD_GENS_MISC.ADD_SNOW.generate(worldIn, rand, blockPos);
     }
 
     private static void decorateNormal(World worldIn, Random rand, UltraMutableBlockPos blockPos, byte biomeId) {
-        blockPos.setWorldYFromHM(worldIn);
+        blockPos.setWorldY(worldIn);
         WORLD_GENS_MISC.REPLACE_VISIBLE_BLOCKS.generate(worldIn, rand, blockPos);
         WORLD_GENS_MISC.ADD_TAINT_FEATURE.generate(worldIn, rand, blockPos);
         WORLD_GENS_MISC.REMOVE_LIQUIDS.generate(worldIn, rand, blockPos);
@@ -159,14 +173,8 @@ public class BiomeTaint extends BiomeBase {
     }
 
     private static void decorateChunkNormal(World worldIn, Random rand, UltraMutableBlockPos blockPos) {
-        blockPos.pushPos();
-        boolean isTintWasteland = MiscHandler.getBiomeIdOnPos(worldIn, blockPos.add(8, 0, 8)) == Biome.getIdForBiome(InitBiome.TAINT_WASTELAND);
-        blockPos.popPos();
-        if (isTintWasteland) {
-            if (rand.nextInt(6) == 0) {
-                WORLD_GENS_MISC.INFERNAL_CIRCLE.generate(worldIn, rand, blockPos);
-            }
-        }
+//        WORLD_GENS_MISC.INFERNAL_CIRCLE.generate(worldIn, rand,  blockPos);
+        WORLD_GENS_MISC.LAVA_STAIRS.generate(worldIn, rand,  blockPos);
     }
 
     public void registerBiomeP2() {

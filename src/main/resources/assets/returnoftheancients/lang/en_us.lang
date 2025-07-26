@@ -13,6 +13,7 @@ tile.ancient_sanctuary_controller.name=Ancient controller of the sanctuary
 tile.eldritch_stairs.name=Eldritch stone stairs
 tile.ancient_stairs.name=Ancient stone stairs
 tile.taint_void_stone.name=Infected void stone
+tile.taint_void_cobblestone.name=Infected void cobblestone
 tile.pedestal_phantom.name=Phantom pedestal
 tile.incandescent_taint_void_stone.name=Incandescent infected void stone
 tile.ancient_lamp_1.name=Ancient device

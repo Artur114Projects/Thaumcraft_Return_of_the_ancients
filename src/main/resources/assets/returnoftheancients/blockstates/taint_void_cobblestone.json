@@ -1,0 +1,9 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thaumcraft:empty"
+  },
+  "variants": {
+    "inventory": [{ "model": "returnoftheancients:taint_void_cobblestone" }], "normal": [{ "model": "returnoftheancients:taint_void_cobblestone" }]
+  }
+}

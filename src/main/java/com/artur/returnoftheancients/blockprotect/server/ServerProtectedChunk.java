@@ -49,6 +49,9 @@ public class ServerProtectedChunk extends ProtectedChunk implements IServerProte
 
     @Override
     public void unProtect(int x, int y, int z) {
+        if (y >> 4 >= 16) {
+            return;
+        }
         IExtendedProtectStorage storage = this.storages[y >> 4];
         if (storage == null) {
             return;

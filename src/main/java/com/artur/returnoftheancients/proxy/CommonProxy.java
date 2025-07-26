@@ -12,6 +12,7 @@ import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.CraftingRegister;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;

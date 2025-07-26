@@ -12,6 +12,7 @@ tile.pedestal_phantom.name=Фантомный пьедестал
 tile.ancient_sanctuary_controller_broken.name=Сломанный древний контроллер святилища
 tile.ancient_sanctuary_controller.name=Древний контроллер святилища
 tile.taint_void_stone.name=Заражённый пустотный камень
+tile.taint_void_cobblestone.name=Заражённый пустотный булыжник
 tile.incandescent_taint_void_stone.name=Раскалённый заражённый пустотный камень
 tile.ancient_lamp_1.name=Древнее устройство
 tile.ancient_lamp_0.name=Древнее устройство

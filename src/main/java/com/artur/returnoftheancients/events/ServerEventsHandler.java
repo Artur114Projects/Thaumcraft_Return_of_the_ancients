@@ -31,7 +31,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -284,8 +286,14 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
 
     @SubscribeEvent
     public static void canSpawn(LivingSpawnEvent.CheckSpawn e) {
-        if (e.getEntity().dimension == ancient_world_dim_id && e.getEntity().world.canSeeSky(e.getEntity().getPosition())) {
+        if (e.getEntity().dimension == ancient_world_dim_id && e.getWorld().canSeeSky(e.getEntity().getPosition())) {
             e.setResult(Event.Result.DENY);
+        }
+        Biome biome = e.getWorld().getBiome(e.getEntity().getPosition());
+        if (biome instanceof BiomeTaint) {
+            if (!BiomeTaint.canSpawn(e.getEntity(), (BiomeTaint) biome)) {
+                e.setResult(Event.Result.DENY);
+            }
         }
     }
 

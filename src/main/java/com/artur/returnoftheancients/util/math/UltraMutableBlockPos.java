@@ -194,7 +194,14 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
     }
 
     public UltraMutableBlockPos setWorldY(World world, boolean ignoringLiquids, Block... ignoringBlocks) {
-        this.setY(world.getHeight());
+        Chunk chunk = world.getChunkFromBlockCoords(this);
+        int index;
+        for (index = 0; index != 16; index++) {
+            if (chunk.getBlockStorageArray()[index] == null) {
+                break;
+            }
+        }
+        this.setY((index + 1) * 16);
 
         while (this.getY() >= 0) {
             IBlockState state = world.getBlockState(this);

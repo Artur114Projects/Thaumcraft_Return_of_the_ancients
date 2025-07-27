@@ -11,12 +11,11 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import java.util.Random;
 
 public abstract class WorldGeneratorBiomeWhiteList extends WorldGenerator {
-    private CheckType checkType = CheckType.BLOCK;
+    private final CheckType checkType;
     private byte[] biomes;
 
-
-    protected void setCheckType(CheckType type) {
-        this.checkType = type;
+    protected WorldGeneratorBiomeWhiteList(CheckType checkType) {
+        this.checkType = checkType;
     }
 
     @Override

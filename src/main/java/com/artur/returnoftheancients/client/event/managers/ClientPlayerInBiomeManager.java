@@ -36,9 +36,11 @@ public class ClientPlayerInBiomeManager {
 
     public ClientPlayerInBiomeManager() {
         fogParamsMap.put(InitBiome.TAINT_SEA, new FogManager.FogParams(70.0F / 7.0F, 90.0F / 8.0F, 100.0F / 7.0F, 40));
+        fogParamsMap.put(InitBiome.TAINT_BEACH, new FogManager.FogParams(70.0F / 7.0F, 90.0F / 8.0F, 100.0F / 7.0F, 30));
         fogParamsMap.put(InitBiome.TAINT_MOUNTAINS, new FogManager.FogParams(43.0F / 5.0f, 0, 61.0F / 5.0f, 30));
         fogParamsMap.put(InitBiome.TAINT_EXTREME_MOUNTAINS, new FogManager.FogParams(43.0F / 8.0f, 0, 61.0F / 8.0f, 30));
-        fogParamsMap.put(InitBiome.TAINT_WASTELAND, new FogManager.FogParams(6, 2, 2, 30));
+        fogParamsMap.put(InitBiome.INFERNAL_CRATER, new FogManager.FogParams(255.0F * 0.5F, 255.0F * 0.2F, 0, 80));
+        fogParamsMap.put(InitBiome.TAINT_WASTELAND, new FogManager.FogParams(255.0F * (0.5F / 8.0F), 255.0F * (0.2F / 8.0F), 2, 40));
     }
 
     public void entityViewRenderEventFogColors(EntityViewRenderEvent.FogColors e) {

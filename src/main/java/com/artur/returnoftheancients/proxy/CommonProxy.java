@@ -37,6 +37,7 @@ public class CommonProxy {
         ((BiomeTaint) InitBiome.TAINT_EXTREME_MOUNTAINS).registerBiomeP2(InitBlocks.TAINT_VOID_STONE.getDefaultState(), InitBlocks.TAINT_VOID_STONE.getDefaultState());
         ((BiomeTaint) InitBiome.TAINT_SEA).registerBiomeP2(InitBlocks.TAINT_VOID_STONE.getDefaultState(), InitBlocks.TAINT_VOID_STONE.getDefaultState());
         ((BiomeTaint) InitBiome.TAINT_WASTELAND).registerBiomeP2(InitBlocks.TAINT_VOID_STONE.getDefaultState(), InitBlocks.TAINT_VOID_STONE.getDefaultState());
+        ((BiomeTaint) InitBiome.INFERNAL_CRATER).registerBiomeP2(InitBlocks.TAINT_VOID_STONE.getDefaultState(), InitBlocks.TAINT_VOID_STONE.getDefaultState());
         ((BiomeTaint) InitBiome.TAINT_BEACH).registerBiomeP2(InitBlocks.TAINT_VOID_STONE.getDefaultState(), InitBlocks.TAINT_VOID_STONE.getDefaultState());
         ((BiomeTaint) InitBiome.TAINT_PLATEAU).registerBiomeP2();
         RegisterHandler.registerTCRecipes();

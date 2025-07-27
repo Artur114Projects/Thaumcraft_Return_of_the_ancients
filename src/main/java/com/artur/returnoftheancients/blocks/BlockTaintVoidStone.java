@@ -10,14 +10,16 @@ import net.minecraft.util.EnumBlockRenderType;
 
 import java.util.Random;
 
-// TODO: Доделать текстуру.
 public class BlockTaintVoidStone extends BaseBlock {
     public BlockTaintVoidStone(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
+
+        this.setHarvestLevel("pickaxe", 3);
     }
 
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(InitBlocks.TAINT_VOID_COBBLESTONE);
     }
+
 }

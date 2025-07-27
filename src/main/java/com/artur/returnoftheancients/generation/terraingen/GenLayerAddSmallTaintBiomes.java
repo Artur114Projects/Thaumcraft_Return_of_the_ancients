@@ -14,17 +14,20 @@ public class GenLayerAddSmallTaintBiomes extends GenLayerWithPortalsPos {
 
     @Override
     public int[] getInts(int areaX, int areaY, int areaWidth, int areaHeight) {
-        int[] aint1 = this.parent.getInts(areaX - 0, areaY - 0, areaWidth + 0, areaHeight + 0);
+        int[] aint1 = this.parent.getInts(areaX - 4, areaY - 4, areaWidth + 8, areaHeight + 8);
         int[] aint = IntCache.getIntCache(areaWidth * areaHeight);
 
         int taintId = Biome.getIdForBiome(InitBiome.TAINT);
         int seaId = Biome.getIdForBiome(InitBiome.TAINT_SEA);
+        int mountainsId = Biome.getIdForBiome(InitBiome.TAINT_MOUNTAINS);
+        int wastelandId = Biome.getIdForBiome(InitBiome.TAINT_WASTELAND);
+
 
         for (int j = 0; j < areaHeight; j++) {
             for (int i = 0; i < areaWidth; i++) {
-                int areaWidth1 = areaWidth + 0;
-                int i1 = i + 0;
-                int j1 = j + 0;
+                int areaWidth1 = areaWidth + 8;
+                int i1 = i + 4;
+                int j1 = j + 4;
 
                 int k = aint1[i1 + j1 * areaWidth1];
 
@@ -35,6 +38,10 @@ public class GenLayerAddSmallTaintBiomes extends GenLayerWithPortalsPos {
 
                 if (GenLayersHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, 0, 2)) {
                     aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_PLATEAU);
+                }
+
+                if (k == wastelandId && GenLayersHandler.isAllBiomesOnRangeEqualsInt0(aint1, wastelandId, i1, j1, areaWidth1, 4)) {
+                    aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.INFERNAL_CRATER);
                 }
             }
         }

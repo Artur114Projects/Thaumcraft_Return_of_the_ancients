@@ -58,16 +58,18 @@ public abstract class GenLayerTRA extends GenLayer {
         GenLayer lvt_7_1_ = GenLayerZoom.magnify(1000L, genlayer4, 0);
         GenLayer genlayerriverinit = new GenLayerRiverInit(100L, lvt_7_1_);
         GenLayer genlayerbiome = new GenLayerBiomeTRA(200L, genlayer4, worldType, null, seed, biomeSize);
-        GenLayer ret = GenLayerZoom.magnify(1000L, genlayerbiome, 2);
+        GenLayer ret1 = new GenLayerZoom(1000L + 0, genlayerbiome);
+        ret1 = new GenLayerAddMutatedTaintBiomes(1000L, ret1);
+        GenLayer ret = new GenLayerZoom(1000L + 1, ret1);
         GenLayer genlayerbiomeedge = new GenLayerBiomeEdge(1000L, ret);
         GenLayer lvt_9_1_ = GenLayerZoom.magnify(1000L, genlayerriverinit, 2);
         GenLayer genlayerhills = new GenLayerHills(1000L, genlayerbiomeedge, lvt_9_1_);
-        genlayerhills = new GenLayerAddTaintBiomes(1000L, genlayerhills);
         GenLayer genlayer5 = GenLayerZoom.magnify(1000L, genlayerriverinit, 2);
         genlayer5 = GenLayerZoom.magnify(1000L, genlayer5, riverSize);
         GenLayer genlayerriver = new GenLayerRiver(1L, genlayer5);
         GenLayer genlayersmooth = new GenLayerSmooth(1000L, genlayerriver);
         genlayerhills = new GenLayerRareBiome(1001L, genlayerhills);
+        genlayerhills = new GenLayerAddTaintBeach(1000L, genlayerhills);
 
         for (int k = 0; k < biomeSize; k++) {
             genlayerhills = new GenLayerZoom(1000L + k, genlayerhills);

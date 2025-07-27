@@ -50,6 +50,8 @@ public class BiomeTaint extends BiomeBase {
             this.decorator.deadBushPerChunk = -1;
             this.decorator.reedsPerChunk = -1;
             this.decorator.cactiPerChunk = -1;
+            this.decorator.grassPerChunk = -1;
+            this.decorator.flowersPerChunk = -1;
         } else if (type == TaintType.NORMAL || type == TaintType.HILLS) {
             if (type == TaintType.NORMAL) {
                 this.decorator.extraTreeChance = 0.8F;
@@ -166,14 +168,15 @@ public class BiomeTaint extends BiomeBase {
 
     private static void decorateNormal(World worldIn, Random rand, UltraMutableBlockPos blockPos, byte biomeId) {
         blockPos.setWorldY(worldIn);
+        WORLD_GENS_MISC.REMOVE_LIQUIDS.generate(worldIn, rand, blockPos);
         WORLD_GENS_MISC.REPLACE_VISIBLE_BLOCKS.generate(worldIn, rand, blockPos);
         WORLD_GENS_MISC.ADD_TAINT_FEATURE.generate(worldIn, rand, blockPos);
-        WORLD_GENS_MISC.REMOVE_LIQUIDS.generate(worldIn, rand, blockPos);
         WORLD_GENS_MISC.ADD_SNOW.generate(worldIn, rand, blockPos);
     }
 
     private static void decorateChunkNormal(World worldIn, Random rand, UltraMutableBlockPos blockPos) {
-//        WORLD_GENS_MISC.INFERNAL_CIRCLE.generate(worldIn, rand,  blockPos);
+        WORLD_GENS_MISC.CLEAN_VOID_STONE.generate(worldIn, rand, blockPos);
+        WORLD_GENS_MISC.INFERNAL_CIRCLE.generate(worldIn, rand, blockPos);
         WORLD_GENS_MISC.LAVA_STAIRS.generate(worldIn, rand,  blockPos);
     }
 

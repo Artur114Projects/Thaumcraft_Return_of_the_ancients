@@ -53,10 +53,6 @@ public class GenLayerAddTaintBeach extends GenLayer {
                 if (k == seaId && GenLayersHandler.hasBiomeOnRange0(aint1, Biome.getIdForBiome(InitBiome.TAINT_PLATEAU), i1, j1, areaWidth1, 1)) {
                     aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_BEACH);
                 }
-
-                if (k == wastelandId && GenLayersHandler.hasBiomeOnRange0(aint1, seaId, i1, j1, areaWidth1, 1)) {
-                    aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_BEACH);
-                }
             }
         }
         return aint;

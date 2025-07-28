@@ -322,7 +322,7 @@ public abstract class AncientPortal implements IWriteToNBT {
 
     @Nullable
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        if (isExploded) {
+        if (isExploded || nbt == null) {
             return null;
         }
         nbt.setInteger("portalTypeID", getPortalTypeID());

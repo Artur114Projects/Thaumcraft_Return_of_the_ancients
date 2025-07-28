@@ -12,6 +12,7 @@ tile.pedestal_phantom.name=Фантомный пьедестал
 tile.ancient_sanctuary_controller_broken.name=Сломанный древний контроллер святилища
 tile.ancient_sanctuary_controller.name=Древний контроллер святилища
 tile.taint_void_stone.name=Заражённый пустотный камень
+tile.cleaned_void_stone.name=Очищенный пустотный камень
 tile.taint_void_cobblestone.name=Заражённый пустотный булыжник
 tile.incandescent_taint_void_stone.name=Раскалённый заражённый пустотный камень
 tile.ancient_lamp_1.name=Древнее устройство
@@ -141,7 +142,7 @@ returnoftheancients.text.dead=Вы умерли?
 returnoftheancients.text.deformation=Вы обнаружили странное искажение в структуре лабиринта
 returnoftheancients.text.boss=Вы обнаружили Стража
 #
-tc.research_category.ANCIENT_WORLD=Древний мир
+tc.research_category.ANCIENT_WORLD=Древний мир legacy
 #
 research.start.title=Начало
 research.start.text.stage.1=Также в этой книге написано о неком древнем мире и о устройстве которое поможет найти вход, думою под это стоит выделить отдельную категорию исследований.

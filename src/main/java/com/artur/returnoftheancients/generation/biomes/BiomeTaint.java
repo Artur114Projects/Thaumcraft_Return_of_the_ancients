@@ -74,7 +74,7 @@ public class BiomeTaint extends BiomeBase {
             this.decorator.reedsPerChunk = -1;
             this.decorator.cactiPerChunk = -1;
         } else if (type == TaintType.WASTELAND) {
-            this.decorator.extraTreeChance = 0.2F;
+            this.decorator.extraTreeChance = 0.4F;
             this.decorator.treesPerChunk = 0;
             this.decorator.deadBushPerChunk = -1;
             this.decorator.reedsPerChunk = -1;

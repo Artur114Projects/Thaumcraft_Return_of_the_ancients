@@ -14,7 +14,9 @@ import thaumcraft.api.blocks.BlocksTC;
 
 import java.util.*;
 
-public class GenAncientArch { // TODO: Улучшить!
+// TODO: Улучшить!
+// TODO: 29.07.2025 Разобраться с переполнением стека в fallArchChunks.
+public class GenAncientArch {
     private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
     private ArchChunk[] archChunksCanFall = null;
     private TupleI[] terrainHeightArray = null;

@@ -13,9 +13,10 @@ tile.ancient_sanctuary_controller.name=Ancient controller of the sanctuary
 tile.eldritch_stairs.name=Eldritch stone stairs
 tile.ancient_stairs.name=Ancient stone stairs
 tile.taint_void_stone.name=Infected void stone
+tile.cleaned_void_stone.name=Cleaned void stone
 tile.taint_void_cobblestone.name=Infected void cobblestone
-tile.pedestal_phantom.name=Phantom pedestal
 tile.incandescent_taint_void_stone.name=Incandescent infected void stone
+tile.pedestal_phantom.name=Phantom pedestal
 tile.ancient_lamp_1.name=Ancient device
 tile.ancient_lamp_0.name=Ancient device
 tile.dummy_ancient_stone.name=Structural block
@@ -143,7 +144,7 @@ returnoftheancients.text.found_portal=You found an ancient portal
 returnoftheancients.text.recovery=You came to your senses
 returnoftheancients.text.dead=You dead?
 #
-tc.research_category.ANCIENT_WORLD=Ancient world
+tc.research_category.ANCIENT_WORLD=Ancient world legacy
 #
 research.start.title=Start
 research.start.text.stage.1=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this

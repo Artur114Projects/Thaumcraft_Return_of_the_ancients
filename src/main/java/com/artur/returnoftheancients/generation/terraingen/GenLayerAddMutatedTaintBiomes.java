@@ -41,7 +41,8 @@ public class GenLayerAddMutatedTaintBiomes extends GenLayer {
                     int l1 = aint1[i1 - 1 + (j1 + 0) * areaWidth1];
                     int k2 = aint1[i1 + 0 + (j1 + 1) * areaWidth1];
 
-                    if (j3 == mountainsId && i4 == mountainsId && l1 == mountainsId && k2 == mountainsId) {
+                    this.initChunkSeed(x, y);
+                    if (j3 == mountainsId && i4 == mountainsId && l1 == mountainsId && k2 == mountainsId && this.nextInt(1) == 0) {
                         aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_EXTREME_MOUNTAINS);
                     }
                 }

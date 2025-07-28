@@ -19,9 +19,8 @@ import java.util.Random;
 public class BlockIncandescentTaintVoidStone extends BlockTaintVoidStone {
     public BlockIncandescentTaintVoidStone(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
-        setLightOpacity(1);
-        setLightLevel(1);
-        setTickRandomly(true);
+        this.setLightOpacity(1);
+        this.setLightLevel(0.8F);
     }
 
     @Override

@@ -386,6 +386,7 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
     }
 
     public ExtendedBlockStorage ebs(World world) {
+        if ((this.getY() >> 4) >= 16 || (this.getY() >> 4) < 0) return null;
         Chunk chunk = world.getChunkFromBlockCoords(this);
         ExtendedBlockStorage storage = chunk.getBlockStorageArray()[this.getY() >> 4];
         return storage == null ? chunk.getBlockStorageArray()[this.getY() >> 4] = new ExtendedBlockStorage(this.getY() >> 4 << 4, world.provider.hasSkyLight()) : storage;

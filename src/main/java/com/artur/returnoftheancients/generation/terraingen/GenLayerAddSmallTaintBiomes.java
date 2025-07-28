@@ -43,6 +43,10 @@ public class GenLayerAddSmallTaintBiomes extends GenLayerWithPortalsPos {
                 if (k == wastelandId && GenLayersHandler.isAllBiomesOnRangeEqualsInt0(aint1, wastelandId, i1, j1, areaWidth1, 4)) {
                     aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.INFERNAL_CRATER);
                 }
+
+                if (k == wastelandId && GenLayersHandler.hasBiomeOnRange0(aint1, new int[] {taintId, mountainsId, seaId}, i1, j1, areaWidth1, 1)) {
+                    aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.PRE_TERMAL_ZONE);
+                }
             }
         }
 

@@ -23,6 +23,7 @@ public class InitBiome {
 
     public static final List<Biome> BIOMES = new ArrayList<>();
 
+    public static final Biome PRE_TERMAL_ZONE = new BiomeTaint("pre_termal_zone_r", new Biome.BiomeProperties("Pre termal zone").setWaterColor(0x310042).setBaseHeight(0.4F).setRainfall(0.0F).setHeightVariation(0.1F).setRainDisabled(), EBiome.TAINT, BiomeTaint.TaintType.BEACH);
     public static final Biome TAINT_WASTELAND = new BiomeTaint("taint_wasteland_r", new Biome.BiomeProperties("Scorched Earth").setWaterColor(0x310042).setBaseHeight(0.2F).setRainfall(0.0F).setHeightVariation(0.1F).setRainDisabled(), EBiome.TAINT, BiomeTaint.TaintType.WASTELAND);
     public static final Biome INFERNAL_CRATER = new BiomeTaint("infernal_crater_r", new Biome.BiomeProperties("Infernal Crater").setWaterColor(0x310042).setBaseHeight(-1.8F).setRainfall(0.0F).setHeightVariation(0.2F).setRainDisabled(), EBiome.TAINT, BiomeTaint.TaintType.WASTELAND);
     public static final Biome TAINT_EDGE = new BiomeTaint("taint_edge_r", new Biome.BiomeProperties("Taint Land Edge").setWaterColor(0x310042).setBaseHeight(3.4F).setRainfall(0.7F).setHeightVariation(0.1F).setSnowEnabled().setTemperature(0.2F), EBiome.TAINT_EDGE, BiomeTaint.TaintType.EDGE);

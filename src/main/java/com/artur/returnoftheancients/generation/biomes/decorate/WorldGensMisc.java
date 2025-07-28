@@ -44,9 +44,11 @@ public class WorldGensMisc {
         public boolean generate(World worldIn, Random rand, BlockPos position) {
             UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
             Biome biome = worldIn.getBiome(position);
-            int h = biome == InitBiome.INFERNAL_CRATER || biome == InitBiome.TAINT_WASTELAND ? 0 : worldIn.getSeaLevel() - 10;
+            int h = this.replaceHFromBiome(biome, rand);
             for (blockPos.setPos(position); blockPos.getY() > h; blockPos.down()) {
-                IBlockState replacingState = worldIn.getBlockState(blockPos);
+                ExtendedBlockStorage storage = blockPos.ebs(worldIn);
+                if (storage == null) continue;
+                IBlockState replacingState = storage.get(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15);
                 Material material = replacingState.getMaterial();
                 Block block = replacingState.getBlock();
 
@@ -54,30 +56,23 @@ public class WorldGensMisc {
                     continue;
                 }
 
-                if (biome == InitBiome.INFERNAL_CRATER) {
-                    ExtendedBlockStorage storage = blockPos.ebs(worldIn);
-                    IBlockState state1 = blockPos.getY() <= 20 ? InitBlocks.INCANDESCENT_TAINT_VOID_STONE.getDefaultState() : InitBlocks.TAINT_VOID_STONE.getDefaultState();
-                    storage.set(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15, state1);
-                    continue;
-                }
-
-                for (EnumFacing facing : EnumFacing.values()) {
-                    blockPos.offset(facing);
-                    IBlockState state = worldIn.getBlockState(blockPos);
-                    boolean isNeedReplace = state.getMaterial() == Material.AIR || !state.getBlock().isOpaqueCube(state) || state.getMaterial() == Material.SNOW;
-
-                    blockPos.offset(facing.getOpposite());
-
-                     if (isNeedReplace) {
-                         ExtendedBlockStorage storage = blockPos.ebs(worldIn);
-                         IBlockState state1 = blockPos.getY() <= 20 ? InitBlocks.INCANDESCENT_TAINT_VOID_STONE.getDefaultState() : InitBlocks.TAINT_VOID_STONE.getDefaultState();
-                         storage.set(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15, state1);
-                         break;
-                    }
-                }
+                IBlockState state1 = blockPos.getY() <= 20 ? InitBlocks.INCANDESCENT_TAINT_VOID_STONE.getDefaultState() : InitBlocks.TAINT_VOID_STONE.getDefaultState();
+                storage.set(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15, state1);
             }
             UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
             return true;
+        }
+
+        private int replaceHFromBiome(Biome biome, Random rand) {
+            if (biome == InitBiome.TAINT_WASTELAND) {
+                return 0;
+            } else if (biome == InitBiome.INFERNAL_CRATER) {
+                return 0;
+            } else if (biome == InitBiome.TAINT_SEA) {
+                return 24 + rand.nextInt(4);
+            } else {
+                return 32 + rand.nextInt(8);
+            }
         }
     }
 
@@ -89,10 +84,12 @@ public class WorldGensMisc {
             if (rand.nextInt(33) == 0) {
                 blockPos.setPos(position);
                 if (blockPos.getY() < 100 && worldIn.getBlockState(blockPos).getBlock() == BlocksTC.taintSoil) {
-                    IBlockState state = BlocksTC.taintFeature.getDefaultState();
-                    blockPos.up();
-                    if (worldIn.isAirBlock(blockPos)) {
-                        worldIn.setBlockState(blockPos, state.withProperty(BlockDirectional.FACING, EnumFacing.UP), 2);
+                    IBlockState state = BlocksTC.taintFeature.getDefaultState().withProperty(BlockDirectional.FACING, EnumFacing.UP);
+                    ExtendedBlockStorage storage = blockPos.up().ebs(worldIn);
+                    if (storage != null) {
+                        storage.set(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15, state);
+                        worldIn.getChunkFromBlockCoords(position).resetRelightChecks();
+                        worldIn.checkLight(blockPos);
                     }
                 }
             }
@@ -110,11 +107,17 @@ public class WorldGensMisc {
                 if (blockPos.getY() > 110) {
                     IBlockState state = worldIn.getBlockState(blockPos);
                     if (state.getBlock() == BlocksTC.taintSoil || state.getMaterial() == Material.SNOW) blockPos.down();
-                    worldIn.setBlockState(blockPos.up(), Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, MathHelper.clamp((int) MiscHandler.interpolate(1, 8, (blockPos.getY() - 110.0F) / (148.0F - 110.0F)), 1, 8)));
+                    ExtendedBlockStorage storage = blockPos.up().ebs(worldIn);
+                    if (storage != null) {
+                        storage.set(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15, Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, MathHelper.clamp((int) MiscHandler.interpolate(1, 8, (blockPos.getY() - 110.0F) / (148.0F - 110.0F)), 1, 8)));
+                    }
                 } else if (rand.nextBoolean()) {
                     IBlockState state = worldIn.getBlockState(blockPos);
                     if (state.getMaterial() == Material.SNOW) blockPos.down();
-                    worldIn.setBlockState(blockPos.up(), Blocks.SNOW_LAYER.getDefaultState());
+                    ExtendedBlockStorage storage = blockPos.up().ebs(worldIn);
+                    if (storage != null) {
+                        storage.set(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15, Blocks.SNOW_LAYER.getDefaultState());
+                    }
                 }
             }
             UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
@@ -152,8 +155,11 @@ public class WorldGensMisc {
                     pos.add(xOffset, 0, zOffset).setWorldY(worldIn);
                     if (range1 != radius || (rand == null || rand.nextInt(4) == 0)) {
                         IBlockState state = (range1 < radius - 2) && (rand == null || rand.nextFloat() < 0.5) ? Blocks.LAVA.getDefaultState() : InitBlocks.INCANDESCENT_TAINT_VOID_STONE.getDefaultState();
-                        if (worldIn.getBlockState(pos).getMaterial() == ThaumcraftMaterials.MATERIAL_TAINT) {
-                            worldIn.setBlockState(pos, state);
+                        Chunk chunk = worldIn.getChunkFromBlockCoords(pos);
+                        ExtendedBlockStorage storage = pos.ebs(worldIn);
+                        if (storage != null && storage.get(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15).getMaterial() == ThaumcraftMaterials.MATERIAL_TAINT) {
+                            storage.set(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15, state);
+                            chunk.resetRelightChecks();
                         }
                     }
                     pos.popPos();
@@ -207,7 +213,10 @@ public class WorldGensMisc {
 
             for (int x = 0; x != 16; x++) {
                 for (int z = 0; z != 16; z++) {
-                    pos.setPos(position).add(x, 0, z).setWorldY(world);
+                    if (!CheckType.BLOCK.check(world, pos.setPos(position).add(x, 0, z), this.biomes)) {
+                        continue;
+                    }
+                    pos.setWorldY(world);
 
                     int h = pos.getY();
 
@@ -218,15 +227,19 @@ public class WorldGensMisc {
                         if (pos.offset(facing).setWorldY(world).getY() < h && (state.getBlock() instanceof BlockTaintVoidStone || state.getMaterial() == Material.LAVA)) {
                             if (h < 60 && h - pos.getY() == 1) {
                                 if (state.getMaterial() != Material.LAVA) {
-                                    world.setBlockState(pos.down(), InitBlocks.INCANDESCENT_TAINT_VOID_STONE.getDefaultState());
-                                    world.setBlockState(pos.up(), Blocks.LAVA.getDefaultState());
+                                    ExtendedBlockStorage storage1 = pos.down().ebs(world);
+                                    storage1.set(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15, InitBlocks.INCANDESCENT_TAINT_VOID_STONE.getDefaultState());
+                                    ExtendedBlockStorage storage2 = pos.up().ebs(world);
+                                    storage2.set(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15, Blocks.LAVA.getDefaultState());
+                                    world.checkLight(pos);
                                 }
 
                                 for (EnumFacing facing1 : EnumFacing.HORIZONTALS) {
                                     pos.pushPos();
                                     pos.offset(facing1);
-                                    if (world.getBlockState(pos).getMaterial() != Material.LAVA) {
-                                        world.setBlockState(pos, InitBlocks.INCANDESCENT_TAINT_VOID_STONE.getDefaultState());
+                                    ExtendedBlockStorage storage = pos.ebs(world);
+                                    if (storage != null && storage.get(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15).getMaterial() != Material.LAVA) {
+                                        storage.set(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15, InitBlocks.INCANDESCENT_TAINT_VOID_STONE.getDefaultState());
                                     }
                                     pos.popPos();
                                 }
@@ -237,13 +250,18 @@ public class WorldGensMisc {
                         pos.popPos();
 
                         if (flag) {
-                            world.setBlockState(pos, InitBlocks.INCANDESCENT_TAINT_VOID_STONE.getDefaultState());
+                            ExtendedBlockStorage storage = pos.ebs(world);
+                            if (storage != null) {
+                                storage.set(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15, InitBlocks.INCANDESCENT_TAINT_VOID_STONE.getDefaultState());
+                                world.checkLight(pos);
+                            }
                         }
                     }
 
                 }
             }
 
+            world.getChunkFromBlockCoords(position).resetRelightChecks();
             UltraMutableBlockPos.returnBlockPosToPoll(pos);
             return true;
 
@@ -282,13 +300,17 @@ public class WorldGensMisc {
                     BlockPos pos1 = queue.poll();
 
                     if (pos1 != null) {
-                        IBlockState state = world.getBlockState(pos1);
-                        if (state.getBlock() != InitBlocks.CLEANED_VOID_STONE && state.getMaterial() != Material.AIR && !state.getMaterial().isLiquid()) {
-                            world.setBlockState(pos1, InitBlocks.CLEANED_VOID_STONE.getDefaultState());
-                            addedBlocks++;
+                        Chunk chunk = world.getChunkFromBlockCoords(pos1);
+                        ExtendedBlockStorage storage = pos1.getY() >> 4 < 16 && pos1.getY() >> 4 >= 0 ? chunk.getBlockStorageArray()[pos1.getY() >> 4] : null;
+                        if (storage != null) {
+                            IBlockState state = storage.get(pos1.getX() & 15, pos1.getY() & 15, pos1.getZ() & 15);
+                            if (state.getBlock() != InitBlocks.CLEANED_VOID_STONE && state.getMaterial() != Material.AIR && !state.getMaterial().isLiquid()) {
+                                storage.set(pos1.getX() & 15, pos1.getY() & 15, pos1.getZ() & 15, InitBlocks.CLEANED_VOID_STONE.getDefaultState());
+                                addedBlocks++;
 
-                            for (EnumFacing facing : EnumFacing.VALUES) {
-                                queue.addLast(pos1.offset(facing));
+                                for (EnumFacing facing : EnumFacing.VALUES) {
+                                    queue.addLast(pos1.offset(facing));
+                                }
                             }
                         }
                     }

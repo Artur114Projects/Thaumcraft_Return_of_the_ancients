@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
+import thaumcraft.api.blocks.BlocksTC;
 
 import java.util.Random;
 
@@ -45,6 +46,10 @@ public class WorldGenRottenSpires extends WorldGenAbstractTree {
         int spireHeight = blockY + (worldIn.getSeaLevel() - blockY) + (finalSpireHeight - ((rand.nextInt(spireHeightOffset) + 1)));
 
         blockPos.setY(blockY);
+
+        if (worldIn.getBlockState(blockPos).getBlock() == BlocksTC.stoneAncient) {
+            return false;
+        }
 
         for (blockPos.pushPos(); blockPos.getY() < spireHeight; blockPos.up()) {
             int fY = spireHeight - blockPos.getY();

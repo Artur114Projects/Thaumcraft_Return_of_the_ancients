@@ -7,6 +7,7 @@ import com.artur.returnoftheancients.ancientworld.map.utils.maps.InteractiveMap;
 import com.artur.returnoftheancients.ancientworld.system.utils.AncientWorldPlayer;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitItems;
+import com.artur.returnoftheancients.items.ItemPhantomTablet;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientProjector;
 import com.artur.returnoftheancients.tileentity.TileEntityDoorBase;
 import com.artur.returnoftheancients.tileentity.interf.ITileDoor;
@@ -79,12 +80,20 @@ public class StructureBoss extends StructureMultiChunk implements IStructureInte
     @Override
     public void update(List<AncientWorldPlayer> players) {
         if (!this.isBossSpawn && !this.isBossDead && !this.world.isRemote) {
+            boolean flag = false;
             for (AncientWorldPlayer player : this.boundingBox.sortCollided(players, (p) -> p.player)) {
                 if (!player.isSleep() && player.player.inventory.hasItemStack(new ItemStack(InitItems.PHANTOM_TABLET))) {
-                    this.closeDoor();
-                    this.updateProjectorState(false);
-                    this.spawnBoss();
+                    flag = true;
+                    break;
                 }
+            }
+
+            if (flag) {
+                this.closeDoor();
+                this.updateProjectorState(false);
+                this.spawnBoss();
+
+                this.removePhantomTablet(players);
             }
         }
     }
@@ -116,6 +125,19 @@ public class StructureBoss extends StructureMultiChunk implements IStructureInte
         if (tile instanceof TileEntityDoorBase) {
             ((TileEntityDoorBase) tile).close();
             ((TileEntityDoorBase) tile).syncTile(false);
+        }
+    }
+
+    private void removePhantomTablet(List<AncientWorldPlayer> players) {
+        for (AncientWorldPlayer player : players) {
+            if (!player.isSleep()) {
+                for (int i = 0; i != player.player.inventory.getSizeInventory(); i++) {
+                    ItemStack stack = player.player.inventory.getStackInSlot(i);
+                    if (stack.getItem() instanceof ItemPhantomTablet) {
+                        player.player.inventory.deleteStack(stack);
+                    }
+                }
+            }
         }
     }
 

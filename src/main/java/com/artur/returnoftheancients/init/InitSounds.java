@@ -23,6 +23,8 @@ public class InitSounds {
     public static SoundTRA WHISPER = create("whisper");
     public static SoundTRA RUI_DEAD = create("rui_dead");
     public static SoundTRA HEARTBEAT = create("heartbeat");
+    public static SoundTRA SPOTLIGHT = create("spotlight");
+    public static SoundTRA PROJECTOR = create("projector");
     public static SoundTRA DOOR_OPEN_2 = create("door_open_2");
     public static SoundTRA DOOR_OPEN_1 = create("door_open_1");
     public static SoundTRA PORTAL_IMPACT = create("portal_impact");
@@ -32,7 +34,6 @@ public class InitSounds {
     public static SoundTRA PEDESTAL_ACTIVATED = create("pedestal_activated");
     public static SoundTRA PNEUMATIC_PUFF_LONG = create("pneumatic_puff_long");
     public static SoundTRA FIRE_TRAP_START_SOUND = create("fire_trap_sound_start");
-    public static SoundTRA ANCIENT_PORTAL_LIGHT_ON = create("ancient_portal_light_on");
     public static SoundTRA ANCIENT_CONTROLLER_ACTIVATE = create("ancient_controller_activate");
     public static SoundTRA ANCIENT_CONTROLLER_DEACTIVATE = create("ancient_controller_deactivate");
 

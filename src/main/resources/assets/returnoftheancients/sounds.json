@@ -99,11 +99,11 @@
       }
     ]
   },
-  "ancient_portal_light_on": {
+  "spotlight": {
     "category": "ambient",
     "sounds": [
       {
-        "name": "returnoftheancients:ancient_portal_light_on",
+        "name": "returnoftheancients:spotlight",
         "stream": false,
         "volume": 1
       }
@@ -154,6 +154,16 @@
     "sounds": [
       {
         "name": "returnoftheancients:pneumatic_puff_long",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  },
+  "projector": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "returnoftheancients:projector",
         "stream": false,
         "volume": 1
       }

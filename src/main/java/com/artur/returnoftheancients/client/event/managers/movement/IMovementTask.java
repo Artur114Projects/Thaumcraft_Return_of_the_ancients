@@ -6,4 +6,5 @@ public interface IMovementTask {
     void move(EntityPlayer player);
     boolean isDoneWork();
     boolean isNeedToWorkAlone();
+    default void onDoneWork() {}
 }

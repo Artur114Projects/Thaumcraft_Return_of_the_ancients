@@ -583,4 +583,12 @@ public class MiscHandler {
     public static ChunkPos chunkPosFromLong(long data) {
         return new ChunkPos((int) (data), (int) (data >> 32));
     }
+
+    public static int mod(double v) {
+        if (v < 0) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
 }

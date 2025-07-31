@@ -150,6 +150,7 @@ public class ClientAncientPortal {
         private boolean firstTick = true;
         private final ElevatingType type;
         private boolean fastEnd = false;
+        private boolean isDone = false;
         private final float speed;
         private int lastY = -100;
         private final int toY;
@@ -159,8 +160,6 @@ public class ClientAncientPortal {
             this.speed = type == ElevatingType.UP ? speed : -speed;
             this.type = type;
             this.toY = toY;
-
-
         }
 
         @Override
@@ -199,12 +198,17 @@ public class ClientAncientPortal {
 
         @Override
         public boolean isDoneWork() {
-            return (type == ElevatingType.UP ? lastY >= toY : lastY <= toY) && lastY != -100;
+            return ((type == ElevatingType.UP ? lastY >= toY : lastY <= toY) && lastY != -100) || this.isDone;
         }
 
         @Override
         public boolean isNeedToWorkAlone() {
             return true;
+        }
+
+        @Override
+        public void onDoneWork() {
+            this.isDone = true;
         }
 
         public boolean isUp() {

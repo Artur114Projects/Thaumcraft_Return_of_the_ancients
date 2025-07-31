@@ -156,10 +156,10 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
                 this.portal.updateActiveState(state);
 
                 UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
-                this.world.playSound(null, blockPos.setPos(tilePos).add(0, 2, 0), InitSounds.ANCIENT_PORTAL_LIGHT_ON.SOUND, SoundCategory.AMBIENT, 1, 1);
+                this.world.playSound(null, blockPos.setPos(tilePos).add(0, 2, 0), InitSounds.SPOTLIGHT.SOUND, SoundCategory.AMBIENT, 1, 1);
 
                 blockPos.setPos(portal.portalPos).setY(portal.posY + 10);
-                blockPos.offsetAndCallRunnable(OffsetsUtil.getCornerOffsets(2, 13), pos -> this.world.playSound(null, pos, InitSounds.ANCIENT_PORTAL_LIGHT_ON.SOUND, SoundCategory.AMBIENT, 1, 1));
+                blockPos.offsetAndCallRunnable(OffsetsUtil.getCornerOffsets(2, 13), pos -> this.world.playSound(null, pos, InitSounds.SPOTLIGHT.SOUND, SoundCategory.AMBIENT, 1, 1));
 
                 UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
             });

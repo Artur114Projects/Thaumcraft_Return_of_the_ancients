@@ -24,6 +24,7 @@ public class GenAncientArch {
     private EnumFacing offset2Arch = null;
     private EnumFacing genOffset = null;
     private BlockPos start = null;
+    private int fallCounter = 0;
     private BlockPos end = null;
     private World world = null;
     private Random rand = null;
@@ -77,7 +78,8 @@ public class GenAncientArch {
             }
         }
 
-        if (!flag) {
+        if (!flag && this.fallCounter < 8) {
+            this.fallCounter++;
             this.fallArchChunks();
         }
     }
@@ -154,6 +156,7 @@ public class GenAncientArch {
         this.rand = null;
         this.end = null;
 
+        this.fallCounter = 0;
         this.length = 0;
         this.dx = 0;
         this.dy = 0;

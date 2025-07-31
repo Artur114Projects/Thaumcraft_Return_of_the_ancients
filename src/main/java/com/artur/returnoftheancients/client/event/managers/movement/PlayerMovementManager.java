@@ -45,6 +45,15 @@ public class PlayerMovementManager {
 
         if (!TO_DELETE.isEmpty()) {
             for (String key : TO_DELETE) {
+                IMovementTask task = WORK_ALONE_TASKS.get(key);
+                if (task == null) {
+                    task = TASKS.get(key);
+                }
+
+                if (task != null) {
+                    task.onDoneWork();
+                }
+
                 WORK_ALONE_TASKS.remove(key);
                 TASKS.remove(key);
             }

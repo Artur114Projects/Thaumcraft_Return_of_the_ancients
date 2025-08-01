@@ -26,6 +26,7 @@ public class CommonProxy {
 	
     public void preInit(FMLPreInitializationEvent event) {
         CraftingRegister.register();
+        RegisterHandler.preInit();
         TRACapabilities.preInit();
         PlayerTimer.preInit();
     }

@@ -57,9 +57,9 @@ public class InitBiome {
     }
 
     public static void registerBiomeInfo() {
-        BiomeHandler.registerBiomeInfo(TAINT_TYPE, 0.0F, Aspect.FLUX, false, 0.0F);
-        BiomeHandler.registerBiomeInfo(TAINT_TYPE_L, 0.0F, Aspect.FLUX, false, 0.0F);
-        BiomeHandler.registerBiomeInfo(TAINT_TYPE_L_SEA, 0.0F, Aspect.FLUX, false, 0.0F);
+        BiomeHandler.registerBiomeInfo(TAINT_TYPE, 0.04F, Aspect.FLUX, false, 0.0F);
+        BiomeHandler.registerBiomeInfo(TAINT_TYPE_L, 0.04F, Aspect.FLUX, false, 0.0F);
+        BiomeHandler.registerBiomeInfo(TAINT_TYPE_L_SEA, 0.04F, Aspect.FLUX, false, 0.0F);
     }
 
     public static void registerBiomeArrays() {

@@ -16,6 +16,7 @@ public class FogManager {
     public final DefaultFog defaultFog = new DefaultFog();
     public FogParams oldFogParams = this.defaultFog;
     public FogParams newFogParams = this.defaultFog;
+    public int prevFogTime = 0;
     public float fogCache = 0;
     public int fogTime = 0;
 
@@ -31,13 +32,13 @@ public class FogManager {
         this.defaultFog.update(e);
 
         if (this.oldFogParams instanceof IDynamicFog) {
-            ((IDynamicFog) this.oldFogParams).update(e);
+            ((IDynamicFog) this.oldFogParams).update(e, this.newFogParams, false);
         }
         if (this.newFogParams instanceof IDynamicFog) {
-            ((IDynamicFog) this.newFogParams).update(e);
+            ((IDynamicFog) this.newFogParams).update(e, this.oldFogParams, true);
         }
 
-        float deltaPrev = (float) MathHelper.clamp(this.fogTime - 1, 0, Integer.MAX_VALUE) / this.newFogParams.fogChangeTime(this.oldFogParams);
+        float deltaPrev = (float) this.prevFogTime / this.newFogParams.fogChangeTime(this.oldFogParams);
         float delta = (float) this.fogTime / this.newFogParams.fogChangeTime(this.oldFogParams);
         this.oldFogParams.mix(this.newFogParams, RenderHandler.interpolate(deltaPrev, delta, (float) e.getRenderPartialTicks())).bind(e);
     }
@@ -60,12 +61,20 @@ public class FogManager {
         int fogChangeTime = this.newFogParams.fogChangeTime(this.oldFogParams);
 
         if (RenderEventHandler.fogDuration != this.newFogParams.fogDuration) {
-            this.fogCache += (float) (this.newFogParams.fogDuration - this.oldFogParams.fogDuration) / fogChangeTime;
-            float absCache = Math.abs(this.fogCache);
-            if (absCache > 1) {
-                RenderEventHandler.fogDuration += (int) this.fogCache;
-                int mod = MiscHandler.mod(this.fogCache);
-                this.fogCache = (absCache - ((int) absCache)) * mod;
+            this.fogCache += (float) Math.abs(this.newFogParams.fogDuration - this.oldFogParams.fogDuration) / fogChangeTime;
+            if (this.fogCache > 1) {
+                if (RenderEventHandler.fogDuration < this.newFogParams.fogDuration) {
+                    RenderEventHandler.fogDuration += (int) this.fogCache;
+                    if (RenderEventHandler.fogDuration > this.newFogParams.fogDuration) {
+                        RenderEventHandler.fogDuration = this.newFogParams.fogDuration;
+                    }
+                } else {
+                    RenderEventHandler.fogDuration -= (int) this.fogCache;
+                    if (RenderEventHandler.fogDuration < this.newFogParams.fogDuration) {
+                        RenderEventHandler.fogDuration = this.newFogParams.fogDuration;
+                    }
+                }
+                this.fogCache -= (int) this.fogCache;
             }
         }
 
@@ -74,6 +83,7 @@ public class FogManager {
             RenderEventHandler.fogFiddled = true;
         }
 
+        this.prevFogTime = this.fogTime;
         if (this.fogTime < fogChangeTime) {
             this.fogTime++;
         } else if (this.fogTime > fogChangeTime) {
@@ -91,7 +101,7 @@ public class FogManager {
 
         float scaleBase = (float) this.fogTime / this.newFogParams.fogChangeTime(this.oldFogParams);
         MixedFog mix = this.oldFogParams.mix(this.newFogParams, scaleBase);
-        this.oldFogParams = new FogParams(mix, RenderEventHandler.fogDuration);
+        this.oldFogParams = this.newFogParams.copy(mix, RenderEventHandler.fogDuration);
         this.newFogParams = fog;
 
         this.fogTime = (int) (this.newFogParams.fogChangeTime(this.oldFogParams) * (1 - scaleBase));
@@ -120,6 +130,10 @@ public class FogManager {
             this.r = fog.r;
             this.b = fog.b;
             this.g = fog.g;
+        }
+
+        public FogParams copy(MixedFog fog, int fogDuration) {
+            return new FogParams(fog, fogDuration);
         }
 
         public MixedFog mix(FogParams end, float delta) {
@@ -173,6 +187,6 @@ public class FogManager {
 
     public interface IDynamicFog {
         int update(EntityPlayer player, FogParams fog, boolean isNew, int fogTime);
-        void update(EntityViewRenderEvent.FogColors e);
+        void update(EntityViewRenderEvent.FogColors e, FogParams fog, boolean isNew);
     }
 }

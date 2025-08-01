@@ -17,12 +17,17 @@ import com.artur.returnoftheancients.tileentity.BlockTileEntity;
 import com.artur.returnoftheancients.util.interfaces.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionHelper;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -48,6 +53,7 @@ import static net.minecraft.init.Items.*;
 
 @EventBusSubscriber(modid = Referense.MODID)
 public class RegisterHandler {
+	public static void preInit() {}
 
 	@SubscribeEvent
 	public static void onBlockRegister(RegistryEvent.Register<Block> event) {
@@ -84,7 +90,6 @@ public class RegisterHandler {
 		for (BaseBlockContainer<?> block : InitTileEntity.TILE_ENTITIES_CONTAINER) {
 			GameRegistry.registerTileEntity(block.getTileEntityClass(), block.getRegistryName().toString());
 		}
-
 	}
 
 	public static void registerPackets() {

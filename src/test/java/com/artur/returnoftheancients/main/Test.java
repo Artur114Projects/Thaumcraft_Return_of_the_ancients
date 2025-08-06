@@ -64,8 +64,6 @@ public class Test { //
         return null; // Если путь не найден
     }
 
-
-
     public static void main(String[] args) {
 //        GenPhase.initAllGenPhases().getMap(System.currentTimeMillis(), 17);
         Random rand = new Random();

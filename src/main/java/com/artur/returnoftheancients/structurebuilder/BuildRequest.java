@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.structurebuilder;
 
 import com.artur.returnoftheancients.structurebuilder.interf.IBuildProperties;
 import com.artur.returnoftheancients.structurebuilder.interf.IStructureBuilder;
+import com.artur.returnoftheancients.util.interfaces.Function2;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -19,6 +20,7 @@ public class BuildRequest implements IBuildProperties {
     protected Function<IBlockState, Boolean> isUseEBSHook = null;
     protected boolean isNeedMarkRenderUpdate = true;
     protected Function<IBlockState, IBlockState> blockStateHook = null;
+    protected Function2<IBlockState, BlockPos, Boolean> blockProtectHook = null;
     protected boolean isPosAsXZCenter = false;
 
     protected BuildRequest(World world, BlockPos pos, IStructureBuilder builder) {
@@ -83,6 +85,18 @@ public class BuildRequest implements IBuildProperties {
     }
     public BuildRequest addBlockStateHook(Function<IBlockState, IBlockState> hook) {
         this.blockStateHook = hook;
+        return this;
+    }
+
+    @Override
+    public boolean blockProtectHook(IBlockState state, BlockPos pos) {
+        if (this.blockProtectHook == null) {
+            return true;
+        }
+        return this.blockProtectHook.apply(state, pos);
+    }
+    public BuildRequest addBlockProtectHook(Function2<IBlockState, BlockPos, Boolean> hook) {
+        this.blockProtectHook = hook;
         return this;
     }
 

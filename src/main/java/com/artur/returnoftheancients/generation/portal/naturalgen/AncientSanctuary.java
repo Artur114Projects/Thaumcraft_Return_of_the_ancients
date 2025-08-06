@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.generation.portal.naturalgen;
 
 import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
+import com.artur.returnoftheancients.structurebuilder.BuildRequest;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.generation.portal.util.OffsetsUtil;
 import com.artur.returnoftheancients.events.ServerEventsHandler;
@@ -14,6 +15,7 @@ import com.artur.returnoftheancients.util.interfaces.IWriteToNBT;
 import com.artur.returnoftheancients.util.interfaces.RunnableWithParam;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -68,7 +70,7 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
         UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
 
         blockPos.setPos(pos).setY(analyzer.getMaxHeight());
-        StructureBuildersManager.createBuildRequest(world, blockPos.addY(2), type.getStructureName()).setIgnoreAir().setNeedProtect().build();
+        this.type.createBuildRequest(world, blockPos.addY(2)).build();
 
         if (!type.isBroken()) {
             blockPos.pushPos();
@@ -206,10 +208,25 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
     private void callRunnableOnLightOffsets(RunnableWithParam<UltraMutableBlockPos> run) {
         UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
 
-        blockPos.setPos(tilePos).addY(2);
-        blockPos.offsetAndCallRunnable(EnumFacing.HORIZONTALS, run);
+        blockPos.setPos(tilePos).addY(3);
+        run.run(blockPos);
+        for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+            blockPos.pushPos();
+            blockPos.offset(facing, 3);
+            run.run(blockPos);
+            blockPos.popPos();
+        }
 
-        BlockPos[] backLights = OffsetsUtil.getCornerOffsets(3, 11);
+        BlockPos[] backLights = new BlockPos[] {
+                new BlockPos(3, 0, 4),
+                new BlockPos(4, 0, 3),
+                new BlockPos(10, 0, 3),
+                new BlockPos(11, 0, 4),
+                new BlockPos(11, 0, 10),
+                new BlockPos(10, 0, 11),
+                new BlockPos(4, 0, 11),
+                new BlockPos(3, 0, 10),
+        };
 
         blockPos.setPos(pos);
         for (int i = 0; i != 2; i++) {
@@ -264,6 +281,14 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
             this.structureName = structureName;
             this.isBrokenArch = isBrokenArch;
             this.isBroken = isBroken;
+        }
+
+        public BuildRequest createBuildRequest(World world, BlockPos pos) {
+            if (this == CULTIST) {
+                return StructureBuildersManager.createBuildRequest(world, pos, this.getStructureName()).setIgnoreAir().setNeedProtect().addBlockProtectHook(((state, pos1) -> state.getBlock() != Blocks.TORCH && state.getBlock() != BlocksTC.bannerCrimsonCult));
+            } else {
+                return StructureBuildersManager.createBuildRequest(world, pos, this.getStructureName()).setIgnoreAir().setNeedProtect();
+            }
         }
 
         public String getStructureName() {

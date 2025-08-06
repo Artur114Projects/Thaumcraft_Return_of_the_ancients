@@ -87,7 +87,9 @@ public class StructureBuilder implements IStructureBuilder {
             if (state.getMaterial() == Material.AIR && properties.isIgnoreAir()) continue;
             if (this.blockPos.getY() >> 4 >= 16 || this.blockPos.getY() >> 4 < 0) continue;
 
-            if (properties.isNeedProtect() && state.getMaterial() != Material.AIR) BlockProtectHandler.protect(world, this.blockPos);
+            if (properties.isNeedProtect() && state.getMaterial() != Material.AIR && properties.blockProtectHook(state, blockPos)) {
+                BlockProtectHandler.protect(world, this.blockPos);
+            }
 
             if (this.blocksUseEbs[type] && properties.isUseEBSHook(state)) {
                 ExtendedBlockStorage storage = this.blockPos.ebs(world);

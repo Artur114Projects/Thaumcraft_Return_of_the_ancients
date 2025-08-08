@@ -177,6 +177,7 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
         } else if (this.isPlayerCollideToWay) {
             ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.removeMovementTask("RETENTION_Y_" + this.chunkPos);
             ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.removeMovementTask("ELEVATOR_" + this.chunkPos);
+            this.isPlayerCollideToWay = false;
         }
     }
 

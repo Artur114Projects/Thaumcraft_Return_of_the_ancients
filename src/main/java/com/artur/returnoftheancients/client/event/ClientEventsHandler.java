@@ -20,6 +20,7 @@ public class ClientEventsHandler {
     public static final PlayerMovementManager PLAYER_MOVEMENT_MANAGER = new PlayerMovementManager();
     public static final ThaumcraftFogFixer THAUMCRAFT_FOG_FIXER = new ThaumcraftFogFixer();
     public static final CustomRainManager CUSTOM_RAIN_MANAGER = new CustomRainManager();
+    public static final GlobalTickManager GLOBAL_TICK_MANAGER = new GlobalTickManager();
     public static final CameraFXManager CAMERA_FX_MANAGER = new CameraFXManager();
     public static final FogManager FOG_MANAGER = new FogManager();
 
@@ -48,6 +49,7 @@ public class ClientEventsHandler {
         PLAYER_MOVEMENT_MANAGER.tickEventClientTickEvent(e);
         PLAYER_IN_BIOME_MANAGER.tickEventClientTickEvent(e);
         CUSTOM_RAIN_MANAGER.tickEventClientTickEvent(e);
+        GLOBAL_TICK_MANAGER.tickEventClientTickEvent(e);
         CAMERA_FX_MANAGER.tickEventClientTickEvent(e);
         FOG_MANAGER.tickEventClientTickEvent(e);
     }

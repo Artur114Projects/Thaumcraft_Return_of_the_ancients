@@ -11,22 +11,22 @@ public class MaterialArray {
     private float resistance;
     private float hardness;
 
-    public MaterialArray setHardness(float hardness) {
+    protected MaterialArray setHardness(float hardness) {
         this.hardness = hardness;
         return this;
     }
 
-    public MaterialArray setMaterial(Material material) {
+    protected MaterialArray setMaterial(Material material) {
         this.material = material;
         return this;
     }
 
-    public MaterialArray setResistance(float resistance) {
+    protected MaterialArray setResistance(float resistance) {
         this.resistance = resistance;
         return this;
     }
 
-    public MaterialArray setSoundType(SoundType soundType) {
+    protected MaterialArray setSoundType(SoundType soundType) {
         this.soundType = soundType;
         return this;
     }

@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.items;
 
 
+import baubles.api.BaublesApi;
 import com.artur.returnoftheancients.ancientworld.map.build.AncientLayer1Builder;
 import com.artur.returnoftheancients.ancientworld.map.gen.GenPhase;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
@@ -10,6 +11,7 @@ import com.artur.returnoftheancients.generation.biomes.decorate.WorldGenTaintBig
 import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.generation.portal.base.client.ClientAncientPortal;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
+import com.artur.returnoftheancients.tileentity.interf.ITileBurner;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,8 +19,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -119,11 +123,21 @@ public class ItemDebug extends BaseItem {
 //				ClientEventsHandler.FOG_MANAGER.setFogParams(new FogManager.FogParams(100, 20, 100, 20));
 //			}
 		}
+		if (player.isSneaking()) {
+			TileEntity tile = worldIn.getTileEntity(pos);
+			if (tile instanceof ITileBurner) {
+				if (((ITileBurner) tile).isActive()) {
+					((ITileBurner) tile).deactivate();
+				} else {
+					((ITileBurner) tile).activate();
+				}
+			}
+		}
 		if (!worldIn.isRemote) {
-
-			if (player.isSneaking()) {
-				new WorldGenTaintBigTree(false).generate(worldIn, new Random(), pos.up());
-            }
+			System.out.println(BaublesApi.getBaublesHandler(player).getSlots());
+			System.out.println(BaublesApi.getBaublesHandler(player).isItemValidForSlot(10, ItemStack.EMPTY, player));
+			BaublesApi.getBaublesHandler(player).setStackInSlot(10, new ItemStack(Items.WOODEN_AXE));
+			System.out.println(BaublesApi.getBaublesHandler(player).getStackInSlot(10));
 
 
 //			if (player.isSneaking()) {

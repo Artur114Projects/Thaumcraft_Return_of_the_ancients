@@ -19,6 +19,7 @@ public class InitSounds {
     private static final List<SoundEvent> soundEvents = new ArrayList<>();
     public static final HashMap<String, SoundEvent> SOUND_MAP = new HashMap<>();
 
+    public static SoundTRA FAN = create("fan");
     public static SoundTRA BUM = create("bum");
     public static SoundTRA WHISPER = create("whisper");
     public static SoundTRA RUI_DEAD = create("rui_dead");

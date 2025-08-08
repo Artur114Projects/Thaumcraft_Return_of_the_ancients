@@ -103,8 +103,7 @@ public class FogManager {
         MixedFog mix = this.oldFogParams.mix(this.newFogParams, scaleBase);
         this.oldFogParams = this.newFogParams.copy(mix, RenderEventHandler.fogDuration);
         this.newFogParams = fog;
-
-        this.fogTime = (int) (this.newFogParams.fogChangeTime(this.oldFogParams) * (1 - scaleBase));
+        this.fogTime = 0;
     }
 
     @SideOnly(Side.CLIENT)

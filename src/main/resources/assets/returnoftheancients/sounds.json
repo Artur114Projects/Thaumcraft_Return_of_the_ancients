@@ -168,5 +168,15 @@
         "volume": 1
       }
     ]
+  },
+  "fan": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "returnoftheancients:fan",
+        "stream": false,
+        "volume": 1
+      }
+    ]
   }
 }

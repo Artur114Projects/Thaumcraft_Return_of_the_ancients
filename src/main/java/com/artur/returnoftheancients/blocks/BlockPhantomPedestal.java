@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockPhantomPedestal extends BlockTileEntity<TileEntityPhantomPedestal> {
     public BlockPhantomPedestal(String name) {
-        super(name, Material.GLASS, 2.0F, 10.0F, SoundType.STONE);
+        super(name, Material.GLASS, 2.0F, 10.0F, SoundType.GLASS);
 
         this.bindTESR(new TileEntityPhantomPedestalRender());
         this.setNotFillAndOpaqueCube();

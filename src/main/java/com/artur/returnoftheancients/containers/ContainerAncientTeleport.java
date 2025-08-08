@@ -111,7 +111,6 @@ public class ContainerAncientTeleport extends ContainerWithPages {
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);
 

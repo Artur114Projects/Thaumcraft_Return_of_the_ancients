@@ -43,6 +43,7 @@ public class BlockPedestalActive extends BlockTileEntity<TileEntityPedestalActiv
         this.setDefaultState(this.getDefaultState().withProperty(DIRECTION, EnumFacing.EAST).withProperty(ROTATE, false));
         this.bindTESR(new TileEntityPedestalActiveRender());
         this.setTRACreativeTab();
+        this.setForCreative();
     }
 
     @Override

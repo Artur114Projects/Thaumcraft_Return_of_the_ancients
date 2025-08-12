@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.tileentity;
 
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleFlame;
-import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
+import com.artur.returnoftheancients.client.fx.particle.ParticleFlameCanCollide;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import net.minecraft.block.state.IBlockState;
@@ -175,7 +175,7 @@ public class TileEntityFireTrap extends TileEntity implements ITickable {
 
     @SideOnly(Side.CLIENT)
     public static void spawnCustomParticle(World world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-        Minecraft.getMinecraft().effectRenderer.addEffect(new TrapParticleFlame(world, x, y, z, xSpeed, ySpeed, zSpeed));
+        Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleFlameCanCollide(world, x, y, z, xSpeed, ySpeed, zSpeed));
     }
 
     @SideOnly(Side.CLIENT)

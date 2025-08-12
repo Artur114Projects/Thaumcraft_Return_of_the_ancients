@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.tileentity;
 
 import com.artur.returnoftheancients.client.audio.BlockAncientFanSound;
 import com.artur.returnoftheancients.client.audio.BlockProjectorSound;
+import com.artur.returnoftheancients.client.fx.particle.ParticleFlameCanCollide;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.handlers.RenderHandler;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockPlaceListener;
@@ -63,53 +64,11 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
         }
 
         if (this.world.isRemote && this.spinSpeed(1) > 4) {
-            EnumFacing facing0 = EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, this.axis);
-            EnumFacing facing1 = EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.NEGATIVE, this.axis);
-            UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
-            if (this.world.isAirBlock(blockPos.setPos(this.pos).offset(facing0))) {
-                float speed = 0.6F + (0.3F * (this.spinSpeed(1) - 4) / 2.0F);
-                double x = this.pos.getX() + 0.5 + (facing0.getFrontOffsetX() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
-                double y = this.pos.getY() + 0.5 + (facing0.getFrontOffsetY() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
-                double z = this.pos.getZ() + 0.5 + (facing0.getFrontOffsetZ() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
-                this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, speed * facing0.getFrontOffsetX(), speed * facing0.getFrontOffsetY(), speed * facing0.getFrontOffsetZ());
-
-                if (this.spinSpeed(1) >= 6 && world.rand.nextFloat() < 0.25F) {
-                    x = this.pos.getX() + 0.5 + (facing0.getFrontOffsetX() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
-                    y = this.pos.getY() + 0.5 + (facing0.getFrontOffsetY() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
-                    z = this.pos.getZ() + 0.5 + (facing0.getFrontOffsetZ() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
-                    this.world.spawnParticle(EnumParticleTypes.FLAME, x, y, z, (speed + 0.1F) * facing0.getFrontOffsetX(), (speed + 0.1F) * facing0.getFrontOffsetY(), (speed + 0.1F) * facing0.getFrontOffsetZ());
-                }
-            }
-            if (this.world.isAirBlock(blockPos.setPos(this.pos).offset(facing1))) {
-                float speed = 0.6F + (0.3F * (this.spinSpeed(1) - 4) / 2.0F);
-                double x = this.pos.getX() + 0.5 + (facing1.getFrontOffsetX() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
-                double y = this.pos.getY() + 0.5 + (facing1.getFrontOffsetY() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
-                double z = this.pos.getZ() + 0.5 + (facing1.getFrontOffsetZ() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
-                this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, speed * facing1.getFrontOffsetX(), speed * facing1.getFrontOffsetY(), speed * facing1.getFrontOffsetZ());
-
-                if (this.spinSpeed(1) >= 6 && world.rand.nextFloat() < 0.25F) {
-                    x = this.pos.getX() + 0.5 + (facing1.getFrontOffsetX() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
-                    y = this.pos.getY() + 0.5 + (facing1.getFrontOffsetY() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
-                    z = this.pos.getZ() + 0.5 + (facing1.getFrontOffsetZ() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
-                    this.world.spawnParticle(EnumParticleTypes.FLAME, x, y, z, (speed + 0.1F) * facing1.getFrontOffsetX(), (speed + 0.1F) * facing1.getFrontOffsetY(), (speed + 0.1F) * facing1.getFrontOffsetZ());
-                }
-
-            }
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+            this.spawnParticles();
         }
 
         if (this.world.isRemote) {
-            UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
-            this.redstoneLevel = 0;
-            for (EnumFacing facing : EnumFacing.VALUES) {
-                if (facing.getAxis() == this.axis) {
-                    continue;
-                }
-
-                int r = world.getRedstonePower(blockPos.setPos(this.pos).offset(facing), facing.getOpposite());
-                if (this.redstoneLevel < r) this.redstoneLevel = r;
-            }
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+            this.checkRedStone();
         }
     }
 
@@ -120,8 +79,67 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
         }
     }
 
+    @Override
+    public void validate() {
+        if (this.world.isRemote && this.isInvalid()) {
+            Minecraft.getMinecraft().getSoundHandler().playSound(new BlockAncientFanSound(this));
+        }
+        super.validate();
+    }
+
     private float localSpinSpeed() {
         return 3.0F + 3.0F * (this.redstoneLevel / 15.0F);
+    }
+
+    private void checkRedStone() {
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        this.redstoneLevel = 0;
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            if (facing.getAxis() == this.axis) {
+                continue;
+            }
+
+            int r = world.getRedstonePower(blockPos.setPos(this.pos).offset(facing), facing.getOpposite());
+            if (this.redstoneLevel < r) this.redstoneLevel = r;
+        }
+        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void spawnParticles() {
+        EnumFacing facing0 = EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, this.axis);
+        EnumFacing facing1 = EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.NEGATIVE, this.axis);
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        if (this.world.isAirBlock(blockPos.setPos(this.pos).offset(facing0))) {
+            float speed = 0.6F + (0.3F * (this.spinSpeed(1) - 4) / 2.0F);
+            double x = this.pos.getX() + 0.5 + (facing0.getFrontOffsetX() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
+            double y = this.pos.getY() + 0.5 + (facing0.getFrontOffsetY() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
+            double z = this.pos.getZ() + 0.5 + (facing0.getFrontOffsetZ() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
+            this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, speed * facing0.getFrontOffsetX(), speed * facing0.getFrontOffsetY(), speed * facing0.getFrontOffsetZ());
+
+            if (this.spinSpeed(1) >= 6 && world.rand.nextFloat() < 0.25F) {
+                x = this.pos.getX() + 0.5 + (facing0.getFrontOffsetX() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
+                y = this.pos.getY() + 0.5 + (facing0.getFrontOffsetY() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
+                z = this.pos.getZ() + 0.5 + (facing0.getFrontOffsetZ() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
+                Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleFlameCanCollide(this.world, x, y, z, (speed + 0.1F) * facing0.getFrontOffsetX(), (speed + 0.1F) * facing0.getFrontOffsetY(), (speed + 0.1F) * facing0.getFrontOffsetZ()));
+            }
+        }
+        if (this.world.isAirBlock(blockPos.setPos(this.pos).offset(facing1))) {
+            float speed = 0.6F + (0.3F * (this.spinSpeed(1) - 4) / 2.0F);
+            double x = this.pos.getX() + 0.5 + (facing1.getFrontOffsetX() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
+            double y = this.pos.getY() + 0.5 + (facing1.getFrontOffsetY() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
+            double z = this.pos.getZ() + 0.5 + (facing1.getFrontOffsetZ() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
+            this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, speed * facing1.getFrontOffsetX(), speed * facing1.getFrontOffsetY(), speed * facing1.getFrontOffsetZ());
+
+            if (this.spinSpeed(1) >= 6 && world.rand.nextFloat() < 0.25F) {
+                x = this.pos.getX() + 0.5 + (facing1.getFrontOffsetX() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
+                y = this.pos.getY() + 0.5 + (facing1.getFrontOffsetY() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
+                z = this.pos.getZ() + 0.5 + (facing1.getFrontOffsetZ() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
+                Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleFlameCanCollide(this.world, x, y, z, (speed + 0.1F) * facing1.getFrontOffsetX(), (speed + 0.1F) * facing1.getFrontOffsetY(), (speed + 0.1F) * facing1.getFrontOffsetZ()));
+            }
+
+        }
+        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
     }
 
     @Override

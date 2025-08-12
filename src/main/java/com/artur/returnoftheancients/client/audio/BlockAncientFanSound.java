@@ -23,7 +23,9 @@ public class BlockAncientFanSound extends MovingSound {
 
     @Override
     public void update() {
-        this.donePlaying = this.tile.isInvalid();
+        if (this.tile.isInvalid()) {
+            this.donePlaying = true;
+        }
 
         if (tile.spinSpeed(1) > 2) {
             this.pitch = 1.0F + (0.8F * ((tile.spinSpeed(1) - 2.0F) / 4.0F));

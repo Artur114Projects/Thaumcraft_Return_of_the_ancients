@@ -1,53 +1,38 @@
 package com.artur.returnoftheancients.items;
 
 
-import baubles.api.BaublesApi;
-import com.artur.returnoftheancients.ancientworld.map.build.AncientLayer1Builder;
-import com.artur.returnoftheancients.ancientworld.map.gen.GenPhase;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
-import com.artur.returnoftheancients.client.fx.particle.TrapParticleFlame;
-import com.artur.returnoftheancients.events.ServerEventsHandler;
-import com.artur.returnoftheancients.generation.biomes.decorate.WorldGenTaintBigTree;
-import com.artur.returnoftheancients.generation.generators.GenStructure;
-import com.artur.returnoftheancients.generation.portal.base.client.ClientAncientPortal;
-import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
+import com.artur.returnoftheancients.client.fx.particle.ParticleFlameCanCollide;
 import com.artur.returnoftheancients.tileentity.interf.ITileBurner;
-import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IRarity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import thaumcraft.client.fx.FXDispatcher;
-import thaumcraft.common.blocks.world.taint.TaintHelper;
-import thaumcraft.common.entities.monster.boss.EntityEldritchWarden;
 
-import java.util.List;
 import java.util.Random;
 
-public class ItemDebug extends BaseItem {
+public class ItemDebugCarrot extends BaseItem {
+	private final Random rand = new Random();
 
-	public ItemDebug(String name) {
+	public ItemDebugCarrot(String name) {
 		super(name);
-		setMaxStackSize(1);
-		setContainerItem(this);
-		setMaxDamage(2);
+		this.setMaxStackSize(1);
+		this.setContainerItem(this);
+		this.setMaxDamage(2);
+		this.setTRACreativeTab();
 	}
 
 	@Override
@@ -134,12 +119,6 @@ public class ItemDebug extends BaseItem {
 			}
 		}
 		if (!worldIn.isRemote) {
-			System.out.println(BaublesApi.getBaublesHandler(player).getSlots());
-			System.out.println(BaublesApi.getBaublesHandler(player).isItemValidForSlot(10, ItemStack.EMPTY, player));
-			BaublesApi.getBaublesHandler(player).setStackInSlot(10, new ItemStack(Items.WOODEN_AXE));
-			System.out.println(BaublesApi.getBaublesHandler(player).getStackInSlot(10));
-
-
 //			if (player.isSneaking()) {
 //				BlockProtectHandler.protect(worldIn, pos);
 //			} else {
@@ -253,7 +232,6 @@ public class ItemDebug extends BaseItem {
 		playerIn.setActiveHand(handIn);
 		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
-
 	@SideOnly(Side.CLIENT)
 	public static void spawnCustomParticleTM(World world, double radius, double angularVelocity, EntityPlayer player, double yOffset) {
 		Minecraft.getMinecraft().effectRenderer.addEffect(new RotateParticleSmokeInPlayer(world, radius, angularVelocity, player, yOffset));
@@ -261,7 +239,7 @@ public class ItemDebug extends BaseItem {
 
 	@SideOnly(Side.CLIENT)
 	public static void spawnCustomParticle(World world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-		Minecraft.getMinecraft().effectRenderer.addEffect(new TrapParticleFlame(world, x, y, z, xSpeed, ySpeed, zSpeed));
+		Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleFlameCanCollide(world, x, y, z, xSpeed, ySpeed, zSpeed));
 	}
 
 	@Override
@@ -270,8 +248,7 @@ public class ItemDebug extends BaseItem {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(TextFormatting.UNDERLINE + "M" + TextFormatting.RESET + TextFormatting.OBFUSCATED + "e" + TextFormatting.RESET  + TextFormatting.BOLD + "o" + TextFormatting.RESET  + TextFormatting.STRIKETHROUGH + "w");
+	public IRarity getForgeRarity(ItemStack stack) {
+		return EnumRarity.EPIC;
 	}
-
 }

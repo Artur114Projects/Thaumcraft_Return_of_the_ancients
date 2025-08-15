@@ -20,6 +20,7 @@ public class MovementElevatorSound extends MovingSound {
         this.repeat = true;
         this.repeatDelay = 0;
         this.volume = 0.1F;
+        this.attenuationType = AttenuationType.NONE;
     }
 
     public void update() {

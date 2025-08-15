@@ -31,7 +31,7 @@ public class ClientEventsHandler {
         FOG_MANAGER.entityViewRenderEventFogColors(e);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void fogRender(EntityViewRenderEvent.RenderFogEvent e) {
         PLAYER_IN_BIOME_MANAGER.entityViewRenderEventRenderFogEvent(e);
     }

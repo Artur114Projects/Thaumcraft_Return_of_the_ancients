@@ -11,9 +11,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber
 public class HeatShader {
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent()
     public static void renderShaders(RenderWorldLastEvent evt) { // TODO: 02.05.2025 Rewrite!
         if (Minecraft.getMinecraft().player == null || Minecraft.getMinecraft().player.dimension != InitDimensions.ancient_world_dim_id) {
+            return;
+        }
+
+        if (true) {
             return;
         }
 

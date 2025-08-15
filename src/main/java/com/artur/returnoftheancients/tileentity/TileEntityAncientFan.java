@@ -1,10 +1,8 @@
 package com.artur.returnoftheancients.tileentity;
 
 import com.artur.returnoftheancients.client.audio.BlockAncientFanSound;
-import com.artur.returnoftheancients.client.audio.BlockProjectorSound;
 import com.artur.returnoftheancients.client.fx.particle.ParticleFlameCanCollide;
 import com.artur.returnoftheancients.handlers.MiscHandler;
-import com.artur.returnoftheancients.handlers.RenderHandler;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockPlaceListener;
 import com.artur.returnoftheancients.tileentity.interf.ITileBurner;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
@@ -27,7 +25,7 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
     private final int maxActiveTime = 40;
     private boolean isActive = false;
     private int prevActiveTime = 0;
-    private int redstoneLevel = 0;
+    private int redStoneLevel = 0;
     private int activeTime = 0;
 
     @Override
@@ -77,6 +75,7 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
         if (this.world.isRemote) {
             Minecraft.getMinecraft().getSoundHandler().playSound(new BlockAncientFanSound(this));
         }
+        super.onLoad();
     }
 
     @Override
@@ -88,19 +87,19 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
     }
 
     private float localSpinSpeed() {
-        return 3.0F + 3.0F * (this.redstoneLevel / 15.0F);
+        return 3.0F + 3.0F * (this.redStoneLevel / 15.0F);
     }
 
     private void checkRedStone() {
         UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
-        this.redstoneLevel = 0;
+        this.redStoneLevel = 0;
         for (EnumFacing facing : EnumFacing.VALUES) {
             if (facing.getAxis() == this.axis) {
                 continue;
             }
 
             int r = world.getRedstonePower(blockPos.setPos(this.pos).offset(facing), facing.getOpposite());
-            if (this.redstoneLevel < r) this.redstoneLevel = r;
+            if (this.redStoneLevel < r) this.redStoneLevel = r;
         }
         UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
     }

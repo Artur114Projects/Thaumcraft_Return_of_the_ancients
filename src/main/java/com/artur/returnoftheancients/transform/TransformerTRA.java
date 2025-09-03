@@ -34,6 +34,7 @@ public class TransformerTRA implements IClassTransformer {
         for (ITransformer transformer : TRANSFORMERS) {
             if (transformer.isTarget(transformedName)) {
                 try {
+//                    System.out.println(FMLDeobfuscatingRemapper.INSTANCE.mapFieldName(FMLDeobfuscatingRemapper.INSTANCE.unmap("net/minecraft/client/renderer/entity/RenderLivingBase"), "field_177097_h", "Ljava/util/List;")); // field_177097_h
 //                    System.out.println(FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(FMLDeobfuscatingRemapper.INSTANCE.unmap("net.minecraft.network.NetHandlerPlayServer".replaceAll("\\.", "/")), MappingsProcessor.getObfuscateMethodName("processCustomPayload"), "(Lnet/minecraft/network/play/client/CPacketCustomPayload;)V"));
 //                    System.out.println(FMLDeobfuscatingRemapper.INSTANCE.unmap("net/minecraft/nbt/NBTTagCompound"));
 //                    System.out.println(FMLDeobfuscatingRemapper.INSTANCE.map("net/minecraft/nbt/NBTTagCompound"));

@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.tileentity;
 
 import com.artur.returnoftheancients.client.audio.BlockAncientFanSound;
+import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.client.fx.particle.ParticleFlameCanCollide;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockPlaceListener;
@@ -73,7 +74,7 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
     @Override
     public void onLoad() {
         if (this.world.isRemote) {
-            Minecraft.getMinecraft().getSoundHandler().playSound(new BlockAncientFanSound(this));
+            ClientEventsHandler.SOUNDS_MANAGER.playTileSound(this, BlockAncientFanSound::new);
         }
         super.onLoad();
     }
@@ -81,7 +82,7 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
     @Override
     public void validate() {
         if (this.world.isRemote && this.isInvalid()) {
-            Minecraft.getMinecraft().getSoundHandler().playSound(new BlockAncientFanSound(this));
+            ClientEventsHandler.SOUNDS_MANAGER.playTileSound(this, BlockAncientFanSound::new);
         }
         super.validate();
     }

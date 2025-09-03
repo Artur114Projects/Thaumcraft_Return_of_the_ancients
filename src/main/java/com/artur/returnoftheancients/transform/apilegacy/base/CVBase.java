@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.transform.apilegacy.base;
 
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -30,5 +31,11 @@ public class CVBase extends ClassVisitor {
             }
         }
         return mv;
+    }
+
+
+    @Override
+    public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
+        return super.visitField(access, name, desc, signature, value);
     }
 }

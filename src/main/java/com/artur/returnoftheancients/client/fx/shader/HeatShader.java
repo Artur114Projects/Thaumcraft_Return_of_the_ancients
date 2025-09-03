@@ -17,10 +17,6 @@ public class HeatShader {
             return;
         }
 
-        if (true) {
-            return;
-        }
-
         ShaderProgram.renderFullScreen(InitShaders.HEAT.shader(), () -> InitShaders.HEAT.shader().uniform("Time", (System.currentTimeMillis() % 100000L) / 30000.0F));
     }
 }

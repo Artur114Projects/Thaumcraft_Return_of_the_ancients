@@ -4,6 +4,7 @@ import com.artur.returnoftheancients.client.event.managers.movement.PlayerMoveme
 import com.artur.returnoftheancients.client.event.managers.*;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -22,6 +23,7 @@ public class ClientEventsHandler {
     public static final CustomRainManager CUSTOM_RAIN_MANAGER = new CustomRainManager();
     public static final GlobalTickManager GLOBAL_TICK_MANAGER = new GlobalTickManager();
     public static final CameraFXManager CAMERA_FX_MANAGER = new CameraFXManager();
+    public static final SoundsManager SOUNDS_MANAGER = new SoundsManager();
     public static final FogManager FOG_MANAGER = new FogManager();
 
 
@@ -51,6 +53,7 @@ public class ClientEventsHandler {
         CUSTOM_RAIN_MANAGER.tickEventClientTickEvent(e);
         GLOBAL_TICK_MANAGER.tickEventClientTickEvent(e);
         CAMERA_FX_MANAGER.tickEventClientTickEvent(e);
+        SOUNDS_MANAGER.tickEventClientTickEvent(e);
         FOG_MANAGER.tickEventClientTickEvent(e);
     }
 

@@ -12,14 +12,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thaumcraft.client.lib.events.RenderEventHandler;
 
 @SideOnly(Side.CLIENT)
-public class FogManager {
+public class FogManager { // TODO: 22.08.2025 Починить наличие тумана при заходе в мир
     public final DefaultFog defaultFog = new DefaultFog();
     public FogParams oldFogParams = this.defaultFog;
     public FogParams newFogParams = this.defaultFog;
     public int prevFogTime = 0;
     public float fogCache = 0;
     public int fogTime = 0;
-
 
     public void entityViewRenderEventFogColors(EntityViewRenderEvent.FogColors e) {
         if (this.oldFogParams == this.defaultFog && this.newFogParams == this.defaultFog) {

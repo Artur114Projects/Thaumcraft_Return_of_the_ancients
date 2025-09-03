@@ -139,7 +139,6 @@ public class BlockPedestalActive extends BlockTileEntity<TileEntityPedestalActiv
                 }
             }
 
-
             if (super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ) == EnumActionResult.SUCCESS) {
                 if (data.hasKey("pos")) {
                     TileEntity tile = worldIn.getTileEntity(pos.offset(facing));
@@ -156,8 +155,8 @@ public class BlockPedestalActive extends BlockTileEntity<TileEntityPedestalActiv
         }
 
         @Override
-        public int getItemEnchantability(ItemStack stack) {
-            return stack.getOrCreateSubCompound("parent").hasKey("pos") ? 1 : 0;
+        public boolean hasEffect(ItemStack stack) {
+            return stack.getOrCreateSubCompound("parent").hasKey("pos");
         }
     }
 }

@@ -12,16 +12,6 @@ import java.util.List;
 public interface IWriteToNBT {
     NBTTagCompound writeToNBT(NBTTagCompound nbt);
 
-    static NBTTagList getNBTListAsCollection(Collection<? extends IWriteToNBT> collection) {
-        NBTTagList list = new NBTTagList();
-
-        for (IWriteToNBT write : collection) {
-            list.appendTag(write.writeToNBT(new NBTTagCompound()));
-        }
-
-        return list;
-    }
-
     static <T extends ICanConstructInNBT> List<T> initObjectsAsNBTList(NBTTagList list, Class<T> objClass) throws NullPointerException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         if (list == null || objClass == null) {
             throw new NullPointerException();
@@ -39,10 +29,10 @@ public interface IWriteToNBT {
         return ret;
     }
 
-    static <T extends IWriteToNBT> NBTTagList objectsToNBT(Collection<T> objects) {
+    static NBTTagList objectsToNBT(Collection<? extends IWriteToNBT> objects) {
         NBTTagList list = new NBTTagList();
 
-        for (T obj : objects) {
+        for (IWriteToNBT obj : objects) {
             list.appendTag(obj.writeToNBT(new NBTTagCompound()));
         }
 

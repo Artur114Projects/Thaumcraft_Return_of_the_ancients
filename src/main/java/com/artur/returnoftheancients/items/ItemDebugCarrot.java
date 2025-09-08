@@ -5,7 +5,10 @@ import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPla
 import com.artur.returnoftheancients.client.fx.particle.ParticleFlameCanCollide;
 import com.artur.returnoftheancients.tileentity.interf.ITileBurner;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumRarity;
@@ -15,14 +18,22 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IRarity;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import thaumcraft.client.fx.FXDispatcher;
 
+import java.util.List;
 import java.util.Random;
+
+import static net.minecraft.item.ItemStack.DECIMALFORMAT;
 
 public class ItemDebugCarrot extends BaseItem {
 	private final Random rand = new Random();
@@ -119,6 +130,8 @@ public class ItemDebugCarrot extends BaseItem {
 			}
 		}
 		if (!worldIn.isRemote) {
+			worldIn.sendBlockBreakProgress(128, pos, rand.nextInt(10));
+
 //			if (player.isSneaking()) {
 //				BlockProtectHandler.protect(worldIn, pos);
 //			} else {
@@ -250,5 +263,25 @@ public class ItemDebugCarrot extends BaseItem {
 	@Override
 	public IRarity getForgeRarity(ItemStack stack) {
 		return EnumRarity.EPIC;
+	}
+
+	@Override
+	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+		target.onKillCommand();
+		return true;
+	}
+
+	@Override
+	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+		entity.onKillCommand();
+		return false;
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		tooltip.add("");
+		tooltip.add(I18n.format("item.modifiers.mainhand"));
+		tooltip.add(" " + net.minecraft.util.text.translation.I18n.translateToLocalFormatted("attribute.modifier.equals.0", DECIMALFORMAT.format(3.0D), net.minecraft.util.text.translation.I18n.translateToLocal("attribute.name.generic.attackSpeed")));
+		tooltip.add(" " + I18n.format("item.debug_carrot.info.i") + " " + I18n.format("attribute.name.generic.attackDamage"));
 	}
 }

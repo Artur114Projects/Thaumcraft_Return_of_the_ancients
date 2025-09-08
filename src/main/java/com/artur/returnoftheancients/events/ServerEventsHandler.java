@@ -2,7 +2,8 @@ package com.artur.returnoftheancients.events;
 
 import com.artur.returnoftheancients.ancientworld.system.base.AncientLayer1EventsHandler;
 import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
-import com.artur.returnoftheancients.events.eventmanagers.SlowBuildManager;
+import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
+import com.artur.returnoftheancients.events.eventmanagers.*;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
@@ -10,9 +11,6 @@ import com.artur.returnoftheancients.capabilities.PlayerTimer;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
 import com.artur.returnoftheancients.generation.biomes.BiomeTaint;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
-import com.artur.returnoftheancients.events.eventmanagers.PlayerInBiomeManager;
-import com.artur.returnoftheancients.events.eventmanagers.ShortChunkLoadManager;
-import com.artur.returnoftheancients.events.eventmanagers.TimerTasksManager;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
@@ -25,6 +23,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -41,6 +40,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -60,15 +60,15 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
     public static final SlowBuildManager SLOW_BUILD_MANAGER = new SlowBuildManager();
 
     private static boolean isAncientAreaSet = false;
-    private static byte difficultyId = -1;
     private static boolean newVersion = false;
+    private static byte difficultyId = -1;
 
 
     public static byte getDifficultyId() {return difficultyId;}
 
 
     @SubscribeEvent
-    public static void DifficultyEvent(DifficultyChangeEvent e) {
+    public static void difficultyEvent(DifficultyChangeEvent e) {
         EnumDifficulty d = e.getDifficulty();
         difficultyId = d == EnumDifficulty.PEACEFUL ? 0 : d == EnumDifficulty.EASY ? 1 : d == EnumDifficulty.NORMAL ? 2 : d == EnumDifficulty.HARD ? 3 : (byte) -1;
     }
@@ -98,7 +98,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
 
 
     @SubscribeEvent
-    public static void WorldEventLoad(WorldEvent.Load e) {
+    public static void worldEventLoad(WorldEvent.Load e) {
         if (!e.getWorld().isRemote) {
             WorldData worldData = WorldData.get();
             if (!worldData.saveData.hasKey("version")) {
@@ -106,7 +106,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
             }
             if (e.getWorld().provider.getDimension() == ancient_world_dim_id) {
                 if (!isAncientAreaSet) {
-                    StructureBuildersManager.createBuildRequest(e.getWorld(), new BlockPos(-16, 240, -16), "ancient_area").setNeedProtect().setIgnoreAir().build();
+                    StructureBuildersManager.createBuildRequest(e.getWorld(), new BlockPos(-16, 240, -16), "ancient_area").build();
                     isAncientAreaSet = true;
                 }
                 checkVersion();
@@ -130,7 +130,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
     }
 
     @SubscribeEvent
-    public static void LivingDeathEvent(LivingDeathEvent e) {
+    public static void livingDeathEvent(LivingDeathEvent e) {
         World world = e.getEntity().world;
         if (!e.getEntity().isNonBoss() && world.provider.getDimension() == ancient_world_dim_id && !world.isRemote) {
             AncientWorld.bossDeadBus(e.getEntity().getUniqueID());
@@ -138,7 +138,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
     }
 
     @SubscribeEvent
-    public static void LivingHurtEvent(LivingHurtEvent e) {
+    public static void livingHurtEvent(LivingHurtEvent e) {
         if (!TRAConfigs.AncientWorldSettings.isDeadToAncientWorld) {
             if (e.getEntity() instanceof EntityPlayerMP) {
                 if (e.getEntity().dimension == ancient_world_dim_id) {
@@ -174,7 +174,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
     }
 
     @SubscribeEvent
-    public static void LivingDropsEvent(LivingDropsEvent e) {
+    public static void livingDropsEvent(LivingDropsEvent e) {
         if (e.getEntity().dimension == ancient_world_dim_id && !e.getEntity().isNonBoss()) {
             e.setCanceled(true);
         }
@@ -200,8 +200,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
     }
 
     @SubscribeEvent
-    public static void PlayerTickEvent(TickEvent.PlayerTickEvent e) {
-
+    public static void playerTickEvent(TickEvent.PlayerTickEvent e) {
         if (e.phase != TickEvent.Phase.START || e.player.world.isRemote) {
             return;
         }

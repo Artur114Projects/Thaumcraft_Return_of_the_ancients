@@ -20,12 +20,12 @@ public class InitTileEntity {
     public static final BlockTileEntity<TileEntityEldritchTrap> ELDRITCH_TRAP = new BlockEldritchTrap("eldritch_trap", Material.ROCK, 100, 999999999, SoundType.STONE);
     public static final BlockTileEntity<TileEnergySource> ENERGY_SOURCE = new BlockEnergySource("energy_source", Material.CLAY, 1.0F, 10, SoundType.METAL);
     public static final BlockTileEntity<TileEntityEnergyLine> ENERGY_LINE = new BlockEnergyLine("energy_line", Material.CLAY, 0.2F, 8, SoundType.METAL);
-    public static final BlockTileEntity<TileEntityFireTrap> FIRE_TRAP = new BlockFireTrap("fire_trap", Material.ROCK, 100, 999999999, SoundType.STONE);
     public static final BlockTileEntity<TileEntityAncientDoorH4x4> ANCIENT_DOOR_H_4_X_4 = new BlockAncientDoorH4x4("ancient_door_h_4x4");
     public static final BlockTileEntity<TileEntityAncientProjector> ANCIENT_PROJECTOR = new BlockAncientProjector("ancient_projector");
     public static final BlockTileEntity<TileEntityAncientDoor4X3> ANCIENT_DOOR_4_X_3 = new BlockAncientDoor4X3("ancient_door_4x3");
     public static final BlockTileEntity<TileEntityAncientDoor8X6> ANCIENT_DOOR_8_X_6 = new BlockAncientDoor8x6("ancient_door_8x6");
     public static final BlockTileEntity<TileEntityPhantomPedestal> PHANTOM_PEDESTAL = new BlockPhantomPedestal("pedestal_phantom");
     public static final BlockTileEntity<TileEntityPedestalActive> PEDESTAL_ACTIVE = new BlockPedestalActive("pedestal_active");
+    public static final BlockTileEntity<TileEntityIncinerator> INCINERATOR = new BlockIncinerator("incinerator");
     public static final BlockTileEntity<TileEntityAncientFan> ANCIENT_FAN = new BlockAncientFan("ancient_fan");
 }

@@ -177,7 +177,7 @@ public class ShortChunkLoadManager {
 
     private void updateTickedNBTData(ForgeChunkManager.Ticket ticket) {
         if (ticket.getModData().hasKey("chunks")) {
-            ticket.getModData().setTag("chunks", IWriteToNBT.getNBTListAsCollection(LOADED_CHUNKS.get(ticket).values()));
+            ticket.getModData().setTag("chunks", IWriteToNBT.objectsToNBT(LOADED_CHUNKS.get(ticket).values()));
         }
     }
 

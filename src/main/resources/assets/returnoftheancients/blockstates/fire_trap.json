@@ -1,6 +1,0 @@
-{
-  "variants": {
-    "active=false": { "model": "returnoftheancients:fire_trap" },
-    "active=true": { "model": "returnoftheancients:fire_trap_a" }
-  }
-}

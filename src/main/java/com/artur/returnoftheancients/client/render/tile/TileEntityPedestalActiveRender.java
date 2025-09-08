@@ -30,7 +30,6 @@ public class TileEntityPedestalActiveRender extends TileEntitySpecialRendererBas
 
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             GlStateManager.enableLighting();
-            GlStateManager.enableLighting();
             GlStateManager.disableBlend();
         }
     }

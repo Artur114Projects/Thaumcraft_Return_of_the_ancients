@@ -470,7 +470,6 @@ public abstract class AncientEntry implements IBuild, IALGS {
                         BlockPos pos = buildPhase.pos.setPos(x, 80, buildPhase.ytf);
                         if (world.getBlockState(pos).equals(BlocksTC.stoneAncient.getDefaultState())) {
                             if (world.rand.nextInt(AncientWorldSettings.AncientWorldGenerationSettings.incineratorGenerateChange) == 0) {
-                                world.setBlockState(pos, InitTileEntity.FIRE_TRAP.getDefaultState());
                             }
                         }
                         buildPhase.xtf++;

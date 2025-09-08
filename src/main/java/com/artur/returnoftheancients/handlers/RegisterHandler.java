@@ -135,7 +135,6 @@ public class RegisterHandler {
 		ThaumcraftApi.registerResearchLocation(new ResourceLocation(Referense.MODID, "research/ancient_world_base_legacy"));
 		ThaumcraftApi.registerResearchLocation(new ResourceLocation(Referense.MODID, "research/ancient_world_things_legacy"));
 		ScanningManager.addScannableThing(new ScanItem("!PRIMAL_BLADE", new ItemStack(InitItems.PRIMAL_BLADE)));
-		ScanningManager.addScannableThing(new ScanBlock("!FIRE_TRAP", InitTileEntity.FIRE_TRAP));
 
 		ResearchCategories.registerCategory("ANCIENT_WORLD_LEGACY", "UNLOCKELDRITCH", new AspectList().add(Aspect.ELDRITCH, 1), new ResourceLocation(Referense.MODID, "textures/gui/ancient_logo.png"), new ResourceLocation(Thaumcraft.MODID, "textures/gui/gui_research_back_6.jpg"));
 	}
@@ -163,9 +162,7 @@ public class RegisterHandler {
 		CustomGenStructure.put("ancient_end_rotate-4");
 
 		CustomGenStructure.setUseEBS((x, y, z, state) -> {
-            if (state.getBlock().equals(InitBlocks.BOSS_TRIGGER_BLOCK)) return false;
 			if (state.getBlock().equals(InitTileEntity.ELDRITCH_TRAP)) return false;
-			if (state.getBlock().equals(InitTileEntity.FIRE_TRAP)) return false;
 			if (state.getBlock().equals(BlocksTC.nitor.get(EnumDyeColor.BLACK))) return false;
             return true;
 		});

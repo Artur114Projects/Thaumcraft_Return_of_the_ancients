@@ -344,7 +344,6 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
         return 1 - MathHelper.cos((float) ((Math.PI / 2) * (RenderHandler.interpolate(this.prevMoveTick, this.moveTick, partialTicks) / this.maxMoveTick)));
     }
 
-    @Override
     public void setBoundingBox(AxisAlignedBB bb) {
         this.alignedBB = bb;
     }

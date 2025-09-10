@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.client.fx.particle.ParticleFlameCanCollide;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockPlaceListener;
+import com.artur.returnoftheancients.tileentity.interf.ITileMultiBBProvider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLiving;
@@ -28,12 +29,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class TileEntityIncinerator extends TileBase implements ITileBlockPlaceListener {
+public class TileEntityIncinerator extends TileBase implements ITileBlockPlaceListener, ITileMultiBBProvider {
     private EnumFacing face = EnumFacing.UP;
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         this.face = EnumFacing.getDirectionFromEntityLiving(pos, placer);
+    }
+
+    @Override
+    public AxisAlignedBB[] boundingBoxes() {
+        return new AxisAlignedBB[] {
+            new AxisAlignedBB(0.0 / 16.0, 0.0 / 16.0, 0.0 / 16.0, 16.0 / 16.0, 2.0 / 16.0, 16.0 / 16.0),
+            new AxisAlignedBB(1.0 / 16.0, 2.0 / 16.0, 1.0 / 16.0, 15.0 / 16.0, 4.0 / 16.0, 15.0 / 16.0),
+            new AxisAlignedBB(3.0 / 16.0, 4.0 / 16.0, 3.0 / 16.0, 13.0 / 16.0, 16.0 / 16.0, 13.0 / 16.0)
+        };
     }
 
     public EnumFacing face() {

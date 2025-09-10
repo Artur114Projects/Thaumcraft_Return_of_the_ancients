@@ -268,13 +268,27 @@ public class ItemDebugCarrot extends BaseItem {
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		target.onKillCommand();
+		if (target.getHealth() > 0.0F) {
+			target.setHealth(0.0F);
+			target.setDead();
+		}
 		return true;
 	}
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		entity.onKillCommand();
-		return false;
+		if (!player.world.isRemote && !entity.attackEntityFrom(DamageSource.causePlayerDamage(player), 1.0F)) {
+			entity.onKillCommand();
+			if (!entity.isDead && entity instanceof EntityLivingBase && ((EntityLivingBase) entity).getHealth() > 0.0F){
+				entity.setDead();
+				((EntityLivingBase) entity).setHealth(0.0F);
+			}
+			if (!entity.isDead) {
+				player.world.removeEntity(entity);
+			}
+		}
+		entity.hurtResistantTime = 0;
+		return super.onLeftClickEntity(stack, player, entity);
 	}
 
 	@Override

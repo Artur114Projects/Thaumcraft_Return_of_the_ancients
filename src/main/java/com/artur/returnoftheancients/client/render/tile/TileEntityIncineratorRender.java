@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.client.render.tile;
 
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
-import com.artur.returnoftheancients.client.model.ModelAncientFan;
 import com.artur.returnoftheancients.client.model.ModelIncinerator;
 import com.artur.returnoftheancients.tileentity.TileEntityIncinerator;
 import com.artur.returnoftheancients.util.EnumAssetLocation;
@@ -9,9 +8,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-
-import java.util.Objects;
 
 public class TileEntityIncineratorRender extends TileEntitySpecialRendererBase<TileEntityIncinerator> implements IItemStackRenderer {
     private static final ResourceLocation TEXTURE_LAVA = EnumAssetLocation.TEXTURES_BLOCKS.getPngRL("big_lava_still");

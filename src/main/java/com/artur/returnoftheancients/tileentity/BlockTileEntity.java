@@ -7,12 +7,16 @@ import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.tileentity.interf.ITileBBProvider;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockPlaceListener;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockUseListener;
+import com.artur.returnoftheancients.tileentity.interf.ITileMultiBBProvider;
 import com.artur.returnoftheancients.util.MaterialArray;
 import com.artur.returnoftheancients.util.interfaces.RunnableWithParam;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -21,11 +25,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 
 public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
@@ -33,6 +41,7 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
     private final boolean isBBProvider;
     private final boolean isUseListener;
     private final boolean isPlaceListener;
+    private final boolean isMultiBBProvider;
 
     public BlockTileEntity(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
@@ -41,6 +50,7 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
         this.isBBProvider = ITileBBProvider.class.isAssignableFrom(this.getTileEntityClass());
         this.isUseListener = ITileBlockUseListener.class.isAssignableFrom(this.getTileEntityClass());
         this.isPlaceListener = ITileBlockPlaceListener.class.isAssignableFrom(this.getTileEntityClass());
+        this.isMultiBBProvider = ITileMultiBBProvider.class.isAssignableFrom(this.getTileEntityClass());
     }
 
     public BlockTileEntity(String name, MaterialArray array) {
@@ -77,6 +87,45 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
         if (this.tileRender != null) {
             ClientRegistry.bindTileEntitySpecialRenderer(this.getTileEntityClass(), this.tileRender);
         }
+    }
+
+    @Nullable
+    @Override
+    protected RayTraceResult rayTrace(BlockPos pos, Vec3d start, Vec3d end, AxisAlignedBB boundingBox) {
+        if (this.isMultiBBProvider) {
+            TileEntity tile = Minecraft.getMinecraft().world.getTileEntity(pos);
+            if (this.getTileEntityClass().isInstance(tile)) {
+                Vec3d vec3d = start.subtract(pos.getX(), pos.getY(), pos.getZ());
+                Vec3d vec3d1 = end.subtract(pos.getX(), pos.getY(), pos.getZ());
+                RayTraceResult raytraceresult = null;
+                for (AxisAlignedBB bb : ((ITileMultiBBProvider) tile).boundingBoxes()) {
+                    raytraceresult = bb.calculateIntercept(vec3d, vec3d1);
+
+                    if (raytraceresult != null) {
+                        break;
+                    }
+                }
+                return raytraceresult == null ? null : new RayTraceResult(raytraceresult.hitVec.addVector(pos.getX(), pos.getY(), pos.getZ()), raytraceresult.sideHit, pos);
+            }
+        }
+
+        return super.rayTrace(pos, start, end, boundingBox);
+
+    }
+
+    @Override
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
+        if (this.isMultiBBProvider) {
+            TileEntity tile = worldIn.getTileEntity(pos);
+            if (this.getTileEntityClass().isInstance(tile)) {
+                for (AxisAlignedBB bb : ((ITileMultiBBProvider) tile).boundingBoxes()) {
+                    Block.addCollisionBoxToList(pos, entityBox, collidingBoxes, bb);
+                }
+                return;
+            }
+        }
+
+        super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
     }
 
     @Override

@@ -1,35 +1,19 @@
 package com.artur.returnoftheancients.tileentity;
 
-import com.artur.returnoftheancients.client.fx.particle.RotateParticleFlame;
-import com.artur.returnoftheancients.client.fx.particle.ParticleFlameCanCollide;
-import com.artur.returnoftheancients.init.InitSounds;
-import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockPlaceListener;
 import com.artur.returnoftheancients.tileentity.interf.ITileMultiBBProvider;
+import com.artur.returnoftheancients.util.math.CoordinateMatrix;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 public class TileEntityIncinerator extends TileBase implements ITileBlockPlaceListener, ITileMultiBBProvider {
+    private AxisAlignedBB[] boundingBox = null;
     private EnumFacing face = EnumFacing.UP;
 
     @Override
@@ -39,15 +23,34 @@ public class TileEntityIncinerator extends TileBase implements ITileBlockPlaceLi
 
     @Override
     public AxisAlignedBB[] boundingBoxes() {
-        return new AxisAlignedBB[] {
-            new AxisAlignedBB(0.0 / 16.0, 0.0 / 16.0, 0.0 / 16.0, 16.0 / 16.0, 2.0 / 16.0, 16.0 / 16.0),
-            new AxisAlignedBB(1.0 / 16.0, 2.0 / 16.0, 1.0 / 16.0, 15.0 / 16.0, 4.0 / 16.0, 15.0 / 16.0),
-            new AxisAlignedBB(3.0 / 16.0, 4.0 / 16.0, 3.0 / 16.0, 13.0 / 16.0, 16.0 / 16.0, 13.0 / 16.0)
-        };
+        if (this.boundingBox == null) {
+            this.compileBoundingBox();
+        }
+        return this.boundingBox;
     }
 
     public EnumFacing face() {
         return this.face;
+    }
+
+    private void compileBoundingBox() {
+        CoordinateMatrix matrix = new CoordinateMatrix();
+        matrix.putBoundingBox(new AxisAlignedBB(0.0 / 16.0, 0.0 / 16.0, 0.0 / 16.0, 16.0 / 16.0, 2.0 / 16.0, 16.0 / 16.0), 1);
+        matrix.putBoundingBox(new AxisAlignedBB(1.0 / 16.0, 2.0 / 16.0, 1.0 / 16.0, 15.0 / 16.0, 4.0 / 16.0, 15.0 / 16.0), 2);
+        matrix.putBoundingBox(new AxisAlignedBB(3.0 / 16.0, 4.0 / 16.0, 3.0 / 16.0, 13.0 / 16.0, 16.0 / 16.0, 13.0 / 16.0), 3);
+        matrix.translate(-0.5F, -0.5F, -0.5F);
+        if (this.face == EnumFacing.DOWN) {
+            matrix.rotate(180.0F, 1.0F, 0.0F, 0.0F);
+        }
+        if (this.face.getAxis().isHorizontal()) {
+            matrix.rotate(90.0F * this.face.getAxisDirection().getOffset(), 1.0F * Math.abs(this.face.getFrontOffsetZ()), 0.0F, 1.0F * Math.abs(this.face.getFrontOffsetX()));
+        }
+        matrix.translate(0.5F, 0.5F, 0.5F);
+        this.boundingBox = new AxisAlignedBB[] {
+            matrix.getBoundingBox(1),
+            matrix.getBoundingBox(2),
+            matrix.getBoundingBox(3),
+        };
     }
 
     @Override

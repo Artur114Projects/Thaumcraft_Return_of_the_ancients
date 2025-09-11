@@ -79,6 +79,20 @@ public class Pos3d extends Vec3d {
         return new Pos3d(x, yPos, zPos);
     }
 
+    public @NotNull Pos3d rotateZ(float pitch) {
+        double pitchRadians = Math.toRadians(pitch);
+        double xPos = x;
+        double yPos = y;
+        if (pitch != 0) {
+            double sin = MathHelper.sin((float) pitchRadians);
+            double cos = MathHelper.cos((float) pitchRadians);
+            yPos = y * cos - x * sin;
+            xPos = x * cos + y * sin;
+        }
+        return new Pos3d(xPos, yPos, z);
+    }
+
+
     public @NotNull Pos3d normalize() {
         return new Pos3d(super.normalize());
     }

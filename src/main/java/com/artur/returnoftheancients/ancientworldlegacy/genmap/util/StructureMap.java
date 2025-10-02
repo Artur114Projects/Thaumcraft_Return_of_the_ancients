@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.ancientworldlegacy.genmap.util;
 
-import com.artur.returnoftheancients.util.interfaces.IALGS;
+import com.artur.returnoftheancients.ancientworldlegacy.util.interfaces.IALGS;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.util.interfaces;
+package com.artur.returnoftheancients.ancientworldlegacy.util.interfaces;
 
 public interface IALGS {
 

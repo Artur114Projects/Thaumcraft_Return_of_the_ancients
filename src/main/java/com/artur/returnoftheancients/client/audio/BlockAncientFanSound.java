@@ -21,7 +21,7 @@ public class BlockAncientFanSound extends SoundTile<TileEntityAncientFan> {
     public void update() {
         super.update();
 
-        if (this.tile.spinSpeed(1) > 3) {
+        if (this.tile.spinSpeed(1) > 3) { // TODO: 13.09.2025 Переделать!
             this.pitch = 1.0F + (0.8F * ((this.tile.spinSpeed(1) - 3.0F) / 3.0F));
             this.volume = 0.4F + (0.4F * ((this.tile.spinSpeed(1) - 3.0F) / 3.0F));
         }

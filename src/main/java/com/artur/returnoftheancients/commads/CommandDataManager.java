@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.commads;
 
 import com.artur.returnoftheancients.misc.WorldData;
 
-import com.artur.returnoftheancients.util.interfaces.IALGS;
+import com.artur.returnoftheancients.ancientworldlegacy.util.interfaces.IALGS;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 
-public class DataManager extends CommandBase {
+public class CommandDataManager extends CommandBase {
     String NAME = "data", USAGE = "/data";
 
 

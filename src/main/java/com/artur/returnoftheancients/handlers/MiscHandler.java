@@ -305,6 +305,7 @@ public class MiscHandler {
     }
 
     public static void playSound(EntityPlayerMP playerMP, SoundTRA sound) {
+        playerMP.playSound(sound.SOUND, 1.0F, 1.0F);
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setString("playSound", sound.NAME);
         MainR.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);

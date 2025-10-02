@@ -15,19 +15,15 @@ import com.artur.returnoftheancients.network.*;
 import com.artur.returnoftheancients.referense.Referense;
 import com.artur.returnoftheancients.tileentity.BlockTileEntity;
 import com.artur.returnoftheancients.util.interfaces.IHasModel;
+import com.artur.returnoftheancients.worldsystems.interf.IWorldSystem;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.PotionTypes;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionHelper;
-import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -44,9 +40,10 @@ import thaumcraft.api.aspects.AspectRegistryEvent;
 import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.api.crafting.InfusionRecipe;
 import thaumcraft.api.research.ResearchCategories;
-import thaumcraft.api.research.ScanBlock;
 import thaumcraft.api.research.ScanItem;
 import thaumcraft.api.research.ScanningManager;
+
+import java.util.List;
 
 import static thaumcraft.api.items.ItemsTC.*;
 import static net.minecraft.init.Items.*;
@@ -121,10 +118,14 @@ public class RegisterHandler {
 		}
 	}
 
+	public static void registerWorldSystems(List<Class<? extends IWorldSystem>> systems) {
+
+	}
+
 	public static void registerCommands(FMLServerStartingEvent event) {
 		if (TRAConfigs.Any.debugMode) { // TODO: 23.02.2025 Снести!
 			event.registerServerCommand(new TestCommand2());
-			event.registerServerCommand(new DataManager());
+			event.registerServerCommand(new CommandDataManager());
 			event.registerServerCommand(new TpToPortal());
 		}
 		event.registerServerCommand(new TRACommand());

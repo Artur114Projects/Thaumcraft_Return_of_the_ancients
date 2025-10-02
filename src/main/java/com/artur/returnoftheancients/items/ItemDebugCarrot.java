@@ -129,6 +129,8 @@ public class ItemDebugCarrot extends BaseItem {
 				}
 			}
 		}
+
+
 		if (!worldIn.isRemote) {
 			worldIn.sendBlockBreakProgress(128, pos, rand.nextInt(10));
 
@@ -245,6 +247,7 @@ public class ItemDebugCarrot extends BaseItem {
 		playerIn.setActiveHand(handIn);
 		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
+
 	@SideOnly(Side.CLIENT)
 	public static void spawnCustomParticleTM(World world, double radius, double angularVelocity, EntityPlayer player, double yOffset) {
 		Minecraft.getMinecraft().effectRenderer.addEffect(new RotateParticleSmokeInPlayer(world, radius, angularVelocity, player, yOffset));

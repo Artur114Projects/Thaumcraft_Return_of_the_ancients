@@ -5,9 +5,7 @@ import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.tileentity.BlockTileEntity;
 import com.artur.returnoftheancients.tileentity.TileEntityDummy;
 import com.artur.returnoftheancients.tileentity.TileEntityPedestalActive;
-import com.artur.returnoftheancients.util.interfaces.IHasModel;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -25,7 +23,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.BiomeDictionary;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,7 +38,7 @@ public class BlockPedestalActive extends BlockTileEntity<TileEntityPedestalActiv
         InitItems.ITEMS.add(item);
 
         this.setDefaultState(this.getDefaultState().withProperty(DIRECTION, EnumFacing.EAST).withProperty(ROTATE, false));
-        this.bindTESR(new TileEntityPedestalActiveRender());
+        this.setRenderer(new TileEntityPedestalActiveRender());
         this.setTRACreativeTab();
         this.setForCreative();
     }

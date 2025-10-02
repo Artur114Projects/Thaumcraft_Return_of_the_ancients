@@ -15,7 +15,7 @@ public class BlockPhantomPedestal extends BlockTileEntity<TileEntityPhantomPedes
     public BlockPhantomPedestal(String name) {
         super(name, Material.GLASS, 2.0F, 10.0F, SoundType.GLASS);
 
-        this.bindTESR(new TileEntityPhantomPedestalRender());
+        this.setRenderer(new TileEntityPhantomPedestalRender());
         this.setNotFillAndOpaqueCube();
         this.setTRACreativeTab();
         this.setForCreative();

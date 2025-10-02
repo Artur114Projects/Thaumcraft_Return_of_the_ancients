@@ -26,6 +26,7 @@ public class InitTileEntity {
     public static final BlockTileEntity<TileEntityAncientDoor8X6> ANCIENT_DOOR_8_X_6 = new BlockAncientDoor8x6("ancient_door_8x6");
     public static final BlockTileEntity<TileEntityPhantomPedestal> PHANTOM_PEDESTAL = new BlockPhantomPedestal("pedestal_phantom");
     public static final BlockTileEntity<TileEntityPedestalActive> PEDESTAL_ACTIVE = new BlockPedestalActive("pedestal_active");
+    public static final BlockTileEntity<TileEntityAncientPiston> ANCIENT_PISTON = new BlockAncientPiston("ancient_piston");
     public static final BlockTileEntity<TileEntityIncinerator> INCINERATOR = new BlockIncinerator("incinerator");
     public static final BlockTileEntity<TileEntityAncientFan> ANCIENT_FAN = new BlockAncientFan("ancient_fan");
 }

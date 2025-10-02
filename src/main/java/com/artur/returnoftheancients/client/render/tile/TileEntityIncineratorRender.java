@@ -28,13 +28,17 @@ public class TileEntityIncineratorRender extends TileEntitySpecialRendererBase<T
             GlStateManager.rotate(90.0F * (tile.face().getAxisDirection().getOffset() * -1), 1.0F * Math.abs(tile.face().getFrontOffsetZ()), 0.0F, 1.0F * Math.abs(tile.face().getFrontOffsetX()));
         }
 
-
         this.bindTexture(TEXTURE_LAVA);
         this.modelBase.setLavaBoxIndex((int) (ClientEventsHandler.GLOBAL_TICK_MANAGER.gameTickCounter / 10.0F));
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0.0F, (12.0F / 16.0F) * tile.moveProcess(partialTicks), 0.0F);
         this.modelBase.renderLava();
+        GlStateManager.popMatrix();
 
         this.bindTexture(TEXTURE_BASE);
         this.modelBase.renderBase();
+
+        GlStateManager.translate(0.0F, (12.0F / 16.0F) * tile.moveProcess(partialTicks), 0.0F);
         this.modelBase.renderJetBase();
         this.modelBase.renderJet();
 
@@ -45,17 +49,14 @@ public class TileEntityIncineratorRender extends TileEntitySpecialRendererBase<T
         this.modelBase.renderGlass();
         GlStateManager.disableBlend();
         GlStateManager.popMatrix();
-
     }
 
     @Override
     public void renderByItem(ItemStack stack, float partialTicks) {
         this.defaultTransform(0.0, 0.0, 0.0);
 
-        this.bindTexture(TEXTURE_LAVA);
-        this.modelBase.renderLava();
-
         this.bindTexture(TEXTURE_BASE);
+        this.modelBase.renderLava();
         this.modelBase.renderBase();
         this.modelBase.renderJetBase();
         this.modelBase.renderJet();

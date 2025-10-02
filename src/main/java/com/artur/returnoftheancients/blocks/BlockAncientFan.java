@@ -4,8 +4,6 @@ import com.artur.returnoftheancients.client.render.tile.TileEntityAncientFanRend
 import com.artur.returnoftheancients.tileentity.BlockTileEntity;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientFan;
 import com.artur.returnoftheancients.util.MaterialArray;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -19,7 +17,7 @@ public class BlockAncientFan extends BlockTileEntity<TileEntityAncientFan> {
     public BlockAncientFan(String name) {
         super(name, MaterialArray.ANCIENT_STONE_ARRAY);
 
-        this.bindTESR(new TileEntityAncientFanRender());
+        this.setRenderer(new TileEntityAncientFanRender());
         this.setTRACreativeTab();
         this.setForCreative();
     }

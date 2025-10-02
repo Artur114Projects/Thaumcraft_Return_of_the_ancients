@@ -29,17 +29,11 @@ public class ClientPacketMisc implements IMessage {
         this.data = data;
     }
 
-    /**
-     * Читает данные пакета из ByteBuf при получении.
-     */
     @Override
     public void fromBytes(ByteBuf buf) {
         data = ByteBufUtils.readTag(buf);
     }
 
-    /**
-     * Записывает данные пакета в ByteBuf перед отправкой.
-     */
     @Override
     public void toBytes(ByteBuf buf) {
         ByteBufUtils.writeTag(buf, data);

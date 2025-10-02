@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.generation.generators;
 
-import com.artur.returnoftheancients.util.interfaces.IALGS;
+import com.artur.returnoftheancients.ancientworldlegacy.util.interfaces.IALGS;
 
 public class AncientLabyrinthGeneratorHandler implements IALGS {
 

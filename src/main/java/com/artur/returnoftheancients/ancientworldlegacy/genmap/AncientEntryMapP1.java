@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.ancientworldlegacy.genmap;
 
 import com.artur.returnoftheancients.ancientworldlegacy.genmap.util.StructureMap;
 import com.artur.returnoftheancients.ancientworldlegacy.genmap.util.StructurePos;
-import com.artur.returnoftheancients.util.interfaces.IALGS;
+import com.artur.returnoftheancients.ancientworldlegacy.util.interfaces.IALGS;
 
 import java.util.ArrayDeque;
 import java.util.List;

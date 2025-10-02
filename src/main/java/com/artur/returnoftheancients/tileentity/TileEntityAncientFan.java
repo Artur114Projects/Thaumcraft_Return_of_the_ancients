@@ -4,15 +4,19 @@ import com.artur.returnoftheancients.client.audio.BlockAncientFanSound;
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.client.fx.particle.ParticleFlameCanCollide;
 import com.artur.returnoftheancients.handlers.MiscHandler;
+import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockPlaceListener;
+import com.artur.returnoftheancients.tileentity.interf.ITileBlockUseListener;
 import com.artur.returnoftheancients.tileentity.interf.ITileBurner;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -20,10 +24,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceListener, ITickable, ITileBurner {
+public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceListener, ITileBlockUseListener, ITickable, ITileBurner {
     private EnumFacing.Axis axis = EnumFacing.Axis.Y;
     private final float activeSpinSpeed = 6.0F;
     private final int maxActiveTime = 40;
+    private boolean isRotated = false;
+    private boolean isClosed = false;
     private boolean isActive = false;
     private int prevActiveTime = 0;
     private int redStoneLevel = 0;
@@ -38,8 +44,31 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
         }
     }
 
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (playerIn.getHeldItem(hand).getItem() == InitItems.DEBUG_CARROT) {
+            if (!this.isClosed) {
+                this.isClosed = true; this.isRotated = false;
+            } else if (!this.isRotated) {
+                this.isRotated = true;
+            } else {
+                this.isClosed = false;
+            }
+            return true;
+        }
+        return false;
+    }
+
     public EnumFacing.Axis axis() {
         return this.axis;
+    }
+
+    public boolean isClosed() {
+        return this.isClosed;
+    }
+
+    public boolean isRotated() {
+        return isRotated;
     }
 
     public boolean canConnectRedstone(EnumFacing facing) {
@@ -162,12 +191,16 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
         super.readFromNBT(compound);
 
         this.axis = EnumFacing.Axis.values()[compound.getInteger("axis")];
+        this.isClosed = compound.getBoolean("isClosed");
+        this.isRotated = compound.getBoolean("isRotated");
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         compound = super.writeToNBT(compound);
         compound.setInteger("axis", this.axis.ordinal());
+        compound.setBoolean("isClosed", this.isClosed);
+        compound.setBoolean("isRotated", this.isRotated);
         return compound;
     }
 

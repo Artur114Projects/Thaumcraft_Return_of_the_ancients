@@ -57,7 +57,7 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
         this(name, array.material(), array.hardness(), array.resistance(), array.soundType());
     }
 
-    protected void bindTESR(TileEntitySpecialRenderer<T> tileRender) {
+    protected void setRenderer(TileEntitySpecialRenderer<T> tileRender) {
         this.tileRender = tileRender;
 
         if (tileRender instanceof IItemStackRenderer) {

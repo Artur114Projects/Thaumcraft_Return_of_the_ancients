@@ -22,7 +22,7 @@ public class BlockAncientDoorH4x4 extends BlockTileEntity<TileEntityAncientDoorH
     public BlockAncientDoorH4x4(String name) {
         super(name, Material.ROCK, 2.0F, 10.0F, SoundType.STONE);
 
-        this.bindTESR(new TileEntityAncientDoorH4x4Render());
+        this.setRenderer(new TileEntityAncientDoorH4x4Render());
     }
 
     @Override

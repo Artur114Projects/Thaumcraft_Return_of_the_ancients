@@ -4,18 +4,49 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CoordinateMatrix {
-    private final List<ITransformation> transformations = new ArrayList<>();
     private final Map<Integer, AxisAlignedBB> originalBoundingBoxes = new HashMap<>();
-    private final Map<Integer, Vec3d> originalVectors = new HashMap<>();
     private final Map<Integer, AxisAlignedBB> compiledBoundingBoxes = new HashMap<>();
+    private final LinkedList<LinkedList<ITransformation>> stack = new LinkedList<>();
+    private LinkedList<ITransformation> transformations = new LinkedList<>();
+    private final Map<Integer, Vec3d> originalVectors = new HashMap<>();
     private final Map<Integer, Vec3d> compiledVectors = new HashMap<>();
-    public boolean forceTransform = false;
+    private Map<String, CoordinateMatrix> children = null;
+    private final CoordinateMatrix parent;
+    public final boolean angleInRadians;
+
+    public CoordinateMatrix(boolean angleInRadians) {
+        this(angleInRadians, null);
+    }
+
+    private CoordinateMatrix(boolean angleInRadians, CoordinateMatrix parent) {
+        this.angleInRadians = angleInRadians;
+        this.parent = parent;
+    }
+
+    public CoordinateMatrix() {
+        this(false);
+    }
+
+    public CoordinateMatrix child(String name) {
+        if (this.children == null) {
+            this.children = new HashMap<>();
+        }
+        CoordinateMatrix child = this.children.get(name);
+        if (child == null) {
+            child = new CoordinateMatrix(this.angleInRadians, this);
+            this.children.put(name, child);
+        }
+        return child;
+    }
+
+    public void removeChild(String name) {
+        if (this.children != null) {
+            this.children.remove(name);
+        }
+    }
 
     public Vec3d applyTransformations(Vec3d vec3d) {
         Vec3dM vec3dM = new Vec3dM(vec3d);
@@ -63,49 +94,133 @@ public class CoordinateMatrix {
         return bb;
     }
 
-    public void rotate(double angle, double x, double y, double z) {
-        if (!this.forceTransform) {
-            this.addTransformation(new TransformationRotateD(angle, x, y, z));
+    public List<Vec3d> allVectors() {
+        List<Vec3d> list = new ArrayList<>();
+        for (int id : this.originalVectors.keySet()) {
+            list.add(this.getVector(id));
         }
+        if (this.children != null) {
+            for (CoordinateMatrix child : this.children.values()) {
+                list.addAll(child.allVectors());
+            }
+        }
+        return list;
+    }
+
+    public Vec3d[] allVectorsArr() {
+        return this.allVectors().toArray(new Vec3d[0]);
+    }
+
+    public List<AxisAlignedBB> allBoundingBoxes() {
+        List<AxisAlignedBB> list = new ArrayList<>();
+        for (int id : this.originalBoundingBoxes.keySet()) {
+            list.add(this.getBoundingBox(id));
+        }
+        if (this.children != null) {
+            for (CoordinateMatrix child : this.children.values()) {
+                list.addAll(child.allBoundingBoxes());
+            }
+        }
+        return list;
+    }
+
+    public AxisAlignedBB[] allBoundingBoxesArr() {
+        return this.allBoundingBoxes().toArray(new AxisAlignedBB[0]);
+    }
+
+    public void removeVector(int id) {
+        this.originalVectors.remove(id);
+        this.compiledVectors.remove(id);
+    }
+
+    public void removeBoundingBox(int id) {
+        this.originalBoundingBoxes.remove(id);
+        this.compiledBoundingBoxes.remove(id);
+    }
+
+    public void rotate(double angle, double x, double y, double z) {
+        this.addTransformation(new TransformationRotateD(angle, x, y, z, this.angleInRadians));
     }
 
     public void rotate(float angle, float x, float y, float z) {
-        if (!this.forceTransform) {
-            this.addTransformation(new TransformationRotateF(angle, x, y, z));
-        }
+        this.addTransformation(new TransformationRotateF(angle, x, y, z, this.angleInRadians));
+    }
+
+    public void translate(int x, int y, int z) {
+        this.translate(x / 16.0F, y / 16.0F, z / 16.0F);
     }
 
     public void translate(double x, double y, double z) {
-        if (!this.forceTransform) {
-            this.addTransformation(new TransformationTranslateD(x, y, z));
-        }
+        this.addTransformation(new TransformationTranslateD(x, y, z));
     }
 
     public void translate(float x, float y, float z) {
-        if (!this.forceTransform) {
-            this.addTransformation(new TransformationTranslateF(x, y, z));
-        }
+        this.addTransformation(new TransformationTranslateF(x, y, z));
     }
 
     public void scale(double x, double y, double z) {
-        if (!this.forceTransform) {
-            this.addTransformation(new TransformationScaleD(x, y, z));
-        }
+        this.addTransformation(new TransformationScaleD(x, y, z));
     }
 
     public void scale(float x, float y, float z) {
-        if (!this.forceTransform) {
-            this.addTransformation(new TransformationScaleF(x, y, z));
+        this.addTransformation(new TransformationScaleF(x, y, z));
+    }
+
+    public void pushMatrix() {
+        this.stack.addLast(new LinkedList<>(this.transformations));
+    }
+
+    public void popMatrix() {
+        if (!this.stack.isEmpty()) {
+            this.transformations = this.stack.pollLast();
         }
+    }
+
+    public void clearTransforms(boolean clearContext) {
+        if (clearContext) this.stack.clear();
+        this.transformations.clear();
+        if (this.children != null) {
+            this.children.forEach((k, v) -> v.clearTransforms(clearContext));
+        }
+    }
+
+    public void clear() {
+        this.stack.clear();
+        this.transformations.clear();
+        this.originalVectors.clear();
+        this.compiledVectors.clear();
+        this.originalBoundingBoxes.clear();
+        this.compiledBoundingBoxes.clear();
+        if (this.children != null) {
+            this.children.forEach((k, v) -> v.clear());
+        }
+    }
+
+    public void clearAll() {
+        this.stack.clear();
+        this.children.clear();
+        this.transformations.clear();
+        this.originalVectors.clear();
+        this.compiledVectors.clear();
+        this.originalBoundingBoxes.clear();
+        this.compiledBoundingBoxes.clear();
     }
 
     private void addTransformation(ITransformation tr) {
         this.compiledBoundingBoxes.clear();
         this.compiledVectors.clear();
-        this.transformations.add(tr);
+        ITransformation lastTransformation = this.transformations.peekLast();
+        if (lastTransformation == null || lastTransformation.type() != tr.type() || !lastTransformation.update(tr)) {
+            this.transformations.add(tr);
+        }
     }
 
     private void performTransforms(ITransformable transformable) {
+        if (this.parent != null) {
+            for (ITransformation tr : this.parent.transformations) {
+                transformable.transform(tr);
+            }
+        }
         for (ITransformation tr : this.transformations) {
             transformable.transform(tr);
         }
@@ -113,13 +228,17 @@ public class CoordinateMatrix {
 
     private interface ITransformation {
         void applyTransform(Vec3dM vec3dM);
+        boolean update(ITransformation tr);
+        int type();
     }
 
     private static class TransformationRotateD implements ITransformation {
-        private final byte type;
+        private final boolean angleInRadians;
         private double angle;
+        private byte type;
 
-        public TransformationRotateD(double angle, double x, double y, double z) {
+        public TransformationRotateD(double angle, double x, double y, double z, boolean angleInRadians) {
+            this(angleInRadians);
             this.angle = angle;
             if (x != 0.0D) {
                 this.type = 1;
@@ -133,6 +252,10 @@ public class CoordinateMatrix {
             } else {
                 this.type = 0;
             }
+        }
+
+        private TransformationRotateD(boolean angleInRadians) {
+            this.angleInRadians = angleInRadians;
         }
 
         @Override
@@ -143,44 +266,78 @@ public class CoordinateMatrix {
             double xPos, yPos, zPos;
             double rad, sin, cos;
             switch (this.type) {
-                case 1:
-                    rad = Math.toRadians(this.angle);
+                case 1: {
+                    if (this.angleInRadians) {
+                        rad = this.angle;
+                    } else {
+                        rad = Math.toRadians(this.angle);
+                    }
                     sin = Math.sin(rad);
                     cos = Math.cos(rad);
                     yPos = vec3dM.y * cos - vec3dM.z * sin;
                     zPos = vec3dM.z * cos + vec3dM.y * sin;
                     vec3dM.y = yPos;
                     vec3dM.z = zPos;
-                    break;
-                case 2:
-                    rad = Math.toRadians(this.angle);
+                }
+                break;
+                case 2: {
+                    if (this.angleInRadians) {
+                        rad = this.angle;
+                    } else {
+                        rad = Math.toRadians(this.angle);
+                    }
                     sin = Math.sin(rad);
                     cos = Math.cos(rad);
                     xPos = vec3dM.x * cos - vec3dM.z * sin;
                     zPos = vec3dM.z * cos + vec3dM.x * sin;
                     vec3dM.x = xPos;
                     vec3dM.z = zPos;
-                    break;
-                case 3: 
-                    rad = Math.toRadians(this.angle);
+                }
+                break;
+                case 3: {
+                    if (this.angleInRadians) {
+                        rad = this.angle;
+                    } else {
+                        rad = Math.toRadians(this.angle);
+                    }
                     sin = Math.sin(rad);
                     cos = Math.cos(rad);
                     xPos = vec3dM.x * cos + vec3dM.y * sin;
                     yPos = vec3dM.y * cos - vec3dM.x * sin;
                     vec3dM.y = yPos;
                     vec3dM.x = xPos;
-                    break;
+                }
+                break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + this.type);
             }
         }
+
+        @Override
+        public boolean update(ITransformation tr) {
+            if (tr.type() == this.type()) {
+                TransformationRotateD trd = (TransformationRotateD) tr;
+                if (this.type == trd.type) {
+                    this.angle += trd.angle;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public int type() {
+            return 0;
+        }
     }
 
     private static class TransformationRotateF implements ITransformation {
-        private final byte type;
+        private final boolean angleInRadians;
         private float angle;
+        private byte type;
 
-        public TransformationRotateF(float angle, float x, float y, float z) {
+        public TransformationRotateF(float angle, float x, float y, float z, boolean angleInRadians) {
+            this(angleInRadians);
             this.angle = angle;
             if (x != 0.0D) {
                 this.type = 1;
@@ -196,6 +353,27 @@ public class CoordinateMatrix {
             }
         }
 
+        private TransformationRotateF(boolean angleInRadians) {
+            this.angleInRadians = angleInRadians;
+        }
+
+        public TransformationRotateF update(float angle, float x, float y, float z) {
+            this.angle = angle;
+            if (x != 0.0D) {
+                this.type = 1;
+                this.angle *= x;
+            } else if (y != 0.0D) {
+                this.type = 2;
+                this.angle *= y;
+            } else if (z != 0.0D) {
+                this.type = 3;
+                this.angle *= z;
+            } else {
+                this.type = 0;
+            }
+            return this;
+        }
+
         @Override
         public void applyTransform(Vec3dM vec3dM) {
             if (this.angle == 0.0D || this.type == 0) {
@@ -204,43 +382,75 @@ public class CoordinateMatrix {
             double xPos, yPos, zPos;
             float rad, sin, cos;
             switch (this.type) {
-                case 1:
-                    rad = (float) Math.toRadians(this.angle);
+                case 1: {
+                    if (this.angleInRadians) {
+                        rad = this.angle;
+                    } else {
+                        rad = (float) Math.toRadians(this.angle);
+                    }
                     sin = MathHelper.sin(rad);
                     cos = MathHelper.cos(rad);
                     yPos = vec3dM.y * cos - vec3dM.z * sin;
                     zPos = vec3dM.z * cos + vec3dM.y * sin;
                     vec3dM.y = yPos;
                     vec3dM.z = zPos;
-                    break;
-                case 2:
-                    rad = (float) Math.toRadians(this.angle);
+                }
+                break;
+                case 2: {
+                    if (this.angleInRadians) {
+                        rad = this.angle;
+                    } else {
+                        rad = (float) Math.toRadians(this.angle);
+                    }
                     sin = MathHelper.sin(rad);
                     cos = MathHelper.cos(rad);
                     xPos = vec3dM.x * cos - vec3dM.z * sin;
                     zPos = vec3dM.z * cos + vec3dM.x * sin;
                     vec3dM.x = xPos;
                     vec3dM.z = zPos;
-                    break;
-                case 3:
-                    rad = (float) Math.toRadians(this.angle);
+                }
+                break;
+                case 3: {
+                    if (this.angleInRadians) {
+                        rad = this.angle;
+                    } else {
+                        rad = (float) Math.toRadians(this.angle);
+                    }
                     sin = MathHelper.sin(rad);
                     cos = MathHelper.cos(rad);
                     yPos = vec3dM.y * cos - vec3dM.x * sin;
                     xPos = vec3dM.x * cos + vec3dM.y * sin;
                     vec3dM.y = yPos;
                     vec3dM.x = xPos;
-                    break;
+                }
+                break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + this.type);
             }
         }
+
+        @Override
+        public boolean update(ITransformation tr) {
+            if (tr.type() == this.type()) {
+                TransformationRotateF trf = (TransformationRotateF) tr;
+                if (this.type == trf.type) {
+                    this.angle += trf.angle;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public int type() {
+            return 1;
+        }
     }
 
     private static class TransformationTranslateD implements ITransformation {
-        private final double x;
-        private final double y;
-        private final double z;
+        private double x;
+        private double y;
+        private double z;
 
         private TransformationTranslateD(double x, double y, double z) {
             this.x = x;
@@ -248,18 +458,45 @@ public class CoordinateMatrix {
             this.z = z;
         }
 
+        private TransformationTranslateD() {}
+
+        public TransformationTranslateD update(double x, double y, double z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            return this;
+        }
+
         @Override
         public void applyTransform(Vec3dM vec3dM) {
             vec3dM.x += this.x;
             vec3dM.y += this.y;
             vec3dM.z += this.z;
         }
+
+
+        @Override
+        public boolean update(ITransformation tr) {
+            if (tr.type() == this.type()) {
+                TransformationTranslateD trd = (TransformationTranslateD) tr;
+                this.x += trd.x;
+                this.y += trd.y;
+                this.z += trd.z;
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public int type() {
+            return 2;
+        }
     }
 
     private static class TransformationTranslateF implements ITransformation {
-        private final float x;
-        private final float y;
-        private final float z;
+        private float x;
+        private float y;
+        private float z;
 
         private TransformationTranslateF(float x, float y, float z) {
             this.x = x;
@@ -267,18 +504,44 @@ public class CoordinateMatrix {
             this.z = z;
         }
 
+        private TransformationTranslateF() {}
+
+        public TransformationTranslateF update(float x, float y, float z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            return this;
+        }
+
         @Override
         public void applyTransform(Vec3dM vec3dM) {
             vec3dM.x += this.x;
             vec3dM.y += this.y;
             vec3dM.z += this.z;
         }
+
+        @Override
+        public boolean update(ITransformation tr) {
+            if (tr.type() == this.type()) {
+                TransformationTranslateF trd = (TransformationTranslateF) tr;
+                this.x += trd.x;
+                this.y += trd.y;
+                this.z += trd.z;
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public int type() {
+            return 3;
+        }
     }
 
     private static class TransformationScaleD implements ITransformation {
-        private final double x;
-        private final double y;
-        private final double z;
+        private double x;
+        private double y;
+        private double z;
 
         private TransformationScaleD(double x, double y, double z) {
             this.x = x;
@@ -286,18 +549,44 @@ public class CoordinateMatrix {
             this.z = z;
         }
 
+        private TransformationScaleD() {}
+
+        public TransformationScaleD update(double x, double y, double z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            return this;
+        }
+
         @Override
         public void applyTransform(Vec3dM vec3dM) {
             vec3dM.x *= this.x;
             vec3dM.y *= this.y;
             vec3dM.z *= this.z;
         }
+
+        @Override
+        public boolean update(ITransformation tr) {
+            if (tr.type() == this.type()) {
+                TransformationScaleD trd = (TransformationScaleD) tr;
+                this.x *= trd.x;
+                this.y *= trd.y;
+                this.z *= trd.z;
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public int type() {
+            return 4;
+        }
     }
 
     private static class TransformationScaleF implements ITransformation {
-        private final float x;
-        private final float y;
-        private final float z;
+        private float x;
+        private float y;
+        private float z;
 
         private TransformationScaleF(float x, float y, float z) {
             this.x = x;
@@ -305,11 +594,37 @@ public class CoordinateMatrix {
             this.z = z;
         }
 
+        private TransformationScaleF() {}
+
+        public TransformationScaleF update(float x, float y, float z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            return this;
+        }
+
         @Override
         public void applyTransform(Vec3dM vec3dM) {
             vec3dM.x *= this.x;
             vec3dM.y *= this.y;
             vec3dM.z *= this.z;
+        }
+
+        @Override
+        public boolean update(ITransformation tr) {
+            if (tr.type() == this.type()) {
+                TransformationScaleF trd = (TransformationScaleF) tr;
+                this.x *= trd.x;
+                this.y *= trd.y;
+                this.z *= trd.z;
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public int type() {
+            return 5;
         }
     }
 
@@ -344,6 +659,13 @@ public class CoordinateMatrix {
             this(vec3d.x, vec3d.y, vec3d.z);
         }
 
+        public Vec3dM set(Vec3d vec3d) {
+            this.x = vec3d.x;
+            this.y = vec3d.y;
+            this.z = vec3d.z;
+            return this;
+        }
+
         public Vec3d toNormal() {
             return new Vec3d(this.x, this.y, this.z);
         }
@@ -365,6 +687,16 @@ public class CoordinateMatrix {
 
         public AxisAlignedBBM(AxisAlignedBB bb) {
             this(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
+        }
+
+        public AxisAlignedBBM set(AxisAlignedBB bb) {
+            this.min.x = bb.minX;
+            this.min.y = bb.minY;
+            this.min.z = bb.minZ;
+            this.max.x = bb.maxX;
+            this.max.y = bb.maxY;
+            this.max.z = bb.maxZ;
+            return this;
         }
 
         public AxisAlignedBB toNormal() {

@@ -5,11 +5,14 @@ import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.generation.portal.naturalgen.AncientSanctuary;
 import com.artur.returnoftheancients.init.InitSounds;
+import com.artur.returnoftheancients.tileentity.interf.ITileMultiBBProvider;
+import com.artur.returnoftheancients.util.math.MathUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -17,7 +20,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 // TODO: 25.02.2025 Сделать звук процесса закрытия
-public class TileEntityAncientSanctuaryController extends TileEntity implements ITickable {
+public class TileEntityAncientSanctuaryController extends TileEntity implements ITickable, ITileMultiBBProvider {
+    private static final AxisAlignedBB[] boundingBox = new AxisAlignedBB[] {
+        MathUtils.createBoundingBox(1, 0, 1, 15, 1, 15),
+        MathUtils.createBoundingBox(2, 1, 2, 14, 2, 14),
+        MathUtils.createBoundingBox(3, 2, 3, 13, 16, 13)
+    };
+
     private @Nullable AncientSanctuary sanctuary = null;
     private final int maxDoorMovingProgress = 40;
     private int prevDoorMovingProgress = 0;
@@ -146,5 +155,10 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
     @Override
     public @NotNull NBTTagCompound getUpdateTag() {
         return this.writeToNBT(new NBTTagCompound());
+    }
+
+    @Override
+    public AxisAlignedBB[] boundingBoxes() {
+        return boundingBox;
     }
 }

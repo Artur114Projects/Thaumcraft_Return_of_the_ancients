@@ -123,6 +123,10 @@ public class BiomeTaint extends BiomeBase {
                 int z = (chunk.z << 4) + localZ;
                 int y = MiscHandler.calculateGenerationHeight(world, x, z);
 
+                if (!world.isAnyPlayerWithinRangeAt(x, y, z, 256)) {
+                    continue;
+                }
+
                 EntityLightningBolt lightningBolt = new EntityLightningBolt(world, x, y, z, true);
                 world.addWeatherEffect(lightningBolt);
             }

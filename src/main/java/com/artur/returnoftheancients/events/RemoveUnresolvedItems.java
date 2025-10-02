@@ -37,7 +37,6 @@ public class RemoveUnresolvedItems { // TODO: 10.05.2025 Переписать!
         if (e.player.ticksExisted % 20 == 0) {
             if (e.player.dimension == InitDimensions.ancient_world_dim_id && TRAConfigs.PortalSettings.checkItems) {
                 if (!MiscHandler.isPlayerUseUnresolvedItems(e.player).isEmpty() && (!e.player.getEntityData().getBoolean(isUUI) || !e.player.getEntityData().hasKey(isUUI)) && !e.player.isCreative() && !e.player.isDead) {
-                    System.out.println("La ti krisa " + e.player.getName());
                     e.player.getEntityData().setBoolean(isUUI, true);
                 }
             }

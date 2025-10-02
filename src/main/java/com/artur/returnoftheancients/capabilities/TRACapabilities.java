@@ -7,6 +7,7 @@ import com.artur.returnoftheancients.blockprotect.IProtectedChunk;
 import com.artur.returnoftheancients.blockprotect.server.IServerProtectedChunk;
 import com.artur.returnoftheancients.blockprotect.server.ServerProtectedChunk;
 import com.artur.returnoftheancients.energy.system.EnergySystemsManager;
+import com.artur.returnoftheancients.worldsystems.WorldSystemsManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,6 +27,8 @@ public class TRACapabilities {
     public static final Capability<IProtectedChunk> PROTECTED_CHUNK = null;
     @CapabilityInject(EnergySystemsManager.class)
     public static final Capability<EnergySystemsManager> ENERGY_SYSTEMS_MANAGER = null;
+    @CapabilityInject(WorldSystemsManager.class)
+    public static final Capability<WorldSystemsManager> WORLD_SYSTEMS_MANAGER = null;
     @CapabilityInject(IAncientLayer1Manager.class)
     public static final Capability<IAncientLayer1Manager> ANCIENT_LAYER_1_MANAGER = null;
 
@@ -82,5 +85,26 @@ public class TRACapabilities {
                 ((IServerAncientLayer1Manager) instance).deserializeNBT((NBTTagCompound) nbt);
             }
         }, () -> new ServerAncientLayer1Manager(null));
+
+        CapabilityManager.INSTANCE.register(WorldSystemsManager.class, new Capability.IStorage<WorldSystemsManager>() {
+            @Nullable
+            @Override
+            public NBTBase writeNBT(Capability<WorldSystemsManager> capability, WorldSystemsManager instance, EnumFacing side) {
+                if (instance == null) {
+                    return null;
+                }
+
+                return instance.serializeNBT();
+            }
+            @Override
+            public void readNBT(Capability<WorldSystemsManager> capability, WorldSystemsManager instance, EnumFacing side, NBTBase nbt) {
+                if (instance == null || !(nbt instanceof NBTTagCompound)) {
+                    return;
+                }
+
+                instance.deserializeNBT((NBTTagCompound) nbt);
+            }
+        }, () -> new WorldSystemsManager(null));
+
     }
 }

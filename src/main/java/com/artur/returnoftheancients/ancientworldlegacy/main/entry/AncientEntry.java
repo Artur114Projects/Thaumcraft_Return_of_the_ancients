@@ -9,11 +9,10 @@ import com.artur.returnoftheancients.ancientworldlegacy.genmap.util.StructureMap
 import com.artur.returnoftheancients.ancientworldlegacy.util.interfaces.IBuild;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitItems;
-import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.misc.WorldData;
 import com.artur.returnoftheancients.misc.WorldDataFields;
-import com.artur.returnoftheancients.util.interfaces.IALGS;
+import com.artur.returnoftheancients.ancientworldlegacy.util.interfaces.IALGS;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;

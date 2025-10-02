@@ -18,18 +18,19 @@ public class TileEntityAncientFanRender extends TileEntitySpecialRendererBase<Ti
         GlStateManager.pushMatrix();
         switch (tile.axis()) {
             case X:
-                GlStateManager.rotate(90, 0, 0 ,1);
-                GlStateManager.translate(1, -1, 0);
+                GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
+                GlStateManager.translate(1.0F, -1.0F, 0.0F);
                 break;
             case Z:
-                GlStateManager.rotate(90, 1, 0 ,0);
-                GlStateManager.translate(0, -1, -1);
+                GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.translate(0.0F, -1.0F, -1.0F);
                 break;
         }
+        if (tile.isRotated()) GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
         float spinSpeed = 20.0F / tile.spinSpeed(partialTicks);
         this.bindTexture(TEXTURE_BASE);
         this.modelBase.setFanRotate((float) ((Math.PI * 2) * ((ClientEventsHandler.GLOBAL_TICK_MANAGER.interpolatedGameTickCounter(partialTicks) % spinSpeed) / spinSpeed)));
-        this.modelBase.renderAll();
+        this.modelBase.renderAll(tile.isClosed());
         GlStateManager.popMatrix();
     }
 
@@ -38,7 +39,7 @@ public class TileEntityAncientFanRender extends TileEntitySpecialRendererBase<Ti
         this.defaultTransform(0, 0, 0);
         this.bindTexture(TEXTURE_BASE);
         this.modelBase.setFanRotate(0.0F);
-        this.modelBase.renderAll();
+        this.modelBase.renderAll(false);
         this.defaultEnd();
     }
 }

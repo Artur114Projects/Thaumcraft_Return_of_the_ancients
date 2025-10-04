@@ -55,8 +55,10 @@ public class TileEntityIncineratorRender extends TileEntitySpecialRendererBase<T
     public void renderByItem(ItemStack stack, float partialTicks) {
         this.defaultTransform(0.0, 0.0, 0.0);
 
-        this.bindTexture(TEXTURE_BASE);
+        this.bindTexture(TEXTURE_LAVA);
         this.modelBase.renderLava();
+
+        this.bindTexture(TEXTURE_BASE);
         this.modelBase.renderBase();
         this.modelBase.renderJetBase();
         this.modelBase.renderJet();

@@ -1,11 +1,12 @@
 package com.artur.returnoftheancients.client.event.managers;
 
-import com.artur.returnoftheancients.handlers.RenderHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class GlobalTickManager {
+    public long prevUnloadGameTickCounter = 0;
+    public long unloadGameTickCounter = 0;
     public long prevGameTickCounter = 0;
     public long gameTickCounter = 0;
 
@@ -17,12 +18,19 @@ public class GlobalTickManager {
             return;
         }
 
+        this.prevUnloadGameTickCounter = this.unloadGameTickCounter;
         this.prevGameTickCounter = this.gameTickCounter;
+
+        if (mc.world == null) {
+            this.prevUnloadGameTickCounter = 0;
+            this.unloadGameTickCounter = 0;
+        }
 
         if (player == null || mc.isGamePaused()) {
             return;
         }
 
+        this.unloadGameTickCounter++;
         this.gameTickCounter++;
 
         if (this.gameTickCounter < 0) {
@@ -33,5 +41,9 @@ public class GlobalTickManager {
 
     public double interpolatedGameTickCounter(float pct) {
         return this.prevGameTickCounter + (this.gameTickCounter - this.prevGameTickCounter) * pct;
+    }
+
+    public double interpolatedUnloadGameTickCounter(float pct) {
+        return this.prevUnloadGameTickCounter + (this.unloadGameTickCounter - this.prevUnloadGameTickCounter) * pct;
     }
 }

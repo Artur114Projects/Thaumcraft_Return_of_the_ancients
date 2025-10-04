@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.blocks;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.main.MainR;
+import com.artur.returnoftheancients.util.MaterialArray;
 import com.artur.returnoftheancients.util.interfaces.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -37,6 +38,10 @@ public abstract class BaseBlock extends Block implements IHasModel {
         InitBlocks.BLOCKS.add(this);
         item = new ItemBlock(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
         InitItems.ITEMS.add(item);
+    }
+
+    public BaseBlock(String name, MaterialArray array) {
+        this(name, array.material(), array.hardness(), array.resistance(), array.soundType());
     }
 
     public BaseBlock setNotFillAndOpaqueCube() {

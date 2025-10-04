@@ -1,0 +1,10 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "returnoftheancients:ancient_glass",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{"model": "returnoftheancients:ancient_glass"}], "inventory": [{"model": "returnoftheancients:ancient_glass"}]
+  }
+}

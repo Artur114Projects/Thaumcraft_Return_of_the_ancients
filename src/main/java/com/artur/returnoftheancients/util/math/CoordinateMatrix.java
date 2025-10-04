@@ -30,6 +30,10 @@ public class CoordinateMatrix {
         this(false);
     }
 
+    public boolean isEmpty() {
+        return this.originalBoundingBoxes.isEmpty() && this.originalVectors.isEmpty() && (this.children == null || children.isEmpty());
+    }
+
     public CoordinateMatrix child(String name) {
         if (this.children == null) {
             this.children = new HashMap<>();

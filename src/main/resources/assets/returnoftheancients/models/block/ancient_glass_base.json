@@ -1,0 +1,25 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "returnoftheancients:blocks/ancient_glass",
+		"1": "returnoftheancients:blocks/empty",
+		"particle": "returnoftheancients:blocks/ancient_glass"
+	},
+	"elements": [
+		{
+			"from": [1, 1, 1],
+			"to": [15, 3, 15],
+			"rotation": {"angle": 0, "axis": "z", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [1, 0, 15, 2], "texture": "#1"},
+				"east": {"uv": [1, 0, 15, 2], "texture": "#1"},
+				"south": {"uv": [1, 0, 15, 2], "texture": "#1"},
+				"west": {"uv": [1, 0, 15, 2], "texture": "#1"},
+				"up": {"uv": [1, 1, 15, 15], "texture": "#0"},
+				"down": {"uv": [1, 1, 15, 15], "texture": "#0"}
+			}
+		}
+	],
+	"display": {}
+}

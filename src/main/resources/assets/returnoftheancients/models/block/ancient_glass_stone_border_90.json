@@ -1,0 +1,23 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "returnoftheancients:blocks/ancient_glass_border",
+		"particle": "returnoftheancients:blocks/ancient_glass_border"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [1, 4, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 4], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 4], "texture": "#0"},
+				"south": {"uv": [15, 0, 16, 4], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 4], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 1], "rotation": 270, "texture": "#0"},
+				"down": {"uv": [0, 3, 16, 4], "rotation": 90, "texture": "#0"}
+			}
+		}
+	]
+}

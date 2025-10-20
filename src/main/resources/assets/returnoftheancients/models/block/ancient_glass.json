@@ -1,6 +1,69 @@
 {
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "returnoftheancients:blocks/ancient_glass"
-  }
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"textures": {
+		"1": "returnoftheancients:blocks/ancient_glass_border",
+		"2": "returnoftheancients:blocks/ancient_glass_nq",
+		"particle": "returnoftheancients:blocks/ancient_glass_border"
+	},
+	"elements": [
+		{
+			"from": [1, 7, 1],
+			"to": [15, 9, 15],
+			"rotation": {"angle": 0, "axis": "x", "origin": [3, 6, 3]},
+			"faces": {
+				"up": {"uv": [1, 1, 15, 15], "texture": "#2"},
+				"down": {"uv": [1, 1, 15, 15], "texture": "#2"}
+			}
+		},
+		{
+			"from": [0, 6, 0],
+			"to": [16, 10, 1],
+			"rotation": {"angle": 0, "axis": "x", "origin": [1, 6, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 4], "texture": "#1"},
+				"east": {"uv": [0, 0, 1, 4], "texture": "#1"},
+				"south": {"uv": [1, 0, 15, 4], "texture": "#1"},
+				"west": {"uv": [0, 0, 1, 4], "texture": "#1"},
+				"up": {"uv": [0, 0, 16, 1], "texture": "#1"},
+				"down": {"uv": [0, 3, 16, 4], "texture": "#1"}
+			}
+		},
+		{
+			"from": [0, 6, 15],
+			"to": [16, 10, 16],
+			"rotation": {"angle": 0, "axis": "x", "origin": [1, 6, 15]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 4], "texture": "#1"},
+				"east": {"uv": [0, 0, 1, 4], "texture": "#1"},
+				"south": {"uv": [0, 0, 16, 4], "texture": "#1"},
+				"west": {"uv": [0, 0, 1, 4], "texture": "#1"},
+				"up": {"uv": [0, 0, 16, 1], "texture": "#1"},
+				"down": {"uv": [0, 3, 16, 4], "texture": "#1"}
+			}
+		},
+		{
+			"from": [0, 6, 1],
+			"to": [1, 10, 15],
+			"rotation": {"angle": 0, "axis": "x", "origin": [0, 6, 15]},
+			"faces": {
+				"east": {"uv": [1, 0, 15, 4], "texture": "#1"},
+				"west": {"uv": [1, 0, 15, 4], "texture": "#1"},
+				"up": {"uv": [1, 0, 15, 1], "rotation": 270, "texture": "#1"},
+				"down": {"uv": [1, 3, 15, 4], "rotation": 90, "texture": "#1"}
+			}
+		},
+		{
+			"from": [15, 6, 1],
+			"to": [16, 10, 15],
+			"rotation": {"angle": 0, "axis": "x", "origin": [15, 6, 15]},
+			"faces": {
+				"east": {"uv": [1, 0, 15, 4], "texture": "#1"},
+				"west": {"uv": [1, 0, 15, 4], "texture": "#1"},
+				"up": {"uv": [0, 0, 16, 1], "rotation": 270, "texture": "#1"},
+				"down": {"uv": [1, 3, 15, 4], "rotation": 90, "texture": "#1"}
+			}
+		}
+	]
 }

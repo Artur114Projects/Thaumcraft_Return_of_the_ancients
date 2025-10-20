@@ -127,6 +127,8 @@ public class ItemDebugCarrot extends BaseItem {
 				} else {
 					((ITileBurner) tile).activate();
 				}
+			} else {
+				player.sendMessage(new TextComponentString(worldIn.getBlockState(pos).toString()));
 			}
 		}
 

@@ -49,8 +49,8 @@ public class ClientPlayerInBiomeManager {
 
     public void entityViewRenderEventFogColors(EntityViewRenderEvent.FogColors e) {
         if (e.getEntity().getEntityWorld().provider.getDimension() == ancient_world_dim_id) {
-            e.setRed(1.0F);
-            e.setGreen(0.4F);
+            e.setRed(1.0F * 0.8F);
+            e.setGreen(0.4F * 0.8F);
             e.setBlue(0.0F);
         }
     }
@@ -58,7 +58,7 @@ public class ClientPlayerInBiomeManager {
     public void entityViewRenderEventRenderFogEvent(EntityViewRenderEvent.RenderFogEvent e) {
         if (e.getEntity().getEntityWorld().provider.getDimension() == ancient_world_dim_id) {
             GlStateManager.setFog(GlStateManager.FogMode.EXP);
-            GlStateManager.setFogDensity(0.026F);
+            GlStateManager.setFogDensity(0.02F);
 
             if (RenderEventHandler.fogTarget > 0) {
                 RenderEventHandler.fogTarget = 0;

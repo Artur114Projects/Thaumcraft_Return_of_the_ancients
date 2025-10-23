@@ -1,0 +1,25 @@
+{
+  "multipart": [
+    {
+      "when": {"light": "0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15"},
+      "apply": [
+        { "model": "thaumcraft:ancient_stone" },
+        { "model": "thaumcraft:ancient_stone", "x": 90 },
+        { "model": "thaumcraft:ancient_stone", "x": 180 },
+        { "model": "thaumcraft:ancient_stone", "x": 270 },
+        { "model": "thaumcraft:ancient_stone", "y": 90 },
+        { "model": "thaumcraft:ancient_stone", "y": 180 },
+        { "model": "thaumcraft:ancient_stone", "y": 270 },
+        { "model": "thaumcraft:ancient_stone", "y": 90, "x": 90 },
+        { "model": "thaumcraft:ancient_stone", "y": 90, "x": 180 },
+        { "model": "thaumcraft:ancient_stone", "y": 90, "x": 270 },
+        { "model": "thaumcraft:ancient_stone", "y": 180, "x": 90 },
+        { "model": "thaumcraft:ancient_stone", "y": 180, "x": 180 },
+        { "model": "thaumcraft:ancient_stone", "y": 180, "x": 270 },
+        { "model": "thaumcraft:ancient_stone", "y": 270, "x": 90 },
+        { "model": "thaumcraft:ancient_stone", "y": 270, "x": 180 },
+        { "model": "thaumcraft:ancient_stone", "y": 270, "x": 270 }
+      ]
+    }
+  ]
+}

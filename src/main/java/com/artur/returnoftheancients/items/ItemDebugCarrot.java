@@ -1,9 +1,11 @@
 package com.artur.returnoftheancients.items;
 
 
+import com.artur.returnoftheancients.blocks.BlockLightningStoneTC;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.ParticleFlameCanCollide;
 import com.artur.returnoftheancients.tileentity.interf.ITileBurner;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -85,7 +87,7 @@ public class ItemDebugCarrot extends BaseItem {
 		if (worldIn.isRemote) {
 
 			for (int i = 0; i != 2; i++) {
-				FXDispatcher.INSTANCE.drawVentParticles(pos.getX() + 0.5, pos.getY() + 2, pos.getZ() + 0.5, 0.0, 0.001, 0.0, 0x999999, 1.0F);
+//				FXDispatcher.INSTANCE.drawVentParticles(pos.getX() + 0.5, pos.getY() + 2, pos.getZ() + 0.5, 0.0, 0.001, 0.0, 0x999999, 1.0F);
 			}
 
 //			ClientEventsHandler.CAMERA_FX_MANAGER.startShake(20 * 20);
@@ -119,6 +121,7 @@ public class ItemDebugCarrot extends BaseItem {
 //				ClientEventsHandler.FOG_MANAGER.setFogParams(new FogManager.FogParams(100, 20, 100, 20));
 //			}
 		}
+		IBlockState state = worldIn.getBlockState(pos);
 		if (player.isSneaking()) {
 			TileEntity tile = worldIn.getTileEntity(pos);
 			if (tile instanceof ITileBurner) {
@@ -127,14 +130,17 @@ public class ItemDebugCarrot extends BaseItem {
 				} else {
 					((ITileBurner) tile).activate();
 				}
-			} else {
-				player.sendMessage(new TextComponentString(worldIn.getBlockState(pos).toString()));
 			}
 		}
 
+		if (state.getBlock() instanceof BlockLightningStoneTC) {
+			int value = state.getValue(BlockLightningStoneTC.LIGHT) + 1 - (player.isSneaking() ? 2 : 0); value = value > 15 ? 0 : value; value = value < 0 ? 15 : value;
+			worldIn.setBlockState(pos, state.withProperty(BlockLightningStoneTC.LIGHT, value));
+			player.sendStatusMessage(new TextComponentString("Lightning: " + (15 - value)), true);
+			return EnumActionResult.SUCCESS;
+		}
 
 		if (!worldIn.isRemote) {
-			worldIn.sendBlockBreakProgress(128, pos, rand.nextInt(10));
 
 //			if (player.isSneaking()) {
 //				BlockProtectHandler.protect(worldIn, pos);

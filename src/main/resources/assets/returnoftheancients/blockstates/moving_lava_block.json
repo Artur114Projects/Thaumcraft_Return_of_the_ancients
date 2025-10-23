@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "returnoftheancients:moving_lava_block",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{ "model": "returnoftheancients:moving_lava_block" }],
+    "dir=north": [{ "model": "returnoftheancients:moving_lava_block" }],
+    "dir=west": [{ "model": "returnoftheancients:moving_lava_block", "y": 270 }],
+    "dir=east": [{ "model": "returnoftheancients:moving_lava_block", "y": 90 }],
+    "dir=south": [{ "model": "returnoftheancients:moving_lava_block", "y": 180 }],
+    "inventory": [{"model": "returnoftheancients:moving_lava_block"}]
+  }
+}

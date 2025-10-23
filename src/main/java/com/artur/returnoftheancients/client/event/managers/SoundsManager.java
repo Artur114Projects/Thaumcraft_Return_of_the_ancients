@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.HashMap;
@@ -13,10 +14,9 @@ import java.util.Map;
 
 public class SoundsManager {
     public final Map<BlockPos, TileSoundEntry<?>> soundTileEntryMap = new HashMap<>();
-
+    public final Minecraft mc = Minecraft.getMinecraft();
     public void tickEventClientTickEvent(TickEvent.ClientTickEvent e) {
         EntityPlayer player = Minecraft.getMinecraft().player;
-        Minecraft mc = Minecraft.getMinecraft();
 
         if (e.phase != TickEvent.Phase.START || player == null || mc.isGamePaused()) {
             return;
@@ -27,7 +27,7 @@ public class SoundsManager {
         while (iterator.hasNext()) {
             TileSoundEntry<?> entry = iterator.next();
 
-            if (entry.isInvalid()) {
+            if (entry.isInvalid(this.mc.world)) {
                 entry.remove(); iterator.remove(); continue;
             }
 
@@ -49,7 +49,7 @@ public class SoundsManager {
     public <T extends TileEntity> void playTileSound(T tile, SoundFactory<T> factory) {
         TileSoundEntry<?> sound = this.soundTileEntryMap.get(tile.getPos());
 
-        if (sound == null || sound.isInvalid()) {
+        if (sound == null || sound.isInvalid(this.mc.world)) {
             this.soundTileEntryMap.put(tile.getPos(), new TileSoundEntry<>(factory, tile));
         }
     }
@@ -58,9 +58,11 @@ public class SoundsManager {
         private final SoundFactory<T> factory;
         private final BlockPos pos;
         private SoundTile<T> sound;
+        private final int tileDim;
         private final T tile;
 
         public TileSoundEntry(SoundFactory<T> factory, T tile) {
+            this.tileDim = tile.getWorld().provider.getDimension();
             this.factory = factory;
             this.tile = tile;
 
@@ -75,8 +77,8 @@ public class SoundsManager {
             return this.pos;
         }
 
-        public boolean isInvalid() {
-            return this.tile.isInvalid();
+        public boolean isInvalid(World currentWorld) {
+            return this.tile.isInvalid() || currentWorld == null || this.tileDim != currentWorld.provider.getDimension();
         }
 
         public boolean isPlaying() {

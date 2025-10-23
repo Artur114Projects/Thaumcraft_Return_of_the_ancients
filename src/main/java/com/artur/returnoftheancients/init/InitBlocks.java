@@ -26,6 +26,9 @@ public class InitBlocks {
     public static final Block DUMMY_ANCIENT_STONE = new BlockDummy("dummy_ancient_stone", Material.ROCK, 2.0F, 10.0F, SoundType.STONE);
     public static final Block ANCIENT_GLASS = new BlockAncientGlass("ancient_glass", Material.GLASS, 2.0F, 10.0F, SoundType.GLASS);
     public static final Block ANCIENT_LAMP_0 = new BlockAncientLamp("ancient_lamp_0", 1.0F).setTRACreativeTab().setForCreative();
+    public static final Block ELDRITCH_STONE_LIGHTNING = new BlockLightningStoneTC("stone_eldritch_tile");
+    public static final Block ANCIENT_STONE_LIGHTNING = new BlockLightningStoneTC("stone_ancient");
+    public static final Block MOVING_LAVA_BLOCK = new BlockMovingLava("moving_lava_block");
     public static Block ELDRITCH_STAIRS = null;
     public static Block ANCIENT_STAIRS = null;
 }

@@ -39,7 +39,7 @@ public class TileEntityAncientPiston extends TileBase implements ITileMultiBBPro
         if (playerIn.getHeldItem(hand).getItem() == InitItems.DEBUG_CARROT) {
             this.offset += playerIn.isSneaking() ? -5 : 5;
             this.offset %= 40;
-            playerIn.sendStatusMessage(new TextComponentString("" + this.offset), true);
+            playerIn.sendStatusMessage(new TextComponentString("Offset: " + this.offset), true);
             return true;
         }
         return false;

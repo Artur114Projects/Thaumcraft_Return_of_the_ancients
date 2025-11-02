@@ -83,14 +83,6 @@
     {"when": {"facing": "north"}, "apply": {"model": "returnoftheancients:ancient_glass_base", "x": 270}},
     {"when": {"facing": "south"}, "apply": {"model": "returnoftheancients:ancient_glass_base", "x": 90}},
     {"when": {"facing": "west"}, "apply": {"model": "returnoftheancients:ancient_glass_base", "x": 90, "y": 90}},
-    {"when": {"facing": "east"}, "apply": {"model": "returnoftheancients:ancient_glass_base", "x": 270, "y": 90}},
-
-
-    {"when": {"AND": [{"facing": "down"}, {"lava": true}]}, "apply": {"model": "returnoftheancients:ancient_glass_lava"}},
-    {"when": {"AND": [{"facing": "up"}, {"lava": true}]}, "apply": {"model": "returnoftheancients:ancient_glass_lava", "x": 180}},
-    {"when": {"AND": [{"facing": "north"}, {"lava": true}]}, "apply": {"model": "returnoftheancients:ancient_glass_lava", "x": 270}},
-    {"when": {"AND": [{"facing": "south"}, {"lava": true}]}, "apply": {"model": "returnoftheancients:ancient_glass_lava", "x": 90}},
-    {"when": {"AND": [{"facing": "west"}, {"lava": true}]}, "apply": {"model": "returnoftheancients:ancient_glass_lava", "x": 90, "y": 90}},
-    {"when": {"AND": [{"facing": "east"}, {"lava": true}]}, "apply": {"model": "returnoftheancients:ancient_glass_lava", "x": 270, "y": 90}}
+    {"when": {"facing": "east"}, "apply": {"model": "returnoftheancients:ancient_glass_base", "x": 270, "y": 90}}
   ]
 }

@@ -27,6 +27,15 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
     private static UltraMutableBlockPos[] stack = new UltraMutableBlockPos[64];
     private static long lastTrowTime = 0;
     private static int stackHead = -1;
+    private static final int NUM_X_BITS = 1 + MathHelper.log2(MathHelper.smallestEncompassingPowerOfTwo(30000000));
+    private static final int NUM_Z_BITS = NUM_X_BITS;
+    private static final int NUM_Y_BITS = 64 - NUM_X_BITS - NUM_Z_BITS;
+    private static final int Y_SHIFT = 0 + NUM_Z_BITS;
+    private static final int X_SHIFT = Y_SHIFT + NUM_Y_BITS;
+    private static final long X_MASK = (1L << NUM_X_BITS) - 1L;
+    private static final long Y_MASK = (1L << NUM_Y_BITS) - 1L;
+    private static final long Z_MASK = (1L << NUM_Z_BITS) - 1L;
+
 
 
     public static synchronized @NotNull UltraMutableBlockPos getBlockPosFromPoll() {
@@ -112,6 +121,10 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         return this;
     }
 
+    public BlockPos subtract(Vec3i vec) {
+        return this.add(-vec.getX(), -vec.getY(), -vec.getZ());
+    }
+
     public UltraMutableBlockPos addY(int y) {
         this.y += y;
         return this;
@@ -173,6 +186,13 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
     @Override
     public @NotNull UltraMutableBlockPos setPos(Entity entityIn) {
         return this.setPos(entityIn.posX, entityIn.posY, entityIn.posZ);
+    }
+
+    public UltraMutableBlockPos setPos(long serialized) {
+        int i = (int)(serialized << 64 - X_SHIFT - NUM_X_BITS >> 64 - NUM_X_BITS);
+        int j = (int)(serialized << 64 - Y_SHIFT - NUM_Y_BITS >> 64 - NUM_Y_BITS);
+        int k = (int)(serialized << 64 - NUM_Z_BITS >> 64 - NUM_Z_BITS);
+        return this.setPos(i, j, k);
     }
 
     @Override

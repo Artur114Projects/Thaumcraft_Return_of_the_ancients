@@ -106,7 +106,7 @@ public class ServerAncientLayer1Manager implements IServerAncientLayer1Manager {
         layer1Server.setPlayersState(compiled.getSecond());
         layer1Server.setWorld(this.world);
         this.setFreePos(layer1Server);
-        layer1Server.setSize(17);
+        layer1Server.setSize(33);
         layer1Server.constructFinish();
 
         this.ancientLayer1s.add(layer1Server);

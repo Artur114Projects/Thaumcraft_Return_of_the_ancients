@@ -27,6 +27,21 @@ public class GenPhaseBaseMap extends GenPhase {
             map.insetStructure(EnumStructureType.LADDER.create(EnumRotate.values()[i], center.offset(EnumFace.values()[i + 1 >= 4 ? 0 : i + 1], 3)));
         }
 
+        final List<Integer> indexes = this.createIndexes(size);
+
+        int index = indexes.get(rand.nextInt(indexes.size()));
+
+        int bossX = index % size;
+        int bossY = index / size;
+
+        EnumFace face = EnumFace.fromVector(center.getX() - bossX, center.getY() - bossY);
+        
+        map.insetStructure(EnumMultiChunkStrType.BOSS.create(face.rotateFromDefFace(EnumFace.RIGHT), new StrPos(bossX, bossY)));
+
+        return map;
+    }
+
+    private List<Integer> createIndexes(int size) {
         List<Integer> indexes = new ArrayList<>(size * size);
         int minDistance = (size / 2) / 2 + 1;
         int maxDistance = (size / 2) - 1;
@@ -45,16 +60,6 @@ public class GenPhaseBaseMap extends GenPhase {
 
             indexes.add(i);
         }
-
-        int index = indexes.get(rand.nextInt(indexes.size()));
-
-        int bossX = index % size;
-        int bossY = index / size;
-
-        EnumFace face = EnumFace.fromVector(center.getX() - bossX, center.getY() - bossY);
-        
-        map.insetStructure(EnumMultiChunkStrType.BOSS.create(face.rotateFromDefFace(EnumFace.RIGHT), new StrPos(bossX, bossY)));
-
-        return map;
+        return indexes;
     }
 }

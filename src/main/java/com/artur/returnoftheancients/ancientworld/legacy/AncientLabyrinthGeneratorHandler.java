@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.generation.generators;
+package com.artur.returnoftheancients.ancientworld.legacy;
 
 import com.artur.returnoftheancients.ancientworldlegacy.util.interfaces.IALGS;
 

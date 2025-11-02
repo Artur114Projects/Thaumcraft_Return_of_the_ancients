@@ -1,13 +1,11 @@
 package com.artur.returnoftheancients.generation.chunkgenerators;
 
-import com.artur.returnoftheancients.generation.biomes.BiomeAncientLayer1;
 import com.artur.returnoftheancients.init.InitBiome;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,27 +19,22 @@ public class ChunkGeneratorAncientWorld implements IChunkGenerator {
     private final World world;
 
     public ChunkGeneratorAncientWorld(World worldIn) {
-        world = worldIn;
+        this.world = worldIn;
     }
 
     @Override
     public @NotNull Chunk generateChunk(int parChunkX, int parChunkZ) {
-        Chunk chunk = new Chunk(world, new ChunkPrimer(), parChunkX, parChunkZ);
-        byte[] abyte = chunk.getBiomeArray();
-        byte biomeId = (byte) Biome.getIdForBiome(biome);
-
-        Arrays.fill(abyte, biomeId);
+        Chunk chunk = new Chunk(this.world, parChunkX, parChunkZ);
+        Arrays.fill(chunk.getBiomeArray(), (byte) Biome.getIdForBiome(this.biome));
         return chunk;
     }
 
     @Override
-    public void populate(int x, int z) {
-
-    }
+    public void populate(int x, int z) {}
 
     @Override
     public boolean generateStructures(Chunk chunkIn, int x, int z) {
-        return true;
+        return false;
     }
 
     @Override
@@ -56,9 +49,7 @@ public class ChunkGeneratorAncientWorld implements IChunkGenerator {
     }
 
     @Override
-    public void recreateStructures(Chunk chunkIn, int x, int z) {
-
-    }
+    public void recreateStructures(Chunk chunkIn, int x, int z) {}
 
     @Override
     public boolean isInsideStructure(World worldIn, String structureName, BlockPos pos) {

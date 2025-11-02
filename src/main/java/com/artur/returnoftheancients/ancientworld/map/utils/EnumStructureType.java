@@ -14,7 +14,7 @@ public enum EnumStructureType implements IStructureType {
     WAY("ancient_way_rotate-", EnumRotate.C90, EnumFace.RIGHT, EnumFace.LEFT),
     TURN("ancient_turn_rotate-", EnumRotate.C270, EnumFace.UP, EnumFace.RIGHT),
     CROSSROADS("ancient_crossroads", EnumRotate.NON, EnumFace.values()),
-    END("ancient_end_rotate-", EnumRotate.C270, EnumFace.LEFT);
+    END("ancient_end_rotate-", EnumRotate.C270, EnumFace.RIGHT);
 
     private final Function3<EnumRotate, StrPos, EnumStructureType, IStructure> creator;
     private final Map<EnumRotate, Set<EnumFace>> ports;

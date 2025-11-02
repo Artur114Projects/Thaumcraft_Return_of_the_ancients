@@ -1,21 +1,8 @@
 package com.artur.returnoftheancients.main;
 
-import com.artur.returnoftheancients.ancientworld.map.gen.GenPhase;
-import com.artur.returnoftheancients.ancientworldlegacy.genmap.util.StructureMap;
-import com.artur.returnoftheancients.generation.generators.GenStructure;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.tileentity.TileBase;
-import com.artur.returnoftheancients.tileentity.TileEntityDummy;
-import com.artur.returnoftheancients.tileentity.interf.ITileBBProvider;
 import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-
-import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
 public class Test {

@@ -4,11 +4,10 @@ import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientProjector;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 
-public class BlockProjectorSound extends MovingSound {
+public class SoundBlockProjector extends MovingSound {
     private final TileEntityAncientProjector tile;
-    public BlockProjectorSound(TileEntityAncientProjector tile) {
+    public SoundBlockProjector(TileEntityAncientProjector tile) {
         super(InitSounds.PROJECTOR.SOUND, SoundCategory.BLOCKS);
 
         this.tile = tile;

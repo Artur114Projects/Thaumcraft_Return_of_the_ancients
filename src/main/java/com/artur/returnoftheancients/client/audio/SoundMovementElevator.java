@@ -1,19 +1,17 @@
 package com.artur.returnoftheancients.client.audio;
 
-import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.generation.portal.base.client.ClientAncientPortal;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 
-public class MovementElevatorSound extends MovingSound {
+public class SoundMovementElevator extends MovingSound {
     private final ClientAncientPortal.MovementElevator movement;
     private final EntityPlayerSP player;
 
-    public MovementElevatorSound(EntityPlayerSP player, ClientAncientPortal.MovementElevator movement) {
+    public SoundMovementElevator(EntityPlayerSP player, ClientAncientPortal.MovementElevator movement) {
         super(SoundEvents.ITEM_ELYTRA_FLYING, SoundCategory.PLAYERS);
         this.movement = movement;
         this.player = player;

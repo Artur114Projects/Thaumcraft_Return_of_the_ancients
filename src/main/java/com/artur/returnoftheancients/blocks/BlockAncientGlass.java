@@ -13,6 +13,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -25,7 +26,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockAncientGlass extends BaseBlock {
     private static final CoordinateMatrix MATRIX = createMatrix();
     public static final PropertyDirection FACING = PropertyDirection.create("facing");
-    public static final PropertyBool LAVA = PropertyBool.create("lava");
     public static final PropertyBool UP = PropertyBool.create("up");
     public static final PropertyBool DOWN = PropertyBool.create("down");
     public static final PropertyBool NORTH = PropertyBool.create("north");
@@ -59,13 +59,12 @@ public class BlockAncientGlass extends BaseBlock {
                 .withProperty(WEST, this.hasGlassOn(world, pos, EnumFacing.WEST))
                 .withProperty(EAST, this.hasGlassOn(world, pos, EnumFacing.EAST))
                 .withProperty(NORTH, this.hasGlassOn(world, pos, EnumFacing.NORTH))
-                .withProperty(SOUTH, this.hasGlassOn(world, pos, EnumFacing.SOUTH))
-                .withProperty(LAVA, this.hasLava(world, pos, state));
+                .withProperty(SOUTH, this.hasGlassOn(world, pos, EnumFacing.SOUTH));
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING, LAVA, UP, DOWN, WEST, EAST, NORTH, SOUTH);
+        return new BlockStateContainer(this, FACING, UP, DOWN, WEST, EAST, NORTH, SOUTH);
     }
 
     @Override
@@ -88,11 +87,6 @@ public class BlockAncientGlass extends BaseBlock {
         IBlockState state = world.getBlockState(pos);
         IBlockState stateN = world.getBlockState(pos.offset(facing));
         return stateN.getBlock() == InitBlocks.ANCIENT_GLASS && stateN.getValue(FACING) == state.getValue(FACING);
-    }
-
-    private boolean hasLava(IBlockAccess world, BlockPos pos, IBlockState state) {
-        Block block = world.getBlockState(pos.offset(state.getValue(FACING).getOpposite())).getBlock();
-        return block == Blocks.LAVA;
     }
 
     private static CoordinateMatrix createMatrix() {

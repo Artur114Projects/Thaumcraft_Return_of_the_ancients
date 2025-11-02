@@ -22,6 +22,7 @@ public class BuildRequest implements IBuildProperties {
     protected Function<IBlockState, IBlockState> blockStateHook = null;
     protected Function2<IBlockState, BlockPos, Boolean> blockProtectHook = null;
     protected boolean isPosAsXZCenter = false;
+    protected boolean isNeedLoadLightMap = true;
 
     protected BuildRequest(World world, BlockPos pos, IStructureBuilder builder) {
         this.builder = builder;
@@ -106,6 +107,15 @@ public class BuildRequest implements IBuildProperties {
     }
     public BuildRequest setPosAsXZCenter() {
         this.isPosAsXZCenter = true;
+        return this;
+    }
+
+    @Override
+    public boolean isNeedLoadLightMap() {
+        return isNeedLoadLightMap;
+    }
+    public BuildRequest setNotNeedLoadLightMap() {
+        this.isNeedLoadLightMap = false;
         return this;
     }
 }

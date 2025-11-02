@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.ancientworldlegacy.main.entry;
 
 import com.artur.returnoftheancients.ancientworldlegacy.genmap.AncientEntryMapProvider;
 import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
-import com.artur.returnoftheancients.generation.generators.GenStructure;
+import com.artur.returnoftheancients.ancientworld.legacy.GenStructure;
 import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
 import com.artur.returnoftheancients.ancientworldlegacy.util.BuildPhase;
 import com.artur.returnoftheancients.ancientworldlegacy.genmap.util.StructureMap;

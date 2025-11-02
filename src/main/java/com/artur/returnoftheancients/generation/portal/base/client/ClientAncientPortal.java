@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.generation.portal.base.client;
 
-import com.artur.returnoftheancients.client.audio.MovementElevatorSound;
+import com.artur.returnoftheancients.client.audio.SoundMovementElevator;
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.client.event.managers.movement.IMovementTask;
 import com.artur.returnoftheancients.client.fx.particle.ParticleAncientPortal;
@@ -8,7 +8,6 @@ import com.artur.returnoftheancients.generation.portal.util.OffsetsUtil;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ElytraSound;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -168,7 +167,7 @@ public class ClientAncientPortal {
                 this.firstTick = false;
 
                 if (player instanceof EntityPlayerSP) {
-                    Minecraft.getMinecraft().getSoundHandler().playSound(new MovementElevatorSound((EntityPlayerSP) player, this));
+                    Minecraft.getMinecraft().getSoundHandler().playSound(new SoundMovementElevator((EntityPlayerSP) player, this));
                 }
             }
 

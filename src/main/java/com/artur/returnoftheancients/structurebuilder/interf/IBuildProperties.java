@@ -11,4 +11,5 @@ public interface IBuildProperties {
     IBlockState blockStateHook(IBlockState state);
     boolean blockProtectHook(IBlockState state, BlockPos pos);
     boolean isPosAsXZCenter();
+    boolean isNeedLoadLightMap();
 }

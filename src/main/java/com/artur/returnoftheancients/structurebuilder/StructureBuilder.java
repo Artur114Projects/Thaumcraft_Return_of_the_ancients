@@ -26,13 +26,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StructureBuilder implements IStructureBuilder {
-    protected final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
     protected final Map<Integer, NBTTagCompound> tilesData = new HashMap<>();
     protected final IBlockState[] palette;
     protected final boolean[] blocksUseEbs;
     protected final BlockPos halfSizeXZ;
     protected final BlockPos size;
     protected final int[] blocks;
+    protected final int[] light;
     protected final String name;
 
     public StructureBuilder(String name) {
@@ -40,6 +40,7 @@ public class StructureBuilder implements IStructureBuilder {
         NBTTagList palette = structureNBT.getTagList("palette", 10);
         NBTTagList blocksNBT = structureNBT.getTagList("blocks", 10);
         NBTTagList nbttaglist = structureNBT.getTagList("size", 3);
+        NBTTagList lightMap = structureNBT.hasKey("light") ? structureNBT.getTagList("light", 10) : null;
         this.size = new BlockPos(nbttaglist.getIntAt(0), nbttaglist.getIntAt(1), nbttaglist.getIntAt(2));
         this.halfSizeXZ = new BlockPos(nbttaglist.getIntAt(0) / 2, 0, nbttaglist.getIntAt(2) / 2);
 
@@ -53,6 +54,7 @@ public class StructureBuilder implements IStructureBuilder {
             this.blocksUseEbs[i] = (state.isFullBlock() && !state.canProvidePower() && state.isFullCube() && state.getLightValue() == 0 && !state.getBlock().hasTileEntity(state)) || state.getMaterial() == Material.AIR;
         }
 
+        ArrayList<Integer> rawLight = new ArrayList<>(lightMap == null ? 0 : lightMap.tagCount());
         ArrayList<Integer> rawBlocks = new ArrayList<>(blocksNBT.tagCount());
         for (int i = 0; i != blocksNBT.tagCount(); i++) {
             NBTTagCompound compound = blocksNBT.getCompoundTagAt(i);
@@ -64,7 +66,17 @@ public class StructureBuilder implements IStructureBuilder {
                 this.tilesData.put(block, compound.getCompoundTag("nbt"));
             }
         }
+        if (lightMap != null) {
+            for (int i = 0; i != lightMap.tagCount(); i++) {
+                NBTTagCompound compound = lightMap.getCompoundTagAt(i);
+                NBTTagList pos = compound.getTagList("pos", 3);
+                int value = compound.getInteger("value");
+                int packedLight = this.packBytes((byte) pos.getIntAt(0), (byte) pos.getIntAt(1), (byte) pos.getIntAt(2), (byte) value);
+                rawLight.add(packedLight);
+            }
+        }
 
+        this.light = rawLight.stream().mapToInt(Integer::intValue).toArray();
         this.blocks = rawBlocks.stream().mapToInt(Integer::intValue).toArray();
     }
 
@@ -75,6 +87,8 @@ public class StructureBuilder implements IStructureBuilder {
 
     @Override
     public void build(World world, BlockPos pos, IBuildProperties properties) {
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+
         for (int block : blocks) {
             byte x = (byte) (block >> 24);
             byte y = (byte) (block >> 16);
@@ -82,28 +96,28 @@ public class StructureBuilder implements IStructureBuilder {
             byte type = (byte) block;
             IBlockState state = properties.blockStateHook(this.palette[type]);
             if (state == null) return;
-            this.blockPos.setPos(pos).add(x, y, z);
-            if (properties.isPosAsXZCenter()) this.blockPos.deduct(this.halfSizeXZ);
+            blockPos.setPos(pos).add(x, y, z);
+            if (properties.isPosAsXZCenter()) blockPos.deduct(this.halfSizeXZ);
             if (state.getMaterial() == Material.AIR && properties.isIgnoreAir()) continue;
-            if (this.blockPos.getY() >> 4 >= 16 || this.blockPos.getY() >> 4 < 0) continue;
+            if (blockPos.getY() >> 4 >= 16 || blockPos.getY() >> 4 < 0) continue;
 
             if (properties.isNeedProtect() && state.getMaterial() != Material.AIR && properties.blockProtectHook(state, blockPos)) {
-                BlockProtectHandler.protect(world, this.blockPos);
+                BlockProtectHandler.protect(world, blockPos);
             }
 
             if (this.blocksUseEbs[type] && properties.isUseEBSHook(state)) {
-                ExtendedBlockStorage storage = this.blockPos.ebs(world);
-                this.blockPos.normalizeToEBS();
-                storage.set(this.blockPos.getX(), this.blockPos.getY(), this.blockPos.getZ(), state);
+                ExtendedBlockStorage storage = blockPos.ebs(world);
+                blockPos.normalizeToEBS();
+                storage.set(blockPos.getX(), blockPos.getY(), blockPos.getZ(), state);
             } else {
                 NBTTagCompound data = this.tilesData.get(block);
-                if (world.setBlockState(this.blockPos, state) && data != null) {
-                    TileEntity tile = world.getTileEntity(this.blockPos);
+                if (world.setBlockState(blockPos, state) && data != null) {
+                    TileEntity tile = world.getTileEntity(blockPos);
 
                     if (tile != null) {
-                        data.setInteger("x", this.blockPos.getX());
-                        data.setInteger("y", this.blockPos.getY());
-                        data.setInteger("z", this.blockPos.getZ());
+                        data.setInteger("x", blockPos.getX());
+                        data.setInteger("y", blockPos.getY());
+                        data.setInteger("z", blockPos.getZ());
                         tile.readFromNBT(data);
                         tile.markDirty();
                     }
@@ -111,13 +125,30 @@ public class StructureBuilder implements IStructureBuilder {
             }
         }
 
-        if (properties.isNeedMarkRenderUpdate()) {
-            if (properties.isPosAsXZCenter()) {
-                world.markBlockRangeForRenderUpdate(pos.toImmutable().add(-this.size.getX() / 2, -this.size.getY() / 2, -this.size.getZ() / 2), this.blockPos.setPos(pos).add(this.size.getX() / 2, this.size.getY() / 2, this.size.getZ() / 2));
-            } else {
-                world.markBlockRangeForRenderUpdate(pos, this.blockPos.setPos(pos).add(this.size));
+        if (this.light.length != 0 && properties.isNeedLoadLightMap()) {
+            for (int packedLight : this.light) {
+                byte x = (byte) (packedLight >> 24);
+                byte y = (byte) (packedLight >> 16);
+                byte z = (byte) (packedLight >> 8);
+                byte value = (byte) packedLight;
+                blockPos.setPos(pos).add(x, y, z);
+                if (properties.isPosAsXZCenter()) blockPos.deduct(this.halfSizeXZ);
+                if (blockPos.getY() >> 4 >= 16 || blockPos.getY() >> 4 < 0) continue;
+                ExtendedBlockStorage storage = blockPos.ebs(world);
+                blockPos.normalizeToEBS();
+                storage.setBlockLight(blockPos.getX(), blockPos.getY(), blockPos.getZ(), value);
             }
         }
+
+        if (properties.isNeedMarkRenderUpdate()) {
+            if (properties.isPosAsXZCenter()) {
+                world.markBlockRangeForRenderUpdate(pos.toImmutable().add(-this.size.getX() / 2, -this.size.getY() / 2, -this.size.getZ() / 2), blockPos.setPos(pos).add(this.size.getX() / 2, this.size.getY() / 2, this.size.getZ() / 2));
+            } else {
+                world.markBlockRangeForRenderUpdate(pos, blockPos.setPos(pos).add(this.size));
+            }
+        }
+
+        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
     }
 
     private NBTTagCompound readStructureAsName(String structureName) {

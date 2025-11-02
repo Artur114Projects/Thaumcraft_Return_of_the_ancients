@@ -6,7 +6,7 @@ import com.artur.returnoftheancients.ancientworldlegacy.util.interfaces.IALGS;
 
 import java.util.Random;
 
-import static com.artur.returnoftheancients.generation.generators.AncientLabyrinthGeneratorHandler.getVoidStructures;
+import static com.artur.returnoftheancients.ancientworld.legacy.AncientLabyrinthGeneratorHandler.getVoidStructures;
 
 public class AncientEntryMapP0 implements IALGS {
 

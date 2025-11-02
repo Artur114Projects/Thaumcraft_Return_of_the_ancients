@@ -2,14 +2,11 @@ package com.artur.returnoftheancients.client.audio;
 
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientFan;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.*;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 
-public class BlockAncientFanSound extends SoundTile<TileEntityAncientFan> {
+public class SoundBlockAncientFan extends SoundTile<TileEntityAncientFan> {
 
-    public BlockAncientFanSound(TileEntityAncientFan tile) {
+    public SoundBlockAncientFan(TileEntityAncientFan tile) {
         super(InitSounds.FAN.SOUND, SoundCategory.BLOCKS, tile);
 
         this.repeat = true;

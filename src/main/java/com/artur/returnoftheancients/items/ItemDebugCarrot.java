@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.blocks.BlockLightningStoneTC;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.ParticleFlameCanCollide;
 import com.artur.returnoftheancients.tileentity.interf.ITileBurner;
+import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -15,23 +16,27 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityStructure;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IRarity;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import thaumcraft.client.fx.FXDispatcher;
 
+import java.io.*;
 import java.util.List;
 import java.util.Random;
 
@@ -50,7 +55,8 @@ public class ItemDebugCarrot extends BaseItem {
 
 	@Override
 	public @NotNull EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (player instanceof EntityPlayerMP) {
+		if (!worldIn.isRemote) {
+
 //			if (structure == null) {
 //				structure = new TRAStructureEBS("ancient_crossroads", null);
 //			}
@@ -121,6 +127,7 @@ public class ItemDebugCarrot extends BaseItem {
 //				ClientEventsHandler.FOG_MANAGER.setFogParams(new FogManager.FogParams(100, 20, 100, 20));
 //			}
 		}
+
 		IBlockState state = worldIn.getBlockState(pos);
 		if (player.isSneaking()) {
 			TileEntity tile = worldIn.getTileEntity(pos);
@@ -130,6 +137,10 @@ public class ItemDebugCarrot extends BaseItem {
 				} else {
 					((ITileBurner) tile).activate();
 				}
+			}
+			if (!worldIn.isRemote && tile instanceof TileEntityStructure) {
+				this.loadLightMapToFile((TileEntityStructure) tile, (EntityPlayerMP) player, worldIn);
+				return EnumActionResult.SUCCESS;
 			}
 		}
 
@@ -308,5 +319,71 @@ public class ItemDebugCarrot extends BaseItem {
 		tooltip.add(I18n.format("item.modifiers.mainhand"));
 		tooltip.add(" " + net.minecraft.util.text.translation.I18n.translateToLocalFormatted("attribute.modifier.equals.0", DECIMALFORMAT.format(3.0D), net.minecraft.util.text.translation.I18n.translateToLocal("attribute.name.generic.attackSpeed")));
 		tooltip.add(" " + I18n.format("item.debug_carrot.info.i") + " " + I18n.format("attribute.name.generic.attackDamage"));
+	}
+
+	private void loadLightMapToFile(TileEntityStructure tile, EntityPlayerMP player, World world) {
+		MinecraftServer server = player.mcServer;
+		File structuresPath = server.getActiveAnvilConverter().getFile(server.getFolderName(), "structures");
+		if (!structuresPath.exists()) return;
+
+		NBTTagCompound data = tile.writeToNBT(new NBTTagCompound());
+		if (!data.getString("mode").equals("SAVE")) return;
+		BlockPos startPos = tile.getPos().add(data.getInteger("posX"), data.getInteger("posY"), data.getInteger("posZ"));
+		BlockPos endPos = startPos.add(data.getInteger("sizeX"), data.getInteger("sizeY"), data.getInteger("sizeZ"));
+		File file = new File(structuresPath, data.getString("name") + ".nbt");
+
+		InputStream inputStream = null;
+		NBTTagCompound fileNBT;
+
+		try {
+			inputStream = new FileInputStream(file);
+			fileNBT = CompressedStreamTools.readCompressed(inputStream);
+		} catch (FileNotFoundException e) {
+			player.sendMessage(new TextComponentString("File \"" + data.getString("name") + ".nbt\"" + " not found!"));
+			return;
+		} catch (IOException e) {
+			e.printStackTrace(System.err);
+			return;
+        } finally {
+			IOUtils.closeQuietly(inputStream);
+		}
+
+		UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+		BlockPos minPos = new BlockPos(Math.min(startPos.getX(), endPos.getX()), Math.min(startPos.getY(), endPos.getY()), Math.min(startPos.getZ(), endPos.getZ()));
+		BlockPos maxPos = new BlockPos(Math.max(startPos.getX(), endPos.getX()), Math.max(startPos.getY(), endPos.getY()), Math.max(startPos.getZ(), endPos.getZ()));
+		NBTTagList lightData = new NBTTagList();
+
+		for (BlockPos.MutableBlockPos iteratePos : BlockPos.getAllInBoxMutable(minPos, maxPos)) {
+			blockPos.setPos(iteratePos).subtract(minPos);
+			int light = world.getLightFor(EnumSkyBlock.BLOCK, iteratePos);
+			if (light == 0) continue;
+			NBTTagCompound d = new NBTTagCompound();
+			NBTTagList pos = new NBTTagList();
+			pos.appendTag(new NBTTagInt(blockPos.getX()));
+			pos.appendTag(new NBTTagInt(blockPos.getY()));
+			pos.appendTag(new NBTTagInt(blockPos.getZ()));
+			d.setTag("pos", pos);
+			d.setInteger("value", light);
+			lightData.appendTag(d);
+		}
+
+		UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+
+		fileNBT.setTag("light", lightData);
+
+		OutputStream outputStream = null;
+
+		try {
+			outputStream = new FileOutputStream(file);
+			CompressedStreamTools.writeCompressed(fileNBT, outputStream);
+		} catch (FileNotFoundException e) {
+			player.sendMessage(new TextComponentString("File \"" + data.getString("name") + ".nbt\"" + " not found!"));
+		} catch (IOException e) {
+			e.printStackTrace(System.err);
+        } finally {
+			IOUtils.closeQuietly(outputStream);
+		}
+
+		player.sendMessage(new TextComponentString("Light map successfully load to file \"" + data.getString("name") + ".nbt\""));
 	}
 }

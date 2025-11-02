@@ -1,10 +1,9 @@
 package com.artur.returnoftheancients.tileentity;
 
-import com.artur.returnoftheancients.client.audio.BlockProjectorSound;
+import com.artur.returnoftheancients.client.audio.SoundBlockProjector;
 import com.artur.returnoftheancients.init.InitSounds;
 import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockPlaceListener;
-import com.artur.returnoftheancients.util.EnumAssetLocation;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -12,8 +11,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -46,7 +43,7 @@ public class TileEntityAncientProjector extends TileBase implements ITileBlockPl
     @Override
     public void onLoad() {
         if (this.world.isRemote) {
-            Minecraft.getMinecraft().getSoundHandler().playSound(new BlockProjectorSound(this));
+            Minecraft.getMinecraft().getSoundHandler().playSound(new SoundBlockProjector(this));
         }
     }
 

@@ -4,11 +4,8 @@ package com.artur.returnoftheancients.blocks;
 import com.artur.returnoftheancients.client.render.tile.TileEntityEnergyLineRenderer;
 import com.artur.returnoftheancients.energy.bases.block.BlockEnergyBase;
 import com.artur.returnoftheancients.energy.bases.tile.ITileEnergy;
-import com.artur.returnoftheancients.init.InitItems;
-import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.tileentity.TileEntityEnergyLine;
-import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -18,11 +15,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -38,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
     public static final PropertyBool DOWN = PropertyBool.create("down");
@@ -50,9 +48,6 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
 
     public BlockEnergyLine(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
-        InitItems.ITEMS.remove(item);
-        item = new ItemBlockEnergyLine(this).setRegistryName(this.getRegistryName());
-        InitItems.ITEMS.add(item);
 
         this.setForCreative().setTRACreativeTab();
     }
@@ -158,7 +153,7 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
     }
 
     @Override
-    public Class<TileEntityEnergyLine> getTileEntityClass() {
+    public Class<TileEntityEnergyLine> tileEntityClass() {
         return TileEntityEnergyLine.class;
     }
 
@@ -191,13 +186,18 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
     @Override
     public void registerModels() {
         super.registerModels();
-        ClientRegistry.bindTileEntitySpecialRenderer(this.getTileEntityClass(), new TileEntityEnergyLineRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(this.tileEntityClass(), new TileEntityEnergyLineRenderer());
     }
 
     private boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing facing){
         TileEntity tileOffset = world.getTileEntity(pos.offset(facing));
         TileEntity tile = world.getTileEntity(pos);
         return tileOffset instanceof ITileEnergy && ((ITileEnergy) (tileOffset)).canConnect(facing.getOpposite()) && tile instanceof ITileEnergy && ((ITileEnergy) (tile)).canConnect(facing);
+    }
+
+    @Override
+    protected Item createItemBlock() {
+        return new ItemBlockEnergyLine(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
     }
 
     private static class ItemBlockEnergyLine extends ItemBlock {

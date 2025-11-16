@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.ancientworld.legacy;
+package com.artur.returnoftheancients.ancientworldlegacy.legacy;
 
 import com.artur.returnoftheancients.ancientworld.map.gen.GenPhase;
 import com.artur.returnoftheancients.ancientworld.map.utils.EnumFace;

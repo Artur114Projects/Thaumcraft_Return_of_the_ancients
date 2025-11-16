@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ClientPacketMisc implements IMessage {
+public class ClientPacketMisc implements IMessage { // TODO: 16.11.2025 Упразднить!
     private NBTTagCompound data;
 
     public ClientPacketMisc() {

@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.artur.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
 
 @Mod.EventBusSubscriber(modid = Referense.MODID)
-public class AncientPortalsProcessor {
+public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать под capability!
 
     private static final Map<Integer, ChunkPos[]> PORTALS_GENERATION_POS = new HashMap<>();
     private static ChunkPos[] portalsGenerationPosOverWorld = null;
@@ -69,8 +69,7 @@ public class AncientPortalsProcessor {
                 WorldData worldData = WorldData.get();
 
                 if (dimension == 0) {
-                    portalsGenerationPosOverWorld = new ChunkPos[portalsCount];
-                    GenLayersHandler.initPortalsPosOnWorld(portalsGenerationPosOverWorld, e.getWorld().getWorldInfo().getSeed());
+                    portalsGenerationPosOverWorld = GenLayersHandler.initPortalsPosOnWorld(portalsCount, e.getWorld().getWorldInfo().getSeed());
                 }
 
                 if (TRAConfigs.Any.debugMode) System.out.println("Load portals dim:" + dimension);

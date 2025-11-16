@@ -1,12 +1,12 @@
 package com.artur.returnoftheancients.generation.portal.naturalgen;
 
 import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
+import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.structurebuilder.BuildRequest;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.generation.portal.util.OffsetsUtil;
 import com.artur.returnoftheancients.events.ServerEventsHandler;
 import com.artur.returnoftheancients.init.InitSounds;
-import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientSanctuaryController;
 import com.artur.returnoftheancients.util.TerrainAnalyzer;
@@ -129,7 +129,7 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
             this.tile = (TileEntityAncientSanctuaryController) tileRaw;
             this.tile.bindSanctuary(this);
         } else {
-            world.setBlockState(pos, InitTileEntity.ANCIENT_SANCTUARY_CONTROLLER.getDefaultState());
+            this.world.setBlockState(pos, InitBlocks.ANCIENT_SANCTUARY_CONTROLLER.getDefaultState());
             this.bindTile(pos);
         }
     }

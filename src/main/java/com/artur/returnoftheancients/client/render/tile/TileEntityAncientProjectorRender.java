@@ -1,6 +1,7 @@
 package com.artur.returnoftheancients.client.render.tile;
 
 import com.artur.returnoftheancients.client.model.ModelAncientProjector;
+import com.artur.returnoftheancients.client.render.item.IItemStackRenderer;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientProjector;
 import com.artur.returnoftheancients.util.EnumAssetLocation;
 import net.minecraft.client.renderer.BufferBuilder;

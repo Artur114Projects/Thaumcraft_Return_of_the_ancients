@@ -5,6 +5,7 @@ import com.artur.returnoftheancients.init.InitItems;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class ReturnOfTheAncientsTab extends CreativeTabs {
 
@@ -13,7 +14,7 @@ public class ReturnOfTheAncientsTab extends CreativeTabs {
 	}
 
 	@Override
-	public ItemStack getTabIconItem() {
+	public @NotNull ItemStack getTabIconItem() {
 		return new ItemStack(InitItems.PRIMAL_BLADE);
 	}
 

@@ -27,9 +27,9 @@ public class BlockStairsBase extends BlockStairs implements IHasModel {
         this.setRegistryName(name);
         this.setUnlocalizedName(name);
 
-        InitBlocks.BLOCKS.add(this);
+        InitBlocks.BLOCKS_REGISTER_BUSS.add(this);
         this.item = new ItemBlock(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
-        InitItems.ITEMS.add(this.item);
+        InitItems.ITEMS_REGISTER_BUSS.add(this.item);
     }
 
     public BlockStairsBase setTRACreativeTab() {

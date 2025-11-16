@@ -32,7 +32,7 @@ import java.util.List;
 
 import static com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld.tpToAncientWorld;
 
-public abstract class AncientPortal implements IWriteToNBT {
+public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025 Переписать!
 
     public static final String portalID = "PortalID";
     public static final String tpToHomeNBT = "tpToHomeNBT";
@@ -150,6 +150,8 @@ public abstract class AncientPortal implements IWriteToNBT {
                     data.setBoolean(tpToHomeNBT, false);
                     data.setBoolean(elevatingUp, true);
                     onPlayerTpToHome(player);
+                    player.capabilities.isFlying = true;
+                    player.sendPlayerAbilities();
                 }
             }
             if (data.getBoolean(elevatingUp)) {
@@ -158,6 +160,9 @@ public abstract class AncientPortal implements IWriteToNBT {
                 if (player.posY >= posY || player.posY >= 110) {
                     player.fallDistance = 0;
                     data.setInteger(portalID, -1);
+                    data.setBoolean(elevatingUp, false);
+                    player.capabilities.isFlying = false;
+                    player.sendPlayerAbilities();
                 }
             }
         }

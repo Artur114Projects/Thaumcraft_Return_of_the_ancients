@@ -5,7 +5,6 @@ import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.util.interfaces.IHasModel;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.List;
@@ -16,7 +15,7 @@ public abstract class BaseItem extends Item implements IHasModel {
         this.setRegistryName(name);
         this.setUnlocalizedName(name);
 
-        InitItems.ITEMS.add(this);
+        InitItems.ITEMS_REGISTER_BUSS.add(this);
     }
 
 

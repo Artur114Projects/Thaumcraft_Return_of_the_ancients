@@ -33,7 +33,7 @@ public class InitBiome {
     public static final Biome TAINT_BEACH = new BiomeTaint("taint_beach_r", new Biome.BiomeProperties("Rotten Beach").setWaterColor(0x310042).setBaseHeight(0.01F).setRainfall(1.0F).setHeightVariation(0.0F), EBiome.TAINT, BiomeTaint.TaintType.BEACH);
     public static final Biome TAINT_SEA = new BiomeTaint("taint_sea_r", new Biome.BiomeProperties("Rotten Sea").setWaterColor(0x310042).setBaseHeight(-1.2F).setRainfall(1.0F).setHeightVariation(0.1F), EBiome.TAINT_SEA, BiomeTaint.TaintType.SEA);
     public static final Biome TAINT = new BiomeTaint("taint_r", new Biome.BiomeProperties("Taint Plains").setWaterColor(0x310042).setBaseHeight(0.2F).setRainfall(1.0F).setHeightVariation(0.1F), EBiome.TAINT, BiomeTaint.TaintType.NORMAL);
-    public static final Biome ANCIENT_LABYRINTH = new BiomeAncientLayer1("ancient_layer1", new Biome.BiomeProperties("Ancient layer 1").setRainfall(0.0F).setRainDisabled().setWaterColor(0), EBiome.ANCIENT);
+    public static final Biome ANCIENT_LABYRINTH = new BiomeAncientLayer1("ancient_layer1", new Biome.BiomeProperties("Ancient layer 1").setRainfall(0.0F).setRainDisabled(), EBiome.ANCIENT);
 
     public static byte[] TAINT_BIOMES_ID = new byte[0];
     public static byte[] TAINT_BIOMES_L_ID = new byte[0];
@@ -46,7 +46,7 @@ public class InitBiome {
     public static int[] TAINT_BIOMES_L_MUTATION_INT_ID = new int[0];
 
 
-    public static void initBiomes() {
+    public static void preInit() {
         for (Biome biome : BIOMES) {
             if (biome instanceof IBiome) {
                 ((IBiome) biome).registerBiome();
@@ -54,6 +54,20 @@ public class InitBiome {
         }
 
         registerBiomeInfo();
+    }
+
+    public static void init() {
+        ((BiomeTaint) TAINT).registerBiomeP2();
+        ((BiomeTaint) TAINT_MOUNTAINS).registerBiomeP2();
+        ((BiomeTaint) TAINT_EXTREME_MOUNTAINS).registerBiomeP2(InitBlocks.TAINT_VOID_STONE.getDefaultState(), InitBlocks.TAINT_VOID_STONE.getDefaultState());
+        ((BiomeTaint) TAINT_SEA).registerBiomeP2(InitBlocks.TAINT_VOID_STONE.getDefaultState(), InitBlocks.TAINT_VOID_STONE.getDefaultState());
+        ((BiomeTaint) PRE_TERMAL_ZONE).registerBiomeP2(InitBlocks.TAINT_VOID_STONE.getDefaultState(), InitBlocks.TAINT_VOID_STONE.getDefaultState());
+        ((BiomeTaint) TAINT_WASTELAND).registerBiomeP2(InitBlocks.TAINT_VOID_STONE.getDefaultState(), InitBlocks.TAINT_VOID_STONE.getDefaultState());
+        ((BiomeTaint) INFERNAL_CRATER).registerBiomeP2(InitBlocks.TAINT_VOID_STONE.getDefaultState(), InitBlocks.TAINT_VOID_STONE.getDefaultState());
+        ((BiomeTaint) TAINT_BEACH).registerBiomeP2(InitBlocks.TAINT_VOID_STONE.getDefaultState(), InitBlocks.TAINT_VOID_STONE.getDefaultState());
+        ((BiomeTaint) TAINT_PLATEAU).registerBiomeP2();
+
+        registerBiomeArrays();
     }
 
     public static void registerBiomeInfo() {

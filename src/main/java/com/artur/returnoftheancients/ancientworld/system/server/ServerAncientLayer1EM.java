@@ -94,12 +94,13 @@ public class ServerAncientLayer1EM {
 
     public boolean entityJoinWorldEvent(EntityJoinWorldEvent e) {
         IAncientLayer1Manager managerServer = e.getWorld().getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+        boolean isLiving = e.getEntity() instanceof EntityLiving;
 
-        if (managerServer != null && e.getEntity() instanceof EntityLiving) {
+        if (managerServer != null && isLiving) {
             return ((IServerAncientLayer1Manager) managerServer).loadEntity((EntityLiving) e.getEntity());
         }
 
-        return false;
+        return !isLiving;
     }
 
     public void livingDeathEvent(LivingDeathEvent e) {

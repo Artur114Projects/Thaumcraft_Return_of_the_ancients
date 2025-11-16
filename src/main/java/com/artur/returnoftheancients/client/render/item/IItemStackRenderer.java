@@ -1,4 +1,4 @@
-package com.artur.returnoftheancients.client.render.tile;
+package com.artur.returnoftheancients.client.render.item;
 
 import net.minecraft.item.ItemStack;
 

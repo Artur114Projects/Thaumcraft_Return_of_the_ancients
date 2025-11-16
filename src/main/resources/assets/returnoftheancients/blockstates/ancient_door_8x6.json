@@ -4,7 +4,6 @@
     "model": "thaumcraft:ancient_stone"
   },
   "variants": {
-    "inventory": [{"model": "thaumcraft:ancient_stone"}],
     "normal": [{"model": "thaumcraft:ancient_stone"}]
   }
 }

@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.client.render.tile.TileEntityPhantomPedestalRender;
-import com.artur.returnoftheancients.tileentity.BlockTileEntity;
+import com.artur.returnoftheancients.tileentity.BaseBlockTileEntity;
 import com.artur.returnoftheancients.tileentity.TileEntityPhantomPedestal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockPhantomPedestal extends BlockTileEntity<TileEntityPhantomPedestal> {
+public class BlockPhantomPedestal extends BaseBlockTileEntity<TileEntityPhantomPedestal> {
     public BlockPhantomPedestal(String name) {
         super(name, Material.GLASS, 2.0F, 10.0F, SoundType.GLASS);
 
@@ -22,7 +22,7 @@ public class BlockPhantomPedestal extends BlockTileEntity<TileEntityPhantomPedes
     }
 
     @Override
-    public Class<TileEntityPhantomPedestal> getTileEntityClass() {
+    public Class<TileEntityPhantomPedestal> tileEntityClass() {
         return TileEntityPhantomPedestal.class;
     }
 

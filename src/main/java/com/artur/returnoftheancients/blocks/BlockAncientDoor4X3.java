@@ -1,13 +1,14 @@
 package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.client.render.tile.TileEntityAncientDoor4X3Render;
-import com.artur.returnoftheancients.tileentity.BlockTileEntity;
+import com.artur.returnoftheancients.tileentity.BaseBlockTileEntity;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientDoor4X3;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -18,11 +19,12 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockAncientDoor4X3 extends BlockTileEntity<TileEntityAncientDoor4X3> {
+public class BlockAncientDoor4X3 extends BaseBlockTileEntity<TileEntityAncientDoor4X3> {
     public BlockAncientDoor4X3(String name) {
         super(name, Material.ROCK, 2.0F, 10.0F, SoundType.STONE);
 
         this.setRenderer(new TileEntityAncientDoor4X3Render());
+        this.setForCreative();
     }
 
     @Override
@@ -85,12 +87,17 @@ public class BlockAncientDoor4X3 extends BlockTileEntity<TileEntityAncientDoor4X
     }
 
     @Override
-    public Class<TileEntityAncientDoor4X3> getTileEntityClass() {
+    public Class<TileEntityAncientDoor4X3> tileEntityClass() {
         return TileEntityAncientDoor4X3.class;
     }
 
     @Override
     public @Nullable TileEntityAncientDoor4X3 createTileEntity(@NotNull World world, @NotNull IBlockState blockState) {
         return new TileEntityAncientDoor4X3();
+    }
+
+    @Override
+    protected Item createItemBlock() {
+        return super.createItemBlock().setMaxStackSize(1);
     }
 }

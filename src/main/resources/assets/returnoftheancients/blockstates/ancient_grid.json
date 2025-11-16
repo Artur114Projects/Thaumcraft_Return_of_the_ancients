@@ -1,0 +1,35 @@
+{
+  "multipart": [
+    {"when": {"AND": [{"facing": "down"}, {"north": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border"}},
+    {"when": {"AND": [{"facing": "down"}, {"west": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_90"}},
+    {"when": {"AND": [{"facing": "down"}, {"south": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_180"}},
+    {"when": {"AND": [{"facing": "down"}, {"east": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_270"}},
+    {"when": {"AND": [{"facing": "up"}, {"south": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border", "x": 180}},
+    {"when": {"AND": [{"facing": "up"}, {"west": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_90", "x": 180}},
+    {"when": {"AND": [{"facing": "up"}, {"north": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_180", "x": 180}},
+    {"when": {"AND": [{"facing": "up"}, {"east": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_270", "x": 180}},
+    {"when": {"AND": [{"facing": "north"}, {"up": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border", "x": 270}},
+    {"when": {"AND": [{"facing": "north"}, {"west": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_90", "x": 270}},
+    {"when": {"AND": [{"facing": "north"}, {"down": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_180", "x": 270}},
+    {"when": {"AND": [{"facing": "north"}, {"east": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_270", "x": 270}},
+    {"when": {"AND": [{"facing": "south"}, {"down": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border", "x": 90}},
+    {"when": {"AND": [{"facing": "south"}, {"west": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_90", "x": 90}},
+    {"when": {"AND": [{"facing": "south"}, {"up": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_180", "x": 90}},
+    {"when": {"AND": [{"facing": "south"}, {"east": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_270", "x": 90}},
+    {"when": {"AND": [{"facing": "west"}, {"down": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border", "x": 90, "y": 90}},
+    {"when": {"AND": [{"facing": "west"}, {"north": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_90", "x": 90, "y": 90}},
+    {"when": {"AND": [{"facing": "west"}, {"up": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_180", "x": 90, "y": 90}},
+    {"when": {"AND": [{"facing": "west"}, {"south": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_270", "x": 90, "y": 90}},
+    {"when": {"AND": [{"facing": "east"}, {"up": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border", "x": 270, "y": 90}},
+    {"when": {"AND": [{"facing": "east"}, {"north": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_90", "x": 270, "y": 90}},
+    {"when": {"AND": [{"facing": "east"}, {"down": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_180", "x": 270, "y": 90}},
+    {"when": {"AND": [{"facing": "east"}, {"south": false}]}, "apply": {"model": "returnoftheancients:ancient_glass_stone_border_270", "x": 270, "y": 90}},
+
+    {"when": {"facing": "down"}, "apply": {"model": "returnoftheancients:ancient_grid_base"}},
+    {"when": {"facing": "up"}, "apply": {"model": "returnoftheancients:ancient_grid_base", "x": 180}},
+    {"when": {"facing": "north"}, "apply": {"model": "returnoftheancients:ancient_grid_base", "x": 270}},
+    {"when": {"facing": "south"}, "apply": {"model": "returnoftheancients:ancient_grid_base", "x": 90}},
+    {"when": {"facing": "west"}, "apply": {"model": "returnoftheancients:ancient_grid_base", "x": 90, "y": 90}},
+    {"when": {"facing": "east"}, "apply": {"model": "returnoftheancients:ancient_grid_base", "x": 270, "y": 90}}
+  ]
+}

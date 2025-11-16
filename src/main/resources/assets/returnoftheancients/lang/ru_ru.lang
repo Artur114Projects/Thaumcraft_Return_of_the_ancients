@@ -34,15 +34,17 @@ tile.ancient_teleport.name=Древний портал [WIP]
 ###################################################################################
 # Any
 ###################################################################################
+returnoftheancients.info.p1=Нажмите
+returnoftheancients.info.p2=для дополнительной информации.
+#
 item.soul_binder.info.s.1=ПКМ - привязать.
 item.soul_binder.info.s.2=Shift + ПКМ - отвязать.
 item.soul_binder.info.s.3=Положить в сетку крафта - очистить.
-item.soul_binder.info.d.1=Нажмите
-item.soul_binder.info.d.2=для дополнительной информации.
 item.soul_binder.info.d.3=Игроки:
 item.debug_carrot.info.i=Бесконечный
 #
 returnoftheancients.pedestal_active.need_tablet=Для активации необходима фантомная скрижаль
+item.itemprimalblade.info.1=Устарело, будет удалено в следующем обновлении
 item.phantom_tablet.info.1=Распадается за пределами древнего мира
 item.phantom_tablet.info.2=Если вы не в креативе
 item.portal_compass.info=Показывает на ближайший древний портал

@@ -1,8 +1,8 @@
 package com.artur.returnoftheancients.tileentity;
 
 import com.artur.returnoftheancients.client.audio.SoundBlockProjector;
+import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitSounds;
-import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockPlaceListener;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.state.IBlockState;
@@ -97,7 +97,7 @@ public class TileEntityAncientProjector extends TileBase implements ITileBlockPl
 
     private void updatePedestal(boolean state) {
         if (!this.world.isRemote && state) this.world.playSound(null, this.pos, InitSounds.SPOTLIGHT.SOUND, SoundCategory.BLOCKS, 1.0F, 1.0F);
-        IBlockState blockState = state ? InitTileEntity.PHANTOM_PEDESTAL.getDefaultState() : Blocks.AIR.getDefaultState();
+        IBlockState blockState = state ? InitBlocks.PHANTOM_PEDESTAL.getDefaultState() : Blocks.AIR.getDefaultState();
         this.world.setBlockState(this.pos.add(0, -this.distanceToPedestal, 0), blockState);
     }
 }

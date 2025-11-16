@@ -1,8 +1,7 @@
 package com.artur.returnoftheancients.client.render.tile;
 
-import com.artur.returnoftheancients.client.event.ClientEventsHandler;
-import com.artur.returnoftheancients.client.model.ModelAncientFan;
 import com.artur.returnoftheancients.client.model.ModelAncientPiston;
+import com.artur.returnoftheancients.client.render.item.IItemStackRenderer;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientPiston;
 import com.artur.returnoftheancients.util.EnumAssetLocation;
 import net.minecraft.client.renderer.GlStateManager;

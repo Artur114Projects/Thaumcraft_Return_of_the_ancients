@@ -2,13 +2,10 @@ package com.artur.returnoftheancients.tileentity;
 
 import com.artur.returnoftheancients.blocks.BaseBlock;
 import com.artur.returnoftheancients.client.render.item.TileEntityItemStackRendererTRA;
-import com.artur.returnoftheancients.client.render.tile.IItemStackRenderer;
-import com.artur.returnoftheancients.init.InitTileEntity;
-import com.artur.returnoftheancients.tileentity.interf.ITileBBProvider;
-import com.artur.returnoftheancients.tileentity.interf.ITileBlockPlaceListener;
-import com.artur.returnoftheancients.tileentity.interf.ITileBlockUseListener;
-import com.artur.returnoftheancients.tileentity.interf.ITileMultiBBProvider;
+import com.artur.returnoftheancients.client.render.item.IItemStackRenderer;
+import com.artur.returnoftheancients.tileentity.interf.*;
 import com.artur.returnoftheancients.util.MaterialArray;
+import com.artur.returnoftheancients.util.interfaces.IHasTileEntity;
 import com.artur.returnoftheancients.util.interfaces.RunnableWithParam;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -36,24 +33,25 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 
-public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
+public abstract class BaseBlockTileEntity<T extends TileEntity> extends BaseBlock implements IHasTileEntity<T> {
     private TileEntitySpecialRenderer<T> tileRender = null;
     private final boolean isBBProvider;
     private final boolean isUseListener;
     private final boolean isPlaceListener;
     private final boolean isMultiBBProvider;
+    private final boolean isNeighborListener;
 
-    public BlockTileEntity(String name, Material material, float hardness, float resistance, SoundType soundType) {
+    public BaseBlockTileEntity(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
-        InitTileEntity.TILE_ENTITIES.add(this);
 
-        this.isBBProvider = ITileBBProvider.class.isAssignableFrom(this.getTileEntityClass());
-        this.isUseListener = ITileBlockUseListener.class.isAssignableFrom(this.getTileEntityClass());
-        this.isPlaceListener = ITileBlockPlaceListener.class.isAssignableFrom(this.getTileEntityClass());
-        this.isMultiBBProvider = ITileMultiBBProvider.class.isAssignableFrom(this.getTileEntityClass());
+        this.isBBProvider = ITileBBProvider.class.isAssignableFrom(this.tileEntityClass());
+        this.isUseListener = ITileBlockUseListener.class.isAssignableFrom(this.tileEntityClass());
+        this.isPlaceListener = ITileBlockPlaceListener.class.isAssignableFrom(this.tileEntityClass());
+        this.isMultiBBProvider = ITileMultiBBProvider.class.isAssignableFrom(this.tileEntityClass());
+        this.isNeighborListener = ITileNeighborChangeListener.class.isAssignableFrom(this.tileEntityClass());
     }
 
-    public BlockTileEntity(String name, MaterialArray array) {
+    public BaseBlockTileEntity(String name, MaterialArray array) {
         this(name, array.material(), array.hardness(), array.resistance(), array.soundType());
     }
 
@@ -64,12 +62,6 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
             this.item.setTileEntityItemStackRenderer(TileEntityItemStackRendererTRA.INSTANCE);
             TileEntityItemStackRendererTRA.INSTANCE.register(this.item, ((IItemStackRenderer) tileRender));
         }
-    }
-
-    public abstract Class<T> getTileEntityClass();
-
-    public T getTileEntity(IBlockAccess world, BlockPos position) {
-        return (T) world.getTileEntity(position);
     }
 
     @Override
@@ -85,7 +77,17 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
     public void registerModels() {
         super.registerModels();
         if (this.tileRender != null) {
-            ClientRegistry.bindTileEntitySpecialRenderer(this.getTileEntityClass(), this.tileRender);
+            ClientRegistry.bindTileEntitySpecialRenderer(this.tileEntityClass(), this.tileRender);
+        }
+    }
+
+    @Override
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+        if (this.isNeighborListener) {
+            TileEntity tile = world.getTileEntity(pos);
+            if (this.tileEntityClass().isInstance(tile)) {
+                ((ITileNeighborChangeListener) tile).onNeighborChange(world, pos, neighbor);
+            }
         }
     }
 
@@ -94,7 +96,7 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
     protected RayTraceResult rayTrace(BlockPos pos, Vec3d start, Vec3d end, AxisAlignedBB boundingBox) {
         if (this.isMultiBBProvider) {
             TileEntity tile = Minecraft.getMinecraft().world.getTileEntity(pos);
-            if (this.getTileEntityClass().isInstance(tile)) {
+            if (this.tileEntityClass().isInstance(tile)) {
                 Vec3d vec3d = start.subtract(pos.getX(), pos.getY(), pos.getZ());
                 Vec3d vec3d1 = end.subtract(pos.getX(), pos.getY(), pos.getZ());
                 RayTraceResult raytraceresult = null;
@@ -117,7 +119,7 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
     public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
         if (this.isMultiBBProvider) {
             TileEntity tile = worldIn.getTileEntity(pos);
-            if (this.getTileEntityClass().isInstance(tile)) {
+            if (this.tileEntityClass().isInstance(tile)) {
                 for (AxisAlignedBB bb : ((ITileMultiBBProvider) tile).boundingBoxes()) {
                     Block.addCollisionBoxToList(pos, entityBox, collidingBoxes, bb);
                 }
@@ -132,7 +134,7 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         if (this.isBBProvider) {
             TileEntity tile = source.getTileEntity(pos);
-            if (this.getTileEntityClass().isInstance(tile)) {
+            if (this.tileEntityClass().isInstance(tile)) {
                 return ((ITileBBProvider) tile).boundingBox();
             }
         }
@@ -144,7 +146,7 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (this.isUseListener) {
             TileEntity tile = worldIn.getTileEntity(pos);
-            if (this.getTileEntityClass().isInstance(tile)) {
+            if (this.tileEntityClass().isInstance(tile)) {
                 return ((ITileBlockUseListener) tile).onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
             }
         }
@@ -167,8 +169,8 @@ public abstract class BlockTileEntity<T extends TileEntity> extends BaseBlock {
 
     protected void getTileAndCallRunnable(World world, BlockPos pos, RunnableWithParam<T> run) {
         TileEntity tile = world.getTileEntity(pos);
-        if (tile != null && this.getTileEntityClass().isInstance(tile)) {
-            run.run(this.getTileEntityClass().cast(tile));
+        if (tile != null && this.tileEntityClass().isInstance(tile)) {
+            run.run(this.tileEntityClass().cast(tile));
         }
     }
 }

@@ -6,7 +6,7 @@ item.phantom_tablet.name=Phantom tablet
 item.imitation_ancient_fuse.name=Imitation of an ancient fuse
 tile.stone_ancient_lightning.name=Glowing ancient stone
 tile.stone_eldritch_tile_lightning.name=Glowing eldritch stone
-tile.pedestal_active.name=Activated ancient pedestal
+tile.pedestal_active.name=Ancient pedestal
 tile.ancient_door_h_4x4.name=Ancient horizontal door 4 to 4
 tile.ancient_door_4x3.name=Ancient door 4 to 3
 tile.ancient_door_8x6.name=Ancient door 8 to 6
@@ -34,15 +34,17 @@ tile.ancient_teleport.name=Ancient portal [WIP]
 ################################################################################
 # Any
 ################################################################################
+returnoftheancients.info.p1=Hold
+returnoftheancients.info.p2=to see info.
+#
 item.soul_binder.info.s.1=RMB - bind.
 item.soul_binder.info.s.2=Shift + RMB - unbind.
 item.soul_binder.info.s.3=Put in crafting grid - clear.
-item.soul_binder.info.d.1=Hold
-item.soul_binder.info.d.2= to see info.
 item.soul_binder.info.d.3=Players:
 item.debug_carrot.info.i=Infinity
 #
 returnoftheancients.pedestal_active.need_tablet=Для активации необходима фантомная скрижаль
+item.itemprimalblade.info.1=Deprecated, will be removed in the next update
 item.phantom_tablet.info.1=Decaying outside the ancient world
 item.phantom_tablet.info.2=If you are not in creative
 item.portal_compass.info=Points to the nearest ancient portal

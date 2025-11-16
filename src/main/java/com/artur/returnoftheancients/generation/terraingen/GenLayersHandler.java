@@ -31,6 +31,12 @@ public class GenLayersHandler {
         }
     }
 
+    public static ChunkPos[] initPortalsPosOnWorld(int count, long seed) {
+        ChunkPos[] arr = new ChunkPos[count];
+        initPortalsPosOnWorld(arr, seed);
+        return arr;
+    }
+
     public static boolean isCollideToAnyPortal(ChunkPos[] portalsPos, int x, int z, int bitShift, int offset) {
         for (ChunkPos pos : portalsPos) {
             if (MiscHandler.isCollide(pos.x >> bitShift, pos.z >> bitShift, x, z, offset)) {

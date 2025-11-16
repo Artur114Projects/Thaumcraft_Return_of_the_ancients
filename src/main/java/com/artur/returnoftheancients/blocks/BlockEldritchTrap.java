@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.blocks;
 
-import com.artur.returnoftheancients.tileentity.BlockTileEntity;
+import com.artur.returnoftheancients.tileentity.BaseBlockTileEntity;
 import com.artur.returnoftheancients.tileentity.TileEntityEldritchTrap;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-public class BlockEldritchTrap extends BlockTileEntity<TileEntityEldritchTrap> {
+public class BlockEldritchTrap extends BaseBlockTileEntity<TileEntityEldritchTrap> {
 
 
     public BlockEldritchTrap(String name, Material material, float hardness, float resistance, SoundType soundType) {
@@ -36,7 +36,7 @@ public class BlockEldritchTrap extends BlockTileEntity<TileEntityEldritchTrap> {
         }
     }
 
-    public Class<TileEntityEldritchTrap> getTileEntityClass() {
+    public Class<TileEntityEldritchTrap> tileEntityClass() {
         return TileEntityEldritchTrap.class;
     }
 

@@ -1,15 +1,11 @@
 package com.artur.returnoftheancients.client.render.tile;
 
 import com.artur.returnoftheancients.client.model.ModelPhantomPedestal;
+import com.artur.returnoftheancients.client.render.item.IItemStackRenderer;
 import com.artur.returnoftheancients.tileentity.TileEntityPhantomPedestal;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import thaumcraft.client.renderers.models.gear.ModelFortressArmor;
 
 public class TileEntityPhantomPedestalRender extends TileEntitySpecialRendererBase<TileEntityPhantomPedestal> implements IItemStackRenderer {
     private final ModelPhantomPedestal modelBase = new ModelPhantomPedestal();

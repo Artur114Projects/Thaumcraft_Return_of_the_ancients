@@ -3,7 +3,7 @@ package com.artur.returnoftheancients.blocks;
 import com.artur.returnoftheancients.client.render.tile.TileEntityAncientSanctuaryControllerRenderer;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.main.MainR;
-import com.artur.returnoftheancients.tileentity.BlockTileEntity;
+import com.artur.returnoftheancients.tileentity.BaseBlockTileEntity;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientSanctuaryController;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class BlockAncientSanctuaryController extends BlockTileEntity<TileEntityAncientSanctuaryController> {
+public class BlockAncientSanctuaryController extends BaseBlockTileEntity<TileEntityAncientSanctuaryController> {
     protected static final AxisAlignedBB BASE_ABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 1.0D, 0.9375D);
 
     public BlockAncientSanctuaryController(String name, Material material, float hardness, float resistance, SoundType soundType) {
@@ -80,7 +80,7 @@ public class BlockAncientSanctuaryController extends BlockTileEntity<TileEntityA
     }
 
     @Override
-    public Class<TileEntityAncientSanctuaryController> getTileEntityClass() {
+    public Class<TileEntityAncientSanctuaryController> tileEntityClass() {
         return TileEntityAncientSanctuaryController.class;
     }
 
@@ -92,7 +92,7 @@ public class BlockAncientSanctuaryController extends BlockTileEntity<TileEntityA
     @Override
     public void registerModels() {
         super.registerModels();
-        ClientRegistry.bindTileEntitySpecialRenderer(this.getTileEntityClass(), new TileEntityAncientSanctuaryControllerRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(this.tileEntityClass(), new TileEntityAncientSanctuaryControllerRenderer());
     }
 
     @Override

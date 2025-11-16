@@ -25,7 +25,7 @@ public abstract class BaseBlock extends Block implements IHasModel {
     private boolean isFullCube = true;
     private boolean isOpaqueCube = true;
     protected boolean isForCreative = false;
-    public Item item;
+    public final Item item;
     protected BaseBlock(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(material);
 
@@ -35,9 +35,9 @@ public abstract class BaseBlock extends Block implements IHasModel {
         this.setResistance(resistance);
         this.setSoundType(soundType);
 
-        InitBlocks.BLOCKS.add(this);
-        item = new ItemBlock(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
-        InitItems.ITEMS.add(item);
+        InitBlocks.BLOCKS_REGISTER_BUSS.add(this);
+        this.item = this.createItemBlock();
+        InitItems.ITEMS_REGISTER_BUSS.add(this.item);
     }
 
     public BaseBlock(String name, MaterialArray array) {
@@ -70,9 +70,12 @@ public abstract class BaseBlock extends Block implements IHasModel {
         return this;
     }
 
-    public BaseBlock addForCreativeOnlyTooltip(List<String> tooltip) {
+    public void addForCreativeOnlyTooltip(List<String> tooltip) {
         tooltip.add(TextFormatting.RED + I18n.format("returnoftheancients.for_creative_only"));
-        return this;
+    }
+
+    protected Item createItemBlock() {
+        return new ItemBlock(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
     }
 
     @Override

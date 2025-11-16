@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -27,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class BlockAncientTeleport extends BlockContainerEnergyBase<TileEntityAncientTeleport> {
@@ -34,9 +36,6 @@ public class BlockAncientTeleport extends BlockContainerEnergyBase<TileEntityAnc
 
     public BlockAncientTeleport(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
-        InitItems.ITEMS.remove(item);
-        item = new ItemBlockAncientTeleport(this).setRegistryName(this.getRegistryName());
-        InitItems.ITEMS.add(item);
 
         this.setForCreative().setTRACreativeTab();
     }
@@ -47,7 +46,7 @@ public class BlockAncientTeleport extends BlockContainerEnergyBase<TileEntityAnc
     }
 
     @Override
-    public Class<TileEntityAncientTeleport> getTileEntityClass() {
+    public Class<TileEntityAncientTeleport> tileEntityClass() {
         return TileEntityAncientTeleport.class;
     }
 
@@ -98,6 +97,11 @@ public class BlockAncientTeleport extends BlockContainerEnergyBase<TileEntityAnc
     @Override
     public TileEntity createNewTileEntity(@NotNull World worldIn, int meta) {
         return new TileEntityAncientTeleport();
+    }
+
+    @Override
+    protected Item createItemBlock() {
+        return new ItemBlockAncientTeleport(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
     }
 
     private static class ItemBlockAncientTeleport extends ItemBlock {

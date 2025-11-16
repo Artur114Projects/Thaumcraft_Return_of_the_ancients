@@ -79,7 +79,7 @@ public class ItemSoulBinder extends BaseItem {
                     tooltip.add(TextFormatting.WHITE + "[" + text + TextFormatting.RESET + "]");
                 }
                 tooltip.add("");
-                tooltip.add(TextFormatting.YELLOW + I18n.format("item.soul_binder.info.d.1")  + " " + TextFormatting.WHITE + "[Shift]" + TextFormatting.YELLOW  + " " + I18n.format("item.soul_binder.info.d.2"));
+                tooltip.add(TextFormatting.YELLOW + I18n.format("returnoftheancients.info.p1")  + " " + TextFormatting.WHITE + "[Shift]" + TextFormatting.YELLOW  + " " + I18n.format("returnoftheancients.info.p2"));
             } else {
                 addInfoTranslate(tooltip);
             }

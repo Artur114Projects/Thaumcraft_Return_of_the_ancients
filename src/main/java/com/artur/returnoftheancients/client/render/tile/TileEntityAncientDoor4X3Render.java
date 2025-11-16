@@ -1,17 +1,15 @@
 package com.artur.returnoftheancients.client.render.tile;
 
 import com.artur.returnoftheancients.client.model.ModelAncientDoor4X3;
-import com.artur.returnoftheancients.client.model.ModelAncientSanctuaryController;
+import com.artur.returnoftheancients.client.render.item.IItemStackRenderer;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientDoor4X3;
-import com.artur.returnoftheancients.tileentity.TileEntityAncientSanctuaryController;
 import com.artur.returnoftheancients.util.EnumAssetLocation;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
-public class TileEntityAncientDoor4X3Render extends TileEntitySpecialRenderer<TileEntityAncientDoor4X3> implements IItemStackRenderer  {
+public class TileEntityAncientDoor4X3Render extends TileEntitySpecialRendererBase<TileEntityAncientDoor4X3> implements IItemStackRenderer {
     private static final ResourceLocation TEXTURE_BASE = EnumAssetLocation.TEXTURES_BLOCKS.getPngRL("ancient_door_4x3");
     private final ModelAncientDoor4X3 modelBase = new ModelAncientDoor4X3();
 
@@ -48,13 +46,11 @@ public class TileEntityAncientDoor4X3Render extends TileEntitySpecialRenderer<Ti
 
     @Override
     public void renderByItem(ItemStack stack, float partialTicks) {
-        GlStateManager.pushMatrix();
-        GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
-        GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+        this.defaultTransform(0, 0 ,0);
         this.bindTexture(TEXTURE_BASE);
         modelBase.renderArch();
         modelBase.renderDoor1();
         modelBase.renderDoor2();
-        GlStateManager.popMatrix();
+        this.defaultEnd();
     }
 }

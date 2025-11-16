@@ -1,24 +1,20 @@
 package com.artur.returnoftheancients.handlers;
 
 import com.artur.returnoftheancients.blocks.BlockStairsBase;
-import com.artur.returnoftheancients.structurebuilderlegacy.CustomGenStructure;
-import com.artur.returnoftheancients.blocks.BaseBlockContainer;
 import com.artur.returnoftheancients.client.fx.particle.util.ParticleSprite;
 import com.artur.returnoftheancients.commads.*;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.init.InitParticleSprite;
-import com.artur.returnoftheancients.init.InitTileEntity;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.TRAConfigs;
 import com.artur.returnoftheancients.network.*;
 import com.artur.returnoftheancients.referense.Referense;
-import com.artur.returnoftheancients.tileentity.BlockTileEntity;
 import com.artur.returnoftheancients.util.interfaces.IHasModel;
+import com.artur.returnoftheancients.util.interfaces.IHasTileEntity;
 import com.artur.returnoftheancients.worldsystems.interf.IWorldSystem;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -44,6 +40,7 @@ import thaumcraft.api.research.ScanItem;
 import thaumcraft.api.research.ScanningManager;
 
 import java.util.List;
+import java.util.Objects;
 
 import static thaumcraft.api.items.ItemsTC.*;
 import static net.minecraft.init.Items.*;
@@ -54,7 +51,7 @@ public class RegisterHandler {
 
 	@SubscribeEvent
 	public static void onBlockRegister(RegistryEvent.Register<Block> event) {
-		event.getRegistry().registerAll(InitBlocks.BLOCKS.toArray(new Block[0]));
+		event.getRegistry().registerAll(InitBlocks.BLOCKS_REGISTER_BUSS.toArray(new Block[0]));
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)
@@ -65,7 +62,7 @@ public class RegisterHandler {
 
 	@SubscribeEvent
 	public static void onItemRegister(RegistryEvent.Register<Item> event) {
-		event.getRegistry().registerAll(InitItems.ITEMS.toArray(new Item[0]));
+		event.getRegistry().registerAll(InitItems.ITEMS_REGISTER_BUSS.toArray(new Item[0]));
 	}
 
 	@SubscribeEvent
@@ -80,12 +77,11 @@ public class RegisterHandler {
 		}
 	}
 
-	public static void registerTileEntity() {
-		for (BlockTileEntity<?> block : InitTileEntity.TILE_ENTITIES) {
-			GameRegistry.registerTileEntity(block.getTileEntityClass(), block.getRegistryName().toString());
-		}
-		for (BaseBlockContainer<?> block : InitTileEntity.TILE_ENTITIES_CONTAINER) {
-			GameRegistry.registerTileEntity(block.getTileEntityClass(), block.getRegistryName().toString());
+	public static void registerTileEntities() {
+		for (Block block : InitBlocks.BLOCKS_REGISTER_BUSS) {
+			if (block instanceof IHasTileEntity<?>) {
+				GameRegistry.registerTileEntity(((IHasTileEntity<?>) block).tileEntityClass(), Objects.requireNonNull(block.getRegistryName()));
+			}
 		}
 	}
 
@@ -106,12 +102,12 @@ public class RegisterHandler {
 
 	@SubscribeEvent
 	public static void onModelRegister(ModelRegistryEvent event) {
-		for (Block block : InitBlocks.BLOCKS) {
+		for (Block block : InitBlocks.BLOCKS_REGISTER_BUSS) {
 			if (block instanceof IHasModel) {
 				((IHasModel) block).registerModels();
 			}
 		}
-		for(Item item : InitItems.ITEMS) {
+		for(Item item : InitItems.ITEMS_REGISTER_BUSS) {
 			if(item instanceof IHasModel) {
 				((IHasModel)  item).registerModels();
 			}
@@ -138,64 +134,6 @@ public class RegisterHandler {
 		ScanningManager.addScannableThing(new ScanItem("!PRIMAL_BLADE", new ItemStack(InitItems.PRIMAL_BLADE)));
 
 		ResearchCategories.registerCategory("ANCIENT_WORLD_LEGACY", "UNLOCKELDRITCH", new AspectList().add(Aspect.ELDRITCH, 1), new ResourceLocation(Referense.MODID, "textures/gui/ancient_logo.png"), new ResourceLocation(Thaumcraft.MODID, "textures/gui/gui_research_back_6.jpg"));
-	}
-
-	public static void registerStructures() {
-		CustomGenStructure.put("ancient_entry");
-		CustomGenStructure.put("ancient_crossroads");
-
-		CustomGenStructure.put("ancient_way_rotate-1");
-		CustomGenStructure.put("ancient_way_rotate-2");
-
-		CustomGenStructure.put("ancient_turn_rotate-1");
-		CustomGenStructure.put("ancient_turn_rotate-2");
-		CustomGenStructure.put("ancient_turn_rotate-3");
-		CustomGenStructure.put("ancient_turn_rotate-4");
-
-		CustomGenStructure.put("ancient_fork_rotate-1");
-		CustomGenStructure.put("ancient_fork_rotate-2");
-		CustomGenStructure.put("ancient_fork_rotate-3");
-		CustomGenStructure.put("ancient_fork_rotate-4");
-
-		CustomGenStructure.put("ancient_end_rotate-1");
-		CustomGenStructure.put("ancient_end_rotate-2");
-		CustomGenStructure.put("ancient_end_rotate-3");
-		CustomGenStructure.put("ancient_end_rotate-4");
-
-		CustomGenStructure.setUseEBS((x, y, z, state) -> {
-			if (state.getBlock().equals(InitTileEntity.ELDRITCH_TRAP)) return false;
-			if (state.getBlock().equals(BlocksTC.nitor.get(EnumDyeColor.BLACK))) return false;
-            return true;
-		});
-		CustomGenStructure.register();
-
-		CustomGenStructure.setUseBinary();
-		CustomGenStructure.put("ancient_boss");
-		CustomGenStructure.put("ancient_crossroads_trap");
-
-		CustomGenStructure.put("ancient_entry_way");
-		CustomGenStructure.put("ancient_door");
-		CustomGenStructure.put("ancient_door1");
-		CustomGenStructure.put("ancient_border_cap");
-		CustomGenStructure.put("ancient_door_rock_rotate-1");
-		CustomGenStructure.put("ancient_door_rock_rotate-2");
-		CustomGenStructure.put("ancient_portal_floor");
-
-		for (int i = 0; i <= 8; i++) {
-			CustomGenStructure.put("ancient_spire_segment_" + i);
-		}
-
-		CustomGenStructure.put("ancient_sanctuary");
-		CustomGenStructure.put("ancient_sanctuary_broken");
-		CustomGenStructure.put("ancient_sanctuary_cultist");
-
-		CustomGenStructure.setUseAir();
-		CustomGenStructure.put("ancient_portal_hub");
-		CustomGenStructure.put("ancient_portal_air_cube");
-		CustomGenStructure.put("ancient_portal");
-		CustomGenStructure.put("ancient_area");
-		CustomGenStructure.put("ancient_exit");
-		CustomGenStructure.register();
 	}
 
 	public static void registerTCRecipes() {

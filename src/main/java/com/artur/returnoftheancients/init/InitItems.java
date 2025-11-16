@@ -8,9 +8,8 @@ import com.artur.returnoftheancients.items.*;
 import net.minecraft.item.Item;
 
 public class InitItems {
-	public static final List<Item> ITEMS = new ArrayList<>();
+	public static final List<Item> ITEMS_REGISTER_BUSS = new ArrayList<>();
 
-	// Items
 	public static final Item PRIMAL_BLADE = new ItemPrimalBlade("itemprimalblade", ReturnOfTheAncientsMaterials.TOOL_MAT_PRIMAL);
 	public static final Item IMITATION_ANCIENT_FUSE = new ItemImitationAncientFuse("imitation_ancient_fuse");
 	public static final Item PHANTOM_TABLET = new ItemPhantomTablet("phantom_tablet");

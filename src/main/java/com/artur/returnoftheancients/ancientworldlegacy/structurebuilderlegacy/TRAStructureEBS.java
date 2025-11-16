@@ -1,7 +1,7 @@
-package com.artur.returnoftheancients.structurebuilderlegacy;
+package com.artur.returnoftheancients.ancientworldlegacy.structurebuilderlegacy;
 
-import com.artur.returnoftheancients.structurebuilderlegacy.util.ITRAStructureIsUseEBS;
-import com.artur.returnoftheancients.structurebuilderlegacy.util.ITRAStructureTask;
+import com.artur.returnoftheancients.ancientworldlegacy.structurebuilderlegacy.util.ITRAStructureIsUseEBS;
+import com.artur.returnoftheancients.ancientworldlegacy.structurebuilderlegacy.util.ITRAStructureTask;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;

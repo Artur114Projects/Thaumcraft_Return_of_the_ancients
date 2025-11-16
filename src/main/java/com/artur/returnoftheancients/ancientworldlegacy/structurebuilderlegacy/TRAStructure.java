@@ -1,8 +1,8 @@
-package com.artur.returnoftheancients.structurebuilderlegacy;
+package com.artur.returnoftheancients.ancientworldlegacy.structurebuilderlegacy;
 
+import com.artur.returnoftheancients.ancientworldlegacy.structurebuilderlegacy.util.ITRAStructure;
+import com.artur.returnoftheancients.ancientworldlegacy.structurebuilderlegacy.util.ITRAStructureTask;
 import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
-import com.artur.returnoftheancients.structurebuilderlegacy.util.ITRAStructure;
-import com.artur.returnoftheancients.structurebuilderlegacy.util.ITRAStructureTask;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

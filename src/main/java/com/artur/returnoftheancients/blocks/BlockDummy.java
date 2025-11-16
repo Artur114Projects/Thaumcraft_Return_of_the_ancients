@@ -1,6 +1,6 @@
 package com.artur.returnoftheancients.blocks;
 
-import com.artur.returnoftheancients.tileentity.BlockTileEntity;
+import com.artur.returnoftheancients.tileentity.BaseBlockTileEntity;
 import com.artur.returnoftheancients.tileentity.TileEntityDummy;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -10,17 +10,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-public class BlockDummy extends BlockTileEntity<TileEntityDummy> {
+public class BlockDummy extends BaseBlockTileEntity<TileEntityDummy> {
     public static boolean SAFE_BREAK = false;
 
     public BlockDummy(String name, Material material, float hardness, float resistance, SoundType soundType) {
@@ -64,7 +61,7 @@ public class BlockDummy extends BlockTileEntity<TileEntityDummy> {
     }
 
     @Override
-    public Class<TileEntityDummy> getTileEntityClass() {
+    public Class<TileEntityDummy> tileEntityClass() {
         return TileEntityDummy.class;
     }
 

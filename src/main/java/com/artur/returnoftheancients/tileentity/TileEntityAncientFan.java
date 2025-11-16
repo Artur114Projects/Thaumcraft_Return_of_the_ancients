@@ -3,12 +3,15 @@ package com.artur.returnoftheancients.tileentity;
 import com.artur.returnoftheancients.client.audio.SoundBlockAncientFan;
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.client.fx.particle.ParticleFlameCanCollide;
+import com.artur.returnoftheancients.client.fx.particle.ParticleWaterBubbleDyn;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitItems;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockPlaceListener;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockUseListener;
 import com.artur.returnoftheancients.tileentity.interf.ITileBurner;
+import com.artur.returnoftheancients.tileentity.interf.ITileNeighborChangeListener;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,14 +23,16 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceListener, ITileBlockUseListener, ITickable, ITileBurner {
+public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceListener, ITileBlockUseListener, ITileNeighborChangeListener, ITickable, ITileBurner {
     private EnumFacing.Axis axis = EnumFacing.Axis.Y;
     private final float activeSpinSpeed = 6.0F;
     private final int maxActiveTime = 40;
+    private boolean isInWater = false;
     private boolean isRotated = false;
     private boolean isClosed = false;
     private boolean isActive = false;
@@ -42,6 +47,8 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
         } else {
             this.axis = placer.getHorizontalFacing().getAxis();
         }
+
+        this.isInWater = this.isInWater();
     }
 
     @Override
@@ -57,6 +64,11 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+        this.isInWater = this.isInWater();
     }
 
     public EnumFacing.Axis axis() {
@@ -77,7 +89,7 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
 
     @SideOnly(Side.CLIENT)
     public float spinSpeed(float pct) {
-        return MiscHandler.interpolate(this.localSpinSpeed(), this.activeSpinSpeed, MiscHandler.interpolate(this.prevActiveTime, this.activeTime, pct) / this.maxActiveTime);
+        return MiscHandler.interpolate(this.localSpinSpeed(), this.activeSpinSpeed, MiscHandler.interpolate(this.prevActiveTime, this.activeTime, pct) / this.maxActiveTime) / (this.isInWater ? 2.0F : 1.0F);
     }
 
     @Override
@@ -91,7 +103,7 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
             this.activeTime--;
         }
 
-        if (this.world.isRemote && this.spinSpeed(1) > 4) {
+        if (this.world.isRemote) {
             this.spawnParticles();
         }
 
@@ -114,6 +126,11 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
             ClientEventsHandler.SOUNDS_MANAGER.playTileSound(this, SoundBlockAncientFan::new);
         }
         super.validate();
+    }
+
+    private boolean isInWater() {
+        return this.world.getBlockState(this.pos.offset(EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, this.axis))).getMaterial() == Material.WATER ||
+                this.world.getBlockState(this.pos.offset(EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.NEGATIVE, this.axis))).getMaterial() == Material.WATER;
     }
 
     private float localSpinSpeed() {
@@ -139,8 +156,9 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
         EnumFacing facing0 = EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, this.axis);
         EnumFacing facing1 = EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.NEGATIVE, this.axis);
         UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
-        if (this.world.isAirBlock(blockPos.setPos(this.pos).offset(facing0))) {
-            float speed = 0.6F + (0.3F * (this.spinSpeed(1) - 4) / 2.0F);
+
+        if (this.spinSpeed(1.0F) >= 4.0F && this.world.isAirBlock(blockPos.setPos(this.pos).offset(facing0))) {
+            float speed = 0.2F + (0.3F * (this.spinSpeed(1) - 4) / 2.0F);
             double x = this.pos.getX() + 0.5 + (facing0.getFrontOffsetX() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
             double y = this.pos.getY() + 0.5 + (facing0.getFrontOffsetY() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
             double z = this.pos.getZ() + 0.5 + (facing0.getFrontOffsetZ() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
@@ -152,9 +170,19 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
                 z = this.pos.getZ() + 0.5 + (facing0.getFrontOffsetZ() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
                 Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleFlameCanCollide(this.world, x, y, z, (speed + 0.1F) * facing0.getFrontOffsetX(), (speed + 0.1F) * facing0.getFrontOffsetY(), (speed + 0.1F) * facing0.getFrontOffsetZ()));
             }
+        } else if (this.world.getBlockState(blockPos.setPos(this.pos).offset(facing0)).getMaterial() == Material.WATER) {
+            float speed = 0.6F + (0.3F * (this.spinSpeed(1) - 2));
+            int count = (int) this.spinSpeed(1);
+            for (int i = 0; i != count; i++) {
+                double x = this.pos.getX() + 0.5 + (facing0.getFrontOffsetX() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0.5F * facing0.getFrontOffsetX());
+                double y = this.pos.getY() + 0.5 + (facing0.getFrontOffsetY() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0.5F * facing0.getFrontOffsetY());
+                double z = this.pos.getZ() + 0.5 + (facing0.getFrontOffsetZ() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0.5F * facing0.getFrontOffsetZ());
+                Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleWaterBubbleDyn(this.world, x, y, z, speed * facing0.getFrontOffsetX(), speed * facing0.getFrontOffsetY(), speed * facing0.getFrontOffsetZ()));
+            }
         }
-        if (this.world.isAirBlock(blockPos.setPos(this.pos).offset(facing1))) {
-            float speed = 0.6F + (0.3F * (this.spinSpeed(1) - 4) / 2.0F);
+
+        if (this.spinSpeed(1.0F) >= 4.0F && this.world.isAirBlock(blockPos.setPos(this.pos).offset(facing1))) {
+            float speed = 0.2F + (0.3F * (this.spinSpeed(1) - 4) / 2.0F);
             double x = this.pos.getX() + 0.5 + (facing1.getFrontOffsetX() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
             double y = this.pos.getY() + 0.5 + (facing1.getFrontOffsetY() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
             double z = this.pos.getZ() + 0.5 + (facing1.getFrontOffsetZ() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
@@ -166,8 +194,17 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
                 z = this.pos.getZ() + 0.5 + (facing1.getFrontOffsetZ() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0);
                 Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleFlameCanCollide(this.world, x, y, z, (speed + 0.1F) * facing1.getFrontOffsetX(), (speed + 0.1F) * facing1.getFrontOffsetY(), (speed + 0.1F) * facing1.getFrontOffsetZ()));
             }
-
+        } else if (this.world.getBlockState(blockPos.setPos(this.pos).offset(facing1)).getMaterial() == Material.WATER) {
+            float speed = 0.6F + (0.3F * (this.spinSpeed(1) - 2));
+            int count = (int) this.spinSpeed(1);
+            for (int i = 0; i != count; i++) {
+                double x = this.pos.getX() + 0.5 + (facing1.getFrontOffsetX() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0.5 * facing1.getFrontOffsetX());
+                double y = this.pos.getY() + 0.5 + (facing1.getFrontOffsetY() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0.5 * facing1.getFrontOffsetY());
+                double z = this.pos.getZ() + 0.5 + (facing1.getFrontOffsetZ() == 0 ? ((this.world.rand.nextFloat() * 0.8) + 0.1F) - 0.5F : 0.5 * facing1.getFrontOffsetZ());
+                Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleWaterBubbleDyn(this.world, x, y, z, speed * facing1.getFrontOffsetX(), speed * facing1.getFrontOffsetY(), speed * facing1.getFrontOffsetZ()));
+            }
         }
+
         UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
     }
 
@@ -193,6 +230,7 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
         this.axis = EnumFacing.Axis.values()[compound.getInteger("axis")];
         this.isClosed = compound.getBoolean("isClosed");
         this.isRotated = compound.getBoolean("isRotated");
+        this.isInWater = compound.getBoolean("isInWater");
     }
 
     @Override
@@ -201,6 +239,7 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
         compound.setInteger("axis", this.axis.ordinal());
         compound.setBoolean("isClosed", this.isClosed);
         compound.setBoolean("isRotated", this.isRotated);
+        compound.setBoolean("isInWater", this.isInWater);
         return compound;
     }
 

@@ -1,8 +1,7 @@
 package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.client.render.tile.TileEntityPedestalActiveRender;
-import com.artur.returnoftheancients.init.InitItems;
-import com.artur.returnoftheancients.tileentity.BlockTileEntity;
+import com.artur.returnoftheancients.tileentity.BaseBlockTileEntity;
 import com.artur.returnoftheancients.tileentity.TileEntityDummy;
 import com.artur.returnoftheancients.tileentity.TileEntityPedestalActive;
 import net.minecraft.block.Block;
@@ -14,6 +13,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,16 +26,15 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockPedestalActive extends BlockTileEntity<TileEntityPedestalActive> {
+import java.util.Objects;
+
+public class BlockPedestalActive extends BaseBlockTileEntity<TileEntityPedestalActive> {
     public static final AxisAlignedBB BB_BASE = new AxisAlignedBB(1.0F / 16.0F, 0, 1.0F / 16.0F, 15.0F / 16.0F, 20.4F / 16.0F, 15.0F / 16.0F);
     public final static PropertyDirection DIRECTION = PropertyDirection.create("facing", (f) -> f.getAxis().isHorizontal());
     public final static PropertyBool ROTATE = PropertyBool.create("rotate");
 
     public BlockPedestalActive(String name) {
         super(name, Material.ROCK, 2.0F, 10.0F, SoundType.STONE);
-        InitItems.ITEMS.remove(item);
-        item = new ItemBlockPedestalActive(this).setRegistryName(this.getRegistryName());
-        InitItems.ITEMS.add(item);
 
         this.setDefaultState(this.getDefaultState().withProperty(DIRECTION, EnumFacing.EAST).withProperty(ROTATE, false));
         this.setRenderer(new TileEntityPedestalActiveRender());
@@ -88,7 +87,7 @@ public class BlockPedestalActive extends BlockTileEntity<TileEntityPedestalActiv
     }
 
     @Override
-    public Class<TileEntityPedestalActive> getTileEntityClass() {
+    public Class<TileEntityPedestalActive> tileEntityClass() {
         return TileEntityPedestalActive.class;
     }
 
@@ -110,6 +109,11 @@ public class BlockPedestalActive extends BlockTileEntity<TileEntityPedestalActiv
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
+    }
+
+    @Override
+    protected Item createItemBlock() {
+        return new ItemBlockPedestalActive(this).setRegistryName(Objects.requireNonNull(this.getRegistryName()));
     }
 
     private static class ItemBlockPedestalActive extends ItemBlock {

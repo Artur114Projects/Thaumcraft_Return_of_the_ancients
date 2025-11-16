@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.blocks;
 
 import com.artur.returnoftheancients.client.render.tile.TileEntityAncientDoorH4x4Render;
-import com.artur.returnoftheancients.tileentity.BlockTileEntity;
+import com.artur.returnoftheancients.tileentity.BaseBlockTileEntity;
 import com.artur.returnoftheancients.tileentity.TileEntityAncientDoorH4x4;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockAncientDoorH4x4 extends BlockTileEntity<TileEntityAncientDoorH4x4> {
+public class BlockAncientDoorH4x4 extends BaseBlockTileEntity<TileEntityAncientDoorH4x4> {
     public BlockAncientDoorH4x4(String name) {
         super(name, Material.ROCK, 2.0F, 10.0F, SoundType.STONE);
 
@@ -84,7 +84,7 @@ public class BlockAncientDoorH4x4 extends BlockTileEntity<TileEntityAncientDoorH
     }
 
     @Override
-    public Class<TileEntityAncientDoorH4x4> getTileEntityClass() {
+    public Class<TileEntityAncientDoorH4x4> tileEntityClass() {
         return TileEntityAncientDoorH4x4.class;
     }
 

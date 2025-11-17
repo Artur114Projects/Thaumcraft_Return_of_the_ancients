@@ -83,10 +83,10 @@ public class StructureBase implements IStructure {
 
     @Override
     public void build(World world, ChunkPos pos, Random rand) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
         blockPos.setPos(pos).setY(this.y);
         StructureBuildersManager.createBuildRequest(world, blockPos, this.type.stringId(this.rotate)).setIgnoreAir().build();
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
     }
 
     @Override

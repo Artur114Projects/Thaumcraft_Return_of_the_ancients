@@ -10,6 +10,7 @@ import com.artur.returnoftheancients.tileentity.interf.ITileBlockPlaceListener;
 import com.artur.returnoftheancients.tileentity.interf.ITileBlockUseListener;
 import com.artur.returnoftheancients.tileentity.interf.ITileBurner;
 import com.artur.returnoftheancients.tileentity.interf.ITileNeighborChangeListener;
+import com.artur.returnoftheancients.util.math.MathUtils;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -89,7 +90,7 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
 
     @SideOnly(Side.CLIENT)
     public float spinSpeed(float pct) {
-        return MiscHandler.interpolate(this.localSpinSpeed(), this.activeSpinSpeed, MiscHandler.interpolate(this.prevActiveTime, this.activeTime, pct) / this.maxActiveTime) / (this.isInWater ? 2.0F : 1.0F);
+        return MathUtils.interpolate(this.localSpinSpeed(), this.activeSpinSpeed, MathUtils.interpolate(this.prevActiveTime, this.activeTime, pct) / this.maxActiveTime) / (this.isInWater ? 2.0F : 1.0F);
     }
 
     @Override
@@ -138,7 +139,7 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
     }
 
     private void checkRedStone() {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
         this.redStoneLevel = 0;
         for (EnumFacing facing : EnumFacing.VALUES) {
             if (facing.getAxis() == this.axis) {
@@ -148,14 +149,14 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
             int r = world.getRedstonePower(blockPos.setPos(this.pos).offset(facing), facing.getOpposite());
             if (this.redStoneLevel < r) this.redStoneLevel = r;
         }
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
     }
 
     @SideOnly(Side.CLIENT)
     private void spawnParticles() {
         EnumFacing facing0 = EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, this.axis);
         EnumFacing facing1 = EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.NEGATIVE, this.axis);
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
 
         if (this.spinSpeed(1.0F) >= 4.0F && this.world.isAirBlock(blockPos.setPos(this.pos).offset(facing0))) {
             float speed = 0.2F + (0.3F * (this.spinSpeed(1) - 4) / 2.0F);
@@ -205,7 +206,7 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
             }
         }
 
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
     }
 
     @Override

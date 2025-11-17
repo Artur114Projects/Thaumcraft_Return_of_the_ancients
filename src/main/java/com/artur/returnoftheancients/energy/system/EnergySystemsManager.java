@@ -1,6 +1,5 @@
 package com.artur.returnoftheancients.energy.system;
 
-import com.artur.returnoftheancients.capabilities.TRACapabilities;
 import com.artur.returnoftheancients.energy.bases.tile.ITileEnergy;
 import com.artur.returnoftheancients.energy.bases.tile.ITileEnergyProvider;
 import com.artur.returnoftheancients.handlers.CollectionsHandler;
@@ -91,7 +90,7 @@ public class EnergySystemsManager {
     @Nullable
     private List<ITileEnergy> getNeighbors(ITileEnergy tile) {
         List<ITileEnergy> list = null;
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(tile.pos());
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(tile.pos());
         for (EnumFacing facing : EnumFacing.VALUES) {
             if (tile.canConnect(facing)) {
                 blockPos.pushPos();

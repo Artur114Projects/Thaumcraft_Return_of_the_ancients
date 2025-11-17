@@ -102,7 +102,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
     }
 
     private void setCapState(boolean state) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
 
         blockPos.setPos(portalPos).setY(posY);
         blockPos.offsetAndCallRunnable(OffsetsUtil.portalCollideOffsetsArray, (pos) -> {
@@ -110,7 +110,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
             BlockProtectHandler.setProtectState(world, pos, !state);
         });
 
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
     }
 
     @Override
@@ -423,7 +423,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
         }
 
         private void callRunnableInLightOffsets(RunnableWithParam<UltraMutableBlockPos> run) {
-            UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+            UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
 
             blockPos.setPos(portalPos).setY(portalY);
 
@@ -432,7 +432,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
             this.outside4CornerOffsets(blockPos, run);
             this.base24LightOffsets(blockPos, run);
 
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+            UltraMutableBlockPos.release(blockPos);
         }
 
         private void center2Offsets(UltraMutableBlockPos pos, RunnableWithParam<UltraMutableBlockPos> run) {

@@ -14,7 +14,6 @@ import com.artur.returnoftheancients.tileentity.interf.ITileDoor;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -50,7 +49,7 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
     public void build(World world, ChunkPos pos, Random rand) {
         super.build(world, pos, rand);
 
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
         blockPos.setPos(pos).add(8, 0, 8);
 
         for (int y = this.y + 32; y < world.getHeight(); y += 11) {
@@ -68,7 +67,7 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
         blockPos.setY(0);
         StructureBuildersManager.createBuildRequest(world, blockPos, "ancient_exit").setIgnoreAir().setPosAsXZCenter().build();
 
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
     }
 
     @Override
@@ -119,20 +118,20 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
 
     @SideOnly(Side.CLIENT)
     protected void updateClient(AncientWorldPlayer player) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
         this.addParticles(player.player, this.world, blockPos);
         this.manageMovement(player.player, this.world, blockPos);
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
     }
 
     protected void updateServer(List<AncientWorldPlayer> players) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
         for (AncientWorldPlayer player : players) {
             if (this.isCollideToWay(blockPos.setPos(player.player))) {
                 player.player.fallDistance = 0;
             }
         }
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
     }
 
     @SideOnly(Side.CLIENT)
@@ -182,19 +181,19 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
     }
 
     protected boolean isDoorOpen() {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(this.chunkPos).add(6, this.y + 2, 6);
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(this.chunkPos).add(6, this.y + 2, 6);
 
         TileEntity tile = this.world.getTileEntity(blockPos);
 
         boolean ret = (tile instanceof ITileDoor) && ((ITileDoor) tile).isOpenOrOpening();
 
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
 
         return ret;
     }
 
     public boolean isCollideToWay(BlockPos pos) {
-        UltraMutableBlockPos lBlockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos lBlockPos = UltraMutableBlockPos.obtain();
         lBlockPos.setPos(pos);
         if (lBlockPos.getChunkX() == this.chunkPos.x && lBlockPos.getChunkZ() == this.chunkPos.z) {
             lBlockPos.setPos(this.chunkPos).setY(0);
@@ -202,13 +201,13 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
                 lBlockPos.pushPos();
                 if (lBlockPos.add(offset).equalsXZ(pos)) {
                     lBlockPos.popPos();
-                    UltraMutableBlockPos.returnBlockPosToPoll(lBlockPos);
+                    UltraMutableBlockPos.release(lBlockPos);
                     return true;
                 }
                 lBlockPos.popPos();
             }
         }
-        UltraMutableBlockPos.returnBlockPosToPoll(lBlockPos);
+        UltraMutableBlockPos.release(lBlockPos);
         return false;
     }
 

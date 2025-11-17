@@ -23,24 +23,27 @@ public class WorldGenTaintBigTree extends WorldGenAbstractTree {
 
     @Override
     public boolean generate(World worldIn, Random rand, BlockPos position) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
-        long seed = rand.nextLong();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
+        try {
+            long seed = rand.nextLong();
 
-        if (worldIn.getBlockState(blockPos.setPos(position).down()).getBlock() != BlocksTC.taintSoil) {
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos); return false;
+            if (worldIn.getBlockState(blockPos.setPos(position).down()).getBlock() != BlocksTC.taintSoil) {
+                return false;
+            }
+
+            if (blockPos.getY() > 80) {
+                return false;
+            }
+
+            if (this.checkPosition(worldIn, seed, blockPos.setPos(position).down())) {
+                this.generate(worldIn, seed, blockPos.setPos(position).down());
+                return true;
+            }
+
+            return false;
+        } finally {
+            UltraMutableBlockPos.release(blockPos);
         }
-
-        if (blockPos.getY() > 80) {
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos); return false;
-        }
-
-        if (this.checkPosition(worldIn, seed, blockPos.setPos(position).down())) {
-            this.generate(worldIn, seed, blockPos.setPos(position).down());
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
-            return true;
-        }
-
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos); return false;
     }
 
     private boolean checkPosition(World worldIn, long seed, UltraMutableBlockPos pos) {

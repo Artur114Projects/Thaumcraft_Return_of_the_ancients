@@ -50,7 +50,7 @@ public abstract class BaseBlockContainer<T extends TileEntity> extends BlockCont
 
     @Override
     public void registerModels() {
-        MainR.proxy.registerItemRenderer(item, 0, "inventory");
+        MainR.proxy.registerItemRenderer(this.item, 0, "inventory");
     }
 
     protected void getTileAndCallRunnable(World world, BlockPos pos, RunnableWithParam<T> run) {

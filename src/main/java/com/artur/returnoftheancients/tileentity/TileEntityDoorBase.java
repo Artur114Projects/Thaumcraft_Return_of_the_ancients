@@ -3,7 +3,6 @@ package com.artur.returnoftheancients.tileentity;
 import com.artur.returnoftheancients.blocks.BlockDummy;
 import com.artur.returnoftheancients.handlers.NBTHandler;
 import com.artur.returnoftheancients.handlers.RenderHandler;
-import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.tileentity.interf.ITileBBProvider;
 import com.artur.returnoftheancients.tileentity.interf.ITileDoor;
 import com.artur.returnoftheancients.tileentity.interf.ITileMultiBlock;
@@ -114,7 +113,7 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
     @Override
     public void fillDummy() {
         EnumFacing offsetFacing = EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, axis);
-        UltraMutableBlockPos pos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos pos = UltraMutableBlockPos.obtain();
 
         for (int h = 0; h != this.height; h++) {
             for (int w = 0; w != this.width; w++) {
@@ -128,7 +127,7 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
             }
         }
 
-        UltraMutableBlockPos.returnBlockPosToPoll(pos);
+        UltraMutableBlockPos.release(pos);
     }
 
     @Override
@@ -155,14 +154,14 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
         }
 
         EnumFacing offsetFacing = EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, axis);
-        UltraMutableBlockPos pos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos pos = UltraMutableBlockPos.obtain();
 
         for (int h = 0; h != height; h++) {
             pos.setPos(this.pos).offset(offsetFacing, index).up(h);
             this.replaceDummy(pos, this.staticAxisAlignedBBMap().get(this.currentState.toBinary()).get(this.axis).get(this.getDummyType(pos)));
         }
 
-        UltraMutableBlockPos.returnBlockPosToPoll(pos);
+        UltraMutableBlockPos.release(pos);
     }
 
     protected boolean replaceDummy(BlockPos pos, AxisAlignedBB alignedBB) {
@@ -233,7 +232,7 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
 
     protected void breakAll() {
         EnumFacing offsetFacing = EnumFacing.getFacingFromAxis(EnumFacing.AxisDirection.POSITIVE, this.axis);
-        UltraMutableBlockPos pos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos pos = UltraMutableBlockPos.obtain();
 
         for (int h = 0; h != height; h++) {
             for (int w = 0; w != width; w++) {
@@ -246,7 +245,7 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
                 }
             }
         }
-        UltraMutableBlockPos.returnBlockPosToPoll(pos);
+        UltraMutableBlockPos.release(pos);
 
         this.world.destroyBlock(this.pos, true);
     }

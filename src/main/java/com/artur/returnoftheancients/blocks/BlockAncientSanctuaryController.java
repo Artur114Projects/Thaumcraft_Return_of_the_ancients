@@ -31,7 +31,8 @@ public class BlockAncientSanctuaryController extends BaseBlockTileEntity<TileEnt
     public BlockAncientSanctuaryController(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
 
-        this.setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);
+        this.setRenderer(new TileEntityAncientSanctuaryControllerRenderer());
+        this.setForCreative().setTRACreativeTab();
     }
 
     @Override
@@ -90,12 +91,6 @@ public class BlockAncientSanctuaryController extends BaseBlockTileEntity<TileEnt
     }
 
     @Override
-    public void registerModels() {
-        super.registerModels();
-        ClientRegistry.bindTileEntitySpecialRenderer(this.tileEntityClass(), new TileEntityAncientSanctuaryControllerRenderer());
-    }
-
-    @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
@@ -108,10 +103,5 @@ public class BlockAncientSanctuaryController extends BaseBlockTileEntity<TileEnt
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
-    }
-
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World player, List<String> tooltip, ITooltipFlag advanced) {
-        this.addForCreativeOnlyTooltip(tooltip);
     }
 }

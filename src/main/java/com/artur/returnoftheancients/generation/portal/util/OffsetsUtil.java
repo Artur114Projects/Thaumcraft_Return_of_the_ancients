@@ -5,7 +5,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class OffsetsUtil {
@@ -23,7 +22,7 @@ public class OffsetsUtil {
     private static BlockPos[] initPortalCollideOffsetsArray() {
         List<BlockPos> offsets = new ArrayList<>();
 
-        UltraMutableBlockPos pos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos pos = UltraMutableBlockPos.obtain();
         pos.setPos(6, 0, 6);
 
         for (int x = 0; x != 4; x++) {
@@ -38,14 +37,14 @@ public class OffsetsUtil {
             }
         }
 
-        UltraMutableBlockPos.returnBlockPosToPoll(pos);
+        UltraMutableBlockPos.release(pos);
         return offsets.toArray(new BlockPos[0]);
     }
 
     private static BlockPos[] initPortalOffsetsArray() {
         List<BlockPos> offsets = new ArrayList<>();
 
-        UltraMutableBlockPos pos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos pos = UltraMutableBlockPos.obtain();
         pos.setPos(5, 0, 5);
 
         for (int x = 0; x != 6; x++) {
@@ -60,7 +59,7 @@ public class OffsetsUtil {
             }
         }
 
-        UltraMutableBlockPos.returnBlockPosToPoll(pos);
+        UltraMutableBlockPos.release(pos);
         return offsets.toArray(new BlockPos[0]);
     }
 

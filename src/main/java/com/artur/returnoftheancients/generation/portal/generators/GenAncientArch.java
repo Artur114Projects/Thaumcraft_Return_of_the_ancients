@@ -222,7 +222,7 @@ public class GenAncientArch {
         }
 
         protected void generate(int prevYOffset, int nextYOffset) {
-            UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(startPos);
+            UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(startPos);
             blockPos.offset(genOffsetFacing, genOffset);
             blockPos.setY(yOffset);
 
@@ -240,7 +240,7 @@ public class GenAncientArch {
             setBlockState(blockPos.offset(this.offset2Arch).addY(-1), BlocksTC.stoneEldritchTile.getDefaultState());
             setBlockState(blockPos.addY(1), BlocksTC.stoneAncient.getDefaultState());
 
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+            UltraMutableBlockPos.release(blockPos);
 
             this.calculateMinY();
         }
@@ -257,7 +257,7 @@ public class GenAncientArch {
                 return;
             }
 
-            UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+            UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
             Set<Tuple<BlockPos, IBlockState>> localBlocks = new HashSet<>(generatedBlocks);
             generatedBlocks.clear();
 
@@ -268,7 +268,7 @@ public class GenAncientArch {
                 setBlockState(blockPos, tuple.getSecond());
             }
 
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+            UltraMutableBlockPos.release(blockPos);
 
             this.calculateMinY();
         }
@@ -298,11 +298,11 @@ public class GenAncientArch {
         }
 
         protected BlockPos getStartPosForSegment() {
-            UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(startPos);
+            UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(startPos);
             blockPos.offset(genOffsetFacing, genOffset);
             blockPos.setY(yOffset);
             BlockPos ret = blockPos.toImmutable();
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+            UltraMutableBlockPos.release(blockPos);
             return ret;
         }
 

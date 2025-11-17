@@ -87,7 +87,7 @@ public class StructureBuilder implements IStructureBuilder {
 
     @Override
     public void build(World world, BlockPos pos, IBuildProperties properties) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
 
         for (int block : blocks) {
             byte x = (byte) (block >> 24);
@@ -148,7 +148,7 @@ public class StructureBuilder implements IStructureBuilder {
             }
         }
 
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
     }
 
     private NBTTagCompound readStructureAsName(String structureName) {

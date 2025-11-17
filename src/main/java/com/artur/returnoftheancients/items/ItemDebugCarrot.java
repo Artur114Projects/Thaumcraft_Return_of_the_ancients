@@ -348,7 +348,7 @@ public class ItemDebugCarrot extends BaseItem {
 			IOUtils.closeQuietly(inputStream);
 		}
 
-		UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+		UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
 		BlockPos minPos = new BlockPos(Math.min(startPos.getX(), endPos.getX()), Math.min(startPos.getY(), endPos.getY()), Math.min(startPos.getZ(), endPos.getZ()));
 		BlockPos maxPos = new BlockPos(Math.max(startPos.getX(), endPos.getX()), Math.max(startPos.getY(), endPos.getY()), Math.max(startPos.getZ(), endPos.getZ()));
 		NBTTagList lightData = new NBTTagList();
@@ -367,7 +367,7 @@ public class ItemDebugCarrot extends BaseItem {
 			lightData.appendTag(d);
 		}
 
-		UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+		UltraMutableBlockPos.release(blockPos);
 
 		fileNBT.setTag("light", lightData);
 

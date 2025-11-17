@@ -12,7 +12,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import thaumcraft.api.blocks.BlocksTC;
@@ -121,7 +120,7 @@ public class BiomeTaint extends BiomeBase {
 
                 int x = (chunk.x << 4) + localX;
                 int z = (chunk.z << 4) + localZ;
-                int y = MiscHandler.calculateGenerationHeight(world, x, z);
+                int y = MiscHandler.findHighestBlock(world, x, z);
 
                 if (!world.isAnyPlayerWithinRangeAt(x, y, z, 256)) {
                     continue;
@@ -138,7 +137,7 @@ public class BiomeTaint extends BiomeBase {
     }
 
     public static void decorateCustom(World worldIn, Random random, ChunkPos pos, byte[] biomeArray) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(pos);
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(pos);
         Chunk chunk = worldIn.getChunkFromBlockCoords(blockPos);
 
         for (int i = 0; i != 16; i++) {
@@ -162,7 +161,7 @@ public class BiomeTaint extends BiomeBase {
             decorateChunkNormal(worldIn, random,  blockPos);
         }
 
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
     }
 
     private static void decorateEdge(World worldIn, Random rand, UltraMutableBlockPos blockPos, byte biomeId) {

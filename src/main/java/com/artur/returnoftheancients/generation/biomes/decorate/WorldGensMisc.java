@@ -4,10 +4,10 @@ import com.artur.returnoftheancients.blocks.BlockTaintVoidStone;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitBiome;
 import com.artur.returnoftheancients.init.InitBlocks;
+import com.artur.returnoftheancients.util.math.MathUtils;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -16,7 +16,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
@@ -42,7 +41,7 @@ public class WorldGensMisc {
 
         @Override
         public boolean generate(World worldIn, Random rand, BlockPos position) {
-            UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+            UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
             Biome biome = worldIn.getBiome(position);
             int h = this.replaceHFromBiome(biome, rand);
             for (blockPos.setPos(position); blockPos.getY() > h; blockPos.down()) {
@@ -59,7 +58,7 @@ public class WorldGensMisc {
                 IBlockState state1 = blockPos.getY() <= 20 ? InitBlocks.INCANDESCENT_TAINT_VOID_STONE.getDefaultState() : InitBlocks.TAINT_VOID_STONE.getDefaultState();
                 storage.set(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15, state1);
             }
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+            UltraMutableBlockPos.release(blockPos);
             return true;
         }
 
@@ -80,7 +79,7 @@ public class WorldGensMisc {
 
         @Override
         public boolean generate(World worldIn, Random rand, BlockPos position) {
-            UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+            UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
             if (rand.nextInt(33) == 0) {
                 blockPos.setPos(position);
                 if (blockPos.getY() < 100 && worldIn.getBlockState(blockPos).getBlock() == BlocksTC.taintSoil) {
@@ -93,7 +92,7 @@ public class WorldGensMisc {
                     }
                 }
             }
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+            UltraMutableBlockPos.release(blockPos);
             return true;
         }
     }
@@ -102,14 +101,14 @@ public class WorldGensMisc {
 
         @Override
         public boolean generate(World worldIn, Random rand, BlockPos position) {
-            UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(position);
+            UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(position);
             if (blockPos.getY() >= 100 && worldIn.getBiome(position) != InitBiome.TAINT_WASTELAND) {
                 if (blockPos.getY() > 110) {
                     IBlockState state = worldIn.getBlockState(blockPos);
                     if (state.getBlock() == BlocksTC.taintSoil || state.getMaterial() == Material.SNOW) blockPos.down();
                     ExtendedBlockStorage storage = blockPos.up().ebs(worldIn);
                     if (storage != null) {
-                        storage.set(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15, Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, MathHelper.clamp((int) MiscHandler.interpolate(1, 8, (blockPos.getY() - 110.0F) / (148.0F - 110.0F)), 1, 8)));
+                        storage.set(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15, Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, MathHelper.clamp((int) MathUtils.interpolate(1, 8, (blockPos.getY() - 110.0F) / (148.0F - 110.0F)), 1, 8)));
                     }
                 } else if (rand.nextBoolean()) {
                     IBlockState state = worldIn.getBlockState(blockPos);
@@ -120,7 +119,7 @@ public class WorldGensMisc {
                     }
                 }
             }
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+            UltraMutableBlockPos.release(blockPos);
             return true;
         }
     }
@@ -132,14 +131,14 @@ public class WorldGensMisc {
             if (rand.nextFloat() > 0.1) {
                 return false;
             }
-            UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(position);
+            UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(position);
             blockPos.add(rand.nextInt(16), 0, rand.nextInt(16));
             if (MiscHandler.getBiomeIdOnPos(worldIn, blockPos) != Biome.getIdForBiome(InitBiome.TAINT_WASTELAND)) {
-                UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+                UltraMutableBlockPos.release(blockPos);
                 return false;
             }
             genCircle(worldIn, rand, blockPos, 4 + (rand.nextInt(2) + 1));
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+            UltraMutableBlockPos.release(blockPos);
             return true;
         }
 
@@ -176,7 +175,7 @@ public class WorldGensMisc {
 
         @Override
         public boolean gen(World world, Random rand, BlockPos pos) {
-            UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+            UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
             Chunk chunk = world.getChunkFromBlockCoords(pos);
 
             ExtendedBlockStorage[] blockStorages = chunk.getBlockStorageArray();
@@ -190,7 +189,7 @@ public class WorldGensMisc {
                 }
             }
 
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+            UltraMutableBlockPos.release(blockPos);
             chunk.markDirty();
             return true;
         }
@@ -209,7 +208,7 @@ public class WorldGensMisc {
 
         @Override
         public boolean gen(World world, Random rand, BlockPos position) {
-            UltraMutableBlockPos pos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(position);
+            UltraMutableBlockPos pos = UltraMutableBlockPos.obtain().setPos(position);
 
             for (int x = 0; x != 16; x++) {
                 for (int z = 0; z != 16; z++) {
@@ -262,7 +261,7 @@ public class WorldGensMisc {
             }
 
             world.getChunkFromBlockCoords(position).resetRelightChecks();
-            UltraMutableBlockPos.returnBlockPosToPoll(pos);
+            UltraMutableBlockPos.release(pos);
             return true;
 
         }
@@ -281,12 +280,12 @@ public class WorldGensMisc {
 
         @Override
         public boolean gen(World world, Random rand, BlockPos pos) {
-            UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(pos);
+            UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(pos);
             for (int i = 0; i != 16; i++) {
                 blockPos.pushPos();
                 blockPos.add(rand.nextInt(16), rand.nextInt(20), rand.nextInt(16));
                 if (world.getBiome(blockPos) != InitBiome.INFERNAL_CRATER) {
-                    UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+                    UltraMutableBlockPos.release(blockPos);
                     return false;
                 }
 
@@ -318,7 +317,7 @@ public class WorldGensMisc {
                 blockPos.popPos();
             }
 
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+            UltraMutableBlockPos.release(blockPos);
             return true;
         }
 

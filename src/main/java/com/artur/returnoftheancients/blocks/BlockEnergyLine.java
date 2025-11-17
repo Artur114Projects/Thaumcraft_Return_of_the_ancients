@@ -49,6 +49,7 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
     public BlockEnergyLine(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
 
+        this.setRenderer(new TileEntityEnergyLineRenderer());
         this.setForCreative().setTRACreativeTab();
     }
 
@@ -181,12 +182,6 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
         ITileEnergy tile = (ITileEnergy) tileRaw;
         playerIn.sendMessage(new TextComponentString("Network:" + tile.networkId() + " is client:" + worldIn.isRemote));
         return true;
-    }
-
-    @Override
-    public void registerModels() {
-        super.registerModels();
-        ClientRegistry.bindTileEntitySpecialRenderer(this.tileEntityClass(), new TileEntityEnergyLineRenderer());
     }
 
     private boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing facing){

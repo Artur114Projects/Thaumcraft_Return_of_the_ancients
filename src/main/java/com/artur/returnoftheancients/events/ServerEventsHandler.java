@@ -2,7 +2,6 @@ package com.artur.returnoftheancients.events;
 
 import com.artur.returnoftheancients.ancientworld.system.base.AncientLayer1EventsHandler;
 import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
-import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
 import com.artur.returnoftheancients.events.eventmanagers.*;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
@@ -23,7 +22,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -32,7 +30,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -40,7 +37,6 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -240,14 +236,14 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
     }
 
     protected static void checkResearch(EntityPlayer player) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
         if (AncientPortalsProcessor.hasPortalOnWorld(player.world)) {
             blockPos.setPos(AncientPortalsProcessor.getNearestPortalPos(player.world, blockPos.setPos(player))).add(8, 0, 8).setY(MathHelper.floor(player.posY));
             if (blockPos.distance(player) < 32) {
                 MiscHandler.researchAndSendMessage((EntityPlayerMP) player, "m_FOUND_ANCIENT", Referense.MODID + ".text.found_portal");
             }
         }
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
     }
 
     private static void tickTimer(EntityPlayer player) {

@@ -2,7 +2,6 @@ package com.artur.returnoftheancients.util.math;
 
 import com.artur.returnoftheancients.util.interfaces.RunnableWithParam;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -20,13 +19,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
-    private static UltraMutableBlockPos[] stack = new UltraMutableBlockPos[64];
-    private static long lastTrowTime = 0;
-    private static int stackHead = -1;
+    private static UltraMutableBlockPos[] pool = new UltraMutableBlockPos[64];
+    private static int poolHead = -1;
     private static final int NUM_X_BITS = 1 + MathHelper.log2(MathHelper.smallestEncompassingPowerOfTwo(30000000));
     private static final int NUM_Z_BITS = NUM_X_BITS;
     private static final int NUM_Y_BITS = 64 - NUM_X_BITS - NUM_Z_BITS;
@@ -36,17 +36,14 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
     private static final long Y_MASK = (1L << NUM_Y_BITS) - 1L;
     private static final long Z_MASK = (1L << NUM_Z_BITS) - 1L;
 
-
-
-    public static synchronized @NotNull UltraMutableBlockPos getBlockPosFromPoll() {
-        if (stackHead != -1) {
-            UltraMutableBlockPos blockPos = stack[stackHead];
-            stack[stackHead] = null;
-            stackHead--;
+    public static synchronized @NotNull UltraMutableBlockPos obtain() {
+        if (poolHead != -1) {
+            UltraMutableBlockPos blockPos = pool[poolHead];
+            pool[poolHead--] = null;
 
             if (blockPos == null) {
-                System.out.println("Block pos in " + stackHead + " is null wtf!?");
-                return getBlockPosFromPoll();
+                System.out.println("Block pos in " + poolHead + " is null wtf!?");
+                return new UltraMutableBlockPos();
             }
 
             return blockPos;
@@ -55,18 +52,18 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         }
     }
 
-    public static synchronized void returnBlockPosToPoll(@NotNull UltraMutableBlockPos blockPos) {
-        if (stackHead + 1 >= stack.length) {
+    public static synchronized void release(@NotNull UltraMutableBlockPos blockPos) {
+        if (poolHead + 1 >= pool.length) {
             System.out.println("wow! poll is full!");
-            stack = Arrays.copyOf(stack, stack.length * 2);
+            pool = Arrays.copyOf(pool, pool.length * 2);
         }
 
         blockPos.setToZero();
-        stack[++stackHead] = blockPos;
+        pool[++poolHead] = blockPos;
     }
 
 
-    protected @Nullable LinkedList<PosContext> contextPos = null;
+    protected @Nullable List<PosContext> context = null;
     protected int contextDeep = -1;
 
     public UltraMutableBlockPos() {
@@ -121,7 +118,7 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         return this;
     }
 
-    public BlockPos subtract(Vec3i vec) {
+    public @NotNull UltraMutableBlockPos subtract(Vec3i vec) {
         return this.add(-vec.getX(), -vec.getY(), -vec.getZ());
     }
 
@@ -214,33 +211,46 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
     }
 
     public UltraMutableBlockPos setWorldY(World world, boolean ignoringLiquids, Block... ignoringBlocks) {
-        Chunk chunk = world.getChunkFromBlockCoords(this);
-        int index;
-        for (index = 0; index != 16; index++) {
-            if (chunk.getBlockStorageArray()[index] == null) {
+        Chunk chunk = world.getChunkFromChunkCoords(this.getChunkX(), this.getChunkZ());
+
+        ExtendedBlockStorage[] storages = chunk.getBlockStorageArray();
+        ExtendedBlockStorage storage = storages[storages.length - 1];
+        int storageI = storages.length - 1;
+        int posY = 15;
+        int posX = this.getX() & 15;
+        int posZ = this.getZ() & 15;
+
+        while (storageI >= 0) {
+            if (storage == null) {
+                storageI--;
+                if (storageI >= 0) {
+                    storage = storages[storageI];
+                }
+                continue;
+            }
+
+            IBlockState state = storage.get(posX, posY, posZ);
+
+            if (!(state.getBlock() == Blocks.AIR || (state.getMaterial().isLiquid() && ignoringLiquids) || MathUtils.arrayContains(ignoringBlocks, state.getBlock()))) {
                 break;
             }
-        }
-        this.setY((index + 1) * 16);
 
-        while (this.getY() >= 0) {
-            IBlockState state = world.getBlockState(this);
-            Block block = state.getBlock();
-            Material material = state.getMaterial();
-            boolean flag = true;
-            for (Block ignoring : ignoringBlocks) {
-                if (block == ignoring || (ignoringLiquids && material.isLiquid())) {
-                    flag = false;
+            posY--;
+
+            if (posY < 0) {
+                storageI--;
+                posY = 15;
+                if (storageI >= 0) {
+                    storage = storages[storageI];
+                } else {
+                    posY = -1;
+                    storageI = 0;
                     break;
                 }
             }
-            if (flag) {
-                break;
-            }
-            this.down();
         }
 
-        return this;
+        this.setY((storageI << 4) + posY); return this;
     }
 
     @Override
@@ -283,8 +293,8 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
     public UltraMutableBlockPos copy(boolean isCopyContext) {
         UltraMutableBlockPos pos = new UltraMutableBlockPos(this);
         if (isCopyContext) {
-            if (contextPos != null) {
-                pos.contextPos = new LinkedList<>(contextPos);
+            if (context != null) {
+                pos.context = new LinkedList<>(context);
                 pos.contextDeep = contextDeep;
             }
         }
@@ -329,10 +339,6 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
 
     public int getChunkZ() {
         return this.getZ() >> 4;
-    }
-
-    public ChunkPos getChunkPos() {
-        return new ChunkPos(this);
     }
 
     public int distanceSq(ChunkPos pos) {
@@ -417,27 +423,20 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
     }
 
     public void pushPos() {
-        if (contextPos != null && contextPos.size() > (contextDeep + 1)) {
-            contextPos.get(++contextDeep).setPos(this);
+        if (this.context != null && this.context.size() > (this.contextDeep + 1)) {
+            this.context.get(++this.contextDeep).setPos(this);
         } else {
-            if (contextPos == null) {
-                contextPos = new LinkedList<>();
+            if (this.context == null) {
+                this.context = new ArrayList<>();
             }
-            contextPos.add(new PosContext(this));
-            contextDeep++;
-        }
-
-        if ((contextDeep + 1) % 32 == 0 && System.currentTimeMillis() - lastTrowTime > 1000) {
-            RuntimeException exception = new IllegalStateException("Leak? Context deep exceeded [" + (contextDeep + 1) + "] so it should be!?");
-            exception.printStackTrace(System.out);
-
-            lastTrowTime = System.currentTimeMillis();
+            this.context.add(new PosContext(this));
+            this.contextDeep++;
         }
     }
 
     public void popPos() {
-        if (contextPos != null && contextPos.size() > contextDeep && contextDeep != -1) {
-            this.setPos(contextPos.get(contextDeep--));
+        if (this.context != null && this.context.size() > this.contextDeep && this.contextDeep != -1) {
+            this.setPos(this.context.get(this.contextDeep--));
         } else {
             throw new IllegalStateException("Stack is empty! Cannot be fulfilled popPos!");
         }
@@ -445,9 +444,9 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
 
     public void clearContext(boolean removeContext) {
         if (removeContext) {
-            contextPos = null;
+            this.context = null;
         }
-        contextDeep = -1;
+        this.contextDeep = -1;
     }
 
     public void setToZero() {

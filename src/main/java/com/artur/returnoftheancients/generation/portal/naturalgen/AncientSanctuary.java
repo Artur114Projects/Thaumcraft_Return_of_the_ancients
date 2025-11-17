@@ -67,7 +67,7 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
             return this.getSanctuaryArchOffset(archFacing);
         }
 
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
 
         blockPos.setPos(pos).setY(analyzer.getMaxHeight());
         this.type.createBuildRequest(world, blockPos.addY(2)).build();
@@ -95,7 +95,7 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
         BlockPos offset = getSanctuaryArchOffset(archFacing);
         BlockPos ret = blockPos.add(offset).setWorldY(world).addY(-1).toImmutable();
 
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
 
         this.needSave = true;
         this.isBuild = true;
@@ -157,13 +157,13 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
                 this.updateActiveState(state);
                 this.portal.updateActiveState(state);
 
-                UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+                UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
                 this.world.playSound(null, blockPos.setPos(tilePos).add(0, 2, 0), InitSounds.SPOTLIGHT.SOUND, SoundCategory.AMBIENT, 1, 1);
 
                 blockPos.setPos(portal.portalPos).setY(portal.posY + 10);
                 blockPos.offsetAndCallRunnable(OffsetsUtil.getCornerOffsets(2, 13), pos -> this.world.playSound(null, pos, InitSounds.SPOTLIGHT.SOUND, SoundCategory.AMBIENT, 1, 1));
 
-                UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+                UltraMutableBlockPos.release(blockPos);
             });
         });
     }
@@ -206,7 +206,7 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
     }
 
     private void callRunnableOnLightOffsets(RunnableWithParam<UltraMutableBlockPos> run) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
 
         blockPos.setPos(tilePos).addY(3);
         run.run(blockPos);
@@ -240,7 +240,7 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
             blockPos.offsetAndCallRunnable(backLights, run);
         }
 
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
     }
 
     protected Type getType() {

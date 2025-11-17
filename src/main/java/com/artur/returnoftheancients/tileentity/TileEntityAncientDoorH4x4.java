@@ -76,7 +76,7 @@ public class TileEntityAncientDoorH4x4 extends TileEntityDoorBase implements Til
 
     @Override
     protected void breakAll() {
-        UltraMutableBlockPos pos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos pos = UltraMutableBlockPos.obtain();
 
         for (int h = 0; h != height; h++) {
             for (int w = 0; w != width; w++) {
@@ -90,7 +90,7 @@ public class TileEntityAncientDoorH4x4 extends TileEntityDoorBase implements Til
             }
         }
 
-        UltraMutableBlockPos.returnBlockPosToPoll(pos);
+        UltraMutableBlockPos.release(pos);
 
         this.world.destroyBlock(this.pos, true);
     }
@@ -102,7 +102,7 @@ public class TileEntityAncientDoorH4x4 extends TileEntityDoorBase implements Til
 
     @Override
     public void fillDummy() {
-        UltraMutableBlockPos pos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos pos = UltraMutableBlockPos.obtain();
 
         for (int h = 0; h != this.height; h++) {
             for (int w = 0; w != this.width; w++) {
@@ -116,7 +116,7 @@ public class TileEntityAncientDoorH4x4 extends TileEntityDoorBase implements Til
             }
         }
 
-        UltraMutableBlockPos.returnBlockPosToPoll(pos);
+        UltraMutableBlockPos.release(pos);
     }
 
     @Override
@@ -165,14 +165,14 @@ public class TileEntityAncientDoorH4x4 extends TileEntityDoorBase implements Til
             return;
         }
 
-        UltraMutableBlockPos pos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos pos = UltraMutableBlockPos.obtain();
 
         for (int h = 0; h != height; h++) {
             pos.setPos(this.pos).add(h, 0, index);
             this.replaceDummy(pos, this.staticAxisAlignedBBMap().get(this.currentState.toBinary()).get(this.axis).get(this.getDummyType(pos)));
         }
 
-        UltraMutableBlockPos.returnBlockPosToPoll(pos);
+        UltraMutableBlockPos.release(pos);
     }
 
     @Override

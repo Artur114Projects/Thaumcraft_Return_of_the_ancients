@@ -37,8 +37,8 @@ public class PlayerDistanceToPortalManager {
 
     private void calculateDistanceToPortal(Minecraft mc, EntityPlayer player) {
         if (player.ticksExisted % 8 == 0 && AncientPortalsProcessor.hasPortalOnWorld(mc.world)) {
-            UltraMutableBlockPos playerPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(player);
-            UltraMutableBlockPos portalPos = UltraMutableBlockPos.getBlockPosFromPoll();
+            UltraMutableBlockPos playerPos = UltraMutableBlockPos.obtain().setPos(player);
+            UltraMutableBlockPos portalPos = UltraMutableBlockPos.obtain();
 
             this.nearestPortalPos = AncientPortalsProcessor.getNearestPortalPos(mc.world, playerPos);
             portalPos.setPos(this.nearestPortalPos).add(8, 0, 8);
@@ -46,8 +46,8 @@ public class PlayerDistanceToPortalManager {
             playerPos.setY(0);
             this.distanceToPortal = playerPos.distance(portalPos);
 
-            UltraMutableBlockPos.returnBlockPosToPoll(playerPos);
-            UltraMutableBlockPos.returnBlockPosToPoll(portalPos);
+            UltraMutableBlockPos.release(playerPos);
+            UltraMutableBlockPos.release(portalPos);
         }
     }
 

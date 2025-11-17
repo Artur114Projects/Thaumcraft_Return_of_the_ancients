@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.client.event.managers.movement.IMovementTas
 import com.artur.returnoftheancients.client.fx.particle.ParticleAncientPortal;
 import com.artur.returnoftheancients.generation.portal.util.OffsetsUtil;
 import com.artur.returnoftheancients.handlers.MiscHandler;
+import com.artur.returnoftheancients.util.math.MathUtils;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -71,7 +72,7 @@ public class ClientAncientPortal {
     }
 
     public boolean isCollide(BlockPos pos) {
-        UltraMutableBlockPos lBlockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos lBlockPos = UltraMutableBlockPos.obtain();
         lBlockPos.setPos(pos);
         if (lBlockPos.getChunkX() == chunkX && lBlockPos.getChunkZ() == chunkZ) {
             lBlockPos.setPos(portalPos).setY(0);
@@ -79,13 +80,13 @@ public class ClientAncientPortal {
                 lBlockPos.pushPos();
                 if (lBlockPos.add(offset).equalsXZ(pos)) {
                     lBlockPos.popPos();
-                    UltraMutableBlockPos.returnBlockPosToPoll(lBlockPos);
+                    UltraMutableBlockPos.release(lBlockPos);
                     return true;
                 }
                 lBlockPos.popPos();
             }
         }
-        UltraMutableBlockPos.returnBlockPosToPoll(lBlockPos);
+        UltraMutableBlockPos.release(lBlockPos);
         return false;
     }
 
@@ -174,9 +175,9 @@ public class ClientAncientPortal {
             int currentY = MathHelper.floor(player.posY);
 
             if (Math.abs(toY - currentY) <= 20 && !this.fastEnd) {
-                speedPercent = MiscHandler.interpolate(speedPercent, 0.25F, 0.12F);
+                speedPercent = MathUtils.interpolate(speedPercent, 0.25F, 0.12F);
             } else {
-                speedPercent = MiscHandler.interpolate(speedPercent, 1.0F, 0.05F);
+                speedPercent = MathUtils.interpolate(speedPercent, 1.0F, 0.05F);
             }
 
             player.fallDistance = this.type == ElevatingType.UP ? 0 : 100;

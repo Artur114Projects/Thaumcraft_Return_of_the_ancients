@@ -4,11 +4,11 @@ import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
 import com.artur.returnoftheancients.items.ItemSoulBinder;
 import com.artur.returnoftheancients.misc.SoundTRA;
 import com.artur.returnoftheancients.misc.TRAConfigs;
-import com.artur.returnoftheancients.ancientworldlegacy.legacy.GenStructure;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.network.ClientPacketMisc;
 import com.artur.returnoftheancients.network.ClientPacketPlayerNBTData;
 import com.artur.returnoftheancients.referense.Referense;
+import com.artur.returnoftheancients.util.math.MathUtils;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -29,6 +29,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.Aspect;
@@ -45,37 +46,56 @@ public class MiscHandler {
         return r.nextInt((max - min) + 1) + min;
     }
 
-    public static int calculateGenerationHeight(World world, BlockPos pos) {
-        return calculateGenerationHeight(world, pos.getX(), pos.getZ());
+    public static int findHighestBlock(World world, BlockPos pos) {
+        return findHighestBlock(world, pos.getX(), pos.getZ());
     }
 
-    public static int calculateGenerationHeight(World world, int x, int z) {
-        return calculateGenerationHeight(world, x, z, Blocks.AIR, Blocks.BEDROCK);
+    public static int findHighestBlock(World world, int x, int z) {
+        return findHighestBlock(world, x, z, Blocks.AIR, Blocks.BEDROCK);
     }
 
-    public static int calculateGenerationHeight(World world, int x, int z, Block... ignoringBlocks) {
-        UltraMutableBlockPos pos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(x, world.getHeight(), z);
+    public static int findHighestBlock(World world, int x, int z, Block... ignoringBlocks) {
+        Chunk chunk = world.getChunkFromChunkCoords(x >> 4, z >> 4);
 
-        while (pos.getY() >= 0) {
-            Block block = world.getBlockState(pos).getBlock();
-            boolean flag = true;
-            for (Block ignoring : ignoringBlocks) {
-                if (block == ignoring) {
-                    flag = false;
+        ExtendedBlockStorage[] storages = chunk.getBlockStorageArray();
+        ExtendedBlockStorage storage = storages[storages.length - 1];
+        int storageI = storages.length - 1;
+        int posY = 15;
+        int posX = x & 15;
+        int posZ = z & 15;
+
+        while (storageI >= 0) {
+            if (storage == null) {
+                storageI--;
+                if (storageI >= 0) {
+                    storage = storages[storageI];
+                }
+                continue;
+            }
+
+            IBlockState state = storage.get(posX, posY, posZ);
+
+            if (state.getBlock() != Blocks.AIR && !MathUtils.arrayContains(ignoringBlocks, state.getBlock())) {
+                break;
+            }
+
+            posY--;
+
+            if (posY < 0) {
+                storageI--;
+                posY = 15;
+                if (storageI >= 0) {
+                    storage = storages[storageI];
+                } else {
+                    posY = 0;
+                    storageI = 0;
                     break;
                 }
             }
-            if (flag) {
-                break;
-            }
-            pos.down();
         }
 
-        int y = pos.getY();
-        UltraMutableBlockPos.returnBlockPosToPoll(pos);
-        return y;
+        return (storageI << 4) + posY;
     }
-
 
     public static void SOUT2DArray(byte[][] array) {
         for (byte y = 0; y != array.length; y++) {
@@ -87,20 +107,6 @@ public class MiscHandler {
         for (byte y = 0; y != array.length; y++) {
             System.out.println(Arrays.toString(array[y]));
         }
-    }
-
-
-    public static void genAncientPortal(World world, int x, int z, boolean isSetCube) {
-        int y = TRAConfigs.PortalSettings.y;
-        int fx = (16 * x) + 5;
-        int fz = (16 * z) + 5;
-        if (isSetCube) {
-            GenStructure.generateStructure(world, fx, MiscHandler.calculateGenerationHeight(world, fx + 3, fz + 3) + 1, fz, "ancient_portal_air_cube");
-        }
-        while (calculateGenerationHeight(world, fx + 3, fz + 3) > 0) {
-            GenStructure.generateStructure(world, fx, calculateGenerationHeight(world, fx + 3, fz + 3) + y, fz, "ancient_portal");
-        }
-        GenStructure.generateStructure(world, fx, 0, fz, "ancient_portal_floor");
     }
 
     public static List<String> isPlayerUseUnresolvedItems(EntityPlayer player) {
@@ -542,14 +548,6 @@ public class MiscHandler {
     public static boolean fullCheckChunkContainsAnyOnBiomeArray(Chunk chunk, byte[] biomeArray) {
         byte[] chunkBiomeArray = chunk.getBiomeArray();
         return arrayContainsAny(chunkBiomeArray, biomeArray);
-    }
-
-    public static float interpolate(float start, float end, float pct) {
-        return start + (end - start) * pct;
-    }
-
-    public static double interpolate(double start, double end, float pct) {
-        return start + (end - start) * pct;
     }
 
     public static boolean intTagListContains(NBTTagList list, int value) {

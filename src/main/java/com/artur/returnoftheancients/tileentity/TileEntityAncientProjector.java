@@ -54,7 +54,7 @@ public class TileEntityAncientProjector extends TileBase implements ITileBlockPl
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll().setPos(pos).down();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(pos).down();
 
         while (worldIn.isAirBlock(blockPos)) {
             blockPos.down();

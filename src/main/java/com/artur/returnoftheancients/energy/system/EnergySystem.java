@@ -215,7 +215,7 @@ public class EnergySystem {
         }
 
         private void fillOutputsInputs() {
-            UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+            UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
             for (ITileEnergyProvider provider : this.storages) {
                 if (provider.can(blockPos, provider::canAddFromFacing, this.map::get)) {
                     this.inputs.add(provider);
@@ -224,7 +224,7 @@ public class EnergySystem {
                     this.outputs.add(provider);
                 }
             }
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+            UltraMutableBlockPos.release(blockPos);
         }
 
         private void fillMap() {
@@ -256,7 +256,7 @@ public class EnergySystem {
         }
 
         private Map<OutputInput, EnergyWay> buildWay(Map<OutputInput, EnergyWay> map, ITileEnergyProvider output, Set<ITileEnergyProvider> inputs) {
-            UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+            UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
             ArrayDeque<EnergyWayBuilder> queue = new ArrayDeque<>(100);
             Set<ITileEnergy> checked = new HashSet<>(100);
             Set<ITileEnergy> neighborsBuffer = new HashSet<>();
@@ -303,7 +303,7 @@ public class EnergySystem {
                 EnergyWayBuilder.returnBuilderToPoll(builder);
             }
 
-            UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+            UltraMutableBlockPos.release(blockPos);
             return map;
         }
 

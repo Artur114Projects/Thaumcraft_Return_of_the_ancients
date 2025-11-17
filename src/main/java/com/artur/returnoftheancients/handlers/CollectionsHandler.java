@@ -18,5 +18,4 @@ public class CollectionsHandler {
         }
         return map;
     }
-
 }

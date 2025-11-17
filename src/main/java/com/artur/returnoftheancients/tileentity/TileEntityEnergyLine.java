@@ -113,7 +113,7 @@ public class TileEntityEnergyLine extends TileEnergyBase implements ITickable {
 
     @SideOnly(Side.CLIENT)
     public void compileNeighborsForAll() {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
         for (EnumFacing facing : EnumFacing.VALUES) {
             TileEntity tileRaw = this.world.getTileEntity(blockPos.setPos(this.pos).offset(facing));
             if (tileRaw instanceof TileEntityEnergyLine) {
@@ -121,14 +121,14 @@ public class TileEntityEnergyLine extends TileEnergyBase implements ITickable {
             }
         }
         this.compileNeighbors();
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
     }
 
 
     @SideOnly(Side.CLIENT)
     public void compileNeighbors() {
         this.neighbors.clear();
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
         for (EnumFacing facing : EnumFacing.VALUES) {
             if (this.canConnect(facing)) {
                 TileEntity tileRaw = this.world.getTileEntity(blockPos.setPos(this.pos).offset(facing));
@@ -140,7 +140,7 @@ public class TileEntityEnergyLine extends TileEnergyBase implements ITickable {
                 }
             }
         }
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
         this.updateWorkingNeighbors();
     }
 

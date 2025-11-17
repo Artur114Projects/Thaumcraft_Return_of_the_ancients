@@ -1,7 +1,6 @@
 package com.artur.returnoftheancients.generation.portal.base;
 
 import com.artur.returnoftheancients.ancientworld.system.base.AncientLayer1StaticManager;
-import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
 import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
 import com.artur.returnoftheancients.blocks.BlockTpToAncientWorld;
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
@@ -29,8 +28,6 @@ import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld.tpToAncientWorld;
 
 public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025 Переписать!
 
@@ -184,12 +181,13 @@ public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025
     protected void genAncientPortal(boolean needProtect) {
         int localX = posX + 5;
         int localZ = posZ + 5;
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
         StructureBuildersManager.createBuildRequest(world, blockPos.setPos(localX, posY, localZ), "ancient_portal_air_cube").setNeedProtect(needProtect).build();
         for (int y = posY + 32; y > 0; y -= 31) {
             StructureBuildersManager.createBuildRequest(world, blockPos.setPos(localX, y - (31 + 32), localZ), "ancient_portal").setNeedProtect(needProtect).build();
         }
         StructureBuildersManager.createBuildRequest(world, blockPos.setPos(localX, 0, localZ), "ancient_portal_floor").setNeedProtect(needProtect).build();
+        UltraMutableBlockPos.release(blockPos);
     }
 
     protected void onChunkPopulatePre(int chunkX, int chunkZ) {}
@@ -250,12 +248,12 @@ public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025
     }
 
     public boolean isLoaded() {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.getBlockPosFromPoll();
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
 
         mPos.setPos(0, 0, 0);
         boolean flag = world.isAreaLoaded(mPos.setPos(portalPos), blockPos.setPos(portalPos).add(16, 0, 16));
 
-        UltraMutableBlockPos.returnBlockPosToPoll(blockPos);
+        UltraMutableBlockPos.release(blockPos);
 
         return flag;
     }

@@ -3,6 +3,7 @@ package com.artur.returnoftheancients.client.event.managers;
 import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.handlers.MiscHandler;
 import com.artur.returnoftheancients.init.InitBiome;
+import com.artur.returnoftheancients.util.math.MathUtils;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -137,7 +138,7 @@ public class ClientPlayerInBiomeManager {
         @Override
         public int update(EntityPlayer player, FogManager.FogParams fog, boolean isNew, int fogTime) {
             if (isNew && player.posY > 64) {
-                int v = (int) MiscHandler.interpolate(10.0F, 200.0F, (float) MathHelper.clamp((player.posY - 80) / 48.0F, 0.0F, 1.0F));
+                int v = (int) MathUtils.interpolate(10.0F, 200.0F, (float) MathHelper.clamp((player.posY - 80) / 48.0F, 0.0F, 1.0F));
                 if (this.fogDuration < v) {
                     this.fogDuration = MathHelper.clamp(v, 10, 200);
                 }

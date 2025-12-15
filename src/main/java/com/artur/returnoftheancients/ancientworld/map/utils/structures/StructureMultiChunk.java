@@ -16,10 +16,12 @@ import java.util.function.Consumer;
 public abstract class StructureMultiChunk extends StructureBase implements IStructureMultiChunk {
     protected final List<IStructureSegment> segmentsWithPorts = new ArrayList<>();
     protected final List<IStructureSegment> segments = new ArrayList<>();
+    protected final IMultiChunkStrForm form;
     protected EnumMultiChunkStrType type;
 
     public StructureMultiChunk(EnumRotate rotate, EnumMultiChunkStrType type, StrPos pos) {
         this.pos = pos.toImmutable();
+        this.form = type.form();
         this.rotate = rotate;
         this.type = type;
 
@@ -38,6 +40,7 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
             }
         }
 
+        this.form = parent.form;
         this.type = parent.type;
     }
 
@@ -81,78 +84,27 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
 
     @Override
     public abstract @NotNull IStructure copy();
-    protected abstract char[][] structureForm();
 
     protected void compileSegments() {
-        char[][] form = this.structureForm();
+        IMultiChunkStrForm.IOffset[] offsets = this.form.offsets(this.pos(), this.rotate());
 
-        for (int i = 0; i != form.length; i++) {
-            if (form[0].length != form[i].length) {
-                throw new IllegalArgumentException();
-            }
+        for (IMultiChunkStrForm.IOffset offset : offsets) {
+            IStructureSegment segment = new StructureSegment(this, offset.ports(), offset.globalPos());
+            if (offset.ports().length != 0) this.segmentsWithPorts.add(segment);
+            this.segments.add(segment);
         }
-
-        int centerX = -1;
-        int centerY = -1;
-        for (int y = 0; y != form.length; y++) {
-            for (int x = 0; x != form[y].length; x++) {
-                if (form[y][x] == 'c') {
-                    if (centerY == -1) {
-                        centerX = x;
-                        centerY = y;
-                    } else {
-                        throw new IllegalArgumentException();
-                    }
-                }
-            }
-        }
-        if (centerY == -1) {
-            throw new IllegalArgumentException();
-        }
-
-
-
-        for (int y = 0; y != form.length; y++) {
-            for (int x = 0; x != form[y].length; x++) {
-                if (form[y][x] == 's') {
-                    List<EnumFace> ports = Arrays.asList(EnumFace.rotateAll(this.rotate(), this.getPortsFromForm(x, y, form).toArray(new EnumFace[0])));
-                    StrPos rotatedPos = new StrPos(x - centerX, y - centerY).rotate(this.rotate());
-                    StrPos pos = new StrPos(this.pos.getX() + rotatedPos.getX(), this.pos.getY() + rotatedPos.getY());
-                    IStructureSegment segment = new StructureSegment(this, ports, pos);
-                    if (!ports.isEmpty()) this.segmentsWithPorts.add(segment);
-                    this.segments.add(segment);
-                }
-            }
-        }
-    }
-
-    protected List<EnumFace> getPortsFromForm(int x, int y, char[][] form) {
-        List<EnumFace> faces = new ArrayList<>(4);
-        if (x - 1 >= 0 && form[y][x - 1] == 'p') {
-            faces.add(EnumFace.LEFT);
-        }
-        if (x + 1 < form[y].length && form[y][x + 1] == 'p') {
-            faces.add(EnumFace.RIGHT);
-        }
-        if (y - 1 >= 0 && form[y - 1][x] == 'p') {
-            faces.add(EnumFace.UP);
-        }
-        if (y + 1 < form.length && form[y + 1][x] == 'p') {
-            faces.add(EnumFace.DOWN);
-        }
-        return faces;
     }
 
     public static class StructureSegment extends StructureBase implements IStructureMultiChunk.IStructureSegment {
         protected IStructureMultiChunk parent;
         protected EnumMultiChunkStrType type;
-        public StructureSegment(StructureMultiChunk parent, List<EnumFace> ports, StrPos pos) {
+        public StructureSegment(StructureMultiChunk parent, EnumFace[] ports, StrPos pos) {
             this.pos = pos.toImmutable();
             this.rotate = parent.rotate;
             this.type = parent.type;
 
             this.parent = parent;
-            this.ports.addAll(ports);
+            this.ports.addAll(Arrays.asList(ports));
             this.y = parent.y;
         }
 

@@ -179,7 +179,7 @@ public class GenPhaseBuildWays extends GenPhase {
         }
     }
 
-    private abstract static class RandomReplacerBase {
+    private abstract static class RandomReplacerBase { // TODO: 14.12.2025 Переписать
         private final float chance;
         protected RandomReplacerBase(float chance) {
             this.chance = chance;
@@ -187,7 +187,6 @@ public class GenPhaseBuildWays extends GenPhase {
 
         protected abstract boolean canReplace(ImmutableMap map, StrPos pos, EnumFace buildDirection);
         protected abstract void replace(ImmutableMap map, StrPos pos, EnumFace buildDirection, Random rand);
-
 
         protected List<EnumFace> foundPorts(ImmutableMap map, StrPos pos) {
             StrPos.MutableStrPos strPos = new StrPos.MutableStrPos();

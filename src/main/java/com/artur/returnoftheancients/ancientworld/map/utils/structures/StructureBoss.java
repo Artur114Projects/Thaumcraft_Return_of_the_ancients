@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.ancientworld.map.utils.structures;
 
 import com.artur.returnoftheancients.ancientworld.map.utils.EnumMultiChunkStrType;
 import com.artur.returnoftheancients.ancientworld.map.utils.EnumRotate;
+import com.artur.returnoftheancients.ancientworld.map.utils.MultiChunkStrForm;
 import com.artur.returnoftheancients.ancientworld.map.utils.StrPos;
 import com.artur.returnoftheancients.ancientworld.map.utils.maps.InteractiveMap;
 import com.artur.returnoftheancients.ancientworld.system.utils.AncientWorldPlayer;
@@ -45,17 +46,6 @@ public class StructureBoss extends StructureMultiChunk implements IStructureInte
     @Override
     public @NotNull IStructure copy() {
         return new StructureBoss(this);
-    }
-
-    @Override
-    protected char[][] structureForm() {
-        return new char[][] {
-            {' ',' ',' ',' ',' '},
-            {' ','s','s','s',' '},
-            {' ','s','c','s',' '},
-            {' ','s','s','s','p'},
-            {' ',' ',' ',' ',' '}
-        };
     }
 
     @Override
@@ -198,5 +188,18 @@ public class StructureBoss extends StructureMultiChunk implements IStructureInte
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         nbt.setBoolean("isBossDead", this.isBossDead);
         return nbt;
+    }
+
+    public static class Form extends MultiChunkStrForm {
+        @Override
+        public char[][] form() {
+            return new char[][] {
+                    {' ',' ',' ',' ',' '},
+                    {' ','s','s','s',' '},
+                    {' ','s','c','s',' '},
+                    {' ','s','s','s','p'},
+                    {' ',' ',' ',' ',' '}
+            };
+        }
     }
 }

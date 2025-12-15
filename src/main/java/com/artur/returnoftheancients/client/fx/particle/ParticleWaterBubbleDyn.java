@@ -3,14 +3,15 @@ package com.artur.returnoftheancients.client.fx.particle;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.ParticleBubble;
-import net.minecraft.client.particle.ParticleWaterWake;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ParticleWaterBubbleDyn extends ParticleBubble {
     private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
+    private boolean axis;
+    private double angle;
     public ParticleWaterBubbleDyn(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
+        this.axis = this.rand.nextBoolean();
     }
 
     @Override
@@ -29,5 +30,17 @@ public class ParticleWaterBubbleDyn extends ParticleBubble {
             this.setExpired();
         }
 
+        float rotateSpeed = 1.0F;
+        float radius = 0.04F;
+
+        if (axis) {
+            this.motionX = radius * Math.sin(this.angle);
+            this.motionZ = radius * Math.cos(this.angle);
+        } else {
+            this.motionX = radius * Math.cos(this.angle);
+            this.motionZ = radius * Math.sin(this.angle);
+        }
+
+        this.angle += rotateSpeed;
     }
 }

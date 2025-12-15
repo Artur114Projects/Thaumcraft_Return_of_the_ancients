@@ -43,8 +43,8 @@ public class ParticleHeat extends ParticleBase<ParticleSprite> {
             this.motionX = speed * Math.sin(this.angle);
             this.motionZ = speed * Math.cos(this.angle);
         } else {
-            this.motionX = speed * Math.cos(-this.angle);
-            this.motionZ = speed * Math.sin(-this.angle);
+            this.motionX = speed * Math.cos(this.angle);
+            this.motionZ = speed * Math.sin(this.angle);
         }
 
         this.angle += rotateSpeed;

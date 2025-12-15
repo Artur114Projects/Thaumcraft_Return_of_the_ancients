@@ -18,6 +18,22 @@ public class StrPos {
         this((int) (data), (int) (data >> 32));
     }
 
+    public StrPos add(int x, int y) {
+        return new StrPos(this.getX() + x, this.getY() + y);
+    }
+
+    public StrPos add(StrPos pos) {
+        return this.add(pos.getX(), pos.getY());
+    }
+
+    public StrPos deduct(int x, int y) {
+        return this.add(-x, -y);
+    }
+
+    public StrPos deduct(StrPos pos) {
+        return this.add(-pos.getX(), -pos.getY());
+    }
+
     public StrPos offset(EnumFace face) {
         return this.offset(face, 1);
     }

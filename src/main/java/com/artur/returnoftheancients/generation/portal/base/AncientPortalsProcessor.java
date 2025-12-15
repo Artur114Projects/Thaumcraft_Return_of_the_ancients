@@ -63,15 +63,15 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
 
     @SubscribeEvent
     public static void WorldEventLoad(WorldEvent.Load e) {
-        if (!e.getWorld().isRemote) {
-            if (!LOADED_DIMENSIONS.contains(e.getWorld().provider.getDimension())) {
-                int dimension = e.getWorld().provider.getDimension();
+        if (!LOADED_DIMENSIONS.contains(e.getWorld().provider.getDimension())) {
+            int dimension = e.getWorld().provider.getDimension();
+
+            if (dimension == 0) {
+                portalsGenerationPosOverWorld = GenLayersHandler.initPortalsPosOnWorld(portalsCount, e.getWorld().getWorldInfo().getSeed());
+            }
+
+            if (!e.getWorld().isRemote) {
                 WorldData worldData = WorldData.get();
-
-                if (dimension == 0) {
-                    portalsGenerationPosOverWorld = GenLayersHandler.initPortalsPosOnWorld(portalsCount, e.getWorld().getWorldInfo().getSeed());
-                }
-
                 if (TRAConfigs.Any.debugMode) System.out.println("Load portals dim:" + dimension);
                 NBTTagCompound portalsPack = worldData.saveData.getCompoundTag("PortalsPack");
                 if (portalsPack.hasKey(dimension + "")) {
@@ -98,9 +98,9 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
                         worldData.markDirty();
                     }
                 }
-
-                LOADED_DIMENSIONS.add(dimension);
             }
+
+            LOADED_DIMENSIONS.add(dimension);
         }
     }
 

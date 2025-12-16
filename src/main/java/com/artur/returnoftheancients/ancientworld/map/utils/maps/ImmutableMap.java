@@ -144,14 +144,19 @@ public class ImmutableMap extends AbstractMap {
         StrPos pos = structure.pos();
         if (pos.isOutOfBounds(this.size)) return;
         structure.bindMap(this);
-        this.structures[this.index(pos)] = structure;
+        int index = this.index(pos);
+        IStructure oldStructure = this.structures[index];
+        if (oldStructure != null) {
+            oldStructure.bindMap(null);
+            if (!oldStructure.canReplace()) {
+                throw new IllegalArgumentException();
+            }
+        }
+        this.structures[index] = structure;
     }
 
     private void privateInsetMultiChunkStructure(IStructureMultiChunk structure) {
-        StrPos pos = structure.pos();
-        if (pos.isOutOfBounds(this.size)) return;
-        structure.bindMap(this);
-        this.structures[this.index(pos)] = structure;
+        this.privateInsetStructure(structure);
         structure.insertSegments(this::privateInsetStructure);
     }
 

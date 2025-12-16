@@ -257,16 +257,14 @@ public class GenPhaseBuildWays extends GenPhase {
 
         @Override
         protected boolean canReplace(ImmutableMap map, StrPos pos, EnumFace buildDirection) {
-            boolean has = true;
             StrPos.MutableStrPos strPos = new StrPos.MutableStrPos();
             for (EnumFace face : EnumFace.allFromAxis(buildDirection.axis().opposite())) {
                 IStructure str = map.structure(strPos.setPos(pos).offset(face));
                 if (str != null && !str.canConnect(face.getOppose())) {
-                    has = false;
-                    break;
+                    return false;
                 }
             }
-            return has;
+            return true;
         }
 
         @Override
@@ -316,16 +314,14 @@ public class GenPhaseBuildWays extends GenPhase {
 
         @Override
         protected boolean canReplace(ImmutableMap map, StrPos pos, EnumFace buildDirection) {
-            boolean has = false;
             StrPos.MutableStrPos strPos = new StrPos.MutableStrPos();
             for (EnumFace face : EnumFace.allFromAxis(buildDirection.axis().opposite())) {
                 IStructure str = map.structure(strPos.setPos(pos).offset(face));
                 if (str == null || str.canConnect(face.getOppose())) {
-                    has = true;
-                    break;
+                    return true;
                 }
             }
-            return has;
+            return false;
         }
 
         @Override

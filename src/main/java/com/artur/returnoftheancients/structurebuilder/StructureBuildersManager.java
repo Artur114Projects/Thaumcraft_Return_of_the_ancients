@@ -48,6 +48,7 @@ public class StructureBuildersManager {
         register("ancient_way_rotate-", 1, 2);
 
         register("ancient_crossroads");
+        register("ancient_water_room");
         register("ancient_entry");
         register("ancient_exit");
         register("ancient_boss");

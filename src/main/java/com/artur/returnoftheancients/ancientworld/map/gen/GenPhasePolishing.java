@@ -48,7 +48,7 @@ public class GenPhasePolishing extends GenPhase {
                     IStructure str1 = map.structure(pos);
 
                     if (str1 != null && !str1.canConnect(face.getOppose())) {
-                        this.fixStructuresConnection(map, str.pos(), str1.pos(), face);
+                        this.fixStructuresConnection(map, str.pos(), str1.pos(), face, seed);
                     }
                 }
             }
@@ -57,7 +57,7 @@ public class GenPhasePolishing extends GenPhase {
         return map;
     }
 
-    private void fixStructuresConnection(ImmutableMap map, StrPos strPos, StrPos str1Pos, EnumFace badPort) {
+    private void fixStructuresConnection(ImmutableMap map, StrPos strPos, StrPos str1Pos, EnumFace badPort, long seed) {
         IStructure str = map.structure(strPos);
         IStructure str1 = map.structure(str1Pos);
 
@@ -70,7 +70,7 @@ public class GenPhasePolishing extends GenPhase {
         }
 
         if (!str.canReplace() && !str1.canReplace()) {
-            throw new IllegalStateException("Illegal state. Two nearby, immutable structures with blocked ports. Str1:" + strPos + ", Str2:" + str1Pos);
+            throw new IllegalStateException("Illegal state. Two nearby, immutable structures with blocked ports. Str1:" + strPos + ", Str2:" + str1Pos + ", Seed:" + seed);
         }
 
         if (str1.canReplace()) {

@@ -2,6 +2,7 @@ package com.artur.returnoftheancients.ancientworld.map.utils;
 
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.Objects;
 
@@ -16,6 +17,10 @@ public class StrPos {
 
     public StrPos(long data) {
         this((int) (data), (int) (data >> 32));
+    }
+
+    public StrPos multiply(float scale) {
+        return new StrPos(MathHelper.floor(this.getX() * scale), MathHelper.floor(this.getY() * scale));
     }
 
     public StrPos add(int x, int y) {
@@ -143,6 +148,28 @@ public class StrPos {
         @Override
         public int getY() {
             return y;
+        }
+
+        @Override
+        public MutableStrPos add(StrPos pos) {
+            return this.add(pos.getX(), pos.getY());
+        }
+
+        @Override
+        public MutableStrPos add(int x, int y) {
+            this.x += x;
+            this.y += y;
+            return this;
+        }
+
+        @Override
+        public MutableStrPos deduct(int x, int y) {
+            return this.add(-x, -y);
+        }
+
+        @Override
+        public MutableStrPos deduct(StrPos pos) {
+            return this.deduct(pos.getX(), pos.getY());
         }
 
         @Override

@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.ancientworld.map.utils.structures;
 
 import com.artur.returnoftheancients.ancientworld.map.utils.*;
 import com.artur.returnoftheancients.ancientworld.map.utils.maps.AbstractMap;
-import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
+import com.artur.returnoftheancients.structurebuilder.StructuresBuildManager;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -85,7 +85,7 @@ public class StructureBase implements IStructure {
     public void build(World world, ChunkPos pos, Random rand) {
         UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
         blockPos.setPos(pos).setY(this.y);
-        StructureBuildersManager.createBuildRequest(world, blockPos, this.type.stringId(this.rotate)).setIgnoreAir().build();
+        StructuresBuildManager.createBuildRequest(world, blockPos, this.type.stringId(this.rotate)).setIgnoreAir().build();
         UltraMutableBlockPos.release(blockPos);
     }
 

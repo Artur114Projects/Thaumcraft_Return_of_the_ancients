@@ -3,7 +3,7 @@ package com.artur.returnoftheancients.generation.portal.naturalgen;
 import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
 import com.artur.returnoftheancients.init.InitBlocks;
 import com.artur.returnoftheancients.structurebuilder.BuildRequest;
-import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
+import com.artur.returnoftheancients.structurebuilder.StructuresBuildManager;
 import com.artur.returnoftheancients.generation.portal.util.OffsetsUtil;
 import com.artur.returnoftheancients.events.ServerEventsHandler;
 import com.artur.returnoftheancients.init.InitSounds;
@@ -285,9 +285,9 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
 
         public BuildRequest createBuildRequest(World world, BlockPos pos) {
             if (this == CULTIST) {
-                return StructureBuildersManager.createBuildRequest(world, pos, this.getStructureName()).setIgnoreAir().setNeedProtect().addBlockProtectHook(((state, pos1) -> state.getBlock() != Blocks.TORCH && state.getBlock() != BlocksTC.bannerCrimsonCult));
+                return StructuresBuildManager.createBuildRequest(world, pos, this.getStructureName()).setIgnoreAir().setNeedProtect().addBlockProtectHook(((state, pos1) -> state.getBlock() != Blocks.TORCH && state.getBlock() != BlocksTC.bannerCrimsonCult));
             } else {
-                return StructureBuildersManager.createBuildRequest(world, pos, this.getStructureName()).setIgnoreAir().setNeedProtect();
+                return StructuresBuildManager.createBuildRequest(world, pos, this.getStructureName()).setIgnoreAir().setNeedProtect();
             }
         }
 

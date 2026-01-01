@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StructureBuildersManager {
+public class StructuresBuildManager {
     private static final Map<String, IStructureBuilder> BUILDERS = new HashMap<>();
 
     protected static void register(IStructureBuilder builder) {
@@ -40,6 +40,7 @@ public class StructureBuildersManager {
 
     public static void init() {
         register("ancient_door_rock_rotate-", 1, 2);
+        register("ancient_long_room_rotate-",1, 2);
         register("ancient_spire_segment_", 0, 8);
         register("ancient_ladder_rotate-", 1, 4);
         register("ancient_turn_rotate-", 1, 4);
@@ -47,8 +48,10 @@ public class StructureBuildersManager {
         register("ancient_end_rotate-", 1,  4);
         register("ancient_way_rotate-", 1, 2);
 
+        register("ancient_big_hot_room");
         register("ancient_crossroads");
         register("ancient_water_room");
+        register("ancient_hot_room");
         register("ancient_entry");
         register("ancient_exit");
         register("ancient_boss");

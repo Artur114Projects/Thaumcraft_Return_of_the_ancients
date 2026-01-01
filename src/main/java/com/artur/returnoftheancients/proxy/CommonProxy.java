@@ -13,7 +13,7 @@ import com.artur.returnoftheancients.init.InitDimensions;
 import com.artur.returnoftheancients.main.MainR;
 import com.artur.returnoftheancients.misc.CraftingRegister;
 import com.artur.returnoftheancients.misc.WorldDataFields;
-import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
+import com.artur.returnoftheancients.structurebuilder.StructuresBuildManager;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -45,7 +45,7 @@ public class CommonProxy {
     }
 
     public void postInit(FMLPostInitializationEvent event) {
-        StructureBuildersManager.init();
+        StructuresBuildManager.init();
     }
 
     public void serverStarting(FMLServerStartingEvent event) {

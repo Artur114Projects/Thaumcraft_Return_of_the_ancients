@@ -27,8 +27,9 @@ public class ImmutableMap extends AbstractMap {
 
     @Override
     public @Nullable IStructureType structureType(int x, int y) {
+        if (x < 0 || y < 0 || x >= size || y >= size) return StructureMapBorder.MAP_BORDER_TYPE;
         IStructure structure = this.structurePrivate(x, y);
-        if (structure == null) return StructureMapBorder.MAP_BORDER_TYPE;
+        if (structure == null) return null;
         return structure.type();
     }
 

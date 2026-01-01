@@ -4,7 +4,7 @@ import com.artur.returnoftheancients.ancientworld.system.base.AncientLayer1Event
 import com.artur.returnoftheancients.ancientworldlegacy.main.AncientWorld;
 import com.artur.returnoftheancients.events.eventmanagers.*;
 import com.artur.returnoftheancients.handlers.MiscHandler;
-import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
+import com.artur.returnoftheancients.structurebuilder.StructuresBuildManager;
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.PlayerTimer;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
@@ -102,7 +102,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
             }
             if (e.getWorld().provider.getDimension() == ancient_world_dim_id) {
                 if (!isAncientAreaSet) {
-                    StructureBuildersManager.createBuildRequest(e.getWorld(), new BlockPos(-16, 240, -16), "ancient_area").build();
+                    StructuresBuildManager.createBuildRequest(e.getWorld(), new BlockPos(-16, 240, -16), "ancient_area").build();
                     isAncientAreaSet = true;
                 }
                 checkVersion();

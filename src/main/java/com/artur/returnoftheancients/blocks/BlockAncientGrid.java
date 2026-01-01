@@ -36,6 +36,7 @@ public class BlockAncientGrid extends BaseBlock {
         this.setNotFillAndOpaqueCube();
         this.setTRACreativeTab();
         this.setForCreative();
+        this.setLightLevel(0.75F);
     }
 
     @Override

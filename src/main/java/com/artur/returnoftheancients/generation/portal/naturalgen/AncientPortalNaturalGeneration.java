@@ -2,7 +2,7 @@ package com.artur.returnoftheancients.generation.portal.naturalgen;
 
 import com.artur.returnoftheancients.blockprotect.BlockProtectHandler;
 import com.artur.returnoftheancients.handlers.TeleportHandler;
-import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
+import com.artur.returnoftheancients.structurebuilder.StructuresBuildManager;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortal;
 import com.artur.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
 import com.artur.returnoftheancients.generation.portal.generators.GenAncientArch;
@@ -246,7 +246,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
             blockPos.setY(analyzer.getAverageHeight());
 
             portal.genAncientPortal(true);
-            StructureBuildersManager.createBuildRequest(world, blockPos, "ancient_portal_hub").setNeedProtect().build();
+            StructuresBuildManager.createBuildRequest(world, blockPos, "ancient_portal_hub").setNeedProtect().build();
             genSpire.generate(world, portal.portalPos, 255);
 
             blockPos.pushPos();

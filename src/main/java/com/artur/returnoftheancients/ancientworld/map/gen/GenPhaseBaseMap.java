@@ -2,13 +2,27 @@ package com.artur.returnoftheancients.ancientworld.map.gen;
 
 import com.artur.returnoftheancients.ancientworld.map.utils.*;
 import com.artur.returnoftheancients.ancientworld.map.utils.maps.ImmutableMap;
+import com.artur.returnoftheancients.ancientworld.map.utils.structures.IStructure;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.function.Function;
 
 public class GenPhaseBaseMap extends GenPhase {
+    private final List<Room> rooms;
+
+    public GenPhaseBaseMap() {
+        this.rooms = this.initRooms();
+    }
+
+    private List<Room> initRooms() {
+        return new ArrayList<>(Arrays.asList(
+                new Room(EnumMultiChunkStrType.WATER_ROOM, (size) -> size),
+                new Room(EnumMultiChunkStrType.HOT_ROOM, (size) -> size),
+                new Room(EnumMultiChunkStrType.BIG_HOT_ROOM, (size) -> size)
+        ));
+    }
+
     @Override
     public @NotNull ImmutableMap getMap(long seed, int size) {
         if (size % 2 == 0) {
@@ -39,7 +53,7 @@ public class GenPhaseBaseMap extends GenPhase {
     private void addBoss(ImmutableMap map, Random rand, int size) {
         StrPos center = new StrPos(size / 2, size / 2);
 
-        final List<Integer> indexes = this.createIndexes(size);
+        final List<Integer> indexes = this.createIndexesForBoss(size);
 
         int index = indexes.get(rand.nextInt(indexes.size()));
 
@@ -52,46 +66,100 @@ public class GenPhaseBaseMap extends GenPhase {
     }
 
     private void addRooms(ImmutableMap map, Random rand, int size) {
-        for (int i = 0; i < (size / 2); i++) {
-            StrPos pos = new StrPos(rand.nextInt(size), rand.nextInt(size));
+        List<Room> rooms = new ArrayList<>(this.rooms);
+        Collections.shuffle(rooms, rand);
+        HashSet<Integer> indexes = new HashSet<>();
+        for (int i = 0; i != size * size; i++) {
+            indexes.add(i);
+        }
+        Map<Room, Integer> attempts = new HashMap<>();
+        for (Room room : rooms) {
+            attempts.put(room, room.function.apply(size));
+        }
 
-            if (map.structure(pos) != null) continue;
+        this.updateIndexes(map, indexes, size);
 
-            IMultiChunkStrForm.IOffset[] offsets = EnumMultiChunkStrType.WATER_ROOM.form().offsets(pos);
+        while (!rooms.isEmpty()) {
+            Iterator<Room> iterator = rooms.iterator();
 
-            boolean flag = false;
+            while (iterator.hasNext()) {
+                Room room = iterator.next();
+
+                this.addRoomToRandPos(map, room, rand, indexes, size);
+
+                int a = attempts.get(room) - 1;
+                attempts.put(room, a);
+
+                if (a <= 0) {
+                    iterator.remove();
+                }
+            }
+        }
+    }
+
+    private void addRoomToRandPos(ImmutableMap map, Room room, Random rand, Set<Integer> indexes, int size) {
+        Integer[] integers = indexes.toArray(indexes.toArray(new Integer[0]));
+        int r = integers[rand.nextInt(integers.length)];
+        StrPos pos = new StrPos(r % size, r / size);
+        Set<StrPos> checked = new HashSet<>();
+
+        while (checked.add(pos)) {
+            StrPos.MutableStrPos newPos = new StrPos.MutableStrPos(pos);
+            boolean flag = true;
+
+            if (!indexes.contains(this.index(newPos, size))) {
+                newPos.offset(EnumFace.values()[rand.nextInt(EnumFace.values().length)], rand.nextInt(3) + 1); flag = false;
+            }
+
+            IMultiChunkStrForm.IOffset[] offsets = room.type.form().offsets(newPos);
+
             for (IMultiChunkStrForm.IOffset offset : offsets) {
-                if (map.structure(offset.globalPos()) != null) {
-                    flag = true;
-                    break;
-                }
-
-                for (EnumFace face : EnumFace.values()) {
-                    if (map.structure(offset.globalPos().offset(face)) != null) {
-                        flag = true;
-                        break;
-                    }
-                }
-
-                if (flag) {
-                    break;
-                }
-
-                if (offset.ports().length != 0 && map.structure(offset.globalPos().offset(offset.ports()[0])) != null) {
-                    flag = true;
-                    break;
+                if (!indexes.contains(this.index(offset.globalPos(), size))) {
+                    newPos.add(offset.localPos().multiply(-1)); flag = false;
                 }
             }
 
             if (flag) {
-                continue;
+                this.insertStructure(map, room.type.create(EnumRotate.NON, newPos), indexes, size); return;
             }
 
-            map.insetStructure(EnumMultiChunkStrType.WATER_ROOM.create(EnumRotate.NON, pos));
+            pos = newPos.toImmutable();
         }
     }
 
-    private List<Integer> createIndexes(int size) {
+    private void insertStructure(ImmutableMap map, IStructure str, Set<Integer> indexes, int size) {
+        map.insetStructure(str); this.updateIndexes(map, indexes, size);
+    }
+
+    protected int index(int x, int y, int size) {
+        return x + y * size;
+    }
+
+    protected int index(StrPos pos, int size) {
+        return index(pos.getX(), pos.getY(), size);
+    }
+
+    private void updateIndexes(ImmutableMap map, Set<Integer> indexes, int size) {
+        final int checkDistance = 1;
+        for (int i = 0; i != size * size; i++) {
+            int x = i % size;
+            int y = i / size;
+
+            if (x == 0 || y == 0 || x == size - 1 || y == size - 1) {
+                indexes.remove(i); continue;
+            }
+
+            if (map.structureType(x, y) != null) {
+                for (int x1 = x - checkDistance; x1 != x + checkDistance + 1; x1++) {
+                    for (int y1 = y - checkDistance; y1 != y + checkDistance + 1; y1++) {
+                        indexes.remove(x1 + y1 * size);
+                    }
+                }
+            }
+        }
+    }
+
+    private List<Integer> createIndexesForBoss(int size) {
         List<Integer> indexes = new ArrayList<>(size * size);
         int minDistance = (size / 2) / 2 + 1;
         int maxDistance = (size / 2) - 1;
@@ -111,5 +179,15 @@ public class GenPhaseBaseMap extends GenPhase {
             indexes.add(i);
         }
         return indexes;
+    }
+
+    private static class Room {
+        private final Function<Integer, Integer> function;
+        private final EnumMultiChunkStrType type;
+
+        private Room(EnumMultiChunkStrType type, Function<Integer, Integer> function) {
+            this.function = function;
+            this.type = type;
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.artur.returnoftheancients.generation.portal.base;
 
 import com.artur.returnoftheancients.ancientworld.system.base.AncientLayer1StaticManager;
-import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
+import com.artur.returnoftheancients.structurebuilder.StructuresBuildManager;
 import com.artur.returnoftheancients.blocks.BlockTpToAncientWorld;
 import com.artur.returnoftheancients.capabilities.IPlayerTimerCapability;
 import com.artur.returnoftheancients.capabilities.TRACapabilities;
@@ -182,11 +182,11 @@ public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025
         int localX = posX + 5;
         int localZ = posZ + 5;
         UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
-        StructureBuildersManager.createBuildRequest(world, blockPos.setPos(localX, posY, localZ), "ancient_portal_air_cube").setNeedProtect(needProtect).build();
+        StructuresBuildManager.createBuildRequest(world, blockPos.setPos(localX, posY, localZ), "ancient_portal_air_cube").setNeedProtect(needProtect).build();
         for (int y = posY + 32; y > 0; y -= 31) {
-            StructureBuildersManager.createBuildRequest(world, blockPos.setPos(localX, y - (31 + 32), localZ), "ancient_portal").setNeedProtect(needProtect).build();
+            StructuresBuildManager.createBuildRequest(world, blockPos.setPos(localX, y - (31 + 32), localZ), "ancient_portal").setNeedProtect(needProtect).build();
         }
-        StructureBuildersManager.createBuildRequest(world, blockPos.setPos(localX, 0, localZ), "ancient_portal_floor").setNeedProtect(needProtect).build();
+        StructuresBuildManager.createBuildRequest(world, blockPos.setPos(localX, 0, localZ), "ancient_portal_floor").setNeedProtect(needProtect).build();
         UltraMutableBlockPos.release(blockPos);
     }
 

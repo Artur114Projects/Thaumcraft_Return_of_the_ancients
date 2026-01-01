@@ -10,7 +10,7 @@ import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.client.fx.particle.ParticleAncientPortal;
 import com.artur.returnoftheancients.generation.portal.base.client.ClientAncientPortal;
 import com.artur.returnoftheancients.generation.portal.util.OffsetsUtil;
-import com.artur.returnoftheancients.structurebuilder.StructureBuildersManager;
+import com.artur.returnoftheancients.structurebuilder.StructuresBuildManager;
 import com.artur.returnoftheancients.tileentity.interf.ITileDoor;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
@@ -55,18 +55,18 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
 
         for (int y = this.y + 32; y < world.getHeight(); y += 11) {
             blockPos.setY(y);
-            StructureBuildersManager.createBuildRequest(world, blockPos, "ancient_entry_way").setIgnoreAir().setPosAsXZCenter().build();
+            StructuresBuildManager.createBuildRequest(world, blockPos, "ancient_entry_way").setIgnoreAir().setPosAsXZCenter().build();
         }
 
         for (int y = this.y - 10; y > -12; y -= 11) {
             blockPos.setY(y);
-            StructureBuildersManager.createBuildRequest(world, blockPos, "ancient_entry_way").setIgnoreAir().setPosAsXZCenter().build();
+            StructuresBuildManager.createBuildRequest(world, blockPos, "ancient_entry_way").setIgnoreAir().setPosAsXZCenter().build();
         }
 
         blockPos.setY(255);
-        StructureBuildersManager.createBuildRequest(world, blockPos, "ancient_border_cap").setIgnoreAir().setPosAsXZCenter().build();
+        StructuresBuildManager.createBuildRequest(world, blockPos, "ancient_border_cap").setIgnoreAir().setPosAsXZCenter().build();
         blockPos.setY(0);
-        StructureBuildersManager.createBuildRequest(world, blockPos, "ancient_exit").setIgnoreAir().setPosAsXZCenter().build();
+        StructuresBuildManager.createBuildRequest(world, blockPos, "ancient_exit").setIgnoreAir().setPosAsXZCenter().build();
 
         UltraMutableBlockPos.release(blockPos);
     }

@@ -98,6 +98,7 @@ public class GenPhaseBaseMap extends GenPhase {
     }
 
     private void addRoomToRandPos(ImmutableMap map, Room room, Random rand, Set<Integer> indexes, int size) {
+        EnumRotate rotate = EnumRotate.values()[rand.nextInt(EnumRotate.values().length)];
         Integer[] integers = indexes.toArray(indexes.toArray(new Integer[0]));
         int r = integers[rand.nextInt(integers.length)];
         StrPos pos = new StrPos(r % size, r / size);
@@ -111,16 +112,36 @@ public class GenPhaseBaseMap extends GenPhase {
                 newPos.offset(EnumFace.values()[rand.nextInt(EnumFace.values().length)], rand.nextInt(3) + 1); flag = false;
             }
 
-            IMultiChunkStrForm.IOffset[] offsets = room.type.form().offsets(newPos);
+            boolean isFindGoodRotate = false;
+            EnumRotate rotateF = rotate;
 
-            for (IMultiChunkStrForm.IOffset offset : offsets) {
-                if (!indexes.contains(this.index(offset.globalPos(), size))) {
-                    newPos.add(offset.localPos().multiply(-1)); flag = false;
+            for (int i = 0; i != EnumRotate.values().length; i++) {
+                EnumRotate rotateI = EnumRotate.values()[(rotate.ordinal() + i) % EnumRotate.values().length];
+                IMultiChunkStrForm.IOffset[] offsets = room.type.form().offsets(newPos, rotateI);
+                boolean flagR = true;
+                for (IMultiChunkStrForm.IOffset offset : offsets) {
+                    if (!indexes.contains(this.index(offset.globalPos(), size))) {
+                        flagR = false; break;
+                    }
+                }
+                if (flagR) {
+                    rotateF = rotateI; isFindGoodRotate = true; break;
+                }
+            }
+
+            if (!isFindGoodRotate) {
+                IMultiChunkStrForm.IOffset[] offsets = room.type.form().offsets(newPos, rotateF);
+
+                for (IMultiChunkStrForm.IOffset offset : offsets) {
+                    if (!indexes.contains(this.index(offset.globalPos(), size))) {
+                        newPos.add(offset.localPos().multiply(-1));
+                        flag = false;
+                    }
                 }
             }
 
             if (flag) {
-                this.insertStructure(map, room.type.create(EnumRotate.NON, newPos), indexes, size); return;
+                this.insertStructure(map, room.type.create(rotateF, newPos), indexes, size); return;
             }
 
             pos = newPos.toImmutable();

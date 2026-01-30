@@ -42,7 +42,7 @@ public class RenderHandler {
         return new int[] {red, green, blue};
     }
 
-    @SideOnly(Side.CLIENT) // It's better to use: RenderGlobal:drawSelectionBoundingBox
+    @SideOnly(Side.CLIENT)
     private void renderBox(Tessellator tessellator, BufferBuilder bufferBuilder, double x, double y, double z, double x1, double y1, double z1, float r, float g, float b, float a) {
         GlStateManager.glLineWidth(2.0F);
         bufferBuilder.begin(3, DefaultVertexFormats.POSITION_COLOR);

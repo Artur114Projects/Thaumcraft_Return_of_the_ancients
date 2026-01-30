@@ -1,6 +1,8 @@
 package com.artur.returnoftheancients.util.math;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
@@ -17,6 +19,10 @@ public class Pos3d extends Vec3d {
 
     public Pos3d(Vec3i vector) {
         super(vector);
+    }
+
+    public Pos3d(BlockPos blockPos) {
+        super(blockPos.getX(), blockPos.getY(), blockPos.getZ());
     }
 
     public Pos3d(EntityPlayer player) {
@@ -49,6 +55,10 @@ public class Pos3d extends Vec3d {
 
     public Pos3d add(double x, double y, double z) {
         return new Pos3d(this.x + x, this.y + y, this.z + z);
+    }
+
+    public Pos3d deduct(Vec3d vec3d) {
+        return new Pos3d(this.x - vec3d.x, this.y - vec3d.y, this.z - vec3d.z);
     }
 
     @Override
@@ -92,6 +102,18 @@ public class Pos3d extends Vec3d {
         return new Pos3d(xPos, yPos, z);
     }
 
+    public Pos3d rotateY(Rotation rotationIn) {
+        switch (rotationIn) {
+            case CLOCKWISE_90:
+                return new Pos3d(-this.z, this.y, this.x);
+            case CLOCKWISE_180:
+                return new Pos3d(-this.x, this.y, -this.z);
+            case COUNTERCLOCKWISE_90:
+                return new Pos3d(this.z, this.y, -this.x);
+            default:
+                return this;
+        }
+    }
 
     public @NotNull Pos3d normalize() {
         return new Pos3d(super.normalize());

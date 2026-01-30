@@ -152,7 +152,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
         if (this.isActive) {
             super.teleportToOverworld(player);
         } else {
-            TeleportHandler.teleportToDimension(player, 0, player.getBedLocation(0));
+            TeleportHandler.teleportToDimension(player, 0, new BlockPos(0, 100, 0));
         }
     }
 

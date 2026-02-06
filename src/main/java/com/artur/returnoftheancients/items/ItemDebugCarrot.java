@@ -2,9 +2,13 @@ package com.artur.returnoftheancients.items;
 
 
 import com.artur.returnoftheancients.blocks.BlockLightningStoneTC;
+import com.artur.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur.returnoftheancients.client.fx.particle.RotateParticleSmokeInPlayer;
 import com.artur.returnoftheancients.client.fx.particle.ParticleFlameCanCollide;
 import com.artur.returnoftheancients.tileentity.interf.ITileBurner;
+import com.artur.returnoftheancients.util.math.AreasCombiner;
+import com.artur.returnoftheancients.util.math.BoundingBox;
+import com.artur.returnoftheancients.util.math.IArea;
 import com.artur.returnoftheancients.util.math.UltraMutableBlockPos;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -14,6 +18,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -25,6 +30,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityStructure;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumSkyBlock;
@@ -229,6 +235,19 @@ public class ItemDebugCarrot extends BaseItem {
 //			CustomGenStructure.registerOrGen(player.world, playerPos.getX(), playerPos.getY(), playerPos.getZ(), "ancient_turn");
 //			long timeFinish = System.currentTimeMillis() -  time;
 //			player.sendMessage(new TextComponentString("my gen is took:" + timeFinish + "ms"));
+		}
+
+		AreasCombiner combiner = new AreasCombiner();
+		ChunkPos cPos = new ChunkPos(pos);
+		long time = System.nanoTime();
+		IArea area = combiner.addArea(new BoundingBox(cPos.getBlock(0, pos.getY() + 1, 0), cPos.getBlock(8, pos.getY() + 4, 8))).addArea(new BoundingBox(cPos.getBlock(7, pos.getY() + 1, 7), cPos.getBlock(15, pos.getY() + 4, 15))).bake();
+
+		if (!worldIn.isRemote) {
+			player.sendStatusMessage(new TextComponentString("is took:" + ((System.nanoTime() - time) / 1000000.0F) + "ms"), true);
+		}
+
+		if (worldIn.isRemote) {
+			ClientEventsHandler.AREAS_DRAW_MANAGER.renderArea(area, 4 * 20);
 		}
 //		if (!worldIn.isRemote) {
 //			NBTTagCompound nbt = new NBTTagCompound();

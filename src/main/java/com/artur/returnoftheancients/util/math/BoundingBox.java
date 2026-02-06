@@ -1,13 +1,11 @@
 package com.artur.returnoftheancients.util.math;
 
 import com.artur.returnoftheancients.ancientworld.map.utils.EnumRotate;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 public class BoundingBox implements IArea {
     private final BlockPos start;
@@ -60,5 +58,10 @@ public class BoundingBox implements IArea {
         List<BlockPos> ret = new ArrayList<>();
         for (BlockPos pos : BlockPos.getAllInBox(this.start, this.end)) ret.add(pos);
         return ret;
+    }
+
+    @Override
+    public void renderArea(float alpha) {
+
     }
 }

@@ -3,10 +3,7 @@ package com.artur.returnoftheancients.client.fx.shader;
 import com.artur.returnoftheancients.handlers.RenderHandler;
 import com.artur.returnoftheancients.referense.Referense;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
@@ -124,6 +121,17 @@ public class ShaderProgram {
         GlStateManager.bindTexture(mc.getFramebuffer().depthBuffer);
         shaderProgram.uniform("depthTexture", 1);
 
+//        RenderHelper.enableStandardItemLighting();
+        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+        GlStateManager.enableTexture2D();
+        GlStateManager.bindTexture(OpenGlHelper.lightmapTexUnit);
+        shaderProgram.uniform("lightmapTexUnit", 2);
+
+        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 3);
+        GlStateManager.enableTexture2D();
+        GlStateManager.bindTexture(OpenGlHelper.defaultTexUnit);
+        shaderProgram.uniform("defaultTexUnit", 3);
+
         framebuffer.bindFramebuffer(false);
         GL11.glPushMatrix();
         GlStateManager.bindTexture(mc.getFramebuffer().framebufferTexture);
@@ -133,6 +141,10 @@ public class ShaderProgram {
         GL11.glLoadIdentity();
         drawQuad();
         shaderProgram.disable();
+        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 3);
+        GlStateManager.bindTexture(0);
+        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 2);
+        GlStateManager.bindTexture(0);
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 1);
         GlStateManager.bindTexture(0);
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 0);

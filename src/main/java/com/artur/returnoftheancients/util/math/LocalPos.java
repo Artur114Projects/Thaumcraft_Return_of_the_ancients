@@ -1,6 +1,5 @@
 package com.artur.returnoftheancients.util.math;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import org.jetbrains.annotations.Nullable;
@@ -73,6 +72,11 @@ public class LocalPos {
         @Override
         public List<BlockPos> points() {
             return Collections.singletonList(this.pos);
+        }
+
+        @Override
+        public void renderArea(float alpha) {
+
         }
     }
 }

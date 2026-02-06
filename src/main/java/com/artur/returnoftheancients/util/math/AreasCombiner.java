@@ -1,6 +1,11 @@
 package com.artur.returnoftheancients.util.math;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 
 import java.util.*;
 
@@ -31,7 +36,14 @@ public class AreasCombiner {
         return ret;
     }
 
-    private static class Backed implements IArea {
+    public static class Backed implements IArea {
+        private static final Vec3i x = new Vec3i(1, 0, 0);
+        private static final Vec3i y = new Vec3i(0, 1, 0);
+        private static final Vec3i z = new Vec3i(0, 0, 1);
+        private static final Vec3i xn = new Vec3i(-1, 0, 0);
+        private static final Vec3i yn = new Vec3i(0, -1, 0);
+        private static final Vec3i zn = new Vec3i(0, 0, -1);
+
         private final List<Box> area;
 
         private Backed(Raw raw) {
@@ -39,51 +51,88 @@ public class AreasCombiner {
         }
 
         private List<Box> bake(Raw raw) {
-            return this.sortBoxes(this.createBoxes(raw.points()));
-        }
+            LinkedList<BlockPos> list = new LinkedList<>(raw.points());
+            List<Box> ret = new ArrayList<>();
 
-        private List<Box> createBoxes(List<BlockPos> list) {
-            Set<BlockPos> set = new HashSet<>(list);
-            List<Box> ret = new ArrayList<>(set.size() * set.size());
+            while (!list.isEmpty()) {
+                BlockPos pos = list.peek();
 
-            for (BlockPos pos1 : set) {
-                for (BlockPos pos2 : set) {
-                    if (this.validate(pos1, pos2, set)) {
-                        ret.add(new Box(pos1, pos2));
-                    }
-                }
+                Box box = this.expandBox(pos, new HashSet<>(list));
+
+                list.removeIf(box::isCollide);
+
+                ret.add(box);
             }
 
             return ret;
         }
 
-        private boolean validate(BlockPos from, BlockPos to, Set<BlockPos> set) {
-            for (BlockPos.MutableBlockPos pos : BlockPos.getAllInBoxMutable(from, to)) {
-                if (!set.contains(pos)) {
+        private Box expandBox(BlockPos from, Set<BlockPos> allPoints) {
+            int fx = from.getX();
+            int fy = from.getY();
+            int fz = from.getZ();
+
+            int tx = from.getX();
+            int ty = from.getY();
+            int tz = from.getZ();
+
+            while (this.canExpand(allPoints, x, fx, fy, fz, tx, ty, tz)) {
+                tx++;
+            }
+
+            while (this.canExpand(allPoints, y, fx, fy, fz, tx, ty, tz)) {
+                ty++;
+            }
+
+            while (this.canExpand(allPoints, z, fx, fy, fz, tx, ty, tz)) {
+                tz++;
+            }
+
+            while (this.canExpand(allPoints, xn, fx, fy, fz, tx, ty, tz)) {
+                fx--;
+            }
+
+            while (this.canExpand(allPoints, yn, fx, fy, fz, tx, ty, tz)) {
+                fy--;
+            }
+
+            while (this.canExpand(allPoints, zn, fx, fy, fz, tx, ty, tz)) {
+                fz--;
+            }
+
+
+            return new Box(new BlockPos(fx, fy, fz), new BlockPos(tx, ty, tz));
+        }
+
+        private boolean canExpand(Set<BlockPos> allPoints, Vec3i vec, int fx, int fy, int fz, int tx, int ty, int tz) {
+            int sx = tx - fx;
+            int sy = ty - fy;
+            int sz = tz - fz;
+
+            if (vec.getX() >= 0 && vec.getY() >= 0 && vec.getZ() >= 0) {
+                fx += sx * vec.getX();
+                fy += sy * vec.getY();
+                fz += sz * vec.getZ();
+
+                tx += vec.getX();
+                ty += vec.getY();
+                tz += vec.getZ();
+            } else {
+                tx += sx * vec.getX();
+                ty += sy * vec.getY();
+                tz += sz * vec.getZ();
+
+                fx += vec.getX();
+                fy += vec.getY();
+                fz += vec.getZ();
+            }
+
+            for (BlockPos.MutableBlockPos pos : BlockPos.getAllInBoxMutable(fx, fy, fz, tx, ty, tz)) {
+                if (!allPoints.contains(pos)) {
                     return false;
                 }
             }
             return true;
-        }
-
-        private List<Box> sortBoxes(List<Box> boxes) {
-            List<Box> boxList = new LinkedList<>(boxes);
-            List<Box> ret = new ArrayList<>();
-
-            while (!boxList.isEmpty()) {
-                Box bigger = this.findBigger(boxList);
-
-                boxList.remove(bigger);
-                boxList.removeIf(bigger::isCollide);
-
-                ret.add(bigger);
-            }
-
-            return ret;
-        }
-
-        private Box findBigger(List<Box> boxes) {
-            return boxes.stream().max(Comparator.comparingInt(Box::areaSize)).orElse(null);
         }
 
         @Override
@@ -109,6 +158,19 @@ public class AreasCombiner {
             }
             return ret;
         }
+
+        @Override
+        public void renderArea(float alpha) {
+            Random rand = new Random(this.hashCode());
+            for (Box box : this.area) {
+                box.renderBox(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), alpha);
+            }
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.area);
+        }
     }
     private static class Box {
         private final BlockPos start;
@@ -125,26 +187,44 @@ public class AreasCombiner {
             return this.size.getX() * this.size.getY() * this.size.getZ();
         }
 
-        public boolean isCollide(Box box) {
-            boolean ret = false;
-            ret |= this.end.getX() >= box.start.getX();
-            ret |= this.end.getY() >= box.start.getY();
-            ret |= this.end.getZ() >= box.start.getZ();
+        public boolean isCollide(Box other) {
+            return this.start.getX() <= other.end.getX() &&
+                    this.end.getX() >= other.start.getX() &&
+                    this.start.getY() <= other.end.getY() &&
+                    this.end.getY() >= other.start.getY() &&
+                    this.start.getZ() <= other.end.getZ() &&
+                    this.end.getZ() >= other.start.getZ();
+        }
 
-            ret |= this.start.getX() <= box.end.getX();
-            ret |= this.start.getY() <= box.end.getY();
-            ret |= this.start.getZ() <= box.end.getZ();
-            return ret;
+        public boolean isCollide(BlockPos pos) {
+            return this.isCollide(pos.getX(), pos.getY(), pos.getZ());
         }
 
         public boolean isCollide(double x, double y, double z) {
-            return x >= this.start.getX() && y >= this.start.getY() && z >= this.start.getZ() && x <= this.end.getX() + 1 && y <= this.end.getY() + 1 && z <= this.end.getZ() + 1;
+            return x >= this.start.getX() && y >= this.start.getY() && z >= this.start.getZ() && x < this.end.getX() + 1 && y < this.end.getY() + 1 && z < this.end.getZ() + 1;
+        }
+
+        public void renderBox(float r, float g, float b, float a) {
+            Minecraft mc = Minecraft.getMinecraft();
+            EntityPlayer player = mc.player;
+
+            double x = Particle.interpPosX;
+            double y = Particle.interpPosY;
+            double z = Particle.interpPosZ;
+            double d = 0.001;
+
+            RenderGlobal.drawBoundingBox(this.start.getX() - x + d, this.start.getY() - y + d, this.start.getZ() - z + d, this.end.getX() + 1 - x - d, this.end.getY() + 1 - y - d, this.end.getZ() + 1 - z - d, r, g, b, a);
         }
 
         public List<BlockPos> points() {
             List<BlockPos> ret = new ArrayList<>();
             for (BlockPos pos : BlockPos.getAllInBox(this.start, this.end)) ret.add(pos);
             return ret;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.start, this.end);
         }
     }
 
@@ -177,6 +257,11 @@ public class AreasCombiner {
         @Override
         public List<BlockPos> points() {
             return this.area;
+        }
+
+        @Override
+        public void renderArea(float alpha) {
+
         }
     }
 

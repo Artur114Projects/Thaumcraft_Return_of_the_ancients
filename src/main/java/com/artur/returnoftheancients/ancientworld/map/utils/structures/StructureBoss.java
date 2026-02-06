@@ -68,13 +68,6 @@ public class StructureBoss extends StructureMultiChunk implements IStructureInte
         pos = new ChunkPos(pos.x - 1, pos.z - 1);
 
         this.boundingBox = new BoundingBox(pos.getBlock(0, this.y, 0), new BlockPos(pos.getXStart() + 15, this.y + 32, pos.getZStart() + 20)).rotate(new Pos3d(this.chunkPos.getBlock(7, 0, 7)).add(0.5, 0.0, 0.5), this.rotate);
-        AreasCombiner combiner = new AreasCombiner();
-
-        pos = this.chunkPos;
-
-        for (BlockPos pos1 : combiner.addArea(new BoundingBox(pos.getBlock(0, this.y, 0), pos.getBlock(8, this.y + 1, 8))).addArea(new BoundingBox(pos.getBlock(7, this.y, 7), pos.getBlock(15, this.y + 1, 15))).bake().points()) {
-            this.world.setBlockState(pos1, Blocks.STONE.getDefaultState());
-        }
     }
 
     @Override

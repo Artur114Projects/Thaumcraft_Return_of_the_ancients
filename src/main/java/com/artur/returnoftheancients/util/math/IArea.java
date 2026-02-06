@@ -2,6 +2,8 @@ package com.artur.returnoftheancients.util.math;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ public interface IArea {
     boolean isCollide(double x, double y, double z);
     @Nullable BlockPos fromIndex(int index);
     List<BlockPos> points();
+    @SideOnly(Side.CLIENT) void renderArea(float alpha);
 
     default boolean isCollide(BlockPos pos) {
         return this.isCollide(pos.getX(), pos.getY(), pos.getZ());

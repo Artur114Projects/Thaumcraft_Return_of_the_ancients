@@ -6,6 +6,7 @@ import com.artur.returnoftheancients.ancientworld.map.utils.EnumRotate;
 import com.artur.returnoftheancients.ancientworld.map.utils.StrPos;
 import com.artur.returnoftheancients.ancientworld.map.utils.maps.ImmutableMap;
 import com.artur.returnoftheancients.referense.Referense;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.common.Mod;
 
 import java.io.*;
@@ -20,12 +21,24 @@ import java.util.Set;
 public class Test {
 
     public static void main(String[] args) {
+        Vec3i size = new Vec3i(16, 16, 16);
         Random rand = new Random();
-        GenPhase generator = GenPhase.initAllGenPhases();
-        for (int i = 0; i != 1000; i++) {
-            System.out.println("Started gen:" + i);
-            generator.getMap(rand.nextLong(), 17);
+
+        for (int i = 0; i != size.getX() * size.getY() * size.getZ(); i++) {
+            int x = rand.nextInt(16), y = rand.nextInt(16), z = rand.nextInt(16);
+            System.out.println("[" + x + ", " + y + ", " + z + "]");
+            i = (x & 15) + (y & 15) * 16 + (z & 15) * (16 * 16);
+            System.out.println("[" + (i % size.getX()) + ", " + ((i / size.getX()) % size.getY()) + ", " + (((i / size.getX()) / size.getY()) % size.getZ()) + "]");
+            System.out.println();
         }
+
+
+//        Random rand = new Random();
+//        GenPhase generator = GenPhase.initAllGenPhases();
+//        for (int i = 0; i != 1000; i++) {
+//            System.out.println("Started gen:" + i);
+//            generator.getMap(rand.nextLong(), 17);
+//        }
     }
 
     private static short pacArray(byte[] array) {

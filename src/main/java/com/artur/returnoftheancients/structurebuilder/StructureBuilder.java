@@ -112,7 +112,7 @@ public class StructureBuilder implements IStructureBuilder {
             } else {
                 NBTTagCompound data = this.tilesData.get(block);
                 if (world.setBlockState(blockPos, state) && data != null) {
-                    TileEntity tile = world.getTileEntity(blockPos);
+                    TileEntity tile = properties.tileEntityHook(world.getTileEntity(blockPos), data);
 
                     if (tile != null) {
                         data.setInteger("x", blockPos.getX());

@@ -1,5 +1,9 @@
 package com.artur.returnoftheancients.util.math;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import org.jetbrains.annotations.Nullable;
@@ -63,7 +67,7 @@ public class LocalPos {
 
         @Override
         public @Nullable BlockPos fromIndex(int index) {
-            if (index != 1){
+            if (index != 1) {
                 return null;
             }
             return this.pos;
@@ -76,7 +80,15 @@ public class LocalPos {
 
         @Override
         public void renderArea(float alpha) {
+            Minecraft mc = Minecraft.getMinecraft();
+            EntityPlayer player = mc.player;
 
+            double x = Particle.interpPosX;
+            double y = Particle.interpPosY;
+            double z = Particle.interpPosZ;
+            double d = 0.001;
+
+            RenderGlobal.drawBoundingBox(this.pos.getX() - x + d, this.pos.getY() - y + d, this.pos.getZ() - z + d, this.pos.getX() + 1 - x - d, this.pos.getY() + 1 - y - d, this.pos.getZ() + 1 - z - d, 1.0F, 1.0F, 1.0F, alpha);
         }
     }
 }

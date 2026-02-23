@@ -45,6 +45,7 @@ public class AreasCombiner {
         private static final Vec3i zn = new Vec3i(0, 0, -1);
 
         private final List<Box> area;
+        private int areaSize = -1;
 
         private Backed(Raw raw) {
             this.area = this.bake(raw);
@@ -137,7 +138,14 @@ public class AreasCombiner {
 
         @Override
         public int areaSize() {
-            return 0;
+            if (this.areaSize == -1) {
+                this.areaSize = 0;
+
+                for (Box box : this.area) {
+                    this.areaSize += box.areaSize();
+                }
+            }
+            return this.areaSize;
         }
 
         @Override
@@ -147,6 +155,14 @@ public class AreasCombiner {
 
         @Override
         public BlockPos fromIndex(int index) {
+            int i = 0;
+            for (Box box : this.area) {
+                if (i + box.areaSize() > index) {
+                    return box.fromIndex(index - i);
+                }
+
+                i += box.areaSize();
+            }
             return null;
         }
 
@@ -172,6 +188,7 @@ public class AreasCombiner {
             return Objects.hash(this.area);
         }
     }
+
     private static class Box {
         private final BlockPos start;
         private final BlockPos end;
@@ -180,20 +197,15 @@ public class AreasCombiner {
         public Box(BlockPos start, BlockPos end) {
             this.end = new BlockPos(Math.max(start.getX(), end.getX()), Math.max(start.getY(), end.getY()), Math.max(start.getZ(), end.getZ()));
             this.start = new BlockPos(Math.min(start.getX(), end.getX()), Math.min(start.getY(), end.getY()), Math.min(start.getZ(), end.getZ()));
-            this.size = this.end.add(-this.start.getX(), -this.start.getY(), -this.start.getZ());
+            this.size = this.end.add(-this.start.getX(), -this.start.getY(), -this.start.getZ()).add(1, 1, 1);
         }
 
         public int areaSize() {
             return this.size.getX() * this.size.getY() * this.size.getZ();
         }
 
-        public boolean isCollide(Box other) {
-            return this.start.getX() <= other.end.getX() &&
-                    this.end.getX() >= other.start.getX() &&
-                    this.start.getY() <= other.end.getY() &&
-                    this.end.getY() >= other.start.getY() &&
-                    this.start.getZ() <= other.end.getZ() &&
-                    this.end.getZ() >= other.start.getZ();
+        public BlockPos fromIndex(int index) {
+            return this.start.add((index % size.getX()), ((index / size.getX()) % size.getY()), (((index / size.getX()) / size.getY()) % size.getZ()));
         }
 
         public boolean isCollide(BlockPos pos) {
@@ -261,7 +273,17 @@ public class AreasCombiner {
 
         @Override
         public void renderArea(float alpha) {
+            Minecraft mc = Minecraft.getMinecraft();
+            EntityPlayer player = mc.player;
 
+            double x = Particle.interpPosX;
+            double y = Particle.interpPosY;
+            double z = Particle.interpPosZ;
+            double d = 0.001;
+
+            for (BlockPos pos : this.area) {
+                RenderGlobal.drawBoundingBox(pos.getX() - x + d, pos.getY() - y + d, pos.getZ() - z + d, pos.getX() + 1 - x - d, pos.getY() + 1 - y - d, pos.getZ() + 1 - z - d, 1.0F, 1.0F, 1.0F, alpha);
+            }
         }
     }
 

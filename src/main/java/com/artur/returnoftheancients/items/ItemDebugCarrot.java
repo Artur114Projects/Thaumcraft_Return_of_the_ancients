@@ -244,10 +244,17 @@ public class ItemDebugCarrot extends BaseItem {
 
 		if (!worldIn.isRemote) {
 			player.sendStatusMessage(new TextComponentString("is took:" + ((System.nanoTime() - time) / 1000000.0F) + "ms"), true);
+
+			Random rand = new Random();
+
+			for (int i = 0; i != area.areaSize(); i++) {
+				worldIn.setBlockState(area.fromIndex(i), Blocks.STONE.getDefaultState());
+			}
+//			worldIn.setBlockState(cPos.getBlock(15, 31, 15), Blocks.STONE.getDefaultState());
 		}
 
 		if (worldIn.isRemote) {
-			ClientEventsHandler.AREAS_DRAW_MANAGER.renderArea(area, 4 * 20);
+			ClientEventsHandler.AREAS_DRAW_MANAGER.renderArea(area, 8 * 20);
 		}
 //		if (!worldIn.isRemote) {
 //			NBTTagCompound nbt = new NBTTagCompound();

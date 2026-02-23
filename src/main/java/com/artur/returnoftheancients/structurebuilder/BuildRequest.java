@@ -4,6 +4,8 @@ import com.artur.returnoftheancients.structurebuilder.interf.IBuildProperties;
 import com.artur.returnoftheancients.structurebuilder.interf.IStructureBuilder;
 import com.artur.returnoftheancients.util.interfaces.Function2;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -21,6 +23,7 @@ public class BuildRequest implements IBuildProperties {
     protected boolean isNeedMarkRenderUpdate = true;
     protected Function<IBlockState, IBlockState> blockStateHook = null;
     protected Function2<IBlockState, BlockPos, Boolean> blockProtectHook = null;
+    protected Function2<TileEntity, NBTTagCompound, TileEntity> tileEntityHook = null;
     protected boolean isPosAsXZCenter = false;
     protected boolean isNeedLoadLightMap = true;
 
@@ -98,6 +101,18 @@ public class BuildRequest implements IBuildProperties {
     }
     public BuildRequest addBlockProtectHook(Function2<IBlockState, BlockPos, Boolean> hook) {
         this.blockProtectHook = hook;
+        return this;
+    }
+
+    @Override
+    public TileEntity tileEntityHook(TileEntity tile, NBTTagCompound data) {
+        if (this.tileEntityHook == null) {
+            return tile;
+        }
+        return this.tileEntityHook.apply(tile, data);
+    }
+    public BuildRequest addTileEntityHook(Function2<TileEntity, NBTTagCompound, TileEntity> hook) {
+        this.tileEntityHook = hook;
         return this;
     }
 

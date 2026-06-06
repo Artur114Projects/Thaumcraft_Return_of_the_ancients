@@ -31,6 +31,14 @@ public class BoundingBox implements IArea {
         this(new BlockPos(start.x, start.y, start.z), new BlockPos(end.x, end.y, end.z));
     }
 
+    public BlockPos minPos() {
+        return this.start;
+    }
+
+    public BlockPos maxPos() {
+        return this.end;
+    }
+
     public BoundingBox offset(int x, int y, int z) {
         return new BoundingBox(this.start.add(x, y, z), this.end.add(x, y, z));
     }

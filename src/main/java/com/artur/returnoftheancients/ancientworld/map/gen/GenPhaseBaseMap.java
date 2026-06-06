@@ -68,16 +68,10 @@ public class GenPhaseBaseMap extends GenPhase {
     private void addRooms(ImmutableMap map, Random rand, int size) {
         List<Room> rooms = new ArrayList<>(this.rooms);
         Collections.shuffle(rooms, rand);
-        HashSet<Integer> indexes = new HashSet<>();
-        for (int i = 0; i != size * size; i++) {
-            indexes.add(i);
-        }
         Map<Room, Integer> attempts = new HashMap<>();
         for (Room room : rooms) {
             attempts.put(room, room.function.apply(size));
         }
-
-        this.updateIndexes(map, indexes, size);
 
         while (!rooms.isEmpty()) {
             Iterator<Room> iterator = rooms.iterator();
@@ -85,7 +79,7 @@ public class GenPhaseBaseMap extends GenPhase {
             while (iterator.hasNext()) {
                 Room room = iterator.next();
 
-                this.addRoomToRandPos(map, room, rand, indexes, size);
+                this.addRoomToRandPos(map, room, rand, size);
 
                 int a = attempts.get(room) - 1;
                 attempts.put(room, a);
@@ -97,59 +91,13 @@ public class GenPhaseBaseMap extends GenPhase {
         }
     }
 
-    private void addRoomToRandPos(ImmutableMap map, Room room, Random rand, Set<Integer> indexes, int size) {
+    private void addRoomToRandPos(ImmutableMap map, Room room, Random rand, int size) {
         EnumRotate rotate = EnumRotate.values()[rand.nextInt(EnumRotate.values().length)];
-        Integer[] integers = indexes.toArray(indexes.toArray(new Integer[0]));
-        int r = integers[rand.nextInt(integers.length)];
-        StrPos pos = new StrPos(r % size, r / size);
-        Set<StrPos> checked = new HashSet<>();
-
-        while (checked.add(pos)) {
-            StrPos.MutableStrPos newPos = new StrPos.MutableStrPos(pos);
-            boolean flag = true;
-
-            if (!indexes.contains(this.index(newPos, size))) {
-                newPos.offset(EnumFace.values()[rand.nextInt(EnumFace.values().length)], rand.nextInt(3) + 1); flag = false;
-            }
-
-            boolean isFindGoodRotate = false;
-            EnumRotate rotateF = rotate;
-
-            for (int i = 0; i != EnumRotate.values().length; i++) {
-                EnumRotate rotateI = EnumRotate.values()[(rotate.ordinal() + i) % EnumRotate.values().length];
-                IMultiChunkStrForm.IOffset[] offsets = room.type.form().offsets(newPos, rotateI);
-                boolean flagR = true;
-                for (IMultiChunkStrForm.IOffset offset : offsets) {
-                    if (!indexes.contains(this.index(offset.globalPos(), size))) {
-                        flagR = false; break;
-                    }
-                }
-                if (flagR) {
-                    rotateF = rotateI; isFindGoodRotate = true; break;
-                }
-            }
-
-            if (!isFindGoodRotate) {
-                IMultiChunkStrForm.IOffset[] offsets = room.type.form().offsets(newPos, rotateF);
-
-                for (IMultiChunkStrForm.IOffset offset : offsets) {
-                    if (!indexes.contains(this.index(offset.globalPos(), size))) {
-                        newPos.add(offset.localPos().multiply(-1));
-                        flag = false;
-                    }
-                }
-            }
-
-            if (flag) {
-                this.insertStructure(map, room.type.create(rotateF, newPos), indexes, size); return;
-            }
-
-            pos = newPos.toImmutable();
-        }
-    }
-
-    private void insertStructure(ImmutableMap map, IStructure str, Set<Integer> indexes, int size) {
-        map.insetStructure(str); this.updateIndexes(map, indexes, size);
+        int[] potencial = this.compilePotencialPosFor(map, room, rotate, size);
+        if (potencial.length == 0) return;
+        int p = potencial[rand.nextInt(potencial.length)];
+        StrPos pos = new StrPos(p % size, p / size);
+        map.insetStructure(room.type.create(rotate, pos));
     }
 
     protected int index(int x, int y, int size) {
@@ -158,6 +106,39 @@ public class GenPhaseBaseMap extends GenPhase {
 
     protected int index(StrPos pos, int size) {
         return index(pos.getX(), pos.getY(), size);
+    }
+
+    private int[] compilePotencialPosFor(ImmutableMap map, Room room, EnumRotate rotate, int size) {
+        StrPos.MutableStrPos pos = new StrPos.MutableStrPos();
+        int[] ret = new int[size * size];
+        int cursor = 0;
+
+        for (int i = 0; i != size * size; i++) {
+            int x = i % size;
+            int y = i / size;
+            pos.setPos(x, y);
+
+            IMultiChunkStrForm.IOffset[] offsets = room.type.form().offsets(pos, rotate);
+
+            boolean flag = true;
+            for (IMultiChunkStrForm.IOffset offset : offsets) {
+                if (map.structureType(pos.setPos(offset.globalPos())) != null) {
+                    flag = false; break;
+                }
+                for (EnumFace face : offset.voidCollides()) {
+                    if (map.structureType(pos.setPos(offset.globalPos()).offset(face)) != null) {
+                        flag = false; break;
+                    }
+                }
+                if (!flag) break;
+            }
+
+            if (flag) {
+                ret[cursor++] = i;
+            }
+        }
+
+        return Arrays.copyOf(ret, cursor);
     }
 
     private void updateIndexes(ImmutableMap map, Set<Integer> indexes, int size) {

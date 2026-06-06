@@ -1,13 +1,14 @@
 package com.artur.returnoftheancients.handlers;
 
+import com.artur.returnoftheancients.util.math.BoundingBox;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -162,6 +163,58 @@ public class RenderHandler {
     @SideOnly(Side.CLIENT)
     public static void renderQuadTextureAtlas(int posX, int posY, int startDrawX, int startDrawY, int textureSizeX, int textureSizeY) {
         renderQuadTextureAtlas(posX, posY, startDrawX, startDrawY, textureSizeX, textureSizeY, 1);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void renderCube(BoundingBox box) {
+        renderCube(box.minPos(), box.maxPos());
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void renderCube(BlockPos posMin, BlockPos posMax) {
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+
+        float x = posMin.getX();
+        float y = posMin.getY();
+        float z = posMin.getZ();
+        float x2 = posMax.getX() + 1;
+        float y2 = posMax.getY() + 1;
+        float z2 = posMax.getZ() + 1;
+
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+
+        buffer.pos(x,  y,  z ).tex(0, 1).endVertex();
+        buffer.pos(x2, y,  z ).tex(1, 1).endVertex();
+        buffer.pos(x2, y2, z ).tex(1, 0).endVertex();
+        buffer.pos(x,  y2, z ).tex(0, 0).endVertex();
+
+        buffer.pos(x2, y,  z2).tex(0, 1).endVertex();
+        buffer.pos(x,  y,  z2).tex(1, 1).endVertex();
+        buffer.pos(x,  y2, z2).tex(1, 0).endVertex();
+        buffer.pos(x2, y2, z2).tex(0, 0).endVertex();
+
+        buffer.pos(x, y,  z2).tex(0, 1).endVertex();
+        buffer.pos(x, y,  z ).tex(1, 1).endVertex();
+        buffer.pos(x, y2, z ).tex(1, 0).endVertex();
+        buffer.pos(x, y2, z2).tex(0, 0).endVertex();
+
+        buffer.pos(x2, y,  z ).tex(0, 1).endVertex();
+        buffer.pos(x2, y,  z2).tex(1, 1).endVertex();
+        buffer.pos(x2, y2, z2).tex(1, 0).endVertex();
+        buffer.pos(x2, y2, z ).tex(0, 0).endVertex();
+
+        buffer.pos(x,  y, z2).tex(0, 1).endVertex();
+        buffer.pos(x2, y, z2).tex(1, 1).endVertex();
+        buffer.pos(x2, y, z ).tex(1, 0).endVertex();
+        buffer.pos(x,  y, z ).tex(0, 0).endVertex();
+
+        buffer.pos(x,  y2, z ).tex(0, 1).endVertex();
+        buffer.pos(x2, y2, z ).tex(1, 1).endVertex();
+        buffer.pos(x2, y2, z2).tex(1, 0).endVertex();
+        buffer.pos(x,  y2, z2).tex(0, 0).endVertex();
+
+        tessellator.draw();
     }
 
     @SideOnly(Side.CLIENT)

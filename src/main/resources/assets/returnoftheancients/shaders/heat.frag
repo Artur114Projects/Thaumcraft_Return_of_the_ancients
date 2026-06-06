@@ -1,7 +1,8 @@
 #version 120
 uniform sampler2D screenTexture;   // unit 0
 uniform sampler2D depthTexture;    // unit 1
-uniform float Time;
+uniform mat4 invProjMatrix;
+uniform float time;
 
 varying vec2 texcoord;
 
@@ -13,14 +14,22 @@ vec3 interpolate(vec3 start, vec3 end) {
     return vec3(interpolate(start.r, end.r), interpolate(start.g, end.g), interpolate(start.b, end.b));
 }
 
+float distance(vec2 uv) {
+    float depthRaw = texture2D(depthTexture, uv).r;
+    vec3 ndc = vec3(uv * 2.0 - 1.0, depthRaw * 2.0 - 1.0);
+    vec4 viewH = invProjMatrix * vec4(ndc, 1.0);
+    vec3 viewPos = viewH.xyz / viewH.w;
+    return length(viewPos);
+}
+
 void main() {
     vec2 uv = texcoord;
-    float d = clamp(texture2D(depthTexture, uv).r - 0.16, 0.0, 1.0);
-    float radius = (d * 0.8) * 0.008;
+    float d = clamp(distance(texcoord)/ 16.0, 0.0, 1.0);
+    float radius = (d * 0.8) * 0.004;
 
     if (d > 0) {
-        float dx = sin((uv.x + Time) * 100) * (0.006 * clamp(d + 0.06, 0.0, 0.6));
-        float dy = sin((uv.y + Time * 0.5) * 100) * (0.006 * clamp(d + 0.06, 0.0, 0.6));
+        float dy = sin((uv.y + time) * 100) * (0.000 * clamp(d + 0.06, 0.0, 0.6));
+        float dx = sin((uv.x + time) * 100) * (0.004 * clamp(d + 0.06, 0.0, 0.6));
         uv += vec2(dx, dy);
     }
 

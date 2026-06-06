@@ -1,39 +1,44 @@
 #version 120
-uniform sampler2D screenTexture;   // unit 0
-uniform sampler2D customTexture;    // unit 1
-uniform float Time;
-
+uniform sampler2D screenTexture;
+uniform sampler2D depthTexture;
+uniform sampler2D shaderArea;
+uniform mat4 invProjMatrix;
+uniform vec2 texelSize;
 varying vec2 texcoord;
-varying vec2 lightCoord;
+float edgeThreshold = 0.5;
 
-float interpolate(float start, float end) {
-    return (start + (end - start) * 0.1) * 1.2;
-}
-
-vec3 interpolate(vec3 start, vec3 end) {
-    return vec3(interpolate(start.r, end.r), interpolate(start.g, end.g), interpolate(start.b, end.b));
+float distance(vec2 uv) {
+    float depthRaw = texture2D(depthTexture, uv).r;
+    vec3 ndc = vec3(uv * 2.0 - 1.0, depthRaw * 2.0 - 1.0);
+    vec4 viewH = invProjMatrix * vec4(ndc, 1.0);
+    vec3 viewPos = viewH.xyz / viewH.w;
+    return length(viewPos);
 }
 
 void main() {
-    vec2 uv = texcoord;
-    vec4 color = texture2D(screenTexture, texcoord);
-    if (texture2D(customTexture, texcoord).r > 0.0) {
-        float dx = sin((uv.x + Time) * 100) * (0.006 * clamp(0.06, 0.0, 0.6));
-        float dy = sin((uv.y + Time * 0.5) * 100) * (0.006 * clamp(0.06, 0.0, 0.6));
-        uv += vec2(dx, dy);
+    vec4 texture = texture2D(screenTexture, texcoord);
 
-        vec3 col = vec3(0.0);
-        float count = 0.0;
-        for (int i = 0; i < 8; i++) {
-            float ang = float(i) / 8.0 * 6.2831853;
-            vec2 off = vec2(cos(ang), sin(ang));
-            col += texture2D(screenTexture, uv + off).rgb;
-            count += 1.0;
+    if (texture2D(shaderArea, texcoord).rgba == 1.0) {
+        float dC = distance(texcoord);
+        float dT = distance(texcoord + vec2(0.0, texelSize.y));
+        float dL = distance(texcoord + vec2(-texelSize.x, 0.0));
+        float dR = distance(texcoord + vec2(texelSize.x, 0.0));
+        float dB = distance(texcoord + vec2(0.0, -texelSize.y));
+        float dTL = distance(texcoord + vec2(-texelSize.x, texelSize.y));
+        float dTR = distance(texcoord + vec2(texelSize.x, texelSize.y));
+        float dBL = distance(texcoord + vec2(-texelSize.x, -texelSize.y));
+        float dBR = distance(texcoord + vec2(texelSize.x, -texelSize.y));
+
+        float gx = (dTR + 2.0 * dR + dBR) - (dTL + 2.0 * dL + dBL);
+        float gy = (dBL + 2.0 * dB + dBR) - (dTL + 2.0 * dT + dTR);
+        float edge = sqrt(gx * gx + gy * gy);
+
+        if (edge > edgeThreshold) {
+            gl_FragColor = vec4((vec3(173, 10, 189) / 255.0) * (edge / 10.0), 1.0);
+        } else {
+            gl_FragColor = vec4(vec3(0.0), texture.a);
         }
-        col /= count;
-
-        vec3 orange = vec3(1.0, 0.4, 0.0);
-        color = vec4(interpolate(col, orange), 1.0);
+    } else {
+        gl_FragColor = texture;
     }
-    gl_FragColor = color;
 }

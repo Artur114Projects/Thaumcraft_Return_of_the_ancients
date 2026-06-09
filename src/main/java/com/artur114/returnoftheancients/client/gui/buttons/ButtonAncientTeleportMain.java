@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.client.gui.buttons;
 
-import com.artur114.returnoftheancients.referense.Referense;
+import com.artur114.returnoftheancients.common.referense.Referense;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.BufferBuilder;

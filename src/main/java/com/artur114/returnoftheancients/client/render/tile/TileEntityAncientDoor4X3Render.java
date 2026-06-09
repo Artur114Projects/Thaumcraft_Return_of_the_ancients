@@ -2,8 +2,8 @@ package com.artur114.returnoftheancients.client.render.tile;
 
 import com.artur114.returnoftheancients.client.model.ModelAncientDoor4X3;
 import com.artur114.returnoftheancients.client.render.item.IItemStackRenderer;
-import com.artur114.returnoftheancients.tileentity.TileEntityAncientDoor4X3;
-import com.artur114.returnoftheancients.util.EnumAssetLocation;
+import com.artur114.returnoftheancients.common.tileentity.TileEntityAncientDoor4X3;
+import com.artur114.returnoftheancients.common.util.EnumAssetLocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;

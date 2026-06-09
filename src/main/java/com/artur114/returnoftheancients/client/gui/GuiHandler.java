@@ -1,8 +1,8 @@
 package com.artur114.returnoftheancients.client.gui;
 
 import com.artur114.returnoftheancients.client.gui.container.GuiAncientTeleport;
-import com.artur114.returnoftheancients.containers.ContainerAncientTeleport;
-import com.artur114.returnoftheancients.tileentity.TileEntityAncientTeleport;
+import com.artur114.returnoftheancients.common.containers.ContainerAncientTeleport;
+import com.artur114.returnoftheancients.common.tileentity.TileEntityAncientTeleport;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;

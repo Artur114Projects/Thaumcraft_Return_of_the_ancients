@@ -1,9 +1,9 @@
 package com.artur114.returnoftheancients.client.render.tile;
 
 import com.artur114.returnoftheancients.client.model.ModelAncientSanctuaryController;
-import com.artur114.returnoftheancients.init.InitItems;
-import com.artur114.returnoftheancients.tileentity.TileEntityAncientSanctuaryController;
-import com.artur114.returnoftheancients.util.EnumAssetLocation;
+import com.artur114.returnoftheancients.common.init.InitItems;
+import com.artur114.returnoftheancients.common.tileentity.TileEntityAncientSanctuaryController;
+import com.artur114.returnoftheancients.common.util.EnumAssetLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;

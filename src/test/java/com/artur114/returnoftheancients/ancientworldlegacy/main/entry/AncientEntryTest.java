@@ -1,5 +1,6 @@
 package com.artur114.returnoftheancients.ancientworldlegacy.main.entry;
 
+import com.artur114.returnoftheancients.common.ancientworldlegacy.main.entry.AncientEntry;
 import org.junit.jupiter.api.BeforeEach;
 
 public class AncientEntryTest {

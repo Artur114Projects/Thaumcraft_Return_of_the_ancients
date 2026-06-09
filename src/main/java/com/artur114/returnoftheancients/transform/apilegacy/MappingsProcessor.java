@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.transform.apilegacy;
 
-import com.artur114.returnoftheancients.main.MainR;
+import com.artur114.returnoftheancients.main.ThaumicRotA;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -37,7 +37,7 @@ public class MappingsProcessor {
     }
 
     private static void loadCSVMappings(Map<String, String> map, String fileName) throws IOException {
-        InputStream stream = MainR.class.getResourceAsStream("/assets/returnoftheancients/transform/mappings/" + fileName);
+        InputStream stream = ThaumicRotA.class.getResourceAsStream("/assets/returnoftheancients/transform/mappings/" + fileName);
         if (stream == null) {
             new NullPointerException().printStackTrace(System.err);
             return;

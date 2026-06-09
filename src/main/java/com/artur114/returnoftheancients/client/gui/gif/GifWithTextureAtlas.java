@@ -1,7 +1,7 @@
 package com.artur114.returnoftheancients.client.gui.gif;
 
-import com.artur114.returnoftheancients.handlers.RenderHandler;
-import com.artur114.returnoftheancients.util.EnumAssetLocation;
+import com.artur114.returnoftheancients.client.util.RenderHandler;
+import com.artur114.returnoftheancients.common.util.EnumAssetLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;

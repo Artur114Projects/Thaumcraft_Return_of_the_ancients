@@ -3,7 +3,7 @@ package com.artur114.returnoftheancients.client.model;// Made with Blockbench 4.
 // Paste this class into your mod and generate all required imports
 
 
-import com.artur114.returnoftheancients.handlers.MiscHandler;
+import com.artur114.returnoftheancients.common.handlers.MiscHandler;
 import net.minecraft.client.model.*;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.util.EnumFacing;

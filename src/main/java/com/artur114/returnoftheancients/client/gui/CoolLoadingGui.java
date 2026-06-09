@@ -1,13 +1,13 @@
 package com.artur114.returnoftheancients.client.gui;
 
-import com.artur114.returnoftheancients.ancientworld.system.client.AncientLayer1Client;
+import com.artur114.returnoftheancients.common.ancientworld.system.client.AncientLayer1Client;
 import com.artur114.returnoftheancients.client.gui.buttons.TRAButton;
 import com.artur114.returnoftheancients.client.gui.gif.GifWithTextureAtlas;
-import com.artur114.returnoftheancients.handlers.RenderHandler;
-import com.artur114.returnoftheancients.main.MainR;
-import com.artur114.returnoftheancients.network.ServerPacketTpToHome;
-import com.artur114.returnoftheancients.referense.Referense;
-import com.artur114.returnoftheancients.util.EnumAssetLocation;
+import com.artur114.returnoftheancients.client.util.RenderHandler;
+import com.artur114.returnoftheancients.main.ThaumicRotA;
+import com.artur114.returnoftheancients.common.network.ServerPacketTpToHome;
+import com.artur114.returnoftheancients.common.referense.Referense;
+import com.artur114.returnoftheancients.common.util.EnumAssetLocation;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -97,7 +97,7 @@ public class CoolLoadingGui extends GuiScreen {
                 if (closingTime <= 0) {
                     mc.displayGuiScreen(null);
                     if (isTpToHome) {
-                        MainR.NETWORK.sendToServer(new ServerPacketTpToHome());
+                        ThaumicRotA.NETWORK.sendToServer(new ServerPacketTpToHome());
                     }
                     isClosing = false;
                 }

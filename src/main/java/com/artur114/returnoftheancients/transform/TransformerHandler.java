@@ -1,13 +1,13 @@
 package com.artur114.returnoftheancients.transform;
 
 import com.artur114.returnoftheancients.client.event.ClientEventsHandler;
-import com.artur114.returnoftheancients.handlers.MiscHandler;
-import com.artur114.returnoftheancients.init.InitBiome;
-import com.artur114.returnoftheancients.misc.TRAConfigs;
-import com.artur114.returnoftheancients.referense.Referense;
+import com.artur114.returnoftheancients.common.handlers.MiscHandler;
+import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.referense.Referense;
 import com.artur114.returnoftheancients.transform.apilegacy.base.ITransformer;
 import com.artur114.returnoftheancients.transform.apilegacy.base.MVBase;
-import com.artur114.returnoftheancients.util.EnumAssetLocation;
+import com.artur114.returnoftheancients.common.util.EnumAssetLocation;
 import com.chaosthedude.naturescompass.util.BiomeSearchWorker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;

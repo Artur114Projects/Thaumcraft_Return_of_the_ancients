@@ -1,8 +1,8 @@
 package com.artur114.returnoftheancients.client.fx.particle;
 
 import com.artur114.returnoftheancients.client.fx.particle.util.ParticleAtlasSprite;
-import com.artur114.returnoftheancients.handlers.RenderHandler;
-import com.artur114.returnoftheancients.init.InitParticleSprite;
+import com.artur114.returnoftheancients.client.util.RenderHandler;
+import com.artur114.returnoftheancients.client.init.InitParticleSprite;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

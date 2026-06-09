@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.main;
 
-import com.artur114.returnoftheancients.referense.Referense;
+import com.artur114.returnoftheancients.common.referense.Referense;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.common.Mod;
 

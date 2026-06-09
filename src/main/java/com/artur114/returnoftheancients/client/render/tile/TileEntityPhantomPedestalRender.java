@@ -2,7 +2,7 @@ package com.artur114.returnoftheancients.client.render.tile;
 
 import com.artur114.returnoftheancients.client.model.ModelPhantomPedestal;
 import com.artur114.returnoftheancients.client.render.item.IItemStackRenderer;
-import com.artur114.returnoftheancients.tileentity.TileEntityPhantomPedestal;
+import com.artur114.returnoftheancients.common.tileentity.TileEntityPhantomPedestal;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;

@@ -1,9 +1,9 @@
 package com.artur114.returnoftheancients.client.event.managers;
 
 import com.artur114.returnoftheancients.client.fx.particle.ParticleHeat;
-import com.artur114.returnoftheancients.init.InitBiome;
-import com.artur114.returnoftheancients.init.InitDimensions;
-import com.artur114.returnoftheancients.util.math.UltraMutableBlockPos;
+import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitDimensions;
+import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

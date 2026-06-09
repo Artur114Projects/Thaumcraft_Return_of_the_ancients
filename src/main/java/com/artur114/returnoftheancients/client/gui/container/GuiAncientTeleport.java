@@ -2,12 +2,12 @@ package com.artur114.returnoftheancients.client.gui.container;
 
 import com.artur114.returnoftheancients.client.gui.buttons.ButtonAncientTeleportMain;
 import com.artur114.returnoftheancients.client.gui.buttons.ButtonsPageManager;
-import com.artur114.returnoftheancients.containers.ContainerAncientTeleport;
-import com.artur114.returnoftheancients.main.MainR;
-import com.artur114.returnoftheancients.network.ServerPacketTileAncientTeleportData;
-import com.artur114.returnoftheancients.referense.Referense;
-import com.artur114.returnoftheancients.tileentity.TileEntityAncientTeleport;
-import com.artur114.returnoftheancients.util.AspectBottle;
+import com.artur114.returnoftheancients.common.containers.ContainerAncientTeleport;
+import com.artur114.returnoftheancients.main.ThaumicRotA;
+import com.artur114.returnoftheancients.common.network.ServerPacketTileAncientTeleportData;
+import com.artur114.returnoftheancients.common.referense.Referense;
+import com.artur114.returnoftheancients.common.tileentity.TileEntityAncientTeleport;
+import com.artur114.returnoftheancients.common.util.AspectBottle;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -72,7 +72,7 @@ public class GuiAncientTeleport extends GuiContainer {
         switch (button.id) {
             case 0:{
                 buttonMain.press();
-                MainR.NETWORK.sendToServer(new ServerPacketTileAncientTeleportData(tile, 0));
+                ThaumicRotA.NETWORK.sendToServer(new ServerPacketTileAncientTeleportData(tile, 0));
             } break;
         }
     }

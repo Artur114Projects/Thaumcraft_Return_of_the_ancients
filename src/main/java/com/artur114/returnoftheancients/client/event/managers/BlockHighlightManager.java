@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.client.event.managers;
 
-import com.artur114.returnoftheancients.tileentity.interf.ITileMultiBBProvider;
+import com.artur114.returnoftheancients.common.tileentity.interf.ITileMultiBBProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;

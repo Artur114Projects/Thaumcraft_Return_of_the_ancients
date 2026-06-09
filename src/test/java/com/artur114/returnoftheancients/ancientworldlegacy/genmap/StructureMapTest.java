@@ -1,8 +1,8 @@
 package com.artur114.returnoftheancients.ancientworldlegacy.genmap;
 
-import com.artur114.returnoftheancients.ancientworldlegacy.genmap.util.StructureMap;
-import com.artur114.returnoftheancients.ancientworldlegacy.genmap.util.StructurePos;
-import com.artur114.returnoftheancients.ancientworldlegacy.util.interfaces.IALGS;
+import com.artur114.returnoftheancients.common.ancientworldlegacy.genmap.util.StructureMap;
+import com.artur114.returnoftheancients.common.ancientworldlegacy.genmap.util.StructurePos;
+import com.artur114.returnoftheancients.common.ancientworldlegacy.util.interfaces.IALGS;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

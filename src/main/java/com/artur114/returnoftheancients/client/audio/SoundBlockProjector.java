@@ -1,7 +1,7 @@
 package com.artur114.returnoftheancients.client.audio;
 
-import com.artur114.returnoftheancients.init.InitSounds;
-import com.artur114.returnoftheancients.tileentity.TileEntityAncientProjector;
+import com.artur114.returnoftheancients.common.init.InitSounds;
+import com.artur114.returnoftheancients.common.tileentity.TileEntityAncientProjector;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.util.SoundCategory;
 

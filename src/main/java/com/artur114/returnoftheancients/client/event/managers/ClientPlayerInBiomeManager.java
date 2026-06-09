@@ -1,10 +1,10 @@
 package com.artur114.returnoftheancients.client.event.managers;
 
 import com.artur114.returnoftheancients.client.event.ClientEventsHandler;
-import com.artur114.returnoftheancients.handlers.MiscHandler;
-import com.artur114.returnoftheancients.init.InitBiome;
-import com.artur114.returnoftheancients.util.math.MathUtils;
-import com.artur114.returnoftheancients.util.math.UltraMutableBlockPos;
+import com.artur114.returnoftheancients.common.handlers.MiscHandler;
+import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.util.math.MathUtils;
+import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GlStateManager;
@@ -20,7 +20,7 @@ import thaumcraft.client.lib.events.RenderEventHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.artur114.returnoftheancients.init.InitDimensions.ancient_world_dim_id;
+import static com.artur114.returnoftheancients.common.init.InitDimensions.ancient_world_dim_id;
 
 @SideOnly(Side.CLIENT)
 public class ClientPlayerInBiomeManager {

@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.client.fx.particle;
 
-import com.artur114.returnoftheancients.util.math.UltraMutableBlockPos;
+import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.ParticleBubble;
 import net.minecraft.world.World;

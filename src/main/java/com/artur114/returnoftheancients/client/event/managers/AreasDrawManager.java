@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.client.event.managers;
 
-import com.artur114.returnoftheancients.util.math.IArea;
+import com.artur114.returnoftheancients.common.util.math.IArea;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.RenderWorldLastEvent;

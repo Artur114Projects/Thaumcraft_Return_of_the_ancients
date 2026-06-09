@@ -1,8 +1,8 @@
 package com.artur114.returnoftheancients.client.render.tile;
 
 import com.artur114.returnoftheancients.client.model.ModelPedestalActive;
-import com.artur114.returnoftheancients.tileentity.TileEntityPedestalActive;
-import com.artur114.returnoftheancients.util.EnumAssetLocation;
+import com.artur114.returnoftheancients.common.tileentity.TileEntityPedestalActive;
+import com.artur114.returnoftheancients.common.util.EnumAssetLocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;

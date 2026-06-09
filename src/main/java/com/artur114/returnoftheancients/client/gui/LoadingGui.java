@@ -1,10 +1,10 @@
 package com.artur114.returnoftheancients.client.gui;
 
 import com.artur114.returnoftheancients.client.gui.gif.GifSTime;
-import com.artur114.returnoftheancients.main.MainR;
-import com.artur114.returnoftheancients.misc.TRAConfigs;
-import com.artur114.returnoftheancients.network.ServerPacketTpToHome;
-import com.artur114.returnoftheancients.referense.Referense;
+import com.artur114.returnoftheancients.main.ThaumicRotA;
+import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.network.ServerPacketTpToHome;
+import com.artur114.returnoftheancients.common.referense.Referense;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -208,7 +208,7 @@ public class LoadingGui extends GuiScreen {
                 iaESCString = true;
             } else {
                 iaESCString = false;
-                MainR.NETWORK.sendToServer(new ServerPacketTpToHome());
+                ThaumicRotA.NETWORK.sendToServer(new ServerPacketTpToHome());
                 mc.displayGuiScreen(null);
             }
             return;

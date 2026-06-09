@@ -1,5 +1,6 @@
 package com.artur114.returnoftheancients.util.math;
 
+import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

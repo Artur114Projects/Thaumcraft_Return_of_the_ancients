@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.client.event.managers.movement;
 
-import com.artur114.returnoftheancients.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.TRAConfigs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;

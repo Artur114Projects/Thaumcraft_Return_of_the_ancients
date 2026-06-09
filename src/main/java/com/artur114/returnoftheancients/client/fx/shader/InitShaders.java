@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.client.fx.shader;
 
-import com.artur114.returnoftheancients.util.EnumAssetLocation;
+import com.artur114.returnoftheancients.common.util.EnumAssetLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

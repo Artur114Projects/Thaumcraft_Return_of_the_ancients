@@ -1,7 +1,7 @@
 package com.artur114.returnoftheancients.client.audio;
 
-import com.artur114.returnoftheancients.init.InitSounds;
-import com.artur114.returnoftheancients.tileentity.TileEntityAncientFan;
+import com.artur114.returnoftheancients.common.init.InitSounds;
+import com.artur114.returnoftheancients.common.tileentity.TileEntityAncientFan;
 import net.minecraft.util.SoundCategory;
 
 public class SoundBlockAncientFan extends SoundTile<TileEntityAncientFan> {

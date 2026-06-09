@@ -1,9 +1,9 @@
 package com.artur114.returnoftheancients.client.event.managers;
 
-import com.artur114.returnoftheancients.generation.portal.base.AncientPortalsProcessor;
-import com.artur114.returnoftheancients.main.MainR;
-import com.artur114.returnoftheancients.network.ServerPacketGetWeather;
-import com.artur114.returnoftheancients.util.math.UltraMutableBlockPos;
+import com.artur114.returnoftheancients.common.generation.portal.base.AncientPortalsProcessor;
+import com.artur114.returnoftheancients.main.ThaumicRotA;
+import com.artur114.returnoftheancients.common.network.ServerPacketGetWeather;
+import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.ChunkPos;
@@ -107,7 +107,7 @@ public class PlayerDistanceToPortalManager {
     }
 
     private void updateServerRain() {
-        MainR.NETWORK.sendToServer(new ServerPacketGetWeather());
+        ThaumicRotA.NETWORK.sendToServer(new ServerPacketGetWeather());
     }
 
     public void setServerRain(float rain, float thunder) {

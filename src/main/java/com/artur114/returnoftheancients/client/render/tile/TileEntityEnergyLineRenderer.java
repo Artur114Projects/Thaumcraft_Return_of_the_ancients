@@ -1,9 +1,9 @@
 package com.artur114.returnoftheancients.client.render.tile;
 
 import com.artur114.returnoftheancients.client.model.ModelEnergyLine;
-import com.artur114.returnoftheancients.energy.bases.tile.ITileEnergy;
-import com.artur114.returnoftheancients.tileentity.TileEntityEnergyLine;
-import com.artur114.returnoftheancients.util.Tuple;
+import com.artur114.returnoftheancients.common.energy.bases.tile.ITileEnergy;
+import com.artur114.returnoftheancients.common.tileentity.TileEntityEnergyLine;
+import com.artur114.returnoftheancients.common.util.Tuple;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;

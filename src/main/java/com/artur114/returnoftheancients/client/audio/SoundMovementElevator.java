@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.client.audio;
 
-import com.artur114.returnoftheancients.generation.portal.base.client.ClientAncientPortal;
+import com.artur114.returnoftheancients.common.generation.portal.base.client.ClientAncientPortal;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.init.SoundEvents;

@@ -2,8 +2,7 @@ package com.artur114.returnoftheancients.client.event;
 
 import com.artur114.returnoftheancients.client.event.managers.*;
 import com.artur114.returnoftheancients.client.event.managers.movement.PlayerMovementManager;
-import com.artur114.returnoftheancients.client.event.managers.*;
-import com.artur114.returnoftheancients.referense.Referense;
+import com.artur114.returnoftheancients.common.referense.Referense;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;

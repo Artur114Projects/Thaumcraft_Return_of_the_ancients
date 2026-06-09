@@ -1,6 +1,7 @@
 package com.artur114.returnoftheancients.ancientworldlegacy.genmap;
 
-import com.artur114.returnoftheancients.ancientworldlegacy.genmap.util.StructureMap;
+import com.artur114.returnoftheancients.common.ancientworldlegacy.genmap.AncientEntryMapProvider;
+import com.artur114.returnoftheancients.common.ancientworldlegacy.genmap.util.StructureMap;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

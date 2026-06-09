@@ -1,5 +1,7 @@
 package com.artur114.returnoftheancients.blockprotect;
 
+import com.artur114.returnoftheancients.common.blockprotect.ExtendedProtectStorage1bit;
+import com.artur114.returnoftheancients.common.blockprotect.IExtendedProtectStorage;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import org.junit.jupiter.api.Assertions;

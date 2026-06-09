@@ -1,7 +1,7 @@
 package com.artur114.returnoftheancients.client.fx.particle;
 
 import com.artur114.returnoftheancients.client.fx.particle.util.ParticleAtlasSprite;
-import com.artur114.returnoftheancients.init.InitParticleSprite;
+import com.artur114.returnoftheancients.client.init.InitParticleSprite;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;

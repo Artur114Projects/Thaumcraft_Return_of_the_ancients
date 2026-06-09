@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.transform.transformers;
 
-import com.artur114.returnoftheancients.blockprotect.BlockProtectHandler;
+import com.artur114.returnoftheancients.common.blockprotect.BlockProtectHandler;
 import com.artur114.returnoftheancients.transform.apilegacy.base.IMVInstance;
 import com.artur114.returnoftheancients.transform.apilegacy.base.MVBase;
 import com.artur114.returnoftheancients.transform.apilegacy.base.TransformerBase;

@@ -1,5 +1,7 @@
 package com.artur114.returnoftheancients.blockprotect.server;
 
+import com.artur114.returnoftheancients.common.blockprotect.server.IServerProtectedChunk;
+import com.artur114.returnoftheancients.common.blockprotect.server.ServerProtectedChunk;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;

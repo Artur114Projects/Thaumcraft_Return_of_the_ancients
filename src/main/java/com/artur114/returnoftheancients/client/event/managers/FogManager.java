@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.client.event.managers;
 
-import com.artur114.returnoftheancients.handlers.RenderHandler;
+import com.artur114.returnoftheancients.client.util.RenderHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.EntityViewRenderEvent;

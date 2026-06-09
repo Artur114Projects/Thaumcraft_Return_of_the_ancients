@@ -18,7 +18,6 @@ public abstract class BaseItem extends Item implements IHasModel {
         InitItems.ITEMS_REGISTER_BUSS.add(this);
     }
 
-
     protected void setTRACreativeTab() {
         this.setCreativeTab(MainR.RETURN_OF_ANCIENTS_TAB);
     }

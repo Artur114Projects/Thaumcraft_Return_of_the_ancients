@@ -17,7 +17,7 @@ public abstract class TileBase extends TileEntity {
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        return new SPacketUpdateTileEntity(this.pos, -9, this.getUpdateTag());
+        return new SPacketUpdateTileEntity(this.pos, 0, this.getUpdateTag());
     }
 
     @Override
@@ -27,7 +27,7 @@ public abstract class TileBase extends TileEntity {
 
     @Override
     public @NotNull NBTTagCompound getUpdateTag() {
-        return this.writeSyncNBT(this.writeInternal(new NBTTagCompound()));
+        return this.writeSyncNBT(super.getUpdateTag());
     }
 
     @Override

@@ -24,7 +24,8 @@ configurations {
 }
 
 dependencies {
-    include "com.artur114.bananalib:asm:1.0.0"
+    include 'com.artur114.bananalib:asm:1.0.0'
+    include 'com.artur114.bananalib:mc:0.0.0-SNAPSHOT'
 
     implementation 'org.jetbrains:annotations:24.0.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'

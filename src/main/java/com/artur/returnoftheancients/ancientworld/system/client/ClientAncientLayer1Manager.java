@@ -1,6 +1,5 @@
 package com.artur.returnoftheancients.ancientworld.system.client;
 
-import com.artur.returnoftheancients.handlers.MiscHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -44,7 +43,7 @@ public class ClientAncientLayer1Manager implements IClientAncientLayer1Manager {
             if (data.getBoolean("build")) {
                 this.startBuild();
             } else {
-                this.finisBuild();
+                this.finishBuild();
             }
         }
         if (data.hasKey("playersState")) {
@@ -63,7 +62,7 @@ public class ClientAncientLayer1Manager implements IClientAncientLayer1Manager {
     }
 
     @Override
-    public void finisBuild() {
+    public void finishBuild() {
         if (this.layerClient != null) {
             this.layerClient.onBuildFinish();
         }

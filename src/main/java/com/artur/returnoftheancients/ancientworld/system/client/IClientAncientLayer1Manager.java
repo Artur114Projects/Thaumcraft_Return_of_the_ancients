@@ -7,5 +7,5 @@ public interface IClientAncientLayer1Manager extends IAncientLayer1Manager {
     void createAncientLayer(NBTTagCompound data);
     void handleUpdateTag(NBTTagCompound data);
     void startBuild();
-    void finisBuild();
+    void finishBuild();
 }

@@ -12,7 +12,6 @@ import thaumcraft.api.potions.PotionFluxTaint;
 public class PlayerInBiomeManager {
     private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
 
-
     public void tickEventPlayerTickEvent(TickEvent.PlayerTickEvent e) {
         if (!e.player.world.isRemote && e.player.ticksExisted % 8 == 0) {
             IPlayerTimerCapability timer = TRACapabilities.getTimer(e.player);

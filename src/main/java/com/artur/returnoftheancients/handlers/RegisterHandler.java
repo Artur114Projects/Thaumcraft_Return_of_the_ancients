@@ -67,7 +67,7 @@ public class RegisterHandler {
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
-	public static void registerParticlesTexture(TextureStitchEvent.Pre e){
+	public static void registerParticlesTexture(TextureStitchEvent.Pre e) {
 		registerParticleSprites(e);
 	}
 

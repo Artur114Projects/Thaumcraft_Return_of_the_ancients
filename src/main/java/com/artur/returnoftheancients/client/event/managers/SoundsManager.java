@@ -15,6 +15,7 @@ import java.util.Map;
 public class SoundsManager {
     public final Map<BlockPos, TileSoundEntry<?>> soundTileEntryMap = new HashMap<>();
     public final Minecraft mc = Minecraft.getMinecraft();
+
     public void tickEventClientTickEvent(TickEvent.ClientTickEvent e) {
         EntityPlayer player = Minecraft.getMinecraft().player;
 

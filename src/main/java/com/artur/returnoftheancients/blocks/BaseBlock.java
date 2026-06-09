@@ -16,6 +16,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public abstract class BaseBlock extends Block implements IHasModel {
     private boolean isOpaqueCube = true;
     protected boolean isForCreative = false;
     public final Item item;
+
     protected BaseBlock(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(material);
 
@@ -92,12 +94,12 @@ public abstract class BaseBlock extends Block implements IHasModel {
     }
 
     @Override
-    public boolean isFullCube(IBlockState state) {
+    public boolean isFullCube(@NotNull IBlockState state) {
         return this.isFullCube;
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
+    public boolean isOpaqueCube(@NotNull IBlockState state) {
         return this.isOpaqueCube;
     }
 }

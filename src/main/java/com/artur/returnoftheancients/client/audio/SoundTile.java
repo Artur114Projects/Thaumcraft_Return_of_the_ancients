@@ -1,12 +1,8 @@
 package com.artur.returnoftheancients.client.audio;
 
-import com.artur.returnoftheancients.init.InitSounds;
-import com.artur.returnoftheancients.tileentity.TileEntityAncientFan;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 

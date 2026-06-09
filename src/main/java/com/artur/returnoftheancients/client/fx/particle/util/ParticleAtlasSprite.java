@@ -22,7 +22,6 @@ public class ParticleAtlasSprite extends ParticleSprite {
         this(EnumAssetLocation.TEXTURES_PARTICLE, names);
     }
 
-
     @Override
     public void register(TextureStitchEvent.Pre e) {
         for (int i = 0; i != sprites.length; i++) {

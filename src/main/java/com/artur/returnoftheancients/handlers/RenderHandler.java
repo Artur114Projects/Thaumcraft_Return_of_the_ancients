@@ -219,12 +219,9 @@ public class RenderHandler {
 
     @SideOnly(Side.CLIENT)
     public static Tuple<Integer, Integer> getTextureSize(ResourceLocation textureRL) {
-        GlStateManager.pushMatrix();
         Minecraft.getMinecraft().getTextureManager().bindTexture(textureRL);
         int x = GlStateManager.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
         int y = GlStateManager.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
-        Tuple<Integer, Integer> size = new Tuple<>(x, y);
-        GlStateManager.popMatrix();
-        return size;
+        return new Tuple<>(x, y);
     }
 }

@@ -22,7 +22,6 @@ public class ParticleSprite {
         this(EnumAssetLocation.TEXTURES_PARTICLE, name);
     }
 
-
     public void register(TextureStitchEvent.Pre e) {
         this.atlasSprite = e.getMap().registerSprite(sprite);
     }

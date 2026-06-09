@@ -1,0 +1,227 @@
+package com.artur114.returnoftheancients.handlers;
+
+import com.artur114.returnoftheancients.util.math.BoundingBox;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+@SideOnly(Side.CLIENT)
+public class RenderHandler {
+    @SideOnly(Side.CLIENT)
+    public static float interpolate(float start, float end, float pct) {
+        return start + (end - start) * pct;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static double interpolate(double start, double end, float pct) {
+        return start + (end - start) * pct;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public static int rgbToInt(int red, int green, int blue) {
+        red = (red << 16) & 0x00FF0000;
+        green = (green << 8) & 0x0000FF00;
+        blue = blue & 0x000000FF;
+
+        return 0xFF000000 | red | green | blue;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public static int[] intToRgb(int color) {
+        int red = ((color >> 16) & 0xFF);
+        int green = ((color >> 8) & 0xFF);
+        int blue = (color & 0xFF);
+        
+        return new int[] {red, green, blue};
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void renderBox(Tessellator tessellator, BufferBuilder bufferBuilder, double x, double y, double z, double x1, double y1, double z1, float r, float g, float b, float a) {
+        GlStateManager.glLineWidth(2.0F);
+        bufferBuilder.begin(3, DefaultVertexFormats.POSITION_COLOR);
+        bufferBuilder.pos(x, y, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y1, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y1, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y1, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y1, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y1, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y1, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x, y, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y1, z1).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y1, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y, z).color(r, g, b, a).endVertex();
+        bufferBuilder.pos(x1, y, z).color(r, g, b, a).endVertex();
+        tessellator.draw();
+        GlStateManager.glLineWidth(1.0F);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void renderPrimitive(int x, int x1, int y, int y1, double startU, double endU, double startV, double endV) {
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder builder = tessellator.getBuffer();
+        builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        builder.pos(x, y1, 0).tex(startU, endV).endVertex();
+        builder.pos(x1, y1, 0).tex(endU, endV).endVertex();
+        builder.pos(x1, y, 0).tex(endU, startV).endVertex();
+        builder.pos(x, y, 0).tex(startU, startV).endVertex();
+        tessellator.draw();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void renderTextureAtlas(int posX, int posY, float startDrawX, float startDrawY, float textureSizeX, float textureSizeY, float drawAreaWidth, float drawAreaHeight, float scale) {
+        startDrawX = (scale * startDrawX);
+        startDrawY = (scale * startDrawY);
+        textureSizeX = (scale * textureSizeX);
+        textureSizeY = (scale * textureSizeY);
+        drawAreaWidth = (scale * drawAreaWidth);
+        drawAreaHeight = (scale * drawAreaHeight);
+
+        float posX1 = posX + drawAreaWidth;
+        float posY1 = posY + drawAreaHeight;
+
+        float iX = startDrawX / drawAreaWidth;
+        float iY = startDrawY / drawAreaHeight;
+
+        double endU = (double) (drawAreaWidth * (iX + 1)) / textureSizeX;
+        double startU = (double) (drawAreaWidth * iX) / textureSizeX;
+
+        double endV = (double) (drawAreaHeight * (iY + 1)) / textureSizeY;
+        double startV = (double) (drawAreaHeight * iY) / textureSizeY;
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder builder = tessellator.getBuffer();
+        builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        builder.pos(posX, posY1, 0).tex(startU, endV).endVertex();
+        builder.pos(posX1, posY1, 0).tex(endU, endV).endVertex();
+        builder.pos(posX1, posY, 0).tex(endU, startV).endVertex();
+        builder.pos(posX, posY, 0).tex(startU, startV).endVertex();
+        tessellator.draw();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void renderTextureAtlas(int posX, int posY, float startDrawX, float startDrawY, float textureSizeX, float textureSizeY, float drawAreaWidth, float drawAreaHeight) {
+        renderTextureAtlas(posX, posY, startDrawX, startDrawY, textureSizeX, textureSizeY, drawAreaWidth, drawAreaHeight, 1);
+    }
+
+    /**
+     * @param posX drawing start position
+     * @param posY drawing start position
+     * @param startDrawX drawing start position in texture
+     * @param startDrawY drawing start position in texture
+     * @param textureSizeX texture size
+     * @param textureSizeY texture size
+     * @param scale scale
+     */
+    @SideOnly(Side.CLIENT)
+    public static void renderQuadTextureAtlas(int posX, int posY, float startDrawX, float startDrawY, float textureSizeX, float textureSizeY, float drawQuadSize, float scale) {
+        startDrawX = (scale * startDrawX);
+        startDrawY = (scale * startDrawY);
+        textureSizeX = (scale * textureSizeX);
+        textureSizeY = (scale * textureSizeY);
+
+        float posX1 = posX + drawQuadSize;
+        float posY1 = posY + drawQuadSize;
+
+        float iX = startDrawX / drawQuadSize;
+        float iY = startDrawY / drawQuadSize;
+
+        double endU = (double) (drawQuadSize * (iX + 1)) / textureSizeX;
+        double startU = (double) (drawQuadSize * iX) / textureSizeX;
+
+        double endV = (double) (drawQuadSize * (iY + 1)) / textureSizeY;
+        double startV = (double) (drawQuadSize * iY) / textureSizeY;
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder builder = tessellator.getBuffer();
+        builder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        builder.pos(posX, posY1, 0).tex(startU, endV).endVertex();
+        builder.pos(posX1, posY1, 0).tex(endU, endV).endVertex();
+        builder.pos(posX1, posY, 0).tex(endU, startV).endVertex();
+        builder.pos(posX, posY, 0).tex(startU, startV).endVertex();
+        tessellator.draw();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void renderQuadTextureAtlas(int posX, int posY, float startDrawX, float startDrawY, float textureSizeX, float textureSizeY, float scale) {
+        renderQuadTextureAtlas(posX, posY, startDrawX, startDrawY, textureSizeX, textureSizeY, Math.min(textureSizeX, textureSizeY), scale);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void renderQuadTextureAtlas(int posX, int posY, int startDrawX, int startDrawY, int textureSizeX, int textureSizeY) {
+        renderQuadTextureAtlas(posX, posY, startDrawX, startDrawY, textureSizeX, textureSizeY, 1);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void renderCube(BoundingBox box) {
+        renderCube(box.minPos(), box.maxPos());
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void renderCube(BlockPos posMin, BlockPos posMax) {
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+
+        float x = posMin.getX();
+        float y = posMin.getY();
+        float z = posMin.getZ();
+        float x2 = posMax.getX() + 1;
+        float y2 = posMax.getY() + 1;
+        float z2 = posMax.getZ() + 1;
+
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+
+        buffer.pos(x,  y,  z ).tex(0, 1).endVertex();
+        buffer.pos(x2, y,  z ).tex(1, 1).endVertex();
+        buffer.pos(x2, y2, z ).tex(1, 0).endVertex();
+        buffer.pos(x,  y2, z ).tex(0, 0).endVertex();
+
+        buffer.pos(x2, y,  z2).tex(0, 1).endVertex();
+        buffer.pos(x,  y,  z2).tex(1, 1).endVertex();
+        buffer.pos(x,  y2, z2).tex(1, 0).endVertex();
+        buffer.pos(x2, y2, z2).tex(0, 0).endVertex();
+
+        buffer.pos(x, y,  z2).tex(0, 1).endVertex();
+        buffer.pos(x, y,  z ).tex(1, 1).endVertex();
+        buffer.pos(x, y2, z ).tex(1, 0).endVertex();
+        buffer.pos(x, y2, z2).tex(0, 0).endVertex();
+
+        buffer.pos(x2, y,  z ).tex(0, 1).endVertex();
+        buffer.pos(x2, y,  z2).tex(1, 1).endVertex();
+        buffer.pos(x2, y2, z2).tex(1, 0).endVertex();
+        buffer.pos(x2, y2, z ).tex(0, 0).endVertex();
+
+        buffer.pos(x,  y, z2).tex(0, 1).endVertex();
+        buffer.pos(x2, y, z2).tex(1, 1).endVertex();
+        buffer.pos(x2, y, z ).tex(1, 0).endVertex();
+        buffer.pos(x,  y, z ).tex(0, 0).endVertex();
+
+        buffer.pos(x,  y2, z ).tex(0, 1).endVertex();
+        buffer.pos(x2, y2, z ).tex(1, 1).endVertex();
+        buffer.pos(x2, y2, z2).tex(1, 0).endVertex();
+        buffer.pos(x,  y2, z2).tex(0, 0).endVertex();
+
+        tessellator.draw();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static Tuple<Integer, Integer> getTextureSize(ResourceLocation textureRL) {
+        Minecraft.getMinecraft().getTextureManager().bindTexture(textureRL);
+        int x = GlStateManager.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_WIDTH);
+        int y = GlStateManager.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, 0, GL11.GL_TEXTURE_HEIGHT);
+        return new Tuple<>(x, y);
+    }
+}

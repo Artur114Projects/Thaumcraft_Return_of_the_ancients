@@ -10,9 +10,9 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'java'
 
-version = mod_version
 group = 'com.artur.returnoftheancients'
-archivesBaseName = 'Y_Return of the ancients'
+archivesBaseName = 'YReturnOfTheAncients'
+version = mod_version
 
 repositories {
     mavenCentral()
@@ -24,8 +24,9 @@ configurations {
 }
 
 dependencies {
-    include 'com.artur114.bananalib:asm:1.0.0'
-    include 'com.artur114.bananalib:mc:0.0.0-SNAPSHOT'
+    include('com.artur114.bananalib:asm:1.0.0') {transitive=false}
+    include('com.artur114.bananalib:math:1.0.0') {transitive=false}
+    include('com.artur114.bananalib:mc:0.0.0-SNAPSHOT') {transitive=false}
 
     implementation 'org.jetbrains:annotations:24.0.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'

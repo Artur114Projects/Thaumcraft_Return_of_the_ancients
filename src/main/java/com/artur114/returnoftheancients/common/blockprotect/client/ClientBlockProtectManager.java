@@ -2,7 +2,7 @@ package com.artur114.returnoftheancients.common.blockprotect.client;
 
 import com.artur114.returnoftheancients.common.blockprotect.BlockProtectHandler;
 import com.artur114.returnoftheancients.common.capabilities.GenericCapProviderS;
-import com.artur114.returnoftheancients.common.capabilities.TRACapabilities;
+import com.artur114.returnoftheancients.common.init.InitCapabilities;
 import com.artur114.returnoftheancients.client.fx.particle.ParticleBlockProtect;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import net.minecraft.client.Minecraft;
@@ -47,7 +47,7 @@ public class ClientBlockProtectManager {
     }
 
     public void attachCapabilitiesEventChunk(AttachCapabilitiesEvent<Chunk> e) {
-        e.addCapability(new ResourceLocation(Referense.MODID, "protected_chunk"), new GenericCapProviderS<>(new ClientProtectedChunk(e.getObject().getPos(), e.getObject().getWorld().provider.getDimension()), TRACapabilities.PROTECTED_CHUNK));
+        e.addCapability(new ResourceLocation(Referense.MODID, "protected_chunk"), new GenericCapProviderS<>(new ClientProtectedChunk(e.getObject().getPos(), e.getObject().getWorld().provider.getDimension()), InitCapabilities.PROTECTED_CHUNK));
     }
 
     /*--------------------------------------UTILS--------------------------------------*/

@@ -1,6 +1,6 @@
-package com.artur114.returnoftheancients.common.generation.biomes.decorate;
+package com.artur114.returnoftheancients.common.biomes.decorate;
 
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import com.artur114.returnoftheancients.common.init.InitBlocks;
 import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
@@ -29,7 +29,7 @@ public class WorldGenRottenSpires extends WorldGenAbstractTree {
     public boolean generate(World worldIn, Random rand, BlockPos position) {
         Chunk chunk = worldIn.getChunkFromBlockCoords(position);
         byte[] biomeArray = chunk.getBiomeArray();
-        byte taintSeaId = (byte) (Biome.getIdForBiome(InitBiome.TAINT_SEA) & 255);
+        byte taintSeaId = (byte) (Biome.getIdForBiome(InitBiomes.TAINT_SEA) & 255);
 
         for (byte b : biomeArray) {
             if (b != taintSeaId) {

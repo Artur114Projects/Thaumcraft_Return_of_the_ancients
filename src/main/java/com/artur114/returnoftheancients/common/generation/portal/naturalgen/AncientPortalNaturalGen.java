@@ -7,7 +7,7 @@ import com.artur114.returnoftheancients.common.generation.portal.base.AncientPor
 import com.artur114.returnoftheancients.common.generation.portal.base.AncientPortalsProcessor;
 import com.artur114.returnoftheancients.common.generation.portal.generators.GenAncientArch;
 import com.artur114.returnoftheancients.common.generation.portal.generators.GenAncientSpire;
-import com.artur114.returnoftheancients.common.generation.portal.util.OffsetsUtil;
+import com.artur114.returnoftheancients.common.generation.portal.util.PortalOffsets;
 import com.artur114.returnoftheancients.common.util.ArrayListWriteToNBT;
 import com.artur114.returnoftheancients.common.util.TerrainAnalyzer;
 import com.artur114.returnoftheancients.common.util.context.MethodContext;
@@ -36,7 +36,7 @@ import java.util.Random;
 // TODO: 22.02.2025 Доделать структуры
 // TODO: 22.02.2025 Сделать сломанные контролеры святилища
 // TODO: 25.02.2025 Сделать исследования
-public class AncientPortalNaturalGeneration extends AncientPortal {
+public class AncientPortalNaturalGen extends AncientPortal {
     private static final int portalSize = 16;
 
     private ArrayListWriteToNBT<AncientSanctuary> sanctuaries;
@@ -44,7 +44,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
     private final LightManager lightManager;
     private boolean isActive = false;
 
-    public AncientPortalNaturalGeneration(MinecraftServer server, int dimension, int chunkX, int chunkZ) {
+    public AncientPortalNaturalGen(MinecraftServer server, int dimension, int chunkX, int chunkZ) {
         super(server, dimension, chunkX, chunkZ, 0, AncientPortalsProcessor.getFreeId());
 
         this.genManager = new PortalGenManager(this, portalSize, 8);
@@ -54,7 +54,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
         this.lightManager = new LightManager(this);
     }
 
-    public AncientPortalNaturalGeneration(MinecraftServer server, NBTTagCompound nbt) {
+    public AncientPortalNaturalGen(MinecraftServer server, NBTTagCompound nbt) {
         super(server, nbt);
 
         this.genManager = new PortalGenManager(this, portalSize, 8);
@@ -105,7 +105,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
         UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
 
         blockPos.setPos(portalPos).setY(posY);
-        blockPos.offsetAndCallRunnable(OffsetsUtil.portalCollideOffsetsArray, (pos) -> {
+        blockPos.offsetAndCallRunnable(PortalOffsets.portalCollideOffsetsArray, (pos) -> {
             world.setBlockState(pos, state ? Blocks.AIR.getDefaultState() : BlocksTC.stoneEldritchTile.getDefaultState());
             BlockProtectHandler.setProtectState(world, pos, !state);
         });
@@ -207,7 +207,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
         private final GenAncientSpire genSpire = new GenAncientSpire();
         private final GenAncientArch genArch = new GenAncientArch();
         private final BlockPos[] basePosForArch = new BlockPos[4];
-        private final AncientPortalNaturalGeneration portal;
+        private final AncientPortalNaturalGen portal;
         private final int minSanctuaryGenRange;
         private final TerrainAnalyzer analyzer;
         private BlockPos[] sanctuaryPillars;
@@ -217,7 +217,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
         private final int chunkX;
         private final int chunkZ;
 
-        protected PortalGenManager(AncientPortalNaturalGeneration portal, int genRange, int minSanctuaryGenRange) {
+        protected PortalGenManager(AncientPortalNaturalGen portal, int genRange, int minSanctuaryGenRange) {
             this.rand = new Random(portal.world.getSeed() + portal.chunkX + portal.chunkZ);
             this.minSanctuaryGenRange = minSanctuaryGenRange;
             this.chunkX = portal.chunkX;
@@ -390,7 +390,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
         private final World world;
         private final int portalY;
 
-        private LightManager(AncientPortalNaturalGeneration portal) {
+        private LightManager(AncientPortalNaturalGen portal) {
             this.portalPos = portal.portalPos;
             this.portalY = portal.posY;
             this.world = portal.world;
@@ -444,7 +444,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
 
         private void inside4CornerOffsets(UltraMutableBlockPos pos, RunnableWithParam<UltraMutableBlockPos> run) {
             pos.pushPos();
-            BlockPos[] lightOffsets = OffsetsUtil.getCornerOffsets(2, 13);
+            BlockPos[] lightOffsets = PortalOffsets.getCornerOffsets(2, 13);
             for (int i = 0; i != 2; i++) {
                 int y;
                 if (i == 0) {
@@ -461,7 +461,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
 
         private void outside4CornerOffsets(UltraMutableBlockPos pos, RunnableWithParam<UltraMutableBlockPos> run) {
             pos.pushPos();
-            pos.addY(11).offsetAndCallRunnable(OffsetsUtil.getCornerOffsets(0, 15), run);
+            pos.addY(11).offsetAndCallRunnable(PortalOffsets.getCornerOffsets(0, 15), run);
             pos.popPos();
         }
 
@@ -487,7 +487,7 @@ public class AncientPortalNaturalGeneration extends AncientPortal {
                 }
 
                 pos.setY(y);
-                pos.offsetAndCallRunnable(OffsetsUtil.portalLightOffsets[range], run);
+                pos.offsetAndCallRunnable(PortalOffsets.portalLightOffsets[range], run);
             }
             pos.popPos();
         }

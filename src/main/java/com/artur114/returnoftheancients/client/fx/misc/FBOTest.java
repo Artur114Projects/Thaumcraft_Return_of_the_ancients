@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.client.fx.misc;
 
-import com.artur114.returnoftheancients.client.fx.shader.InitShaders;
+import com.artur114.returnoftheancients.client.init.InitShaders;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;

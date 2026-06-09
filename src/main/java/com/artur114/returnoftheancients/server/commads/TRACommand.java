@@ -1,10 +1,8 @@
 package com.artur114.returnoftheancients.server.commads;
 
-import com.artur114.returnoftheancients.common.ancientworldlegacy.main.AncientWorld;
 import com.artur114.returnoftheancients.common.generation.portal.base.AncientPortalsProcessor;
 import com.artur114.returnoftheancients.common.misc.RotAWorldData;
 import com.artur114.returnoftheancients.common.referense.Referense;
-import com.artur114.returnoftheancients.common.ancientworldlegacy.util.interfaces.IALGS;
 import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.command.*;
@@ -43,19 +41,13 @@ public class TRACommand extends CommandBase {
             return;
         }
         switch (args[0]) {
-            case "updatedropprimalblade":
-                RotAWorldData.get().saveData.setBoolean(IALGS.isPrimalBladeDropKey, false);
-                RotAWorldData.get().markDirty();
-//                WorldDataFields.reload();
-                player.sendMessage(new TextComponentString("Drop is update!").setStyle(new Style().setColor(TextFormatting.GREEN)));
-                break;
             case "seed":
-                long seed = AncientWorld.getSeed(player);
-                if (seed == 0) {
-                    player.sendMessage(new TextComponentString("you don't belong to any labyrinth").setStyle(new Style().setColor(TextFormatting.RED)));
-                } else {
-                    player.sendMessage(new TextComponentString(seed + "").setStyle(new Style().setColor(TextFormatting.GREEN)));
-                }
+//                long seed = AncientWorld.getSeed(player);
+//                if (seed == 0) {
+//                    player.sendMessage(new TextComponentString("you don't belong to any labyrinth").setStyle(new Style().setColor(TextFormatting.RED)));
+//                } else {
+//                    player.sendMessage(new TextComponentString(seed + "").setStyle(new Style().setColor(TextFormatting.GREEN)));
+//                }
                 break;
             case "tptoportal":
                 UltraMutableBlockPos pos;

@@ -1,18 +1,19 @@
-package com.artur114.returnoftheancients.common.generation.biomes;
+package com.artur114.returnoftheancients.common.biomes;
 
 import com.artur114.bananalib.mc.BananaMC;
-import com.artur114.bananalib.mc.math.m3d.vec.IPosMc3I;
-import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
-import com.artur114.returnoftheancients.common.generation.biomes.decorate.*;
-import com.artur114.returnoftheancients.common.generation.biomes.decorate.*;
+import com.artur114.bananalib.mc.base.BBiomeBase;
+import com.artur114.bananalib.mc.register.interf.ILoadStageInit;
+import com.artur114.returnoftheancients.common.biomes.decorate.*;
 import com.artur114.returnoftheancients.common.handlers.MiscHandler;
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import com.artur114.returnoftheancients.common.init.InitBlocks;
 import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
+import com.artur114.returnoftheancients.main.ThaumicRotA;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
@@ -24,20 +25,19 @@ import thaumcraft.common.entities.monster.tainted.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BiomeTaint extends BiomeBase {
+public class BiomeTaint extends BBiomeBase implements ILoadStageInit {
     private static final WorldGensMisc WORLD_GENS_MISC = new WorldGensMisc();
+    public static int taintChunks = 0;
 
     private final WorldGenAbstractTree BIG_TREE_TAINT_FEATURE = new WorldGenTaintBigTree(false);
     private final WorldGenAbstractTree INFERNAL_SPIRES = new WorldGenInfernalSpires(false);
     private final WorldGenAbstractTree TREE_TAINT_FEATURE = new WorldGenTaintTree(false);
     private final WorldGenAbstractTree ROTTEN_SPIRES = new WorldGenRottenSpires(false);
 
-
     public final TaintType type;
-    public static int taintChunks = 0;
 
     public BiomeTaint(String registryName, BiomeProperties properties, EBiome eBiome, TaintType type) {
-        super(registryName, properties, eBiome);
+        super(new ResourceLocation(ThaumicRotA.MODID, registryName), properties, eBiome);
         this.spawnableWaterCreatureList.clear();
         this.spawnableCaveCreatureList.clear();
         this.decorator.generateFalls = false;
@@ -107,7 +107,7 @@ public class BiomeTaint extends BiomeBase {
             for (int i = 0; i < 16; ++i) {
                 for (int j = 0; j < 16; ++j) {
                     byte k = biomes[j + i * 16];
-                    if (MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_L_ID, k)) {
+                    if (BananaMC.biomeHasType(k, InitBiomes.TAINT_TYPE_L)) {
                         taintBiomeArea.add((short) ((i << 8) | (j & 0xFF)));
                     }
                 }
@@ -146,12 +146,12 @@ public class BiomeTaint extends BiomeBase {
         for (int i = 0; i != 16; i++) {
             for (int j = 0; j != 16; j++) {
                 byte k = biomeArray[i + j * 16];
-                if (MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_L_ID, k)) {
+                if (BananaMC.biomeHasType(k, InitBiomes.TAINT_TYPE_L)) {
                     blockPos.pushPos();
                     blockPos.add(i, 0, j);
                     decorateNormal(worldIn, random, blockPos, k);
                     blockPos.popPos();
-                } else if (MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_EDGE_ID, k)) {
+                } else if (BananaMC.biomeHasType(k, InitBiomes.TAINT_TYPE_EDGE)) {
                     blockPos.pushPos();
                     blockPos.add(i, 0, j);
                     decorateEdge(worldIn, random, blockPos, k);
@@ -160,7 +160,7 @@ public class BiomeTaint extends BiomeBase {
             }
         }
 
-        if (MiscHandler.fastCheckChunkContainsAnyOnBiomeArray(chunk, InitBiome.TAINT_BIOMES_L_ID)) {
+        if (MiscHandler.fastCheckChunkContainsBiomeType(chunk, InitBiomes.TAINT_TYPE_L)) {
             decorateChunkNormal(worldIn, random,  blockPos);
         }
 
@@ -187,8 +187,6 @@ public class BiomeTaint extends BiomeBase {
     }
 
     public void registerBiomeP2() {
-        this.fillerBlock = InitBlocks.TAINT_VOID_STONE.getDefaultState();
-        this.topBlock = BlocksTC.taintSoil.getDefaultState();
     }
 
     public void registerBiomeP2(IBlockState topBlock, IBlockState fillerBlock) {
@@ -228,6 +226,20 @@ public class BiomeTaint extends BiomeBase {
             return INFERNAL_SPIRES;
         } else {
             return TREE_TAINT_FEATURE;
+        }
+    }
+
+    @Override
+    public void onInit() {
+        switch (this.type) {
+            case NORMAL:
+            case HILLS:
+                this.fillerBlock = InitBlocks.TAINT_VOID_STONE.getDefaultState();
+                this.topBlock = BlocksTC.taintSoil.getDefaultState();
+            break;
+            default:
+                this.fillerBlock = InitBlocks.TAINT_VOID_STONE.getDefaultState();
+                this.topBlock = InitBlocks.TAINT_VOID_STONE.getDefaultState();
         }
     }
 

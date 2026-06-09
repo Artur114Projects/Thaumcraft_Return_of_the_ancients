@@ -7,10 +7,10 @@ import java.util.Map;
 
 @IFMLLoadingPlugin.MCVersion("1.12.2")
 @IFMLLoadingPlugin.Name("Thaumcraft: Return of the Ancients core")
-public class FMLLoadingPluginTRA implements IFMLLoadingPlugin {
+public class ThaumicRotACore implements IFMLLoadingPlugin {
     @Override
     public String[] getASMTransformerClass() {
-        return new String[] {"com.artur.returnoftheancients.transform.TransformerTRA"};
+        return new String[] {};
     }
 
     @Override

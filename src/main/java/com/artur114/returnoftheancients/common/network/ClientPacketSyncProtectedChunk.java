@@ -2,7 +2,7 @@ package com.artur114.returnoftheancients.common.network;
 
 import com.artur114.returnoftheancients.common.blockprotect.IProtectedChunk;
 import com.artur114.returnoftheancients.common.blockprotect.client.IClientProtectedChunk;
-import com.artur114.returnoftheancients.common.capabilities.TRACapabilities;
+import com.artur114.returnoftheancients.common.init.InitCapabilities;
 import com.artur114.returnoftheancients.common.handlers.MiscHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -57,7 +57,7 @@ public class ClientPacketSyncProtectedChunk implements IMessage {
                 Minecraft mc = Minecraft.getMinecraft();
                 if (mc.world.provider.getDimension() == message.dimension) {
                     Chunk chunk = mc.world.getChunkFromChunkCoords(message.chunk.x, message.chunk.z);
-                    IProtectedChunk protectedChunk = chunk.getCapability(TRACapabilities.PROTECTED_CHUNK, null);
+                    IProtectedChunk protectedChunk = chunk.getCapability(InitCapabilities.PROTECTED_CHUNK, null);
                     if (protectedChunk instanceof IClientProtectedChunk) {
                         ((IClientProtectedChunk) protectedChunk).processSyncData(message.data);
                     }

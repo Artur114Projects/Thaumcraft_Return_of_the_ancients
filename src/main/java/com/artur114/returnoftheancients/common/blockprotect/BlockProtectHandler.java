@@ -1,7 +1,7 @@
 package com.artur114.returnoftheancients.common.blockprotect;
 
 import com.artur114.returnoftheancients.common.blockprotect.server.IServerProtectedChunk;
-import com.artur114.returnoftheancients.common.capabilities.TRACapabilities;
+import com.artur114.returnoftheancients.common.init.InitCapabilities;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -19,7 +19,7 @@ public class BlockProtectHandler {
             return false;
         }
 
-        IProtectedChunk protectedChunk = chunk.getCapability(TRACapabilities.PROTECTED_CHUNK, null);
+        IProtectedChunk protectedChunk = chunk.getCapability(InitCapabilities.PROTECTED_CHUNK, null);
 
         if (protectedChunk != null) {
             return protectedChunk.hasProtect(pos);
@@ -42,7 +42,7 @@ public class BlockProtectHandler {
         }
 
         Chunk chunk = world.getChunkFromBlockCoords(pos);
-        IProtectedChunk protectedChunk = chunk.getCapability(TRACapabilities.PROTECTED_CHUNK, null);
+        IProtectedChunk protectedChunk = chunk.getCapability(InitCapabilities.PROTECTED_CHUNK, null);
 
         ((IServerProtectedChunk) protectedChunk).protect(pos);
     }
@@ -53,7 +53,7 @@ public class BlockProtectHandler {
         }
 
         Chunk chunk = world.getChunkFromBlockCoords(pos);
-        IProtectedChunk protectedChunk = chunk.getCapability(TRACapabilities.PROTECTED_CHUNK, null);
+        IProtectedChunk protectedChunk = chunk.getCapability(InitCapabilities.PROTECTED_CHUNK, null);
 
         ((IServerProtectedChunk) protectedChunk).unProtect(pos);
     }
@@ -61,7 +61,7 @@ public class BlockProtectHandler {
 
     public static void protectAllBlocksOnChunk(World world, ChunkPos pos, Block... blocks) {
         Chunk chunk = world.getChunkFromChunkCoords(pos.x, pos.z);
-        IProtectedChunk chunkP = chunk.getCapability(TRACapabilities.PROTECTED_CHUNK, null);
+        IProtectedChunk chunkP = chunk.getCapability(InitCapabilities.PROTECTED_CHUNK, null);
 
         if (!(chunkP instanceof IServerProtectedChunk)) {
             return;

@@ -1,5 +1,6 @@
 package com.artur114.returnoftheancients.client.fx.shader;
 
+import com.artur114.returnoftheancients.client.init.InitShaders;
 import com.artur114.returnoftheancients.client.util.RenderHandler;
 import com.artur114.returnoftheancients.common.util.math.BoundingBox;
 import net.minecraft.client.Minecraft;

@@ -1,7 +1,7 @@
 package com.artur114.returnoftheancients.common.energy.system;
 
 import com.artur114.returnoftheancients.common.capabilities.GenericCapProviderNS;
-import com.artur114.returnoftheancients.common.capabilities.TRACapabilities;
+import com.artur114.returnoftheancients.common.init.InitCapabilities;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -18,7 +18,7 @@ public class EnergySystemsEventsHandler {
 
     @SubscribeEvent
     public static void tickEventWorldTickEvent(TickEvent.WorldTickEvent e) {
-        EnergySystemsManager manager = e.world.getCapability(TRACapabilities.ENERGY_SYSTEMS_MANAGER, null);
+        EnergySystemsManager manager = e.world.getCapability(InitCapabilities.ENERGY_SYSTEMS_MANAGER, null);
         if (manager != null) {
             manager.update(e.phase == TickEvent.Phase.START);
         }
@@ -30,7 +30,7 @@ public class EnergySystemsEventsHandler {
         if (Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().player == null || Minecraft.getMinecraft().isGamePaused()) {
             return;
         }
-        EnergySystemsManager manager = Minecraft.getMinecraft().world.getCapability(TRACapabilities.ENERGY_SYSTEMS_MANAGER, null);
+        EnergySystemsManager manager = Minecraft.getMinecraft().world.getCapability(InitCapabilities.ENERGY_SYSTEMS_MANAGER, null);
         if (manager != null) {
             manager.update(e.phase == TickEvent.Phase.START);
         }
@@ -38,6 +38,6 @@ public class EnergySystemsEventsHandler {
 
     @SubscribeEvent
     public static void attachCapabilitiesWorld(AttachCapabilitiesEvent<World> e) {
-        e.addCapability(new ResourceLocation(Referense.MODID, "energy_systems_manager"), new GenericCapProviderNS<>(new EnergySystemsManager(e.getObject()), TRACapabilities.ENERGY_SYSTEMS_MANAGER));
+        e.addCapability(new ResourceLocation(Referense.MODID, "energy_systems_manager"), new GenericCapProviderNS<>(new EnergySystemsManager(e.getObject()), InitCapabilities.ENERGY_SYSTEMS_MANAGER));
     }
 }

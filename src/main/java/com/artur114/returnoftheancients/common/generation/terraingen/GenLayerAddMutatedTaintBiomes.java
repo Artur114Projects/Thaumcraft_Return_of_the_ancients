@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.common.generation.terraingen;
 
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
@@ -17,10 +17,10 @@ public class GenLayerAddMutatedTaintBiomes extends GenLayer {
         int[] aint1 = this.parent.getInts(areaX - 1, areaY - 1, areaWidth + 2, areaHeight + 2);
         int[] aint = IntCache.getIntCache(areaWidth * areaHeight);
 
-        int mountainsId = Biome.getIdForBiome(InitBiome.TAINT_MOUNTAINS);
-        int wastelandId = Biome.getIdForBiome(InitBiome.TAINT_WASTELAND);
-        int taintId = Biome.getIdForBiome(InitBiome.TAINT);
-        int seaId = Biome.getIdForBiome(InitBiome.TAINT_SEA);
+        int mountainsId = Biome.getIdForBiome(InitBiomes.TAINT_MOUNTAINS);
+        int wastelandId = Biome.getIdForBiome(InitBiomes.TAINT_WASTELAND);
+        int taintId = Biome.getIdForBiome(InitBiomes.TAINT);
+        int seaId = Biome.getIdForBiome(InitBiomes.TAINT_SEA);
 
         for (int j = 0; j < areaHeight; j++) {
             for (int i = 0; i < areaWidth; i++) {
@@ -43,7 +43,7 @@ public class GenLayerAddMutatedTaintBiomes extends GenLayer {
 
                     this.initChunkSeed(x, y);
                     if (j3 == mountainsId && i4 == mountainsId && l1 == mountainsId && k2 == mountainsId && this.nextInt(1) == 0) {
-                        aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_EXTREME_MOUNTAINS);
+                        aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiomes.TAINT_EXTREME_MOUNTAINS);
                     }
                 }
             }

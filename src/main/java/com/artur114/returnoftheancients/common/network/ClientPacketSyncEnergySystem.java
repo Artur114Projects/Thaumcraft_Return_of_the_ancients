@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.common.network;
 
-import com.artur114.returnoftheancients.common.capabilities.TRACapabilities;
+import com.artur114.returnoftheancients.common.init.InitCapabilities;
 import com.artur114.returnoftheancients.common.energy.bases.tile.ITileEnergy;
 import com.artur114.returnoftheancients.common.energy.system.EnergySystemsManager;
 import com.artur114.returnoftheancients.main.ThaumicRotA;
@@ -34,7 +34,7 @@ public class ClientPacketSyncEnergySystem extends NBTPacketBase {
                     BlockPos tilePos = BlockPos.fromLong(data.getLong("onBlockDestroyed"));
                     TileEntity tileRaw = world.getTileEntity(tilePos);
                     if (tileRaw instanceof ITileEnergy) {
-                        EnergySystemsManager manager = world.getCapability(TRACapabilities.ENERGY_SYSTEMS_MANAGER, null);
+                        EnergySystemsManager manager = world.getCapability(InitCapabilities.ENERGY_SYSTEMS_MANAGER, null);
                         if (manager != null) manager.onBlockDestroyed((ITileEnergy) tileRaw);
                     }
                 }

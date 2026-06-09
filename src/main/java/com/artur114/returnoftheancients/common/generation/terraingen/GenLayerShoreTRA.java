@@ -2,7 +2,7 @@ package com.artur114.returnoftheancients.common.generation.terraingen;
 
 
 import com.artur114.returnoftheancients.common.handlers.MiscHandler;
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
@@ -62,7 +62,7 @@ public class GenLayerShoreTRA extends GenLayer {
                         this.replaceIfNeighborOcean(aint, aint1, j, i, areaWidth, k, Biome.getIdForBiome(Biomes.COLD_BEACH));
                     } else if (k != Biome.getIdForBiome(Biomes.MESA) && k != Biome.getIdForBiome(Biomes.MESA_ROCK)) {
                         if (k != Biome.getIdForBiome(Biomes.OCEAN) && k != Biome.getIdForBiome(Biomes.DEEP_OCEAN) && k != Biome.getIdForBiome(Biomes.RIVER) && k != Biome.getIdForBiome(Biomes.SWAMPLAND)) {
-                            if (!MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_INT_ID, k)) {
+                            if (!this.isTaint(k)) {
                                 int j3 = aint[j1 + 0 + (i1 - 1) * areaWidth1];
                                 int i4 = aint[j1 + 1 + (i1 + 0) * areaWidth1];
                                 int l1 = aint[j1 - 1 + (i1 + 0) * areaWidth1];
@@ -77,7 +77,7 @@ public class GenLayerShoreTRA extends GenLayer {
                                 if (isAllBiomesOnRangeTaint0(aint, i1, j1, areaWidth1, 2)) { // my
                                     aint1[j + i * areaWidth] = k;
                                 } else {
-                                    aint1[j + i * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_EDGE);
+                                    aint1[j + i * areaWidth] = Biome.getIdForBiome(InitBiomes.TAINT_EDGE);
                                 }
                             }
                         } else {
@@ -183,9 +183,7 @@ public class GenLayerShoreTRA extends GenLayer {
 
     private boolean isTaint(int biomeIDA) {
         Biome biome = Biome.getBiome(biomeIDA);
-        if (biome == null) {
-            return false;
-        }
-        return BiomeDictionary.hasType(biome, InitBiome.TAINT_TYPE);
+        if (biome == null) return false;
+        return BiomeDictionary.hasType(biome, InitBiomes.TAINT_TYPE);
     }
 }

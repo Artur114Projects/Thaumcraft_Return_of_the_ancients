@@ -9,7 +9,7 @@ import com.artur114.returnoftheancients.common.ancientworld.system.utils.Ancient
 import com.artur114.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur114.returnoftheancients.client.fx.particle.ParticleAncientPortal;
 import com.artur114.returnoftheancients.common.generation.portal.base.client.ClientAncientPortal;
-import com.artur114.returnoftheancients.common.generation.portal.util.OffsetsUtil;
+import com.artur114.returnoftheancients.common.generation.portal.util.PortalOffsets;
 import com.artur114.returnoftheancients.common.structurebuilder.StructuresBuildManager;
 import com.artur114.returnoftheancients.common.tileentity.interf.ITileDoor;
 import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
@@ -136,7 +136,7 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
             if (util.getY() > y + 2 && util.getY() < y + 16) {
                 continue;
             }
-            for (BlockPos offset : OffsetsUtil.portalCollideOffsetsArray) {
+            for (BlockPos offset : PortalOffsets.portalCollideOffsetsArray) {
                 if (rand.nextInt(16) == 0) {
                     util.offsetAndCallRunnable(offset, offsetPos -> {
                         mc.effectRenderer.addEffect(new ParticleAncientPortal(world, offsetPos.getX() + rand.nextDouble(), offsetPos.getY() + rand.nextDouble(), offsetPos.getZ() + rand.nextDouble(), 0.2));
@@ -187,7 +187,7 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
         lBlockPos.setPos(pos);
         if (lBlockPos.getChunkX() == this.chunkPos.x && lBlockPos.getChunkZ() == this.chunkPos.z) {
             lBlockPos.setPos(this.chunkPos).setY(0);
-            for (BlockPos offset : OffsetsUtil.portalCollideOffsetsArray) {
+            for (BlockPos offset : PortalOffsets.portalCollideOffsetsArray) {
                 lBlockPos.pushPos();
                 if (lBlockPos.add(offset).equalsXZ(pos)) {
                     lBlockPos.popPos();

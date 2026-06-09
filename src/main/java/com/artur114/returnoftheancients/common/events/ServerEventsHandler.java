@@ -1,7 +1,6 @@
 package com.artur114.returnoftheancients.common.events;
 
 import com.artur114.returnoftheancients.common.ancientworld.system.base.AncientLayer1EventsHandler;
-import com.artur114.returnoftheancients.common.ancientworldlegacy.main.AncientWorld;
 import com.artur114.returnoftheancients.common.events.eventmanagers.PlayerInBiomeManager;
 import com.artur114.returnoftheancients.common.events.eventmanagers.ShortChunkLoadManager;
 import com.artur114.returnoftheancients.common.events.eventmanagers.SlowBuildManager;
@@ -10,15 +9,16 @@ import com.artur114.returnoftheancients.common.handlers.MiscHandler;
 import com.artur114.returnoftheancients.common.structurebuilder.StructuresBuildManager;
 import com.artur114.returnoftheancients.common.capabilities.IPlayerTimerCapability;
 import com.artur114.returnoftheancients.common.capabilities.PlayerTimer;
-import com.artur114.returnoftheancients.common.capabilities.TRACapabilities;
-import com.artur114.returnoftheancients.common.generation.biomes.BiomeTaint;
+import com.artur114.returnoftheancients.common.init.InitCapabilities;
+import com.artur114.returnoftheancients.common.biomes.BiomeTaint;
 import com.artur114.returnoftheancients.common.generation.portal.base.AncientPortalsProcessor;
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import com.artur114.returnoftheancients.common.misc.TRAConfigs;
 import com.artur114.returnoftheancients.common.misc.RotAWorldData;
 import com.artur114.returnoftheancients.common.blocks.BlockTpToAncientWorld;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
+import com.artur114.returnoftheancients.server.event.PublicSStoppingEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,14 +28,12 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.DifficultyChangeEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
@@ -76,8 +74,6 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
         if (!e.player.world.isRemote) {
             EntityPlayerMP player = (EntityPlayerMP) e.player;
 
-//            WorldDataFields.sync(player);
-            if (player.dimension == ancient_world_dim_id) AncientWorld.playerJoinBuss(player);
 
             if (newVersion) {
                 MiscHandler.sendMessageTranslate(player, Referense.MODID + ".message.new-version");
@@ -85,15 +81,6 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
             }
         }
     }
-
-    @SubscribeEvent
-    public static void playerLoggedOutEvent(PlayerEvent.PlayerLoggedOutEvent e) {
-        if (e.player instanceof EntityPlayerMP) {
-            EntityPlayerMP player = (EntityPlayerMP) e.player;
-            if (player.dimension == ancient_world_dim_id) AncientWorld.playerLoggedOutBus(player.getUniqueID());
-        }
-    }
-
 
     @SubscribeEvent
     public static void worldEventLoad(WorldEvent.Load e) {
@@ -125,14 +112,6 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
         System.out.println("new version!");
         worldData.saveData.setString("version", Referense.VERSION);
         worldData.markDirty();
-    }
-
-    @SubscribeEvent
-    public static void livingDeathEvent(LivingDeathEvent e) {
-        World world = e.getEntity().world;
-        if (!e.getEntity().isNonBoss() && world.provider.getDimension() == ancient_world_dim_id && !world.isRemote) {
-            AncientWorld.bossDeadBus(e.getEntity().getUniqueID());
-        }
     }
 
     @SubscribeEvent
@@ -222,7 +201,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
         if (e.player.ticksExisted % 20 == 0) {
             if (playerDimension != ancient_world_dim_id) {
                 if (e.player.getEntityData().getBoolean(BlockTpToAncientWorld.noCollisionNBT)) {
-                    IPlayerTimerCapability timer = TRACapabilities.getTimer(e.player);
+                    IPlayerTimerCapability timer = InitCapabilities.getTimer(e.player);
                     if (timer.getTime("notCollisionTime") >= 8 * 20) {
                         e.player.getEntityData().setBoolean(BlockTpToAncientWorld.noCollisionNBT, false);
                         timer.delete("notCollisionTime");
@@ -249,7 +228,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
     }
 
     private static void tickTimer(EntityPlayer player) {
-        IPlayerTimerCapability timer = TRACapabilities.getTimer(player);
+        IPlayerTimerCapability timer = InitCapabilities.getTimer(player);
         if (timer.hasTimer("recovery")) {
             timer.addTime(40, "recovery");
             if (timer.getTime("recovery") >= 10000) {
@@ -320,7 +299,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
                             continue;
                         }
 
-                        if (MiscHandler.fastCheckChunkContainsAnyOnBiomeArray(chunk, InitBiome.TAINT_BIOMES_L_ID)) {
+                        if (MiscHandler.fastCheckChunkContainsBiomeType(chunk, InitBiomes.TAINT_TYPE_L)) {
                             BiomeTaint.chunkHasBiomeUpdate(chunk);
                             taintChunks++;
                         }
@@ -343,7 +322,8 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
         SHORT_CHUNK_LOAD_MANAGER.worldEventSave(e);
     }
 
-    public static void unload() {
+    @SubscribeEvent
+    public static void unload(PublicSStoppingEvent e) {
         isAncientAreaSet = false;
         newVersion = false;
 

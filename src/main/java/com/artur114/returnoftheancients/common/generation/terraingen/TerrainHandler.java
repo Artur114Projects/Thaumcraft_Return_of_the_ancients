@@ -1,9 +1,9 @@
 package com.artur114.returnoftheancients.common.generation.terraingen;
 
 
-import com.artur114.returnoftheancients.common.generation.biomes.BiomeTaint;
+import com.artur114.returnoftheancients.common.biomes.BiomeTaint;
 import com.artur114.returnoftheancients.common.handlers.MiscHandler;
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
@@ -30,7 +30,7 @@ public class TerrainHandler {
         Chunk chunk = e.getWorld().getChunkFromChunkCoords(e.getChunkPos().x, e.getChunkPos().z);
         byte[] biomeArray = chunk.getBiomeArray();
 
-        if (MiscHandler.fullCheckChunkContainsAnyOnBiomeArray(chunk, InitBiome.TAINT_BIOMES_ID)) {
+        if (MiscHandler.fullCheckChunkContainsBiomeType(chunk, InitBiomes.TAINT_TYPE)) {
             ((WorldServer) e.getWorld()).getChunkProvider().loadChunk(e.getChunkPos().x, e.getChunkPos().z, () -> BiomeTaint.decorateCustom(e.getWorld(), e.getRand(), e.getChunkPos(), biomeArray));
         }
     }
@@ -51,7 +51,7 @@ public class TerrainHandler {
             return;
         }
 
-        if (MiscHandler.fastCheckChunkContainsAnyOnBiomeArray(chunk, InitBiome.TAINT_BIOMES_ID)) {
+        if (MiscHandler.fastCheckChunkContainsBiomeType(chunk, InitBiomes.TAINT_TYPE)) {
             e.setResult(Event.Result.DENY);
         }
     }

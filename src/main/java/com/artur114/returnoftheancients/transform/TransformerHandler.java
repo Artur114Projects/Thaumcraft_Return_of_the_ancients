@@ -1,8 +1,9 @@
 package com.artur114.returnoftheancients.transform;
 
+import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur114.returnoftheancients.common.handlers.MiscHandler;
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import com.artur114.returnoftheancients.common.misc.TRAConfigs;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import com.artur114.returnoftheancients.transform.apilegacy.base.ITransformer;
@@ -49,11 +50,11 @@ public class TransformerHandler {
     }
 
     public static boolean isEntityLivingBaseInTaintBiome(Item item, ItemStack stack, EntityLivingBase livingBase) {
-        return MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_ID, MiscHandler.getBiomeIdOnPos(livingBase.world, livingBase.getPosition()));
+        return BananaMC.biomeHasType(MiscHandler.getBiomeIdOnPos(livingBase.world, livingBase.getPosition()), InitBiomes.TAINT_TYPE);
     }
 
     public static boolean isTaintLBiomeInPos(World world, BlockPos pos) {
-        return MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_L_ID, world.getChunkFromBlockCoords(pos).getBiomeArray()[(pos.getX() & 15) + (pos.getZ() & 15) * 16]);
+        return BananaMC.biomeHasType(world.getChunkFromBlockCoords(pos).getBiomeArray()[(pos.getX() & 15) + (pos.getZ() & 15) * 16], InitBiomes.TAINT_TYPE_L);
     }
 
     public static boolean isClientPlayerInTaintBiome() {
@@ -69,7 +70,7 @@ public class TransformerHandler {
     }
 
     public static boolean isTaintEdgeBiome(World world, BlockPos pos) {
-        return MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_EDGE_ID, world.getChunkFromBlockCoords(pos).getBiomeArray()[(pos.getX() & 15) + (pos.getZ() & 15) * 16]);
+        return BananaMC.biomeHasType(world.getChunkFromBlockCoords(pos).getBiomeArray()[(pos.getX() & 15) + (pos.getZ() & 15) * 16], InitBiomes.TAINT_TYPE_EDGE);
     }
 
     public static void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
@@ -79,7 +80,7 @@ public class TransformerHandler {
     }
 
     public static boolean isNotCanSearchBiome(BiomeSearchWorker bsw) {
-        return !TRAConfigs.Any.debugMode && MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_ID, (byte) Biome.getIdForBiome(bsw.biome));
+        return !TRAConfigs.Any.debugMode && BananaMC.biomeHasType(bsw.biome, InitBiomes.TAINT_TYPE);
     }
 
     public static void fixedFogDensityEvent(EntityViewRenderEvent.RenderFogEvent event) {

@@ -2,7 +2,7 @@ package com.artur114.returnoftheancients.common.ancientworld.system.server;
 
 import com.artur114.returnoftheancients.common.ancientworld.system.base.IAncientLayer1Manager;
 import com.artur114.returnoftheancients.common.capabilities.GenericCapProviderS;
-import com.artur114.returnoftheancients.common.capabilities.TRACapabilities;
+import com.artur114.returnoftheancients.common.init.InitCapabilities;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class ServerAncientLayer1EM {
     public void attachCapabilitiesEventWorld(AttachCapabilitiesEvent<World> e) {
-        e.addCapability(new ResourceLocation(Referense.MODID, "ancient_layer_1"), new GenericCapProviderS<>(new ServerAncientLayer1Manager(e.getObject()), TRACapabilities.ANCIENT_LAYER_1_MANAGER));
+        e.addCapability(new ResourceLocation(Referense.MODID, "ancient_layer_1"), new GenericCapProviderS<>(new ServerAncientLayer1Manager(e.getObject()), InitCapabilities.ANCIENT_LAYER_1_MANAGER));
     }
 
     public void tickEventWorldTickEvent(TickEvent.WorldTickEvent e) {
@@ -27,7 +27,7 @@ public class ServerAncientLayer1EM {
             return;
         }
 
-        IAncientLayer1Manager managerServer = e.world.getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+        IAncientLayer1Manager managerServer = e.world.getCapability(InitCapabilities.ANCIENT_LAYER_1_MANAGER, null);
 
         if (managerServer != null) {
             managerServer.worldTick();
@@ -35,7 +35,7 @@ public class ServerAncientLayer1EM {
     }
 
     public void playerEventPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent e) {
-        IAncientLayer1Manager managerServer = e.player.world.getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+        IAncientLayer1Manager managerServer = e.player.world.getCapability(InitCapabilities.ANCIENT_LAYER_1_MANAGER, null);
 
         if (managerServer != null) {
             ((IServerAncientLayer1Manager) managerServer).onPlayerLoginIn((EntityPlayerMP) e.player);
@@ -43,7 +43,7 @@ public class ServerAncientLayer1EM {
     }
 
     public void playerEventPlayerLoggedOutEvent(PlayerEvent.PlayerLoggedOutEvent e) {
-        IAncientLayer1Manager managerServer = e.player.world.getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+        IAncientLayer1Manager managerServer = e.player.world.getCapability(InitCapabilities.ANCIENT_LAYER_1_MANAGER, null);
 
         if (managerServer != null) {
             ((IServerAncientLayer1Manager) managerServer).onPlayerLoginOut((EntityPlayerMP) e.player);
@@ -51,7 +51,7 @@ public class ServerAncientLayer1EM {
     }
 
     public boolean playerLost(EntityPlayerMP player) {
-        IAncientLayer1Manager managerServer = player.world.getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+        IAncientLayer1Manager managerServer = player.world.getCapability(InitCapabilities.ANCIENT_LAYER_1_MANAGER, null);
 
         if (managerServer != null) {
             return ((IServerAncientLayer1Manager) managerServer).onPlayerLost(player);
@@ -61,7 +61,7 @@ public class ServerAncientLayer1EM {
     }
 
     public boolean playerElope(EntityPlayerMP player) {
-        IAncientLayer1Manager managerServer = player.world.getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+        IAncientLayer1Manager managerServer = player.world.getCapability(InitCapabilities.ANCIENT_LAYER_1_MANAGER, null);
 
         if (managerServer != null) {
             return ((IServerAncientLayer1Manager) managerServer).onPlayerElope(player);
@@ -71,7 +71,7 @@ public class ServerAncientLayer1EM {
     }
 
     public boolean playerInterruptBuild(EntityPlayerMP player) {
-        IAncientLayer1Manager managerServer = player.world.getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+        IAncientLayer1Manager managerServer = player.world.getCapability(InitCapabilities.ANCIENT_LAYER_1_MANAGER, null);
 
         if (managerServer != null) {
             return ((IServerAncientLayer1Manager) managerServer).onPlayerInterruptBuild(player);
@@ -81,7 +81,7 @@ public class ServerAncientLayer1EM {
     }
 
     public void chunkEventUnload(ChunkEvent.Unload e) {
-        IAncientLayer1Manager managerServer = e.getWorld().getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+        IAncientLayer1Manager managerServer = e.getWorld().getCapability(InitCapabilities.ANCIENT_LAYER_1_MANAGER, null);
 
         if (managerServer != null) {
             for (ClassInheritanceMultiMap<Entity> entity : e.getChunk().getEntityLists()) {
@@ -93,7 +93,7 @@ public class ServerAncientLayer1EM {
     }
 
     public boolean entityJoinWorldEvent(EntityJoinWorldEvent e) {
-        IAncientLayer1Manager managerServer = e.getWorld().getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+        IAncientLayer1Manager managerServer = e.getWorld().getCapability(InitCapabilities.ANCIENT_LAYER_1_MANAGER, null);
         boolean isLiving = e.getEntity() instanceof EntityLiving;
 
         if (managerServer != null && isLiving) {
@@ -104,7 +104,7 @@ public class ServerAncientLayer1EM {
     }
 
     public void livingDeathEvent(LivingDeathEvent e) {
-        IAncientLayer1Manager managerServer = e.getEntity().world.getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+        IAncientLayer1Manager managerServer = e.getEntity().world.getCapability(InitCapabilities.ANCIENT_LAYER_1_MANAGER, null);
 
         if (managerServer != null && e.getEntity() instanceof EntityLiving) {
             ((IServerAncientLayer1Manager) managerServer).onEntityDead((EntityLiving) e.getEntityLiving());

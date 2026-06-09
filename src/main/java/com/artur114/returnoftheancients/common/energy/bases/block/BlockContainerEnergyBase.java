@@ -1,7 +1,7 @@
 package com.artur114.returnoftheancients.common.energy.bases.block;
 
 import com.artur114.returnoftheancients.common.blocks.BaseBlockContainer;
-import com.artur114.returnoftheancients.common.capabilities.TRACapabilities;
+import com.artur114.returnoftheancients.common.init.InitCapabilities;
 import com.artur114.returnoftheancients.common.energy.bases.tile.ITileEnergy;
 import com.artur114.returnoftheancients.common.energy.system.EnergySystemsManager;
 import net.minecraft.block.SoundType;
@@ -18,7 +18,7 @@ public abstract class BlockContainerEnergyBase<T extends TileEntity> extends Bas
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        EnergySystemsManager manager = worldIn.getCapability(TRACapabilities.ENERGY_SYSTEMS_MANAGER, null);
+        EnergySystemsManager manager = worldIn.getCapability(InitCapabilities.ENERGY_SYSTEMS_MANAGER, null);
         TileEntity tileRaw = worldIn.getTileEntity(pos);
         if (manager != null && tileRaw instanceof ITileEnergy) {
             manager.onBlockDestroyed((ITileEnergy) tileRaw);

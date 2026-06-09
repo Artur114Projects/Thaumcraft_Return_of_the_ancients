@@ -2,7 +2,7 @@ package com.artur114.returnoftheancients.common.blockprotect.server;
 
 import com.artur114.returnoftheancients.common.blockprotect.BlockProtectHandler;
 import com.artur114.returnoftheancients.common.capabilities.GenericCapProviderS;
-import com.artur114.returnoftheancients.common.capabilities.TRACapabilities;
+import com.artur114.returnoftheancients.common.init.InitCapabilities;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -58,13 +58,13 @@ public class ServerBlockProtectManager {
     }
 
     public void attachCapabilitiesEventChunk(AttachCapabilitiesEvent<Chunk> e) {
-        e.addCapability(new ResourceLocation(Referense.MODID, "protected_chunk"), new GenericCapProviderS<>(new ServerProtectedChunk(e.getObject().getPos(), e.getObject().getWorld().provider.getDimension()), TRACapabilities.PROTECTED_CHUNK));
+        e.addCapability(new ResourceLocation(Referense.MODID, "protected_chunk"), new GenericCapProviderS<>(new ServerProtectedChunk(e.getObject().getPos(), e.getObject().getWorld().provider.getDimension()), InitCapabilities.PROTECTED_CHUNK));
     }
 
     public void chunkWatchEventWatch(ChunkWatchEvent.Watch e) {
         Chunk chunk = e.getChunkInstance();
         if (chunk != null && !chunk.isEmpty()) {
-            IServerProtectedChunk protectedChunk = (IServerProtectedChunk) chunk.getCapability(TRACapabilities.PROTECTED_CHUNK, null);
+            IServerProtectedChunk protectedChunk = (IServerProtectedChunk) chunk.getCapability(InitCapabilities.PROTECTED_CHUNK, null);
             if (protectedChunk != null && protectedChunk.isChanged()) {
                 protectedChunk.syncToClient(e.getPlayer());
             }

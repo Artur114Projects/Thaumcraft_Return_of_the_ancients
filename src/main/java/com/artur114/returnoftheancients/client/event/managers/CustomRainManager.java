@@ -1,7 +1,7 @@
 package com.artur114.returnoftheancients.client.event.managers;
 
 import com.artur114.returnoftheancients.client.fx.particle.ParticleHeat;
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import com.artur114.returnoftheancients.common.init.InitDimensions;
 import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
 import net.minecraft.block.material.Material;
@@ -59,7 +59,7 @@ public class CustomRainManager {
 
                 Biome biome = world.getBiome(precipitationHeight);
 
-                if (precipitationHeight.getY() <= blockPos.getY() + 10 && precipitationHeight.getY() >= blockPos.getY() - 10 && (biome == InitBiome.TAINT_WASTELAND || biome == InitBiome.INFERNAL_CRATER)) {
+                if (precipitationHeight.getY() <= blockPos.getY() + 10 && precipitationHeight.getY() >= blockPos.getY() - 10 && (biome == InitBiomes.TAINT_WASTELAND || biome == InitBiomes.INFERNAL_CRATER)) {
                     blockPos.pushPos();
 
                     blockPos.setPos(precipitationHeight).down();
@@ -69,7 +69,7 @@ public class CustomRainManager {
                     AxisAlignedBB axisalignedbb = iblockstate.getBoundingBox(world, blockPos);
 
                     if (iblockstate.getMaterial() != Material.AIR && !iblockstate.getMaterial().isLiquid()) {
-                        EnumParticleTypes type = biome == InitBiome.INFERNAL_CRATER && random.nextFloat() < 0.25 ? EnumParticleTypes.FLAME : EnumParticleTypes.SMOKE_NORMAL;
+                        EnumParticleTypes type = biome == InitBiomes.INFERNAL_CRATER && random.nextFloat() < 0.25 ? EnumParticleTypes.FLAME : EnumParticleTypes.SMOKE_NORMAL;
                         mc.world.spawnParticle(type, (double)blockPos.getX() + d3, (double)((float)blockPos.getY() + 0.1F) + axisalignedbb.maxY, (double)blockPos.getZ() + d4, 0.0D, random.nextDouble() / 4, 0.0D);
                     }
 

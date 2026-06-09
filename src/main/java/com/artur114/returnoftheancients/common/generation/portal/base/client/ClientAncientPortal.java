@@ -4,7 +4,7 @@ import com.artur114.returnoftheancients.client.audio.SoundMovementElevator;
 import com.artur114.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur114.returnoftheancients.client.event.managers.movement.IMovementTask;
 import com.artur114.returnoftheancients.client.fx.particle.ParticleAncientPortal;
-import com.artur114.returnoftheancients.common.generation.portal.util.OffsetsUtil;
+import com.artur114.returnoftheancients.common.generation.portal.util.PortalOffsets;
 import com.artur114.returnoftheancients.common.util.math.MathUtils;
 import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
@@ -75,7 +75,7 @@ public class ClientAncientPortal {
         lBlockPos.setPos(pos);
         if (lBlockPos.getChunkX() == chunkX && lBlockPos.getChunkZ() == chunkZ) {
             lBlockPos.setPos(portalPos).setY(0);
-            for (BlockPos offset : OffsetsUtil.portalCollideOffsetsArray) {
+            for (BlockPos offset : PortalOffsets.portalCollideOffsetsArray) {
                 lBlockPos.pushPos();
                 if (lBlockPos.add(offset).equalsXZ(pos)) {
                     lBlockPos.popPos();
@@ -133,7 +133,7 @@ public class ClientAncientPortal {
                 if (blockPos.getY() >= posY || blockPos.getY() < 3) {
                     continue;
                 }
-                for (BlockPos offset : OffsetsUtil.portalCollideOffsetsArray) {
+                for (BlockPos offset : PortalOffsets.portalCollideOffsetsArray) {
                     if (random.nextInt(16) == 0) {
                         blockPos.offsetAndCallRunnable(offset, offsetPos -> {
                             mc.effectRenderer.addEffect(new ParticleAncientPortal(world, offsetPos.getX() + random.nextDouble(), offsetPos.getY() + random.nextDouble(), offsetPos.getZ() + random.nextDouble(), particlesSpeed));

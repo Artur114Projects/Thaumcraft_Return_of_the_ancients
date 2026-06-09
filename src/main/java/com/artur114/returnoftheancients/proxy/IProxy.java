@@ -1,11 +1,10 @@
 package com.artur114.returnoftheancients.proxy;
 
+import com.artur114.bananalib.mc.register.IRegisterBus;
 import net.minecraftforge.fml.common.event.*;
 
 public interface IProxy {
-    default void serverStarting(FMLServerStartingEvent e) {}
-    default void serverStopping(FMLServerStoppingEvent e) {}
-    void preInit(FMLPreInitializationEvent e);
-    void init(FMLInitializationEvent e);
-    void postInit(FMLPostInitializationEvent e);
+    void preInit(IRegisterBus bus, FMLPreInitializationEvent e);
+    void init(IRegisterBus bus, FMLInitializationEvent e);
+    void postInit(IRegisterBus bus, FMLPostInitializationEvent e);
 }

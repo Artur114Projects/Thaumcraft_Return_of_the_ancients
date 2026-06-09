@@ -28,7 +28,6 @@ public class ClientEventsHandler {
     public static final SoundsManager SOUNDS_MANAGER = new SoundsManager();
     public static final FogManager FOG_MANAGER = new FogManager();
 
-
     @SubscribeEvent
     public static void fogSetColor(EntityViewRenderEvent.FogColors e) {
         PLAYER_IN_BIOME_MANAGER.entityViewRenderEventFogColors(e);

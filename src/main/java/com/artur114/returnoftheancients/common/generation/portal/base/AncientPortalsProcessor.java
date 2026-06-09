@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.common.generation.portal.base;
 
-import com.artur114.returnoftheancients.common.generation.portal.naturalgen.AncientPortalNaturalGeneration;
+import com.artur114.returnoftheancients.common.generation.portal.naturalgen.AncientPortalNaturalGen;
 import com.artur114.returnoftheancients.common.generation.portal.AncientPortalOpening;
 import com.artur114.returnoftheancients.common.generation.terraingen.GenLayersHandler;
 import com.artur114.returnoftheancients.common.handlers.MiscHandler;
@@ -11,6 +11,7 @@ import com.artur114.returnoftheancients.common.misc.RotAWorldData;
 import com.artur114.returnoftheancients.common.network.ClientPacketSyncAncientPortals;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
+import com.artur114.returnoftheancients.server.event.PublicSStoppingEvent;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
@@ -88,7 +89,7 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
                         ChunkPos[] portalsPos = getAllPortalsPosOnDim(dimension);
 
                         for (ChunkPos pos : portalsPos) {
-                            AncientPortal portal = new AncientPortalNaturalGeneration(e.getWorld().getMinecraftServer(), dimension, pos.x, pos.z);
+                            AncientPortal portal = new AncientPortalNaturalGen(e.getWorld().getMinecraftServer(), dimension, pos.x, pos.z);
                             PORTALS.put(portal.id, portal);
                         }
 
@@ -227,7 +228,7 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
     public static AncientPortal loadPortal(MinecraftServer server, NBTTagCompound nbt) {
         switch (nbt.getInteger("portalTypeID")) {
             case 0:{
-                return new AncientPortalNaturalGeneration(server, nbt);
+                return new AncientPortalNaturalGen(server, nbt);
             }
             case 1:{
                 return new AncientPortalOpening(server, nbt);
@@ -316,7 +317,8 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
         if (TRAConfigs.Any.debugMode) System.out.println("Save portals finish " + nbt);
     }
 
-    public static void unload() {
+    @SubscribeEvent
+    public static void unload(PublicSStoppingEvent e) {
         PORTALS_GENERATION_POS.clear();
         LOADED_DIMENSIONS.clear();
         LOADED_PORTALS.clear();

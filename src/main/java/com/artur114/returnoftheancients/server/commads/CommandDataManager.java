@@ -2,7 +2,6 @@ package com.artur114.returnoftheancients.server.commads;
 
 import com.artur114.returnoftheancients.common.misc.RotAWorldData;
 
-import com.artur114.returnoftheancients.common.ancientworldlegacy.util.interfaces.IALGS;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -11,12 +10,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import org.jetbrains.annotations.NotNull;
 
-
-
 public class CommandDataManager extends CommandBase {
     String NAME = "data", USAGE = "/data";
-
-
 
     @Override
     public String getName() {
@@ -33,10 +28,6 @@ public class CommandDataManager extends CommandBase {
         EntityPlayerMP playerMP = getCommandSenderAsPlayer(sender);
         RotAWorldData worldData = RotAWorldData.get();
         if (args[0].equals("set") && args.length == 4) {
-            if (args[1].equals("setnodropprimalblade")) {
-                RotAWorldData.get().saveData.setBoolean(IALGS.isPrimalBladeDropKey, false);
-                return;
-            }
             boolean data = false;
             switch (args[3]) {
                 case "0":
@@ -68,11 +59,9 @@ public class CommandDataManager extends CommandBase {
         } else if (args[0].equals("help") && args.length == 1){
             playerMP.sendMessage(new TextComponentString("/data set dataType [key] [value]"));
             playerMP.sendMessage(new TextComponentString("/data get dataType [key]"));
-            playerMP.sendMessage(new TextComponentString("/data setnodropprimalblade"));
         } else {
             playerMP.sendMessage(new TextComponentString("/data set dataType [key] [value]"));
             playerMP.sendMessage(new TextComponentString("/data get dataType [key]"));
-            playerMP.sendMessage(new TextComponentString("/data setnodropprimalblade"));
         }
     }
 }

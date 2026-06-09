@@ -153,11 +153,11 @@ public class RegisterHandler {
 
 	@SubscribeEvent
 	public static void registerAspects(AspectRegistryEvent event) {
-		addAspectsPB(event);
-		addAspectsSB(event);
+		addAspectsPrimalB(event);
+		addAspectsSoulB(event);
 	}
 
-	private static void addAspectsPB(AspectRegistryEvent event) {
+	private static void addAspectsPrimalB(AspectRegistryEvent event) {
 		ItemStack myItem = new ItemStack(InitItems.PRIMAL_BLADE);
 
 		AspectList aspects = new AspectList();
@@ -170,7 +170,7 @@ public class RegisterHandler {
 		event.register.registerObjectTag(myItem, aspects);
 	}
 
-	private static void addAspectsSB(AspectRegistryEvent event) {
+	private static void addAspectsSoulB(AspectRegistryEvent event) {
 		ItemStack myItem = new ItemStack(InitItems.SOUL_BINDER);
 
 		AspectList aspects = new AspectList();

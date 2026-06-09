@@ -1,4 +1,4 @@
-package com.artur114.returnoftheancients.common.generation.biomes.decorate;
+package com.artur114.returnoftheancients.common.biomes.decorate;
 
 import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;

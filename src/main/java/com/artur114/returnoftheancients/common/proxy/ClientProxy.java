@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.common.proxy;
 
-import com.artur114.returnoftheancients.client.fx.shader.InitShaders;
+import com.artur114.returnoftheancients.client.init.InitShaders;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
@@ -19,8 +19,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
-
-        InitShaders.init();
     }
 
     @Override

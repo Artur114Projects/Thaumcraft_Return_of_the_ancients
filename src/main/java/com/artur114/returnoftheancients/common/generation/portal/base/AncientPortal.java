@@ -4,9 +4,8 @@ import com.artur114.returnoftheancients.common.ancientworld.system.base.AncientL
 import com.artur114.returnoftheancients.common.structurebuilder.StructuresBuildManager;
 import com.artur114.returnoftheancients.common.blocks.BlockTpToAncientWorld;
 import com.artur114.returnoftheancients.common.capabilities.IPlayerTimerCapability;
-import com.artur114.returnoftheancients.common.capabilities.TRACapabilities;
-import com.artur114.returnoftheancients.common.generation.portal.util.OffsetsUtil;
-import com.artur114.returnoftheancients.common.generation.portal.util.interfaces.IExplore;
+import com.artur114.returnoftheancients.common.init.InitCapabilities;
+import com.artur114.returnoftheancients.common.generation.portal.util.PortalOffsets;
 import com.artur114.returnoftheancients.common.handlers.TeleportHandler;
 import com.artur114.returnoftheancients.common.handlers.MiscHandler;
 import com.artur114.returnoftheancients.common.init.InitBlocks;
@@ -37,7 +36,7 @@ public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025
 
 
     protected final UltraMutableBlockPos mPos = new UltraMutableBlockPos();
-    private final List<IExplore> explosionList = new ArrayList<>();
+    private final List<Runnable> explosionList = new ArrayList<>();
     private boolean isRequestToUpdateOnClient = false;
     private boolean isExploded = false;
     public final ChunkPos portalPos;
@@ -104,7 +103,7 @@ public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025
                 isExploded = true;
                 return;
             }
-            explosionList.get(exploreIndex).explore();
+            explosionList.get(exploreIndex).run();
             exploreIndex++;
         }
     }
@@ -168,7 +167,7 @@ public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025
     protected static void onPlayerTpToHome(EntityPlayerMP player) {
         if (!ThaumcraftCapabilities.knowsResearchStrict(player, "DEAD")) {
             MiscHandler.researchAndSendMessage(player, "DEAD", Referense.MODID + ".text.dead");
-            IPlayerTimerCapability timer = TRACapabilities.getTimer(player);
+            IPlayerTimerCapability timer = InitCapabilities.getTimer(player);
             timer.createTimer("recovery");
         }
     }
@@ -208,7 +207,7 @@ public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025
         if (x >> 4 == chunkX && z >> 4 == chunkZ) {
             mPos.pushPos();
             mPos.setPos(portalPos);
-            for (BlockPos pos : OffsetsUtil.portalCollideOffsetsArray) {
+            for (BlockPos pos : PortalOffsets.portalCollideOffsetsArray) {
                 mPos.pushPos();
                 mPos.add(pos);
                 if (mPos.getX() == x && mPos.getZ() == z) {

@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.common.generation.worlds;
 
-import com.artur114.returnoftheancients.common.generation.chunkgenerators.ChunkGeneratorAncientWorld;
+import com.artur114.returnoftheancients.common.generation.chunkgens.ChunkGenAncientWorld;
 import com.artur114.returnoftheancients.common.init.InitDimensions;
 import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.util.math.BlockPos;
@@ -29,7 +29,7 @@ public class WorldProviderAncientWorld extends WorldProvider {
 
     @Override
     public @NotNull IChunkGenerator createChunkGenerator() {
-        return new ChunkGeneratorAncientWorld(this.world);
+        return new ChunkGenAncientWorld(this.world);
     }
 
     @Override

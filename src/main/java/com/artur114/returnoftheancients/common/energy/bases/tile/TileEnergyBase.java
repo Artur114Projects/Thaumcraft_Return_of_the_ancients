@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.common.energy.bases.tile;
 
-import com.artur114.returnoftheancients.common.capabilities.TRACapabilities;
+import com.artur114.returnoftheancients.common.init.InitCapabilities;
 import com.artur114.returnoftheancients.common.energy.system.EnergySystemsManager;
 import com.artur114.returnoftheancients.common.tileentity.TileBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -47,7 +47,7 @@ public abstract class TileEnergyBase extends TileBase implements ITileEnergy {
         }
 
         if (nbt.getBoolean("isLoaded")) {
-            EnergySystemsManager manager = this.world.getCapability(TRACapabilities.ENERGY_SYSTEMS_MANAGER, null);
+            EnergySystemsManager manager = this.world.getCapability(InitCapabilities.ENERGY_SYSTEMS_MANAGER, null);
             if (manager != null) manager.onTileLoad(this);
         }
     }
@@ -56,7 +56,7 @@ public abstract class TileEnergyBase extends TileBase implements ITileEnergy {
     public void onLoad() {
         if (!this.world.isRemote) {
             if (this.networkId == -1) this.isAdded = true;
-            EnergySystemsManager manager = this.world.getCapability(TRACapabilities.ENERGY_SYSTEMS_MANAGER, null);
+            EnergySystemsManager manager = this.world.getCapability(InitCapabilities.ENERGY_SYSTEMS_MANAGER, null);
             if (manager != null) manager.onTileLoad(this);
             this.isLoaded = true;
         }
@@ -64,7 +64,7 @@ public abstract class TileEnergyBase extends TileBase implements ITileEnergy {
 
     @Override
     public void onChunkUnload() {
-        EnergySystemsManager manager = this.world.getCapability(TRACapabilities.ENERGY_SYSTEMS_MANAGER, null);
+        EnergySystemsManager manager = this.world.getCapability(InitCapabilities.ENERGY_SYSTEMS_MANAGER, null);
         if (manager != null) manager.onTileUnload(this);
     }
 
@@ -72,7 +72,7 @@ public abstract class TileEnergyBase extends TileBase implements ITileEnergy {
     public void invalidate() {
         super.invalidate();
         if (this.world.isRemote) {
-            EnergySystemsManager manager = this.world.getCapability(TRACapabilities.ENERGY_SYSTEMS_MANAGER, null);
+            EnergySystemsManager manager = this.world.getCapability(InitCapabilities.ENERGY_SYSTEMS_MANAGER, null);
             if (manager != null) manager.onBlockDestroyed(this);
         }
     }

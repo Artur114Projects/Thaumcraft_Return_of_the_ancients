@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.common.generation.terraingen;
 
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
@@ -16,10 +16,10 @@ public class GenLayerAddSmallTaintBiomes extends GenLayerWithPortalsPos {
         int[] aint1 = this.parent.getInts(areaX - 4, areaY - 4, areaWidth + 8, areaHeight + 8);
         int[] aint = IntCache.getIntCache(areaWidth * areaHeight);
 
-        int taintId = Biome.getIdForBiome(InitBiome.TAINT);
-        int seaId = Biome.getIdForBiome(InitBiome.TAINT_SEA);
-        int mountainsId = Biome.getIdForBiome(InitBiome.TAINT_MOUNTAINS);
-        int wastelandId = Biome.getIdForBiome(InitBiome.TAINT_WASTELAND);
+        int taintId = Biome.getIdForBiome(InitBiomes.TAINT);
+        int seaId = Biome.getIdForBiome(InitBiomes.TAINT_SEA);
+        int mountainsId = Biome.getIdForBiome(InitBiomes.TAINT_MOUNTAINS);
+        int wastelandId = Biome.getIdForBiome(InitBiomes.TAINT_WASTELAND);
 
 
         for (int j = 0; j < areaHeight; j++) {
@@ -36,15 +36,15 @@ public class GenLayerAddSmallTaintBiomes extends GenLayerWithPortalsPos {
                 aint[i + j * areaWidth] = k;
 
                 if (GenLayersHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, 0, 2)) {
-                    aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_PLATEAU);
+                    aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiomes.TAINT_PLATEAU);
                 }
 
                 if (k == wastelandId && GenLayersHandler.isAllBiomesOnRangeEqualsInt0(aint1, wastelandId, i1, j1, areaWidth1, 4)) {
-                    aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.INFERNAL_CRATER);
+                    aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiomes.INFERNAL_CRATER);
                 }
 
                 if (k == wastelandId && GenLayersHandler.hasBiomeOnRange0(aint1, new int[] {taintId, mountainsId, seaId}, i1, j1, areaWidth1, 1)) {
-                    aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.PRE_TERMAL_ZONE);
+                    aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiomes.PRE_TERMAL_ZONE);
                 }
             }
         }

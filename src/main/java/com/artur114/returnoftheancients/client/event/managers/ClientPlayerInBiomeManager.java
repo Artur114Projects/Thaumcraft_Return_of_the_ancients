@@ -1,8 +1,9 @@
 package com.artur114.returnoftheancients.client.event.managers;
 
+import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur114.returnoftheancients.common.handlers.MiscHandler;
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import com.artur114.returnoftheancients.common.util.math.MathUtils;
 import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
@@ -39,13 +40,13 @@ public class ClientPlayerInBiomeManager {
 
 
     public ClientPlayerInBiomeManager() {
-        fogParamsMap.put(InitBiome.TAINT_SEA, new TaintFog(70.0F / 7.0F, 90.0F / 8.0F, 100.0F / 7.0F, 40));
-        fogParamsMap.put(InitBiome.TAINT_BEACH, new TaintFog(70.0F / 7.0F, 90.0F / 8.0F, 100.0F / 7.0F, 30));
-        fogParamsMap.put(InitBiome.TAINT_MOUNTAINS, new TaintFog(43.0F / 5.0f, 0, 61.0F / 5.0f, 30));
-        fogParamsMap.put(InitBiome.TAINT_EXTREME_MOUNTAINS, new TaintFog(43.0F / 8.0f, 0, 61.0F / 8.0f, 30));
-        fogParamsMap.put(InitBiome.INFERNAL_CRATER, new TaintFog(255.0F * 0.5F, 255.0F * 0.2F, 0, 80));
-        fogParamsMap.put(InitBiome.TAINT_WASTELAND, new TaintFog(255.0F * (0.5F / 8.0F), 255.0F * (0.2F / 8.0F), 2, 40));
-        fogParamsMap.put(InitBiome.PRE_TERMAL_ZONE, new TaintFog(255.0F * (0.5F / 16.0F), 255.0F * (0.2F / 16.0F), 2, 40));
+        fogParamsMap.put(InitBiomes.TAINT_SEA, new TaintFog(70.0F / 7.0F, 90.0F / 8.0F, 100.0F / 7.0F, 40));
+        fogParamsMap.put(InitBiomes.TAINT_BEACH, new TaintFog(70.0F / 7.0F, 90.0F / 8.0F, 100.0F / 7.0F, 30));
+        fogParamsMap.put(InitBiomes.TAINT_MOUNTAINS, new TaintFog(43.0F / 5.0f, 0, 61.0F / 5.0f, 30));
+        fogParamsMap.put(InitBiomes.TAINT_EXTREME_MOUNTAINS, new TaintFog(43.0F / 8.0f, 0, 61.0F / 8.0f, 30));
+        fogParamsMap.put(InitBiomes.INFERNAL_CRATER, new TaintFog(255.0F * 0.5F, 255.0F * 0.2F, 0, 80));
+        fogParamsMap.put(InitBiomes.TAINT_WASTELAND, new TaintFog(255.0F * (0.5F / 8.0F), 255.0F * (0.2F / 8.0F), 2, 40));
+        fogParamsMap.put(InitBiomes.PRE_TERMAL_ZONE, new TaintFog(255.0F * (0.5F / 16.0F), 255.0F * (0.2F / 16.0F), 2, 40));
     }
 
     public void entityViewRenderEventFogColors(EntityViewRenderEvent.FogColors e) {
@@ -83,7 +84,7 @@ public class ClientPlayerInBiomeManager {
             prevBiome = currentBiome;
             currentBiome = Biome.getBiome(currentBiomeId);
             isPrevBiomeTaint = isCurrentBiomeTaint;
-            isCurrentBiomeTaint = MiscHandler.arrayContains(InitBiome.TAINT_BIOMES_L_ID, currentBiomeId);
+            isCurrentBiomeTaint = BananaMC.biomeHasType(currentBiomeId, InitBiomes.TAINT_TYPE_L);
             if (lastId != currentBiomeId) {
                 onBiomeChanged(lastId, currentBiomeId);
             }
@@ -110,13 +111,13 @@ public class ClientPlayerInBiomeManager {
         EntityPlayer player = Minecraft.getMinecraft().player;
         WorldClient world = Minecraft.getMinecraft().world;
         FogManager.FogParams params = fogParamsMap.get(this.currentBiome);
-        if (this.currentBiome == InitBiome.TAINT_EDGE) {
+        if (this.currentBiome == InitBiomes.TAINT_EDGE) {
             params = new TaintEdgeFog();
         }
         if (params == null && this.isCurrentBiomeTaint) {
             params = this.taintFogParams;
         }
-        if (this.prevBiome == InitBiome.TAINT_EDGE && this.isCurrentBiomeTaint && player.posY - ultraBlockPos.setPos(player).setWorldY(world).getY() > 6) {
+        if (this.prevBiome == InitBiomes.TAINT_EDGE && this.isCurrentBiomeTaint && player.posY - ultraBlockPos.setPos(player).setWorldY(world).getY() > 6) {
             FogManager.FogParams finalParams = params;
             this.runOnGround = () -> ClientEventsHandler.FOG_MANAGER.setFogParams(finalParams);
             return;

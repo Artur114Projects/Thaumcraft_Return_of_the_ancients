@@ -1,6 +1,6 @@
-package com.artur114.returnoftheancients.common.generation.chunkgenerators;
+package com.artur114.returnoftheancients.common.generation.chunkgens;
 
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ChunkGeneratorAncientWorld implements IChunkGenerator {
-    private final Biome biome = InitBiome.ANCIENT_LABYRINTH;
+public class ChunkGenAncientWorld implements IChunkGenerator {
+    private final Biome biome = InitBiomes.ANCIENT_LABYRINTH;
     private final World world;
 
-    public ChunkGeneratorAncientWorld(World worldIn) {
+    public ChunkGenAncientWorld(World worldIn) {
         this.world = worldIn;
     }
 

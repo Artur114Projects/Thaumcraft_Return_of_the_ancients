@@ -1,4 +1,4 @@
-def core_mod_class = "com.artur.returnoftheancients.main.FMLLoadingPluginTRA"
+def core_mod_class = "com.artur114.returnoftheancients.main.ThaumicRotACore"
 def at_file = "src/main/resources/META-INF/tc_at.cfg"
 
 minecraft {

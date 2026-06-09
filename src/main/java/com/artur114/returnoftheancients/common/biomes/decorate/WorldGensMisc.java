@@ -1,8 +1,8 @@
-package com.artur114.returnoftheancients.common.generation.biomes.decorate;
+package com.artur114.returnoftheancients.common.biomes.decorate;
 
 import com.artur114.returnoftheancients.common.blocks.BlockTaintVoidStone;
 import com.artur114.returnoftheancients.common.handlers.MiscHandler;
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import com.artur114.returnoftheancients.common.init.InitBlocks;
 import com.artur114.returnoftheancients.common.util.math.MathUtils;
 import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
@@ -63,11 +63,11 @@ public class WorldGensMisc {
         }
 
         private int replaceHFromBiome(Biome biome, Random rand) {
-            if (biome == InitBiome.TAINT_WASTELAND) {
+            if (biome == InitBiomes.TAINT_WASTELAND) {
                 return 0;
-            } else if (biome == InitBiome.INFERNAL_CRATER) {
+            } else if (biome == InitBiomes.INFERNAL_CRATER) {
                 return 0;
-            } else if (biome == InitBiome.TAINT_SEA) {
+            } else if (biome == InitBiomes.TAINT_SEA) {
                 return 24 + rand.nextInt(4);
             } else {
                 return 32 + rand.nextInt(8);
@@ -102,7 +102,7 @@ public class WorldGensMisc {
         @Override
         public boolean generate(World worldIn, Random rand, BlockPos position) {
             UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(position);
-            if (blockPos.getY() >= 100 && worldIn.getBiome(position) != InitBiome.TAINT_WASTELAND) {
+            if (blockPos.getY() >= 100 && worldIn.getBiome(position) != InitBiomes.TAINT_WASTELAND) {
                 if (blockPos.getY() > 110) {
                     IBlockState state = worldIn.getBlockState(blockPos);
                     if (state.getBlock() == BlocksTC.taintSoil || state.getMaterial() == Material.SNOW) blockPos.down();
@@ -133,7 +133,7 @@ public class WorldGensMisc {
             }
             UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(position);
             blockPos.add(rand.nextInt(16), 0, rand.nextInt(16));
-            if (MiscHandler.getBiomeIdOnPos(worldIn, blockPos) != Biome.getIdForBiome(InitBiome.TAINT_WASTELAND)) {
+            if (MiscHandler.getBiomeIdOnPos(worldIn, blockPos) != Biome.getIdForBiome(InitBiomes.TAINT_WASTELAND)) {
                 UltraMutableBlockPos.release(blockPos);
                 return false;
             }
@@ -196,7 +196,7 @@ public class WorldGensMisc {
 
         @Override
         protected Biome[] biomesWhiteList() {
-            return new Biome[] {InitBiome.TAINT_WASTELAND, InitBiome.INFERNAL_CRATER};
+            return new Biome[] {InitBiomes.TAINT_WASTELAND, InitBiomes.INFERNAL_CRATER};
         }
     }
 
@@ -268,7 +268,7 @@ public class WorldGensMisc {
 
         @Override
         protected Biome[] biomesWhiteList() {
-            return new Biome[] {InitBiome.TAINT_WASTELAND, InitBiome.INFERNAL_CRATER};
+            return new Biome[] {InitBiomes.TAINT_WASTELAND, InitBiomes.INFERNAL_CRATER};
         }
     }
 
@@ -284,7 +284,7 @@ public class WorldGensMisc {
             for (int i = 0; i != 16; i++) {
                 blockPos.pushPos();
                 blockPos.add(rand.nextInt(16), rand.nextInt(20), rand.nextInt(16));
-                if (world.getBiome(blockPos) != InitBiome.INFERNAL_CRATER) {
+                if (world.getBiome(blockPos) != InitBiomes.INFERNAL_CRATER) {
                     UltraMutableBlockPos.release(blockPos);
                     return false;
                 }
@@ -323,7 +323,7 @@ public class WorldGensMisc {
 
         @Override
         protected Biome[] biomesWhiteList() {
-            return new Biome[] {InitBiome.INFERNAL_CRATER};
+            return new Biome[] {InitBiomes.INFERNAL_CRATER};
         }
     }
 }

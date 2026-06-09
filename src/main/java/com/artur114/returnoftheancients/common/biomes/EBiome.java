@@ -1,14 +1,15 @@
-package com.artur114.returnoftheancients.common.generation.biomes;
+package com.artur114.returnoftheancients.common.biomes;
 
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.bananalib.mc.base.IBiomeData;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 
-public enum EBiome {
+public enum EBiome implements IBiomeData {
 
-    TAINT_SEA(InitBiome.TAINT_TYPE, InitBiome.TAINT_TYPE_L, InitBiome.TAINT_TYPE_L_SEA),
-    TAINT_EDGE(InitBiome.TAINT_TYPE, InitBiome.TAINT_TYPE_EDGE),
-    TAINT(InitBiome.TAINT_TYPE, InitBiome.TAINT_TYPE_L),
+    TAINT_SEA(InitBiomes.TAINT_TYPE, InitBiomes.TAINT_TYPE_L, InitBiomes.TAINT_TYPE_L_SEA),
+    TAINT_EDGE(InitBiomes.TAINT_TYPE, InitBiomes.TAINT_TYPE_EDGE),
+    TAINT(InitBiomes.TAINT_TYPE, InitBiomes.TAINT_TYPE_L),
     ANCIENT(BiomeDictionary.Type.DEAD, BiomeDictionary.Type.DENSE);
 
     private final BiomeManager.BiomeType biomeType;
@@ -27,15 +28,18 @@ public enum EBiome {
         this.types = types;
     }
 
-    public BiomeManager.BiomeType getBiomeType() {
+    @Override
+    public BiomeManager.BiomeType biomeType() {
         return this.biomeType;
     }
 
-    public int getWeight() {
+    @Override
+    public int weight() {
         return this.weight;
     }
 
-    public BiomeDictionary.Type[] getTypes() {
+    @Override
+    public BiomeDictionary.Type[] types() {
         return this.types;
     }
 }

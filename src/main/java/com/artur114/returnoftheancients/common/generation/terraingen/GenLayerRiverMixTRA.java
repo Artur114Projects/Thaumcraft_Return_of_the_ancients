@@ -1,7 +1,7 @@
 package com.artur114.returnoftheancients.common.generation.terraingen;
 
 
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import net.minecraft.init.Biomes;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
@@ -30,7 +30,7 @@ public class GenLayerRiverMixTRA extends GenLayer {
         int[] aint2 = IntCache.getIntCache(areaWidth * areaHeight);
 
         for (int i = 0; i < areaWidth * areaHeight; ++i) {
-            if (aint[i] != Biome.getIdForBiome(Biomes.OCEAN) && aint[i] != Biome.getIdForBiome(Biomes.DEEP_OCEAN) && !BiomeDictionary.hasType(Biome.getBiomeForId(aint[i]), InitBiome.TAINT_TYPE)) { // Добавляем проверку для наших биомов
+            if (aint[i] != Biome.getIdForBiome(Biomes.OCEAN) && aint[i] != Biome.getIdForBiome(Biomes.DEEP_OCEAN) && !BiomeDictionary.hasType(Biome.getBiomeForId(aint[i]), InitBiomes.TAINT_TYPE)) { // Добавляем проверку для наших биомов
                 if (aint1[i] == Biome.getIdForBiome(Biomes.RIVER)) {
                     if (aint[i] == Biome.getIdForBiome(Biomes.ICE_PLAINS)) {
                         aint2[i] = Biome.getIdForBiome(Biomes.FROZEN_RIVER);

@@ -3,7 +3,7 @@ package com.artur114.returnoftheancients.common.network;
 import com.artur114.returnoftheancients.common.ancientworld.system.base.IAncientLayer1Manager;
 import com.artur114.returnoftheancients.common.ancientworld.system.client.IClientAncientLayer1Manager;
 import com.artur114.returnoftheancients.common.ancientworld.system.server.AncientLayer1Server;
-import com.artur114.returnoftheancients.common.capabilities.TRACapabilities;
+import com.artur114.returnoftheancients.common.init.InitCapabilities;
 import com.artur114.returnoftheancients.common.init.InitDimensions;
 import com.artur114.returnoftheancients.main.ThaumicRotA;
 import com.artur114.returnoftheancients.common.network.base.NBTPacketBase;
@@ -36,7 +36,7 @@ public class ClientPacketSyncAncientLayer1s extends NBTPacketBase {
                 Minecraft mc = Minecraft.getMinecraft();
 
                 if (mc.player.dimension == InitDimensions.ancient_world_dim_id) {
-                    IAncientLayer1Manager manager = mc.world.getCapability(TRACapabilities.ANCIENT_LAYER_1_MANAGER, null);
+                    IAncientLayer1Manager manager = mc.world.getCapability(InitCapabilities.ANCIENT_LAYER_1_MANAGER, null);
 
                     if (manager != null) {
                         ((IClientAncientLayer1Manager) manager).handleUpdateTag(message.nbt);

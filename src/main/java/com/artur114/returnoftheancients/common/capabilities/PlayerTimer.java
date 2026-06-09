@@ -1,5 +1,6 @@
 package com.artur114.returnoftheancients.common.capabilities;
 
+import com.artur114.returnoftheancients.common.init.InitCapabilities;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import net.minecraft.nbt.*;
 import net.minecraft.util.EnumFacing;
@@ -35,11 +36,11 @@ public class PlayerTimer {
         }
 
         public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-            return capability == TRACapabilities.TIMER;
+            return capability == InitCapabilities.TIMER;
         }
 
         public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-            return capability == TRACapabilities.TIMER ?  TRACapabilities.TIMER.cast(timer) : null;
+            return capability == InitCapabilities.TIMER ?  InitCapabilities.TIMER.cast(timer) : null;
         }
 
         public NBTTagCompound serializeNBT() {

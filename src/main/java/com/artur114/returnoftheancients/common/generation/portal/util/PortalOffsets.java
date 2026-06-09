@@ -7,11 +7,10 @@ import net.minecraft.util.math.BlockPos;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OffsetsUtil {
+public class PortalOffsets {
     public static final BlockPos[] portalCollideOffsetsArray;
     public static final BlockPos[][] portalLightOffsets;
     public static final BlockPos[] portalOffsetsArray;
-
 
     static {
         portalCollideOffsetsArray = initPortalCollideOffsetsArray();

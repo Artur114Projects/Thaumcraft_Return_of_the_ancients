@@ -4,7 +4,7 @@ import com.artur114.returnoftheancients.common.blockprotect.BlockProtectHandler;
 import com.artur114.returnoftheancients.common.init.InitBlocks;
 import com.artur114.returnoftheancients.common.structurebuilder.BuildRequest;
 import com.artur114.returnoftheancients.common.structurebuilder.StructuresBuildManager;
-import com.artur114.returnoftheancients.common.generation.portal.util.OffsetsUtil;
+import com.artur114.returnoftheancients.common.generation.portal.util.PortalOffsets;
 import com.artur114.returnoftheancients.common.events.ServerEventsHandler;
 import com.artur114.returnoftheancients.common.init.InitSounds;
 import com.artur114.returnoftheancients.common.misc.TRAConfigs;
@@ -33,7 +33,7 @@ import java.util.List;
 
 public class AncientSanctuary implements IIsNeedWriteToNBT {
     private final Block nitorBlock = BlocksTC.nitor.get(EnumDyeColor.BLACK);
-    private AncientPortalNaturalGeneration portal = null;
+    private AncientPortalNaturalGen portal = null;
     private TileEntityAncientSanctuaryController tile;
     private boolean isBuild = false;
     private boolean needSave = true;
@@ -134,7 +134,7 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
         }
     }
 
-    protected void bindPortal(AncientPortalNaturalGeneration portal) {
+    protected void bindPortal(AncientPortalNaturalGen portal) {
         this.portal = portal;
         if (!type.isBroken()) {
             this.portal.updateActiveState(active);
@@ -161,7 +161,7 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
                 this.world.playSound(null, blockPos.setPos(tilePos).add(0, 2, 0), InitSounds.SPOTLIGHT.SOUND, SoundCategory.AMBIENT, 1, 1);
 
                 blockPos.setPos(portal.portalPos).setY(portal.posY + 10);
-                blockPos.offsetAndCallRunnable(OffsetsUtil.getCornerOffsets(2, 13), pos -> this.world.playSound(null, pos, InitSounds.SPOTLIGHT.SOUND, SoundCategory.AMBIENT, 1, 1));
+                blockPos.offsetAndCallRunnable(PortalOffsets.getCornerOffsets(2, 13), pos -> this.world.playSound(null, pos, InitSounds.SPOTLIGHT.SOUND, SoundCategory.AMBIENT, 1, 1));
 
                 UltraMutableBlockPos.release(blockPos);
             });

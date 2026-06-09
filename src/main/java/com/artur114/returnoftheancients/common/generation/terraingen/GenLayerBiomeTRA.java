@@ -1,7 +1,7 @@
 package com.artur114.returnoftheancients.common.generation.terraingen;
 
 import com.artur114.returnoftheancients.common.generation.portal.base.AncientPortalsProcessor;
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
@@ -25,7 +25,12 @@ public class GenLayerBiomeTRA extends GenLayerBiome {
     public int @NotNull[] getInts(int areaX, int areaY, int areaWidth, int areaHeight) {
         int[] aint1 = super.getInts(areaX, areaY, areaWidth, areaHeight);
 
-        int taintId = Biome.getIdForBiome(InitBiome.TAINT);
+        int taintId = Biome.getIdForBiome(InitBiomes.TAINT);
+        int[] mutations = new int[] {
+            Biome.getIdForBiome(InitBiomes.TAINT_MOUNTAINS),
+            Biome.getIdForBiome(InitBiomes.TAINT_SEA),
+            Biome.getIdForBiome(InitBiomes.TAINT_WASTELAND)
+        };
 
         for (int j = 0; j < areaHeight; j++) {
             for (int i = 0; i < areaWidth; i++) {
@@ -34,11 +39,11 @@ public class GenLayerBiomeTRA extends GenLayerBiome {
                 this.initChunkSeed(x, y);
                 if (GenLayersHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, biomeSize, 2)) {
                     if (GenLayersHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, biomeSize, 1)) {
-                        int randId = this.nextInt(InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID.length + 4);
-                        int id = randId >= InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID.length ? 0 : randId;
-                        aint1[i + j * areaWidth] = this.nextInt(4) == 0 || GenLayersHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, biomeSize, 0) ? taintId : InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID[id];
+                        int randId = this.nextInt(mutations.length + 4);
+                        int id = randId >= mutations.length ? 0 : randId;
+                        aint1[i + j * areaWidth] = this.nextInt(4) == 0 || GenLayersHandler.isCollideToAnyPortal(portalsGenerationPos, x, y, biomeSize, 0) ? taintId : mutations[id];
                     } else {
-                        aint1[i + j * areaWidth] = this.nextInt(4) == 0 ? taintId : GenLayersHandler.getRandomIntOnArray(InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID, this.nextInt(InitBiome.TAINT_BIOMES_L_MUTATION_INT_ID.length), Biome.getIdForBiome(InitBiome.TAINT_MOUNTAINS));
+                        aint1[i + j * areaWidth] = this.nextInt(4) == 0 ? taintId : GenLayersHandler.getRandomIntOnArray(mutations, this.nextInt(mutations.length), Biome.getIdForBiome(InitBiomes.TAINT_MOUNTAINS));
                     }
                 }
             }

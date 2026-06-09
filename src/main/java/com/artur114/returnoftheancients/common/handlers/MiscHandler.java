@@ -1,6 +1,8 @@
 package com.artur114.returnoftheancients.common.handlers;
 
+import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.returnoftheancients.common.generation.portal.base.AncientPortal;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import com.artur114.returnoftheancients.common.items.ItemSoulBinder;
 import com.artur114.returnoftheancients.common.misc.SoundTRA;
 import com.artur114.returnoftheancients.common.misc.TRAConfigs;
@@ -29,6 +31,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.Aspect;
@@ -537,6 +540,24 @@ public class MiscHandler {
 
     public static byte getBiomeIdOnPos(World world, BlockPos pos) {
         return world.getChunkFromBlockCoords(pos).getBiomeArray()[(pos.getX() & 15) + (pos.getZ() & 15) * 16];
+    }
+
+    public static boolean fastCheckChunkContainsBiomeType(Chunk chunk, BiomeDictionary.Type type) {
+        byte[] chunkBiomeArray = chunk.getBiomeArray();
+        if (BananaMC.biomeHasType(chunkBiomeArray[0], type)) return true;
+        if (BananaMC.biomeHasType(chunkBiomeArray[15 * 16], type)) return true;
+        if (BananaMC.biomeHasType(chunkBiomeArray[15 + 15 * 16], type)) return true;
+        return BananaMC.biomeHasType(chunkBiomeArray[15], type);
+    }
+
+    public static boolean fullCheckChunkContainsBiomeType(Chunk chunk, BiomeDictionary.Type type) {
+        byte[] chunkBiomeArray = chunk.getBiomeArray();
+        for (byte b : chunkBiomeArray) {
+            if (BananaMC.biomeHasType(b, type)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static boolean fastCheckChunkContainsAnyOnBiomeArray(Chunk chunk, byte[] biomeArray) {

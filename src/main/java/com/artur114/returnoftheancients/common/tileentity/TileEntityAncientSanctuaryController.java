@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.common.tileentity;
 
-import com.artur114.returnoftheancients.common.generation.portal.naturalgen.AncientPortalNaturalGeneration;
+import com.artur114.returnoftheancients.common.generation.portal.naturalgen.AncientPortalNaturalGen;
 import com.artur114.returnoftheancients.common.generation.portal.base.AncientPortal;
 import com.artur114.returnoftheancients.common.generation.portal.base.AncientPortalsProcessor;
 import com.artur114.returnoftheancients.common.generation.portal.naturalgen.AncientSanctuary;
@@ -126,8 +126,8 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
 
         AncientPortal portalRaw = AncientPortalsProcessor.getPortalOnPos(pos);
 
-        if (portalRaw instanceof AncientPortalNaturalGeneration) {
-            AncientPortalNaturalGeneration portal = (AncientPortalNaturalGeneration) portalRaw;
+        if (portalRaw instanceof AncientPortalNaturalGen) {
+            AncientPortalNaturalGen portal = (AncientPortalNaturalGen) portalRaw;
             AncientSanctuary sanctuary = portal.getNotBrokenSanctuary();
             if (sanctuary != null) {
                 sanctuary.onTileLoad(this.isDone(), pos);

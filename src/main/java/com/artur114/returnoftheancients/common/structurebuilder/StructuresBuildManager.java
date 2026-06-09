@@ -1,5 +1,7 @@
 package com.artur114.returnoftheancients.common.structurebuilder;
 
+import com.artur114.bananalib.mc.register.ann.AutoInstantiate;
+import com.artur114.bananalib.mc.register.interf.ILoadStagePost;
 import com.artur114.returnoftheancients.common.structurebuilder.interf.IStructureBuilder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -8,7 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StructuresBuildManager {
+@AutoInstantiate
+public class StructuresBuildManager implements ILoadStagePost {
     private static final Map<String, IStructureBuilder> BUILDERS = new HashMap<>();
 
     protected static void register(IStructureBuilder builder) {
@@ -38,7 +41,8 @@ public class StructuresBuildManager {
         return builder;
     }
 
-    public static void init() {
+    @Override
+    public void onPostInit() {
         register("ancient_door_rock_rotate-", 1, 2);
         register("ancient_long_room_rotate-",1, 2);
         register("ancient_spire_segment_", 0, 8);

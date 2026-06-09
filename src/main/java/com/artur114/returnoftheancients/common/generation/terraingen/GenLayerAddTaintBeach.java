@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.common.generation.terraingen;
 
-import com.artur114.returnoftheancients.common.init.InitBiome;
+import com.artur114.returnoftheancients.common.init.InitBiomes;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
@@ -19,10 +19,10 @@ public class GenLayerAddTaintBeach extends GenLayer {
         int[] aint1 = this.parent.getInts(areaX - 1, areaY - 1, areaWidth + 2, areaHeight + 2);
         int[] aint = IntCache.getIntCache(areaWidth * areaHeight);
 
-        int mountainsId = Biome.getIdForBiome(InitBiome.TAINT_MOUNTAINS);
-        int wastelandId = Biome.getIdForBiome(InitBiome.TAINT_WASTELAND);
-        int taintId = Biome.getIdForBiome(InitBiome.TAINT);
-        int seaId = Biome.getIdForBiome(InitBiome.TAINT_SEA);
+        int mountainsId = Biome.getIdForBiome(InitBiomes.TAINT_MOUNTAINS);
+        int wastelandId = Biome.getIdForBiome(InitBiomes.TAINT_WASTELAND);
+        int taintId = Biome.getIdForBiome(InitBiomes.TAINT);
+        int seaId = Biome.getIdForBiome(InitBiomes.TAINT_SEA);
 
         for (int j = 0; j < areaHeight; j++) {
             for (int i = 0; i < areaWidth; i++) {
@@ -46,12 +46,12 @@ public class GenLayerAddTaintBeach extends GenLayer {
                     int k2 = aint1[i1 + 0 + (j1 + 1) * areaWidth1];
 
                     if (isBiomeSea(l1) || isBiomeSea(k2) || isBiomeSea(j3) || isBiomeSea(i4)) {
-                        aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_BEACH);
+                        aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiomes.TAINT_BEACH);
                     }
                 }
 
-                if (k == seaId && GenLayersHandler.hasBiomeOnRange0(aint1, Biome.getIdForBiome(InitBiome.TAINT_PLATEAU), i1, j1, areaWidth1, 1)) {
-                    aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiome.TAINT_BEACH);
+                if (k == seaId && GenLayersHandler.hasBiomeOnRange0(aint1, Biome.getIdForBiome(InitBiomes.TAINT_PLATEAU), i1, j1, areaWidth1, 1)) {
+                    aint[i + j * areaWidth] = Biome.getIdForBiome(InitBiomes.TAINT_BEACH);
                 }
             }
         }
@@ -59,6 +59,6 @@ public class GenLayerAddTaintBeach extends GenLayer {
     }
 
     private boolean isBiomeSea(int biome) {
-        return biome == Biome.getIdForBiome(InitBiome.TAINT_SEA);
+        return biome == Biome.getIdForBiome(InitBiomes.TAINT_SEA);
     }
 }

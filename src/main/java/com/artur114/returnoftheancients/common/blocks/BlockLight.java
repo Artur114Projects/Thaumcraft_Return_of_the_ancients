@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.common.blocks;
 
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
@@ -27,19 +27,19 @@ public class BlockLight extends BaseBlock {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return TRAConfigs.Any.debugMode ? FULL_BLOCK_AABB : NULL_AABB;
+        return RotAConfigs.Any.debugMode ? FULL_BLOCK_AABB : NULL_AABB;
     }
 
     @Nullable
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-        return TRAConfigs.Any.debugMode ? FULL_BLOCK_AABB : NULL_AABB;
+        return RotAConfigs.Any.debugMode ? FULL_BLOCK_AABB : NULL_AABB;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
-        return TRAConfigs.Any.debugMode ? FULL_BLOCK_AABB : NULL_AABB;
+        return RotAConfigs.Any.debugMode ? FULL_BLOCK_AABB : NULL_AABB;
     }
 
     @Override
@@ -58,6 +58,6 @@ public class BlockLight extends BaseBlock {
     }
 
     public boolean canCollideCheck(IBlockState state, boolean hitIfLiquid) {
-        return TRAConfigs.Any.debugMode;
+        return RotAConfigs.Any.debugMode;
     }
 }

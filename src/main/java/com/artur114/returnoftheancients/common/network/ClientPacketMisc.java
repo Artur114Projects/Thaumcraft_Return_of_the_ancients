@@ -1,7 +1,7 @@
 package com.artur114.returnoftheancients.common.network;
 
 import com.artur114.returnoftheancients.common.init.InitSounds;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -45,7 +45,7 @@ public class ClientPacketMisc implements IMessage { // TODO: 16.11.2025 Упра
             Minecraft.getMinecraft().addScheduledTask(() -> {
                 NBTTagCompound nbt = message.data;
                 EntityPlayerSP playerSP = Minecraft.getMinecraft().player;
-                String TITLE = TextFormatting.DARK_PURPLE + TRAConfigs.Any.ModChatName + TextFormatting.RESET;
+                String TITLE = TextFormatting.DARK_PURPLE + RotAConfigs.Any.ModChatName + TextFormatting.RESET;
                 if (nbt.hasKey("changeTitle")) {
                     TITLE = nbt.getString("changeTitle");
                 }

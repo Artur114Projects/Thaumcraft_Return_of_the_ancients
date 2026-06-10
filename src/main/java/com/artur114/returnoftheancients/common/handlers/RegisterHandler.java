@@ -11,7 +11,7 @@ import com.artur114.returnoftheancients.common.init.InitItems;
 import com.artur114.returnoftheancients.client.init.InitParticleSprite;
 import com.artur114.returnoftheancients.common.network.*;
 import com.artur114.returnoftheancients.main.ThaumicRotA;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import com.artur114.returnoftheancients.common.util.interfaces.IHasModel;
 import com.artur114.returnoftheancients.common.util.interfaces.IHasTileEntity;
@@ -116,7 +116,7 @@ public class RegisterHandler {
 	}
 
 	public static void registerCommands(FMLServerStartingEvent event) {
-		if (TRAConfigs.Any.debugMode) { // TODO: 23.02.2025 Снести!
+		if (RotAConfigs.Any.debugMode) { // TODO: 23.02.2025 Снести!
 			event.registerServerCommand(new TestCommand2());
 			event.registerServerCommand(new CommandDataManager());
 			event.registerServerCommand(new TpToPortal());

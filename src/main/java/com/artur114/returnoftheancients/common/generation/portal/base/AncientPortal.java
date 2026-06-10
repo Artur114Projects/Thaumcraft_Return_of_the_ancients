@@ -9,7 +9,7 @@ import com.artur114.returnoftheancients.common.generation.portal.util.PortalOffs
 import com.artur114.returnoftheancients.common.handlers.TeleportHandler;
 import com.artur114.returnoftheancients.common.handlers.MiscHandler;
 import com.artur114.returnoftheancients.common.init.InitBlocks;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import com.artur114.returnoftheancients.common.util.interfaces.IWriteToNBT;
 import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
@@ -60,7 +60,7 @@ public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025
 
 
     public AncientPortal(MinecraftServer server, int dimension, int chunkX, int chunkZ, int posY, int id) {
-        if (TRAConfigs.Any.debugMode) System.out.println("New portal x:" + chunkX + "z:" + chunkZ + " id:" + id);
+        if (RotAConfigs.Any.debugMode) System.out.println("New portal x:" + chunkX + "z:" + chunkZ + " id:" + id);
         if (AncientPortalsProcessor.hasPortal(chunkX, chunkZ, dimension)) isExploded = true;
         this.portalPos = new ChunkPos(chunkX, chunkZ);
         this.world = server.getWorld(dimension);
@@ -78,7 +78,7 @@ public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025
         this.chunkZ = compound.getInteger("chunkZ");
         this.portalPos = new ChunkPos(chunkX, chunkZ);
         this.id = compound.getInteger("id");
-        if (TRAConfigs.Any.debugMode) System.out.println("Portal load x:" + chunkX + "z:" + chunkZ + " id:" + id);
+        if (RotAConfigs.Any.debugMode) System.out.println("Portal load x:" + chunkX + "z:" + chunkZ + " id:" + id);
         this.isGenerated = compound.getBoolean("isGenerated");
         this.dimension = compound.getInteger("dimension");
         this.isExplodes = compound.getBoolean("isExplodes");
@@ -307,7 +307,7 @@ public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025
         }
         explosionList.add(() -> world.createExplosion(null, eX, posY, eZ, 16, true));
         isExplodes = true;
-        if (TRAConfigs.Any.debugMode) System.out.println("Portal id:" + id + " is explosion!");
+        if (RotAConfigs.Any.debugMode) System.out.println("Portal id:" + id + " is explosion!");
     }
 
     public boolean isNeedUpdateOnClient() {

@@ -1,7 +1,7 @@
 package com.artur114.returnoftheancients.common.generation.portal.generators;
 
 import com.artur114.returnoftheancients.common.blockprotect.BlockProtectHandler;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -43,7 +43,7 @@ public class GenAncientArch {
         }
         this.resetObjectData();
 
-        if (TRAConfigs.Any.debugMode) System.out.println("Generated ancient arch! start:" + start + " end:" + end);
+        if (RotAConfigs.Any.debugMode) System.out.println("Generated ancient arch! start:" + start + " end:" + end);
     }
 
     private void genArchAndInitSegments() {

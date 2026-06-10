@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.client.event.managers.movement;
 
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,7 +55,7 @@ public class PlayerMovementManager {
                 WORK_ALONE_TASKS.remove(key);
                 TASKS.remove(key);
             }
-            if (TRAConfigs.Any.debugMode) {
+            if (RotAConfigs.Any.debugMode) {
                 System.out.println("Tasks is done work:");
                 for (String s : TO_DELETE) {
                     System.out.println(s);
@@ -91,7 +91,7 @@ public class PlayerMovementManager {
         } else {
             TASKS.put(name, task);
         }
-        if (TRAConfigs.Any.debugMode) System.out.println("New movement task [" + name + "]");
+        if (RotAConfigs.Any.debugMode) System.out.println("New movement task [" + name + "]");
     }
 
     public void removeMovementTask(String name) {

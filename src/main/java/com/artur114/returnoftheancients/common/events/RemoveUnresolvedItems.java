@@ -2,7 +2,7 @@ package com.artur114.returnoftheancients.common.events;
 
 import com.artur114.returnoftheancients.common.handlers.MiscHandler;
 import com.artur114.returnoftheancients.common.init.InitDimensions;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import com.artur114.returnoftheancients.common.init.InitSounds;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,7 +35,7 @@ public class RemoveUnresolvedItems { // TODO: 10.05.2025 Переписать!
     @SubscribeEvent
     public static void Tick(TickEvent.PlayerTickEvent e) {
         if (e.player.ticksExisted % 20 == 0) {
-            if (e.player.dimension == InitDimensions.ancient_world_dim_id && TRAConfigs.PortalSettings.checkItems) {
+            if (e.player.dimension == InitDimensions.ancient_world_dim_id && RotAConfigs.PortalSettings.checkItems) {
                 if (!MiscHandler.isPlayerUseUnresolvedItems(e.player).isEmpty() && (!e.player.getEntityData().getBoolean(isUUI) || !e.player.getEntityData().hasKey(isUUI)) && !e.player.isCreative() && !e.player.isDead) {
                     e.player.getEntityData().setBoolean(isUUI, true);
                 }

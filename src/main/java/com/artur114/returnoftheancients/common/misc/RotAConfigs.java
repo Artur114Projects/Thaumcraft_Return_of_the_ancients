@@ -1,6 +1,7 @@
 package com.artur114.returnoftheancients.common.misc;
 
 import com.artur114.returnoftheancients.common.referense.Referense;
+import com.artur114.returnoftheancients.main.ThaumicRotA;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -9,10 +10,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Config(modid = Referense.MODID)
 @Mod.EventBusSubscriber(modid = Referense.MODID)
-public class TRAConfigs {
+public class RotAConfigs {
 
     @Config.LangKey(Referense.MODID + ".cfg.sub.portal")
-    @Config.Comment("Here you can change item description")
     public static PortalSettings PortalSettings = new PortalSettings();
 
     @Config.LangKey(Referense.MODID + ".cfg.sub.any")
@@ -24,8 +24,7 @@ public class TRAConfigs {
     public static AncientWorldSettings AncientWorldSettings = new AncientWorldSettings();
 
     @Config.LangKey(Referense.MODID + ".cfg.sub.mgs")
-    @Config.Comment("(Don`t work)")
-    public static MobGenSettings MobGenSettings = new MobGenSettings();
+    public static CompatibilitySettings CompatibilitySettings = new CompatibilitySettings();
 
     @Config.LangKey(Referense.MODID + ".cfg.sub.ds")
     @Config.Comment("Here you can change difficulty settings")
@@ -68,7 +67,6 @@ public class TRAConfigs {
      }
 
     public static class PortalSettings {
-
         @Config.LangKey(Referense.MODID + ".cfg.sub.portal.chunkX")
         @Config.Comment("works if notRandomGenerate = true, only affects new worlds")
         public int chunkX = 0;
@@ -178,6 +176,7 @@ public class TRAConfigs {
         @Config.Comment("the higher the number, the lower the chance")
         public int eldritchTrapGenerateChange = 3;
     }
+
     public static class PerformanceSettings {
         @Config.LangKey(Referense.MODID + ".cfg.sub.ps.sgd")
         @Config.Comment("set the value more if the server lags during generation")
@@ -190,43 +189,9 @@ public class TRAConfigs {
         public int numberSetReloadLightPerTick = 925;
     }
 
-
-    public static class MobGenSettings {
-        @Config.LangKey(Referense.MODID + ".cfg.sub.mgs.c_c")
-        @Config.Comment({"EntityInhabitedZombie = 1", "EntityEldritchGuardian = 2", "EntityMindSpider = 3"})
-        public int[] CROSSROADS_CHANGE = new int[] {0, 0, 0};
-
-        @Config.LangKey(Referense.MODID + ".cfg.sub.mgs.c_g")
-        @Config.Comment({"EntityInhabitedZombie: 1 = min, 2 = max", "EntityEldritchGuardian: 3 = min, 4 = max", "EntityMindSpider: 5 = min, 6 = max"})
-        public int[] CROSSROADS_GROUP = new int[] {0, 0, 0, 0, 0, 0};
-
-        @Config.LangKey(Referense.MODID + ".cfg.sub.mgs.w_c")
-        @Config.Comment({"EntityInhabitedZombie = 1", "EntityEldritchGuardian = 2", "EntityMindSpider = 3"})
-        public int[] WAY_CHANGE = new int[] {0, 0, 0};
-
-        @Config.LangKey(Referense.MODID + ".cfg.sub.mgs.w_g")
-        @Config.Comment({"EntityInhabitedZombie: 1 = min, 2 = max", "EntityEldritchGuardian: 3 = min, 4 = max", "EntityMindSpider: 5 = min, 6 = max"})
-        public int[] WAY_GROUP = new int[] {0, 0, 0, 0, 0, 0};
-
-        @Config.LangKey(Referense.MODID + ".cfg.sub.mgs.f_c")
-        @Config.Comment({"EntityInhabitedZombie = 1", "EntityEldritchGuardian = 2", "EntityMindSpider = 3"})
-        public int[] FORK_CHANGE = new int[] {0, 0, 0};
-
-        @Config.LangKey(Referense.MODID + ".cfg.sub.mgs.f_g")
-        @Config.Comment({"EntityInhabitedZombie: 1 = min, 2 = max", "EntityEldritchGuardian: 3 = min, 4 = max", "EntityMindSpider: 5 = min, 6 = max"})
-        public int[] FORK_GROUP = new int[] {0, 0, 0, 0, 0, 0};
-
-        @Config.LangKey(Referense.MODID + ".cfg.sub.mgs.t_c")
-        @Config.Comment({"EntityInhabitedZombie = 1", "EntityEldritchGuardian = 2", "EntityMindSpider = 3"})
-        public int[] TURN_CHANGE = new int[] {0, 0, 0};
-
-        @Config.LangKey(Referense.MODID + ".cfg.sub.mgs.t_g")
-        @Config.Comment({"EntityInhabitedZombie: 1 = min, 2 = max", "EntityEldritchGuardian: 3 = min, 4 = max", "EntityMindSpider: 5 = min, 6 = max"})
-        public int[] TURN_GROUP = new int[] {0, 0, 0, 0, 0, 0};
-
-        @Config.LangKey(Referense.MODID + ".cfg.sub.mgs.umg")
-        @Config.Comment("(false)")
-        public boolean useNewMobGeneration = false;
+    public static class CompatibilitySettings {
+        @Config.RequiresMcRestart
+        public int ancientWorldDimId = Integer.MIN_VALUE;
     }
 
 

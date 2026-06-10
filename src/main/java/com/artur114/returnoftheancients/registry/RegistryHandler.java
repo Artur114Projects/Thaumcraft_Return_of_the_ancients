@@ -2,6 +2,7 @@ package com.artur114.returnoftheancients.registry;
 
 import com.artur114.bananalib.mc.register.ann.AutoInstantiate;
 import com.artur114.bananalib.mc.register.data.PacketRegData;
+import com.artur114.bananalib.mc.register.interf.IHasCraftRecipe;
 import com.artur114.bananalib.mc.register.interf.IHasNetworkPacket;
 import com.artur114.bananalib.mc.register.interf.ILoadStagePre;
 import com.artur114.bananalib.mc.util.PacketRegDataList;
@@ -28,6 +29,7 @@ import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ScanItem;
 import thaumcraft.api.research.ScanningManager;
 
+import java.util.Collections;
 import java.util.List;
 
 import static net.minecraft.init.Items.COMPASS;
@@ -35,7 +37,7 @@ import static thaumcraft.api.items.ItemsTC.*;
 import static thaumcraft.api.items.ItemsTC.plate;
 
 @AutoInstantiate
-public class RegistryHandler implements ILoadStagePre, IHasNetworkPacket {
+public class RegistryHandler implements ILoadStagePre, IHasNetworkPacket, IHasCraftRecipe {
     @Override
     public void onPreInit() {
         ThaumicRotA.INTERNAL_EVENT_BUS.register(this);
@@ -47,6 +49,11 @@ public class RegistryHandler implements ILoadStagePre, IHasNetworkPacket {
     @SubscribeEvent
     public void serverStarting(PublicSStartingEvent e) {
         e.fml().registerServerCommand(new TRACommand());
+    }
+
+    @Override
+    public List<ResourceLocation> registerCraftRecipesName() {
+        return Collections.singletonList(ThaumicRotA.loc("soul_binder_clear"));
     }
 
     @Override

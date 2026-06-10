@@ -3,7 +3,7 @@ package com.artur114.returnoftheancients.common.items;
 import com.artur114.returnoftheancients.common.handlers.MiscHandler;
 import com.artur114.returnoftheancients.common.init.InitDimensions;
 import com.artur114.returnoftheancients.main.ThaumicRotA;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -132,7 +132,7 @@ public class ItemSoulBinder extends BaseItem {
                         EntityPlayerMP playerMP = (EntityPlayerMP) entity;
                         if (player.dimension == playerMP.dimension) {
                             List<String> uui = MiscHandler.isPlayerUseUnresolvedItems(playerMP);
-                            if (uui.isEmpty() || !TRAConfigs.PortalSettings.checkItems) {
+                            if (uui.isEmpty() || !RotAConfigs.PortalSettings.checkItems) {
                                 players.add(playerMP);
                                 names.put(id, key);
                             } else {

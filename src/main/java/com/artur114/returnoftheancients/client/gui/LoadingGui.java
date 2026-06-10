@@ -2,7 +2,7 @@ package com.artur114.returnoftheancients.client.gui;
 
 import com.artur114.returnoftheancients.client.gui.gif.GifSTime;
 import com.artur114.returnoftheancients.main.ThaumicRotA;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.network.ServerPacketTpToHome;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import net.minecraft.client.gui.GuiButton;
@@ -42,7 +42,7 @@ public class LoadingGui extends GuiScreen {
 
     public LoadingGui(boolean isTeam) {
         this.isTeam = isTeam;
-        if (!TRAConfigs.ClientSettings.useStaticImageOnLoadingGui) {
+        if (!RotAConfigs.ClientSettings.useStaticImageOnLoadingGui) {
             gif = new GifSTime(Referense.MODID + ":textures/gui/gif/gen_gif/gen_gif_v2-", 18, 15, true);
         }
         location = new ResourceLocation( Referense.MODID + ":textures/gui/loading_gui_background.png");
@@ -126,7 +126,7 @@ public class LoadingGui extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-        if (!TRAConfigs.ClientSettings.useStaticImageOnLoadingGui) {
+        if (!RotAConfigs.ClientSettings.useStaticImageOnLoadingGui) {
             gif.drawInFullScreen(mc, width, height);
         } else {
             mc.getTextureManager().bindTexture(location);

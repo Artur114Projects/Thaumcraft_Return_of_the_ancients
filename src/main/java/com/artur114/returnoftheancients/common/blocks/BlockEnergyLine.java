@@ -4,7 +4,7 @@ package com.artur114.returnoftheancients.common.blocks;
 import com.artur114.returnoftheancients.client.render.tile.TileEntityEnergyLineRenderer;
 import com.artur114.returnoftheancients.common.energy.bases.block.BlockEnergyBase;
 import com.artur114.returnoftheancients.common.energy.bases.tile.ITileEnergy;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.tileentity.TileEntityEnergyLine;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -169,7 +169,7 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (!TRAConfigs.Any.debugMode) {
+        if (!RotAConfigs.Any.debugMode) {
             return false;
         }
 

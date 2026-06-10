@@ -4,7 +4,7 @@ import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.returnoftheancients.client.event.ClientEventsHandler;
 import com.artur114.returnoftheancients.common.handlers.MiscHandler;
 import com.artur114.returnoftheancients.common.init.InitBiomes;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import com.artur114.returnoftheancients.transform.apilegacy.base.ITransformer;
 import com.artur114.returnoftheancients.transform.apilegacy.base.MVBase;
@@ -18,7 +18,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.*;
@@ -80,7 +79,7 @@ public class TransformerHandler {
     }
 
     public static boolean isNotCanSearchBiome(BiomeSearchWorker bsw) {
-        return !TRAConfigs.Any.debugMode && BananaMC.biomeHasType(bsw.biome, InitBiomes.TAINT_TYPE);
+        return !RotAConfigs.Any.debugMode && BananaMC.biomeHasType(bsw.biome, InitBiomes.TAINT_TYPE);
     }
 
     public static void fixedFogDensityEvent(EntityViewRenderEvent.RenderFogEvent event) {

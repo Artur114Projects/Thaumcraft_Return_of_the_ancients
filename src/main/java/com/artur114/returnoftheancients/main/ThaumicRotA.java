@@ -8,6 +8,7 @@ import com.artur114.returnoftheancients.proxy.IProxy;
 import com.artur114.returnoftheancients.server.event.PublicSStartingEvent;
 import com.artur114.returnoftheancients.server.event.PublicSStoppingEvent;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -25,7 +26,7 @@ public class ThaumicRotA {
     public static final SimpleNetworkWrapper NETWORK = new SimpleNetworkWrapper(Referense.MODID);
     public static final IRegisterBus REGISTER_BUS = new BananaRegisterBus().putNetWrapper(NETWORK);
     public static final EventBus INTERNAL_EVENT_BUS = new EventBus();
-    public static final String NAME = "Thaumcraft: Return of the ancients";
+    public static final String NAME = "Thaumcraft: Return of the Ancients";
     public static final String MODID = "returnoftheancients";
     public static final String VERSION = "v2.0.0-alpha";
 
@@ -58,6 +59,10 @@ public class ThaumicRotA {
     @EventHandler
     public void serverStopping(FMLServerStoppingEvent e) {
         INTERNAL_EVENT_BUS.post(new PublicSStoppingEvent(e));
+    }
+
+    public static ResourceLocation loc(String id) {
+        return new ResourceLocation(MODID, id);
     }
 }
 

@@ -3,7 +3,7 @@ package com.artur114.returnoftheancients.common.blocks;
 import com.artur114.returnoftheancients.common.generation.portal.base.AncientPortal;
 import com.artur114.returnoftheancients.common.generation.portal.base.AncientPortalsProcessor;
 import com.artur114.returnoftheancients.common.events.ServerEventsHandler;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.handlers.MiscHandler;
 import com.artur114.returnoftheancients.common.referense.Referense;
 import net.minecraft.block.SoundType;
@@ -69,7 +69,7 @@ public class BlockTpToAncientWorld extends BaseBlock {
             if (entityIn instanceof EntityPlayerMP) {
                 EntityPlayerMP player = (EntityPlayerMP) entityIn;
                 List<String> ID = MiscHandler.isPlayerUseUnresolvedItems(player);
-                if ((ID.isEmpty() || !TRAConfigs.PortalSettings.checkItems) && (ServerEventsHandler.getDifficultyId() != 0 || !TRAConfigs.AncientWorldSettings.noPeaceful)) {
+                if ((ID.isEmpty() || !RotAConfigs.PortalSettings.checkItems) && (ServerEventsHandler.getDifficultyId() != 0 || !RotAConfigs.AncientWorldSettings.noPeaceful)) {
                     player.fallDistance = 0;
                     AncientPortalsProcessor.onPlayerCollidePortal(player);
                 } else {

@@ -2,7 +2,7 @@ package com.artur114.returnoftheancients.common.events.eventmanagers;
 
 import com.artur114.returnoftheancients.common.events.ServerEventsHandler;
 import com.artur114.returnoftheancients.main.ThaumicRotA;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.util.interfaces.IWriteToNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -33,7 +33,7 @@ public class ShortChunkLoadManager {
 
             if (chunks.isEmpty()) {
                 ForgeChunkManager.releaseTicket(ticket);
-                if (TRAConfigs.Any.debugMode) System.out.println("Released ticked " + ticket);
+                if (RotAConfigs.Any.debugMode) System.out.println("Released ticked " + ticket);
                 ticketIterator.remove();
                 continue;
             }
@@ -47,7 +47,7 @@ public class ShortChunkLoadManager {
                 if (chunk.isDone()) {
                     chunk.unForce();
                     iterator.remove();
-                    if (TRAConfigs.Any.debugMode) System.out.println("Un forced chunk " + chunk.pos);
+                    if (RotAConfigs.Any.debugMode) System.out.println("Un forced chunk " + chunk.pos);
                     flag = true;
                     continue;
                 }
@@ -118,7 +118,7 @@ public class ShortChunkLoadManager {
             if (!chunks.containsKey(pos)) {
                 ForgeChunkManager.forceChunk(ticket, pos);
                 chunks.put(pos, new TickingChunk(ticket, pos, time));
-                if (TRAConfigs.Any.debugMode) System.out.println("Forced chunk " + pos);
+                if (RotAConfigs.Any.debugMode) System.out.println("Forced chunk " + pos);
             }
         } else {
             System.out.println("It was not possible to load the chunk!");
@@ -168,7 +168,7 @@ public class ShortChunkLoadManager {
             if (ticket != null) {
                 ticket.getModData().setString("userClassName", this.getClass().getName());
                 TICKETS.put(world, ticket);
-                if (TRAConfigs.Any.debugMode) System.out.println("Created ticked " + ticket);
+                if (RotAConfigs.Any.debugMode) System.out.println("Created ticked " + ticket);
             }
         }
 

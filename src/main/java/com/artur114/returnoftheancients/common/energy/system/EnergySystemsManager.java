@@ -2,7 +2,7 @@ package com.artur114.returnoftheancients.common.energy.system;
 
 import com.artur114.returnoftheancients.common.energy.bases.tile.ITileEnergy;
 import com.artur114.returnoftheancients.common.energy.bases.tile.ITileEnergyProvider;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.network.ClientPacketSyncEnergySystem;
 import com.artur114.returnoftheancients.common.util.math.UltraMutableBlockPos;
 import net.minecraft.tileentity.TileEntity;
@@ -37,7 +37,7 @@ public class EnergySystemsManager {
         if (system != null) {
             system.remove(tile);
         }
-        if (TRAConfigs.Any.debugMode) System.out.println("Unloaded tile, system id:" + tile.networkId());
+        if (RotAConfigs.Any.debugMode) System.out.println("Unloaded tile, system id:" + tile.networkId());
     }
 
     public void onBlockDestroyed(ITileEnergy tile) {
@@ -80,7 +80,7 @@ public class EnergySystemsManager {
 
             if (system.isEmpty()) {
                 iterator.remove();
-                if (TRAConfigs.Any.debugMode) System.out.println("Removed system:" + system.id);
+                if (RotAConfigs.Any.debugMode) System.out.println("Removed system:" + system.id);
             }
 
             system.update(isStart);
@@ -113,7 +113,7 @@ public class EnergySystemsManager {
     private void onBlockAdded(ITileEnergy tile) {
         List<ITileEnergy> connectedTiles = this.getNeighbors(tile);
 
-        if (TRAConfigs.Any.debugMode) System.out.println("New tile!");
+        if (RotAConfigs.Any.debugMode) System.out.println("New tile!");
 
         if (connectedTiles == null) {
             this.newSystem().bindTile(tile);
@@ -139,7 +139,7 @@ public class EnergySystemsManager {
 
     private void loadTile(ITileEnergy tile) {
         this.getSystem(tile.networkId(), () -> this.newSystem(tile.networkId())).bindTile(tile);
-        if (TRAConfigs.Any.debugMode) System.out.println("Loaded tile, system id:" + tile.networkId());
+        if (RotAConfigs.Any.debugMode) System.out.println("Loaded tile, system id:" + tile.networkId());
     }
 
     private void addSystem(EnergySystem system) {
@@ -173,7 +173,7 @@ public class EnergySystemsManager {
     private EnergySystem newSystem(Set<ITileEnergyProvider> storages, Set<ITileEnergy> lines, long id) {
         EnergySystem system = new EnergySystem(storages, lines, id);
         this.addSystem(system);
-        if (TRAConfigs.Any.debugMode) System.out.println("New system id:" + system.id);
+        if (RotAConfigs.Any.debugMode) System.out.println("New system id:" + system.id);
         return system;
     }
 
@@ -241,7 +241,7 @@ public class EnergySystemsManager {
             }
         }
 
-        if (TRAConfigs.Any.debugMode) System.out.println("Build network:" + id);
+        if (RotAConfigs.Any.debugMode) System.out.println("Build network:" + id);
 
         return this.newSystem(storages, lines, id);
     }

@@ -1,6 +1,6 @@
 package com.artur114.returnoftheancients.common.items;
 
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.init.InitItems;
 import com.artur114.returnoftheancients.main.ThaumicRotA;
 import com.artur114.returnoftheancients.common.util.interfaces.IHasModel;
@@ -20,7 +20,7 @@ import java.util.List;
 public class ItemPrimalBlade extends ItemAxe implements IHasModel {
 
     public ItemPrimalBlade(String name, Item.ToolMaterial e) {
-        super(e, TRAConfigs.Any.primalBladeDamage - 1, (float) TRAConfigs.Any.primalBladeSpeed);
+        super(e, RotAConfigs.Any.primalBladeDamage - 1, (float) RotAConfigs.Any.primalBladeSpeed);
         setRegistryName(name);
         setUnlocalizedName(name);
         setMaxStackSize(1);

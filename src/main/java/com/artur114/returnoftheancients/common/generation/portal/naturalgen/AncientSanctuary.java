@@ -7,7 +7,7 @@ import com.artur114.returnoftheancients.common.structurebuilder.StructuresBuildM
 import com.artur114.returnoftheancients.common.generation.portal.util.PortalOffsets;
 import com.artur114.returnoftheancients.common.events.ServerEventsHandler;
 import com.artur114.returnoftheancients.common.init.InitSounds;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.tileentity.TileEntityAncientSanctuaryController;
 import com.artur114.returnoftheancients.common.util.TerrainAnalyzer;
 import com.artur114.returnoftheancients.common.util.interfaces.IIsNeedWriteToNBT;
@@ -100,7 +100,7 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
         this.needSave = true;
         this.isBuild = true;
 
-        if (TRAConfigs.Any.debugMode) System.out.println("Generated new ancient sanctuary pos:" + pos);
+        if (RotAConfigs.Any.debugMode) System.out.println("Generated new ancient sanctuary pos:" + pos);
 
         return ret;
     }

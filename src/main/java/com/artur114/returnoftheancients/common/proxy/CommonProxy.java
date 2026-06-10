@@ -14,11 +14,6 @@ public class CommonProxy {
 	public void registerItemRenderer(Item item, int meta, String id) {}
 	
     public void preInit(FMLPreInitializationEvent event) {
-        RegisterHandler.registerTileEntities();
-        InitDimensions.registerDimensions();
-        RegisterHandler.registerPackets();
-        CraftingRegister.register();
-        RegisterHandler.preInit();
         PlayerTimer.preInit();
     }
     

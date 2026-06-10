@@ -9,8 +9,12 @@ import com.artur114.returnoftheancients.common.ancientworld.system.server.Server
 import com.artur114.returnoftheancients.common.blockprotect.IProtectedChunk;
 import com.artur114.returnoftheancients.common.blockprotect.server.ServerProtectedChunk;
 import com.artur114.returnoftheancients.common.capabilities.IPlayerTimerCapability;
+import com.artur114.returnoftheancients.common.capabilities.PlayerTimer;
 import com.artur114.returnoftheancients.common.energy.system.EnergySystemsManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -49,6 +53,11 @@ public class InitCapabilities implements ILoadStagePre {
             IAncientLayer1Manager.class,
             new BananaCapStorage<>(),
             () -> new ServerAncientLayer1Manager(null)
+        );
+        CapabilityManager.INSTANCE.register(
+            IPlayerTimerCapability.class,
+            new BananaCapStorage<>(),
+            PlayerTimer.Timer::new
         );
     }
 }

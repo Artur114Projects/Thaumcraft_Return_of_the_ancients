@@ -13,7 +13,7 @@ import com.artur114.returnoftheancients.common.init.InitCapabilities;
 import com.artur114.returnoftheancients.common.biomes.BiomeTaint;
 import com.artur114.returnoftheancients.common.generation.portal.base.AncientPortalsProcessor;
 import com.artur114.returnoftheancients.common.init.InitBiomes;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.misc.RotAWorldData;
 import com.artur114.returnoftheancients.common.blocks.BlockTpToAncientWorld;
 import com.artur114.returnoftheancients.common.referense.Referense;
@@ -116,7 +116,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
 
     @SubscribeEvent
     public static void livingHurtEvent(LivingHurtEvent e) {
-        if (!TRAConfigs.AncientWorldSettings.isDeadToAncientWorld) {
+        if (!RotAConfigs.AncientWorldSettings.isDeadToAncientWorld) {
             if (e.getEntity() instanceof EntityPlayerMP) {
                 if (e.getEntity().dimension == ancient_world_dim_id) {
                     EntityPlayerMP player = (EntityPlayerMP) e.getEntity();
@@ -126,9 +126,9 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
                         return;
                     }
 
-                    double additionalOffset = TRAConfigs.DifficultySettings.additionalOffset;
-                    int ignoringOffset = TRAConfigs.DifficultySettings.ignoringOffset;
-                    int baseChange = TRAConfigs.DifficultySettings.baseChange;
+                    double additionalOffset = RotAConfigs.DifficultySettings.additionalOffset;
+                    int ignoringOffset = RotAConfigs.DifficultySettings.ignoringOffset;
+                    int baseChange = RotAConfigs.DifficultySettings.baseChange;
 
                     double hurt = player.getEntityData().getDouble("hurt");
                     if (MiscHandler.getIgnoringChance((int) (baseChange + (ignoringOffset * hurt)), player.world.rand)) {
@@ -187,7 +187,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
         int playerDimension = e.player.dimension;
         if (e.player.ticksExisted % 4 == 0) {
             if (playerDimension == ancient_world_dim_id) {
-                if (TRAConfigs.AncientWorldSettings.noPeaceful) {
+                if (RotAConfigs.AncientWorldSettings.noPeaceful) {
                     if (difficultyId == 0) {
                         if (!e.player.world.isRemote) {
                             AncientPortalsProcessor.teleportToOverworld((EntityPlayerMP) e.player);
@@ -244,10 +244,10 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (event.getEntity().dimension == ancient_world_dim_id && !event.getWorld().isRemote) {
-            if (TRAConfigs.DifficultySettings.speedAmplifier > 0 && event.getEntity() instanceof EntityLiving && !(event.getEntity() instanceof EntityPlayer)) {
+            if (RotAConfigs.DifficultySettings.speedAmplifier > 0 && event.getEntity() instanceof EntityLiving && !(event.getEntity() instanceof EntityPlayer)) {
                 EntityLiving living = (EntityLiving) event.getEntity();
-                if (living.isNonBoss() || TRAConfigs.DifficultySettings.iaAddSpeedEffectToBoss) {
-                    living.addPotionEffect(new PotionEffect(MobEffects.SPEED, Integer.MAX_VALUE, TRAConfigs.DifficultySettings.speedAmplifier - 1, false, false));
+                if (living.isNonBoss() || RotAConfigs.DifficultySettings.iaAddSpeedEffectToBoss) {
+                    living.addPotionEffect(new PotionEffect(MobEffects.SPEED, Integer.MAX_VALUE, RotAConfigs.DifficultySettings.speedAmplifier - 1, false, false));
                 }
             }
         }
@@ -270,13 +270,6 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
             if (!BiomeTaint.canSpawn(e.getEntity(), (BiomeTaint) biome)) {
                 e.setResult(Event.Result.DENY);
             }
-        }
-    }
-
-    @SubscribeEvent
-    public static void attachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof EntityPlayer) {
-            event.addCapability(PlayerTimer.Provider.NAME, new PlayerTimer.Provider());
         }
     }
 

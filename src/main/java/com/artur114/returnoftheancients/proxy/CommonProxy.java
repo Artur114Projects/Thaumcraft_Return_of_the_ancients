@@ -35,9 +35,9 @@ public abstract class CommonProxy implements IProxy {
             InitBiomes.class,
             InitSounds.class,
             InitDimensions.class,
+            InitCapabilities.class,
             RegistryHandler.class,
-            RotAGuiHandler.class,
-            InitCapabilities.class
+            RotAGuiHandler.class
         );
     }
 

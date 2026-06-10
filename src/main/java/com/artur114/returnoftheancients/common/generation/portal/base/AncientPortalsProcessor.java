@@ -6,7 +6,7 @@ import com.artur114.returnoftheancients.common.generation.terraingen.GenLayersHa
 import com.artur114.returnoftheancients.common.handlers.MiscHandler;
 import com.artur114.returnoftheancients.common.handlers.TeleportHandler;
 import com.artur114.returnoftheancients.main.ThaumicRotA;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.common.misc.RotAWorldData;
 import com.artur114.returnoftheancients.common.network.ClientPacketSyncAncientPortals;
 import com.artur114.returnoftheancients.common.referense.Referense;
@@ -73,7 +73,7 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
 
             if (!e.getWorld().isRemote) {
                 RotAWorldData worldData = RotAWorldData.get();
-                if (TRAConfigs.Any.debugMode) System.out.println("Load portals dim:" + dimension);
+                if (RotAConfigs.Any.debugMode) System.out.println("Load portals dim:" + dimension);
                 NBTTagCompound portalsPack = worldData.saveData.getCompoundTag("PortalsPack");
                 if (portalsPack.hasKey(dimension + "")) {
                     NBTTagList list = portalsPack.getTagList(dimension + "", 10);
@@ -313,8 +313,8 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
 
         worldData.saveData.setTag("PortalsPack", nbt);
         worldData.markDirty();
-        if (TRAConfigs.Any.debugMode) System.out.println("Is took:" + ((System.nanoTime() - time) / 1000000.0D) + "ms");
-        if (TRAConfigs.Any.debugMode) System.out.println("Save portals finish " + nbt);
+        if (RotAConfigs.Any.debugMode) System.out.println("Is took:" + ((System.nanoTime() - time) / 1000000.0D) + "ms");
+        if (RotAConfigs.Any.debugMode) System.out.println("Save portals finish " + nbt);
     }
 
     @SubscribeEvent

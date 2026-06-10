@@ -1,58 +1,28 @@
 package com.artur114.returnoftheancients.common.capabilities;
 
+import com.artur114.bananalib.mc.util.cap.BananaCapProv;
 import com.artur114.returnoftheancients.common.init.InitCapabilities;
-import com.artur114.returnoftheancients.common.referense.Referense;
+import com.artur114.returnoftheancients.main.ThaumicRotA;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.*;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.HashMap;
 
+@Mod.EventBusSubscriber
 public class PlayerTimer {
 
-    public static void preInit() {
-        CapabilityManager.INSTANCE.register(IPlayerTimerCapability.class, new Capability.IStorage<IPlayerTimerCapability>() {
-            public NBTTagCompound writeNBT(Capability<IPlayerTimerCapability> capability, IPlayerTimerCapability instance, EnumFacing side) {
-                return instance.serializeNBT();
-            }
-            public void readNBT(Capability<IPlayerTimerCapability> capability, IPlayerTimerCapability instance, EnumFacing side, NBTBase nbt) {
-                if (nbt instanceof NBTTagCompound) {
-                    instance.deserializeNBT((NBTTagCompound) nbt);
-                }
-            }
-        }, Timer::new);
-    }
-
-
-    public static class Provider implements ICapabilitySerializable<NBTTagCompound> {
-        public static final ResourceLocation NAME = new ResourceLocation(Referense.MODID, "timer");
-
-        private final Timer timer = new Timer();
-
-        public Provider() {
-        }
-
-        public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-            return capability == InitCapabilities.TIMER;
-        }
-
-        public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-            return capability == InitCapabilities.TIMER ?  InitCapabilities.TIMER.cast(timer) : null;
-        }
-
-        public NBTTagCompound serializeNBT() {
-            return timer.serializeNBT();
-        }
-
-        public void deserializeNBT(NBTTagCompound nbt) {
-            timer.deserializeNBT(nbt);
+    @SubscribeEvent
+    public static void attachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
+        if (event.getObject() instanceof EntityPlayer) {
+            event.addCapability(ThaumicRotA.loc("timer"), new BananaCapProv<>(new Timer(), InitCapabilities.TIMER));
         }
     }
 
-    private static class Timer implements IPlayerTimerCapability {
+    public static class Timer implements IPlayerTimerCapability {
         HashMap<String, Time> timers = new HashMap<>();
 
         @Override

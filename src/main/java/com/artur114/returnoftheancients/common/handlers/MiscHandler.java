@@ -2,10 +2,9 @@ package com.artur114.returnoftheancients.common.handlers;
 
 import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.returnoftheancients.common.generation.portal.base.AncientPortal;
-import com.artur114.returnoftheancients.common.init.InitBiomes;
 import com.artur114.returnoftheancients.common.items.ItemSoulBinder;
 import com.artur114.returnoftheancients.common.misc.SoundTRA;
-import com.artur114.returnoftheancients.common.misc.TRAConfigs;
+import com.artur114.returnoftheancients.common.misc.RotAConfigs;
 import com.artur114.returnoftheancients.main.ThaumicRotA;
 import com.artur114.returnoftheancients.common.network.ClientPacketMisc;
 import com.artur114.returnoftheancients.common.network.ClientPacketPlayerNBTData;
@@ -113,7 +112,7 @@ public class MiscHandler {
 
     public static List<String> isPlayerUseUnresolvedItems(EntityPlayer player) {
         List<String> ID = new ArrayList<>();
-        String[] modId = TRAConfigs.PortalSettings.modId;
+        String[] modId = RotAConfigs.PortalSettings.modId;
         boolean is = true;
 
         for (ItemStack itemStack : player.inventory.mainInventory) {
@@ -279,7 +278,7 @@ public class MiscHandler {
     }
 
     public static void sendMessageTranslate(EntityPlayerMP playerMP, String key) {
-        String TITLE = TextFormatting.DARK_PURPLE + TRAConfigs.Any.ModChatName + TextFormatting.RESET;
+        String TITLE = TextFormatting.DARK_PURPLE + RotAConfigs.Any.ModChatName + TextFormatting.RESET;
         sendMessageTranslateWithChangeTitle(playerMP, key, TITLE);
     }
 

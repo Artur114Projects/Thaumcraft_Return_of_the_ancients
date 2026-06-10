@@ -1,6 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "returnoftheancients:blocks/taint_void_cobblestone"
-  }
-}

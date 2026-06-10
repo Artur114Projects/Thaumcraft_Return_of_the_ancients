@@ -1,0 +1,184 @@
+item.debug_carrot.name=Debugging carrot
+item.soul_binder.name=Soul connection stone
+item.itemprimalblade.name=Primal Blade
+item.portal_compass.name=Void compass
+item.phantom_tablet.name=Phantom tablet
+item.imitation_ancient_fuse.name=Imitation of an ancient fuse
+tile.stone_ancient_lightning.name=Glowing ancient stone
+tile.stone_eldritch_tile_lightning.name=Glowing eldritch stone
+tile.pedestal_active.name=Ancient pedestal
+tile.ancient_door_h_4x4.name=Ancient horizontal door 4 to 4
+tile.ancient_door_4x3.name=Ancient door 4 to 3
+tile.ancient_door_8x6.name=Ancient door 8 to 6
+tile.ancient_sanctuary_controller_broken.name=Broken ancient controller of the sanctuary
+tile.ancient_sanctuary_controller.name=Ancient controller of the sanctuary
+tile.eldritch_stairs.name=Eldritch stone stairs
+tile.ancient_stairs.name=Ancient stone stairs
+tile.taint_void_stone.name=Infected void stone
+tile.cleaned_void_stone.name=Cleaned void stone
+tile.taint_void_cobblestone.name=Infected void cobblestone
+tile.incandescent_taint_void_stone.name=Hot infected void stone
+tile.pedestal_phantom.name=Phantom pedestal
+tile.ancient_lamp_1.name=Ancient device
+tile.ancient_lamp_0.name=Ancient device
+tile.dummy_ancient_stone.name=Structural block
+tile.eldritch_trap.name=Trap
+tile.incinerator.name=Incinerator
+tile.tp_to_home_block.name=Portal to overworld
+tile.taint_ancient_stone.name=Taint ancient stone
+tile.tp_to_ancient_world_block.name=Portal to Ancient World
+itemGroup.thaumrota_tab=Thaumcraft: Return of the ancients
+tile.energy_line.name=Energy line [WIP]
+tile.energy_source.name=Energy source [WIP]
+tile.ancient_teleport.name=Ancient portal [WIP]
+################################################################################
+# Any
+################################################################################
+thaumrota.info.p1=Hold
+thaumrota.info.p2=to see info.
+#
+item.soul_binder.info.s.1=RMB - bind.
+item.soul_binder.info.s.2=Shift + RMB - unbind.
+item.soul_binder.info.s.3=Put in crafting grid - clear.
+item.soul_binder.info.d.3=Players:
+item.debug_carrot.info.i=Infinity
+#
+thaumrota.pedestal_active.need_tablet=Для активации необходима фантомная скрижаль
+item.itemprimalblade.info.1=Deprecated, will be removed in the next update
+item.phantom_tablet.info.1=Decaying outside the ancient world
+item.phantom_tablet.info.2=If you are not in creative
+item.portal_compass.info=Points to the nearest ancient portal
+thaumrota.for_creative_only=For creativity only
+thaumrota.portal.message=Cant use:
+thaumrota.rui.t=put it away
+thaumrota.rui.f=you have 30 seconds
+thaumrota.gui.esc=Press ESC again to exit.
+thaumrota.message.new-version=Welcome to Thaumcraft: Return of the ancients v1.4.0-betta!
+thaumrota.command.main.usage=/thaumrota <updatedropprimalblade|seed|help|tptoportal>
+thaumrota.kJ.prefixes=J/kJ/MJ/GJ/TJ
+thaumrota.kW.prefixes=W/kW/MW/GW/TW
+thaumrota.energy.local.0=Energy:
+thaumrota.energy.local.1=Input:
+thaumrota.energy.local.2=Output:
+#
+thaumrota.team_state.interrupt=The player interrupted the wait.
+thaumrota.team_state.has_unresolved_items=The player has unresolved items.
+thaumrota.team_state.in_other_world=The player is in another dimension.
+thaumrota.team_state.in_ancient_world=The player is in the ancient world.
+thaumrota.team_state.out_of_game=Player not in the game.
+thaumrota.team_state.not_player=The player is not a player... Wtf!?
+###################################################################################
+# Loading gui
+###################################################################################
+rota.l-gui.generate.stage.0=Waiting for build
+rota.l-gui.generate.stage.1=Cleaning area
+rota.l-gui.generate.stage.2=Place structures in world
+rota.l-gui.generate.stage.3=Finalizing
+rota.l-gui.generate.stage.4=Finis!
+rota.l-gui.button.team=Team
+rota.l-gui.lore.0=Meow, Meow, Meow, Meow, Meow, Meow, Meow, Meow, Meow, Meow!
+rota.l-gui.lore.1=This layer was used a protection so that outsiders could not enter the ancient world, only from whom such a developed civilization was protected remains a question.
+rota.l-gui.lore.title=Lore
+################################################################################
+# Config any
+################################################################################
+thaumrota.cfg.sub.any.primalbladespeed=The attack speed of the Primordial Blade
+thaumrota.cfg.sub.any.primalbladedamage=The damage of the Primordial Blade
+thaumrota.cfg.sub.any=Any
+thaumrota.cfg.sub.any.uog=Use old loading gui
+################################################################################
+# Config Difficulty settings
+################################################################################
+thaumrota.cfg.sub.ds=Difficulty settings
+thaumrota.cfg.sub.ds.pcd=Effect list (Don`t work)
+################################################################################
+# Config Portal gen settings
+################################################################################
+thaumrota.cfg.sub.portal.slm=Is send load message
+thaumrota.cfg.sub.portal=Ancient portal settings
+thaumrota.cfg.sub.portal.isgen=generate? (Don`t work)
+thaumrota.cfg.sub.portal.x=X
+thaumrota.cfg.sub.portal.z=Z
+thaumrota.cfg.sub.portal.y=Y
+thaumrota.cfg.sub.portal.tobedrock=Generate to bedrock? (Don`t work)
+thaumrota.cfg.sub.portal.modId=Mod ID
+thaumrota.cfg.sub.portal.ci=Check items?
+################################################################################
+# Config Ancient world settings
+################################################################################
+thaumrota.cfg.sub.aws=Ancient world settings
+thaumrota.cfg.sub.aws.og=Use old generator
+thaumrota.cfg.sub.aws.np=No peaceful difficulty
+thaumrota.cfg.sub.aws.isw=Is set Warp
+thaumrota.cfg.sub.aws.nnv=Cant use night vision
+thaumrota.cfg.sub.aws.daw=Is dead in ancient world
+################################################################################
+# Configs Ancient world generation settings
+################################################################################
+thaumrota.cfg.sub.aws.wgs=Ancient world generation settings
+thaumrota.cfg.sub.aws.wgs.fc=Chance of generating a fork
+thaumrota.cfg.sub.aws.wgs.tc=Chance of generating a turn
+thaumrota.cfg.sub.aws.wgs.sgd=Structures generation delay
+thaumrota.cfg.sub.aws.wgs.nct=Number of cleaned structures per tick
+thaumrota.cfg.sub.aws.wgs.nrt=Number of reload light block per tick
+################################################################################
+# Config Performance settings
+################################################################################
+thaumrota.cfg.sub.ps=Performance settings
+thaumrota.cfg.sub.ps.sgd=Number of ticks for which 1 structure is generated
+thaumrota.cfg.sub.ps.nct=Number of chunks cleared per 1 tick
+thaumrota.cfg.sub.ps.nrt=Number of blocks that rebooted the light in 1 tick
+################################################################################
+# Config Client settings
+################################################################################
+thaumrota.cfg.sub.cs=Client settings
+thaumrota.cfg.sub.cs.usi=Use static image in gui?
+################################################################################
+# Config Mob gen settings
+################################################################################
+thaumrota.cfg.sub.mgs=Mob gen settings (Don`t work)
+thaumrota.cfg.sub.mgs.umg=Use new mob generation (Don`t work)
+################################################################################
+#research main
+################################################################################
+thaumrota.text.boss=You found the Guard
+thaumrota.text.deformation=You have discovered a strange distortion in the structure of the labyrinth.
+thaumrota.text.entered_ancient=You visited the ancient world
+thaumrota.text.found_portal=You found an ancient portal
+thaumrota.text.recovery=You came to your senses
+thaumrota.text.dead=You dead?
+#
+tc.research_category.ANCIENT_WORLD=Ancient world legacy
+#
+research.start.title=Start
+research.start.text.stage.1=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this
+research.start.text.stage.2=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this. <BR> <BR> I managed to recreate this device... It doesn't work, I think that with my knowledge I can improve it.
+research.start.text.stage.3=Also in this book it is written about a certain ancient world and about a device that will help to find the entrance, I think it is worth allocating a separate category of research for this. <BR> <BR> I managed to recreate this device... It doesn't work, I think that with my knowledge I can improve it.. <BR> <BR> Great! I got a working prototype
+#
+research.to_ancient.title=To ancient world
+research.m_FOUND_ANCIENT.text=Find the portal
+research.m_ENTRY_ANCIENT.text=Enter the portal
+research.to_ancient.text.stage.1=I should go and see where it leads, I might have a long journey ahead of me.
+research.to_ancient.text.stage.2=I should go and see where it leads, I might have a long journey ahead of me. <BR> <BR> Should I go there? Am I ready? Will I come back from there? In the 'crimson rituals' it is written that the armor is ~40% less effective in this world. In any case, without this, this research branch will stop.
+research.to_ancient.text.stage.3=I should go and see where it leads, I might have a long journey ahead of me. <BR> <BR> Should I go there? Am I ready? Will I come back from there? In the 'crimson rituals' it is written that the armor is ~40% less effective in this world. In any case, without this, this research branch will stop. <BR> <BR> <BR> <BR> Everything looks almost the same as in the illustrations in the 'crimson rituals'. This layer should be the entrance to the ancient world itself, which itself is nothing, somewhere here there should be a guard who guards the passage to the next layer, at least that's what the cultists write.
+research.to_ancient.text.addenda.1=Am I dead? Am I dead! Or not? I need time...
+#
+research.final.title=End?
+research.final.text.stage.1=For now, yes...
+#
+research.boss.title=Guard
+research.boss.text.stage.1=Still, the cultists were right about the armor (I wonder where they know all this from) I think I should continue my research.
+research.boss.text.stage.2=Still, the cultists were right about the armor (I wonder where they know all this from) I think I should continue my research. <BR> <BR> Interesting... it seems to increase as you go in a certain direction.
+research.boss.text.stage.3=Still, the cultists were right about the armor (I wonder where they know all this from) I think I should continue my research. <BR> <BR> Interesting... it seems to increase as you go in a certain direction. <BR> <BR> I found the guard! It seems that the closer to the guard the greater this deformation, now I know where to go.
+research.DEFORMATION.text=Continue exploring the ancient world
+research.m_BOSS.text=Go towards increasing deformation
+research.f_!FINAL.text=Defeat the Guardian
+#
+research.soul_binder.text.stage.1=Based on the cultists' data and my research, it looks like a person who enters the portal appears in different parts of the layer. If I want to explore the ancient world in a group, I need to somehow solve this problem.
+research.soul_binder.text.stage.2=Based on the cultists' data and my research, it looks like a person who enters the portal appears in different parts of the layer. If I want to explore the ancient world in a group, I need to somehow solve this problem. <BR> <BR> I managed to develop a soul connection stone, it can be tied to yourself and if you enter the portal with it, then everyone who is tied will move to the ancient world.
+################################################################################
+#research things
+################################################################################
+research.primal_blade.text.stage.1=A blade made of primordial matter, created using ancient lost technology, cannot be recreated.
+research.fire_trap.text.stage.1=An ancient and very powerful burner, it is not clear how it works, fortunately it does not activate instantly and you can have time to escape.
+research.eldritch_trap.text.stage.1=It appears only at intersections, you can recognize it by the purple particles, apparently over time the mechanism has worn out and the doors can be broken.

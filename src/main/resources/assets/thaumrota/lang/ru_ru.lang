@@ -1,0 +1,184 @@
+item.debug_carrot.name=Отладочная морковка
+item.itemprimalblade.name=Певородный клинок
+item.portal_compass.name=Пустотный компас
+item.soul_binder.name=Камень связи душ
+item.phantom_tablet.name=Фантомная скрижаль
+item.imitation_ancient_fuse.name=Имитация древнего предохранителя
+tile.stone_ancient_lightning.name=Светящийся древний камень
+tile.stone_eldritch_tile_lightning.name=Светящийся потусторонний камень
+tile.pedestal_active.name=Активируемый древний пьедестал
+tile.ancient_door_h_4x4.name=Древняя горизонтальная дверь 4 на 4
+tile.ancient_door_4x3.name=Древняя дверь 4 на 3
+tile.ancient_door_8x6.name=Древняя дверь 8 на 6
+tile.pedestal_phantom.name=Фантомный пьедестал
+tile.ancient_sanctuary_controller_broken.name=Сломанный древний контроллер святилища
+tile.ancient_sanctuary_controller.name=Древний контроллер святилища
+tile.taint_void_stone.name=Заражённый пустотный камень
+tile.cleaned_void_stone.name=Очищенный пустотный камень
+tile.taint_void_cobblestone.name=Заражённый пустотный булыжник
+tile.incandescent_taint_void_stone.name=Раскалённый заражённый пустотный камень
+tile.ancient_lamp_1.name=Древнее устройство
+tile.ancient_lamp_0.name=Древнее устройство
+tile.dummy_ancient_stone.name=Структурный блок
+tile.eldritch_stairs.name=Ступеньки из потустороннего камня
+tile.ancient_stairs.name=Ступеньки из древнего камня
+tile.eldritch_trap.name=Ловушка
+tile.incinerator.name=Испепелитель
+tile.tp_to_home_block.name=Портал в верхний мир
+tile.taint_ancient_stone.name=Заражённый древний камень
+tile.tp_to_ancient_world_block.name=Портал в древний мир
+itemGroup.thaumrota_tab=Thaumcraft: Return of the ancients
+tile.energy_line.name=Энерго трасса [WIP]
+tile.energy_source.name=Источник энергии [WIP]
+tile.ancient_teleport.name=Древний портал [WIP]
+###################################################################################
+# Any
+###################################################################################
+thaumrota.info.p1=Нажмите
+thaumrota.info.p2=для дополнительной информации.
+#
+item.soul_binder.info.s.1=ПКМ - привязать.
+item.soul_binder.info.s.2=Shift + ПКМ - отвязать.
+item.soul_binder.info.s.3=Положить в сетку крафта - очистить.
+item.soul_binder.info.d.3=Игроки:
+item.debug_carrot.info.i=Бесконечный
+#
+thaumrota.pedestal_active.need_tablet=Для активации необходима фантомная скрижаль
+item.itemprimalblade.info.1=Устарело, будет удалено в следующем обновлении
+item.phantom_tablet.info.1=Распадается за пределами древнего мира
+item.phantom_tablet.info.2=Если вы не в креативе
+item.portal_compass.info=Показывает на ближайший древний портал
+thaumrota.for_creative_only=Только для креатива
+thaumrota.portal.message=Нельзя использовать:
+thaumrota.rui.t=убери это
+thaumrota.rui.f=у тебя 30 секунд
+thaumrota.gui.esc=Нажмите ESC еще раз чтобы выйти.
+thaumrota.message.new-version=Добро пожаловать в Thaumcraft: Return of the ancients v1.4.0-betta!
+thaumrota.kJ.prefixes=Дж/кДж/МДж/ГДж/ТДж
+thaumrota.kW.prefixes=Вт/кВт/МВт/ГВт/ТВт
+thaumrota.energy.local.0=Энергия:
+thaumrota.energy.local.1=Вход:
+thaumrota.energy.local.2=Выход:
+#
+thaumrota.team_state.interrupt=Игрок прервал ожидание.
+thaumrota.team_state.has_unresolved_items=Игрок имеет запрещённые предметы.
+thaumrota.team_state.in_other_world=Игрок находится в другом изменении.
+thaumrota.team_state.in_ancient_world=Игрок находится в древнем мире.
+thaumrota.team_state.out_of_game=Игрок не в игре.
+thaumrota.team_state.not_player=Игрок не является игроком... Так стоп. Что!?
+###################################################################################
+# Loading gui
+###################################################################################
+rota.l-gui.generate.stage.0=Ожидание сборки
+rota.l-gui.generate.stage.1=Очистка территории
+rota.l-gui.generate.stage.2=Установка структур
+rota.l-gui.generate.stage.3=Завершение
+rota.l-gui.generate.stage.4=Завершено!
+rota.l-gui.button.team=Команда
+rota.l-gui.lore.0=Мяу, Мяу, Мяу, Мяу, Мяу, Мяу, Мяу, Мяу, Мяу, Мяу!
+rota.l-gui.lore.1=Этот слой использовался как защита чтобы посторонние не могли попасть в древний мир, только от кого защищалась такая развитая цивилизация остаётся вопросом.
+rota.l-gui.lore.title=Лор
+##################################################################################
+# Config any
+##################################################################################
+thaumrota.cfg.sub.any.primalbladespeed=Скорость атаки первородного клинка
+thaumrota.cfg.sub.any.primalbladedamage=Урон первородного клинка
+thaumrota.cfg.sub.any=Разное
+thaumrota.cfg.sub.any.uog=Использовать старый загрузочный экран
+##################################################################################
+# Config Difficulty settings
+##################################################################################
+thaumrota.cfg.sub.ds=Настройки сложности
+thaumrota.cfg.sub.ds.pcd=Лист эффектов (Не работает)
+##################################################################################
+# Config Portal settings
+##################################################################################
+thaumrota.cfg.sub.portal.slm=Отправлять сообщение о загрузке
+thaumrota.cfg.sub.portal=Настройки древнего портала
+thaumrota.cfg.sub.portal.isgen=Генерировать? (Не работает)
+thaumrota.cfg.sub.portal.x=X
+thaumrota.cfg.sub.portal.z=Z
+thaumrota.cfg.sub.portal.y=Y
+thaumrota.cfg.sub.portal.tobedrock=Генерировать до бедрока? (Не работает)
+thaumrota.cfg.sub.portal.modId=ID Модов
+thaumrota.cfg.sub.portal.ci=Проверять предметы?
+#################################################################################
+# Config Ancient world settings
+#################################################################################
+thaumrota.cfg.sub.aws=Настройки древнего мира
+thaumrota.cfg.sub.aws.og=Использовать старый генератор
+thaumrota.cfg.sub.aws.np=Нельзя использовать мирную сложность
+thaumrota.cfg.sub.aws.nnv=Нельзя использовать ночное зрение
+thaumrota.cfg.sub.aws.daw=Умирать в древнем мире
+################################################################################
+# Config Ancient world generation settings
+################################################################################
+thaumrota.cfg.sub.aws.wgs=Настройки генерации древнего мира
+thaumrota.cfg.sub.aws.wgs.fc=Шанс генерации развилки
+thaumrota.cfg.sub.aws.wgs.tc=Шанс генерации поворота
+################################################################################
+# Config Performance settings
+################################################################################
+thaumrota.cfg.sub.ps=Настройки производительности
+thaumrota.cfg.sub.ps.sgd=Количество тиков за которые генерируется 1 структура
+thaumrota.cfg.sub.ps.nct=Количество чанков очищенных за 1 тик
+thaumrota.cfg.sub.ps.nrt=Количество блоков перезагрузившие свет за 1 тик
+################################################################################
+# Config Client settings
+################################################################################
+thaumrota.cfg.sub.cs=Клиентские настройки
+thaumrota.cfg.sub.cs.usi=Использовать статичную картинку в gui?
+################################################################################
+# Config Mob gen settings
+################################################################################
+thaumrota.cfg.sub.mgs=Настройки генерации мобов (Не работает)
+thaumrota.cfg.sub.aws.wgs.sgd=Structures generation delay
+thaumrota.cfg.sub.aws.wgs.nct=Number of cleaned structures per tick
+thaumrota.cfg.sub.aws.wgs.nrt=Number of reload light block per tick
+thaumrota.cfg.sub.mgs.umg=Использовать новую генерацию мобов
+################################################################################
+#research
+################################################################################
+thaumrota.text.entered_ancient=Вы посетили древний мир
+thaumrota.text.found_portal=Вы нашли древний портал
+thaumrota.text.recovery=Вы пришли в себя
+thaumrota.text.dead=Вы умерли?
+thaumrota.text.deformation=Вы обнаружили странное искажение в структуре лабиринта
+thaumrota.text.boss=Вы обнаружили Стража
+#
+tc.research_category.ANCIENT_WORLD=Древний мир legacy
+#
+research.start.title=Начало
+research.start.text.stage.1=Также в этой книге написано о неком древнем мире и о устройстве которое поможет найти вход, думою под это стоит выделить отдельную категорию исследований.
+research.start.text.stage.2=Также в этой книге написано о неком древнем мире и о устройстве которое поможет найти вход, думою под это стоит выделить отдельную категорию исследований. <BR> <BR> Мне удалось воссоздать это устройство... Оно не работает, думаю что с моими знаниями я смогу его доработать.
+research.start.text.stage.3=Также в этой книге написано о неком древнем мире и о устройстве которое поможет найти вход, думою под это стоит выделить отдельную категорию исследований. <BR> <BR> Мне удалось воссоздать это устройство... Оно не работает, думаю что с моими знаниями я смогу его доработать.. <BR> <BR> Отлично! у меня есть рабочий прототип.
+#
+research.to_ancient.title=В древний мир
+research.m_FOUND_ANCIENT.text=Найдите портал
+research.m_ENTRY_ANCIENT.text=Войдите в портал
+research.to_ancient.text.stage.1=Стоит пойти посмотреть куда он ведет, возможно мне предстоит долгое путешествие.
+research.to_ancient.text.stage.2=Стоит пойти посмотреть куда он ведет, возможно мне предстоит долгое путешествие. <BR> <BR> Стоит ли мне туда идти? Готов ли я? Вернусь ли я от туда? В 'багровых ритуалах' написано что броня на ~40% менне эффективна в этом мире. Во всяком случае без этого эта ветка исследований приостановится.
+research.to_ancient.text.stage.3=Стоит пойти посмотреть куда он ведет, возможно мне предстоит долгое путешествие. <BR> <BR> Стоит ли мне туда идти? Готов ли я? Вернусь ли я от туда? В 'багровых ритуалах' написано что броня на ~40% менне эффективна в этом мире. Во всяком случае без этого эта ветка исследований приостановится. <BR> <BR> <BR> Все выглядит почти так же как на иллюстрациях в 'багровых ритуалах'. Этот слой должен быть входом в сам древней мир который сам из себя не чего не представляет, где-то тут должен быть страж который охраняет проход на следующий слой, по крайней мере так пишут культисты.
+research.to_ancient.text.addenda.1=Я умер? Я умер! Или нет? Мне нужно время...
+#
+research.final.title=Конец?
+research.final.text.stage.1=Пока что да...
+#
+research.boss.title=Cтраж
+research.boss.text.stage.1=Все же культисты были правы на счет брони (интересно от куда они все это знают) думаю мне стоит продолжить исследования.
+research.boss.text.stage.2=Все же культисты были правы на счет брони (интересно от куда они все это знают) думаю мне стоит продолжить исследования. <BR> Интересно... похоже что оно увеличивается если идти в определенную сторону.
+research.boss.text.stage.3=Все же культисты были правы на счет брони (интересно от куда они все это знают) думаю мне стоит продолжить исследования. <BR> Интересно... похоже что оно увеличивается если идти в определенную сторону. <BR> Я нашел стража! Похоже что чем ближе в стражу тем больше эта деформация, теперь я знаю куда идти.
+research.DEFORMATION.text=Продолжите исследовать древний мир
+research.m_BOSS.text=Идите в сторону увеличения деформации
+research.f_!FINAL.text=Победите стража
+#
+research.soul_binder.text.stage.1=Исходя из данных культистов и моих исследований похоже что зашедший в портал человек появляется в разных частях слоя, если я захочу исследовать древний мир в группе то мне нужно как-то решить эту проблему.
+research.soul_binder.text.stage.2=Исходя из данных культистов и моих исследований похоже что зашедший в портал человек появляется в разных частях слоя, если я захочу исследовать древний мир в группе то мне нужно как-то решить эту проблему. <BR> <BR> Мне удалось разработать камень связи душ, его можно привязать к себе и если зайти в портал с ним то все кто привязан переместятся в древний мир.
+################################################################################
+#research things
+################################################################################
+research.primal_blade.text.stage.1=Клинок из первозданной материи, созданный по древней утерянной технологии, не подлежит воссозданию.
+research.fire_trap.text.stage.1=Древняя и очень мощная горелка, не понятно как она работает, благо активируется не моментально и можно успеть убежать.
+research.eldritch_trap.text.stage.1=Появляется только на перекрестках распознать её можно по фиолетовым частицам, по всей видимости за время механизим износился и двери можно сломать.thaumrota.cfg.sub.aws.isw=Is set Warptile.stone_eldritch_tile_lightning.name=Glowing eldritch stone
+thaumrota.command.main.usage=/thaumrota <updatedropprimalblade|seed|help|tptoportal>
+thaumrota.cfg.sub.aws.isw=Is set Warp

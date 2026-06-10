@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "thaumrota:blocks/taint_ancient_stone_0",
+        "up": "thaumrota:blocks/taint_ancient_stone_0",
+        "down": "thaumrota:blocks/taint_ancient_stone_1",
+        "east": "thaumrota:blocks/taint_ancient_stone_2",
+        "west": "thaumrota:blocks/taint_ancient_stone_3",
+        "north": "thaumrota:blocks/taint_ancient_stone_4",
+        "south": "thaumrota:blocks/taint_ancient_stone_5"
+    }
+}

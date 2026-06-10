@@ -1,0 +1,14 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "thaumrota:items/soul_binder"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "full": 1
+      },
+      "model": "thaumrota:item/soul_binder_empty"
+    }
+  ]
+}

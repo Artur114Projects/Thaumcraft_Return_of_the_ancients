@@ -1,0 +1,26 @@
+package com.artur114.thaumrota.client.audio;
+
+import com.artur114.thaumrota.common.init.InitSounds;
+import com.artur114.thaumrota.common.tileentity.TileEntityAncientFan;
+import net.minecraft.util.SoundCategory;
+
+public class SoundBlockAncientFan extends SoundTile<TileEntityAncientFan> {
+
+    public SoundBlockAncientFan(TileEntityAncientFan tile) {
+        super(InitSounds.FAN.SOUND, SoundCategory.BLOCKS, tile);
+
+        this.repeat = true;
+        this.volume = 0.6F;
+        this.repeatDelay = 0;
+    }
+
+    @Override
+    public void update() {
+        super.update();
+
+        if (this.tile.spinSpeed(1) > 3) { // TODO: 13.09.2025 Переделать!
+            this.pitch = 1.0F + (0.8F * ((this.tile.spinSpeed(1) - 3.0F) / 3.0F));
+            this.volume = 0.4F + (0.4F * ((this.tile.spinSpeed(1) - 3.0F) / 3.0F));
+        }
+    }
+}

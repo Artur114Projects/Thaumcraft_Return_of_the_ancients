@@ -1,0 +1,9 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thaumcraft:empty"
+  },
+  "variants": {
+    "inventory": [{ "model": "thaumrota:cleaned_void_stone" }], "normal": [{ "model": "thaumrota:cleaned_void_stone" }]
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "whisper": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "thaumrota:whisper",
+        "stream": true,
+        "volume": 1
+      }
+    ]
+  },
+  "heartbeat": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "thaumrota:heartbeat",
+        "stream": false,
+        "volume": 4
+      }
+    ]
+  },
+  "bum": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "thaumrota:bum",
+        "stream": true,
+        "volume": 1
+      }
+    ]
+  },
+  "rui_dead": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "thaumrota:rui_dead",
+        "stream": true,
+        "volume": 2
+      }
+    ]
+  },
+  "fire_trap_sound": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "thaumrota:fire_trap_sound",
+        "stream": true,
+        "volume": 16
+      }
+    ]
+  },
+  "fire_trap_sound_start": {
+    "category": "block",
+    "sounds": [
+      {
+        "name": "thaumrota:fire_trap_sound_start",
+        "stream": true,
+        "volume": 4
+      }
+    ]
+  },
+  "portal_impact": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "thaumrota:portal_impact",
+        "stream": true,
+        "volume": 2
+      }
+    ]
+  },
+  "portal_heart_beat": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "thaumrota:portal_heart_beat",
+        "stream": true,
+        "volume": 2
+      }
+    ]
+  },
+  "ancient_controller_activate": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "thaumrota:ancient_controller_activate",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  },
+  "ancient_controller_deactivate": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "thaumrota:ancient_controller_deactivate",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  },
+  "spotlight": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "thaumrota:spotlight",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  },
+  "pneumatic_puff": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "thaumrota:pneumatic_puff",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  },
+  "door_open_2": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "thaumrota:door_open_2",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  },
+  "door_open_1": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "thaumrota:door_open_1",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  },
+  "pedestal_activated": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "thaumrota:pedestal_activated",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  },
+  "pneumatic_puff_long": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "thaumrota:pneumatic_puff_long",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  },
+  "projector": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "thaumrota:projector",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  },
+  "fan": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "thaumrota:fan",
+        "stream": false,
+        "volume": 1
+      }
+    ]
+  }
+}

@@ -3,14 +3,14 @@ package com.artur114.thaumrota.client.render.tile;
 import com.artur114.thaumrota.client.model.ModelAncientDoor8x6;
 import com.artur114.thaumrota.client.render.item.IItemStackRenderer;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientDoor8X6;
-import com.artur114.thaumrota.common.util.EnumAssetLocation;
+import com.artur114.thaumrota.common.util.EnumAsset;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 public class TileEntityAncientDoor8x6Render extends TileEntitySpecialRendererBase<TileEntityAncientDoor8X6> implements IItemStackRenderer {
-    private static final ResourceLocation TEXTURE_BASE = EnumAssetLocation.TEXTURES_BLOCKS.getPngRL("ancient_door_8x6");
+    private static final ResourceLocation TEXTURE_BASE = EnumAsset.TEXTURES_BLOCKS.png("ancient_door_8x6");
     private final ModelAncientDoor8x6 modelBase = new ModelAncientDoor8x6();
 
     @Override

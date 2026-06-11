@@ -1,15 +1,15 @@
 package com.artur114.thaumrota.common.tileentity;
 
+import com.artur114.bananalib.math.BananaMath;
+import com.artur114.bananalib.mc.base.tileabs.ITileBlockPlaceListener;
+import com.artur114.bananalib.mc.base.tileabs.ITileBlockUseListener;
+import com.artur114.bananalib.mc.base.tileabs.ITileNeighborChangeListener;
 import com.artur114.thaumrota.client.audio.SoundBlockAncientFan;
 import com.artur114.thaumrota.client.event.ClientEventsHandler;
 import com.artur114.thaumrota.client.fx.particle.ParticleFlameCanCollide;
 import com.artur114.thaumrota.client.fx.particle.ParticleWaterBubbleDyn;
 import com.artur114.thaumrota.common.init.InitItems;
-import com.artur114.thaumrota.common.tileentity.interf.ITileBlockPlaceListener;
-import com.artur114.thaumrota.common.tileentity.interf.ITileBlockUseListener;
 import com.artur114.thaumrota.common.tileentity.interf.ITileBurner;
-import com.artur114.thaumrota.common.tileentity.interf.ITileNeighborChangeListener;
-import com.artur114.thaumrota.common.util.math.MathUtils;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -89,7 +89,7 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
 
     @SideOnly(Side.CLIENT)
     public float spinSpeed(float pct) {
-        return MathUtils.interpolate(this.localSpinSpeed(), this.activeSpinSpeed, MathUtils.interpolate(this.prevActiveTime, this.activeTime, pct) / this.maxActiveTime) / (this.isInWater ? 2.0F : 1.0F);
+        return BananaMath.lerp(this.localSpinSpeed(), this.activeSpinSpeed, BananaMath.lerp(this.prevActiveTime, this.activeTime, pct) / this.maxActiveTime) / (this.isInWater ? 2.0F : 1.0F);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.common.generation.portal.generators;
 
-import com.artur114.thaumrota.common.blockprotect.BlockProtectHandler;
+import com.artur114.thaumrota.common.worldstate.blockprotect.BlockProtectHandler;
 import com.artur114.thaumrota.common.misc.RotAConfigs;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.block.state.IBlockState;

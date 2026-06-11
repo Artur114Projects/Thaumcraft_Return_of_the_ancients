@@ -5,7 +5,7 @@ import com.artur114.thaumrota.common.generation.portal.AncientPortalOpening;
 import com.artur114.thaumrota.common.generation.terraingen.GenLayersHandler;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.handlers.TeleportHandler;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.misc.RotAConfigs;
 import com.artur114.thaumrota.common.misc.RotAWorldData;
 import com.artur114.thaumrota.common.network.ClientPacketSyncAncientPortals;
@@ -34,7 +34,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.artur114.thaumrota.common.init.InitDimensions.ancient_world_dim_id;
 
-@Mod.EventBusSubscriber(modid = ThaumicRotA.MODID)
+@Mod.EventBusSubscriber(modid = ThaumRotA.MODID)
 public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать под capability!
 
     private static final Map<Integer, ChunkPos[]> PORTALS_GENERATION_POS = new HashMap<>();
@@ -221,7 +221,7 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
     }
 
     public static int getFreeId() {
-        return MiscHandler.foundMostSmallUniqueIntInList(new ArrayList<>(AncientPortalsProcessor.PORTALS.keySet()));
+        return foundMostSmallUniqueIntInList(new ArrayList<>(AncientPortalsProcessor.PORTALS.keySet()));
     }
 
     public static AncientPortal loadPortal(MinecraftServer server, NBTTagCompound nbt) {
@@ -416,11 +416,11 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
     }
 
     public static void updatePortalDataOnClient() {
-        ThaumicRotA.NETWORK.sendToAll(new ClientPacketSyncAncientPortals(crateSyncNBT()));
+        ThaumRotA.NETWORK.sendToAll(new ClientPacketSyncAncientPortals(crateSyncNBT()));
     }
 
     public static void updatePortalDataOnClient(EntityPlayerMP player) {
-        ThaumicRotA.NETWORK.sendTo(new ClientPacketSyncAncientPortals(crateSyncNBT()), player);
+        ThaumRotA.NETWORK.sendTo(new ClientPacketSyncAncientPortals(crateSyncNBT()), player);
     }
 
     public static NBTTagCompound crateSyncNBT() {
@@ -437,4 +437,22 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
         return nbt;
     }
 
+    public static int foundMostSmallUniqueIntInList(List<Integer> list) {
+        if (list.isEmpty()) return 0;
+        boolean isFound;
+        int value = 0;
+        while (true) {
+            isFound = true;
+            for (Integer i : list) {
+                if (i == value) {
+                    isFound = false;
+                    break;
+                }
+            }
+            if (isFound) {
+                return value;
+            }
+            value++;
+        }
+    }
 }

@@ -1,8 +1,9 @@
 package com.artur114.thaumrota.common.items;
 
+import com.artur114.bananalib.mc.base.BItemBase;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitDimensions;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.misc.RotAConfigs;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -27,12 +28,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class ItemSoulBinder extends BaseItem {
+public class ItemSoulBinder extends BItemBase {
     public ItemSoulBinder(String name) {
         super(name);
         setMaxStackSize(1);
-        setCreativeTab(ThaumicRotA.ROTA_CREATIVE_TAB);
+        setCreativeTab(ThaumRotA.CREATIVE_TAB);
         addPropertyOverride(new ResourceLocation("full"), new IItemPropertyGetter() {
             @Override
             @SideOnly(Side.CLIENT)
@@ -40,7 +42,7 @@ public class ItemSoulBinder extends BaseItem {
                 if (entityIn == null && !stack.isOnItemFrame()) {
                     return 1;
                 }
-                return !stack.getOrCreateSubCompound(ThaumicRotA.MODID).getBoolean("isFull") ? 1 : 0;
+                return !stack.getOrCreateSubCompound(ThaumRotA.MODID).getBoolean("isFull") ? 1 : 0;
             }
         });
     }
@@ -53,7 +55,7 @@ public class ItemSoulBinder extends BaseItem {
     @Override
     public @NotNull ActionResult<ItemStack> onItemRightClick(@NotNull World worldIn, EntityPlayer playerIn, @NotNull EnumHand handIn) {
         ItemStack stack = playerIn.getHeldItem(handIn);
-        NBTTagCompound nbt = stack.getOrCreateSubCompound(ThaumicRotA.MODID);
+        NBTTagCompound nbt = stack.getOrCreateSubCompound(ThaumRotA.MODID);
         NBTTagCompound list = nbt.getCompoundTag("players");
         if (!playerIn.isSneaking()) {
             list.setUniqueId(playerIn.getName(), playerIn.getUniqueID());
@@ -69,12 +71,12 @@ public class ItemSoulBinder extends BaseItem {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        NBTTagCompound nbt = stack.getOrCreateSubCompound(ThaumicRotA.MODID);
+        NBTTagCompound nbt = stack.getOrCreateSubCompound(ThaumRotA.MODID);
         if (nbt.getBoolean("isFull")) {
             if(!GuiScreen.isShiftKeyDown()) {
                 NBTTagCompound list = nbt.getCompoundTag("players");
                 tooltip.add(TextFormatting.YELLOW + I18n.format("item.soul_binder.info.d.3"));
-                for (String text : MiscHandler.uuidKeySetToList(list.getKeySet(), TextFormatting.AQUA)) {
+                for (String text : uuidKeySetToList(list.getKeySet(), TextFormatting.AQUA)) {
                     tooltip.add(TextFormatting.WHITE + "[" + text + TextFormatting.RESET + "]");
                 }
                 tooltip.add("");
@@ -102,7 +104,7 @@ public class ItemSoulBinder extends BaseItem {
 
     public static boolean isSoulBinderFull(@Nullable ItemStack stack) {
         if (stack == null || !(stack.getItem() instanceof ItemSoulBinder)) return false;
-        return stack.getOrCreateSubCompound(ThaumicRotA.MODID).getBoolean("isFull");
+        return stack.getOrCreateSubCompound(ThaumRotA.MODID).getBoolean("isFull");
     }
 
 
@@ -116,9 +118,9 @@ public class ItemSoulBinder extends BaseItem {
         players.add(player);
 
         if (isSoulBinderFull(stack)) {
-            NBTTagCompound nbt = stack.getOrCreateSubCompound(ThaumicRotA.MODID);
+            NBTTagCompound nbt = stack.getOrCreateSubCompound(ThaumRotA.MODID);
             NBTTagCompound list = nbt.getCompoundTag("players");
-            List<String> keys = MiscHandler.uuidKeySetToList(list.getKeySet());
+            List<String> keys = uuidKeySetToList(list.getKeySet());
 
             for (String key : keys) {
                 UUID id = list.getUniqueId(key);
@@ -136,7 +138,7 @@ public class ItemSoulBinder extends BaseItem {
                                 names.put(id, key);
                             } else {
                                 names.put(id, key + "|thaumrota.team_state.has_unresolved_items");
-                                playerMP.sendMessage(new TextComponentTranslation(ThaumicRotA.MODID + ".portal.message"));
+                                playerMP.sendMessage(new TextComponentTranslation(ThaumRotA.MODID + ".portal.message"));
                                 playerMP.sendMessage(new TextComponentString(uui.toString()));
                             }
                         } else {
@@ -154,5 +156,29 @@ public class ItemSoulBinder extends BaseItem {
         }
 
         return new Tuple<>(players, names);
+    }
+
+    public static List<String> uuidKeySetToList(Set<String> set) {
+        String[] keys = set.toArray(new String[0]);
+        List<String> keysF = new ArrayList<>();
+        for (String key : keys) {
+            key = key.replaceAll("Most", "");
+            key = key.replaceAll("Least", "");
+            keysF.add(key);
+        }
+        keysF = keysF.stream().distinct().collect(Collectors.toList());
+        return keysF;
+    }
+
+    public static List<String> uuidKeySetToList(Set<String> set, TextFormatting textFormatting) {
+        String[] keys = set.toArray(new String[0]);
+        List<String> keysF = new ArrayList<>();
+        for (String key : keys) {
+            key = key.replaceAll("Most", "");
+            key = key.replaceAll("Least", "");
+            keysF.add(textFormatting + key);
+        }
+        keysF = keysF.stream().distinct().collect(Collectors.toList());
+        return keysF;
     }
 }

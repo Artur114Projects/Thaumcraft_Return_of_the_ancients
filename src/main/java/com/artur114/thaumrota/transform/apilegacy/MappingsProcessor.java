@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.transform.apilegacy;
 
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -37,7 +37,7 @@ public class MappingsProcessor {
     }
 
     private static void loadCSVMappings(Map<String, String> map, String fileName) throws IOException {
-        InputStream stream = ThaumicRotA.class.getResourceAsStream("/assets/thaumrota/transform/mappings/" + fileName);
+        InputStream stream = ThaumRotA.class.getResourceAsStream("/assets/thaumrota/transform/mappings/" + fileName);
         if (stream == null) {
             new NullPointerException().printStackTrace(System.err);
             return;

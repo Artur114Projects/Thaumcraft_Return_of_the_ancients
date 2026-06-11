@@ -4,7 +4,7 @@ package com.artur114.thaumrota.common.energy.bases.block;
 import com.artur114.thaumrota.common.init.InitCapabilities;
 import com.artur114.thaumrota.common.energy.bases.tile.ITileEnergy;
 import com.artur114.thaumrota.common.energy.system.EnergySystemsManager;
-import com.artur114.thaumrota.common.tileentity.BaseBlockTileEntity;
+import com.artur114.thaumrota.common.blocks.BaseBlockTileEntity;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

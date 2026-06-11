@@ -1,18 +1,18 @@
 package com.artur114.thaumrota.common.generation.portal.base;
 
-import com.artur114.thaumrota.common.ancientworld.system.base.AncientLayer1StaticManager;
-import com.artur114.thaumrota.common.structurebuilder.StructuresBuildManager;
-import com.artur114.thaumrota.common.blocks.BlockTpToAncientWorld;
-import com.artur114.thaumrota.common.capabilities.IPlayerTimerCapability;
+import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1StaticManager;
+import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
+import com.artur114.thaumrota.common.blocks.BlockAncientWorldPortal;
+import com.artur114.thaumrota.common.worldstate.playertimer.IPlayerTimer;
 import com.artur114.thaumrota.common.init.InitCapabilities;
 import com.artur114.thaumrota.common.generation.portal.util.PortalOffsets;
 import com.artur114.thaumrota.common.handlers.TeleportHandler;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitBlocks;
 import com.artur114.thaumrota.common.misc.RotAConfigs;
-import com.artur114.thaumrota.common.util.interfaces.IWriteToNBT;
+import com.artur114.bananalib.mc.nbt.IWriteToNBT;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -166,14 +166,14 @@ public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025
 
     protected static void onPlayerTpToHome(EntityPlayerMP player) {
         if (!ThaumcraftCapabilities.knowsResearchStrict(player, "DEAD")) {
-            MiscHandler.researchAndSendMessage(player, "DEAD", ThaumicRotA.MODID + ".text.dead");
-            IPlayerTimerCapability timer = InitCapabilities.getTimer(player);
+            MiscHandler.researchAndSendMessage(player, "DEAD", ThaumRotA.MODID + ".text.dead");
+            IPlayerTimer timer = InitCapabilities.getTimer(player);
             timer.createTimer("recovery");
         }
     }
 
     public static void setTpToHomeNBTData(EntityPlayerMP player) {
-        player.getEntityData().setBoolean(BlockTpToAncientWorld.noCollisionNBT, true);
+        player.getEntityData().setBoolean(BlockAncientWorldPortal.noCollisionNBT, true);
         player.getEntityData().setBoolean(tpToHomeNBT, true);
     }
 

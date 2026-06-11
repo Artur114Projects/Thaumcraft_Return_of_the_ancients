@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.common.blocks;
 
-import com.artur114.thaumrota.common.util.math.MathUtils;
+import com.artur114.bananalib.mc.BananaMC;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -32,7 +32,7 @@ public class BlockMovingLava extends BaseBlock {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return MathUtils.createBoundingBox(0, 0, 0, 16, 14, 16);
+        return BananaMC.createAABBFromPixels(0, 0, 0, 16, 14, 16);
     }
 
     @Override

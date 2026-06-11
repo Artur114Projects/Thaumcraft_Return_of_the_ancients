@@ -1,6 +1,5 @@
 package com.artur114.thaumrota.common.blocks;
 
-import com.artur114.thaumrota.common.tileentity.BaseBlockTileEntity;
 import com.artur114.thaumrota.common.tileentity.TileEntityDummy;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -61,7 +60,7 @@ public class BlockDummy extends BaseBlockTileEntity<TileEntityDummy> {
     }
 
     @Override
-    public Class<TileEntityDummy> tileEntityClass() {
+    public Class<TileEntityDummy> tileClass() {
         return TileEntityDummy.class;
     }
 

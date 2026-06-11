@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.client.gui;
 
 import com.artur114.thaumrota.client.gui.gif.GifSTime;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.misc.RotAConfigs;
 import com.artur114.thaumrota.common.network.ServerPacketTpToHome;
 import net.minecraft.client.gui.GuiButton;
@@ -42,9 +42,9 @@ public class LoadingGui extends GuiScreen {
     public LoadingGui(boolean isTeam) {
         this.isTeam = isTeam;
         if (!RotAConfigs.ClientSettings.useStaticImageOnLoadingGui) {
-            gif = new GifSTime(ThaumicRotA.MODID + ":textures/gui/gif/gen_gif/gen_gif_v2-", 18, 15, true);
+            gif = new GifSTime(ThaumRotA.MODID + ":textures/gui/gif/gen_gif/gen_gif_v2-", 18, 15, true);
         }
-        location = new ResourceLocation( ThaumicRotA.MODID + ":textures/gui/loading_gui_background.png");
+        location = new ResourceLocation( ThaumRotA.MODID + ":textures/gui/loading_gui_background.png");
         for (int i = 0; i != constantNamesTranslate.length; i++) {
             names[i] = I18n.format(constantNamesTranslate[i]);
         }
@@ -168,7 +168,7 @@ public class LoadingGui extends GuiScreen {
         }
 
         if (isDrawESCString) {
-            String s = I18n.format(ThaumicRotA.MODID + ".gui.esc");
+            String s = I18n.format(ThaumRotA.MODID + ".gui.esc");
             int hieE = (int) (height / 1.25);
             int widE = ((width / 2) - (fontRenderer.getStringWidth(s) / 2));
             fontRenderer.drawStringWithShadow(s, widE, hieE, Red);
@@ -207,7 +207,7 @@ public class LoadingGui extends GuiScreen {
                 iaESCString = true;
             } else {
                 iaESCString = false;
-                ThaumicRotA.NETWORK.sendToServer(new ServerPacketTpToHome());
+                ThaumRotA.NETWORK.sendToServer(new ServerPacketTpToHome());
                 mc.displayGuiScreen(null);
             }
             return;

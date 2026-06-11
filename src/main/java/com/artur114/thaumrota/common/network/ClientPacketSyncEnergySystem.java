@@ -3,7 +3,7 @@ package com.artur114.thaumrota.common.network;
 import com.artur114.thaumrota.common.init.InitCapabilities;
 import com.artur114.thaumrota.common.energy.bases.tile.ITileEnergy;
 import com.artur114.thaumrota.common.energy.system.EnergySystemsManager;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.network.base.NBTPacketBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,6 +46,6 @@ public class ClientPacketSyncEnergySystem extends NBTPacketBase {
     public static void sendOnBlockDestroyed(ITileEnergy tile) {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setLong("onBlockDestroyed", tile.pos().toLong());
-        ThaumicRotA.NETWORK.sendToAllTracking(new ClientPacketSyncEnergySystem(nbt), new NetworkRegistry.TargetPoint(tile.world().provider.getDimension(), tile.pos().getX(), tile.pos().getY(), tile.pos().getZ(), 0));
+        ThaumRotA.NETWORK.sendToAllTracking(new ClientPacketSyncEnergySystem(nbt), new NetworkRegistry.TargetPoint(tile.world().provider.getDimension(), tile.pos().getX(), tile.pos().getY(), tile.pos().getZ(), 0));
     }
 }

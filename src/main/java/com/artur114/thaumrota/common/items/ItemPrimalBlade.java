@@ -1,9 +1,10 @@
 package com.artur114.thaumrota.common.items;
 
+import com.artur114.bananalib.mc.registry.data.ModelRegData;
+import com.artur114.bananalib.mc.registry.interf.IHasModel;
 import com.artur114.thaumrota.common.misc.RotAConfigs;
 import com.artur114.thaumrota.common.init.InitItems;
-import com.artur114.thaumrota.main.ThaumicRotA;
-import com.artur114.thaumrota.common.util.interfaces.IHasModel;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -15,19 +16,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ItemPrimalBlade extends ItemAxe implements IHasModel {
 
     public ItemPrimalBlade(String name, Item.ToolMaterial e) {
         super(e, RotAConfigs.Any.primalBladeDamage - 1, (float) RotAConfigs.Any.primalBladeSpeed);
-        setRegistryName(name);
-        setUnlocalizedName(name);
-        setMaxStackSize(1);
-        setCreativeTab(ThaumicRotA.ROTA_CREATIVE_TAB);
-        setNoRepair();
-
-        InitItems.ITEMS_REGISTER_BUSS.add(this);
+        this.setRegistryName(name);
+        this.setUnlocalizedName(name);
+        this.setMaxStackSize(1);
+        this.setCreativeTab(ThaumRotA.CREATIVE_TAB);
+        this.setNoRepair();
     }
 
     @SideOnly(Side.CLIENT)
@@ -46,7 +46,7 @@ public class ItemPrimalBlade extends ItemAxe implements IHasModel {
     }
 
     @Override
-    public void registerModels() {
-        ThaumicRotA.proxy.registerItemRenderer(this, 0, "inventory");
+    public List<ModelRegData> registerModelsData() {
+        return Collections.singletonList(ModelRegData.inventory(this, 0));
     }
 }

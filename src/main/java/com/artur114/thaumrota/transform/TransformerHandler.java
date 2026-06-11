@@ -5,10 +5,10 @@ import com.artur114.thaumrota.client.event.ClientEventsHandler;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitBiomes;
 import com.artur114.thaumrota.common.misc.RotAConfigs;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.transform.apilegacy.base.ITransformer;
 import com.artur114.thaumrota.transform.apilegacy.base.MVBase;
-import com.artur114.thaumrota.common.util.EnumAssetLocation;
+import com.artur114.thaumrota.common.util.EnumAsset;
 import com.chaosthedude.naturescompass.util.BiomeSearchWorker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -34,7 +34,7 @@ public class TransformerHandler {
     /*--------------------------START TRANSFORMER METHODS--------------------------*/
 
     public static ResourceLocation getCustomPlayerArmTex() {
-        return EnumAssetLocation.TEXTURES_MISC.getPngRL("player_arm");
+        return EnumAsset.TEXTURES_MISC.png("player_arm");
     }
 
     public static int getPotionMaxStackSize() {
@@ -42,7 +42,7 @@ public class TransformerHandler {
     }
 
     public static void addPatchedTooltip(Item item, ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn, String text) {
-        tooltip.add(TextFormatting.GREEN + "Patched with the mod: " + TextFormatting.RESET + "[" + ThaumicRotA.MODID + "]" + TextFormatting.GREEN + " Patch list:");
+        tooltip.add(TextFormatting.GREEN + "Patched with the mod: " + TextFormatting.RESET + "[" + ThaumRotA.MODID + "]" + TextFormatting.GREEN + " Patch list:");
         String[] textArray = text.split("\n");
         Collections.addAll(tooltip, textArray);
         tooltip.add("");

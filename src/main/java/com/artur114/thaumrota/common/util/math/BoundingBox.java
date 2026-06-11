@@ -1,6 +1,10 @@
 package com.artur114.thaumrota.common.util.math;
 
-import com.artur114.thaumrota.common.ancientworld.map.utils.EnumRotate;
+import com.artur114.bananalib.math.core.m3d.vec.IVec3DC;
+import com.artur114.bananalib.mc.math.EnumRot;
+import com.artur114.bananalib.mc.math.m3d.vec.IVecMc3D;
+import com.artur114.bananalib.mc.math.m3d.vec.VecMc3D;
+import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.EnumRotate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -27,6 +31,11 @@ public class BoundingBox implements IArea {
         this(start.blockPos(), end.blockPos());
     }
 
+    public BoundingBox(IVec3DC start, IVec3DC end) {
+        this(new BlockPos(start.x(), start.y(), start.z()), new BlockPos(end.x(), end.y(), end.z()));
+    }
+
+    @Deprecated
     public BoundingBox(Pos3d start, Pos3d end) {
         this(new BlockPos(start.x, start.y, start.z), new BlockPos(end.x, end.y, end.z));
     }
@@ -55,6 +64,13 @@ public class BoundingBox implements IArea {
         return new BoundingBox(this.start.add(-x, -y, -z), this.end.add(x, y, z));
     }
 
+    public BoundingBox rotate(IVecMc3D center, EnumRot rotate) {
+        VecMc3D vecStart = new VecMc3D(this.start.getX(), this.start.getY(), this.start.getZ()).subtract(center).rotateY(rotate.degrees()).add(center);
+        VecMc3D vecEnd = new VecMc3D(this.end.getX(), this.end.getY(), this.end.getZ()).subtract(center).rotateY(rotate.degrees()).add(center);
+        return new BoundingBox(vecStart, vecEnd);
+    }
+
+    @Deprecated
     public BoundingBox rotate(Pos3d center, EnumRotate rotate) {
         Pos3d vecStart = new Pos3d(this.start.getX(), this.start.getY(), this.start.getZ()).deduct(center).rotateY(EnumRotate.toMc(rotate)).add(center);
         Pos3d vecEnd = new Pos3d(this.end.getX(), this.end.getY(), this.end.getZ()).deduct(center).rotateY(EnumRotate.toMc(rotate)).add(center);

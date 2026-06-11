@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.common.network;
 
-import com.artur114.thaumrota.common.blockprotect.IProtectedChunk;
-import com.artur114.thaumrota.common.blockprotect.client.IClientProtectedChunk;
+import com.artur114.thaumrota.common.worldstate.blockprotect.IProtectedChunk;
+import com.artur114.thaumrota.common.worldstate.blockprotect.client.IClientProtectedChunk;
 import com.artur114.thaumrota.common.init.InitCapabilities;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import io.netty.buffer.ByteBuf;

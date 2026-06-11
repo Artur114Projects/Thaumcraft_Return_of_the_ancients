@@ -1,8 +1,9 @@
 package com.artur114.thaumrota.common.blocks;
 
+import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.thaumrota.common.init.InitBlocks;
 import com.artur114.thaumrota.common.util.math.CoordinateMatrix;
-import com.artur114.thaumrota.common.util.math.MathUtils;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -34,7 +35,7 @@ public class BlockAncientGrid extends BaseBlock {
         super(name, material, hardness, resistance, soundType);
 
         this.setNotFillAndOpaqueCube();
-        this.setTRACreativeTab();
+        this.setCreativeTab(ThaumRotA.CREATIVE_TAB);
         this.setForCreative();
         this.setLightLevel(0.75F);
     }
@@ -88,7 +89,7 @@ public class BlockAncientGrid extends BaseBlock {
     }
 
     private static CoordinateMatrix createMatrix() {
-        AxisAlignedBB bb = MathUtils.createBoundingBox(0, 0, 0, 16, 4, 16);
+        AxisAlignedBB bb = BananaMC.createAABBFromPixels(0, 0, 0, 16, 4, 16);
         CoordinateMatrix matrix = new CoordinateMatrix();
 
         for (EnumFacing facing : EnumFacing.VALUES) {

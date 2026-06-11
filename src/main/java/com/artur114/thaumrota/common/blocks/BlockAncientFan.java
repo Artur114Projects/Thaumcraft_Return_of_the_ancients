@@ -1,9 +1,8 @@
 package com.artur114.thaumrota.common.blocks;
 
 import com.artur114.thaumrota.client.render.tile.TileEntityAncientFanRender;
-import com.artur114.thaumrota.common.tileentity.BaseBlockTileEntity;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientFan;
-import com.artur114.thaumrota.common.util.MaterialArray;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -15,10 +14,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockAncientFan extends BaseBlockTileEntity<TileEntityAncientFan> {
     public BlockAncientFan(String name) {
-        super(name, MaterialArray.ANCIENT_STONE_ARRAY);
+        super(name, MaterialArrays.ANCIENT_STONE_ARRAY);
 
-        this.setRenderer(new TileEntityAncientFanRender());
-        this.setTRACreativeTab();
+        this.setTileRender(new TileEntityAncientFanRender());
+        this.setCreativeTab(ThaumRotA.CREATIVE_TAB);
         this.setForCreative();
     }
 
@@ -32,7 +31,7 @@ public class BlockAncientFan extends BaseBlockTileEntity<TileEntityAncientFan> {
     }
 
     @Override
-    public Class<TileEntityAncientFan> tileEntityClass() {
+    public Class<TileEntityAncientFan> tileClass() {
         return TileEntityAncientFan.class;
     }
 

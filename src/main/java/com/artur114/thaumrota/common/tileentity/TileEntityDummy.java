@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.common.tileentity;
 
-import com.artur114.thaumrota.common.tileentity.interf.ITileBBProvider;
+import com.artur114.bananalib.mc.base.tileabs.ITileMultiBBProvider;
 import com.artur114.thaumrota.common.tileentity.interf.ITileMultiBlock;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,7 +8,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
-public class TileEntityDummy extends TileBase implements ITileBBProvider {
+import java.util.Collections;
+import java.util.List;
+
+public class TileEntityDummy extends TileBase implements ITileMultiBBProvider {
     protected AxisAlignedBB alignedBB = Block.FULL_BLOCK_AABB;
     protected BlockPos parent = null;
 
@@ -18,8 +21,9 @@ public class TileEntityDummy extends TileBase implements ITileBBProvider {
         this.markDirty();
     }
 
-    public AxisAlignedBB boundingBox() {
-        return this.alignedBB;
+    @Override
+    public List<AxisAlignedBB> boundingBoxes() {
+        return Collections.singletonList(this.alignedBB);
     }
 
     public void bindParent(BlockPos pos) {

@@ -2,7 +2,7 @@ package com.artur114.thaumrota.registry;
 
 import com.artur114.bananalib.mc.registry.ann.AutoInstantiate;
 import com.artur114.bananalib.mc.registry.interf.ILoadStagePre;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import org.apache.logging.log4j.LogManager;
@@ -44,6 +44,6 @@ public class RotAForceLoadCb implements ForgeChunkManager.LoadingCallback, ILoad
 
     @Override
     public void onPreInit() {
-        ForgeChunkManager.setForcedChunkLoadingCallback(ThaumicRotA.INSTANCE, this);
+        ForgeChunkManager.setForcedChunkLoadingCallback(ThaumRotA.INSTANCE, this);
     }
 }

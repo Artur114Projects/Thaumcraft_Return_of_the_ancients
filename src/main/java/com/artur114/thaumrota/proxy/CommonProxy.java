@@ -1,9 +1,13 @@
 package com.artur114.thaumrota.proxy;
 
 import com.artur114.bananalib.mc.registry.IRegisterBus;
+import com.artur114.bananalib.mc.services.BananaClientServices;
 import com.artur114.thaumrota.client.gui.RotAGuiHandler;
 import com.artur114.thaumrota.common.init.*;
+import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.registry.RegistryHandler;
+import com.artur114.thaumrota.registry.RotAForceLoadCb;
+import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import net.minecraftforge.fml.common.event.*;
 
 import java.util.Arrays;
@@ -14,7 +18,7 @@ public abstract class CommonProxy implements IProxy {
     public void preInit(IRegisterBus bus, FMLPreInitializationEvent e) {
         bus.scanAndRegister(this.commonClassesToReg().toArray(new Class[0]));
         bus.scanAndRegister(this.classesToRegister().toArray(new Class[0]));
-
+        bus.subscribe();
         bus.preInit();
     }
 
@@ -37,7 +41,9 @@ public abstract class CommonProxy implements IProxy {
             InitDimensions.class,
             InitCapabilities.class,
             RegistryHandler.class,
-            RotAGuiHandler.class
+            RotAGuiHandler.class,
+            RotAForceLoadCb.class,
+            StructuresBuildManager.class
         );
     }
 

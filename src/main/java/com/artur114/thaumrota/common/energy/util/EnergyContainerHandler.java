@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.common.energy.util;
 
 import com.artur114.thaumrota.client.util.RenderHandler;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class EnergyContainerHandler {
 
-    public static final ResourceLocation barBaseTexture = new ResourceLocation(ThaumicRotA.MODID, "textures/gui/container/energy_bar_base.png");
+    public static final ResourceLocation barBaseTexture = new ResourceLocation(ThaumRotA.MODID, "textures/gui/container/energy_bar_base.png");
 
     private float lastEnergyCount = 0.0F;
     public float energyCount = 0.0F;
@@ -235,12 +235,12 @@ public class EnergyContainerHandler {
             return;
         }
         List<String> list = new ArrayList<>();
-        list.add(TextFormatting.AQUA + I18n.format(ThaumicRotA.MODID + ".energy.local.0") + TextFormatting.RESET + " " + EnergyTypes.kJToString(energyCount) + "/" + EnergyTypes.kJToString(maxEnergy));
+        list.add(TextFormatting.AQUA + I18n.format(ThaumRotA.MODID + ".energy.local.0") + TextFormatting.RESET + " " + EnergyTypes.kJToString(energyCount) + "/" + EnergyTypes.kJToString(maxEnergy));
         if (hoveredInput) {
-            list.add(TextFormatting.YELLOW + I18n.format(ThaumicRotA.MODID + ".energy.local.1") + TextFormatting.RESET + " " + EnergyTypes.kWToString(inputCount) + "/" + EnergyTypes.kWToString(maxInput * 20));
+            list.add(TextFormatting.YELLOW + I18n.format(ThaumRotA.MODID + ".energy.local.1") + TextFormatting.RESET + " " + EnergyTypes.kWToString(inputCount) + "/" + EnergyTypes.kWToString(maxInput * 20));
         }
         if (hoveredOutput) {
-            list.add(TextFormatting.YELLOW + I18n.format(ThaumicRotA.MODID + ".energy.local.2") + TextFormatting.RESET + " " + EnergyTypes.kWToString(outputCount) + "/" + EnergyTypes.kWToString(maxOutput * 20));
+            list.add(TextFormatting.YELLOW + I18n.format(ThaumRotA.MODID + ".energy.local.2") + TextFormatting.RESET + " " + EnergyTypes.kWToString(outputCount) + "/" + EnergyTypes.kWToString(maxOutput * 20));
         }
         container.drawHoveringText(list, mouseX, mouseY);
 

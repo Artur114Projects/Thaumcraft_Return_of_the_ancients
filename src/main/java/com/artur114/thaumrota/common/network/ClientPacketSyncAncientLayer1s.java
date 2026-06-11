@@ -1,11 +1,11 @@
 package com.artur114.thaumrota.common.network;
 
-import com.artur114.thaumrota.common.ancientworld.system.base.IAncientLayer1Manager;
-import com.artur114.thaumrota.common.ancientworld.system.client.IClientAncientLayer1Manager;
-import com.artur114.thaumrota.common.ancientworld.system.server.AncientLayer1Server;
+import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.IAncientLayer1Manager;
+import com.artur114.thaumrota.common.worldstate.ancientworld.system.client.IClientAncientLayer1Manager;
+import com.artur114.thaumrota.common.worldstate.ancientworld.system.server.AncientLayer1Server;
 import com.artur114.thaumrota.common.init.InitCapabilities;
 import com.artur114.thaumrota.common.init.InitDimensions;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.network.base.NBTPacketBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -51,7 +51,7 @@ public class ClientPacketSyncAncientLayer1s extends NBTPacketBase {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setTag("create", layer1Server.writeClientCreateNBT(new NBTTagCompound()));
 
-        ThaumicRotA.NETWORK.sendTo(new ClientPacketSyncAncientLayer1s(nbt), player);
+        ThaumRotA.NETWORK.sendTo(new ClientPacketSyncAncientLayer1s(nbt), player);
     }
 
     public static void sendCreateLayerAndStartBuild(EntityPlayerMP player, AncientLayer1Server layer1Server) {
@@ -59,14 +59,14 @@ public class ClientPacketSyncAncientLayer1s extends NBTPacketBase {
         nbt.setTag("create", layer1Server.writeClientCreateNBT(new NBTTagCompound()));
         nbt.setBoolean("build", true);
 
-        ThaumicRotA.NETWORK.sendTo(new ClientPacketSyncAncientLayer1s(nbt), player);
+        ThaumRotA.NETWORK.sendTo(new ClientPacketSyncAncientLayer1s(nbt), player);
     }
 
     public static void sendBuildState(EntityPlayerMP player, boolean state) {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setBoolean("build", state);
 
-        ThaumicRotA.NETWORK.sendTo(new ClientPacketSyncAncientLayer1s(nbt), player);
+        ThaumRotA.NETWORK.sendTo(new ClientPacketSyncAncientLayer1s(nbt), player);
     }
 
     public static void sendUpdatePlayersState(EntityPlayerMP player, Map<UUID, String> teamState) {
@@ -79,7 +79,7 @@ public class ClientPacketSyncAncientLayer1s extends NBTPacketBase {
 
         nbt.setTag("playersState", list);
 
-        ThaumicRotA.NETWORK.sendTo(new ClientPacketSyncAncientLayer1s(nbt), player);
+        ThaumRotA.NETWORK.sendTo(new ClientPacketSyncAncientLayer1s(nbt), player);
     }
 
     public static void sendSyncStructures(EntityPlayerMP player, NBTTagCompound data) {
@@ -87,6 +87,6 @@ public class ClientPacketSyncAncientLayer1s extends NBTPacketBase {
 
         nbt.setTag("structuresSync", data);
 
-        ThaumicRotA.NETWORK.sendTo(new ClientPacketSyncAncientLayer1s(nbt), player);
+        ThaumRotA.NETWORK.sendTo(new ClientPacketSyncAncientLayer1s(nbt), player);
     }
 }

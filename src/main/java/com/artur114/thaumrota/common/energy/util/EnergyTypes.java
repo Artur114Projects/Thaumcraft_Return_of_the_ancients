@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.common.energy.util;
 
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.client.resources.I18n;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +35,7 @@ public enum EnergyTypes {
     }
 
     public static String kJToString(float count) {
-        String[] prefixes = I18n.format(ThaumicRotA.MODID + ".kJ.prefixes").split("/");
+        String[] prefixes = I18n.format(ThaumRotA.MODID + ".kJ.prefixes").split("/");
         float localCount = count;
         if (localCount < 1) {
             return ((int) (localCount * 1000)) + prefixes[0];
@@ -50,7 +50,7 @@ public enum EnergyTypes {
     }
 
     public static String kWToString(float count) {
-        String[] prefixes = I18n.format(ThaumicRotA.MODID + ".kW.prefixes").split("/");
+        String[] prefixes = I18n.format(ThaumRotA.MODID + ".kW.prefixes").split("/");
         float localCount = count;
         if (localCount < 1) {
             return ((int) (localCount * 1000)) + prefixes[0];

@@ -1,8 +1,8 @@
 package com.artur114.thaumrota.common.tileentity;
 
+import com.artur114.bananalib.mc.base.tileabs.ITileBlockPlaceListener;
+import com.artur114.bananalib.mc.base.tileabs.ITileMultiBBProvider;
 import com.artur114.thaumrota.client.util.RenderHandler;
-import com.artur114.thaumrota.common.tileentity.interf.ITileBlockPlaceListener;
-import com.artur114.thaumrota.common.tileentity.interf.ITileMultiBBProvider;
 import com.artur114.thaumrota.common.util.math.CoordinateMatrix;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -15,6 +15,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class TileEntityIncinerator extends TileBase implements ITickable, ITileBlockPlaceListener, ITileMultiBBProvider {
     private EnumFacing face = EnumFacing.UP;
@@ -29,7 +31,7 @@ public class TileEntityIncinerator extends TileBase implements ITickable, ITileB
     }
 
     @Override
-    public AxisAlignedBB[] boundingBoxes() {
+    public List<AxisAlignedBB> boundingBoxes() {
         if (this.matrix == null) {
             this.compileMatrix();
         }
@@ -38,7 +40,7 @@ public class TileEntityIncinerator extends TileBase implements ITickable, ITileB
         CoordinateMatrix move = this.matrix.child("move");
         move.clearTransforms(false);
         move.translate(((12.0F / 16.0F) * this.moveProcess(partialTicks)) * -this.face.getFrontOffsetX(), ((12.0F / 16.0F) * this.moveProcess(partialTicks)) * -this.face.getFrontOffsetY(), ((12.0F / 16.0F) * this.moveProcess(partialTicks)) * -this.face.getFrontOffsetZ());
-        return this.matrix.allBoundingBoxes().toArray(new AxisAlignedBB[0]);
+        return this.matrix.allBoundingBoxes();
     }
 
     @Override

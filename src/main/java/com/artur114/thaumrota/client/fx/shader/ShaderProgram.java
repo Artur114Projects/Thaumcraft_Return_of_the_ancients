@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.client.fx.shader;
 
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.TextureUtil;
@@ -120,7 +120,7 @@ public class ShaderProgram {
 
     private String readFile(String path) {
         try {
-            return IOUtils.toString(new InputStreamReader(Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation(ThaumicRotA.MODID, path)).getInputStream(), StandardCharsets.UTF_8));
+            return IOUtils.toString(new InputStreamReader(Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation(ThaumRotA.MODID, path)).getInputStream(), StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace(System.err);
         }

@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.common.tileentity;
 
-import com.artur114.thaumrota.common.structurebuilder.StructuresBuildManager;
+import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -49,7 +49,6 @@ public class TileEntityEldritchTrap extends TileEntity implements ITickable {
         if (!players.isEmpty() && phase == 0 && !players.get(0).isCreative()) {
             if (!world.isRemote) {
                 for (EntityPlayer player : players) {
-                    MiscHandler.researchTC((EntityPlayerMP) player, "!ELDRITCH_TRAP");
                     player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 30, 0));
                 }
             }

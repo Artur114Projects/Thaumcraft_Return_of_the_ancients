@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.common.generation.portal.generators;
 
-import com.artur114.thaumrota.common.structurebuilder.StructuresBuildManager;
+import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;

@@ -2,7 +2,7 @@ package com.artur114.thaumrota.common.network;
 
 import com.artur114.thaumrota.common.init.InitSounds;
 import com.artur114.thaumrota.common.misc.RotAConfigs;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -51,9 +51,9 @@ public class ClientPacketMisc implements IMessage { // TODO: 16.11.2025 Упра
                 }
                 if (nbt.hasKey("sendAncientWorldLoadMessage")) {
                     if (nbt.getBoolean("sendAncientWorldLoadMessage")) {
-                        playerSP.sendMessage(new TextComponentString(TITLE + I18n.translateToLocal(ThaumicRotA.MODID + ".message.ancientworldload.start")));
+                        playerSP.sendMessage(new TextComponentString(TITLE + I18n.translateToLocal(ThaumRotA.MODID + ".message.ancientworldload.start")));
                     } else {
-                        playerSP.sendMessage(new TextComponentString(TITLE + I18n.translateToLocal(ThaumicRotA.MODID + ".message.ancientworldload.finish")));
+                        playerSP.sendMessage(new TextComponentString(TITLE + I18n.translateToLocal(ThaumRotA.MODID + ".message.ancientworldload.finish")));
                     }
                 } else if (nbt.hasKey("sendMessage")) {
                     playerSP.sendMessage(new TextComponentString(TITLE + nbt.getString("sendMessage")));

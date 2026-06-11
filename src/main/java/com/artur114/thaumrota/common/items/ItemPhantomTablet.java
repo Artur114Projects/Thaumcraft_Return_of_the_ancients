@@ -1,8 +1,10 @@
 package com.artur114.thaumrota.common.items;
 
+import com.artur114.bananalib.mc.base.BItemBase;
 import com.artur114.thaumrota.client.fx.particle.ParticlePhantom;
 import com.artur114.thaumrota.common.init.InitDimensions;
 import com.artur114.thaumrota.common.util.math.Pos3d;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -25,12 +27,12 @@ import thaumcraft.common.lib.SoundsTC;
 
 import java.util.List;
 
-public class ItemPhantomTablet extends BaseItem {
+public class ItemPhantomTablet extends BItemBase {
 
     public ItemPhantomTablet(String name) {
         super(name);
 
-        this.setTRACreativeTab();
+        this.setCreativeTab(ThaumRotA.CREATIVE_TAB);
         this.setMaxStackSize(1);
     }
 

@@ -2,8 +2,8 @@ package com.artur114.thaumrota.common.blocks;
 
 import com.artur114.thaumrota.client.render.tile.TileEntityAncientSanctuaryControllerRenderer;
 import com.artur114.thaumrota.common.init.InitItems;
-import com.artur114.thaumrota.common.tileentity.BaseBlockTileEntity;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientSanctuaryController;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -26,8 +26,8 @@ public class BlockAncientSanctuaryController extends BaseBlockTileEntity<TileEnt
     public BlockAncientSanctuaryController(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
 
-        this.setRenderer(new TileEntityAncientSanctuaryControllerRenderer());
-        this.setForCreative().setTRACreativeTab();
+        this.setTileRender(new TileEntityAncientSanctuaryControllerRenderer());
+        this.setForCreative().setCreativeTab(ThaumRotA.CREATIVE_TAB);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class BlockAncientSanctuaryController extends BaseBlockTileEntity<TileEnt
     }
 
     @Override
-    public Class<TileEntityAncientSanctuaryController> tileEntityClass() {
+    public Class<TileEntityAncientSanctuaryController> tileClass() {
         return TileEntityAncientSanctuaryController.class;
     }
 

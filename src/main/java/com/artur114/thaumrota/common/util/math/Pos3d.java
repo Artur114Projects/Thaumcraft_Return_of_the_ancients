@@ -8,6 +8,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import org.jetbrains.annotations.NotNull;
 
+@Deprecated
 public class Pos3d extends Vec3d {
     public Pos3d(double x, double y, double z) {
         super(x, y, z);

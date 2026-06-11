@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.blockprotect;
 
-import com.artur114.thaumrota.common.blockprotect.ExtendedProtectStorage1bit;
-import com.artur114.thaumrota.common.blockprotect.IExtendedProtectStorage;
+import com.artur114.thaumrota.common.worldstate.blockprotect.ExtendedProtectStorage1bit;
+import com.artur114.thaumrota.common.worldstate.blockprotect.IExtendedProtectStorage;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import org.junit.jupiter.api.Assertions;

@@ -1,12 +1,12 @@
 package com.artur114.thaumrota.client.gui;
 
-import com.artur114.thaumrota.common.ancientworld.system.client.AncientLayer1Client;
+import com.artur114.thaumrota.common.worldstate.ancientworld.system.client.AncientLayer1Client;
 import com.artur114.thaumrota.client.gui.buttons.TRAButton;
 import com.artur114.thaumrota.client.gui.gif.GifWithTextureAtlas;
 import com.artur114.thaumrota.client.util.RenderHandler;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.network.ServerPacketTpToHome;
-import com.artur114.thaumrota.common.util.EnumAssetLocation;
+import com.artur114.thaumrota.common.util.EnumAsset;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -28,7 +28,7 @@ public class CoolLoadingGui extends GuiScreen {
     private GuiButton button;
     protected final ResourceLocation background;
     private final GifWithTextureAtlas gif_2_0 = new GifWithTextureAtlas("loading", 20, 8, 8 * 12, 8, 8);
-    protected static final ResourceLocation blur = EnumAssetLocation.TEXTURES_GUI.getPngRL("v.png");
+    protected static final ResourceLocation blur = EnumAsset.TEXTURES_GUI.png("v.png");
     protected final AncientLayer1Client layer1Client;
     private final int Red = 16711680;
     private final int Yellow = 0xffff40;
@@ -53,7 +53,7 @@ public class CoolLoadingGui extends GuiScreen {
     public CoolLoadingGui(AncientLayer1Client layer1Client) {
         this.layer1Client = layer1Client;
         int id = rand.nextInt(3);
-        background = EnumAssetLocation.TEXTURES_GUI.getPngRL("/loading_gui_backgrounds/background" + id);
+        background = EnumAsset.TEXTURES_GUI.png("/loading_gui_backgrounds/background" + id);
         int loreId = rand.nextInt(2);
         lore = I18n.format("rota.l-gui.lore." + loreId);
         this.isTeam = layer1Client.playersState().size() > 1;
@@ -96,7 +96,7 @@ public class CoolLoadingGui extends GuiScreen {
                 if (closingTime <= 0) {
                     mc.displayGuiScreen(null);
                     if (isTpToHome) {
-                        ThaumicRotA.NETWORK.sendToServer(new ServerPacketTpToHome());
+                        ThaumRotA.NETWORK.sendToServer(new ServerPacketTpToHome());
                     }
                     isClosing = false;
                 }
@@ -109,7 +109,7 @@ public class CoolLoadingGui extends GuiScreen {
         super.initGui();
         resolution = new ScaledResolution(mc);
         if (isTeam) {
-            this.button = new TRAButton(0, 0, 0, fontRenderer.getStringWidth(I18n.format("rota.l-gui.button.team")) + 16, 20, I18n.format("rota.l-gui.button.team"), new ResourceLocation(ThaumicRotA.MODID + ":textures/gui/tra_button.png"));
+            this.button = new TRAButton(0, 0, 0, fontRenderer.getStringWidth(I18n.format("rota.l-gui.button.team")) + 16, 20, I18n.format("rota.l-gui.button.team"), new ResourceLocation(ThaumRotA.MODID + ":textures/gui/tra_button.png"));
             this.buttonList.add(this.button);
         }
     }

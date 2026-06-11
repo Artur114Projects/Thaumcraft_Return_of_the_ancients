@@ -13,6 +13,6 @@ public class CreativeTabRotA extends CreativeTabs {
 
     @Override
 	public @NotNull ItemStack getTabIconItem() {
-		return new ItemStack(InitBlocks.PEDESTAL_ACTIVE);
+		return new ItemStack(InitBlocks.ANCIENT_LAMP_1);
 	}
 }

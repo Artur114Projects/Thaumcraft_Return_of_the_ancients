@@ -1,7 +1,5 @@
 package com.artur114.thaumrota.common.containers.util;
 
-import com.artur114.thaumrota.common.util.AspectBottle;
-import com.artur114.thaumrota.common.util.AspectBottlesList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import thaumcraft.api.aspects.Aspect;

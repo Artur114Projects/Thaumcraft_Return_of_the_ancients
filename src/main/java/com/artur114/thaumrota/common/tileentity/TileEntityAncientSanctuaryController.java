@@ -1,12 +1,12 @@
 package com.artur114.thaumrota.common.tileentity;
 
+import com.artur114.bananalib.mc.BananaMC;
+import com.artur114.bananalib.mc.base.tileabs.ITileMultiBBProvider;
 import com.artur114.thaumrota.common.generation.portal.naturalgen.AncientPortalNaturalGen;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortal;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.common.generation.portal.naturalgen.AncientSanctuary;
 import com.artur114.thaumrota.common.init.InitSounds;
-import com.artur114.thaumrota.common.tileentity.interf.ITileMultiBBProvider;
-import com.artur114.thaumrota.common.util.math.MathUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -19,13 +19,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.List;
+
 // TODO: 25.02.2025 Сделать звук процесса закрытия
 public class TileEntityAncientSanctuaryController extends TileEntity implements ITickable, ITileMultiBBProvider {
-    private static final AxisAlignedBB[] boundingBox = new AxisAlignedBB[] {
-        MathUtils.createBoundingBox(1, 0, 1, 15, 1, 15),
-        MathUtils.createBoundingBox(2, 1, 2, 14, 2, 14),
-        MathUtils.createBoundingBox(3, 2, 3, 13, 16, 13)
-    };
+    private static final List<AxisAlignedBB> boundingBox = Arrays.asList(
+        BananaMC.createAABBFromPixels(1, 0, 1, 15, 1, 15),
+        BananaMC.createAABBFromPixels(2, 1, 2, 14, 2, 14),
+        BananaMC.createAABBFromPixels(3, 2, 3, 13, 16, 13)
+    );
 
     private @Nullable AncientSanctuary sanctuary = null;
     private final int maxDoorMovingProgress = 40;
@@ -158,7 +161,7 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
     }
 
     @Override
-    public AxisAlignedBB[] boundingBoxes() {
+    public List<AxisAlignedBB> boundingBoxes() {
         return boundingBox;
     }
 }

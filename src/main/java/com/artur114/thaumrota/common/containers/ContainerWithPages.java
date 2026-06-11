@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.common.containers;
 
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.network.ServerPacketSyncContainerHideSlots;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
@@ -29,7 +29,7 @@ public abstract class ContainerWithPages extends Container {
 
     protected void onSlotsStateChange(List<Integer> hide, List<Integer> notHide) {
         if (tileC.isRemote()) {
-            ThaumicRotA.NETWORK.sendToServer(new ServerPacketSyncContainerHideSlots(tileC, hide, notHide));
+            ThaumRotA.NETWORK.sendToServer(new ServerPacketSyncContainerHideSlots(tileC, hide, notHide));
         }
     }
 

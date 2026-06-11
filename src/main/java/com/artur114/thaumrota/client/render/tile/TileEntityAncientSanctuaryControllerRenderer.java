@@ -3,7 +3,7 @@ package com.artur114.thaumrota.client.render.tile;
 import com.artur114.thaumrota.client.model.ModelAncientSanctuaryController;
 import com.artur114.thaumrota.common.init.InitItems;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientSanctuaryController;
-import com.artur114.thaumrota.common.util.EnumAssetLocation;
+import com.artur114.thaumrota.common.util.EnumAsset;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class TileEntityAncientSanctuaryControllerRenderer extends TileEntitySpecialRenderer<TileEntityAncientSanctuaryController> {
     private final EntityItem FUSE_IMITATION_ENTITY_TO_RENDER = new EntityItem(Minecraft.getMinecraft().world, 0.0, 0.0, 0.0, new ItemStack(InitItems.IMITATION_ANCIENT_FUSE));
-    private static final ResourceLocation TEXTURE_BASE = EnumAssetLocation.TEXTURES_BLOCKS.getPngRL("ancient_sanctuary_controller");
+    private static final ResourceLocation TEXTURE_BASE = EnumAsset.TEXTURES_BLOCKS.png("ancient_sanctuary_controller");
     private final ModelAncientSanctuaryController modelBase = new ModelAncientSanctuaryController();
 
     public TileEntityAncientSanctuaryControllerRenderer() {

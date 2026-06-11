@@ -1,11 +1,11 @@
 package com.artur114.thaumrota.common.generation.portal.base.client;
 
+import com.artur114.bananalib.math.BananaMath;
 import com.artur114.thaumrota.client.audio.SoundMovementElevator;
 import com.artur114.thaumrota.client.event.ClientEventsHandler;
 import com.artur114.thaumrota.client.event.managers.movement.IMovementTask;
 import com.artur114.thaumrota.client.fx.particle.ParticleAncientPortal;
 import com.artur114.thaumrota.common.generation.portal.util.PortalOffsets;
-import com.artur114.thaumrota.common.util.math.MathUtils;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -174,9 +174,9 @@ public class ClientAncientPortal {
             int currentY = MathHelper.floor(player.posY);
 
             if (Math.abs(toY - currentY) <= 20 && !this.fastEnd) {
-                speedPercent = MathUtils.interpolate(speedPercent, 0.25F, 0.12F);
+                speedPercent = BananaMath.lerp(speedPercent, 0.25F, 0.12F);
             } else {
-                speedPercent = MathUtils.interpolate(speedPercent, 1.0F, 0.05F);
+                speedPercent = BananaMath.lerp(speedPercent, 1.0F, 0.05F);
             }
 
             player.fallDistance = this.type == ElevatingType.UP ? 0 : 100;

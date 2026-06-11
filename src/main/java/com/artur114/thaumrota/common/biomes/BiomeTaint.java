@@ -8,7 +8,7 @@ import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitBiomes;
 import com.artur114.thaumrota.common.init.InitBlocks;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -37,7 +37,7 @@ public class BiomeTaint extends BBiomeBase implements ILoadStageInit {
     public final TaintType type;
 
     public BiomeTaint(String registryName, BiomeProperties properties, EBiome eBiome, TaintType type) {
-        super(new ResourceLocation(ThaumicRotA.MODID, registryName), properties, eBiome);
+        super(new ResourceLocation(ThaumRotA.MODID, registryName), properties, eBiome);
         this.spawnableWaterCreatureList.clear();
         this.spawnableCaveCreatureList.clear();
         this.decorator.generateFalls = false;

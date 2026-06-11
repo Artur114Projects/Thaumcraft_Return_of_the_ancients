@@ -1,27 +1,22 @@
 package com.artur114.thaumrota.common.util;
 
-import com.artur114.thaumrota.common.util.context.MethodContext;
-import com.artur114.thaumrota.common.util.context.MethodParams4;
-import com.artur114.thaumrota.common.util.context.MethodsContextManager;
-import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
+import com.artur114.bananalib.mc.BananaMC;
+import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
 public class TerrainAnalyzer {
     private static final AnalyzingArea EMPTY_AREA = new AnalyzingArea(new BlockPos(0, 0, 0), new BlockPos(0, 0, 0));
-    private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
+    private final PosMc3IM blockPos = new PosMc3IM();
     private final World world;
 
-    private MethodsContextManager<Integer, MethodParams4<Integer, Integer, Integer, Integer>> CONTEXT_4_INT_RES_INT = new MethodsContextManager<>(20);
     private AnalyzingArea analyzingArea = EMPTY_AREA;
     private int[] heightMapNotLiquids = null;
     private int[] heightMap = null;
-
 
     public TerrainAnalyzer(World world) {
         this.world = world;
@@ -63,24 +58,15 @@ public class TerrainAnalyzer {
         this.analyzingArea = newArea;
     }
 
-    @Nullable
-    public MethodContext<Integer, MethodParams4<Integer, Integer, Integer, Integer>> get4IntRetIntMethodContext(String name) {
-        if (!CONTEXT_4_INT_RES_INT.hasMethodContext(name)) {
-            return null;
-        }
-
-        return CONTEXT_4_INT_RES_INT.getMethodContext(name);
-    }
-
     public int getHeight(BlockPos pos, boolean notLiquids) {
-        blockPos.pushPos();
+        this.blockPos.pushPos();
 
-        this.analyzingArea.localize(blockPos.setPos(pos));
+        this.analyzingArea.localize(this.blockPos.set(pos));
 
         int[] heightMap = this.getAndLoadHeightMap(notLiquids);
-        int y = heightMap[blockPos.getX() + blockPos.getZ() * analyzingArea.getAreaXSize()];
+        int y = heightMap[this.blockPos.getX() + this.blockPos.getZ() * this.analyzingArea.getAreaXSize()];
 
-        blockPos.popPos();
+        this.blockPos.popPos();
 
         return y;
     }
@@ -98,11 +84,7 @@ public class TerrainAnalyzer {
 
     public int getHeightVariation(int inX, int inZ, int toX, int toZ) {
         this.checkOutOfBound(inX, inZ, toX, toZ);
-
-        if (this.CONTEXT_4_INT_RES_INT.getMethodContext("getHeightVariation").hasResultFromParam(new MethodParams4<>(inX, inZ, toX, toZ))) {
-            return this.CONTEXT_4_INT_RES_INT.getMethodContext("getHeightVariation").getResultFromParam(new MethodParams4<>(inX, inZ, toX, toZ));
-        }
-        if (heightMap == null) {
+        if (this.heightMap == null) {
             loadHeightMap(false);
         }
 
@@ -125,11 +107,7 @@ public class TerrainAnalyzer {
             }
         }
 
-        int heightVariation = max - min;
-
-        this.CONTEXT_4_INT_RES_INT.onMethodInvoke("getHeightVariation", new MethodParams4<>(inX, inZ, toX, toZ), heightVariation);
-
-        return heightVariation;
+        return max - min;
     }
 
     public int getTerrainFlow() {
@@ -138,11 +116,7 @@ public class TerrainAnalyzer {
 
     public int getTerrainFlow(int inX, int inZ, int toX, int toZ) {
         this.checkOutOfBound(inX, inZ, toX, toZ);
-
-        if (this.CONTEXT_4_INT_RES_INT.getMethodContext("getTerrainFlow").hasResultFromParam(new MethodParams4<>(inX, inZ, toX, toZ))) {
-            return this.CONTEXT_4_INT_RES_INT.getMethodContext("getTerrainFlow").getResultFromParam(new MethodParams4<>(inX, inZ, toX, toZ));
-        }
-        if (heightMap == null) {
+        if (this.heightMap == null) {
             loadHeightMap(false);
         }
 
@@ -178,9 +152,6 @@ public class TerrainAnalyzer {
                 }
             }
         }
-
-        this.CONTEXT_4_INT_RES_INT.onMethodInvoke("getTerrainFlow", new MethodParams4<>(inX, inZ, toX, toZ), terrainFlow);
-
         return terrainFlow;
     }
 
@@ -190,11 +161,7 @@ public class TerrainAnalyzer {
 
     public int getAverageHeight(int inX, int inZ, int toX, int toZ) {
         this.checkOutOfBound(inX, inZ, toX, toZ);
-
-        if (this.CONTEXT_4_INT_RES_INT.getMethodContext("getAverageHeight").hasResultFromParam(new MethodParams4<>(inX, inZ, toX, toZ))) {
-            return this.CONTEXT_4_INT_RES_INT.getMethodContext("getAverageHeight").getResultFromParam(new MethodParams4<>(inX, inZ, toX, toZ));
-        }
-        if (heightMap == null) {
+        if (this.heightMap == null) {
             loadHeightMap(false);
         }
 
@@ -211,9 +178,6 @@ public class TerrainAnalyzer {
         }
 
         ret = (ret / spase) + 1;
-
-        this.CONTEXT_4_INT_RES_INT.onMethodInvoke("getAverageHeight", new MethodParams4<>(inX, inZ, toX, toZ), ret);
-
         return ret;
     }
 
@@ -223,11 +187,7 @@ public class TerrainAnalyzer {
 
     public int getMaxHeight(int inX, int inZ, int toX, int toZ) {
         this.checkOutOfBound(inX, inZ, toX, toZ);
-
-        if (this.CONTEXT_4_INT_RES_INT.getMethodContext("getMaxHeight").hasResultFromParam(new MethodParams4<>(inX, inZ, toX, toZ))) {
-            return this.CONTEXT_4_INT_RES_INT.getMethodContext("getMaxHeight").getResultFromParam(new MethodParams4<>(inX, inZ, toX, toZ));
-        }
-        if (heightMap == null) {
+        if (this.heightMap == null) {
             loadHeightMap(false);
         }
 
@@ -242,8 +202,6 @@ public class TerrainAnalyzer {
                 }
             }
         }
-
-        this.CONTEXT_4_INT_RES_INT.onMethodInvoke("getMaxHeight", new MethodParams4<>(inX, inZ, toX, toZ), ret);
 
         return ret;
     }
@@ -276,27 +234,27 @@ public class TerrainAnalyzer {
         int areaX = this.analyzingArea.getAreaXSize();
         int areaZ = this.analyzingArea.getAreaZSize();
 
-        blockPos.pushPos();
+        this.blockPos.pushPos();
 
-        this.analyzingArea.offsetToStart(blockPos);
+        this.analyzingArea.offsetToStart(this.blockPos);
 
         for (int x = 0; x != areaX; x++) {
             for (int z = 0; z != areaZ; z++) {
-                blockPos.pushPos();
+                this.blockPos.pushPos();
 
-                this.analyzingArea.offset(blockPos, x, z);
+                this.analyzingArea.offset(this.blockPos, x, z);
 
                 if (notLiquids) {
-                    this.heightMapNotLiquids[x + z * areaX] = blockPos.setWorldY(world, true).getY();
+                    this.heightMapNotLiquids[x + z * areaX] = BananaMC.findHighestBlock(this.world, this.blockPos, true);
                 } else {
-                    this.heightMap[x + z * areaX] = blockPos.setWorldY(world).getY();
+                    this.heightMap[x + z * areaX] = BananaMC.findHighestBlock(this.world, this.blockPos);
                 }
 
-                blockPos.popPos();
+                this.blockPos.popPos();
             }
         }
 
-        blockPos.popPos();
+        this.blockPos.popPos();
     }
 
     private void checkOutOfBound(int inX, int inZ, int toX, int toZ) {
@@ -330,7 +288,6 @@ public class TerrainAnalyzer {
     }
 
     private void resetObjectData() {
-        this.CONTEXT_4_INT_RES_INT = new MethodsContextManager<>(20);
         this.analyzingArea = EMPTY_AREA;
         this.heightMap = null;
     }
@@ -387,13 +344,13 @@ public class TerrainAnalyzer {
             return Math.abs(areaZSize);
         }
 
-        public void offsetToStart(UltraMutableBlockPos pos) {
+        public void offsetToStart(PosMc3IM pos) {
             int y = pos.getY();
-            pos.setPos(startCords).setY(y);
+            pos.set(startCords).setY(y);
         }
 
-        public void localize(UltraMutableBlockPos pos) {
-            pos.deduct(startCords);
+        public void localize(PosMc3IM pos) {
+            pos.subtract(startCords);
             if (pos.getX() < 0 || pos.getX() >= this.getAreaXSize()) {
                 throw new IllegalArgumentException("Out of bound area! AreaXSize:" + this.getAreaXSize() + "Pos:" + pos.getX());
             }
@@ -402,7 +359,7 @@ public class TerrainAnalyzer {
             }
         }
 
-        public void offset(UltraMutableBlockPos pos, int toAreaCordX, int toAreaCordZ) {
+        public void offset(PosMc3IM pos, int toAreaCordX, int toAreaCordZ) {
             if (toAreaCordX < 0 || toAreaCordX >= this.getAreaXSize()) {
                 throw new IllegalArgumentException("Out of bound area! AreaXSize:" + this.getAreaXSize() + "Index:" + toAreaCordX);
             }

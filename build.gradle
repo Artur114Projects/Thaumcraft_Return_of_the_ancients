@@ -16,8 +16,8 @@ version = mod_version
 
 repositories {
     maven { url = 'https://maven.minecraftforge.net/' }
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
 }
 
 configurations {
@@ -27,6 +27,7 @@ configurations {
 dependencies {
     include('com.artur114.bananalib:asm:1.0.0') {transitive=false}
     include('com.artur114.bananalib:math:1.0.0') {transitive=false}
+    include('com.artur114.bananalib:util:1.0.0') {transitive=false}
     include('com.artur114.bananalib:mc:0.0.0-SNAPSHOT') {transitive=false}
 
     implementation 'org.jetbrains:annotations:24.0.0'
@@ -34,7 +35,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
-    compileOnly fileTree(dir: "libs", includes: ['*.jar'])
+    implementation fileTree(dir: "libs", includes: ['*.jar'])
 }
 
 test {

@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.common.blocks;
 
 import com.artur114.thaumrota.common.energy.bases.block.BlockContainerEnergyBase;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientTeleport;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -36,7 +36,8 @@ public class BlockAncientTeleport extends BlockContainerEnergyBase<TileEntityAnc
     public BlockAncientTeleport(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
 
-        this.setForCreative().setTRACreativeTab();
+        this.setForCreative().setCreativeTab(ThaumRotA.CREATIVE_TAB);
+        this.tileClass();
     }
 
     @Override
@@ -45,8 +46,13 @@ public class BlockAncientTeleport extends BlockContainerEnergyBase<TileEntityAnc
     }
 
     @Override
-    public Class<TileEntityAncientTeleport> tileEntityClass() {
+    public @NotNull Class<TileEntityAncientTeleport> tileClass() {
         return TileEntityAncientTeleport.class;
+    }
+
+    @Override
+    public @Nullable TileEntityAncientTeleport createTileEntity(@NotNull World world, @NotNull IBlockState blockState) {
+        return new TileEntityAncientTeleport();
     }
 
     @Override
@@ -56,7 +62,7 @@ public class BlockAncientTeleport extends BlockContainerEnergyBase<TileEntityAnc
         TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof TileEntityAncientTeleport)
         {
-            playerIn.openGui(ThaumicRotA.INSTANCE, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
+            playerIn.openGui(ThaumRotA.INSTANCE, 0, worldIn, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
         return false;

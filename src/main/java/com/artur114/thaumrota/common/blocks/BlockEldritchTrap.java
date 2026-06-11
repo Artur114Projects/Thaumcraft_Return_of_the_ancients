@@ -1,6 +1,5 @@
 package com.artur114.thaumrota.common.blocks;
 
-import com.artur114.thaumrota.common.tileentity.BaseBlockTileEntity;
 import com.artur114.thaumrota.common.tileentity.TileEntityEldritchTrap;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -36,7 +35,7 @@ public class BlockEldritchTrap extends BaseBlockTileEntity<TileEntityEldritchTra
         }
     }
 
-    public Class<TileEntityEldritchTrap> tileEntityClass() {
+    public Class<TileEntityEldritchTrap> tileClass() {
         return TileEntityEldritchTrap.class;
     }
 

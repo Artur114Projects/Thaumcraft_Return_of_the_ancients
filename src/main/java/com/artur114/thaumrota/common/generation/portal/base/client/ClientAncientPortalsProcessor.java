@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.common.generation.portal.base.client;
 
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SideOnly(Side.CLIENT)
-@Mod.EventBusSubscriber(modid = ThaumicRotA.MODID)
+@Mod.EventBusSubscriber(modid = ThaumRotA.MODID)
 public class ClientAncientPortalsProcessor {
     private static final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
 

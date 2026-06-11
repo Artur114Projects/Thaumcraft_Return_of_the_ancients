@@ -1,4 +1,4 @@
-def core_mod_class = "com.artur114.thaumrota.main.ThaumicRotACore"
+def core_mod_class = "com.artur114.thaumrota.main.ThaumRotACore"
 def at_file = "src/main/resources/META-INF/tc_at.cfg"
 
 minecraft {
@@ -25,6 +25,10 @@ minecraft {
             args '--launchTarget', 'fmluserdevclient'
         }
     }
+}
+
+dependencies {
+    implementation('net.minecraftforge:mergetool:0.2.3.3') { force = true }
 }
 
 jar.finalizedBy('reobfJar')

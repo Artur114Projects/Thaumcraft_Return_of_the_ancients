@@ -3,10 +3,10 @@ package com.artur114.thaumrota.client.gui.container;
 import com.artur114.thaumrota.client.gui.buttons.ButtonAncientTeleportMain;
 import com.artur114.thaumrota.client.gui.buttons.ButtonsPageManager;
 import com.artur114.thaumrota.common.containers.ContainerAncientTeleport;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.network.ServerPacketTileAncientTeleportData;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientTeleport;
-import com.artur114.thaumrota.common.util.AspectBottle;
+import com.artur114.thaumrota.common.containers.util.AspectBottle;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,11 +19,11 @@ import java.io.IOException;
 
 public class GuiAncientTeleport extends GuiContainer {
     private final ResourceLocation[] texturesBackground = new ResourceLocation[] {
-            new ResourceLocation(ThaumicRotA.MODID, "textures/gui/container/ancient_teleport_gui_page0.png"),
-            new ResourceLocation(ThaumicRotA.MODID, "textures/gui/container/ancient_teleport_gui_page1.png")
+            new ResourceLocation(ThaumRotA.MODID, "textures/gui/container/ancient_teleport_gui_page0.png"),
+            new ResourceLocation(ThaumRotA.MODID, "textures/gui/container/ancient_teleport_gui_page1.png")
     };
-    private final ResourceLocation aspectBottlesTexture = new ResourceLocation(ThaumicRotA.MODID, "textures/gui/container/aspect_bottle_vertical.png");
-    private final ResourceLocation ancientEnergyBarTexture = new ResourceLocation(ThaumicRotA.MODID, "textures/gui/container/ancient_energy_bar.png");
+    private final ResourceLocation aspectBottlesTexture = new ResourceLocation(ThaumRotA.MODID, "textures/gui/container/aspect_bottle_vertical.png");
+    private final ResourceLocation ancientEnergyBarTexture = new ResourceLocation(ThaumRotA.MODID, "textures/gui/container/ancient_energy_bar.png");
 
     public final ContainerAncientTeleport container;
     private final TileEntityAncientTeleport tile;
@@ -46,8 +46,8 @@ public class GuiAncientTeleport extends GuiContainer {
         super.initGui();
         buttonMain = new ButtonAncientTeleportMain(0, (width - xSize) / 2 + (xSize - 16 - 64), (height - ySize) / 2 + 12);
         buttonList.add(buttonMain);
-        ResourceLocation baseTexture = new ResourceLocation(ThaumicRotA.MODID, "textures/gui/button/ancient_button_page1.png");
-        pageManager = new ButtonsPageManager(buttonList, ((width - xSize) / 2 + 1 - 16), (height - ySize) / 2, 100, 2, 16, 1.0F, 'y', baseTexture, new ResourceLocation[] {new ResourceLocation(ThaumicRotA.MODID, "textures/gui/button/ancient_button_page_icon0.png"), null}, new String[] {"Main page", "Activating"}) {
+        ResourceLocation baseTexture = new ResourceLocation(ThaumRotA.MODID, "textures/gui/button/ancient_button_page1.png");
+        pageManager = new ButtonsPageManager(buttonList, ((width - xSize) / 2 + 1 - 16), (height - ySize) / 2, 100, 2, 16, 1.0F, 'y', baseTexture, new ResourceLocation[] {new ResourceLocation(ThaumRotA.MODID, "textures/gui/button/ancient_button_page_icon0.png"), null}, new String[] {"Main page", "Activating"}) {
             @Override
             public void onPageChange(int page, int pageIn) {
                 super.onPageChange(page, pageIn);
@@ -71,7 +71,7 @@ public class GuiAncientTeleport extends GuiContainer {
         switch (button.id) {
             case 0:{
                 buttonMain.press();
-                ThaumicRotA.NETWORK.sendToServer(new ServerPacketTileAncientTeleportData(tile, 0));
+                ThaumRotA.NETWORK.sendToServer(new ServerPacketTileAncientTeleportData(tile, 0));
             } break;
         }
     }

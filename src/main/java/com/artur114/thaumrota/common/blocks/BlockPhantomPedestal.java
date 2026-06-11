@@ -1,8 +1,8 @@
 package com.artur114.thaumrota.common.blocks;
 
 import com.artur114.thaumrota.client.render.tile.TileEntityPhantomPedestalRender;
-import com.artur114.thaumrota.common.tileentity.BaseBlockTileEntity;
 import com.artur114.thaumrota.common.tileentity.TileEntityPhantomPedestal;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -15,14 +15,14 @@ public class BlockPhantomPedestal extends BaseBlockTileEntity<TileEntityPhantomP
     public BlockPhantomPedestal(String name) {
         super(name, Material.GLASS, 2.0F, 10.0F, SoundType.GLASS);
 
-        this.setRenderer(new TileEntityPhantomPedestalRender());
+        this.setTileRender(new TileEntityPhantomPedestalRender());
+        this.setCreativeTab(ThaumRotA.CREATIVE_TAB);
         this.setNotFillAndOpaqueCube();
-        this.setTRACreativeTab();
         this.setForCreative();
     }
 
     @Override
-    public Class<TileEntityPhantomPedestal> tileEntityClass() {
+    public Class<TileEntityPhantomPedestal> tileClass() {
         return TileEntityPhantomPedestal.class;
     }
 

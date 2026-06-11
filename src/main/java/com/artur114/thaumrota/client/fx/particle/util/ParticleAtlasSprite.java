@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.client.fx.particle.util;
 
-import com.artur114.thaumrota.common.util.EnumAssetLocation;
+import com.artur114.thaumrota.common.util.EnumAsset;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -9,7 +9,7 @@ public class ParticleAtlasSprite extends ParticleSprite {
     protected final TextureAtlasSprite[] atlasSprites;
     protected final ResourceLocation[] sprites;
 
-    public ParticleAtlasSprite(EnumAssetLocation textureLocation, String... names) {
+    public ParticleAtlasSprite(EnumAsset textureLocation, String... names) {
         super(null, null);
         this.sprites = new ResourceLocation[names.length];
         this.atlasSprites = new TextureAtlasSprite[names.length];
@@ -19,7 +19,7 @@ public class ParticleAtlasSprite extends ParticleSprite {
     }
 
     public ParticleAtlasSprite(String... names) {
-        this(EnumAssetLocation.TEXTURES_PARTICLE, names);
+        this(EnumAsset.TEXTURES_PARTICLE, names);
     }
 
     @Override

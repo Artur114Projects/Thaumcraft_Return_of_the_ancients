@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.common.init;
 
 import com.artur114.thaumrota.common.misc.SoundTRA;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-@Mod.EventBusSubscriber(modid = ThaumicRotA.MODID)
+@Mod.EventBusSubscriber(modid = ThaumRotA.MODID)
 public class InitSounds {
     private static final List<SoundEvent> soundEvents = new ArrayList<>();
     public static final HashMap<String, SoundEvent> SOUND_MAP = new HashMap<>();
@@ -49,7 +49,7 @@ public class InitSounds {
     }
 
     private static SoundTRA create(String name) {
-        ResourceLocation rl = new ResourceLocation(ThaumicRotA.MODID, name);
+        ResourceLocation rl = new ResourceLocation(ThaumRotA.MODID, name);
         SoundEvent s = (new SoundEvent(rl)).setRegistryName(rl);
         soundEvents.add(s);
         SOUND_MAP.put(name, s);

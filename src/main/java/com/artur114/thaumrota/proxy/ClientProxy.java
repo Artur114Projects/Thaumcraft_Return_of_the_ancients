@@ -1,7 +1,9 @@
 package com.artur114.thaumrota.proxy;
 
 import com.artur114.bananalib.mc.registry.IRegisterBus;
+import com.artur114.bananalib.mc.services.BananaClientServices;
 import com.artur114.thaumrota.client.init.InitShaders;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -13,6 +15,9 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInit(IRegisterBus bus, FMLPreInitializationEvent e) {
         super.preInit(bus, e);
+
+        ThaumRotA.SERVICES.register(BananaClientServices.class);
+        ThaumRotA.SERVICES.subscribe("block-highlight-draw");
     }
 
     @Override

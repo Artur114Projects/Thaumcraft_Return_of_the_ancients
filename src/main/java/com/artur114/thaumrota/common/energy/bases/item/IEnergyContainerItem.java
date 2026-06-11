@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.common.energy.bases.item;
 
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.item.ItemStack;
 
 public interface IEnergyContainerItem {
@@ -33,9 +33,9 @@ public interface IEnergyContainerItem {
         }
     }
     default void setEnergy(ItemStack stack, float count) {
-        stack.getOrCreateSubCompound(ThaumicRotA.MODID).setFloat("EnergyCount", count);
+        stack.getOrCreateSubCompound(ThaumRotA.MODID).setFloat("EnergyCount", count);
     }
     default float getEnergy(ItemStack stack) {
-        return stack.getOrCreateSubCompound(ThaumicRotA.MODID).getFloat("EnergyCount");
+        return stack.getOrCreateSubCompound(ThaumRotA.MODID).getFloat("EnergyCount");
     }
 }

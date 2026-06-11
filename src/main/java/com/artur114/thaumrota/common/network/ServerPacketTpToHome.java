@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.common.network;
 
-import com.artur114.thaumrota.common.ancientworld.system.base.AncientLayer1EventsHandler;
+import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1EventsHandler;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

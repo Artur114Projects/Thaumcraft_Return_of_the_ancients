@@ -4,15 +4,15 @@ import com.artur114.thaumrota.client.event.ClientEventsHandler;
 import com.artur114.thaumrota.client.model.ModelIncinerator;
 import com.artur114.thaumrota.client.render.item.IItemStackRenderer;
 import com.artur114.thaumrota.common.tileentity.TileEntityIncinerator;
-import com.artur114.thaumrota.common.util.EnumAssetLocation;
+import com.artur114.thaumrota.common.util.EnumAsset;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 public class TileEntityIncineratorRender extends TileEntitySpecialRendererBase<TileEntityIncinerator> implements IItemStackRenderer {
-    private static final ResourceLocation TEXTURE_LAVA = EnumAssetLocation.TEXTURES_BLOCKS.getPngRL("big_lava_still");
-    private static final ResourceLocation TEXTURE_BASE = EnumAssetLocation.TEXTURES_BLOCKS.getPngRL("incinerator");
+    private static final ResourceLocation TEXTURE_LAVA = EnumAsset.TEXTURES_BLOCKS.png("big_lava_still");
+    private static final ResourceLocation TEXTURE_BASE = EnumAsset.TEXTURES_BLOCKS.png("incinerator");
     private final ModelIncinerator modelBase = new ModelIncinerator();
 
     @Override

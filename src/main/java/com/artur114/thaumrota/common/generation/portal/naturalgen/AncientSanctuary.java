@@ -1,18 +1,19 @@
 package com.artur114.thaumrota.common.generation.portal.naturalgen;
 
-import com.artur114.thaumrota.common.blockprotect.BlockProtectHandler;
+import com.artur114.thaumrota.common.worldstate.blockprotect.BlockProtectHandler;
 import com.artur114.thaumrota.common.init.InitBlocks;
-import com.artur114.thaumrota.common.structurebuilder.BuildRequest;
-import com.artur114.thaumrota.common.structurebuilder.StructuresBuildManager;
+import com.artur114.thaumrota.server.structurebuilder.BuildRequest;
+import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import com.artur114.thaumrota.common.generation.portal.util.PortalOffsets;
-import com.artur114.thaumrota.common.events.ServerEventsHandler;
+import com.artur114.thaumrota.common.event.ServerEventsHandler;
 import com.artur114.thaumrota.common.init.InitSounds;
 import com.artur114.thaumrota.common.misc.RotAConfigs;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientSanctuaryController;
 import com.artur114.thaumrota.common.util.TerrainAnalyzer;
-import com.artur114.thaumrota.common.util.interfaces.IIsNeedWriteToNBT;
-import com.artur114.thaumrota.common.util.interfaces.IWriteToNBT;
-import com.artur114.thaumrota.common.util.interfaces.RunnableWithParam;
+import com.artur114.bananalib.mc.nbt.IWriteToNBT;
+
+import java.util.function.Consumer;
+
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -31,7 +32,7 @@ import thaumcraft.api.blocks.BlocksTC;
 import java.util.Arrays;
 import java.util.List;
 
-public class AncientSanctuary implements IIsNeedWriteToNBT {
+public class AncientSanctuary implements IWriteToNBT {
     private final Block nitorBlock = BlocksTC.nitor.get(EnumDyeColor.BLACK);
     private AncientPortalNaturalGen portal = null;
     private TileEntityAncientSanctuaryController tile;
@@ -205,15 +206,15 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
         });
     }
 
-    private void callRunnableOnLightOffsets(RunnableWithParam<UltraMutableBlockPos> run) {
+    private void callRunnableOnLightOffsets(Consumer<UltraMutableBlockPos> run) {
         UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
 
         blockPos.setPos(tilePos).addY(3);
-        run.run(blockPos);
+        run.accept(blockPos);
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
             blockPos.pushPos();
             blockPos.offset(facing, 3);
-            run.run(blockPos);
+            run.accept(blockPos);
             blockPos.popPos();
         }
 
@@ -260,11 +261,6 @@ public class AncientSanctuary implements IIsNeedWriteToNBT {
         nbt.setInteger("posX", pos.x);
         nbt.setInteger("posZ", pos.z);
         return nbt;
-    }
-
-    @Override
-    public boolean isNeedWriteToNBT() {
-        return needSave;
     }
 
     protected enum Type implements IWriteToNBT {

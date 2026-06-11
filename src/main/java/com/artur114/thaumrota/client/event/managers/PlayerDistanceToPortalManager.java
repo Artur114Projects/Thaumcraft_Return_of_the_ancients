@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.client.event.managers;
 
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.network.ServerPacketGetWeather;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
@@ -107,7 +107,7 @@ public class PlayerDistanceToPortalManager {
     }
 
     private void updateServerRain() {
-        ThaumicRotA.NETWORK.sendToServer(new ServerPacketGetWeather());
+        ThaumRotA.NETWORK.sendToServer(new ServerPacketGetWeather());
     }
 
     public void setServerRain(float rain, float thunder) {

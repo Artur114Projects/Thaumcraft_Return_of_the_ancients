@@ -1,9 +1,8 @@
 package com.artur114.thaumrota.common.blocks;
 
 import com.artur114.thaumrota.client.render.tile.TileEntityAncientProjectorRender;
-import com.artur114.thaumrota.common.tileentity.BaseBlockTileEntity;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientProjector;
-import com.artur114.thaumrota.common.util.MaterialArray;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -11,15 +10,15 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockAncientProjector extends BaseBlockTileEntity<TileEntityAncientProjector> {
     public BlockAncientProjector(String name) {
-        super(name, MaterialArray.ANCIENT_STONE_ARRAY);
+        super(name, MaterialArrays.ANCIENT_STONE_ARRAY);
 
-        this.setRenderer(new TileEntityAncientProjectorRender());
-        this.setTRACreativeTab();
+        this.setTileRender(new TileEntityAncientProjectorRender());
+        this.setCreativeTab(ThaumRotA.CREATIVE_TAB);
         this.setForCreative();
     }
 
     @Override
-    public Class<TileEntityAncientProjector> tileEntityClass() {
+    public Class<TileEntityAncientProjector> tileClass() {
         return TileEntityAncientProjector.class;
     }
 

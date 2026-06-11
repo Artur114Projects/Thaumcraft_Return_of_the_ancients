@@ -1,11 +1,12 @@
 package com.artur114.thaumrota.proxy;
 
 import com.artur114.bananalib.mc.registry.IRegisterBus;
-import com.artur114.thaumrota.common.structurebuilder.StructuresBuildManager;
+import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import com.artur114.thaumrota.registry.RotAForceLoadCb;
 import net.minecraftforge.fml.common.event.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ServerProxy extends CommonProxy {
@@ -26,9 +27,6 @@ public class ServerProxy extends CommonProxy {
 
     @Override
     public List<Class<?>> classesToRegister() {
-        return Arrays.asList(
-            RotAForceLoadCb.class,
-            StructuresBuildManager.class
-        );
+        return Collections.emptyList();
     }
 }

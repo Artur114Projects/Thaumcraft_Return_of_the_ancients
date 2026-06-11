@@ -1,10 +1,11 @@
 package com.artur114.thaumrota.common.items;
 
+import com.artur114.bananalib.mc.base.BItemBase;
 import com.artur114.thaumrota.client.event.ClientEventsHandler;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitItems;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -26,8 +27,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemPortalCompass extends BaseItem {
+public class ItemPortalCompass extends BItemBase {
     private final UltraMutableBlockPos mutableBlockPos = new UltraMutableBlockPos();
+    private final ItemStack compassStack = new ItemStack(InitItems.COMPASS);
 
     public ItemPortalCompass(String name)
     {
@@ -62,7 +64,7 @@ public class ItemPortalCompass extends BaseItem {
                         if (hasPortal) {
                             setNearestPortalPos(entityIn);
                         }
-                        if (MiscHandler.isHasItem(player, InitItems.COMPASS) && hasPortal && !MiscHandler.isWithinRadius(player.posX, player.posZ, mutableBlockPos.getX(), mutableBlockPos.getZ(), 8)) {
+                        if (player.inventory.hasItemStack(compassStack) && hasPortal && !MiscHandler.isWithinRadius(player.posX, player.posZ, mutableBlockPos.getX(), mutableBlockPos.getZ(), 8)) {
                             double d1 = entity.rotationYaw;
                             d1 = MathHelper.positiveModulo(d1 / 360.0D, 1.0D);
                             double d2 = this.getPortalToAngle(entity) / (Math.PI * 2D);
@@ -111,7 +113,7 @@ public class ItemPortalCompass extends BaseItem {
                 mutableBlockPos.setPos(ClientEventsHandler.PLAYER_DISTANCE_TO_PORTAL_MANAGER.nearestPortalPos).add(8 ,0, 8);
             }
         });
-        setCreativeTab(ThaumicRotA.ROTA_CREATIVE_TAB);
+        setCreativeTab(ThaumRotA.CREATIVE_TAB);
     }
 
     public @NotNull EnumRarity getRarity(@NotNull ItemStack stack) {

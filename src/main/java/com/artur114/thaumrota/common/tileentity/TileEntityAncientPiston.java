@@ -1,12 +1,12 @@
 package com.artur114.thaumrota.common.tileentity;
 
+import com.artur114.bananalib.mc.BananaMC;
+import com.artur114.bananalib.mc.base.tileabs.ITileBlockPlaceListener;
+import com.artur114.bananalib.mc.base.tileabs.ITileBlockUseListener;
+import com.artur114.bananalib.mc.base.tileabs.ITileMultiBBProvider;
 import com.artur114.thaumrota.client.event.ClientEventsHandler;
 import com.artur114.thaumrota.common.init.InitItems;
-import com.artur114.thaumrota.common.tileentity.interf.ITileBlockPlaceListener;
-import com.artur114.thaumrota.common.tileentity.interf.ITileBlockUseListener;
-import com.artur114.thaumrota.common.tileentity.interf.ITileMultiBBProvider;
 import com.artur114.thaumrota.common.util.math.CoordinateMatrix;
-import com.artur114.thaumrota.common.util.math.MathUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,6 +21,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class TileEntityAncientPiston extends TileBase implements ITileMultiBBProvider, ITileBlockPlaceListener, ITileBlockUseListener {
     private final CoordinateMatrix matrix = new CoordinateMatrix();
@@ -44,7 +47,7 @@ public class TileEntityAncientPiston extends TileBase implements ITileMultiBBPro
     }
 
     @Override
-    public AxisAlignedBB[] boundingBoxes() {
+    public List<AxisAlignedBB> boundingBoxes() {
         synchronized (this.matrix) {
             if (this.matrix.isEmpty()) {
                 this.compileMatrix();
@@ -52,7 +55,7 @@ public class TileEntityAncientPiston extends TileBase implements ITileMultiBBPro
 
             this.moveMatrix();
 
-            return this.matrix.allBoundingBoxesArr();
+            return Arrays.asList(this.matrix.allBoundingBoxesArr());
         }
     }
 
@@ -64,12 +67,12 @@ public class TileEntityAncientPiston extends TileBase implements ITileMultiBBPro
     }
 
     private void compileMatrix() {
-        this.matrix.putBoundingBox(MathUtils.createBoundingBox(1, 0, 1, 15, 2, 15), 1);
-        this.matrix.putBoundingBox(MathUtils.createBoundingBox(2, 2, 2, 14, 4, 14), 2);
-        this.matrix.putBoundingBox(MathUtils.createBoundingBox(3, 4, 3, 13, 5, 13), 3);
+        this.matrix.putBoundingBox(BananaMC.createAABBFromPixels(1, 0, 1, 15, 2, 15), 1);
+        this.matrix.putBoundingBox(BananaMC.createAABBFromPixels(2, 2, 2, 14, 4, 14), 2);
+        this.matrix.putBoundingBox(BananaMC.createAABBFromPixels(3, 4, 3, 13, 5, 13), 3);
         CoordinateMatrix move = this.matrix.child("move");
-        move.putBoundingBox(MathUtils.createBoundingBox(4, 2, 4, 12, 14, 12), 1);
-        move.putBoundingBox(MathUtils.createBoundingBox(3, 14, 3, 13, 16, 13), 2);
+        move.putBoundingBox(BananaMC.createAABBFromPixels(4, 2, 4, 12, 14, 12), 1);
+        move.putBoundingBox(BananaMC.createAABBFromPixels(3, 14, 3, 13, 16, 13), 2);
         this.matrix.translate(-0.5F, -0.5F, -0.5F);
         if (this.face == EnumFacing.DOWN) {
             this.matrix.rotate(180.0F, 1.0F, 0.0F, 0.0F);

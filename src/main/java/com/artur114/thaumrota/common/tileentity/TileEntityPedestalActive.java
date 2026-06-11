@@ -1,10 +1,10 @@
 package com.artur114.thaumrota.common.tileentity;
 
+import com.artur114.bananalib.mc.base.tileabs.ITileBlockUseListener;
 import com.artur114.thaumrota.common.blocks.BlockPedestalActive;
 import com.artur114.thaumrota.client.fx.particle.ParticlePhantom;
 import com.artur114.thaumrota.common.init.InitSounds;
 import com.artur114.thaumrota.common.items.ItemPhantomTablet;
-import com.artur114.thaumrota.common.tileentity.interf.ITileBlockUseListener;
 import com.artur114.thaumrota.common.util.math.Pos3d;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

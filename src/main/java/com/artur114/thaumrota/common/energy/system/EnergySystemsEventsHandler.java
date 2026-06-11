@@ -1,8 +1,8 @@
 package com.artur114.thaumrota.common.energy.system;
 
-import com.artur114.thaumrota.common.capabilities.GenericCapProviderNS;
+import com.artur114.bananalib.mc.cap.BananaCapProvNoSave;
 import com.artur114.thaumrota.common.init.InitCapabilities;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -38,6 +38,6 @@ public class EnergySystemsEventsHandler {
 
     @SubscribeEvent
     public static void attachCapabilitiesWorld(AttachCapabilitiesEvent<World> e) {
-        e.addCapability(new ResourceLocation(ThaumicRotA.MODID, "energy_systems_manager"), new GenericCapProviderNS<>(new EnergySystemsManager(e.getObject()), InitCapabilities.ENERGY_SYSTEMS_MANAGER));
+        e.addCapability(new ResourceLocation(ThaumRotA.MODID, "energy_systems_manager"), new BananaCapProvNoSave<>(new EnergySystemsManager(e.getObject()), InitCapabilities.ENERGY_SYSTEMS_MANAGER));
     }
 }

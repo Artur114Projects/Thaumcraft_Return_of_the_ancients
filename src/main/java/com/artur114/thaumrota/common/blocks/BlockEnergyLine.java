@@ -6,6 +6,7 @@ import com.artur114.thaumrota.common.energy.bases.block.BlockEnergyBase;
 import com.artur114.thaumrota.common.energy.bases.tile.ITileEnergy;
 import com.artur114.thaumrota.common.misc.RotAConfigs;
 import com.artur114.thaumrota.common.tileentity.TileEntityEnergyLine;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -48,15 +49,17 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
     public BlockEnergyLine(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
 
-        this.setRenderer(new TileEntityEnergyLineRenderer());
-        this.setForCreative().setTRACreativeTab();
+        this.setTileRender(new TileEntityEnergyLineRenderer());
+        this.setForCreative().setCreativeTab(ThaumRotA.CREATIVE_TAB);
     }
 
     @Override
     public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
         super.onNeighborChange(world, pos, neighbor);
-
-        this.getTileAndCallRunnable((World) world, pos, TileEntityEnergyLine::notifyAboutNeighborChanged);
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile instanceof TileEntityEnergyLine) {
+            ((TileEntityEnergyLine) tile).notifyAboutNeighborChanged();
+        }
     }
 
     @Override
@@ -153,7 +156,7 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
     }
 
     @Override
-    public Class<TileEntityEnergyLine> tileEntityClass() {
+    public Class<TileEntityEnergyLine> tileClass() {
         return TileEntityEnergyLine.class;
     }
 

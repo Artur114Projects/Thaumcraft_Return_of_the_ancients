@@ -1,9 +1,9 @@
 package com.artur114.thaumrota.common.tileentity;
 
+import com.artur114.bananalib.mc.base.tileabs.ITileMultiBBProvider;
 import com.artur114.thaumrota.common.blocks.BlockDummy;
 import com.artur114.thaumrota.common.handlers.NBTHandler;
 import com.artur114.thaumrota.client.util.RenderHandler;
-import com.artur114.thaumrota.common.tileentity.interf.ITileBBProvider;
 import com.artur114.thaumrota.common.tileentity.interf.ITileDoor;
 import com.artur114.thaumrota.common.tileentity.interf.ITileMultiBlock;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
@@ -20,10 +20,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public abstract class TileEntityDoorBase extends TileBase implements ITickable, ITileDoor, ITileMultiBlock, ITileBBProvider, TileEntityPedestalActive.ITileActivatedWithPedestal {
+public abstract class TileEntityDoorBase extends TileBase implements ITickable, ITileDoor, ITileMultiBlock, ITileMultiBBProvider, TileEntityPedestalActive.ITileActivatedWithPedestal {
     protected AxisAlignedBB alignedBB = Block.FULL_BLOCK_AABB;
     protected EnumFacing.Axis axis = EnumFacing.Axis.Z;
     protected EnumDoorState currentState;
@@ -348,8 +350,8 @@ public abstract class TileEntityDoorBase extends TileBase implements ITickable, 
     }
 
     @Override
-    public AxisAlignedBB boundingBox() {
-        return this.alignedBB;
+    public List<AxisAlignedBB> boundingBoxes() {
+        return Collections.singletonList(this.alignedBB);
     }
 
     public enum EnumDummyType {

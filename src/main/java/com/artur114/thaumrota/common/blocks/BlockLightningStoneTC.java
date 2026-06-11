@@ -1,6 +1,5 @@
 package com.artur114.thaumrota.common.blocks;
 
-import com.artur114.thaumrota.common.util.MaterialArray;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -17,7 +16,7 @@ public class BlockLightningStoneTC extends BaseBlock {
     private final String name;
 
     public BlockLightningStoneTC(String name) {
-        super(name + "_lightning", MaterialArray.ANCIENT_STONE_ARRAY);
+        super(name + "_lightning", MaterialArrays.ANCIENT_STONE_ARRAY);
 
         this.name = name;
         this.setForCreative();

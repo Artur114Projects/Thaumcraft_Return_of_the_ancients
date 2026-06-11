@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.client.gui.gif;
 
 import com.artur114.thaumrota.client.util.RenderHandler;
-import com.artur114.thaumrota.common.util.EnumAssetLocation;
+import com.artur114.thaumrota.common.util.EnumAsset;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,7 +24,7 @@ public class GifWithTextureAtlas {
 
 
     public GifWithTextureAtlas(String fileName, int fps, float textureSizeX, float textureSizeY, float drawAreaWidth, float drawAreaHeight) {
-        this.texturePath = EnumAssetLocation.TEXTURES_GUI_GIF.getPngRL(fileName);
+        this.texturePath = EnumAsset.TEXTURES_GUI_GIF.png(fileName);
         this.framesCount = (int) Math.ceil(textureSizeY / drawAreaHeight);
         this.drawAreaHeight = drawAreaHeight;
         this.drawAreaWidth = drawAreaWidth;

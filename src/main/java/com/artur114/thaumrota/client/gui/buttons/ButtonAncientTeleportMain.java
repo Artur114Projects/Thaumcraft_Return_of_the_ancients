@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.client.gui.buttons;
 
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 
 public class ButtonAncientTeleportMain extends GuiButton {
 
-    private final ResourceLocation textureButton = new ResourceLocation(ThaumicRotA.MODID, "textures/gui/container/ancient_teleport_main_button_icon.png");
+    private final ResourceLocation textureButton = new ResourceLocation(ThaumRotA.MODID, "textures/gui/container/ancient_teleport_main_button_icon.png");
     private boolean press = true;
     private int buttonTime = 0;
 

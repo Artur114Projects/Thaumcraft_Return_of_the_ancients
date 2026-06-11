@@ -3,7 +3,7 @@ package com.artur114.thaumrota.client.render.tile;
 import com.artur114.thaumrota.client.model.ModelAncientProjector;
 import com.artur114.thaumrota.client.render.item.IItemStackRenderer;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientProjector;
-import com.artur114.thaumrota.common.util.EnumAssetLocation;
+import com.artur114.thaumrota.common.util.EnumAsset;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -14,7 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 public class TileEntityAncientProjectorRender extends TileEntitySpecialRendererBase<TileEntityAncientProjector> implements IItemStackRenderer {
-    private static final ResourceLocation TEXTURE_BASE = EnumAssetLocation.TEXTURES_BLOCKS.getPngRL("ancient_projector");
+    private static final ResourceLocation TEXTURE_BASE = EnumAsset.TEXTURES_BLOCKS.png("ancient_projector");
     private final ModelAncientProjector modelBase = new ModelAncientProjector();
 
     @Override

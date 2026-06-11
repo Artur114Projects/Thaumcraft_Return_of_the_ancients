@@ -1,9 +1,9 @@
 package com.artur114.thaumrota.common.blocks;
 
 import com.artur114.thaumrota.client.render.tile.TileEntityPedestalActiveRender;
-import com.artur114.thaumrota.common.tileentity.BaseBlockTileEntity;
 import com.artur114.thaumrota.common.tileentity.TileEntityDummy;
 import com.artur114.thaumrota.common.tileentity.TileEntityPedestalActive;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -37,8 +37,8 @@ public class BlockPedestalActive extends BaseBlockTileEntity<TileEntityPedestalA
         super(name, Material.ROCK, 2.0F, 10.0F, SoundType.STONE);
 
         this.setDefaultState(this.getDefaultState().withProperty(DIRECTION, EnumFacing.EAST).withProperty(ROTATE, false));
-        this.setRenderer(new TileEntityPedestalActiveRender());
-        this.setTRACreativeTab();
+        this.setTileRender(new TileEntityPedestalActiveRender());
+        this.setCreativeTab(ThaumRotA.CREATIVE_TAB);
         this.setForCreative();
     }
 
@@ -87,7 +87,7 @@ public class BlockPedestalActive extends BaseBlockTileEntity<TileEntityPedestalA
     }
 
     @Override
-    public Class<TileEntityPedestalActive> tileEntityClass() {
+    public Class<TileEntityPedestalActive> tileClass() {
         return TileEntityPedestalActive.class;
     }
 

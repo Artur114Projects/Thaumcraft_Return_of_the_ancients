@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.blockprotect.server;
 
-import com.artur114.thaumrota.common.blockprotect.server.IServerProtectedChunk;
-import com.artur114.thaumrota.common.blockprotect.server.ServerProtectedChunk;
+import com.artur114.thaumrota.common.worldstate.blockprotect.server.IServerProtectedChunk;
+import com.artur114.thaumrota.common.worldstate.blockprotect.server.ServerProtectedChunk;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;

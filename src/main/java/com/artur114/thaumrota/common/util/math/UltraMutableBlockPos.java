@@ -1,6 +1,9 @@
 package com.artur114.thaumrota.common.util.math;
 
-import com.artur114.thaumrota.common.util.interfaces.RunnableWithParam;
+import com.artur114.bananalib.mc.BananaMC;
+
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -24,6 +27,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+@Deprecated
 public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
     private static UltraMutableBlockPos[] pool = new UltraMutableBlockPos[64];
     private static int poolHead = -1;
@@ -231,7 +235,7 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
 
             IBlockState state = storage.get(posX, posY, posZ);
 
-            if (!(state.getBlock() == Blocks.AIR || (state.getMaterial().isLiquid() && ignoringLiquids) || MathUtils.arrayContains(ignoringBlocks, state.getBlock()))) {
+            if (!(state.getBlock() == Blocks.AIR || (state.getMaterial().isLiquid() && ignoringLiquids) || BananaMC.arrayContains(ignoringBlocks, state.getBlock()))) {
                 break;
             }
 
@@ -385,29 +389,29 @@ public class UltraMutableBlockPos extends BlockPos.MutableBlockPos {
         return distance(MathHelper.floor(entity.posX), MathHelper.floor(entity.posY), MathHelper.floor(entity.posZ));
     }
 
-    public void offsetAndCallRunnable(BlockPos[] offsets, RunnableWithParam<UltraMutableBlockPos> callable) {
+    public void offsetAndCallRunnable(BlockPos[] offsets, Consumer<UltraMutableBlockPos> callable) {
         for (BlockPos offset : offsets) {
             this.offsetAndCallRunnable(offset, callable);
         }
     }
 
-    public void offsetAndCallRunnable(EnumFacing[] offsets, RunnableWithParam<UltraMutableBlockPos> callable) {
+    public void offsetAndCallRunnable(EnumFacing[] offsets, Consumer<UltraMutableBlockPos> callable) {
         for (EnumFacing offset : offsets) {
             this.offsetAndCallRunnable(offset, callable);
         }
     }
 
-    public void offsetAndCallRunnable(BlockPos offset, RunnableWithParam<UltraMutableBlockPos> callable) {
+    public void offsetAndCallRunnable(BlockPos offset, Consumer<UltraMutableBlockPos> callable) {
         this.pushPos();
         this.add(offset);
-        callable.run(this);
+        callable.accept(this);
         this.popPos();
     }
 
-    public void offsetAndCallRunnable(EnumFacing offset, RunnableWithParam<UltraMutableBlockPos> callable) {
+    public void offsetAndCallRunnable(EnumFacing offset, Consumer<UltraMutableBlockPos> callable) {
         this.pushPos();
         this.offset(offset);
-        callable.run(this);
+        callable.accept(this);
         this.popPos();
     }
 

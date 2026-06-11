@@ -1,8 +1,8 @@
 package com.artur114.thaumrota.common.energy.bases.item;
 
+import com.artur114.bananalib.mc.base.BItemBase;
 import com.artur114.thaumrota.common.energy.util.EnergyTypes;
-import com.artur114.thaumrota.common.items.BaseItem;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class ItemEnergyBase extends BaseItem implements IEnergyContainerItem {
+public abstract class ItemEnergyBase extends BItemBase implements IEnergyContainerItem {
     private float maxChargingSpeed = 0;
     private float maxEnergy = 0;
 
@@ -53,7 +53,7 @@ public abstract class ItemEnergyBase extends BaseItem implements IEnergyContaine
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
 
-        tooltip.add(TextFormatting.AQUA + I18n.format(ThaumicRotA.MODID + ".energy.local.0") + TextFormatting.RESET + " " + EnergyTypes.kJToString(getEnergy(stack)) + "/" + EnergyTypes.kJToString(getMaxEnergy()));
+        tooltip.add(TextFormatting.AQUA + I18n.format(ThaumRotA.MODID + ".energy.local.0") + TextFormatting.RESET + " " + EnergyTypes.kJToString(getEnergy(stack)) + "/" + EnergyTypes.kJToString(getMaxEnergy()));
     }
 
     protected void setMaxChargingSpeed(float maxChargingSpeed) {

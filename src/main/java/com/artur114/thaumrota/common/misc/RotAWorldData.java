@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.common.misc;
 
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
@@ -11,7 +11,7 @@ import java.util.Objects;
 
 
 public class RotAWorldData extends WorldSavedData {
-    public static final String DATA_NAME = ThaumicRotA.MODID + "_data";
+    public static final String DATA_NAME = ThaumRotA.MODID + "_data";
     public NBTTagCompound saveData = new NBTTagCompound();
 
     public RotAWorldData() {

@@ -1,10 +1,10 @@
 package com.artur114.thaumrota.common.biomes.decorate;
 
+import com.artur114.bananalib.math.BananaMath;
 import com.artur114.thaumrota.common.blocks.BlockTaintVoidStone;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitBiomes;
 import com.artur114.thaumrota.common.init.InitBlocks;
-import com.artur114.thaumrota.common.util.math.MathUtils;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
@@ -108,7 +108,7 @@ public class WorldGensMisc {
                     if (state.getBlock() == BlocksTC.taintSoil || state.getMaterial() == Material.SNOW) blockPos.down();
                     ExtendedBlockStorage storage = blockPos.up().ebs(worldIn);
                     if (storage != null) {
-                        storage.set(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15, Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, MathHelper.clamp((int) MathUtils.interpolate(1, 8, (blockPos.getY() - 110.0F) / (148.0F - 110.0F)), 1, 8)));
+                        storage.set(blockPos.getX() & 15, blockPos.getY() & 15, blockPos.getZ() & 15, Blocks.SNOW_LAYER.getDefaultState().withProperty(BlockSnow.LAYERS, MathHelper.clamp((int) BananaMath.lerp(1, 8, (blockPos.getY() - 110.0F) / (148.0F - 110.0F)), 1, 8)));
                     }
                 } else if (rand.nextBoolean()) {
                     IBlockState state = worldIn.getBlockState(blockPos);

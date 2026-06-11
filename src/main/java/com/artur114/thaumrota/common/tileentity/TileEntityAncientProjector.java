@@ -1,9 +1,9 @@
 package com.artur114.thaumrota.common.tileentity;
 
+import com.artur114.bananalib.mc.base.tileabs.ITileBlockPlaceListener;
 import com.artur114.thaumrota.client.audio.SoundBlockProjector;
 import com.artur114.thaumrota.common.init.InitBlocks;
 import com.artur114.thaumrota.common.init.InitSounds;
-import com.artur114.thaumrota.common.tileentity.interf.ITileBlockPlaceListener;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

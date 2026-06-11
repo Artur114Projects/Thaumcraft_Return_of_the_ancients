@@ -1,7 +1,6 @@
 package com.artur114.thaumrota.common.blocks;
 
 import com.artur114.thaumrota.client.render.tile.TileEntityAncientDoor8x6Render;
-import com.artur114.thaumrota.common.tileentity.BaseBlockTileEntity;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientDoor8X6;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -23,7 +22,7 @@ public class BlockAncientDoor8x6 extends BaseBlockTileEntity<TileEntityAncientDo
     public BlockAncientDoor8x6(String name) {
         super(name, Material.ROCK, 2.0F, 10.0F, SoundType.STONE);
 
-        this.setRenderer(new TileEntityAncientDoor8x6Render());
+        this.setTileRender(new TileEntityAncientDoor8x6Render());
         this.setForCreative();
     }
 
@@ -87,7 +86,7 @@ public class BlockAncientDoor8x6 extends BaseBlockTileEntity<TileEntityAncientDo
     }
 
     @Override
-    public Class<TileEntityAncientDoor8X6> tileEntityClass() {
+    public Class<TileEntityAncientDoor8X6> tileClass() {
         return TileEntityAncientDoor8X6.class;
     }
 

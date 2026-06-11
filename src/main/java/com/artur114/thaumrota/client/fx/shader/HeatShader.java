@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL30;
 
 import static org.lwjgl.opengl.GL11.*;
 
-@Mod.EventBusSubscriber
+//@Mod.EventBusSubscriber
 public class HeatShader {
     protected static Framebuffer framebuffer;
 

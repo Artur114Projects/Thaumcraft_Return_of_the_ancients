@@ -5,7 +5,7 @@ import com.artur114.bananalib.mc.registry.interf.ILoadStageInit;
 import com.artur114.thaumrota.client.gui.container.GuiAncientTeleport;
 import com.artur114.thaumrota.common.containers.ContainerAncientTeleport;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientTeleport;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -44,6 +44,6 @@ public class RotAGuiHandler implements IGuiHandler, ILoadStageInit {
 
     @Override
     public void onInit() {
-        NetworkRegistry.INSTANCE.registerGuiHandler(ThaumicRotA.INSTANCE, this);
+        NetworkRegistry.INSTANCE.registerGuiHandler(ThaumRotA.INSTANCE, this);
     }
 }

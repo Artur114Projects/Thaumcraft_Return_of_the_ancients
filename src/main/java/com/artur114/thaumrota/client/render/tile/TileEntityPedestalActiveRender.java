@@ -2,13 +2,13 @@ package com.artur114.thaumrota.client.render.tile;
 
 import com.artur114.thaumrota.client.model.ModelPedestalActive;
 import com.artur114.thaumrota.common.tileentity.TileEntityPedestalActive;
-import com.artur114.thaumrota.common.util.EnumAssetLocation;
+import com.artur114.thaumrota.common.util.EnumAsset;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 public class TileEntityPedestalActiveRender extends TileEntitySpecialRendererBase<TileEntityPedestalActive> {
-    private static final ResourceLocation TEXTURE_BASE = EnumAssetLocation.TEXTURES_BLOCKS.getPngRL("pedestal_active");
+    private static final ResourceLocation TEXTURE_BASE = EnumAsset.TEXTURES_BLOCKS.png("pedestal_active");
     private final ModelPedestalActive modelBase = new ModelPedestalActive();
 
     @Override

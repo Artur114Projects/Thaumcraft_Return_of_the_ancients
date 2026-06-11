@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.transform.transformers;
 
-import com.artur114.thaumrota.common.blockprotect.BlockProtectHandler;
+import com.artur114.thaumrota.common.worldstate.blockprotect.BlockProtectHandler;
 import com.artur114.thaumrota.transform.apilegacy.base.IMVInstance;
 import com.artur114.thaumrota.transform.apilegacy.base.MVBase;
 import com.artur114.thaumrota.transform.apilegacy.base.TransformerBase;

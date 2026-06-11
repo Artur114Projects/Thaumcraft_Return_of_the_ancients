@@ -1,6 +1,7 @@
 package com.artur114.thaumrota.common.items;
 
 
+import com.artur114.bananalib.mc.base.BItemBase;
 import com.artur114.thaumrota.common.blocks.BlockLightningStoneTC;
 import com.artur114.thaumrota.client.event.ClientEventsHandler;
 import com.artur114.thaumrota.client.fx.particle.RotateParticleSmokeInPlayer;
@@ -10,6 +11,7 @@ import com.artur114.thaumrota.common.util.math.AreasCombiner;
 import com.artur114.thaumrota.common.util.math.BoundingBox;
 import com.artur114.thaumrota.common.util.math.IArea;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
@@ -48,7 +50,7 @@ import java.util.Random;
 
 import static net.minecraft.item.ItemStack.DECIMALFORMAT;
 
-public class ItemDebugCarrot extends BaseItem {
+public class ItemDebugCarrot extends BItemBase {
 	private final Random rand = new Random();
 
 	public ItemDebugCarrot(String name) {
@@ -56,7 +58,7 @@ public class ItemDebugCarrot extends BaseItem {
 		this.setMaxStackSize(1);
 		this.setContainerItem(this);
 		this.setMaxDamage(2);
-		this.setTRACreativeTab();
+		this.setCreativeTab(ThaumRotA.CREATIVE_TAB);
 	}
 
 	@Override

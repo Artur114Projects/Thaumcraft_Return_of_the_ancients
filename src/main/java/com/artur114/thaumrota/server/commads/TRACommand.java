@@ -2,7 +2,7 @@ package com.artur114.thaumrota.server.commads;
 
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
-import com.artur114.thaumrota.main.ThaumicRotA;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public class TRACommand extends CommandBase {
 
-    String NAME = ThaumicRotA.MODID, USAGE = "thaumrota.command.main.usage";
+    String NAME = ThaumRotA.MODID, USAGE = "thaumrota.command.main.usage";
 
 
     @Override

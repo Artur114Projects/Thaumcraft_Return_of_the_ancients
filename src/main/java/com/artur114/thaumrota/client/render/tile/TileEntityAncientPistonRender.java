@@ -3,7 +3,7 @@ package com.artur114.thaumrota.client.render.tile;
 import com.artur114.thaumrota.client.model.ModelAncientPiston;
 import com.artur114.thaumrota.client.render.item.IItemStackRenderer;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientPiston;
-import com.artur114.thaumrota.common.util.EnumAssetLocation;
+import com.artur114.thaumrota.common.util.EnumAsset;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 public class TileEntityAncientPistonRender extends TileEntitySpecialRendererBase<TileEntityAncientPiston> implements IItemStackRenderer {
-    private static final ResourceLocation TEXTURE_BASE = EnumAssetLocation.TEXTURES_BLOCKS.getPngRL("ancient_piston");
+    private static final ResourceLocation TEXTURE_BASE = EnumAsset.TEXTURES_BLOCKS.png("ancient_piston");
     private final ModelAncientPiston modelBase = new ModelAncientPiston();
 
     @Override

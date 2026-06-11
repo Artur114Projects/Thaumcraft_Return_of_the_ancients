@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.common.biomes.decorate;
 
-import com.artur114.thaumrota.common.util.interfaces.Function4;
+import com.artur114.bananalib.util.func.QuadFunction;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -56,7 +56,7 @@ public class WorldGenTaintBigTree extends WorldGenAbstractTree {
 
         AtomicBoolean flag = new AtomicBoolean(true);
 
-        Function4<World, BlockPos, IBlockState, Boolean, Boolean> def = (world, pos12, state, isReplace) -> {
+        QuadFunction<World, BlockPos, IBlockState, Boolean, Boolean> def = (world, pos12, state, isReplace) -> {
             if (state.getBlock() != BlocksTC.taintFeature) {
                 if ((!isReplace && !world.isAirBlock(pos12)) || (isReplace && world.getBlockState(pos12).getMaterial() != ThaumcraftMaterials.MATERIAL_TAINT)) {
                     flag.set(false); return false;
@@ -83,7 +83,7 @@ public class WorldGenTaintBigTree extends WorldGenAbstractTree {
 
         int lastTrunkHeight = 2 + maxBranchHeight + 3;
 
-        Function4<World, BlockPos, IBlockState, Boolean, Boolean> def = (world, pos12, state, isReplace) -> {
+        QuadFunction<World, BlockPos, IBlockState, Boolean, Boolean> def = (world, pos12, state, isReplace) -> {
             if (state.getBlock() == BlocksTC.taintFeature) {
                 if (rand.nextFloat() < 0.2F && world.isAirBlock(pos12)) {
                     world.setBlockState(pos12, state);
@@ -100,7 +100,7 @@ public class WorldGenTaintBigTree extends WorldGenAbstractTree {
         this.applyLastBranchesPositions(pos, worldIn, def);
     }
 
-    private void applyLastBranchesPositions(UltraMutableBlockPos blockPos, World world, Function4<World, BlockPos, IBlockState, Boolean, Boolean> apply) {
+    private void applyLastBranchesPositions(UltraMutableBlockPos blockPos, World world, QuadFunction<World, BlockPos, IBlockState, Boolean, Boolean> apply) {
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
             blockPos.pushPos();
 
@@ -153,7 +153,7 @@ public class WorldGenTaintBigTree extends WorldGenAbstractTree {
         }
     }
 
-    private void applyMainBranchesPositions(UltraMutableBlockPos blockPos, World world, Random rand, int minBranchH, int maxBranchH, Function4<World, BlockPos, IBlockState, Boolean, Boolean> apply) {
+    private void applyMainBranchesPositions(UltraMutableBlockPos blockPos, World world, Random rand, int minBranchH, int maxBranchH, QuadFunction<World, BlockPos, IBlockState, Boolean, Boolean> apply) {
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
             int height = maxBranchH == minBranchH ? maxBranchH : rand.nextInt(maxBranchH - minBranchH) + minBranchH;
             blockPos.pushPos();
@@ -237,7 +237,7 @@ public class WorldGenTaintBigTree extends WorldGenAbstractTree {
         }
     }
 
-    private void applyLastTrunkPositions(UltraMutableBlockPos blockPos, World world, int trunkHeight, Function4<World, BlockPos, IBlockState, Boolean, Boolean> apply) {
+    private void applyLastTrunkPositions(UltraMutableBlockPos blockPos, World world, int trunkHeight, QuadFunction<World, BlockPos, IBlockState, Boolean, Boolean> apply) {
         for (int i = 0; i != trunkHeight + 1; i++) {
             blockPos.pushPos();
             blockPos.up(i);
@@ -262,7 +262,7 @@ public class WorldGenTaintBigTree extends WorldGenAbstractTree {
         blockPos.up(trunkHeight - 2);
     }
 
-    private void applyFirstTrunkPositions(UltraMutableBlockPos blockPos, World world, int trunkHeight, Function4<World, BlockPos, IBlockState, Boolean, Boolean> apply) {
+    private void applyFirstTrunkPositions(UltraMutableBlockPos blockPos, World world, int trunkHeight, QuadFunction<World, BlockPos, IBlockState, Boolean, Boolean> apply) {
         if (!apply.apply(world, blockPos, BlocksTC.taintLog.getDefaultState(), true)) return;
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
             blockPos.pushPos();

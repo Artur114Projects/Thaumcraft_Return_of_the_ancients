@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.common.network;
 
 import com.artur114.thaumrota.common.init.InitSounds;
-import com.artur114.thaumrota.common.misc.RotAConfigs;
+import com.artur114.thaumrota.common.config.RotAConfigs;
 import com.artur114.thaumrota.main.ThaumRotA;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;

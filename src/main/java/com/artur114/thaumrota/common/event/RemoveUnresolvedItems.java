@@ -2,7 +2,7 @@ package com.artur114.thaumrota.common.event;
 
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitDimensions;
-import com.artur114.thaumrota.common.misc.RotAConfigs;
+import com.artur114.thaumrota.common.config.RotAConfigs;
 import com.artur114.thaumrota.common.init.InitSounds;
 import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.entity.player.EntityPlayer;

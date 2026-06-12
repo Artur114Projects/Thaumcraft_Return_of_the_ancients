@@ -2,7 +2,7 @@ package com.artur114.thaumrota.common.energy.system;
 
 import com.artur114.thaumrota.common.energy.bases.tile.ITileEnergy;
 import com.artur114.thaumrota.common.energy.bases.tile.ITileEnergyProvider;
-import com.artur114.thaumrota.common.misc.RotAConfigs;
+import com.artur114.thaumrota.common.config.RotAConfigs;
 import com.artur114.thaumrota.common.network.ClientPacketSyncEnergySystem;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.tileentity.TileEntity;

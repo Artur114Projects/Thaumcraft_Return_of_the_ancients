@@ -4,7 +4,7 @@ import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.thaumrota.client.event.ClientEventsHandler;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitBiomes;
-import com.artur114.thaumrota.common.misc.RotAConfigs;
+import com.artur114.thaumrota.common.config.RotAConfigs;
 import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.transform.apilegacy.base.ITransformer;
 import com.artur114.thaumrota.transform.apilegacy.base.MVBase;

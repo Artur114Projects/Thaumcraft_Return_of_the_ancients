@@ -12,7 +12,7 @@ import com.artur114.thaumrota.common.init.InitCapabilities;
 import com.artur114.thaumrota.common.biomes.BiomeTaint;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.common.init.InitBiomes;
-import com.artur114.thaumrota.common.misc.RotAConfigs;
+import com.artur114.thaumrota.common.config.RotAConfigs;
 import com.artur114.thaumrota.common.blocks.BlockAncientWorldPortal;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import com.artur114.thaumrota.main.ThaumRotA;

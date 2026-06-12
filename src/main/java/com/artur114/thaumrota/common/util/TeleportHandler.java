@@ -1,4 +1,4 @@
-package com.artur114.thaumrota.common.handlers;
+package com.artur114.thaumrota.common.util;
 
 
 import net.minecraft.entity.Entity;

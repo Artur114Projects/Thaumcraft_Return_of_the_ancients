@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.common.generation.portal.naturalgen;
 
 import com.artur114.thaumrota.common.worldstate.blockprotect.BlockProtectHandler;
-import com.artur114.thaumrota.common.handlers.TeleportHandler;
+import com.artur114.thaumrota.common.util.TeleportHandler;
 import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortal;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;

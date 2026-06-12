@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.server.commads;
 
-import com.artur114.thaumrota.common.misc.RotAWorldData;
+import com.artur114.thaumrota.common.worldstate.RotAWorldData;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

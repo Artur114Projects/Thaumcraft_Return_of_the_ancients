@@ -2,7 +2,7 @@ package com.artur114.thaumrota.common.event.eventmanagers;
 
 import com.artur114.thaumrota.common.event.ServerEventsHandler;
 import com.artur114.thaumrota.main.ThaumRotA;
-import com.artur114.thaumrota.common.misc.RotAConfigs;
+import com.artur114.thaumrota.common.config.RotAConfigs;
 import com.artur114.bananalib.mc.nbt.IWriteToNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;

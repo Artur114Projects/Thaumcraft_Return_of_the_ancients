@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.system.server;
 
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1;
-import com.artur114.thaumrota.common.handlers.TeleportHandler;
+import com.artur114.thaumrota.common.util.TeleportHandler;
 import com.artur114.thaumrota.common.init.InitDimensions;
 import com.artur114.thaumrota.common.items.ItemSoulBinder;
 import net.minecraft.entity.EntityLiving;

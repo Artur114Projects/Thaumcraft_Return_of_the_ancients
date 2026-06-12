@@ -1,4 +1,4 @@
-package com.artur114.thaumrota.common.misc;
+package com.artur114.thaumrota.common.config;
 
 import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraftforge.common.config.Config;
@@ -7,6 +7,7 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+// TODO Переписать!
 @Config(modid = ThaumRotA.MODID)
 @Mod.EventBusSubscriber(modid = ThaumRotA.MODID)
 public class RotAConfigs {

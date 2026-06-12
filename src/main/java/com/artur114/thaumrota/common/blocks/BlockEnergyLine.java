@@ -4,7 +4,7 @@ package com.artur114.thaumrota.common.blocks;
 import com.artur114.thaumrota.client.render.tile.TileEntityEnergyLineRenderer;
 import com.artur114.thaumrota.common.energy.bases.block.BlockEnergyBase;
 import com.artur114.thaumrota.common.energy.bases.tile.ITileEnergy;
-import com.artur114.thaumrota.common.misc.RotAConfigs;
+import com.artur114.thaumrota.common.config.RotAConfigs;
 import com.artur114.thaumrota.common.tileentity.TileEntityEnergyLine;
 import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.Block;

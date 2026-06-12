@@ -2,8 +2,7 @@ package com.artur114.thaumrota.common.items;
 
 import com.artur114.bananalib.mc.registry.data.ModelRegData;
 import com.artur114.bananalib.mc.registry.interf.IHasModel;
-import com.artur114.thaumrota.common.misc.RotAConfigs;
-import com.artur114.thaumrota.common.init.InitItems;
+import com.artur114.thaumrota.common.config.RotAConfigs;
 import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;

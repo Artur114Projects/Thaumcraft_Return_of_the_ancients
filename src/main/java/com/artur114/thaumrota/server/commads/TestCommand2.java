@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.server.commads;
 
-import com.artur114.thaumrota.common.handlers.TeleportHandler;
+import com.artur114.thaumrota.common.util.TeleportHandler;
 import com.artur114.thaumrota.common.init.InitDimensions;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

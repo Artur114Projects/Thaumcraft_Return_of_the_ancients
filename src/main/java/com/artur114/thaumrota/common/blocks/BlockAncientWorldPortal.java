@@ -3,7 +3,7 @@ package com.artur114.thaumrota.common.blocks;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortal;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.common.event.ServerEventsHandler;
-import com.artur114.thaumrota.common.misc.RotAConfigs;
+import com.artur114.thaumrota.common.config.RotAConfigs;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.SoundType;

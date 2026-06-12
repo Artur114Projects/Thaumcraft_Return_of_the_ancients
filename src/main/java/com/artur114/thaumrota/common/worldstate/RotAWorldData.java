@@ -1,4 +1,4 @@
-package com.artur114.thaumrota.common.misc;
+package com.artur114.thaumrota.common.worldstate;
 
 import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.nbt.NBTTagCompound;

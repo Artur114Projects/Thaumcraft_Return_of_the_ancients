@@ -7,7 +7,7 @@ import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import com.artur114.thaumrota.common.generation.portal.util.PortalOffsets;
 import com.artur114.thaumrota.common.event.ServerEventsHandler;
 import com.artur114.thaumrota.common.init.InitSounds;
-import com.artur114.thaumrota.common.misc.RotAConfigs;
+import com.artur114.thaumrota.common.config.RotAConfigs;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientSanctuaryController;
 import com.artur114.thaumrota.common.util.TerrainAnalyzer;
 import com.artur114.bananalib.mc.nbt.IWriteToNBT;

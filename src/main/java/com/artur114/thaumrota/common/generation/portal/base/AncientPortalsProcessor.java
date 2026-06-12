@@ -4,10 +4,10 @@ import com.artur114.thaumrota.common.generation.portal.naturalgen.AncientPortalN
 import com.artur114.thaumrota.common.generation.portal.AncientPortalOpening;
 import com.artur114.thaumrota.common.generation.terraingen.GenLayersHandler;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
-import com.artur114.thaumrota.common.handlers.TeleportHandler;
+import com.artur114.thaumrota.common.util.TeleportHandler;
 import com.artur114.thaumrota.main.ThaumRotA;
-import com.artur114.thaumrota.common.misc.RotAConfigs;
-import com.artur114.thaumrota.common.misc.RotAWorldData;
+import com.artur114.thaumrota.common.config.RotAConfigs;
+import com.artur114.thaumrota.common.worldstate.RotAWorldData;
 import com.artur114.thaumrota.common.network.ClientPacketSyncAncientPortals;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import com.artur114.thaumrota.server.event.PublicSStoppingEvent;

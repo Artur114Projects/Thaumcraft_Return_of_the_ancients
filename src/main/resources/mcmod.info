@@ -1,7 +1,7 @@
 [
   {
     "modid": "thaumrota",
-    "name": "Thaumcraft: Return of the ancients",
+    "name": "Thaumcraft: Return of the Ancients",
     "description": "Addon for Thaumcraft",
     "version": "${mod_version}",
     "mcversion": "1.12.2",

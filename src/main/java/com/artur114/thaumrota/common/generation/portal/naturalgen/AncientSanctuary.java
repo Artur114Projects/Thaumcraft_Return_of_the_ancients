@@ -1,5 +1,9 @@
 package com.artur114.thaumrota.common.generation.portal.naturalgen;
 
+import com.artur114.bananalib.mc.BananaMC;
+import com.artur114.bananalib.mc.math.m2d.vec.PosMc2I;
+import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
+import com.artur114.bananalib.mc.nbt.IReadFromNBT;
 import com.artur114.thaumrota.common.worldstate.blockprotect.BlockProtectHandler;
 import com.artur114.thaumrota.common.init.InitBlocks;
 import com.artur114.thaumrota.server.structurebuilder.BuildRequest;
@@ -7,14 +11,12 @@ import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import com.artur114.thaumrota.common.generation.portal.util.PortalOffsets;
 import com.artur114.thaumrota.common.event.ServerEventsHandler;
 import com.artur114.thaumrota.common.init.InitSounds;
-import com.artur114.thaumrota.common.config.RotAConfigs;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientSanctuaryController;
 import com.artur114.thaumrota.common.util.TerrainAnalyzer;
 import com.artur114.bananalib.mc.nbt.IWriteToNBT;
 
 import java.util.function.Consumer;
 
-import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -27,51 +29,42 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import thaumcraft.api.blocks.BlocksTC;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class AncientSanctuary implements IWriteToNBT {
+public class AncientSanctuary implements IWriteToNBT, IReadFromNBT {
+    private static final Logger log = LogManager.getLogger();
     private final Block nitorBlock = BlocksTC.nitor.get(EnumDyeColor.BLACK);
     private AncientPortalNaturalGen portal = null;
     private TileEntityAncientSanctuaryController tile;
     private boolean isBuild = false;
-    private boolean needSave = true;
     private boolean active = false;
-    private final ChunkPos pos;
-    private final World world;
+    private PosMc2I pos;
+    private World world;
     private BlockPos tilePos;
-    private final Type type;
+    private Type type;
 
     protected AncientSanctuary(World world, ChunkPos pos, Type type) {
         this.world = world;
         this.type = type;
-        this.pos = pos;
+        this.pos = new PosMc2I(pos.x, pos.z);
     }
 
-    protected AncientSanctuary(NBTTagCompound nbt) {
-        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-        this.world = server.getWorld(nbt.getInteger("dimension"));
-        this.type = Type.getTypeFromNBT(nbt);
-        this.pos = new ChunkPos(nbt.getInteger("posX"), nbt.getInteger("posZ"));
-        this.isBuild = nbt.getBoolean("isBuild");
-
-        if (!type.isBroken()) {
-            this.bindTile(BlockPos.fromLong(nbt.getLong("tilePos")));
-            this.active = nbt.getBoolean("active");
-        }
-    }
+    protected AncientSanctuary() {}
 
     protected BlockPos generate(TerrainAnalyzer analyzer, EnumFacing archFacing, BlockPos[] sanctuaryPillars) {
-        if (isBuild) {
+        if (this.isBuild) {
             return this.getSanctuaryArchOffset(archFacing);
         }
 
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
+        PosMc3IM blockPos = PosMc3IM.obtain();
 
-        blockPos.setPos(pos).setY(analyzer.getMaxHeight());
-        this.type.createBuildRequest(world, blockPos.addY(2)).build();
+        blockPos.setChunk(this.pos).setY(analyzer.getMaxHeight());
+        this.type.createBuildRequest(this.world, blockPos.addY(2)).build();
 
         if (!type.isBroken()) {
             blockPos.pushPos();
@@ -85,23 +78,22 @@ public class AncientSanctuary implements IWriteToNBT {
         for (BlockPos offset : sanctuaryPillars) {
             blockPos.pushPos();
 
-            for (blockPos.add(offset); (world.isAirBlock(blockPos) || world.getBlockState(blockPos).getMaterial().isLiquid()); blockPos.down()) {
-                world.setBlockState(blockPos, BlocksTC.stoneEldritchTile.getDefaultState());
-                BlockProtectHandler.protect(world, blockPos);
+            for (blockPos.add(offset); (this.world.isAirBlock(blockPos) || this.world.getBlockState(blockPos).getMaterial().isLiquid()); blockPos.down()) {
+                this.world.setBlockState(blockPos, BlocksTC.stoneEldritchTile.getDefaultState());
+                BlockProtectHandler.protect(this.world, blockPos);
             }
 
             blockPos.popPos();
         }
 
         BlockPos offset = getSanctuaryArchOffset(archFacing);
-        BlockPos ret = blockPos.add(offset).setWorldY(world).addY(-1).toImmutable();
+        BlockPos ret = blockPos.add(offset).setY(BananaMC.findHighestBlock(this.world, blockPos)).addY(-1).toImmutable();
 
-        UltraMutableBlockPos.release(blockPos);
+        PosMc3IM.release(blockPos);
 
-        this.needSave = true;
         this.isBuild = true;
 
-        if (RotAConfigs.Any.debugMode) System.out.println("Generated new ancient sanctuary pos:" + pos);
+        log.debug("Generated new ancient sanctuary pos: {}", this.pos);
 
         return ret;
     }
@@ -124,7 +116,7 @@ public class AncientSanctuary implements IWriteToNBT {
     private void bindTile(BlockPos pos) {
         this.tilePos = pos;
 
-        TileEntity tileRaw = world.getTileEntity(pos);
+        TileEntity tileRaw = this.world.getTileEntity(pos);
 
         if (tileRaw instanceof TileEntityAncientSanctuaryController) {
             this.tile = (TileEntityAncientSanctuaryController) tileRaw;
@@ -137,16 +129,16 @@ public class AncientSanctuary implements IWriteToNBT {
 
     protected void bindPortal(AncientPortalNaturalGen portal) {
         this.portal = portal;
-        if (!type.isBroken()) {
-            this.portal.updateActiveState(active);
+        if (!this.type.isBroken()) {
+            this.portal.updateActiveState(this.active);
         }
     }
 
     public void onTileLoad(boolean state, BlockPos pos) {
-        if (!pos.equals(tilePos) || type.isBroken()) {
+        if (!pos.equals(this.tilePos) || this.type.isBroken()) {
             return;
         }
-        this.bindTile(tilePos);
+        this.bindTile(this.tilePos);
         this.updateActiveState(state);
     }
 
@@ -158,13 +150,19 @@ public class AncientSanctuary implements IWriteToNBT {
                 this.updateActiveState(state);
                 this.portal.updateActiveState(state);
 
-                UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
-                this.world.playSound(null, blockPos.setPos(tilePos).add(0, 2, 0), InitSounds.SPOTLIGHT.SOUND, SoundCategory.AMBIENT, 1, 1);
+                PosMc3IM blockPos = PosMc3IM.obtain();
+                this.world.playSound(null, blockPos.set(tilePos).add(0, 2, 0), InitSounds.SPOTLIGHT, SoundCategory.AMBIENT, 1, 1);
 
-                blockPos.setPos(portal.portalPos).setY(portal.posY + 10);
-                blockPos.offsetAndCallRunnable(PortalOffsets.getCornerOffsets(2, 13), pos -> this.world.playSound(null, pos, InitSounds.SPOTLIGHT.SOUND, SoundCategory.AMBIENT, 1, 1));
+                blockPos.setX(portal.portalPos.x << 4).setZ(portal.portalPos.z << 4).setY(portal.posY + 10);
 
-                UltraMutableBlockPos.release(blockPos);
+                for (BlockPos pos : PortalOffsets.getCornerOffsets(2, 13)) {
+                    blockPos.pushPos();
+                    blockPos.add(pos);
+                    this.world.playSound(null, blockPos, InitSounds.SPOTLIGHT, SoundCategory.AMBIENT, 1, 1);
+                    blockPos.popPos();
+                }
+
+                PosMc3IM.release(blockPos);
             });
         });
     }
@@ -177,7 +175,6 @@ public class AncientSanctuary implements IWriteToNBT {
         this.setLightState(newState);
 
         this.active = newState;
-        this.needSave = true;
     }
 
     private void setLightState(boolean state) {
@@ -206,10 +203,10 @@ public class AncientSanctuary implements IWriteToNBT {
         });
     }
 
-    private void callRunnableOnLightOffsets(Consumer<UltraMutableBlockPos> run) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
+    private void callRunnableOnLightOffsets(Consumer<PosMc3IM> run) {
+        PosMc3IM blockPos = PosMc3IM.obtain();
 
-        blockPos.setPos(tilePos).addY(3);
+        blockPos.set(this.tilePos).addY(3);
         run.accept(blockPos);
         for (EnumFacing facing : EnumFacing.HORIZONTALS) {
             blockPos.pushPos();
@@ -229,7 +226,7 @@ public class AncientSanctuary implements IWriteToNBT {
                 new BlockPos(3, 0, 10),
         };
 
-        blockPos.setPos(pos);
+        blockPos.setChunk(this.pos);
         for (int i = 0; i != 2; i++) {
             int y;
             if (i == 0) {
@@ -238,10 +235,16 @@ public class AncientSanctuary implements IWriteToNBT {
                 y = tilePos.getY() + 2;
             }
             blockPos.setY(y);
-            blockPos.offsetAndCallRunnable(backLights, run);
+
+            for (BlockPos pos : backLights) {
+                blockPos.pushPos();
+                blockPos.add(pos);
+                run.accept(blockPos);
+                blockPos.popPos();
+            }
         }
 
-        UltraMutableBlockPos.release(blockPos);
+        PosMc3IM.release(blockPos);
     }
 
     protected Type getType() {
@@ -250,9 +253,8 @@ public class AncientSanctuary implements IWriteToNBT {
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        needSave = false;
-        type.writeToNBT(nbt);
-        if (!type.isBroken() && tilePos != null) {
+        this.type.writeToNBT(nbt);
+        if (!this.type.isBroken() && tilePos != null) {
             nbt.setLong("tilePos", tilePos.toLong());
         }
         nbt.setInteger("dimension", world.provider.getDimension());
@@ -261,6 +263,20 @@ public class AncientSanctuary implements IWriteToNBT {
         nbt.setInteger("posX", pos.x);
         nbt.setInteger("posZ", pos.z);
         return nbt;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        this.world = server.getWorld(nbt.getInteger("dimension"));
+        this.type = Type.getTypeFromNBT(nbt);
+        this.pos = new PosMc2I(nbt.getInteger("posX"), nbt.getInteger("posZ"));
+        this.isBuild = nbt.getBoolean("isBuild");
+
+        if (!this.type.isBroken()) {
+            this.bindTile(BlockPos.fromLong(nbt.getLong("tilePos")));
+            this.active = nbt.getBoolean("active");
+        }
     }
 
     protected enum Type implements IWriteToNBT {

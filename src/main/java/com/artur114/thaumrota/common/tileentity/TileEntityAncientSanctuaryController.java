@@ -44,7 +44,7 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
             sanctuary.onTileStateChanged(state);
         }
 
-        SoundEvent sound = state ? InitSounds.ANCIENT_CONTROLLER_ACTIVATE.SOUND : InitSounds.ANCIENT_CONTROLLER_DEACTIVATE.SOUND;
+        SoundEvent sound = state ? InitSounds.ANCIENT_CONTROLLER_ACTIVATE : InitSounds.ANCIENT_CONTROLLER_DEACTIVATE;
 
         this.world.playSound(null, pos, sound, SoundCategory.BLOCKS, 1, 1);
     }

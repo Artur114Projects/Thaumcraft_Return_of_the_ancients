@@ -6,12 +6,19 @@ import com.artur114.bananalib.math.m3d.vec.IVec3D
 import com.artur114.bananalib.math.m3d.vec.Vec3D
 import com.artur114.bananalib.math.m3d.vec.Vec3DM
 import com.artur114.bananalib.mc.math.m3d.vec.VecMc3D
+import groovy.transform.BaseScript
 import net.minecraft.client.Minecraft
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.util.EnumParticleTypes
 import net.minecraft.world.World
 
-if (worldIn.isRemote) {
+@BaseScript
+RotADevScript script
+
+onClient {
+    if (!player.isSneaking()) {
+        return
+    }
     EntityPlayerSP player = Minecraft.minecraft.player
     VecMc3D lookVec = new VecMc3D(player.lookVec)
     VecMc3D vec = lookVec.scale(5).add(new VecMc3D(player).add(0, player.eyeHeight, 0))
@@ -48,6 +55,18 @@ if (worldIn.isRemote) {
 
 
     Vec3DM.release(vec3DM)
+}
+
+onClient {
+    if (player.isSneaking()) {
+        return
+    }
+
+    def look = playerLookVec().add(0, 0.3, 0).normalize()
+    look *= 3
+    player.motionX += look.x
+    player.motionY += look.y
+    player.motionZ += look.z
 }
 
 private void spawnParticle(EnumParticleTypes type, IVec3DC pos, IVec3DC move) {

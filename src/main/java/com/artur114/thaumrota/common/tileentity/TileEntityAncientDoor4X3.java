@@ -33,11 +33,11 @@ public class TileEntityAncientDoor4X3 extends TileEntityDoorBase {
 
             if (this.world.isRemote) {
                 if (this.startOpenTimer == 8) {
-                    ((WorldClient) this.world).playSound(this.pos, InitSounds.PNEUMATIC_PUFF.SOUND, SoundCategory.BLOCKS, 0.25F, 1, false);
+                    ((WorldClient) this.world).playSound(this.pos, InitSounds.PNEUMATIC_PUFF, SoundCategory.BLOCKS, 0.25F, 1, false);
                 }
 
                 if (this.startOpenTimer == 4) {
-                    ((WorldClient) this.world).playSound(this.pos, InitSounds.DOOR_OPEN_2.SOUND, SoundCategory.BLOCKS, 0.25F, 1, false);
+                    ((WorldClient) this.world).playSound(this.pos, InitSounds.DOOR_OPEN_2, SoundCategory.BLOCKS, 0.25F, 1, false);
                 }
 
                 if (this.axis == EnumFacing.Axis.Z) {

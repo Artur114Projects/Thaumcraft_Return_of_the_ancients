@@ -5,7 +5,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.nbt.NBTTagList
 
 
-def resourceDir = new File("src/main/resources/assets/thaumrota/structures")
+def resourceDir = new File("D:\\Games\\Minecraft\\Tests\\minecraft\\saves\\build\\structures")
 def outDir = new File("recompile/out/structures")
 outDir.mkdirs()
 

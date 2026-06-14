@@ -1,5 +1,9 @@
 package com.artur114.thaumrota.common.generation.portal.naturalgen;
 
+import com.artur114.bananalib.mc.BananaMC;
+import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
+import com.artur114.bananalib.mc.nbt.IReadFromNBT;
+import com.artur114.bananalib.mc.nbt.IWriteToNBT;
 import com.artur114.thaumrota.common.worldstate.blockprotect.BlockProtectHandler;
 import com.artur114.thaumrota.common.util.TeleportHandler;
 import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
@@ -9,8 +13,11 @@ import com.artur114.thaumrota.common.generation.portal.generators.GenAncientArch
 import com.artur114.thaumrota.common.generation.portal.generators.GenAncientSpire;
 import com.artur114.thaumrota.common.generation.portal.util.PortalOffsets;
 import com.artur114.thaumrota.common.util.TerrainAnalyzer;
+
+import java.util.*;
 import java.util.function.Consumer;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
+import javafx.geometry.Pos;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -22,21 +29,21 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.blocks.BlocksTC;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 
 
 // TODO: 22.02.2025 Доделать структуры
 // TODO: 22.02.2025 Сделать сломанные контролеры святилища
 // TODO: 25.02.2025 Сделать исследования
+// TODO: переписать!
 public class AncientPortalNaturalGen extends AncientPortal {
+    private static final Logger log = LogManager.getLogger("ThaumRotA/PortalsLegacy");
     private static final int portalSize = 16;
 
-//    private ArrayListWriteToNBT<AncientSanctuary> sanctuaries;
+    private List<AncientSanctuary> sanctuaries;
     private final PortalGenManager genManager;
     private final LightManager lightManager;
     private boolean isActive = false;
@@ -57,37 +64,35 @@ public class AncientPortalNaturalGen extends AncientPortal {
         this.genManager = new PortalGenManager(this, portalSize, 8);
         this.isActive = nbt.getBoolean("isActive");
 
-//        if (isGenerated()) {
-//            sanctuaries = new ArrayListWriteToNBT<>(AncientSanctuary.class);
-//            try {
-//                sanctuaries.readFromNBT(nbt.getCompoundTag("sanctuaries"));
-//                for (AncientSanctuary sanctuary : sanctuaries) sanctuary.bindPortal(this);
-//            } catch (Exception e) {
-//                System.out.println("It was not possible to download the portal of the ID:" + id + " disruption...");
-//                e.printStackTrace(System.err);
-//                this.explosion();
-//            }
-//        }
+        if (isGenerated()) {
+            try {
+                this.sanctuaries = IReadFromNBT.instantiateNBTList(nbt.getTagList("sanctuaries", 10), AncientSanctuary::new);
+                for (AncientSanctuary sanctuary : this.sanctuaries) sanctuary.bindPortal(this);
+            } catch (Exception e) {
+                log.warn("It was not possible to download the portal of the ID:{} disruption...", this.id, e);
+                this.explosion();
+            }
+        }
 
         this.lightManager = new LightManager(this);
     }
 
     public AncientSanctuary getNotBrokenSanctuary() {
-//        if (sanctuaries == null) {
-//            return null;
-//        }
-//
-//        for (AncientSanctuary sanctuary : sanctuaries) {
-//            if (!sanctuary.getType().isBroken()) {
-//                return sanctuary;
-//            }
-//        }
+        if (sanctuaries == null) {
+            return null;
+        }
+
+        for (AncientSanctuary sanctuary : this.sanctuaries) {
+            if (!sanctuary.getType().isBroken()) {
+                return sanctuary;
+            }
+        }
 
         return null;
     }
 
     protected void updateActiveState(boolean newState) {
-        if (isActive == newState) {
+        if (this.isActive == newState) {
             return;
         }
 
@@ -99,15 +104,19 @@ public class AncientPortalNaturalGen extends AncientPortal {
     }
 
     private void setCapState(boolean state) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
+        PosMc3IM blockPos = PosMc3IM.obtain();
 
-        blockPos.setPos(portalPos).setY(posY);
-        blockPos.offsetAndCallRunnable(PortalOffsets.portalCollideOffsetsArray, (pos) -> {
-            world.setBlockState(pos, state ? Blocks.AIR.getDefaultState() : BlocksTC.stoneEldritchTile.getDefaultState());
-            BlockProtectHandler.setProtectState(world, pos, !state);
-        });
+        blockPos.setChunk(portalPos).setY(posY);
 
-        UltraMutableBlockPos.release(blockPos);
+        for (BlockPos off : PortalOffsets.portalCollideOffsetsArray) {
+            blockPos.pushPos();
+            blockPos.add(off);
+            world.setBlockState(blockPos, state ? Blocks.AIR.getDefaultState() : BlocksTC.stoneEldritchTile.getDefaultState());
+            BlockProtectHandler.setProtectState(world, blockPos, !state);
+            blockPos.popPos();
+        }
+
+        PosMc3IM.release(blockPos);
     }
 
     @Override
@@ -116,11 +125,11 @@ public class AncientPortalNaturalGen extends AncientPortal {
             this.setGenerated();
             this.build();
 
-//            this.sanctuaries = genManager.getSanctuaries();
-//
-//            for (AncientSanctuary sanctuary : sanctuaries) {
-//                sanctuary.bindPortal(this);
-//            }
+            this.sanctuaries = genManager.sanctuaries();
+
+            for (AncientSanctuary sanctuary : sanctuaries) {
+                sanctuary.bindPortal(this);
+            }
         }
     }
 
@@ -160,9 +169,9 @@ public class AncientPortalNaturalGen extends AncientPortal {
             return null;
         }
         if (isGenerated()) {
-//            nbt.setTag("sanctuaries", sanctuaries.writeToNBT(null));
+            nbt.setTag("sanctuaries", IWriteToNBT.writeToNBTList(this.sanctuaries));
         }
-        nbt.setBoolean("isActive", isActive);
+        nbt.setBoolean("isActive", this.isActive);
         return nbt;
     }
 
@@ -172,7 +181,7 @@ public class AncientPortalNaturalGen extends AncientPortal {
         if (nbt == null) {
             return null;
         }
-        nbt.setBoolean("isActive", isActive);
+        nbt.setBoolean("isActive", this.isActive);
         return nbt;
     }
 
@@ -182,8 +191,8 @@ public class AncientPortalNaturalGen extends AncientPortal {
     }
 
     private boolean isAnyChunkOnRangeLoaded(int range) {
-        for (int x = chunkX - range; x != chunkX + range + 1; x++) {
-            for (int z = chunkZ - range; z != chunkZ + range + 1; z++) {
+        for (int x = this.chunkX - range; x != this.chunkX + range + 1; x++) {
+            for (int z = this.chunkZ - range; z != this.chunkZ + range + 1; z++) {
                 if (isChunkLoaded(x, z)) {
                     return true;
                 }
@@ -193,17 +202,17 @@ public class AncientPortalNaturalGen extends AncientPortal {
     }
 
     private boolean isChunkLoaded(int chunkX, int chunkZ) {
-        return ((WorldServer) world).getChunkProvider().chunkExists(chunkX, chunkZ);
+        return ((WorldServer) this.world).getChunkProvider().chunkExists(chunkX, chunkZ);
     }
 
     private static class PortalGenManager {
         private AncientSanctuary.Type[] sanctuaryTypes = new AncientSanctuary.Type[0];
-        private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
         private final AncientSanctuary[] sanctuaries = new AncientSanctuary[4];
         private final BlockPos[] sanctuaryPosForArch = new BlockPos[4];
         private final GenAncientSpire genSpire = new GenAncientSpire();
         private final GenAncientArch genArch = new GenAncientArch();
         private final BlockPos[] basePosForArch = new BlockPos[4];
+        private final PosMc3IM blockPos = new PosMc3IM();
         private final AncientPortalNaturalGen portal;
         private final int minSanctuaryGenRange;
         private final TerrainAnalyzer analyzer;
@@ -229,15 +238,15 @@ public class AncientPortalNaturalGen extends AncientPortal {
         }
 
         protected void generate() {
+            log.info("Portal [{}, {}] start generate", chunkX, chunkZ);
             this.genBase();
             this.genSanctuary();
             this.genArches();
-
-            System.out.println("Portal id:" + portal.id + " is successfully generated!");
+            log.info("Portal [{}, {}] is successfully generated", chunkX, chunkZ);
         }
 
         private void genBase() {
-            blockPos.setPos(chunkX, chunkZ);
+            blockPos.setChunk(chunkX, chunkZ);
             analyzer.startAnalyzing(portal.portalPos);
 
             blockPos.setY(analyzer.getAverageHeight());
@@ -247,19 +256,19 @@ public class AncientPortalNaturalGen extends AncientPortal {
             genSpire.generate(world, portal.portalPos, 255);
 
             blockPos.pushPos();
-            basePosForArch[0] = blockPos.add(0, 0, 7).setWorldY(world).addY(-1).toImmutable();
+            basePosForArch[0] = blockPos.add(0, 0, 7).setY(BananaMC.findHighestBlock(this.world, blockPos)).addY(-1).toImmutable();
             blockPos.popPos();
 
             blockPos.pushPos();
-            basePosForArch[1] = blockPos.add(7, 0, 0).setWorldY(world).addY(-1).toImmutable();
+            basePosForArch[1] = blockPos.add(7, 0, 0).setY(BananaMC.findHighestBlock(this.world, blockPos)).addY(-1).toImmutable();
             blockPos.popPos();
 
             blockPos.pushPos();
-            basePosForArch[2] = blockPos.add(15, 0, 7).setWorldY(world).addY(-1).toImmutable();
+            basePosForArch[2] = blockPos.add(15, 0, 7).setY(BananaMC.findHighestBlock(this.world, blockPos)).addY(-1).toImmutable();
             blockPos.popPos();
 
             blockPos.pushPos();
-            basePosForArch[3] = blockPos.add(7, 0, 15).setWorldY(world).addY(-1).toImmutable();
+            basePosForArch[3] = blockPos.add(7, 0, 15).setY(BananaMC.findHighestBlock(this.world, blockPos)).addY(-1).toImmutable();
             blockPos.popPos();
         }
 
@@ -282,6 +291,7 @@ public class AncientPortalNaturalGen extends AncientPortal {
 
                 analyzer.startAnalyzing(min, end);
 
+                int lastFlow = Integer.MAX_VALUE;
                 int index = -1;
 
                 for (int j = genRange - minSanctuaryGenRange; j > 0; j--) {
@@ -297,28 +307,12 @@ public class AncientPortalNaturalGen extends AncientPortal {
                         x1 = 16;
                     }
 
-                    int flow;
+                    int flow = analyzer.getTerrainFlow(x, z, x1, z1);
 
-                    flow = analyzer.getTerrainFlow(x, z, x1, z1);
-
-                    if (flow < 256) {
+                    if (flow < lastFlow) {
+                        lastFlow = flow;
                         index = j;
-                        break;
                     }
-                }
-
-                if (index == -1) {
-//                    MethodContext<Integer, MethodParams4<Integer, Integer, Integer, Integer>> context = analyzer.get4IntRetIntMethodContext("getTerrainFlow");
-//                    if (context != null) {
-//                        List<Integer> ret = context.getAllReturns();
-//                        int minFlow = ret.get(0);
-//                        for (int j = 0; j != genRange - minSanctuaryGenRange; j++) {
-//                            if (minFlow > ret.get(j)) {
-//                                minFlow = ret.get(j);
-//                                index = j + 1;
-//                            }
-//                        }
-//                    }
                 }
 
                 ChunkPos res = new ChunkPos(min.x + index * facing.getFrontOffsetX(), min.z + index * facing.getFrontOffsetZ());
@@ -358,11 +352,9 @@ public class AncientPortalNaturalGen extends AncientPortal {
             return analyzer.getAverageHeight();
         }
 
-//        protected ArrayListWriteToNBT<AncientSanctuary> getSanctuaries() {
-//            ArrayListWriteToNBT<AncientSanctuary> list = new ArrayListWriteToNBT<>(AncientSanctuary.class);
-//            list.addAll(sanctuaries);
-//            return list;
-//        }
+        protected List<AncientSanctuary> sanctuaries() {
+            return new ArrayList<>(Arrays.asList(this.sanctuaries));
+        }
 
         private void initOffsets() {
             sanctuaryPillars = new BlockPos[] {
@@ -419,27 +411,27 @@ public class AncientPortalNaturalGen extends AncientPortal {
             });
         }
 
-        private void callRunnableInLightOffsets(Consumer<UltraMutableBlockPos> run) {
-            UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
+        private void callRunnableInLightOffsets(Consumer<PosMc3IM> run) {
+            PosMc3IM blockPos = PosMc3IM.obtain();
 
-            blockPos.setPos(portalPos).setY(portalY);
+            blockPos.setX(portalPos.x << 4).setZ(portalPos.z << 4).setY(portalY);
 
             this.center2Offsets(blockPos, run);
             this.inside4CornerOffsets(blockPos, run);
             this.outside4CornerOffsets(blockPos, run);
             this.base24LightOffsets(blockPos, run);
 
-            UltraMutableBlockPos.release(blockPos);
+            PosMc3IM.release(blockPos);
         }
 
-        private void center2Offsets(UltraMutableBlockPos pos, Consumer<UltraMutableBlockPos> run) {
+        private void center2Offsets(PosMc3IM pos, Consumer<PosMc3IM> run) {
             pos.pushPos();
             run.accept(pos.add(7, 10, 8));
             run.accept(pos.add(1, 0, -1));
             pos.popPos();
         }
 
-        private void inside4CornerOffsets(UltraMutableBlockPos pos, Consumer<UltraMutableBlockPos> run) {
+        private void inside4CornerOffsets(PosMc3IM pos, Consumer<PosMc3IM> run) {
             pos.pushPos();
             BlockPos[] lightOffsets = PortalOffsets.getCornerOffsets(2, 13);
             for (int i = 0; i != 2; i++) {
@@ -450,19 +442,28 @@ public class AncientPortalNaturalGen extends AncientPortal {
                     y = portalY + 10;
                 }
                 pos.setY(y);
-
-                pos.offsetAndCallRunnable(lightOffsets, run);
+                for (BlockPos off : lightOffsets) {
+                    pos.pushPos();
+                    pos.add(off);
+                    run.accept(pos);
+                    pos.popPos();
+                }
             }
             pos.popPos();
         }
 
-        private void outside4CornerOffsets(UltraMutableBlockPos pos, Consumer<UltraMutableBlockPos> run) {
-            pos.pushPos();
-            pos.addY(11).offsetAndCallRunnable(PortalOffsets.getCornerOffsets(0, 15), run);
+        private void outside4CornerOffsets(PosMc3IM pos, Consumer<PosMc3IM> run) {
+            pos.pushPos().addY(11);
+            for (BlockPos off : PortalOffsets.getCornerOffsets(0, 15)) {
+                pos.pushPos();
+                pos.add(off);
+                run.accept(pos);
+                pos.popPos();
+            }
             pos.popPos();
         }
 
-        private void base24LightOffsets(UltraMutableBlockPos pos, Consumer<UltraMutableBlockPos> run) {
+        private void base24LightOffsets(PosMc3IM pos, Consumer<PosMc3IM> run) {
             pos.pushPos();
             for (int i = 0; i != 3; i++) {
                 int range;
@@ -482,9 +483,13 @@ public class AncientPortalNaturalGen extends AncientPortal {
                         range = 3;
                         break;
                 }
-
                 pos.setY(y);
-                pos.offsetAndCallRunnable(PortalOffsets.portalLightOffsets[range], run);
+                for (BlockPos off : PortalOffsets.portalLightOffsets[range]) {
+                    pos.pushPos();
+                    pos.add(off);
+                    run.accept(pos);
+                    pos.popPos();
+                }
             }
             pos.popPos();
         }

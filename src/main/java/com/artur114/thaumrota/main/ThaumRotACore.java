@@ -5,8 +5,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
+@IFMLLoadingPlugin.SortingIndex(1001)
 @IFMLLoadingPlugin.MCVersion("1.12.2")
-@IFMLLoadingPlugin.Name("TC: Return of the Ancients Core Mod")
+@IFMLLoadingPlugin.Name("ThaumRotA's CoreMod")
 public class ThaumRotACore implements IFMLLoadingPlugin {
     @Override
     public String[] getASMTransformerClass() {

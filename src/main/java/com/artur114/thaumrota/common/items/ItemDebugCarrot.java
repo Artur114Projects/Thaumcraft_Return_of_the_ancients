@@ -2,26 +2,19 @@ package com.artur114.thaumrota.common.items;
 
 
 import com.artur114.bananalib.mc.base.BItemBase;
+import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import com.artur114.thaumrota.common.blocks.BlockLightningStoneTC;
-import com.artur114.thaumrota.client.event.ClientEventsHandler;
-import com.artur114.thaumrota.client.fx.particle.RotateParticleSmokeInPlayer;
-import com.artur114.thaumrota.client.fx.particle.ParticleFlameCanCollide;
 import com.artur114.thaumrota.common.tileentity.interf.ITileBurner;
-import com.artur114.thaumrota.common.util.DevScriptsRunner;
-import com.artur114.thaumrota.common.util.math.AreasCombiner;
-import com.artur114.thaumrota.common.util.math.BoundingBox;
-import com.artur114.thaumrota.common.util.math.IArea;
+import com.artur114.thaumrota.common.util.DevScriptsShell;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -33,15 +26,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityStructure;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IRarity;
-import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -88,10 +76,10 @@ public class ItemDebugCarrot extends BItemBase {
 			return EnumActionResult.SUCCESS;
 		}
 
-        if (DevScriptsRunner.isDev()) {
-            DevScriptsRunner.run(
+        if (DevScriptsShell.isDev()) {
+            ThaumRotA.DEV_SHELL.evaluate(
                 "carrot_use_on_block.groovy",
-                new String[]{"player", "worldIn", "pos", "hand", "facing", "hitX", "hitY", "hitZ"},
+                new String[]{"player", "world", "pos", "hand", "facing", "hitX", "hitY", "hitZ"},
                 new Object[]{player, worldIn, pos, hand, facing, hitX, hitY, hitZ}
             );
         }
@@ -101,10 +89,10 @@ public class ItemDebugCarrot extends BItemBase {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        if (DevScriptsRunner.isDev()) {
-            DevScriptsRunner.run(
+        if (DevScriptsShell.isDev()) {
+            ThaumRotA.DEV_SHELL.evaluate(
                 "carrot_use.groovy",
-                new String[]{"worldIn", "playerIn", "handIn"},
+                new String[]{"world", "player", "hand"},
                 new Object[]{worldIn, playerIn, handIn}
             );
         }
@@ -177,13 +165,13 @@ public class ItemDebugCarrot extends BItemBase {
 			IOUtils.closeQuietly(inputStream);
 		}
 
-		UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
+		PosMc3IM blockPos = PosMc3IM.obtain();
 		BlockPos minPos = new BlockPos(Math.min(startPos.getX(), endPos.getX()), Math.min(startPos.getY(), endPos.getY()), Math.min(startPos.getZ(), endPos.getZ()));
 		BlockPos maxPos = new BlockPos(Math.max(startPos.getX(), endPos.getX()), Math.max(startPos.getY(), endPos.getY()), Math.max(startPos.getZ(), endPos.getZ()));
 		NBTTagList lightData = new NBTTagList();
 
 		for (BlockPos.MutableBlockPos iteratePos : BlockPos.getAllInBoxMutable(minPos, maxPos)) {
-			blockPos.setPos(iteratePos).subtract(minPos);
+			blockPos.set(iteratePos).subtract(minPos);
 			int light = world.getLightFor(EnumSkyBlock.BLOCK, iteratePos);
 			if (light == 0) continue;
 			NBTTagCompound d = new NBTTagCompound();
@@ -196,7 +184,7 @@ public class ItemDebugCarrot extends BItemBase {
 			lightData.appendTag(d);
 		}
 
-		UltraMutableBlockPos.release(blockPos);
+        PosMc3IM.release(blockPos);
 
 		fileNBT.setTag("light", lightData);
 

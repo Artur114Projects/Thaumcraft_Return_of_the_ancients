@@ -47,7 +47,7 @@ public class TileEntityPedestalActive extends TileBase implements ITileBlockUseL
                 Pos3d vec = new Pos3d(0.1, 0, 0).rotateYaw(this.rotate);
                 Minecraft.getMinecraft().effectRenderer.addEffect(new ParticlePhantom(world, this.pos.getX() + 6.0F / 16.0F + (world.rand.nextFloat() * 4.0F / 16.0F), this.pos.getY() + 12.0F / 16.0F, this.pos.getZ() + 6.0F / 16.0F + (world.rand.nextFloat() * 4.0F / 16.0F), vec, -1));
             }
-            ((WorldClient) this.world).playSound(this.pos, InitSounds.PEDESTAL_ACTIVATED.SOUND, SoundCategory.BLOCKS, 0.5F, 1.0F, false);
+            ((WorldClient) this.world).playSound(this.pos, InitSounds.PEDESTAL_ACTIVATED, SoundCategory.BLOCKS, 0.5F, 1.0F, false);
         }
 
         if (this.parent != null) {

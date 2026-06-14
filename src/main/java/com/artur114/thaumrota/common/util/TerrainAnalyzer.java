@@ -182,7 +182,7 @@ public class TerrainAnalyzer {
     }
 
     public int getMaxHeight() {
-        return this.getAverageHeight(0, 0, analyzingArea.getAreaXSize(), analyzingArea.getAreaZSize());
+        return this.getMaxHeight(0, 0, analyzingArea.getAreaXSize(), analyzingArea.getAreaZSize());
     }
 
     public int getMaxHeight(int inX, int inZ, int toX, int toZ) {
@@ -198,6 +198,31 @@ public class TerrainAnalyzer {
         for (int x = inX; x != toX; x++) {
             for (int z = inZ; z != toZ; z++) {
                 if (ret < heightMap[x + z * areaX]) {
+                    ret = heightMap[x + z * areaX];
+                }
+            }
+        }
+
+        return ret;
+    }
+
+    public int getMinHeight() {
+        return this.getMinHeight(0, 0, analyzingArea.getAreaXSize(), analyzingArea.getAreaZSize());
+    }
+
+    public int getMinHeight(int inX, int inZ, int toX, int toZ) {
+        this.checkOutOfBound(inX, inZ, toX, toZ);
+        if (this.heightMap == null) {
+            loadHeightMap(false);
+        }
+
+        int ret = Integer.MAX_VALUE;
+
+        int areaX = this.analyzingArea.getAreaXSize();
+
+        for (int x = inX; x != toX; x++) {
+            for (int z = inZ; z != toZ; z++) {
+                if (ret > heightMap[x + z * areaX]) {
                     ret = heightMap[x + z * areaX];
                 }
             }

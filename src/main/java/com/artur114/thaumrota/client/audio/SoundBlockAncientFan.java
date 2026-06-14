@@ -7,7 +7,7 @@ import net.minecraft.util.SoundCategory;
 public class SoundBlockAncientFan extends SoundTile<TileEntityAncientFan> {
 
     public SoundBlockAncientFan(TileEntityAncientFan tile) {
-        super(InitSounds.FAN.SOUND, SoundCategory.BLOCKS, tile);
+        super(InitSounds.FAN, SoundCategory.BLOCKS, tile);
 
         this.repeat = true;
         this.volume = 0.6F;

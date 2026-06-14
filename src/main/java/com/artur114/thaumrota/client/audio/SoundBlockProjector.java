@@ -8,7 +8,7 @@ import net.minecraft.util.SoundCategory;
 public class SoundBlockProjector extends MovingSound {
     private final TileEntityAncientProjector tile;
     public SoundBlockProjector(TileEntityAncientProjector tile) {
-        super(InitSounds.PROJECTOR.SOUND, SoundCategory.BLOCKS);
+        super(InitSounds.PROJECTOR, SoundCategory.BLOCKS);
 
         this.tile = tile;
         this.repeat = true;

@@ -1,14 +1,10 @@
 package com.artur114.thaumrota.common.handlers;
 
 import com.artur114.bananalib.mc.BananaMC;
-import com.artur114.thaumrota.common.misc.SoundTRA;
 import com.artur114.thaumrota.common.config.RotAConfigs;
-import com.artur114.thaumrota.main.ThaumRotA;
-import com.artur114.thaumrota.common.network.ClientPacketMisc;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -66,13 +62,6 @@ public class MiscHandler {
 
     public static void sendMessageTranslateWithChangeTitle(EntityPlayerMP playerMP, String key, String title) {
         playerMP.sendMessage(new TextComponentString(title + new TextComponentTranslation(key).getFormattedText()));
-    }
-
-    public static void playSound(EntityPlayerMP playerMP, SoundTRA sound) {
-        playerMP.playSound(sound.SOUND, 1.0F, 1.0F);
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setString("playSound", sound.NAME);
-        ThaumRotA.NETWORK.sendTo(new ClientPacketMisc(nbt), playerMP);
     }
 
     public static void researchAndSendMessage(EntityPlayerMP player, String key, String translateKey, TextFormatting formatting) {

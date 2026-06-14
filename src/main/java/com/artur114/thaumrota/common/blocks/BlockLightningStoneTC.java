@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -23,18 +24,18 @@ public class BlockLightningStoneTC extends BaseBlock {
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    public @NotNull Item getItemDropped(@NotNull IBlockState state, @NotNull Random rand, int fortune) {
         Item item = Item.getByNameOrId("thaumcraft:" + name);
         return item != null ? item : super.getItemDropped(state, rand, fortune);
     }
 
     @Override
-    public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+    public boolean canSilkHarvest(@NotNull World world, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull EntityPlayer player) {
         return false;
     }
 
     @Override
-    protected BlockStateContainer createBlockState() {
+    protected @NotNull BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, LIGHT);
     }
 
@@ -44,12 +45,12 @@ public class BlockLightningStoneTC extends BaseBlock {
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
+    public @NotNull IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(LIGHT, meta);
     }
 
     @Override
-    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+    public int getLightValue(IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos) {
         return 15 - state.getValue(LIGHT);
     }
 }

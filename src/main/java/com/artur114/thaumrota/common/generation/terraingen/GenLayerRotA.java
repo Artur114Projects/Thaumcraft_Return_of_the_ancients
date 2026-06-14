@@ -19,14 +19,13 @@ import net.minecraft.world.gen.layer.GenLayerSmooth;
 import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
 import net.minecraft.world.gen.layer.GenLayerZoom;
 
-public abstract class GenLayerTRA extends GenLayer {
+public abstract class GenLayerRotA extends GenLayer {
 
 
-    public GenLayerTRA(long seed) {
+    public GenLayerRotA(long seed) {
         super(seed);
     }
 
-    // TODO: Сделать совместимость с WorldType.LARGE_BIOMES
     public static GenLayer[] initializeAllBiomeGenerators(long seed, WorldType worldType) {
         GenLayer genlayer = new GenLayerIsland(1L);
         genlayer = new GenLayerFuzzyZoom(2000L, genlayer);

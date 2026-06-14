@@ -48,11 +48,11 @@ public class TileEntityAncientDoorH4x4 extends TileEntityDoorBase implements Til
 
             if (this.world.isRemote) {
                 if (this.startOpenTimer == 40) {
-                    ((WorldClient) this.world).playSound(this.pos, InitSounds.PNEUMATIC_PUFF_LONG.SOUND, SoundCategory.BLOCKS, 0.25F, 1, false);
+                    ((WorldClient) this.world).playSound(this.pos, InitSounds.PNEUMATIC_PUFF_LONG, SoundCategory.BLOCKS, 0.25F, 1, false);
                 }
 
                 if (this.startOpenTimer == 2) {
-                    ((WorldClient) this.world).playSound(this.pos, InitSounds.DOOR_OPEN_1.SOUND, SoundCategory.BLOCKS, 0.5F, 1, false);
+                    ((WorldClient) this.world).playSound(this.pos, InitSounds.DOOR_OPEN_1, SoundCategory.BLOCKS, 0.5F, 1, false);
                 }
 
                 FXDispatcher.INSTANCE.drawVentParticles(pos.getX() + 4.0F / 16.0F, pos.getY() + (12.0F / 16.0F), pos.getZ() + 2, 0.0, 0.001, 0.0, 0x999999, 1.0F);

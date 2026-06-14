@@ -96,7 +96,7 @@ public class TileEntityAncientProjector extends TileBase implements ITileBlockPl
     }
 
     private void updatePedestal(boolean state) {
-        if (!this.world.isRemote && state) this.world.playSound(null, this.pos, InitSounds.SPOTLIGHT.SOUND, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        if (!this.world.isRemote && state) this.world.playSound(null, this.pos, InitSounds.SPOTLIGHT, SoundCategory.BLOCKS, 1.0F, 1.0F);
         IBlockState blockState = state ? InitBlocks.PHANTOM_PEDESTAL.getDefaultState() : Blocks.AIR.getDefaultState();
         this.world.setBlockState(this.pos.add(0, -this.distanceToPedestal, 0), blockState);
     }

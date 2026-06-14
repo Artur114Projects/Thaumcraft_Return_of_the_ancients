@@ -61,7 +61,7 @@ public class ClientPacketMisc implements IMessage { // TODO: 16.11.2025 Упра
                     playerSP.sendMessage(new TextComponentString(TITLE + I18n.translateToLocal(nbt.getString("sendMessageTranslate"))));
                 }
                 if (nbt.hasKey("playSound")) {
-                    playerSP.playSound(InitSounds.SOUND_MAP.get(nbt.getString("playSound")), 1, 1);
+//                    playerSP.playSound(InitSounds.SOUND_MAP.get(nbt.getString("playSound")), 1, 1);
                 }
             });
             return null;

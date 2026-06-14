@@ -1,4 +1,4 @@
-package com.artur114.thaumrota.common.misc;
+package com.artur114.thaumrota.common.creative;
 
 import com.artur114.thaumrota.common.init.InitBlocks;
 
@@ -8,9 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class RotACreativeTab extends CreativeTabs {
 	public RotACreativeTab(String label) {

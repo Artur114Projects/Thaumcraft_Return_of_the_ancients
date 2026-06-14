@@ -3,12 +3,13 @@ package com.artur114.thaumrota.proxy;
 import com.artur114.bananalib.mc.registry.IRegisterBus;
 import com.artur114.bananalib.mc.services.BananaClientServices;
 import com.artur114.thaumrota.client.init.InitShaders;
+import com.artur114.thaumrota.client.render.dev.DevScriptedRender;
 import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class ClientProxy extends CommonProxy {
@@ -32,6 +33,6 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public List<Class<?>> classesToRegister() {
-        return Collections.singletonList(InitShaders.class);
+        return Arrays.asList(InitShaders.class, DevScriptedRender.class);
     }
 }

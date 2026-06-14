@@ -4,7 +4,8 @@ import com.artur114.bananalib.mc.registry.BananaRegisterBus;
 import com.artur114.bananalib.mc.registry.IRegisterBus;
 import com.artur114.bananalib.mc.services.BananaServicesManager;
 import com.artur114.bananalib.mc.services.IServicesManager;
-import com.artur114.thaumrota.common.misc.RotACreativeTab;
+import com.artur114.thaumrota.common.creative.RotACreativeTab;
+import com.artur114.thaumrota.common.util.DevScriptsShell;
 import com.artur114.thaumrota.proxy.IProxy;
 import com.artur114.thaumrota.server.event.PublicSStartingEvent;
 import com.artur114.thaumrota.server.event.PublicSStoppingEvent;
@@ -18,12 +19,15 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
+import java.nio.file.Paths;
+
 @Mod(modid = ThaumRotA.MODID, useMetadata = true)
 public class ThaumRotA {
     public static final CreativeTabs CREATIVE_TAB = new RotACreativeTab("thaumrota_tab");
     public static final SimpleNetworkWrapper NETWORK = new SimpleNetworkWrapper("thaumrota");
     public static final IRegisterBus REGISTER_BUS = new BananaRegisterBus().putNetWrapper(NETWORK);
     public static final IServicesManager SERVICES = new BananaServicesManager();
+    public static final DevScriptsShell DEV_SHELL = new DevScriptsShell(Paths.get("..", "src/test/groovy/scripts").toAbsolutePath().normalize()).newClassInBasePath("RotADevScript.groovy");
     public static final EventBus INTERNAL_EVENT_BUS = new EventBus();
     public static final String MODID = "thaumrota";
 

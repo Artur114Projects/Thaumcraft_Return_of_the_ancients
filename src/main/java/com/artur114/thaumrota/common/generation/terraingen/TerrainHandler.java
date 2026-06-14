@@ -1,8 +1,8 @@
 package com.artur114.thaumrota.common.generation.terraingen;
 
 
+import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.thaumrota.common.biomes.BiomeTaint;
-import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitBiomes;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
@@ -14,14 +14,20 @@ import net.minecraftforge.event.terraingen.WorldTypeEvent.InitBiomeGens;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod.EventBusSubscriber
 public class TerrainHandler {
+    private static final Logger log = LogManager.getLogger("ThaumRotA/TerrainGen");
+
     @SubscribeEvent
     public void initializeAllBiomeGenerators(InitBiomeGens event) {
         if (event.getWorldType() == WorldType.DEFAULT || event.getWorldType() == WorldType.LARGE_BIOMES) {
-            GenLayer[] genlayer = GenLayerTRA.initializeAllBiomeGenerators(event.getSeed(), event.getWorldType());
+            GenLayer[] genlayer = GenLayerRotA.initializeAllBiomeGenerators(event.getSeed(), event.getWorldType());
             event.setNewBiomeGens(genlayer);
+
+            log.info("Injected RotA Biome Gens");
         }
     }
 
@@ -30,7 +36,7 @@ public class TerrainHandler {
         Chunk chunk = e.getWorld().getChunkFromChunkCoords(e.getChunkPos().x, e.getChunkPos().z);
         byte[] biomeArray = chunk.getBiomeArray();
 
-        if (MiscHandler.fullCheckChunkContainsBiomeType(chunk, InitBiomes.TAINT_TYPE)) {
+        if (BananaMC.chunkContainsBiomeTypeOnCorners(chunk, InitBiomes.TAINT_TYPE)) {
             ((WorldServer) e.getWorld()).getChunkProvider().loadChunk(e.getChunkPos().x, e.getChunkPos().z, () -> BiomeTaint.decorateCustom(e.getWorld(), e.getRand(), e.getChunkPos(), biomeArray));
         }
     }
@@ -51,7 +57,7 @@ public class TerrainHandler {
             return;
         }
 
-        if (MiscHandler.fastCheckChunkContainsBiomeType(chunk, InitBiomes.TAINT_TYPE)) {
+        if (BananaMC.chunkContainsBiomeType(chunk, InitBiomes.TAINT_TYPE)) {
             e.setResult(Event.Result.DENY);
         }
     }

@@ -37,6 +37,7 @@ dependencies {
     include('com.artur114.bananalib:util:0.0.0-SNAPSHOT') {transitive=false}
     include('com.artur114.bananalib:mc:0.0.0-SNAPSHOT') {transitive=false}
 
+    implementation 'com.artur114.bananalib:math-groovy:1.0.0'
     implementation 'org.jetbrains:annotations:24.0.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.0'

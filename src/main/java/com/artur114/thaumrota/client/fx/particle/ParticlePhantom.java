@@ -1,17 +1,17 @@
 package com.artur114.thaumrota.client.fx.particle;
 
-import com.artur114.thaumrota.client.fx.particle.util.ParticleSprite;
-import com.artur114.thaumrota.client.init.InitParticleSprite;
+import com.artur114.bananalib.mc.base.client.BParticleBase;
+import com.artur114.thaumrota.client.init.InitAtlasSprites;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class ParticlePhantom extends ParticleBase<ParticleSprite> {
+public class ParticlePhantom extends BParticleBase {
     private final float finalMotionY = (this.rand.nextFloat() * 0.15F) + 0.05F;
 
     public ParticlePhantom(World worldIn, double posXIn, double posYIn, double posZIn) {
         super(worldIn, posXIn, posYIn, posZIn);
 
-        this.setSprite(InitParticleSprite.PARTICLE_QUAD_GENERIC);
+        this.setSprite(InitAtlasSprites.PARTICLE_QUAD_GENERIC);
         this.bindSprite();
 
         this.particleGravity = 0;
@@ -27,7 +27,7 @@ public class ParticlePhantom extends ParticleBase<ParticleSprite> {
     public ParticlePhantom(World worldIn, double posXIn, double posYIn, double posZIn, Vec3d vec3d, int livingTime) {
         super(worldIn, posXIn, posYIn, posZIn, vec3d.x, vec3d.y, vec3d.z);
 
-        this.setSprite(InitParticleSprite.PARTICLE_QUAD_GENERIC);
+        this.setSprite(InitAtlasSprites.PARTICLE_QUAD_GENERIC);
         this.bindSprite();
 
         this.particleGravity = 0;

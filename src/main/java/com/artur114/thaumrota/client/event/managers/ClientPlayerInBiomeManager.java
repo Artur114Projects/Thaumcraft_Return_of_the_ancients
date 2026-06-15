@@ -102,7 +102,7 @@ public class ClientPlayerInBiomeManager {
             }
         }
 
-        if (player.onGround && this.runOnGround != null) {
+        if ((player.onGround || player.isInWater() || player.isInLava()) && this.runOnGround != null) {
             this.runOnGround.run(); this.runOnGround = null;
         }
     }

@@ -26,9 +26,6 @@ public class FBOTest {
 
     @SubscribeEvent
     public static void fboTest(RenderWorldLastEvent event) {
-//        if (true) {
-//            return;
-//        }
         int current = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
 
         prepareFrameBuff();

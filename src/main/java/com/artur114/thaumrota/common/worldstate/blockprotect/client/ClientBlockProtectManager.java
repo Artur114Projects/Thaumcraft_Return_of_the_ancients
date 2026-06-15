@@ -17,9 +17,12 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import thaumcraft.api.blocks.BlocksTC;
 
+import java.util.Random;
+
 public class ClientBlockProtectManager {
     private final Minecraft mc = Minecraft.getMinecraft();
     private ParticleBlockProtect lastParticle = null;
+    private final Random rand = new Random();
     private Vec3d lastParticleVec = null;
     private long lastParticleTime = 0;
 
@@ -57,9 +60,9 @@ public class ClientBlockProtectManager {
             return;
         }
 
-        double x = vec3d.x + ((facing != null) ? facing.getFrontOffsetX() / 100.0D : 0);
-        double y = vec3d.y + ((facing != null) ? facing.getFrontOffsetY() / 100.0D : 0);
-        double z = vec3d.z + ((facing != null) ? facing.getFrontOffsetZ() / 100.0D : 0);
+        double x = vec3d.x + ((facing != null) ? facing.getFrontOffsetX() / (64.0D) + this.rand.nextDouble() * 16.0D : 0);
+        double y = vec3d.y + ((facing != null) ? facing.getFrontOffsetY() / (64.0D) + this.rand.nextDouble() * 16.0D : 0);
+        double z = vec3d.z + ((facing != null) ? facing.getFrontOffsetZ() / (64.0D) + this.rand.nextDouble() * 16.0D : 0);
 
         boolean flag = world.getBlockState(pos).getBlock() == BlocksTC.stoneEldritchTile;
 

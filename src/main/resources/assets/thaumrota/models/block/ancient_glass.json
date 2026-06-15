@@ -5,7 +5,7 @@
 	"textures": {
 		"1": "thaumrota:blocks/ancient_glass_border",
 		"2": "thaumrota:blocks/ancient_glass_nq",
-		"particle": "thaumrota:blocks/ancient_glass_border"
+		"particle": "thaumrota:blocks/ancient_glass"
 	},
 	"elements": [
 		{

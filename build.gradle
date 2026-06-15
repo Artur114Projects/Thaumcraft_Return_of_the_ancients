@@ -32,10 +32,10 @@ configurations {
 }
 
 dependencies {
-    include('com.artur114.bananalib:asm:1.0.0') {transitive=false}
+    include('com.artur114.bananalib:asm:1.1.0') {transitive=false}
     include('com.artur114.bananalib:math:1.0.0') {transitive=false}
     include('com.artur114.bananalib:util:0.0.0-SNAPSHOT') {transitive=false}
-    include('com.artur114.bananalib:mc:0.0.0-SNAPSHOT') {transitive=false}
+    include('com.artur114.bananalib:mc:0.1.0-SNAPSHOT') {transitive=false}
 
     implementation 'com.artur114.bananalib:math-groovy:1.0.0'
     implementation 'org.jetbrains:annotations:24.0.0'
@@ -71,7 +71,8 @@ jar {
         attributes([
             "Implementation-Vendor": mod_author,
             "Implementation-Version": mod_version,
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "Included-Libs": "[${configurations.include.collect{it.name.substring(0, it.name.lastIndexOf('.'))}.join(", ")}]"
         ])
     }
 }

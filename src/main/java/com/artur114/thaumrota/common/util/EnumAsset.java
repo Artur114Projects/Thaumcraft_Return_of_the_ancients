@@ -61,9 +61,8 @@ public enum EnumAsset {
         return new ResourceLocation(modId, path + additionalPath);
     }
 
-    @Deprecated
-    public String getPathNotTextures(String additionalPath) {
+    public String texture(String additionalPath) {
         if (!additionalPath.startsWith("/")) additionalPath = "/" + additionalPath;
-        return fullPath.replaceAll("textures/", "") + additionalPath;
+        return this.fullPath.replaceAll("textures/", "") + additionalPath;
     }
 }

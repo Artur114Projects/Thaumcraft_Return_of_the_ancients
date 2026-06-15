@@ -1,16 +1,12 @@
 package scripts
 
 import com.artur114.bananalib.math.core.m3d.vec.IVec3DC
-import com.artur114.bananalib.math.m3d.matrix.Matrix3DM
-import com.artur114.bananalib.math.m3d.vec.IVec3D
-import com.artur114.bananalib.math.m3d.vec.Vec3D
 import com.artur114.bananalib.math.m3d.vec.Vec3DM
 import com.artur114.bananalib.mc.math.m3d.vec.VecMc3D
 import groovy.transform.BaseScript
 import net.minecraft.client.Minecraft
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.util.EnumParticleTypes
-import net.minecraft.world.World
 
 @BaseScript
 RotADevScript script
@@ -57,6 +53,10 @@ onClient {
     Vec3DM.release(vec3DM)
 }
 
+private void spawnParticle(EnumParticleTypes type, IVec3DC pos, IVec3DC move) {
+    worldIn.spawnParticle(type, false, pos.x(), pos.y(), pos.z(), move.x(), move.y(), move.z())
+}
+
 onClient {
     if (player.isSneaking()) {
         return
@@ -67,8 +67,4 @@ onClient {
     player.motionX += look.x
     player.motionY += look.y
     player.motionZ += look.z
-}
-
-private void spawnParticle(EnumParticleTypes type, IVec3DC pos, IVec3DC move) {
-    worldIn.spawnParticle(type, false, pos.x(), pos.y(), pos.z(), move.x(), move.y(), move.z())
 }

@@ -4,6 +4,8 @@ import com.artur114.bananalib.mc.base.BBlockTileBase;
 import com.artur114.bananalib.mc.base.MaterialArray;
 import com.artur114.thaumrota.client.render.item.TileEntityItemStackRendererTRA;
 import com.artur114.thaumrota.client.render.item.IItemStackRenderer;
+import com.artur114.thaumrota.client.render.tile.TileEntityForDevRenderer;
+import com.artur114.thaumrota.common.tileentity.TileEntityForDev;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -24,11 +26,11 @@ public abstract class BaseBlockTileEntity<T extends TileEntity> extends BBlockTi
     }
 
     public BaseBlockTileEntity(String name, Material material, float hardness, float resistance, SoundType soundType) {
-        super(name, material, hardness, resistance, soundType);
+        this(name, material, material.getMaterialMapColor(), hardness, resistance, soundType);
     }
 
     public BaseBlockTileEntity(String name, MaterialArray mat) {
-        super(name, mat);
+        this(name, mat.material(), mat.hardness(), mat.resistance(), mat.soundType());
     }
 
     @Override

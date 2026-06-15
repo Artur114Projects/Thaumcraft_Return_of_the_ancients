@@ -22,12 +22,12 @@ public class TerrainHandler {
     private static final Logger log = LogManager.getLogger("ThaumRotA/TerrainGen");
 
     @SubscribeEvent
-    public void initializeAllBiomeGenerators(InitBiomeGens event) {
-        if (event.getWorldType() == WorldType.DEFAULT || event.getWorldType() == WorldType.LARGE_BIOMES) {
-            GenLayer[] genlayer = GenLayerRotA.initializeAllBiomeGenerators(event.getSeed(), event.getWorldType());
-            event.setNewBiomeGens(genlayer);
+    public void initializeAllBiomeGenerators(InitBiomeGens e) {
+        if (e.getWorldType() == WorldType.DEFAULT || e.getWorldType() == WorldType.LARGE_BIOMES) {
+            GenLayer[] genlayer = GenLayerRotA.initializeAllBiomeGenerators(e.getSeed(), e.getWorldType());
+            e.setNewBiomeGens(genlayer);
 
-            log.info("Injected RotA Biome Gens");
+            log.info("Injecting RotA Biome Gens, seed {}", e.getSeed());
         }
     }
 
@@ -37,10 +37,9 @@ public class TerrainHandler {
         byte[] biomeArray = chunk.getBiomeArray();
 
         if (BananaMC.chunkContainsBiomeTypeOnCorners(chunk, InitBiomes.TAINT_TYPE)) {
-            ((WorldServer) e.getWorld()).getChunkProvider().loadChunk(e.getChunkPos().x, e.getChunkPos().z, () -> BiomeTaint.decorateCustom(e.getWorld(), e.getRand(), e.getChunkPos(), biomeArray));
+            BiomeTaint.decorateCustom(e.getWorld(), e.getRand(), e.getChunkPos(), biomeArray);
         }
     }
-
 
     @SubscribeEvent
     public void populate(PopulateChunkEvent.Populate e) {

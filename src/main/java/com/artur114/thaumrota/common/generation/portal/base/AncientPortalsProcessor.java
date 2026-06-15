@@ -27,6 +27,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -36,7 +38,7 @@ import static com.artur114.thaumrota.common.init.InitDimensions.ancient_world_di
 
 @Mod.EventBusSubscriber(modid = ThaumRotA.MODID)
 public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать под capability!!!
-
+    private static final Logger log = LogManager.getLogger("ThaumRotA/PortalsLegacy");
     private static final Map<Integer, ChunkPos[]> PORTALS_GENERATION_POS = new HashMap<>();
     private static ChunkPos[] portalsGenerationPosOverWorld = null;
     public static final int portalsCount = 8;
@@ -67,12 +69,12 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
             int dimension = e.getWorld().provider.getDimension();
 
             if (dimension == 0) {
-                portalsGenerationPosOverWorld = GenLayersHandler.initPortalsPosOnWorld(portalsCount, e.getWorld().provider.getSeed());
+                portalsGenerationPosOverWorld = GenLayersHandler.initPortalsPosOnWorld(portalsCount, e.getWorld().getWorldInfo().getSeed());
             }
 
             if (!e.getWorld().isRemote) {
                 RotAWorldData worldData = RotAWorldData.get();
-                if (RotAConfigs.Any.debugMode) System.out.println("Load portals dim:" + dimension);
+                log.info("Load portals dim:{}", dimension);
                 NBTTagCompound portalsPack = worldData.saveData.getCompoundTag("PortalsPack");
                 if (portalsPack.hasKey(dimension + "")) {
                     NBTTagList list = portalsPack.getTagList(dimension + "", 10);

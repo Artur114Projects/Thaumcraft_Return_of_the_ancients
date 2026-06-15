@@ -2,6 +2,7 @@ package com.artur114.thaumrota.proxy;
 
 import com.artur114.bananalib.mc.registry.IRegisterBus;
 import com.artur114.bananalib.mc.services.BananaClientServices;
+import com.artur114.thaumrota.client.init.InitAtlasSprites;
 import com.artur114.thaumrota.client.init.InitShaders;
 import com.artur114.thaumrota.client.render.dev.DevScriptedRender;
 import com.artur114.thaumrota.main.ThaumRotA;
@@ -33,6 +34,6 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public List<Class<?>> classesToRegister() {
-        return Arrays.asList(InitShaders.class, DevScriptedRender.class);
+        return Arrays.asList(InitShaders.class, DevScriptedRender.class, InitAtlasSprites.class);
     }
 }

@@ -4,7 +4,7 @@
 	"parent": "block/block",
 	"textures": {
 		"0": "thaumrota:blocks/ancient_grid",
-		"particle": "thaumrota:blocks/ancient_grid"
+		"particle": "thaumcraft:blocks/ancient_stone_0"
 	},
 	"elements": [
 		{

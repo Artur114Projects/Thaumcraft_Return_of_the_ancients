@@ -232,6 +232,8 @@ public class BiomeTaint extends BBiomeBase implements ILoadStageInit {
     @Override
     public void onInit() {
         switch (this.type) {
+            case EDGE:
+                return;
             case NORMAL:
             case HILLS:
                 this.fillerBlock = InitBlocks.TAINT_VOID_STONE.getDefaultState();

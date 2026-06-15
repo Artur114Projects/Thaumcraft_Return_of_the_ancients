@@ -1,17 +1,17 @@
 package com.artur114.thaumrota.client.fx.particle;
 
-import com.artur114.thaumrota.client.fx.particle.util.ParticleSprite;
-import com.artur114.thaumrota.client.init.InitParticleSprite;
+import com.artur114.bananalib.mc.base.client.BParticleBase;
+import com.artur114.thaumrota.client.init.InitAtlasSprites;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class ParticleHeat extends ParticleBase<ParticleSprite> {
+public class ParticleHeat extends BParticleBase {
     private boolean axis;
     private double angle;
     public ParticleHeat(World worldIn, double posXIn, double posYIn, double posZIn) {
         super(worldIn, posXIn, posYIn, posZIn);
 
-        this.setSprite(InitParticleSprite.PARTICLE_QUAD_GENERIC);
+        this.setSprite(InitAtlasSprites.PARTICLE_QUAD_GENERIC);
         this.bindSprite();
 
         this.particleRed = 207.0F / 255.0F;

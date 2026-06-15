@@ -1,18 +1,18 @@
 package com.artur114.thaumrota.client.fx.particle;
 
-import com.artur114.thaumrota.client.fx.particle.util.ParticleAtlasSprite;
-import com.artur114.thaumrota.client.init.InitParticleSprite;
+import com.artur114.bananalib.mc.base.client.BParticleBase;
+import com.artur114.thaumrota.client.init.InitAtlasSprites;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class ParticleAncientPortal extends ParticleBase<ParticleAtlasSprite> {
+public class ParticleAncientPortal extends BParticleBase {
     private final Minecraft mc = Minecraft.getMinecraft();
 
     public ParticleAncientPortal(World worldIn, double posXIn, double posYIn, double posZIn, double ySpeed) {
         super(worldIn, posXIn, posYIn, posZIn);
 
-        this.setSprite(InitParticleSprite.PARTICLE_PORTAL);
+        this.setSprite(InitAtlasSprites.PARTICLE_PORTAL);
         this.bindSprite(this.getRandSpriteIndex());
 
         this.motionY = ySpeed;
@@ -24,8 +24,8 @@ public class ParticleAncientPortal extends ParticleBase<ParticleAtlasSprite> {
     }
 
     private int getRandSpriteIndex() {
-        int randSprite = rand.nextInt(InitParticleSprite.PARTICLE_PORTAL.atlasSize() + 4);
-        randSprite = randSprite >= InitParticleSprite.PARTICLE_PORTAL.atlasSize() - 1 ? 0 : randSprite;
+        int randSprite = rand.nextInt(InitAtlasSprites.PARTICLE_PORTAL.length + 4);
+        randSprite = randSprite >= InitAtlasSprites.PARTICLE_PORTAL.length - 1 ? 0 : randSprite;
         return randSprite;
     }
 

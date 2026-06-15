@@ -1,8 +1,9 @@
 package com.artur114.thaumrota.client.fx.particle;
 
-import com.artur114.thaumrota.client.fx.particle.util.ParticleAtlasSprite;
+import com.artur114.bananalib.mc.base.client.BParticleBase;
+import com.artur114.bananalib.mc.base.client.RegAtlasSprite;
 import com.artur114.thaumrota.client.util.RenderHandler;
-import com.artur114.thaumrota.client.init.InitParticleSprite;
+import com.artur114.thaumrota.client.init.InitAtlasSprites;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -13,7 +14,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
-public class ParticleBlockProtect extends ParticleBase<ParticleAtlasSprite> {
+public class ParticleBlockProtect extends BParticleBase {
     private final Vec3d[] renderFacingOffsets;
     private int currentTextureId = 0;
     private int prevTextureId = 0;
@@ -40,7 +41,7 @@ public class ParticleBlockProtect extends ParticleBase<ParticleAtlasSprite> {
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         for (int i = 0; i != 2; i++) {
-            TextureAtlasSprite atlasSprite = this.sprite().atlasSprite(i == 0 ? prevTextureId : currentTextureId);
+            TextureAtlasSprite atlasSprite = this.sprite()[(i == 0 ? prevTextureId : currentTextureId)];
             float alpha = i == 0 ? 1 - partialTicks : partialTicks;
 
             double startU = atlasSprite.getMinU();
@@ -87,16 +88,16 @@ public class ParticleBlockProtect extends ParticleBase<ParticleAtlasSprite> {
     }
 
     public enum TextureType {
-        ANCIENT(InitParticleSprite.PARTICLE_BLOCK_PROTECT_0),
-        ELDRITCH(InitParticleSprite.PARTICLE_BLOCK_PROTECT_1);
+        ANCIENT(InitAtlasSprites.PARTICLE_BLOCK_PROTECT_0),
+        ELDRITCH(InitAtlasSprites.PARTICLE_BLOCK_PROTECT_1);
 
-        private final ParticleAtlasSprite sprite;
+        private final RegAtlasSprite[] sprite;
 
-        TextureType(ParticleAtlasSprite sprite) {
+        TextureType(RegAtlasSprite[] sprite) {
             this.sprite = sprite;
         }
 
-        public ParticleAtlasSprite getSprite() {
+        public RegAtlasSprite[] getSprite() {
             return sprite;
         }
     }

@@ -33,7 +33,11 @@ public class TileEntityAncientPistonRender extends TileEntitySpecialRendererBase
         this.modelBase.renderBase();
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate(0.0F, -(-9.0F / 16.0F - (9.0F / 16.0F * MathHelper.cos((float) ((Math.PI * tile.moveProcess(40.0F)) + (Math.PI / 2.0F))))), 0.0F);
+        float moveRange = 9.0F / 16.0F;
+        float angle = (float) (2.0 * Math.PI * tile.moveProcess(partialTicks, 40.0F));
+        float cos = MathHelper.cos(angle);
+        float move = moveRange * (cos - 1.0F) / 2.0F;
+        GlStateManager.translate(0.0F, moveRange + move, 0.0F);
         this.modelBase.renderPiston();
         GlStateManager.popMatrix();
     }

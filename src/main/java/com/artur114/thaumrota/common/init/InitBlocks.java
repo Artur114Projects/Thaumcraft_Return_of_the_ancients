@@ -14,6 +14,7 @@ import java.util.List;
 
 @RegistryContainer
 public class InitBlocks {
+    public static final BaseBlockTileEntity<TileEntityForDev> DEV_BLOCK = new BlockForDev("dev_block", Material.ROCK, -1, 999999999, SoundType.METAL);
     public static final BaseBlockTileEntity<TileEntityAncientSanctuaryController> ANCIENT_SANCTUARY_CONTROLLER = new BlockAncientSanctuaryController("ancient_sanctuary_controller", Material.ROCK, -1, 999999999, SoundType.METAL);
     public static final BaseBlockContainer<TileEntityAncientTeleport> ANCIENT_TELEPORT = new BlockAncientTeleport("ancient_teleport", Material.IRON, 1.4F, 10, SoundType.STONE);
     public static final BaseBlockTileEntity<TileEntityEldritchTrap> ELDRITCH_TRAP = new BlockEldritchTrap("eldritch_trap", Material.ROCK, 100, 999999999, SoundType.STONE);

@@ -2,7 +2,6 @@ package com.artur114.thaumrota.asm;
 
 import com.artur114.bananalib.asm.ASMTransformBus;
 import com.artur114.thaumrota.asm.transform.*;
-import net.minecraft.item.Item;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.apache.logging.log4j.LogManager;
 
@@ -18,7 +17,8 @@ public class ASMTransformerRotA implements IClassTransformer {
             new NetHandlerPlayServerTransformer(),
             new TaintHelperTransformer(),
             new TCRenderEventsTransformer(),
-            new TileStructureTransformer()
+            new TileStructureTransformer(),
+            new WorldTransformer()
         );
         this.bus.registerDownListener(((tr, e) -> {
             logger.error("An exception occurred in transformer {}", tr, e);

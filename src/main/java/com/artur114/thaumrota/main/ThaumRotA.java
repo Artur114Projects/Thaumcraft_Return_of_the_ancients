@@ -27,7 +27,7 @@ public class ThaumRotA {
     public static final SimpleNetworkWrapper NETWORK = new SimpleNetworkWrapper("thaumrota");
     public static final IRegisterBus REGISTER_BUS = new BananaRegisterBus().putNetWrapper(NETWORK);
     public static final IServicesManager SERVICES = new BananaServicesManager();
-    public static final DevScriptsShell DEV_SHELL = new DevScriptsShell(Paths.get("..", "src/test/groovy/scripts").toAbsolutePath().normalize()).loadClass("RotADevScript.groovy");
+    public static final DevScriptsShell DEV_SHELL = new DevScriptsShell(Paths.get("..", "src/test/groovy/scripts").toAbsolutePath().normalize()).loadClass("TestGroovyClass.groovy").loadClass("RotADevScript.groovy");
     public static final EventBus INTERNAL_EVENT_BUS = new EventBus();
     public static final String MODID = "thaumrota";
 

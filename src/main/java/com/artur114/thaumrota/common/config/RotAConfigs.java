@@ -191,7 +191,7 @@ public class RotAConfigs {
 
     public static class CompatibilitySettings {
         @Config.RequiresMcRestart
-        public int ancientWorldDimId = Integer.MIN_VALUE;
+        public int ancientWorldDimId = -902;
     }
 
 

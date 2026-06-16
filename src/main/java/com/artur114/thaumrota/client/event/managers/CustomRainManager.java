@@ -32,7 +32,7 @@ public class CustomRainManager {
         }
 
         this.addScorchedLandRainParticles(mc, player);
-        this.addAncientWorldHeatParticles(mc, player);
+//        this.addAncientWorldHeatParticles(mc, player);
     }
 
     private void addScorchedLandRainParticles(Minecraft mc, EntityPlayer player) {

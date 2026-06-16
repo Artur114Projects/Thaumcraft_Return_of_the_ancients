@@ -4,7 +4,7 @@ import com.artur114.bananalib.mc.registry.IRegisterBus;
 import com.artur114.bananalib.mc.services.BananaClientServices;
 import com.artur114.thaumrota.client.init.InitAtlasSprites;
 import com.artur114.thaumrota.client.init.InitShaders;
-import com.artur114.thaumrota.client.render.dev.DevScriptedRender;
+import com.artur114.thaumrota.client.render.dev.DevScriptedTickAndRender;
 import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -34,6 +34,6 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public List<Class<?>> classesToRegister() {
-        return Arrays.asList(InitShaders.class, DevScriptedRender.class, InitAtlasSprites.class);
+        return Arrays.asList(InitShaders.class, DevScriptedTickAndRender.class, InitAtlasSprites.class);
     }
 }

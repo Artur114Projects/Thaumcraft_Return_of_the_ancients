@@ -59,8 +59,9 @@ public class ClientPlayerInBiomeManager {
 
     public void entityViewRenderEventRenderFogEvent(EntityViewRenderEvent.RenderFogEvent e) {
         if (e.getEntity().getEntityWorld().provider.getDimension() == ancient_world_dim_id) {
-            GlStateManager.setFog(GlStateManager.FogMode.EXP);
-            GlStateManager.setFogDensity(0.02F);
+            GlStateManager.setFog(GlStateManager.FogMode.LINEAR);
+            GlStateManager.setFogStart(32);
+            GlStateManager.setFogEnd(64);
 
             if (RenderEventHandler.fogTarget > 0) {
                 RenderEventHandler.fogTarget = 0;

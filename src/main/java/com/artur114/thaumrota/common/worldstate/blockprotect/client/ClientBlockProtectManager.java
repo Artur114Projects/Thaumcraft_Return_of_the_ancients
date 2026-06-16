@@ -60,9 +60,9 @@ public class ClientBlockProtectManager {
             return;
         }
 
-        double x = vec3d.x + ((facing != null) ? facing.getFrontOffsetX() / (64.0D) + this.rand.nextDouble() * 16.0D : 0);
-        double y = vec3d.y + ((facing != null) ? facing.getFrontOffsetY() / (64.0D) + this.rand.nextDouble() * 16.0D : 0);
-        double z = vec3d.z + ((facing != null) ? facing.getFrontOffsetZ() / (64.0D) + this.rand.nextDouble() * 16.0D : 0);
+        double x = vec3d.x + ((facing != null) ? facing.getFrontOffsetX() / ((64.0D) + this.rand.nextDouble() * 32.0D) : 0);
+        double y = vec3d.y + ((facing != null) ? facing.getFrontOffsetY() / ((64.0D) + this.rand.nextDouble() * 32.0D) : 0);
+        double z = vec3d.z + ((facing != null) ? facing.getFrontOffsetZ() / ((64.0D) + this.rand.nextDouble() * 32.0D) : 0);
 
         boolean flag = world.getBlockState(pos).getBlock() == BlocksTC.stoneEldritchTile;
 

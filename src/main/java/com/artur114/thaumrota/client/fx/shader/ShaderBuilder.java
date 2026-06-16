@@ -14,10 +14,14 @@ public class ShaderBuilder implements ILoadStagePre {
 
     @Override
     public void onPreInit() {
+        if (this.shaderProgram != null) {
+            this.shaderProgram.delete();
+        }
+
         try {
             this.shaderProgram = builder.call();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
         }
     }
 

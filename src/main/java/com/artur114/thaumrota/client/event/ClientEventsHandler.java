@@ -19,7 +19,6 @@ public class ClientEventsHandler {
     public static final PlayerDistanceToPortalManager PLAYER_DISTANCE_TO_PORTAL_MANAGER = new PlayerDistanceToPortalManager();
     public static final ClientPlayerInBiomeManager PLAYER_IN_BIOME_MANAGER = new ClientPlayerInBiomeManager();
     public static final PlayerMovementManager PLAYER_MOVEMENT_MANAGER = new PlayerMovementManager();
-    public static final ThaumcraftFogFixer THAUMCRAFT_FOG_FIXER = new ThaumcraftFogFixer();
     public static final CustomRainManager CUSTOM_RAIN_MANAGER = new CustomRainManager();
     public static final GlobalTickManager GLOBAL_TICK_MANAGER = new GlobalTickManager();
     public static final AreasDrawManager AREAS_DRAW_MANAGER = new AreasDrawManager();
@@ -36,12 +35,6 @@ public class ClientEventsHandler {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void fogRender(EntityViewRenderEvent.RenderFogEvent e) {
         PLAYER_IN_BIOME_MANAGER.entityViewRenderEventRenderFogEvent(e);
-    }
-
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public static void fogDensityEvent(EntityViewRenderEvent.RenderFogEvent e) {
-        THAUMCRAFT_FOG_FIXER.entityViewRenderEventRenderFogEvent(e);
     }
 
     @SubscribeEvent

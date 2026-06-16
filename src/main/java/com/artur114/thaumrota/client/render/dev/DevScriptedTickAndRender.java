@@ -8,9 +8,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 @AutoInstantiate
-public class DevScriptedRender implements ILoadStagePost {
+public class DevScriptedTickAndRender implements ILoadStagePost {
 
     @SubscribeEvent
     public void worldRender(RenderWorldLastEvent e) {
@@ -19,6 +20,16 @@ public class DevScriptedRender implements ILoadStagePost {
             "render_world.groovy",
             new String[] {"renderGlobal", "partialTicks", "world", "player"},
             new Object[] {e.getContext(), e.getPartialTicks(), mc.world, mc.player}
+        );
+    }
+
+    @SubscribeEvent
+    public void worldTick(TickEvent.ClientTickEvent e) {
+        Minecraft mc = Minecraft.getMinecraft();
+        ThaumRotA.DEV_SHELL.evaluate(
+            "client_tick_world.groovy",
+            new String[] {"world", "player", "phase"},
+            new Object[] {mc.world, mc.player, e.phase}
         );
     }
 

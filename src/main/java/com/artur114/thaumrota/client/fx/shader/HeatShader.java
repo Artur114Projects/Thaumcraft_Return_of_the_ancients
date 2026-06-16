@@ -31,7 +31,7 @@ public class HeatShader {
 
         ShaderProgram.renderFullScreen(InitShaders.TEST_SHADER.shader(), () -> {
             InitShaders.TEST_SHADER.shader().uniform("texelSize", 1.0F / framebuffer.framebufferWidth, 1.0F / framebuffer.framebufferHeight);
-            InitShaders.TEST_SHADER.shader().uniformInvProjMatrix("invProjMatrix");
+            InitShaders.TEST_SHADER.shader().uniformInvMVPMatrix("invMVPMatrix");
 //            InitShaders.HEAT.shader().uniform("time", (System.currentTimeMillis() % 100000L) / 30000.0F);
         });
     }

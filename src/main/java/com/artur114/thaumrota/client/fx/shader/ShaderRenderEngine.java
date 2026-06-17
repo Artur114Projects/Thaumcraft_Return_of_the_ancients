@@ -1,42 +1,40 @@
-package scripts
+package com.artur114.thaumrota.client.fx.shader;
 
-import com.artur114.bananalib.math.m3d.vec.IVec3DM
-import com.artur114.thaumrota.client.fx.shader.ShaderProgram
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.shader.Framebuffer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL14;
+import org.lwjgl.opengl.GL30;
 
-import com.artur114.thaumrota.client.light.LineLightSource
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.BufferBuilder
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.client.renderer.OpenGlHelper
-import net.minecraft.client.renderer.Tessellator
-import net.minecraft.client.renderer.texture.TextureUtil
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats
-import net.minecraft.client.shader.Framebuffer
-import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL13
-import org.lwjgl.opengl.GL14
-import org.lwjgl.opengl.GL30
+import java.util.function.Consumer;
 
-import java.util.function.Consumer
+import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
+import static org.lwjgl.opengl.GL11.GL_PROJECTION;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 
-import static org.lwjgl.opengl.GL11.GL_MODELVIEW
-import static org.lwjgl.opengl.GL11.GL_PROJECTION
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D
-
-class TestGroovyClass {
-    static IVec3DM lastPoint = null;
+public class ShaderRenderEngine {
+    private static final Logger log = LogManager.getLogger("ThaumRotA/Shaders");
+    private static int lastFBOWidth = -1, lastFBOHeight = -1;
+    private static int depthCopyTexture = -1;
+    private static int depthCopyFBO = -1;
+    private static Framebuffer framebuffer;
 
 
-    private static Framebuffer framebuffer
-
-    static void renderFullScreen(ShaderProgram shaderProgram) {
-        renderFullScreen(shaderProgram, {});
+    public static void renderFullScreen(ShaderRender render) {
+        renderFullScreen(render, (s) -> {});
     }
 
-    static void renderFullScreen(ShaderProgram shaderProgram, Consumer<ShaderProgram> onShaderEnabled) {  // TODO: 02.05.2025 Rewrite!
-        if (shaderProgram == null) {
-            return;
-        }
+    public static void renderFullScreen(ShaderRender render, Consumer<ShaderProgram> onShaderEnabled) {  // TODO: 02.05.2025 Rewrite!
+        if (render == null) return;
 
         Minecraft mc = Minecraft.getMinecraft();
         int current = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
@@ -55,18 +53,31 @@ class TestGroovyClass {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.depthMask(true);
 
-        shaderProgram.enable();
-        onShaderEnabled.accept(shaderProgram)
+        render.shader.enable();
+        onShaderEnabled.accept(render.shader);
 
-        GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
-        GlStateManager.enableTexture2D();
-        GL11.glBindTexture(GL_TEXTURE_2D, mc.getFramebuffer().framebufferTexture);
-        shaderProgram.uniform("screenTexture", 0);
+        if (render.mainTextureName != null) {
+            GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
+            GlStateManager.enableTexture2D();
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.getFramebuffer().framebufferTexture);
+            render.shader.uniform(render.mainTextureName, 0);
+        }
 
-        GlStateManager.setActiveTexture(GL13.GL_TEXTURE2)
-        GlStateManager.enableTexture2D(); copyDepth()
-        GL11.glBindTexture(GL_TEXTURE_2D, depthCopyTexture)
-        shaderProgram.uniform("depthTexture", 2)
+        if (render.depthTextureName != null) {
+            GlStateManager.setActiveTexture(GL13.GL_TEXTURE2);
+            GlStateManager.enableTexture2D(); copyDepth();
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, depthCopyTexture);
+            render.shader.uniform(render.depthTextureName, 2);
+        }
+
+        final int[] texture = {2};
+        render.textures.forEach((name, tex) -> {
+            GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + texture[0]);
+            GlStateManager.enableTexture2D();
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex);
+            render.shader.uniform(name, texture[0]);
+            texture[0]++;
+        });
 
         framebuffer.bindFramebuffer(false);
         GL11.glPushMatrix();
@@ -75,11 +86,16 @@ class TestGroovyClass {
         GL11.glMatrixMode(GL_MODELVIEW);
         GL11.glLoadIdentity();
         drawQuad();
-        shaderProgram.disable();
+        render.shader.disable();
+
+        for (int i = texture[0]; i != 2; i--) {
+            GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + i);
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+        }
         GlStateManager.setActiveTexture(GL13.GL_TEXTURE2);
-        GL11.glBindTexture(GL_TEXTURE_2D, 0);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
         GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL_TEXTURE_2D, 0);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
         GL11.glPopMatrix();
         mc.getFramebuffer().bindFramebuffer(false);
@@ -112,10 +128,6 @@ class TestGroovyClass {
         tessellator.draw();
     }
 
-    private static int depthCopyFBO = -1;
-    private static int depthCopyTexture = -1;
-    private static int lastWidth = -1, lastHeight = -1;
-
     private static void copyDepth() {
         Minecraft mc = Minecraft.getMinecraft();
         if (!OpenGlHelper.isFramebufferEnabled()) return;
@@ -125,10 +137,10 @@ class TestGroovyClass {
         int width = mc.getFramebuffer().framebufferWidth;
         int height = mc.getFramebuffer().framebufferHeight;
 
-        if (depthCopyFBO == -1 || width != lastWidth || height != lastHeight) {
+        if (depthCopyFBO == -1 || width != lastFBOWidth || height != lastFBOHeight) {
             createDepthCopyFBO();
-            lastWidth = width;
-            lastHeight = height;
+            lastFBOWidth = width;
+            lastFBOHeight = height;
         }
 
         boolean depthMask = GL11.glGetBoolean(GL11.GL_DEPTH_WRITEMASK);
@@ -136,11 +148,10 @@ class TestGroovyClass {
 
         GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, mainFBO);
         GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, depthCopyFBO);
-        GL30.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height,
-                GL11.GL_DEPTH_BUFFER_BIT, GL11.GL_NEAREST);
+        GL30.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL11.GL_DEPTH_BUFFER_BIT, GL11.GL_NEAREST);
 
         int err = GL11.glGetError();
-        if (err != 0) System.err.println("GL error after blit: " + err);
+        if (err != 0) log.error("GL error after blit: {}", err);
 
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, mainFBO);
         GL11.glDepthMask(depthMask);
@@ -155,31 +166,29 @@ class TestGroovyClass {
 
         depthCopyTexture = TextureUtil.glGenTextures();
         GlStateManager.bindTexture(depthCopyTexture);
-        GlStateManager.glTexImage2D(GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT24,
-                width, height, 0, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, null);
-        GlStateManager.glTexParameteri(GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-        GlStateManager.glTexParameteri(GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-        GlStateManager.glTexParameteri(GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
-        GlStateManager.glTexParameteri(GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
+        GlStateManager.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT24, width, height, 0, GL11.GL_DEPTH_COMPONENT, GL11.GL_FLOAT, null);
+        GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+        GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+        GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
+        GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
         GlStateManager.bindTexture(0);
 
         depthCopyFBO = OpenGlHelper.glGenFramebuffers();
         OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, depthCopyFBO);
-        OpenGlHelper.glFramebufferTexture2D(OpenGlHelper.GL_FRAMEBUFFER,
-                OpenGlHelper.GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthCopyTexture, 0);
+        OpenGlHelper.glFramebufferTexture2D(OpenGlHelper.GL_FRAMEBUFFER, OpenGlHelper.GL_DEPTH_ATTACHMENT, GL11.GL_TEXTURE_2D, depthCopyTexture, 0);
 
         GL11.glDrawBuffer(GL11.GL_NONE);
         GL11.glReadBuffer(GL11.GL_NONE);
 
         int status = OpenGlHelper.glCheckFramebufferStatus(OpenGlHelper.GL_FRAMEBUFFER);
         if (status != OpenGlHelper.GL_FRAMEBUFFER_COMPLETE) {
-            System.err.println("Depth copy FBO incomplete! Status: " + status);
+            log.error("Depth copy FBO not compiled! Status: {}", status);
         }
 
         OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, mc.getFramebuffer().framebufferObject);
     }
 
-    static void deleteDepthCopyFBO() {
+    private static void deleteDepthCopyFBO() {
         if (depthCopyFBO != -1) {
             OpenGlHelper.glDeleteFramebuffers(depthCopyFBO);
             depthCopyFBO = -1;
@@ -188,9 +197,5 @@ class TestGroovyClass {
             TextureUtil.deleteTexture(depthCopyTexture);
             depthCopyTexture = -1;
         }
-    }
-
-    static int getDepthTexture() {
-        return depthCopyTexture;
     }
 }

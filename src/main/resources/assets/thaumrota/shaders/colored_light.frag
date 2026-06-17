@@ -36,9 +36,7 @@ float distToLineSq(vec3 p, vec3 a, vec3 b) {
 }
 
 vec3 computeLight(float distSq, vec3 color, vec2 params) {
-//    float attenuation = 1.0 / (1.0 + distSq * params.x);
-    float att = 1.0 / (1.0 + distSq * params.x);
-    att *= att;
+    float att = 1.0 / (1.0 + distSq * params.x); att *= att;
     return color * att * params.y;
 }
 

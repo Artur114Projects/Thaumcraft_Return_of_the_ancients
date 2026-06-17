@@ -1,14 +1,18 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.system.client;
 
+import com.artur114.bananalib.mc.BananaMC;
+import com.artur114.thaumrota.client.render.fx.HeatRenderer;
+import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrPos;
+import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructure;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.utils.AncientWorldPlayer;
 import com.artur114.thaumrota.client.gui.CoolLoadingGui;
-import com.artur114.thaumrota.common.handlers.MiscHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.math.ChunkPos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +42,21 @@ public class AncientLayer1Client extends AncientLayer1 {
             this.isPlayerWasHigh = true;
         } else if (this.player.player.onGround && this.isPlayerWasHigh) {
             this.player.player.playSound(SoundEvents.ENTITY_PLAYER_BIG_FALL, 1.0F, 1.0F); this.isPlayerWasHigh = false;
+        }
+
+        HeatRenderer.clearLight();
+        StrPos pos = this.player.calculatePosOnMap(this.pos, this.size);
+        int radius = 3;
+        for (int i = -radius; i != radius + 1; i++) {
+            for (int j = -radius; j != radius + 1; j++) {
+                StrPos p = pos.add(i, j);
+                IStructure str = this.map.structure(p);
+                if (str != null) {
+                    int x = this.pos.x + (this.size / 2) - (p.getX());
+                    int z = this.pos.z + (this.size / 2) - (p.getY());
+                    HeatRenderer.addLight(str.light(new ChunkPos(x, z)));
+                }
+            }
         }
     }
 
@@ -69,7 +88,7 @@ public class AncientLayer1Client extends AncientLayer1 {
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
-        this.pos = MiscHandler.chunkPosFromLong(nbt.getLong("pos"));
+        this.pos = BananaMC.chunkPosFromLong(nbt.getLong("pos"));
         this.posIndex = nbt.getInteger("posIndex");
         this.size = nbt.getInteger("size");
 

@@ -1,5 +1,6 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.system.base;
 
+import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.gen.GenPhase;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrPos;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.maps.InteractiveMap;
@@ -176,7 +177,7 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
     public void readFromNBT(NBTTagCompound nbt) {
         NBTTagList list = nbt.getTagList("players", 10);
         for (int i = 0; i != list.tagCount(); i++) this.players.add(new AncientWorldPlayer(list.getCompoundTagAt(i).getUniqueId("playerID")));
-        this.pos = MiscHandler.chunkPosFromLong(nbt.getLong("pos"));
+        this.pos = BananaMC.chunkPosFromLong(nbt.getLong("pos"));
         this.loadCount = nbt.getInteger("loadCount") + 1;
         this.posIndex = nbt.getInteger("posIndex");
         this.size = nbt.getInteger("size");
@@ -190,7 +191,7 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         nbt.setTag("players", IWriteToNBT.writeToNBTList(this.players));
-        nbt.setLong("pos", MiscHandler.chunkPosAsLong(this.pos));
+        nbt.setLong("pos", BananaMC.chunkPosAsLong(this.pos));
         nbt.setInteger("posIndex", this.posIndex);
         nbt.setInteger("loadCount", loadCount);
         nbt.setInteger("size", this.size);

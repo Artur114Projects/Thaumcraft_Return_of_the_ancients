@@ -21,7 +21,7 @@ public class ShaderBuilder implements ILoadStagePre {
         try {
             this.shaderProgram = builder.call();
         } catch (Exception e) {
-//            throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 

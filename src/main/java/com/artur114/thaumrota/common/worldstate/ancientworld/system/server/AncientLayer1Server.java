@@ -1,5 +1,6 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.system.server;
 
+import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.build.AncientLayer1Builder;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrPos;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructure;
@@ -8,7 +9,6 @@ import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.Ancient
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.utils.AncientWorldPlayer;
 import com.artur114.thaumrota.common.event.ServerEventsHandler;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
-import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.network.ClientPacketSyncAncientLayer1s;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 
 import java.util.*;
+import java.util.List;
 
 public class AncientLayer1Server extends AncientLayer1 {
     protected Map<UUID, String> playersState = new HashMap<>();
@@ -289,7 +290,7 @@ public class AncientLayer1Server extends AncientLayer1 {
 
     public NBTTagCompound writeClientCreateNBT(NBTTagCompound nbt) {
         nbt.setTag("map", this.map.writeToNBT(new NBTTagCompound()));
-        nbt.setLong("pos", MiscHandler.chunkPosAsLong(this.pos));
+        nbt.setLong("pos", BananaMC.chunkPosAsLong(this.pos));
         nbt.setInteger("posIndex", this.posIndex);
         nbt.setInteger("size", this.size);
 

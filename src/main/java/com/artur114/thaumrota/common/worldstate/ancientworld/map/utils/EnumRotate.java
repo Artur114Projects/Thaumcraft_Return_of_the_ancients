@@ -3,7 +3,6 @@ package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils;
 import com.artur114.bananalib.mc.math.EnumRot;
 import net.minecraft.util.Rotation;
 
-@Deprecated
 public enum EnumRotate {
     NON(1),
     C90(2),

@@ -1,5 +1,6 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures;
 
+import com.artur114.thaumrota.client.light.ILightSource;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.EnumFace;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.EnumRotate;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.IStructureType;
@@ -9,6 +10,8 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class StructureMapBorder implements IStructure {
@@ -67,6 +70,11 @@ public class StructureMapBorder implements IStructure {
 
     @Override
     public void bindMap(AbstractMap map) {}
+
+    @Override
+    public List<ILightSource> light(ChunkPos pos) {
+        return Collections.emptyList();
+    }
 
     @Override
     public boolean canReplace() {

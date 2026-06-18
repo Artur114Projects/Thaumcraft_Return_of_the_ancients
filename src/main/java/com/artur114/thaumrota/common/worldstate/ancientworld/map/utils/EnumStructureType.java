@@ -1,34 +1,39 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils;
 
-import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructure;
-import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.StructureBase;
-import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.StructureLadder;
+import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.*;
 import com.artur114.bananalib.util.func.TriFunction;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public enum EnumStructureType implements IStructureType {
-    FORK("ancient_fork_rotate-", EnumRotate.C270, EnumFace.UP, EnumFace.LEFT, EnumFace.RIGHT),
-    LADDER("ancient_ladder_rotate-", EnumRotate.C270, (rot, pos, type) -> new StructureLadder(rot, pos), EnumFace.RIGHT, EnumFace.LEFT),
-    WAY("ancient_way_rotate-", EnumRotate.C90, EnumFace.RIGHT, EnumFace.LEFT),
-    TURN("ancient_turn_rotate-", EnumRotate.C270, EnumFace.UP, EnumFace.RIGHT),
-    CROSSROADS("ancient_crossroads", EnumRotate.NON, EnumFace.values()),
-    END("ancient_end_rotate-", EnumRotate.C270, EnumFace.RIGHT);
+    FORK("ancient_fork_rotate-", EnumRotate.C270, LightTemplates.FORK, EnumFace.UP, EnumFace.LEFT, EnumFace.RIGHT),
+    LADDER("ancient_ladder_rotate-", EnumRotate.C270, LightTemplates.LADDER, StructureLadder::new, EnumFace.RIGHT, EnumFace.LEFT),
+    WAY("ancient_way_rotate-", EnumRotate.C90, LightTemplates.WAY, EnumFace.RIGHT, EnumFace.LEFT),
+    TURN("ancient_turn_rotate-", EnumRotate.C270, LightTemplates.TURN, EnumFace.UP, EnumFace.RIGHT),
+    CROSSROADS("ancient_crossroads", EnumRotate.NON, LightTemplates.CROSSROADS, EnumFace.values()),
+    END("ancient_end_rotate-", EnumRotate.C270, LightTemplates.WAY, EnumFace.RIGHT);
 
     private final TriFunction<EnumRotate, StrPos, EnumStructureType, IStructure> creator;
     private final Map<EnumRotate, Set<EnumFace>> ports;
+    private final ILightTemplate light;
     private final String id;
 
-    EnumStructureType(String id, EnumRotate maxRotate, TriFunction<EnumRotate, StrPos, EnumStructureType, IStructure> creator, EnumFace... ports) {
+    EnumStructureType(String id, EnumRotate maxRotate, ILightTemplate light, TriFunction<EnumRotate, StrPos, EnumStructureType, IStructure> creator, EnumFace... ports) {
         this.creator = creator;
+        this.light = light;
         this.id = id;
 
         this.ports = this.compilePorts(ports, maxRotate);
     }
 
-    EnumStructureType(String id, EnumRotate rotate, EnumFace... ports) {
-        this(id, rotate, (rot, pos, type) -> new StructureBase(rot, type, pos), ports);
+    EnumStructureType(String id, EnumRotate rotate, ILightTemplate light, EnumFace... ports) {
+        this(id, rotate, light, (rot, pos, type) -> new StructureBase(rot, type, pos), ports);
+    }
+
+    @Override
+    public ILightTemplate light() {
+        return this.light;
     }
 
     @Override
@@ -68,5 +73,10 @@ public enum EnumStructureType implements IStructureType {
         }
 
         return ret;
+    }
+
+    @Override
+    public String toString() {
+        return this.name();
     }
 }

@@ -70,7 +70,7 @@ public class TileEntityAncientPiston extends TileBase implements ITileMultiBBPro
     @Override
     public void update() {
         if (this.world.isRemote) {
-            if (!BananaMC.isInPlayerView(this.pos, 32)) {
+            if (!BananaMC.isInPlayerView(this.pos, 16)) {
                 return;
             }
             if (this.particlePos == null) {

@@ -43,7 +43,7 @@ public class BlockTpToHome extends BaseBlock {
 
     @Override
     public void onEntityCollidedWithBlock(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull Entity entityIn) {
-        if (entityIn instanceof EntityPlayerMP && entityIn.dimension == InitDimensions.ancient_world_dim_id) {
+        if (entityIn instanceof EntityPlayerMP && entityIn.dimension == InitDimensions.ANCIENT_WORLD_ID) {
             if (!AncientLayer1EventsHandler.SERVER_MANAGER.playerElope((EntityPlayerMP) entityIn)) {
                 AncientPortalsProcessor.teleportToOverworld((EntityPlayerMP) entityIn);
             }

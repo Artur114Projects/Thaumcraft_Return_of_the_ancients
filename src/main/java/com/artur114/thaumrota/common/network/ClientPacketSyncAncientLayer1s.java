@@ -35,7 +35,7 @@ public class ClientPacketSyncAncientLayer1s extends NBTPacketBase {
             Minecraft.getMinecraft().addScheduledTask(() -> {
                 Minecraft mc = Minecraft.getMinecraft();
 
-                if (mc.player.dimension == InitDimensions.ancient_world_dim_id) {
+                if (mc.player.dimension == InitDimensions.ANCIENT_WORLD_ID) {
                     IAncientLayer1Manager manager = mc.world.getCapability(InitCapabilities.ANCIENT_LAYER_1_MANAGER, null);
 
                     if (manager != null) {

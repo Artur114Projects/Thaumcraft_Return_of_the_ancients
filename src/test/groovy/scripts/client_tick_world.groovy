@@ -1,17 +1,12 @@
 package scripts
 
 import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM
-import com.artur114.thaumrota.client.fx.particle.ParticleHeat
 import com.artur114.thaumrota.common.init.InitDimensions
 import groovy.transform.BaseScript
 import net.minecraft.block.material.Material
 import net.minecraft.client.Minecraft
-import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.EnumParticleTypes
-import net.minecraft.world.World
 import net.minecraftforge.fml.common.gameevent.TickEvent
-import net.minecraftforge.fml.relauncher.Side
-import thaumcraft.client.fx.FXDispatcher
 
 @BaseScript
 RotADevScript script
@@ -21,7 +16,7 @@ if (phaseIn != TickEvent.Phase.START || player == null || mc.isGamePaused()) {
     return
 }
 
-if (player.dimension != InitDimensions.ancient_world_dim_id || true) {
+if (player.dimension != InitDimensions.ANCIENT_WORLD_ID || true) {
     return;
 }
 

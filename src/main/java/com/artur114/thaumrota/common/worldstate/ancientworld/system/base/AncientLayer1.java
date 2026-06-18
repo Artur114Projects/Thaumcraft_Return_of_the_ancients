@@ -8,7 +8,6 @@ import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structure
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructureInteractive;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructureMultiChunk;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.utils.AncientWorldPlayer;
-import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitDimensions;
 import com.artur114.bananalib.mc.nbt.IReadFromNBT;
 import com.artur114.bananalib.mc.nbt.IWriteToNBT;
@@ -77,6 +76,10 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
         return this.pos;
     }
 
+    public InteractiveMap map() {
+        return this.map;
+    }
+
     protected void addPlayer(AncientWorldPlayer player) {
         this.players.add(player);
         this.onPlayersListChanged();
@@ -139,7 +142,7 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
     public void update() {
         Map<IStructure, List<AncientWorldPlayer>> listMap = null;
 
-        this.players.removeIf((v) -> v.player != null && v.player.dimension != InitDimensions.ancient_world_dim_id);
+        this.players.removeIf((v) -> v.player != null && v.player.dimension != InitDimensions.ANCIENT_WORLD_ID);
 
         for (AncientWorldPlayer player : this.players) {
 

@@ -38,7 +38,7 @@ public class ItemPhantomTablet extends BItemBase {
 
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if (worldIn.provider.getDimension() != InitDimensions.ancient_world_dim_id && (!(entityIn instanceof EntityPlayer) || !((EntityPlayer) entityIn).isCreative())) {
+        if (worldIn.provider.getDimension() != InitDimensions.ANCIENT_WORLD_ID && (!(entityIn instanceof EntityPlayer) || !((EntityPlayer) entityIn).isCreative())) {
             entityIn.replaceItemInInventory(itemSlot, ItemStack.EMPTY);
 
             if (worldIn.isRemote) {
@@ -56,7 +56,7 @@ public class ItemPhantomTablet extends BItemBase {
 
     @Override
     public boolean onEntityItemUpdate(EntityItem entityItem) {
-        if (entityItem.dimension != InitDimensions.ancient_world_dim_id) {
+        if (entityItem.dimension != InitDimensions.ANCIENT_WORLD_ID) {
             entityItem.setDead();
 
             if (entityItem.world.isRemote) {

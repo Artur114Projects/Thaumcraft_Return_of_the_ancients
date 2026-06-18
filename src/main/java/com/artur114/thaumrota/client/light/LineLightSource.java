@@ -6,6 +6,7 @@ import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 
 import java.awt.*;
 import java.nio.FloatBuffer;
@@ -96,6 +97,11 @@ public class LineLightSource implements ILightSource {
     @Override
     public boolean isOnView(int maxRenderDist) {
         return BananaMC.isInPlayerView(this.from, maxRenderDist) || BananaMC.isInPlayerView(this.to, maxRenderDist);
+    }
+
+    @Override
+    public boolean collideToPos(BlockPos pos) {
+        return this.from.equals(pos) || this.to.equals(pos);
     }
 
     @Override

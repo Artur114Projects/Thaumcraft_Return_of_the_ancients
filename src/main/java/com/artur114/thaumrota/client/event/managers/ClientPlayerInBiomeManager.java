@@ -21,7 +21,7 @@ import thaumcraft.client.lib.events.RenderEventHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.artur114.thaumrota.common.init.InitDimensions.ancient_world_dim_id;
+import static com.artur114.thaumrota.common.init.InitDimensions.ANCIENT_WORLD_ID;
 
 @SideOnly(Side.CLIENT)
 public class ClientPlayerInBiomeManager {
@@ -50,7 +50,7 @@ public class ClientPlayerInBiomeManager {
     }
 
     public void entityViewRenderEventFogColors(EntityViewRenderEvent.FogColors e) {
-        if (e.getEntity().getEntityWorld().provider.getDimension() == ancient_world_dim_id) {
+        if (e.getEntity().getEntityWorld().provider.getDimension() == ANCIENT_WORLD_ID) {
             e.setRed(1.0F * 0.8F);
             e.setGreen(0.4F * 0.8F);
             e.setBlue(0.0F);
@@ -58,7 +58,7 @@ public class ClientPlayerInBiomeManager {
     }
 
     public void entityViewRenderEventRenderFogEvent(EntityViewRenderEvent.RenderFogEvent e) {
-        if (e.getEntity().getEntityWorld().provider.getDimension() == ancient_world_dim_id) {
+        if (e.getEntity().getEntityWorld().provider.getDimension() == ANCIENT_WORLD_ID) {
             GlStateManager.setFog(GlStateManager.FogMode.LINEAR);
             GlStateManager.setFogStart(32);
             GlStateManager.setFogEnd(64);

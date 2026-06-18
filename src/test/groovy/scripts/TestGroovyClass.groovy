@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.texture.TextureUtil
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.client.shader.Framebuffer
+import net.minecraft.util.math.BlockPos
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL13
 import org.lwjgl.opengl.GL14
@@ -24,7 +25,7 @@ import static org.lwjgl.opengl.GL11.GL_PROJECTION
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D
 
 class TestGroovyClass {
-    static IVec3DM lastPoint = null;
+    static BlockPos lastPoint = null;
 
 
     private static Framebuffer framebuffer

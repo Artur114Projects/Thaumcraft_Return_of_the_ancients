@@ -1,8 +1,11 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.system.client;
 
+import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class ClientAncientLayer1Manager implements IClientAncientLayer1Manager {
     private final Minecraft mc = Minecraft.getMinecraft();
@@ -10,6 +13,14 @@ public class ClientAncientLayer1Manager implements IClientAncientLayer1Manager {
     private final World world;
     public ClientAncientLayer1Manager(World world) {
         this.world = world;
+    }
+
+    @Override
+    public @Nullable AncientLayer1 sectorFor(EntityPlayer player) {
+        if (player == this.mc.player) {
+            return layerClient;
+        }
+        return null;
     }
 
     @Override

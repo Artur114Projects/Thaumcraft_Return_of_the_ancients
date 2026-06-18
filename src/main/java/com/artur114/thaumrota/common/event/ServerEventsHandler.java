@@ -42,7 +42,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import thaumcraft.api.blocks.BlocksTC;
 
-import static com.artur114.thaumrota.common.init.InitDimensions.ancient_world_dim_id;
+import static com.artur114.thaumrota.common.init.InitDimensions.ANCIENT_WORLD_ID;
 
 @Mod.EventBusSubscriber(modid = ThaumRotA.MODID)
 public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
@@ -81,7 +81,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
     @SubscribeEvent
     public static void worldEventLoad(WorldEvent.Load e) {
         if (!e.getWorld().isRemote) {
-            if (e.getWorld().provider.getDimension() == ancient_world_dim_id) {
+            if (e.getWorld().provider.getDimension() == ANCIENT_WORLD_ID) {
                 if (!isAncientAreaSet) {
                     StructuresBuildManager.createBuildRequest(e.getWorld(), new BlockPos(-16, 240, -16), "ancient_area").build();
                     isAncientAreaSet = true;
@@ -94,7 +94,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
     public static void livingHurtEvent(LivingHurtEvent e) {
         if (!RotAConfigs.AncientWorldSettings.isDeadToAncientWorld) {
             if (e.getEntity() instanceof EntityPlayerMP) {
-                if (e.getEntity().dimension == ancient_world_dim_id) {
+                if (e.getEntity().dimension == ANCIENT_WORLD_ID) {
                     EntityPlayerMP player = (EntityPlayerMP) e.getEntity();
                     if (player.getHealth() - e.getAmount() <= 0) {
                         e.setCanceled(true);
@@ -128,14 +128,14 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
 
     @SubscribeEvent
     public static void livingDropsEvent(LivingDropsEvent e) {
-        if (e.getEntity().dimension == ancient_world_dim_id && !e.getEntity().isNonBoss()) {
+        if (e.getEntity().dimension == ANCIENT_WORLD_ID && !e.getEntity().isNonBoss()) {
             e.setCanceled(true);
         }
     }
 
     @SubscribeEvent
     public static void BreakEvent(BlockEvent.BreakEvent e) {
-        if (e.getPlayer().dimension == ancient_world_dim_id) {
+        if (e.getPlayer().dimension == ANCIENT_WORLD_ID) {
             if (!e.getPlayer().isCreative() && e.getState().getBlock() != BlocksTC.stoneArcane) {
                 e.setCanceled(true);
             }
@@ -144,7 +144,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
 
     @SubscribeEvent
     public static void PlaceEvent(BlockEvent.PlaceEvent e) {
-        if (e.getPlayer().dimension == ancient_world_dim_id) {
+        if (e.getPlayer().dimension == ANCIENT_WORLD_ID) {
             if (!e.getPlayer().isCreative()) {
                 e.getPlayer().addItemStackToInventory(e.getItemInHand().splitStack(1));
                 e.setCanceled(true);
@@ -162,7 +162,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
 
         int playerDimension = e.player.dimension;
         if (e.player.ticksExisted % 4 == 0) {
-            if (playerDimension == ancient_world_dim_id) {
+            if (playerDimension == ANCIENT_WORLD_ID) {
                 if (RotAConfigs.AncientWorldSettings.noPeaceful) {
                     if (difficultyId == 0) {
                         if (!e.player.world.isRemote) {
@@ -175,7 +175,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
             }
         }
         if (e.player.ticksExisted % 20 == 0) {
-            if (playerDimension != ancient_world_dim_id) {
+            if (playerDimension != ANCIENT_WORLD_ID) {
                 if (e.player.getEntityData().getBoolean(BlockAncientWorldPortal.noCollisionNBT)) {
                     IPlayerTimer timer = InitCapabilities.getTimer(e.player);
                     if (timer.getTime("notCollisionTime") >= 8 * 20) {
@@ -219,7 +219,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
 
     @SubscribeEvent
     public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
-        if (event.getEntity().dimension == ancient_world_dim_id && !event.getWorld().isRemote) {
+        if (event.getEntity().dimension == ANCIENT_WORLD_ID && !event.getWorld().isRemote) {
             if (RotAConfigs.DifficultySettings.speedAmplifier > 0 && event.getEntity() instanceof EntityLiving && !(event.getEntity() instanceof EntityPlayer)) {
                 EntityLiving living = (EntityLiving) event.getEntity();
                 if (living.isNonBoss() || RotAConfigs.DifficultySettings.iaAddSpeedEffectToBoss) {
@@ -238,7 +238,7 @@ public class ServerEventsHandler { // TODO: 10.05.2025 Переписать!
 
     @SubscribeEvent
     public static void canSpawn(LivingSpawnEvent.CheckSpawn e) {
-        if (e.getEntity().dimension == ancient_world_dim_id && e.getWorld().canSeeSky(e.getEntity().getPosition())) {
+        if (e.getEntity().dimension == ANCIENT_WORLD_ID && e.getWorld().canSeeSky(e.getEntity().getPosition())) {
             e.setResult(Event.Result.DENY);
         }
         Biome biome = e.getWorld().getBiome(e.getEntity().getPosition());

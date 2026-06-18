@@ -6,7 +6,7 @@ import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrPos;
 import org.jetbrains.annotations.NotNull;
 
 public class StructureLadder extends StructureBase {
-    public StructureLadder(EnumRotate rotate, StrPos pos) {
+    public StructureLadder(EnumRotate rotate, StrPos pos, EnumStructureType type) {
         super(rotate, EnumStructureType.LADDER, pos);
     }
 

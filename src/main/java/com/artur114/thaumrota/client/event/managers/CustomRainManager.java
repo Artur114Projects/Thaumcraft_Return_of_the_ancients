@@ -81,7 +81,7 @@ public class CustomRainManager {
     }
 
     private void addAncientWorldHeatParticles(Minecraft mc, EntityPlayer player) {
-        if (player.dimension != InitDimensions.ancient_world_dim_id) {
+        if (player.dimension != InitDimensions.ANCIENT_WORLD_ID) {
             return;
         }
 

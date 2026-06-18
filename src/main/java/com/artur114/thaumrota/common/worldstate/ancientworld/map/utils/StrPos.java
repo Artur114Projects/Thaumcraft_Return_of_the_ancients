@@ -82,6 +82,10 @@ public class StrPos {
         return this.getX() < xSizeMin || this.getX() > xSizeMax || this.getY() < ySizeMin || this.getY() > ySizeMax;
     }
 
+    public int distanceM(StrPos pos) {
+        return Math.abs(pos.getX() - this.getX()) + Math.abs(pos.getY() - this.getY());
+    }
+
     public StrPos toImmutable() {
         return this;
     }

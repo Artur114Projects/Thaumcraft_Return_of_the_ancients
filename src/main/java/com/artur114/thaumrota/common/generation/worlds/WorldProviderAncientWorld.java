@@ -19,7 +19,7 @@ public class WorldProviderAncientWorld extends WorldProvider {
 
     @Override
     public @NotNull DimensionType getDimensionType() {
-        return InitDimensions.ancient_world_dim_type;
+        return InitDimensions.ANCIENT_WORLD_DIM_TYPE;
     }
 
     @Override

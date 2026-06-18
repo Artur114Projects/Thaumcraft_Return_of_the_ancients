@@ -1,5 +1,6 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures;
 
+import com.artur114.bananalib.math.m3d.matrix.Matrix3FM;
 import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import com.artur114.thaumrota.client.light.ILightSource;
 import com.artur114.thaumrota.client.light.LineLightSource;
@@ -29,7 +30,7 @@ public class StructureBase implements IStructure {
     protected StrPos pos;
 
     @SideOnly(Side.CLIENT)
-    protected Map<ChunkPos, List<ILightSource>> lightSources = null;
+    protected List<ILightSource> lightSources = null;
 
     protected StructureBase() {}
 
@@ -116,34 +117,34 @@ public class StructureBase implements IStructure {
     @SideOnly(Side.CLIENT)
     public List<ILightSource> light(ChunkPos pos) {
         if (this.lightSources == null) {
-            this.lightSources = new HashMap<>();
-        }
-        return this.lightSources.computeIfAbsent(pos, p -> {
             List<ILightSource> list = new ArrayList<>();
             this.addLights(list);
+            Matrix3FM matrix = Matrix3FM.obtain();
+            if (this.rotate != null) {
+                matrix.rotateYAround(7.5, 0, 7.5, this.rotate.lightDegrees());
+            }
             for (ILightSource source : list) {
                 if (source instanceof PointLightSource) {
-                    ((PointLightSource) source).pos().add(p.x << 4, this.y, p.z << 4);
+                    matrix.transform(((PointLightSource) source).pos()).add(pos.x << 4, this.y, pos.z << 4);
                 } else if (source instanceof LineLightSource) {
-                    ((LineLightSource) source).from().add(p.x << 4, this.y, p.z << 4);
-                    ((LineLightSource) source).to().add(p.x << 4, this.y, p.z << 4);
+                    matrix.transform(((LineLightSource) source).from()).add(pos.x << 4, this.y, pos.z << 4);
+                    matrix.transform(((LineLightSource) source).to()).add(pos.x << 4, this.y, pos.z << 4);
                 }
             }
-            return list;
-        });
-    }
+            Matrix3FM.release(matrix);
+            this.lightSources = list;
+        }
 
-    protected LineLightSource heatLineLight(BlockPos from, BlockPos to) {
-        return new LineLightSource(new PosMc3IM(from), new PosMc3IM(to), HeatRenderer.HEAT_COLOR, 0.2F, 2, 1);
-    }
-
-    protected PointLightSource heatPointLight(BlockPos pos) {
-        return new PointLightSource(new PosMc3IM(pos), HeatRenderer.HEAT_COLOR, 0.2F, 2, 1);
+        return this.lightSources;
     }
 
     protected void addLights(List<ILightSource> list) {
-        list.add(this.heatLineLight(new BlockPos(10, 1, 0), new BlockPos(10, 1, 15)));
-        list.add(this.heatLineLight(new BlockPos(5, 1, 0), new BlockPos(5, 1, 15)));
+        if (this.type != null && this.type.light() != null){
+            List<ILightSource> lights = this.type.light().createLights();
+            if (lights != null) {
+                list.addAll(lights);
+            }
+        }
     }
 
     private void compilePorts() {

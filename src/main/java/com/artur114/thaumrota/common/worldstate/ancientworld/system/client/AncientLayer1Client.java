@@ -1,6 +1,7 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.system.client;
 
 import com.artur114.bananalib.mc.BananaMC;
+import com.artur114.bananalib.util.graphs.BananaGraphs;
 import com.artur114.thaumrota.client.render.fx.HeatRenderer;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrPos;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructure;
@@ -22,6 +23,7 @@ public class AncientLayer1Client extends AncientLayer1 {
     private final Minecraft mc = Minecraft.getMinecraft();
     protected boolean isPlayerWasHigh = false;
     private final AncientWorldPlayer player;
+    private StrPos lastPlayerPos = null;
 
     public AncientLayer1Client(EntityPlayerSP player) {
         this.addPlayer(new AncientWorldPlayer(player));
@@ -44,18 +46,23 @@ public class AncientLayer1Client extends AncientLayer1 {
             this.player.player.playSound(SoundEvents.ENTITY_PLAYER_BIG_FALL, 1.0F, 1.0F); this.isPlayerWasHigh = false;
         }
 
-        HeatRenderer.clearLight();
-        StrPos pos = this.player.calculatePosOnMap(this.pos, this.size);
-        int radius = 3;
-        for (int i = -radius; i != radius + 1; i++) {
-            for (int j = -radius; j != radius + 1; j++) {
-                StrPos p = pos.add(i, j);
-                IStructure str = this.map.structure(p);
-                if (str != null) {
-                    int x = this.pos.x + (this.size / 2) - (p.getX());
-                    int z = this.pos.z + (this.size / 2) - (p.getY());
-                    HeatRenderer.addLight(str.light(new ChunkPos(x, z)));
-                }
+        IStructure curr = this.player.currentRoom();
+        if (curr != null) {
+            StrPos pos = curr.pos();
+
+            if (!pos.equals(this.lastPlayerPos)) {
+                this.lastPlayerPos = pos;
+                HeatRenderer.clearLight("ancient_world");
+                HeatRenderer.addLight("ancient_world", curr.light(new ChunkPos(this.pos.x + (this.size / 2) - (pos.getX()), this.pos.z + (this.size / 2) - (pos.getY()))));
+                BananaGraphs.bfs(pos, this.map::connectedStructures, p -> p.distanceM(pos) <= 3, (p) -> {
+                    IStructure str = this.map.structure(p);
+                    if (str != null) {
+                        int x = this.pos.x + (this.size / 2) - (p.getX());
+                        int z = this.pos.z + (this.size / 2) - (p.getY());
+                        HeatRenderer.addLight("ancient_world", str.light(new ChunkPos(x, z)));
+                    }
+                    return false;
+                });
             }
         }
     }
@@ -91,6 +98,7 @@ public class AncientLayer1Client extends AncientLayer1 {
         this.pos = BananaMC.chunkPosFromLong(nbt.getLong("pos"));
         this.posIndex = nbt.getInteger("posIndex");
         this.size = nbt.getInteger("size");
+        this.seed = nbt.getLong("seed");
 
         NBTTagList list = nbt.getTagList("playersState", 8);
 

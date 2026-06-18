@@ -9,18 +9,18 @@ import net.minecraftforge.common.DimensionManager;
 
 @AutoInstantiate
 public class InitDimensions implements ILoadStagePre {
-    public static final String ancient_world_name = "ancient_world";
-    public static final int ancient_world_dim_id = RotAConfigs.CompatibilitySettings.ancientWorldDimId;
-    public static final DimensionType ancient_world_dim_type = DimensionType.register(
-        ancient_world_name,
-        "_" + ancient_world_name,
-        ancient_world_dim_id,
+    public static final String ANCIENT_WORLD_NAME = "ancient_world";
+    public static final int ANCIENT_WORLD_ID = RotAConfigs.CompatibilitySettings.ancientWorldDimId;
+    public static final DimensionType ANCIENT_WORLD_DIM_TYPE = DimensionType.register(
+        ANCIENT_WORLD_NAME,
+        "_" + ANCIENT_WORLD_NAME,
+        ANCIENT_WORLD_ID,
         WorldProviderAncientWorld.class,
         false
     );
 
     @Override
     public void onPreInit() {
-        DimensionManager.registerDimension(ancient_world_dim_id, ancient_world_dim_type);
+        DimensionManager.registerDimension(ANCIENT_WORLD_ID, ANCIENT_WORLD_DIM_TYPE);
     }
 }

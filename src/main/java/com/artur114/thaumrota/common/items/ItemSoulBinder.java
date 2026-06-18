@@ -129,7 +129,7 @@ public class ItemSoulBinder extends BItemBase {
                 }
                 Entity entity = server.getEntityFromUuid(id);
                 if (entity instanceof EntityPlayerMP) {
-                    if (entity.dimension != InitDimensions.ancient_world_dim_id) {
+                    if (entity.dimension != InitDimensions.ANCIENT_WORLD_ID) {
                         EntityPlayerMP playerMP = (EntityPlayerMP) entity;
                         if (player.dimension == playerMP.dimension) {
                             List<String> uui = MiscHandler.isPlayerUseUnresolvedItems(playerMP);

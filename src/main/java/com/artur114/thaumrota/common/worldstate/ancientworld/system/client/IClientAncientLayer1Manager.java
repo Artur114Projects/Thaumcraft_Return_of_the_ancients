@@ -8,4 +8,6 @@ public interface IClientAncientLayer1Manager extends IAncientLayer1Manager {
     void handleUpdateTag(NBTTagCompound data);
     void startBuild();
     void finishBuild();
+
+    default boolean isRemote() {return true;}
 }

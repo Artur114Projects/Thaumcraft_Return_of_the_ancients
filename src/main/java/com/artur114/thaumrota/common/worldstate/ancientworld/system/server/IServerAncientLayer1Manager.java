@@ -16,4 +16,6 @@ public interface IServerAncientLayer1Manager extends IAncientLayer1Manager, INBT
     boolean loadEntity(EntityLiving entity);
     void onEntityDead(EntityLiving entity);
     void unloadEntity(EntityLiving entity);
+
+    default boolean isRemote() {return false;}
 }

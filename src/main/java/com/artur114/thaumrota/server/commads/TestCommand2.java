@@ -28,9 +28,9 @@ public class TestCommand2 extends CommandBase {
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         EntityPlayerMP player = getCommandSenderAsPlayer(sender);
 
-        if (player.dimension != InitDimensions.ancient_world_dim_id) {
-            TeleportHandler.teleportToDimension(player, InitDimensions.ancient_world_dim_id, new BlockPos(0, 61, 0));
-            server.getWorld(InitDimensions.ancient_world_dim_id).setBlockState(new BlockPos(0, 60, 0), Blocks.STONE.getDefaultState());
+        if (player.dimension != InitDimensions.ANCIENT_WORLD_ID) {
+            TeleportHandler.teleportToDimension(player, InitDimensions.ANCIENT_WORLD_ID, new BlockPos(0, 61, 0));
+            server.getWorld(InitDimensions.ANCIENT_WORLD_ID).setBlockState(new BlockPos(0, 60, 0), Blocks.STONE.getDefaultState());
         } else {
             TeleportHandler.teleportToDimension(player, player.getSpawnDimension(), this.getTeleportPos(player));
         }

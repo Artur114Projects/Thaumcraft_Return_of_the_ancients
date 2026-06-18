@@ -84,6 +84,11 @@ public class StructureMapBorder implements IStructure {
     public static class StructureMapBorderType implements IStructureType {
 
         @Override
+        public ILightTemplate light() {
+            return Collections::emptyList;
+        }
+
+        @Override
         public IStructure create(EnumRotate rotate, StrPos pos) {
             return null;
         }

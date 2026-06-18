@@ -134,6 +134,7 @@ void main() {
         lighting += color;
     }
 
+    lighting = lighting / (lighting + 1.0);
     heat = 1.0 - exp(-heat);
     heat *= 1.6;
     float dist = lenghtSq(worldPos - cameraPos);

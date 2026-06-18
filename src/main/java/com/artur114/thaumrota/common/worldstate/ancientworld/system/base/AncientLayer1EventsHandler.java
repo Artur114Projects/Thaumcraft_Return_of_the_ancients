@@ -21,42 +21,42 @@ public class AncientLayer1EventsHandler {
 
     @SubscribeEvent
     public static void attachCapabilitiesWorld(AttachCapabilitiesEvent<World> e) {
-        if (e.getObject() != null &&  e.getObject().isRemote && e.getObject().provider.getDimension() == InitDimensions.ancient_world_dim_id) CLIENT_MANAGER.attachCapabilitiesEventWorld(e);
-        if (e.getObject() != null && !e.getObject().isRemote && e.getObject().provider.getDimension() == InitDimensions.ancient_world_dim_id) SERVER_MANAGER.attachCapabilitiesEventWorld(e);
+        if (e.getObject() != null &&  e.getObject().isRemote && e.getObject().provider.getDimension() == InitDimensions.ANCIENT_WORLD_ID) CLIENT_MANAGER.attachCapabilitiesEventWorld(e);
+        if (e.getObject() != null && !e.getObject().isRemote && e.getObject().provider.getDimension() == InitDimensions.ANCIENT_WORLD_ID) SERVER_MANAGER.attachCapabilitiesEventWorld(e);
     }
 
     @SubscribeEvent
     public static void clientTick(TickEvent.ClientTickEvent e) {
-        World world = Minecraft.getMinecraft().world; if (world != null && world.provider.getDimension() == InitDimensions.ancient_world_dim_id) CLIENT_MANAGER.tickEventClientTickEvent(e);
+        World world = Minecraft.getMinecraft().world; if (world != null && world.provider.getDimension() == InitDimensions.ANCIENT_WORLD_ID) CLIENT_MANAGER.tickEventClientTickEvent(e);
     }
 
     @SubscribeEvent
     public static void worldTick(TickEvent.WorldTickEvent e) {
-        if (!e.world.isRemote && e.world.provider.getDimension() == InitDimensions.ancient_world_dim_id) SERVER_MANAGER.tickEventWorldTickEvent(e);
+        if (!e.world.isRemote && e.world.provider.getDimension() == InitDimensions.ANCIENT_WORLD_ID) SERVER_MANAGER.tickEventWorldTickEvent(e);
     }
 
     @SubscribeEvent
     public static void playerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent e) {
-        if (e.player.dimension == InitDimensions.ancient_world_dim_id) SERVER_MANAGER.playerEventPlayerLoggedInEvent(e);
+        if (e.player.dimension == InitDimensions.ANCIENT_WORLD_ID) SERVER_MANAGER.playerEventPlayerLoggedInEvent(e);
     }
 
     @SubscribeEvent
     public static void playerLoggedOutEvent(PlayerEvent.PlayerLoggedOutEvent e) {
-        if (e.player.dimension == InitDimensions.ancient_world_dim_id) SERVER_MANAGER.playerEventPlayerLoggedOutEvent(e);
+        if (e.player.dimension == InitDimensions.ANCIENT_WORLD_ID) SERVER_MANAGER.playerEventPlayerLoggedOutEvent(e);
     }
 
     @SubscribeEvent
     public static void chunkUnloadEvent(ChunkEvent.Unload e) {
-        if (!e.getWorld().isRemote && e.getWorld().provider.getDimension() == InitDimensions.ancient_world_dim_id) SERVER_MANAGER.chunkEventUnload(e);
+        if (!e.getWorld().isRemote && e.getWorld().provider.getDimension() == InitDimensions.ANCIENT_WORLD_ID) SERVER_MANAGER.chunkEventUnload(e);
     }
 
     @SubscribeEvent
     public static void entityJoinToWorld(EntityJoinWorldEvent e) {
-        if (e.getEntity().dimension == InitDimensions.ancient_world_dim_id && !e.getWorld().isRemote) e.setCanceled(!SERVER_MANAGER.entityJoinWorldEvent(e));
+        if (e.getEntity().dimension == InitDimensions.ANCIENT_WORLD_ID && !e.getWorld().isRemote) e.setCanceled(!SERVER_MANAGER.entityJoinWorldEvent(e));
     }
 
     @SubscribeEvent
     public static void livingDeathEvent(LivingDeathEvent e) {
-        if (e.getEntity().dimension == InitDimensions.ancient_world_dim_id && !e.getEntity().world.isRemote) SERVER_MANAGER.livingDeathEvent(e);
+        if (e.getEntity().dimension == InitDimensions.ANCIENT_WORLD_ID && !e.getEntity().world.isRemote) SERVER_MANAGER.livingDeathEvent(e);
     }
 }

@@ -5,12 +5,14 @@ import com.artur114.thaumrota.common.util.TeleportHandler;
 import com.artur114.thaumrota.common.init.InitDimensions;
 import com.artur114.thaumrota.common.items.ItemSoulBinder;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -21,6 +23,16 @@ public class ServerAncientLayer1Manager implements IServerAncientLayer1Manager {
 
     public ServerAncientLayer1Manager(World world) {
         this.world = world;
+    }
+
+    @Override
+    public @Nullable AncientLayer1 sectorFor(EntityPlayer player) {
+        for (AncientLayer1 sector : this.ancientLayer1s) {
+            if (sector.hasPlayer(player)) {
+                return sector;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -150,7 +162,7 @@ public class ServerAncientLayer1Manager implements IServerAncientLayer1Manager {
     }
 
     private void teleportToPlatform(EntityPlayerMP player) {
-        TeleportHandler.teleportToDimension(player, InitDimensions.ancient_world_dim_id, 0, 244, 0);
+        TeleportHandler.teleportToDimension(player, InitDimensions.ANCIENT_WORLD_ID, 0, 244, 0);
     }
 
     private void setFreePos(AncientLayer1Server layer1Server) {

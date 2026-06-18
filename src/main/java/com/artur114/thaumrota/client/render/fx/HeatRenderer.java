@@ -11,6 +11,7 @@ import com.artur114.thaumrota.common.init.InitDimensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -21,14 +22,15 @@ import java.awt.*;
 import java.nio.FloatBuffer;
 import java.util.*;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber
 public class HeatRenderer {
     public static final Color HEAT_COLOR = new Color(214, 111, 29);
+    private static final @SuppressWarnings("unchecked") ListHeap<List<ILightSource>> heap = new ListHeap<List<ILightSource>>(new List[4], ArrayList::new);
     private static final ShaderRender render = ShaderRender.of(InitShaders.TEST_SHADER).withMainTex().withDepthTex();
+    private static final Map<String, EnumMap<EnumLightType, List<ILightSource>>> lights = new HashMap<>();
     private static FloatBuffer buffer = BufferUtils.createFloatBuffer(64 * 3);
-    private static final List<ILightSource> pointLights = new ArrayList<>();
-    private static final List<ILightSource> lineLights = new ArrayList<>();
     private static final Map<Integer, Float> dimensions = new HashMap<>();
     private static int maxRenderDist = 48;
     private static int maxLights = 64;
@@ -46,9 +48,37 @@ public class HeatRenderer {
         HeatRenderer.maxLights = maxLights;
     }
 
+    public static void clearLight(String lightGroup) {
+        EnumMap<EnumLightType, List<ILightSource>> group = lights.get(lightGroup);
+        if (group != null) group.clear();
+    }
+
     public static void clearLight() {
-        pointLights.clear();
-        lineLights.clear();
+        lights.clear();
+    }
+
+    public static void removeLight(BlockPos pos) {
+        removeLight("all", pos);
+    }
+
+    public static void removeLight(String lightGroup, BlockPos pos) {
+        EnumMap<EnumLightType, List<ILightSource>> group = lights.get(lightGroup);
+        if (group != null) {
+            group.forEach((type, list) -> {
+                list.removeIf(light -> light.collideToPos(pos));
+            });
+        }
+    }
+
+    public static void addLight(String lightGroup, List<ILightSource> lights) {
+        if (lights == null) return;
+        for (ILightSource source : lights) {
+            addLight(lightGroup, source);
+        }
+    }
+
+    public static void addLight(String lightGroup, ILightSource light) {
+        lights.computeIfAbsent(lightGroup, k -> new EnumMap<>(EnumLightType.class)).computeIfAbsent(light.type(), k -> new ArrayList<>()).add(light);
     }
 
     public static void addLight(List<ILightSource> lights) {
@@ -59,21 +89,18 @@ public class HeatRenderer {
     }
 
     public static void addLight(ILightSource light) {
-        switch (light.type()) {
-            case POINT:
-                pointLights.add(light);
-                break;
-            case LINE:
-                lineLights.add(light);
-                break;
-        }
+        addLight("all", light);
     }
 
-    private static List<ILightSource> prepareLights(List<ILightSource> lights) {
-        lights.sort(Comparator.comparingInt(ILightSource::distanceSqToPlayer));
-        List<ILightSource> ret = new ArrayList<>();
+    private static List<ILightSource> prepareLights(EnumLightType type) {
+        List<ILightSource> lights = allLights(type);
+        List<ILightSource> sorted = heap.obtain();
+        sorted.addAll(lights);
+        sorted.sort(Comparator.comparingInt(ILightSource::distanceSqToPlayer));
 
-        for (ILightSource source : lights) {
+        List<ILightSource> ret = heap.obtain();
+
+        for (ILightSource source : sorted) {
             if (source.isOnView(maxRenderDist)) {
                 if (ret.size() >= maxLights) {
                     break;
@@ -81,6 +108,9 @@ public class HeatRenderer {
                 ret.add(source);
             }
         }
+
+        heap.release(sorted);
+        heap.release(lights);
 
         return ret;
     }
@@ -96,38 +126,39 @@ public class HeatRenderer {
         }
     }
 
+    private static List<ILightSource> allLights(EnumLightType type) {
+        List<ILightSource> ret = heap.obtain();
+
+        lights.forEach((group, map) -> {
+            ret.addAll(map.getOrDefault(type, Collections.emptyList()));
+        });
+
+        return ret;
+    }
+
     public static int debugLightsCount(EnumLightType type) {
-        switch (type) {
-            case LINE:
-                return lineLights.size();
-            case POINT:
-                return pointLights.size();
-            default:
-                return -1;
-        }
+        List<ILightSource> list = allLights(type);
+        int ret = list.size();
+        heap.release(list);
+        return ret;
     }
 
     public static int debugLightsToRenCount(EnumLightType type) {
-        switch (type) {
-            case LINE:
-                return prepareLights(lineLights).size();
-            case POINT:
-                return prepareLights(pointLights).size();
-            default:
-                return -1;
-        }
+        List<ILightSource> list = prepareLights(type);
+        int ret = list.size();
+        heap.release(list);
+        return ret;
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void renderShaders(RenderWorldLastEvent evt) {
         if (!dimensions.containsKey(Minecraft.getMinecraft().world.provider.getDimension())) {
-            pointLights.clear();
-            lineLights.clear();
+            lights.clear();
             return;
         }
         EntityPlayer player = Minecraft.getMinecraft().player;
-        List<ILightSource> point = prepareLights(pointLights);
-        List<ILightSource> line = prepareLights(lineLights);
+        List<ILightSource> point = prepareLights(EnumLightType.POINT);
+        List<ILightSource> line = prepareLights(EnumLightType.LINE);
 
         ShaderRenderEngine.renderFullScreen(render, program -> {
             sendToShader(EnumLightType.POINT, point, program);
@@ -140,9 +171,59 @@ public class HeatRenderer {
             program.uniform("globalHeat", dimensions.get(Minecraft.getMinecraft().world.provider.getDimension()));
             program.uniform("time", (float) (ClientEventsHandler.GLOBAL_TICK_MANAGER.interpolatedGameTickCounter(evt.getPartialTicks()) / 8));
         });
+
+        heap.release(point);
+        heap.release(line);
     }
 
     static {
-        dimensions.put(InitDimensions.ancient_world_dim_id, 1.0F);
+        dimensions.put(InitDimensions.ANCIENT_WORLD_ID, 1.0F);
+    }
+
+    private static final class ListHeap<T extends List<?>> {
+        private final Set<T> created = Collections.newSetFromMap(new IdentityHashMap<>());
+        private final Supplier<T> creator;
+        private int cursor = -1;
+        private T[] heap;
+
+        private ListHeap(T[] arr, Supplier<T> creator) {
+            this.creator = creator;
+            this.heap = arr;
+        }
+
+        public T obtain() {
+            if (this.cursor < 0) {
+                T ret = this.creator.get();
+                this.created.add(ret);
+                return ret;
+            }
+
+            T obj = this.heap[this.cursor];
+            this.heap[this.cursor--] = null;
+
+            if (obj == null) {
+                T ret = this.creator.get();
+                this.created.add(ret);
+                return ret;
+            }
+
+            return obj;
+        }
+
+        public void release(T obj) {
+            if (obj == null) {
+                return;
+            }
+            if (!this.created.contains(obj)) {
+                return;
+            }
+
+            if (this.cursor + 1 >= this.heap.length) {
+                this.heap = Arrays.copyOf(this.heap, this.heap.length + 2);
+            }
+
+            obj.clear();
+            this.heap[++this.cursor] = obj;
+        }
     }
 }

@@ -293,6 +293,7 @@ public class AncientLayer1Server extends AncientLayer1 {
         nbt.setLong("pos", BananaMC.chunkPosAsLong(this.pos));
         nbt.setInteger("posIndex", this.posIndex);
         nbt.setInteger("size", this.size);
+        nbt.setLong("seed", this.seed);
 
         NBTTagList list = new NBTTagList();
 

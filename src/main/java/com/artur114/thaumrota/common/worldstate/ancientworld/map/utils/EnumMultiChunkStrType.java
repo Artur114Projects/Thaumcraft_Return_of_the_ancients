@@ -21,6 +21,11 @@ public enum EnumMultiChunkStrType implements IStructureType {
     }
 
     @Override
+    public ILightTemplate light() {
+        return LightTemplates.WAY;
+    }
+
+    @Override
     public IStructure create(EnumRotate rotate, StrPos pos) {
         return this.creator.apply(rotate, pos, this);
     }
@@ -32,5 +37,10 @@ public enum EnumMultiChunkStrType implements IStructureType {
 
     public IMultiChunkStrForm form() {
         return this.form;
+    }
+
+    @Override
+    public String toString() {
+        return this.name();
     }
 }

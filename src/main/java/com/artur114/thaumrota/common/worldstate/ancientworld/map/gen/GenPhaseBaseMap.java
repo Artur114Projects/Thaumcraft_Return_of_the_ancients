@@ -16,9 +16,9 @@ public class GenPhaseBaseMap extends GenPhase {
 
     private List<Room> initRooms() {
         return new ArrayList<>(Arrays.asList(
-            new Room(EnumMultiChunkStrType.WATER_ROOM, (size) -> size),
-            new Room(EnumMultiChunkStrType.HOT_ROOM, (size) -> size),
-            new Room(EnumMultiChunkStrType.BIG_HOT_ROOM, (size) -> size)
+            new Room(EnumMultiChunkStrType.WATER_ROOM, (size) -> size / 3),
+            new Room(EnumMultiChunkStrType.HOT_ROOM, (size) -> size / 5),
+            new Room(EnumMultiChunkStrType.BIG_HOT_ROOM, (size) -> size / 3)
         ));
     }
 

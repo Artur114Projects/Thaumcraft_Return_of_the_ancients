@@ -1,12 +1,16 @@
 package com.artur114.thaumrota.client.light;
 
+import com.artur114.bananalib.math.core.m3d.vec.IVec3IC;
 import com.artur114.bananalib.math.m3d.vec.IVec3DM;
+import com.artur114.bananalib.math.m3d.vec.Vec3DM;
 import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
+import com.artur114.thaumrota.client.render.fx.HeatRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;
 import java.nio.FloatBuffer;
@@ -38,6 +42,10 @@ public class LineLightSource implements ILightSource {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public void setHeat(float heat) {
+        this.heat = heat;
     }
 
     public void setFrom(PosMc3IM from) {
@@ -77,7 +85,7 @@ public class LineLightSource implements ILightSource {
                 buffer.put(this.color.getBlue() / 255.0F);
                 break;
             case 1:
-                buffer.put(1.0F / (this.range * this.range));
+                buffer.put(this.range * this.range);
                 buffer.put(this.brightness);
                 buffer.put(this.heat);
                 break;
@@ -96,7 +104,18 @@ public class LineLightSource implements ILightSource {
 
     @Override
     public boolean isOnView(int maxRenderDist) {
-        return BananaMC.isInPlayerView(this.from, maxRenderDist) || BananaMC.isInPlayerView(this.to, maxRenderDist);
+        if (this.distanceSqToPlayer() > maxRenderDist * maxRenderDist) {
+            return false;
+        }
+
+        double minX = Math.min(this.from.x(), this.to.x()) - this.range;
+        double minY = Math.min(this.from.y(), this.to.y()) - this.range;
+        double minZ = Math.min(this.from.z(), this.to.z()) - this.range;
+        double maxX = Math.max(this.from.x(), this.to.x()) + this.range;
+        double maxY = Math.max(this.from.y(), this.to.y()) + this.range;
+        double maxZ = Math.max(this.from.z(), this.to.z()) + this.range;
+
+        return HeatRenderer.FRUSTUM.isBoxInFrustum(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     @Override
@@ -106,8 +125,15 @@ public class LineLightSource implements ILightSource {
 
     @Override
     public int distanceSqToPlayer() {
-        EntityPlayer player = Minecraft.getMinecraft().player;
-        return (int) (this.from.distanceSq(player.posX, player.posY, player.posZ) + this.to.distanceSq(player.posX, player.posY, player.posZ)) / 2;
+        Vec3DM ab = (Vec3DM) Vec3DM.obtain().set(this.to).subtract(this.from);
+        Vec3DM ap = (Vec3DM) Vec3DM.obtain().set(Particle.interpPosX, Particle.interpPosY, Particle.interpPosZ).subtract(this.from);
+        double t = MathHelper.clamp((ap.dot(ab) / ab.dot(ab)), 0.0, 1.0);
+        Vec3DM closest = (Vec3DM) Vec3DM.obtain().set(this.from).add(ab.scale(t));
+        double dist = closest.distanceSq(Particle.interpPosX, Particle.interpPosY, Particle.interpPosZ);
+        Vec3DM.release(ab);
+        Vec3DM.release(ap);
+        Vec3DM.release(closest);
+        return (int) dist;
     }
 
     public Color color() {

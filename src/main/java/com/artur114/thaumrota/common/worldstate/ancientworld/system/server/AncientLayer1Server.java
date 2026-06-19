@@ -208,6 +208,7 @@ public class AncientLayer1Server extends AncientLayer1 {
 
     protected void onWakeUp() {
         this.createMap();
+        this.loadCount = 0;
         if (!this.isBuild && !this.isBuilding) {
             this.build();
         }
@@ -252,8 +253,7 @@ public class AncientLayer1Server extends AncientLayer1 {
     }
 
     private void updatePlayerState(EntityPlayerMP player, String newState) {
-        String name = this.playersState.get(player.getUniqueID());
-        this.playersState.put(player.getUniqueID(), name + "|" + newState);
+        this.playersState.compute(player.getUniqueID(), (k, name) -> name + "|" + newState);
 
         for (AncientWorldPlayer playerA : this.players) {
             if (!playerA.isSleep()) {

@@ -26,11 +26,11 @@ public class StructureHotRoom extends StructureMultiChunk {
         @Override
         public char[][] form() {
             return new char[][] {
-                    {' ',' ','p',' ',' '},
-                    {' ','s','s','s',' '},
-                    {'p','s','c','s','p'},
-                    {' ','s','s','s',' '},
-                    {' ',' ',' ',' ',' '}
+                {' ',' ','p',' ',' '},
+                {' ','s','s','s',' '},
+                {'p','s','c','s','p'},
+                {' ','s','s','s',' '},
+                {' ',' ',' ',' ',' '}
             };
         }
     }

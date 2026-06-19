@@ -10,6 +10,8 @@ import com.artur114.thaumrota.client.light.ILightSource;
 import com.artur114.thaumrota.common.init.InitDimensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.culling.ClippingHelperImpl;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -26,6 +28,7 @@ import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber
 public class HeatRenderer {
+    public static final Frustum FRUSTUM = new Frustum();
     public static final Color HEAT_COLOR = new Color(214, 111, 29);
     private static final @SuppressWarnings("unchecked") ListHeap<List<ILightSource>> heap = new ListHeap<List<ILightSource>>(new List[4], ArrayList::new);
     private static final ShaderRender render = ShaderRender.of(InitShaders.TEST_SHADER).withMainTex().withDepthTex();
@@ -156,6 +159,9 @@ public class HeatRenderer {
             lights.clear();
             return;
         }
+
+        ClippingHelperImpl.getInstance();
+        FRUSTUM.setPosition(Particle.interpPosX, Particle.interpPosY, Particle.interpPosZ);
         EntityPlayer player = Minecraft.getMinecraft().player;
         List<ILightSource> point = prepareLights(EnumLightType.POINT);
         List<ILightSource> line = prepareLights(EnumLightType.LINE);
@@ -167,7 +173,6 @@ public class HeatRenderer {
             program.uniform("pointLightCount", point.size());
             program.uniform("lineLightCount", line.size());
             program.uniformInvMVPMatrix("invMVPMatrix");
-            program.uniform("cameraPos", (float) (player.posX - Particle.interpPosX), (float) (player.posY - Particle.interpPosY), (float) (player.posZ - Particle.interpPosZ));
             program.uniform("globalHeat", dimensions.get(Minecraft.getMinecraft().world.provider.getDimension()));
             program.uniform("time", (float) (ClientEventsHandler.GLOBAL_TICK_MANAGER.interpolatedGameTickCounter(evt.getPartialTicks()) / 8));
         });

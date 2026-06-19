@@ -19,6 +19,13 @@ public class ImmutableMap extends AbstractMap {
         super(size);
     }
 
+    public @Nullable IStructureType structureType(int index) {
+        if (index < 0 || index >= this.area()) return null;
+        IStructure structure = this.structures[index];
+        if (structure == null) return null;
+        return structure.type();
+    }
+
     @Override
     public @Nullable IStructureType structureType(StrPos pos) {
         return this.structureType(pos.getX(), pos.getY());

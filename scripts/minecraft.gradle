@@ -5,6 +5,7 @@ minecraft {
     version = "1.12.2-14.23.5.2847"
     mappings = "snapshot_20171003"
     coreMod = core_mod_class
+    clientRunArgs += ["--uuid", "11111111-1111-1111-1111-111111111111"]
 }
 
 jar {

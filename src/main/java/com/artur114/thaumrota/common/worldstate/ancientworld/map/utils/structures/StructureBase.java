@@ -5,13 +5,9 @@ import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import com.artur114.thaumrota.client.light.ILightSource;
 import com.artur114.thaumrota.client.light.LineLightSource;
 import com.artur114.thaumrota.client.light.PointLightSource;
-import com.artur114.thaumrota.client.render.fx.HeatRenderer;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.*;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.maps.AbstractMap;
 import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
-import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,9 +24,6 @@ public class StructureBase implements IStructure {
     protected EnumRotate rotate;
     protected int y = baseY;
     protected StrPos pos;
-
-    @SideOnly(Side.CLIENT)
-    protected List<ILightSource> lightSources = null;
 
     protected StructureBase() {}
 
@@ -96,10 +89,10 @@ public class StructureBase implements IStructure {
 
     @Override
     public void build(World world, ChunkPos pos, Random rand) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
-        blockPos.setPos(pos).setY(this.y);
+        PosMc3IM blockPos = PosMc3IM.obtain();
+        blockPos.setChunk(pos).setY(this.y);
         StructuresBuildManager.createBuildRequest(world, blockPos, this.type.stringId(this.rotate)).setIgnoreAir().build();
-        UltraMutableBlockPos.release(blockPos);
+        PosMc3IM.release(blockPos);
     }
 
     @Override
@@ -116,26 +109,22 @@ public class StructureBase implements IStructure {
     @Override
     @SideOnly(Side.CLIENT)
     public List<ILightSource> light(ChunkPos pos) {
-        if (this.lightSources == null) {
-            List<ILightSource> list = new ArrayList<>();
-            this.addLights(list);
-            Matrix3FM matrix = Matrix3FM.obtain();
-            if (this.rotate != null) {
-                matrix.rotateYAround(7.5, 0, 7.5, this.rotate.lightDegrees());
-            }
-            for (ILightSource source : list) {
-                if (source instanceof PointLightSource) {
-                    matrix.transform(((PointLightSource) source).pos()).add(pos.x << 4, this.y, pos.z << 4);
-                } else if (source instanceof LineLightSource) {
-                    matrix.transform(((LineLightSource) source).from()).add(pos.x << 4, this.y, pos.z << 4);
-                    matrix.transform(((LineLightSource) source).to()).add(pos.x << 4, this.y, pos.z << 4);
-                }
-            }
-            Matrix3FM.release(matrix);
-            this.lightSources = list;
+        List<ILightSource> list = new ArrayList<>();
+        this.addLights(list);
+        Matrix3FM matrix = Matrix3FM.obtain();
+        if (this.rotate != null) {
+            matrix.rotateYAround(7.5, 0, 7.5, this.rotate.lightDegrees());
         }
-
-        return this.lightSources;
+        for (ILightSource source : list) {
+            if (source instanceof PointLightSource) {
+                matrix.transform(((PointLightSource) source).pos()).add(pos.x << 4, this.y, pos.z << 4);
+            } else if (source instanceof LineLightSource) {
+                matrix.transform(((LineLightSource) source).from()).add(pos.x << 4, this.y, pos.z << 4);
+                matrix.transform(((LineLightSource) source).to()).add(pos.x << 4, this.y, pos.z << 4);
+            }
+        }
+        Matrix3FM.release(matrix);
+        return list;
     }
 
     protected void addLights(List<ILightSource> list) {

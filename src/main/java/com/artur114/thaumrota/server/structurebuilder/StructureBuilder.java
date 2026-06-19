@@ -1,5 +1,7 @@
 package com.artur114.thaumrota.server.structurebuilder;
 
+import com.artur114.bananalib.mc.BananaMC;
+import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import com.artur114.thaumrota.common.worldstate.blockprotect.BlockProtectHandler;
 import com.artur114.thaumrota.server.structurebuilder.interf.IBuildProperties;
 import com.artur114.thaumrota.server.structurebuilder.interf.IStructureBuilder;
@@ -87,7 +89,7 @@ public class StructureBuilder implements IStructureBuilder {
 
     @Override
     public void build(World world, BlockPos pos, IBuildProperties properties) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
+        PosMc3IM blockPos = PosMc3IM.obtain();
 
         for (int block : blocks) {
             byte x = (byte) (block >> 24);
@@ -96,8 +98,8 @@ public class StructureBuilder implements IStructureBuilder {
             byte type = (byte) block;
             IBlockState state = properties.blockStateHook(this.palette[type]);
             if (state == null) return;
-            blockPos.setPos(pos).add(x, y, z);
-            if (properties.isPosAsXZCenter()) blockPos.deduct(this.halfSizeXZ);
+            blockPos.set(pos).add(x, y, z);
+            if (properties.isPosAsXZCenter()) blockPos.subtract(this.halfSizeXZ);
             if (state.getMaterial() == Material.AIR && properties.isIgnoreAir()) continue;
             if (blockPos.getY() >> 4 >= 16 || blockPos.getY() >> 4 < 0) continue;
 
@@ -106,8 +108,8 @@ public class StructureBuilder implements IStructureBuilder {
             }
 
             if (this.blocksUseEbs[type] && properties.isUseEBSHook(state)) {
-                ExtendedBlockStorage storage = blockPos.ebs(world);
-                blockPos.normalizeToEBS();
+                ExtendedBlockStorage storage = BananaMC.ebs(world, blockPos);
+                blockPos.wrap(PosMc3IM.EBS_BOUND);
                 storage.set(blockPos.getX(), blockPos.getY(), blockPos.getZ(), state);
             } else {
                 NBTTagCompound data = this.tilesData.get(block);
@@ -131,24 +133,24 @@ public class StructureBuilder implements IStructureBuilder {
                 byte y = (byte) (packedLight >> 16);
                 byte z = (byte) (packedLight >> 8);
                 byte value = (byte) packedLight;
-                blockPos.setPos(pos).add(x, y, z);
-                if (properties.isPosAsXZCenter()) blockPos.deduct(this.halfSizeXZ);
+                blockPos.set(pos).add(x, y, z);
+                if (properties.isPosAsXZCenter()) blockPos.subtract(this.halfSizeXZ);
                 if (blockPos.getY() >> 4 >= 16 || blockPos.getY() >> 4 < 0) continue;
-                ExtendedBlockStorage storage = blockPos.ebs(world);
-                blockPos.normalizeToEBS();
+                ExtendedBlockStorage storage = BananaMC.ebs(world, blockPos);
+                blockPos.wrap(PosMc3IM.EBS_BOUND);
                 storage.setBlockLight(blockPos.getX(), blockPos.getY(), blockPos.getZ(), value);
             }
         }
 
         if (properties.isNeedMarkRenderUpdate()) {
             if (properties.isPosAsXZCenter()) {
-                world.markBlockRangeForRenderUpdate(pos.toImmutable().add(-this.size.getX() / 2, -this.size.getY() / 2, -this.size.getZ() / 2), blockPos.setPos(pos).add(this.size.getX() / 2, this.size.getY() / 2, this.size.getZ() / 2));
+                world.markBlockRangeForRenderUpdate(pos.toImmutable().add(-this.size.getX() / 2, -this.size.getY() / 2, -this.size.getZ() / 2), blockPos.set(pos).add(this.size.getX() / 2, this.size.getY() / 2, this.size.getZ() / 2));
             } else {
-                world.markBlockRangeForRenderUpdate(pos, blockPos.setPos(pos).add(this.size));
+                world.markBlockRangeForRenderUpdate(pos, blockPos.set(pos).add(this.size));
             }
         }
 
-        UltraMutableBlockPos.release(blockPos);
+        PosMc3IM.release(blockPos);
     }
 
     private NBTTagCompound readStructureAsName(String structureName) {

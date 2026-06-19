@@ -33,7 +33,7 @@ configurations {
 
 dependencies {
     include('com.artur114.bananalib:asm:1.1.0') {transitive=false}
-    include('com.artur114.bananalib:math:1.0.0') {transitive=false}
+    include('com.artur114.bananalib:math:1.1.0') {transitive=false}
     include('com.artur114.bananalib:util:0.0.0-SNAPSHOT') {transitive=false}
     include('com.artur114.bananalib:mc:0.1.0-SNAPSHOT') {transitive=false}
 

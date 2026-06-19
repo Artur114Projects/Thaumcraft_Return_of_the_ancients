@@ -83,7 +83,7 @@ public class PointLightSource implements ILightSource {
                 buffer.put(this.color.getBlue() / 255.0F);
                 break;
             case 1:
-                buffer.put(1.0F / (this.range * this.range));
+                buffer.put(this.range * this.range);
                 buffer.put(this.brightness);
                 buffer.put(this.heat);
                 break;

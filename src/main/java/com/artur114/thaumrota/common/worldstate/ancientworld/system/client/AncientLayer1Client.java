@@ -2,7 +2,9 @@ package com.artur114.thaumrota.common.worldstate.ancientworld.system.client;
 
 import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.bananalib.util.graphs.BananaGraphs;
+import com.artur114.thaumrota.client.light.ILightSource;
 import com.artur114.thaumrota.client.render.fx.HeatRenderer;
+import com.artur114.thaumrota.client.util.LightCompressor;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrPos;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructure;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1;
@@ -16,9 +18,12 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.ChunkPos;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AncientLayer1Client extends AncientLayer1 {
+    private final Map<StrPos, List<ILightSource>> lightMap = new HashMap<>();
     protected List<String> playersState = new ArrayList<>();
     private final Minecraft mc = Minecraft.getMinecraft();
     protected boolean isPlayerWasHigh = false;
@@ -50,19 +55,14 @@ public class AncientLayer1Client extends AncientLayer1 {
         if (curr != null) {
             StrPos pos = curr.pos();
 
+            if (this.lightMap.isEmpty()) {
+                this.compileLightMap();
+            }
+
             if (!pos.equals(this.lastPlayerPos)) {
                 this.lastPlayerPos = pos;
                 HeatRenderer.clearLight("ancient_world");
-                HeatRenderer.addLight("ancient_world", curr.light(new ChunkPos(this.pos.x + (this.size / 2) - (pos.getX()), this.pos.z + (this.size / 2) - (pos.getY()))));
-                BananaGraphs.bfs(pos, this.map::connectedStructures, p -> p.distanceM(pos) <= 3, (p) -> {
-                    IStructure str = this.map.structure(p);
-                    if (str != null) {
-                        int x = this.pos.x + (this.size / 2) - (p.getX());
-                        int z = this.pos.z + (this.size / 2) - (p.getY());
-                        HeatRenderer.addLight("ancient_world", str.light(new ChunkPos(x, z)));
-                    }
-                    return false;
-                });
+                HeatRenderer.addLight("ancient_world", this.lightMap.get(pos));
             }
         }
     }
@@ -91,6 +91,36 @@ public class AncientLayer1Client extends AncientLayer1 {
 
     public List<String> playersState() {
         return this.playersState;
+    }
+
+    private void compileLightMap() {
+        Map<StrPos, List<ILightSource>> rawMap = new HashMap<>();
+        for (int i = 0; i != this.map.area(); i++) {
+            StrPos pos = new StrPos(i % this.map.size(), i / this.map.size());
+            IStructure str = this.map.structure(pos);
+            if (str != null) {
+                int x = this.pos.x + (this.size / 2) - (pos.getX());
+                int z = this.pos.z + (this.size / 2) - (pos.getY());
+                rawMap.put(pos, str.light(new ChunkPos(x, z)));
+            }
+        }
+
+        for (int i = 0; i != this.map.area(); i++) {
+            StrPos pos = new StrPos(i % this.map.size(), i / this.map.size());
+            IStructure str = this.map.structure(pos);
+            if (str != null) {
+                List<ILightSource> ret = new ArrayList<>();
+                BananaGraphs.bfs(pos, this.map::connectedStructures, p -> p.distanceM(pos) <= 4 && (p.getX() == pos.getX() || p.getY() == pos.getY() || p.distanceM(pos) <= 2), (p) -> {
+                    List<ILightSource> list = rawMap.get(p);
+                    if (list != null) ret.addAll(list);
+                    return false;
+                });
+                List<ILightSource> list = rawMap.get(pos);
+                if (list != null) ret.addAll(list);
+                LightCompressor.compress(ret);
+                this.lightMap.put(pos, ret);
+            }
+        }
     }
 
     @Override

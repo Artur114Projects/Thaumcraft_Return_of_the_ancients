@@ -9,6 +9,7 @@ import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.Ancient
 import groovy.transform.BaseScript
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.FontRenderer
+import net.minecraft.util.math.RayTraceResult
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraftforge.fml.common.FMLCommonHandler
 import net.minecraftforge.fml.server.FMLServerHandler
@@ -32,6 +33,13 @@ if (sector != null) {
     StrPos pos = sector.players[0].calculatePosOnMap(sector.pos, sector.size)
     debug << "Current str: ${sector.map().structure(pos)?.type()}, rot: ${sector.map().structure(pos)?.rotate()}"
 }
+
+RayTraceResult res = player.rayTrace(8, partialTicksIn)
+
+if (res.typeOfHit == RayTraceResult.Type.BLOCK) {
+    debug << "Look at [${res.blockPos.x}, ${res.blockPos.y}, ${res.blockPos.z}]"
+}
+
 
 this.renderList(debug)
 

@@ -5,16 +5,15 @@ uniform sampler2D screenTexture;
 uniform sampler2D depthTexture;
 uniform mat4 invMVPMatrix;
 uniform float globalHeat;
-uniform vec3 cameraPos;
 uniform float time;
 
-#define MAX_POINT_LIGHTS 64
+#define MAX_POINT_LIGHTS 32
 uniform vec3 pointLightPos[MAX_POINT_LIGHTS];
 uniform vec3 pointLightColor[MAX_POINT_LIGHTS];
 uniform vec3 pointLightParams[MAX_POINT_LIGHTS];
 uniform int pointLightCount;
 
-#define MAX_LINE_LIGHTS 64
+#define MAX_LINE_LIGHTS 32
 uniform vec3 lineLightPosTo[MAX_LINE_LIGHTS];
 uniform vec3 lineLightPosFrom[MAX_LINE_LIGHTS];
 uniform vec3 lineLightColor[MAX_LINE_LIGHTS];
@@ -100,7 +99,7 @@ vec4 heatWaves(vec3 col, float dist, float heatFactor) {
 }
 
 vec4 modifyColor(vec4 color) {
-    return vec4(lerp(color.rgb, vec3(0.8, 0.3, 0.0), 0.1) * 1.2, color.a);
+    return vec4(lerp(color.rgb, vec3(0.8, 0.3, 0.0), (0.1 * globalHeat)) * (1.0 + (0.2 * globalHeat)), color.a);
 }
 
 void main() {
@@ -112,23 +111,21 @@ void main() {
     vec3 lighting = vec3(0.0);
     float heat = 0;
 
-
-    for (int i = 0; i != MAX_POINT_LIGHTS; i++) {
-        if (i >= pointLightCount) break;
-
+    for (int i = 0; i != pointLightCount; i++) {
         vec3 par = pointLightParams[i];
         float dist = lenghtSq(worldPos - pointLightPos[i]);
-        float att = computeAtt(dist, par.x);
+        if (dist > (par.x * 3)) continue;
+        float att = computeAtt(dist, 1.0 / par.x);
         vec3 color = computeLight(dist, pointLightColor[i], par.y, att);
         heat += att * att * dist * par.z;
         lighting += color;
     }
 
-    for (int i = 0; i != MAX_LINE_LIGHTS; i++) {
-        if (i >= lineLightCount) break;
+    for (int i = 0; i != lineLightCount; i++) {
         vec3 par = lineLightParams[i];
         float dist = distToLineSq(worldPos, lineLightPosFrom[i], lineLightPosTo[i]);
-        float att = computeAtt(dist, par.x);
+        if (dist > (par.x * 3)) continue;
+        float att = computeAtt(dist, 1.0 / par.x);
         vec3 color = computeLight(dist, lineLightColor[i], par.y, att);
         heat += att * att * dist * par.z;
         lighting += color;
@@ -137,7 +134,7 @@ void main() {
     lighting = lighting / (lighting + 1.0);
     heat = 1.0 - exp(-heat);
     heat *= 1.6;
-    float dist = lenghtSq(worldPos - cameraPos);
+    float dist = dot(worldPos, worldPos);
     vec4 color;
 
     color = heatWaves(lighting, dist, heat);

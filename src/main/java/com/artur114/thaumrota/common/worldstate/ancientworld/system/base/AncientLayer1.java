@@ -19,14 +19,15 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITickable {
     protected final List<AncientWorldPlayer> players = new ArrayList<>();
-    protected long seed = System.nanoTime();
+    protected long seed = ThreadLocalRandom.current().nextLong();
     protected NBTTagCompound mapData = null;
     protected InteractiveMap map = null;
     protected int loadCount;
-    protected int size = 17;
+    protected int size = 33;
     protected ChunkPos pos;
     protected int posIndex;
     protected World world;

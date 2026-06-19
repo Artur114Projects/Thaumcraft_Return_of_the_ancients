@@ -43,7 +43,6 @@ public class StructuresBuildManager implements ILoadStagePost {
 
     @Override
     public void onPostInit() {
-        register("ancient_door_rock_rotate-", 1, 2);
         register("ancient_long_room_rotate-",1, 2);
         register("ancient_spire_segment_", 0, 8);
         register("ancient_ladder_rotate-", 1, 4);
@@ -60,9 +59,7 @@ public class StructuresBuildManager implements ILoadStagePost {
         register("ancient_exit");
         register("ancient_boss");
 
-        register("ancient_door");
         register("ancient_area");
-        register("ancient_door1");
         register("ancient_portal");
         register("ancient_sanctuary");
         register("ancient_entry_way");

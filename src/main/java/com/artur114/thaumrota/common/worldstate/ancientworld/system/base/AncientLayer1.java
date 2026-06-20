@@ -121,10 +121,12 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
     }
 
     protected void createMap() {
-        this.map = GenPhase.InstanceAllGenPhases().getMap(this.seed, this.size).toInteractive(this.world, this.pos);
-
         if (this.mapData != null) {
+            this.map = new InteractiveMap(this.size, this.world, this.pos);
             this.map.readFromNBT(this.mapData);
+            this.mapData = null;
+        } else {
+            this.map = GenPhase.InstanceAllGenPhases().getMap(this.seed, this.size).toInteractive(this.world, this.pos);
         }
     }
 
@@ -182,14 +184,11 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
         NBTTagList list = nbt.getTagList("players", 10);
         for (int i = 0; i != list.tagCount(); i++) this.players.add(new AncientWorldPlayer(list.getCompoundTagAt(i).getUniqueId("playerID")));
         this.pos = BananaMC.chunkPosFromLong(nbt.getLong("pos"));
+        this.deSerialiseMap(nbt.getCompoundTag("mapData"));
         this.loadCount = nbt.getInteger("loadCount") + 1;
         this.posIndex = nbt.getInteger("posIndex");
         this.size = nbt.getInteger("size");
         this.seed = nbt.getLong("seed");
-
-        if (nbt.hasKey("mapData") && this.map != null) {
-            this.deSerialiseMap(nbt.getCompoundTag("mapData"));
-        }
     }
 
     @Override
@@ -203,6 +202,8 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
 
         if (this.map != null) {
             nbt.setTag("mapData", this.map.writeToNBT(new NBTTagCompound()));
+        } else if (this.mapData != null) {
+            nbt.setTag("mapData", this.mapData);
         }
 
         return nbt;

@@ -6,7 +6,7 @@ public enum EnumLightType {
     public int passCount() {
         switch (this) {
             case LINE:
-                return 4;
+                return 6;
             case POINT:
                 return 3;
             default:
@@ -26,6 +26,10 @@ public enum EnumLightType {
                         return "lineLightPosFrom";
                     case 3:
                         return "lineLightPosTo";
+                    case 4:
+                        return "lineLightABBMin";
+                    case 5:
+                        return "lineLightABBMax";
                 }
             case POINT:
                 switch (pass) {

@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Random;
 
 public interface IStructure {
+    int yPos();
+    void setYPos(int y);
     @NotNull IStructure copy();
     @NotNull StrPos pos();
     @NotNull IStructureType type();

@@ -1,5 +1,6 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures;
 
+import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.*;
 import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
@@ -46,10 +47,10 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
 
     @Override
     public void build(World world, ChunkPos pos, Random rand) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
-        blockPos.setPos(pos).add(8, 0, 8).setY(this.y);
+        PosMc3IM blockPos = PosMc3IM.obtain();
+        blockPos.setChunk(pos).add(8, 0, 8).setY(this.y);
         StructuresBuildManager.createBuildRequest(world, blockPos, this.type.stringId(this.rotate)).setIgnoreAir().setPosAsXZCenter().build();
-        UltraMutableBlockPos.release(blockPos);
+        PosMc3IM.release(blockPos);
     }
 
     @Override

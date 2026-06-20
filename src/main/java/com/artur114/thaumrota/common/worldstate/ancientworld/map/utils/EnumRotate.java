@@ -53,4 +53,8 @@ public enum EnumRotate {
                 return EnumRot.NON;
         }
     }
+
+    public EnumRotate wrap(EnumRotate maxRot) {
+        return EnumRotate.values()[this.ordinal() % (maxRot.ordinal() + 1)];
+    }
 }

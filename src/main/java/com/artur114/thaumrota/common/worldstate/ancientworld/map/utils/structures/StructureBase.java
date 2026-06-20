@@ -46,6 +46,16 @@ public class StructureBase implements IStructure {
     }
 
     @Override
+    public int yPos() {
+        return this.y;
+    }
+
+    @Override
+    public void setYPos(int y) {
+        this.y = y;
+    }
+
+    @Override
     public @NotNull IStructure copy() {
         return new StructureBase(this);
     }

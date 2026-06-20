@@ -14,10 +14,12 @@ import net.minecraft.client.renderer.culling.ClippingHelperImpl;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.BufferUtils;
 
 import java.awt.*;
@@ -33,10 +35,11 @@ public class HeatRenderer {
     private static final @SuppressWarnings("unchecked") ListHeap<List<ILightSource>> heap = new ListHeap<List<ILightSource>>(new List[4], ArrayList::new);
     private static final ShaderRender render = ShaderRender.of(InitShaders.TEST_SHADER).withMainTex().withDepthTex();
     private static final Map<String, EnumMap<EnumLightType, List<ILightSource>>> lights = new HashMap<>();
+    private static final Map<EnumLightType, List<ILightSource>> prepared = new HashMap<>();
     private static FloatBuffer buffer = BufferUtils.createFloatBuffer(64 * 3);
     private static final Map<Integer, Float> dimensions = new HashMap<>();
     private static int maxRenderDist = 48;
-    private static int maxLights = 64;
+    private static int maxLights = 48;
 
     public static void registerDim(int id, float globalHeat) {
         dimensions.put(id, globalHeat);
@@ -118,15 +121,17 @@ public class HeatRenderer {
         return ret;
     }
 
-    private static void sendToShader(EnumLightType type, List<ILightSource> lights, ShaderProgram program) {
+    private static int sendToShader(EnumLightType type, ShaderProgram program) {
+        List<ILightSource> sources = prepared.getOrDefault(type, Collections.emptyList());
         for (int i = 0; i != type.passCount(); i++) {
             buffer.clear();
-            for (ILightSource source : lights) {
+            for (ILightSource source : sources) {
                 source.writeToBuff(i, buffer);
             }
             buffer.flip();
             program.uniform3(type.nameForPass(i), buffer);
         }
+        return sources.size();
     }
 
     private static List<ILightSource> allLights(EnumLightType type) {
@@ -156,29 +161,56 @@ public class HeatRenderer {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void renderShaders(RenderWorldLastEvent evt) {
         if (!dimensions.containsKey(Minecraft.getMinecraft().world.provider.getDimension())) {
+            prepared.clear();
             lights.clear();
             return;
         }
-
         ClippingHelperImpl.getInstance();
         FRUSTUM.setPosition(Particle.interpPosX, Particle.interpPosY, Particle.interpPosZ);
-        EntityPlayer player = Minecraft.getMinecraft().player;
-        List<ILightSource> point = prepareLights(EnumLightType.POINT);
-        List<ILightSource> line = prepareLights(EnumLightType.LINE);
-
         ShaderRenderEngine.renderFullScreen(render, program -> {
-            sendToShader(EnumLightType.POINT, point, program);
-            sendToShader(EnumLightType.LINE, line, program);
+            int point = sendToShader(EnumLightType.POINT, program);
+            int line = sendToShader(EnumLightType.LINE, program);
 
-            program.uniform("pointLightCount", point.size());
-            program.uniform("lineLightCount", line.size());
+            program.uniform("pointLightCount", point);
+            program.uniform("lineLightCount", line);
             program.uniformInvMVPMatrix("invMVPMatrix");
             program.uniform("globalHeat", dimensions.get(Minecraft.getMinecraft().world.provider.getDimension()));
             program.uniform("time", (float) (ClientEventsHandler.GLOBAL_TICK_MANAGER.interpolatedGameTickCounter(evt.getPartialTicks()) / 8));
         });
+    }
 
-        heap.release(point);
-        heap.release(line);
+    @SubscribeEvent
+    public static void clientTick(TickEvent.ClientTickEvent e) {
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        World world = Minecraft.getMinecraft().world;
+
+        if (e.phase != TickEvent.Phase.START) {
+            return;
+        }
+
+        if (world == null) {
+            prepared.clear();
+            lights.clear();
+            return;
+        }
+
+        if (player == null) {
+            return;
+        }
+
+        if (!dimensions.containsKey(world.provider.getDimension())) {
+            prepared.clear();
+            lights.clear();
+            return;
+        }
+
+        for (EnumLightType type : EnumLightType.values()) {
+            List<ILightSource> light = prepareLights(type);
+            List<ILightSource> out = prepared.computeIfAbsent(type, k -> new ArrayList<>());
+            out.clear();
+            out.addAll(light);
+            heap.release(light);
+        }
     }
 
     static {

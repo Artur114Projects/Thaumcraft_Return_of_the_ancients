@@ -39,6 +39,13 @@ public class ImmutableMap extends AbstractMap {
         return structure.type();
     }
 
+    public @Nullable EnumRotate structureRotate(int index) {
+        if (index < 0 || index >= this.area()) return null;
+        IStructure structure = this.structures[index];
+        if (structure == null) return null;
+        return structure.rotate();
+    }
+
     @Override
     public @Nullable EnumRotate structureRotate(StrPos pos) {
         return this.structureRotate(pos.getX(), pos.getY());

@@ -18,7 +18,8 @@ public class ASMTransformerRotA implements IClassTransformer {
             new TaintHelperTransformer(),
             new TCRenderEventsTransformer(),
             new TileStructureTransformer(),
-            new WorldTransformer()
+            new WorldTransformer(),
+            new RenderEldritchGuardTransformer()
         );
         this.bus.registerDownListener(((tr, e) -> {
             logger.error("An exception occurred in transformer {}", tr, e);

@@ -39,6 +39,21 @@ prepareToDraw {
             sources.each {
                 if (it instanceof LineLightSource) {
                     drawBox(new Box3D(it.from(), it.to()).offset(0.5, 0.5, 0.5).grow(0.5).grow(0.002))
+//                    drawBox(new Box3D(   
+//                        Math.min(it.from().x(), it.to().x()) + 0.5F - (it.range() * 2),
+//                        Math.min(it.from().y(), it.to().y()) + 0.5F - (it.range() * 2),
+//                        Math.min(it.from().z(), it.to().z()) + 0.5F - (it.range() * 2),
+//                        Math.max(it.from().x(), it.to().x()) + 0.5F + (it.range() * 2),
+//                        Math.max(it.from().y(), it.to().y()) + 0.5F + (it.range() * 2),
+//                        Math. max(it.from().z(), it.to().z()) + 0.5F + (it.range() * 2)
+//                        Math. max(it.from().z(), it.to().z()) + 0.5F + (it.range() * 2)
+//                        Math. max(it.from().z(), it.to().z()) + 0.5F + (it.range() * 2)
+//                        Math. max(it.from().z(), it.to().z()) + 0.5F + (it.range() * 2)
+//                        Math. max(it.from().z(), it.to().z()) + 0.5F + (it.range() * 2)
+//                        Math. max(it.from().z(), it.to().z()) + 0.5F + (it.range() * 2)
+//                        Math. max(it.from().z(), it.to().z()) + 0.5F + (it.range() * 2)
+//                        Math. max(it.from().z(), it.to().z()) + 0.5F + (it.range() * 2)
+//                    ), Color.RED)
                 } else if (it instanceof PointLightSource) {
                     drawBox(new Box3D(it.pos(), it.pos()).offset(0.5, 0.5, 0.5).grow(0.5).grow(0.002))
                 }

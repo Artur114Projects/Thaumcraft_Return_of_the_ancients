@@ -23,6 +23,14 @@ public class StructureMapBorder implements IStructure {
     }
 
     @Override
+    public int yPos() {
+        return 0;
+    }
+
+    @Override
+    public void setYPos(int y) {}
+
+    @Override
     public @NotNull IStructure copy() {
         return new StructureMapBorder(this.pos);
     }

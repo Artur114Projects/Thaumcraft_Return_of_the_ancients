@@ -7,13 +7,15 @@ uniform mat4 invMVPMatrix;
 uniform float globalHeat;
 uniform float time;
 
-#define MAX_POINT_LIGHTS 32
+#define MAX_POINT_LIGHTS 48
 uniform vec3 pointLightPos[MAX_POINT_LIGHTS];
 uniform vec3 pointLightColor[MAX_POINT_LIGHTS];
 uniform vec3 pointLightParams[MAX_POINT_LIGHTS];
 uniform int pointLightCount;
 
-#define MAX_LINE_LIGHTS 32
+#define MAX_LINE_LIGHTS 48
+uniform vec3 lineLightABBMax[MAX_LINE_LIGHTS];
+uniform vec3 lineLightABBMin[MAX_LINE_LIGHTS];
 uniform vec3 lineLightPosTo[MAX_LINE_LIGHTS];
 uniform vec3 lineLightPosFrom[MAX_LINE_LIGHTS];
 uniform vec3 lineLightColor[MAX_LINE_LIGHTS];
@@ -114,7 +116,7 @@ void main() {
     for (int i = 0; i != pointLightCount; i++) {
         vec3 par = pointLightParams[i];
         float dist = lenghtSq(worldPos - pointLightPos[i]);
-        if (dist > (par.x * 3)) continue;
+        if (dist > (par.x * 4)) continue;
         float att = computeAtt(dist, 1.0 / par.x);
         vec3 color = computeLight(dist, pointLightColor[i], par.y, att);
         heat += att * att * dist * par.z;
@@ -122,13 +124,17 @@ void main() {
     }
 
     for (int i = 0; i != lineLightCount; i++) {
-        vec3 par = lineLightParams[i];
-        float dist = distToLineSq(worldPos, lineLightPosFrom[i], lineLightPosTo[i]);
-        if (dist > (par.x * 3)) continue;
-        float att = computeAtt(dist, 1.0 / par.x);
-        vec3 color = computeLight(dist, lineLightColor[i], par.y, att);
-        heat += att * att * dist * par.z;
-        lighting += color;
+        vec3 abbMin = lineLightABBMin[i];
+        vec3 abbMax = lineLightABBMax[i];
+        if (worldPos.x >= abbMin.x && worldPos.y >= abbMin.y && worldPos.z >= abbMin.z && worldPos.x <= abbMax.x && worldPos.y <= abbMax.y && worldPos.z <= abbMax.z) {
+            vec3 par = lineLightParams[i];
+            float dist = distToLineSq(worldPos, lineLightPosFrom[i], lineLightPosTo[i]);
+            if (dist > (par.x * 4)) continue;
+            float att = computeAtt(dist, 1.0 / par.x);
+            vec3 color = computeLight(dist, lineLightColor[i], par.y, att);
+            heat += att * att * dist * par.z;
+            lighting += color;
+        }
     }
 
     lighting = lighting / (lighting + 1.0);

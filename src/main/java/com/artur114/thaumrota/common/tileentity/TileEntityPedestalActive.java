@@ -64,7 +64,7 @@ public class TileEntityPedestalActive extends TileBase implements ITileBlockUseL
         ItemStack stack = playerIn.getHeldItem(hand);
         Item item = stack.getItem();
         if (item instanceof ItemPhantomTablet) {
-            if (this.isActive || playerIn.getCooldownTracker().hasCooldown(item)) {
+            if (this.isActive) {
                 return false;
             }
             playerIn.getCooldownTracker().setCooldown(item, 20);
@@ -72,11 +72,9 @@ public class TileEntityPedestalActive extends TileBase implements ITileBlockUseL
             this.isActive = true;
             this.onActivate();
             return true;
-        } else if (!this.isActive){
-            playerIn.sendStatusMessage(new TextComponentTranslation("thaumrota.pedestal_active.need_tablet"), true);
         }
 
-        return !this.isActive;
+        return false;
     }
 
     @Override

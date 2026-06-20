@@ -28,13 +28,12 @@ RotADevScript script
 onClient {
     player.sendStatusMessage(new TextComponentString("[${posIn.getX() & 15}, ${posIn.getY() - 80}, ${posIn.getZ() & 15}]"), false)
 //    ((AncientLayer1Client) sector)?.lightMap?.clear()
-
     if (!player.isSneaking()) {
-        HeatRenderer.addLight("debug", new PointLightSource(new PosMc3IM(posIn.offset(facingIn)), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5))
+//        HeatRenderer.addLight("debug", new PointLightSource(new PosMc3IM(posIn.offset(facingIn)), HeatRenderer.HEAT_COLOR, 0.3F, 4.0F, 1.5))
 //        this.addLine()
     } else {
 //        HeatRenderer.removeLight("debug", posIn.offset(facingIn))
-        HeatRenderer.clearLight("debug")
+//        HeatRenderer.clearLight("debug")
 //        compileLights()
     }
 }
@@ -67,7 +66,7 @@ void addLine() {
         TestGroovyClass.lastPoint = posIn.offset(facingIn).toImmutable(); return
     }
 
-    HeatRenderer.addLight("debug", new LineLightSource(new PosMc3IM(TestGroovyClass.lastPoint), new PosMc3IM(posIn.offset(facingIn)), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1))
+    HeatRenderer.addLight("debug", new LineLightSource(new PosMc3IM(TestGroovyClass.lastPoint), new PosMc3IM(posIn.offset(facingIn)), HeatRenderer.HEAT_COLOR, 0.6F, 3.5F, 1))
     TestGroovyClass.lastPoint = null
 }
 

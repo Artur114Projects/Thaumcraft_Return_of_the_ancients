@@ -42,6 +42,9 @@ public class RotAConfigs {
     public static class ClientSettings {
         @Config.LangKey(ThaumRotA.MODID + ".cfg.sub.cs.usi")
         public boolean useStaticImageOnLoadingGui = false;
+
+        @Config.LangKey(ThaumRotA.MODID + ".cfg.sub.cs.lq")
+        public EnumLightQuality lightQuality = EnumLightQuality.HIGH;
     }
 
     public static class DifficultySettings {

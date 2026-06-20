@@ -126,6 +126,7 @@ public class AncientLayer1Client extends AncientLayer1 {
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         this.pos = BananaMC.chunkPosFromLong(nbt.getLong("pos"));
+        this.deSerialiseMap(nbt.getCompoundTag("map"));
         this.posIndex = nbt.getInteger("posIndex");
         this.size = nbt.getInteger("size");
         this.seed = nbt.getLong("seed");
@@ -135,7 +136,5 @@ public class AncientLayer1Client extends AncientLayer1 {
         for (int i = 0; i != list.tagCount(); i++) {
             this.playersState.add(list.getStringTagAt(i));
         }
-
-        this.mapData = nbt.getCompoundTag("map");
     }
 }

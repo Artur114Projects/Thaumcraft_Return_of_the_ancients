@@ -209,6 +209,10 @@ public class StrPos {
             return this.setPos((int) (data), (int) (data >> 32));
         }
 
+        public MutableStrPos fromIndex(int index, int mapSize) {
+            return this.setPos(index % mapSize, index / mapSize);
+        }
+
         @Override
         public StrPos toImmutable() {
             return new StrPos(this.getX(), this.getY());

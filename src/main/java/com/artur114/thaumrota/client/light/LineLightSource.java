@@ -99,6 +99,16 @@ public class LineLightSource implements ILightSource {
                 buffer.put((float) (this.to.y() + 0.5F - Particle.interpPosY));
                 buffer.put((float) (this.to.z() + 0.5F - Particle.interpPosZ));
                 break;
+            case 4:
+                buffer.put((float) (Math.min(this.from.x(), this.to.x()) + 0.5F - (this.range * 1.8) - Particle.interpPosX));
+                buffer.put((float) (Math.min(this.from.y(), this.to.y()) + 0.5F - (this.range * 1.8) - Particle.interpPosY));
+                buffer.put((float) (Math.min(this.from.z(), this.to.z()) + 0.5F - (this.range * 1.8) - Particle.interpPosZ));
+                break;
+            case 5:
+                buffer.put((float) (Math.max(this.from.x(), this.to.x()) + 0.5F + (this.range * 1.8) - Particle.interpPosX));
+                buffer.put((float) (Math.max(this.from.y(), this.to.y()) + 0.5F + (this.range * 1.8) - Particle.interpPosY));
+                buffer.put((float) (Math.max(this.from.z(), this.to.z()) + 0.5F + (this.range * 1.8) - Particle.interpPosZ));
+                break;
         }
     }
 

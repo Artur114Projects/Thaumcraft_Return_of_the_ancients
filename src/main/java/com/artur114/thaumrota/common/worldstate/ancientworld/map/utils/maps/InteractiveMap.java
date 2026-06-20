@@ -3,10 +3,8 @@ package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.maps;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.EnumRotate;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.IStructureType;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrPos;
-import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructure;
-import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructureInteractive;
-import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructureMultiChunk;
-import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructureSerializable;
+import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrTypesRegistry;
+import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.*;
 import com.artur114.bananalib.mc.nbt.IReadFromNBT;
 import com.artur114.bananalib.mc.nbt.IWriteToNBT;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,11 +13,14 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFromNBT {
+    private static final Logger log = LogManager.getLogger("ThaumRotA/AncientMap");
     private final Map<Class<IStructure>, List<IStructure>> structuresDictionary = new HashMap<>();
     private NBTTagCompound syncData = null;
     private final ChunkPos center;
@@ -103,8 +104,26 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
+        NBTTagList map = nbt.getTagList("allMap", 10);
         NBTTagList list = nbt.getTagList("strSerializable", 10);
         StrPos.MutableStrPos pos = new StrPos.MutableStrPos();
+
+        if (map.tagCount() != this.area()) {
+            log.warn("Failed to load map from NBT"); return;
+        }
+
+        for (int i = 0; i != this.area(); i++) {
+            NBTTagCompound str = map.getCompoundTagAt(i);
+
+            if (str.getBoolean("void")) {
+                continue;
+            }
+
+            pos.fromIndex(i, this.size);
+            IStructure structure = StrTypesRegistry.typeFromName(str.getString("type")).create(EnumRotate.valueOf(str.getString("rotate")), pos.toImmutable());
+            structure.setYPos(str.getInteger("yPos"));
+            this.insetStructure(structure);
+        }
 
         for (int i = 0; i != list.tagCount(); i++) {
             NBTTagCompound data = list.getCompoundTagAt(i);
@@ -114,10 +133,13 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
                 ((IStructureSerializable) str).readFromNBT(data.getCompoundTag("data"));
             }
         }
+
+        foundAndBindInteractiveS();
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+        StrPos.MutableStrPos pos = new StrPos.MutableStrPos();
         NBTTagList list = new NBTTagList();
         for (IStructureSerializable serializable : this.foundStructures(IStructureSerializable.class)) {
             NBTTagCompound str = new NBTTagCompound();
@@ -125,6 +147,20 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
             str.setLong("pos", serializable.pos().asLong());
             list.appendTag(str);
         }
+        NBTTagList data = new NBTTagList();
+        for (int i = 0; i != this.area(); i++) {
+            NBTTagCompound str = new NBTTagCompound();
+            IStructure structure = this.structure(pos.fromIndex(i, this.size));
+            if (structure == null || structure instanceof IStructureMultiChunk.IStructureSegment) {
+                str.setBoolean("void", true);
+            } else {
+                str.setInteger("yPos", structure.yPos());
+                str.setString("rotate", structure.rotate().name());
+                str.setString("type", StrTypesRegistry.nameOfType(structure.type()));
+            }
+            data.appendTag(str);
+        }
+        nbt.setTag("allMap", data);
         nbt.setTag("strSerializable", list);
         return nbt;
     }

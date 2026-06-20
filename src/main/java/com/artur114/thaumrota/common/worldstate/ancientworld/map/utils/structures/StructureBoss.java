@@ -1,6 +1,11 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures;
 
+import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import com.artur114.bananalib.mc.math.m3d.vec.VecMc3D;
+import com.artur114.thaumrota.client.light.ILightSource;
+import com.artur114.thaumrota.client.light.LineLightSource;
+import com.artur114.thaumrota.client.light.PointLightSource;
+import com.artur114.thaumrota.client.render.fx.HeatRenderer;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.EnumMultiChunkStrType;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.EnumRotate;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.MultiChunkStrForm;
@@ -186,6 +191,62 @@ public class StructureBoss extends StructureMultiChunk implements IStructureInte
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         nbt.setBoolean("isBossDead", this.isBossDead);
         return nbt;
+    }
+
+    @Override
+    protected void addLights(List<ILightSource> list) {
+        // this is generated, don't scare
+        list.add(new LineLightSource(new PosMc3IM(-1, 22, -15), new PosMc3IM(-1, 4, -15), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(19, 4, -15), new PosMc3IM(19, 22, -15), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(29, 4, -14), new PosMc3IM(29, 23, -14), HeatRenderer.HEAT_COLOR, 0.2F, 4.0F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(9, 4, -15), new PosMc3IM(9, 22, -15), HeatRenderer.HEAT_COLOR, 0.2F, 4.0F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(30, 4, 7), new PosMc3IM(30, 22, 7), HeatRenderer.HEAT_COLOR, 0.2F, 4.0F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(29, 4, 28), new PosMc3IM(29, 22, 28), HeatRenderer.HEAT_COLOR, 0.2F, 4.0F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(9, 4, 29), new PosMc3IM(9, 22, 29), HeatRenderer.HEAT_COLOR, 0.2F, 4.0F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(-11, 4, 28), new PosMc3IM(-11, 22, 28), HeatRenderer.HEAT_COLOR, 0.2F, 4.0F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(-12, 4, 7), new PosMc3IM(-12, 22, 7), HeatRenderer.HEAT_COLOR, 0.2F, 4.0F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(30, 4, 18), new PosMc3IM(30, 22, 18), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(30, 22, -4), new PosMc3IM(30, 4, -4), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(19, 4, 29), new PosMc3IM(19, 22, 29), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(-1, 22, 29), new PosMc3IM(-1, 4, 29), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(-12, 4, 18), new PosMc3IM(-12, 22, 18), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(13, 24, 3), new PosMc3IM(11, 21, 5), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(11, 21, 9), new PosMc3IM(13, 24, 11), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(7, 21, 9), new PosMc3IM(5, 24, 11), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(7, 21, 5), new PosMc3IM(5, 24, 3), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(-14, 6, -4), new PosMc3IM(-14, 2, -4), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(-14, 2, -13), new PosMc3IM(-14, 6, -13), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));
+        list.add(new PointLightSource(new PosMc3IM(12, 3, 10), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(12, 3, 4), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(6, 3, 4), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(6, 3, 10), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(7, 19, 5), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(7, 19, 9), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(11, 19, 9), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(11, 19, 5), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(-12, 2, -7), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(-12, 2, -10), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(-10, 2, -12), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(-10, 2, -5), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(7, 24, -8), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(11, 24, -8), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(17, 24, -8), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(24, 24, -8), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(24, 24, -2), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(24, 24, 5), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(24, 24, 9), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(24, 24, 16), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(24, 24, 22), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(17, 24, 22), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(11, 24, 22), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(7, 24, 22), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(1, 24, 22), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(-6, 24, 22), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(-6, 24, 16), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(-6, 24, 9), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(-6, 24, 5), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(-6, 24, -8), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
+        list.add(new PointLightSource(new PosMc3IM(1, 24, -8), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
     }
 
     public static class Form extends MultiChunkStrForm {

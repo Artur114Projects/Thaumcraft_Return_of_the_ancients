@@ -5,11 +5,13 @@ import com.artur114.bananalib.util.graphs.BananaGraphs;
 import com.artur114.thaumrota.client.light.ILightSource;
 import com.artur114.thaumrota.client.render.fx.HeatRenderer;
 import com.artur114.thaumrota.client.util.LightCompressor;
+import com.artur114.thaumrota.common.config.RotAConfig;
+import com.artur114.thaumrota.common.config.client.EnumFXQuality;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrPos;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructure;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.utils.AncientWorldPlayer;
-import com.artur114.thaumrota.client.gui.CoolLoadingGui;
+import com.artur114.thaumrota.client.gui.LoadingGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.init.SoundEvents;
@@ -51,30 +53,27 @@ public class AncientLayer1Client extends AncientLayer1 {
             this.player.player.playSound(SoundEvents.ENTITY_PLAYER_BIG_FALL, 1.0F, 1.0F); this.isPlayerWasHigh = false;
         }
 
-        IStructure curr = this.player.currentRoom();
-        if (curr != null) {
-            StrPos pos = curr.pos();
+        StrPos pos = this.player.calculatePosOnMap(this.pos, this.size);
 
-            if (this.lightMap.isEmpty()) {
-                this.compileLightMap();
-            }
+        if (this.lightMap.isEmpty()) {
+            this.compileLightMap();
+        }
 
-            if (!pos.equals(this.lastPlayerPos)) {
-                this.lastPlayerPos = pos;
-                HeatRenderer.clearLight("ancient_world");
-                HeatRenderer.addLight("ancient_world", this.lightMap.get(pos));
-            }
+        if (!pos.equals(this.lastPlayerPos)) {
+            this.lastPlayerPos = pos;
+            HeatRenderer.clearLight("ancient_world");
+            HeatRenderer.addLight("ancient_world", this.lightMap.get(pos));
         }
     }
 
     protected void onBuildFinish() {
-        if (this.mc.currentScreen instanceof CoolLoadingGui) {
-            ((CoolLoadingGui) this.mc.currentScreen).close();
+        if (this.mc.currentScreen instanceof LoadingGui) {
+            ((LoadingGui) this.mc.currentScreen).close();
         }
     }
 
     protected void onBuildStart() {
-        this.mc.displayGuiScreen(new CoolLoadingGui(this));
+        this.mc.displayGuiScreen(new LoadingGui(this));
     }
 
     protected void updatePlayersState(NBTTagList list) {
@@ -110,7 +109,8 @@ public class AncientLayer1Client extends AncientLayer1 {
             IStructure str = this.map.structure(pos);
             if (str != null) {
                 List<ILightSource> ret = new ArrayList<>();
-                BananaGraphs.bfs(pos, this.map::connectedStructures, p -> p.distanceM(pos) <= 4 && (p.getX() == pos.getX() || p.getY() == pos.getY() || p.distanceM(pos) <= 2), (p) -> {
+                EnumFXQuality q = RotAConfig.client.graphicQuality;
+                BananaGraphs.bfs(pos, this.map::connectedStructures, p -> p.distanceM(pos) <= q.bsfDistance() && (p.getX() == pos.getX() || p.getY() == pos.getY() || p.distanceM(pos) <= q.bsfDirectDistance()), (p) -> {
                     List<ILightSource> list = rawMap.get(p);
                     if (list != null) ret.addAll(list);
                     return false;

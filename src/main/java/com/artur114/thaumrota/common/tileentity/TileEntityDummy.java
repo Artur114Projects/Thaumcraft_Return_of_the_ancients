@@ -13,7 +13,7 @@ import java.util.List;
 
 public class TileEntityDummy extends TileBase implements ITileMultiBBProvider {
     protected AxisAlignedBB alignedBB = Block.FULL_BLOCK_AABB;
-    protected BlockPos parent = null;
+    protected BlockPos parent = BlockPos.ORIGIN;
 
     public void setBoundingBox(AxisAlignedBB alignedBB) {
         this.alignedBB = alignedBB;

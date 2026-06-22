@@ -1,11 +1,17 @@
 package com.artur114.thaumrota.asm.transform;
 
 import com.artur114.bananalib.asm.AbstractASMTransformer;
+import com.artur114.bananalib.asm.BananaASM;
 import com.artur114.bananalib.asm.patterns.InsnPatBuilder;
 import com.artur114.bananalib.asm.patterns.InsnPattern;
 import com.artur114.bananalib.asm.tree.ClassNodeAdv;
 import com.artur114.bananalib.asm.util.IASMLogger;
+import com.artur114.bananalib.asm.util.InsnInterval;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.InsnList;
+
+import java.util.List;
 
 public class TileStructureTransformer extends AbstractASMTransformer {
 

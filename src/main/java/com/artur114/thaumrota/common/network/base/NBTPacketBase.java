@@ -6,7 +6,6 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public abstract class NBTPacketBase implements IMessage {
-
     protected NBTTagCompound nbt;
 
     public NBTPacketBase() {}

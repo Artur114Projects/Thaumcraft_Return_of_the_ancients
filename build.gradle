@@ -51,7 +51,7 @@ test {
 }
 
 processResources {
-    Map replaceProperties = [mod_version: mod_version]
+    Map replaceProperties = [mod_version: mod_version, build_id: new Date().format("dd'.'MM'.'yyy'-'HH:mm:ss")]
     List includeFiles = ["mcmod.info"]
 
     inputs.properties replaceProperties
@@ -78,3 +78,4 @@ jar {
 }
 
 apply from: file("scripts/minecraft.gradle")
+apply from: file("scripts/thaumcraft.gradle")

@@ -117,6 +117,11 @@ public class ShaderProgram {
         GL20.glUniform1i(this.uniformId(name), value);
     }
 
+    public void uniform1(String name, FloatBuffer buffer) {
+        this.checkEnabled();
+        GL20.glUniform1(this.uniformId(name), buffer);
+    }
+
     public void uniform3(String name, FloatBuffer buffer) {
         this.checkEnabled();
         GL20.glUniform3(this.uniformId(name), buffer);

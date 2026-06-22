@@ -22,7 +22,7 @@ public class AncientLayer1StaticManager {
 
     public static @Nullable AncientLayer1 sectorForPlayer(EntityPlayer player) {
         if (player == null) return null;
-        if (player.world.provider.getDimension() != InitDimensions.ANCIENT_WORLD_ID) return null;
+        if (player.dimension != InitDimensions.ANCIENT_WORLD_ID) return null;
         IAncientLayer1Manager manager = player.world.getCapability(InitCapabilities.ANCIENT_LAYER_1_MANAGER, null);
 
         if (manager == null) {

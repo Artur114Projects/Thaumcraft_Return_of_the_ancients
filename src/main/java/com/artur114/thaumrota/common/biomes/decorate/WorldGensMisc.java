@@ -1,6 +1,7 @@
 package com.artur114.thaumrota.common.biomes.decorate;
 
 import com.artur114.bananalib.math.BananaMath;
+import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.thaumrota.common.blocks.BlockTaintVoidStone;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitBiomes;
@@ -133,7 +134,7 @@ public class WorldGensMisc {
             }
             UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(position);
             blockPos.add(rand.nextInt(16), 0, rand.nextInt(16));
-            if (MiscHandler.getBiomeIdOnPos(worldIn, blockPos) != Biome.getIdForBiome(InitBiomes.TAINT_WASTELAND)) {
+            if (BananaMC.biomeIdOnPos(worldIn, blockPos) != Biome.getIdForBiome(InitBiomes.TAINT_WASTELAND)) {
                 UltraMutableBlockPos.release(blockPos);
                 return false;
             }

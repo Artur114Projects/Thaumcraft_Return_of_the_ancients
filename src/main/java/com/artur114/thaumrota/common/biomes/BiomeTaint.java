@@ -160,7 +160,7 @@ public class BiomeTaint extends BBiomeBase implements ILoadStageInit {
             }
         }
 
-        if (MiscHandler.fastCheckChunkContainsBiomeType(chunk, InitBiomes.TAINT_TYPE_L)) {
+        if (BananaMC.chunkContainsBiomeTypeOnCorners(chunk, InitBiomes.TAINT_TYPE_L)) {
             decorateChunkNormal(worldIn, random,  blockPos);
         }
 

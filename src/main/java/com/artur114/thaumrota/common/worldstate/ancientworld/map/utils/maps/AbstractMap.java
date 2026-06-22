@@ -47,6 +47,9 @@ public abstract class AbstractMap {
         if (pos.isOutOfBounds(this.size)) return ret;
         IStructure structure = this.structure(pos);
         if (structure == null) return ret;
+        if (structure instanceof IStructureMultiChunk.IStructureSegment && structure.ports().length == 0) {
+            return this.connectedStructures(((IStructureMultiChunk.IStructureSegment) structure).parent().pos());
+        }
 
         if (structure instanceof IStructureMultiChunk) {
             for (IStructure segment : ((IStructureMultiChunk) structure).segmentsWithPorts()) {
@@ -60,7 +63,11 @@ public abstract class AbstractMap {
             StrPos offsetPos = pos.offset(face);
             IStructure neighbor = this.structure(offsetPos);
             if (neighbor != null && neighbor.canConnect(face.getOppose())) {
-                ret.add(offsetPos);
+                if (neighbor instanceof IStructureMultiChunk.IStructureSegment) {
+                    ret.add(((IStructureMultiChunk.IStructureSegment) neighbor).parent().pos());
+                } else {
+                    ret.add(offsetPos);
+                }
             }
         }
 

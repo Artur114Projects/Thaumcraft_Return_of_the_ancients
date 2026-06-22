@@ -1,9 +1,10 @@
 package com.artur114.thaumrota.common.network;
 
+import com.artur114.bananalib.mc.BananaMC;
+import com.artur114.thaumrota.common.util.CapUtils;
 import com.artur114.thaumrota.common.worldstate.blockprotect.IProtectedChunk;
 import com.artur114.thaumrota.common.worldstate.blockprotect.client.IClientProtectedChunk;
 import com.artur114.thaumrota.common.init.InitCapabilities;
-import com.artur114.thaumrota.common.handlers.MiscHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,7 +29,7 @@ public class ClientPacketSyncProtectedChunk implements IMessage {
         this.chunk = chunkIn;
         this.data = dataIn;
 
-        this.data.setLong("chunkPos", MiscHandler.chunkPosAsLong(chunkIn));
+        this.data.setLong("chunkPos", BananaMC.chunkPosAsLong(chunkIn));
     }
 
     @Override
@@ -37,7 +38,9 @@ public class ClientPacketSyncProtectedChunk implements IMessage {
 
         this.data = ByteBufUtils.readTag(buf);
 
-        this.chunk = MiscHandler.chunkPosFromLong(this.data.getLong("chunkPos"));
+        if (this.data != null) {
+            this.chunk = BananaMC.chunkPosFromLong(this.data.getLong("chunkPos"));
+        }
     }
 
     @Override
@@ -57,10 +60,9 @@ public class ClientPacketSyncProtectedChunk implements IMessage {
                 Minecraft mc = Minecraft.getMinecraft();
                 if (mc.world.provider.getDimension() == message.dimension) {
                     Chunk chunk = mc.world.getChunkFromChunkCoords(message.chunk.x, message.chunk.z);
-                    IProtectedChunk protectedChunk = chunk.getCapability(InitCapabilities.PROTECTED_CHUNK, null);
-                    if (protectedChunk instanceof IClientProtectedChunk) {
-                        ((IClientProtectedChunk) protectedChunk).processSyncData(message.data);
-                    }
+                    CapUtils.capability(chunk, InitCapabilities.PROTECTED_CHUNK, IClientProtectedChunk.class).ifPresent(protectedChunk -> {
+                        protectedChunk.processSyncData(message.data);
+                    });
                 }
             });
             return null;

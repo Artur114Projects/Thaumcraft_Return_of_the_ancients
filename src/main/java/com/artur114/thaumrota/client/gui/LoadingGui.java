@@ -1,233 +1,276 @@
 package com.artur114.thaumrota.client.gui;
 
-import com.artur114.thaumrota.client.gui.gif.GifSTime;
+import com.artur114.thaumrota.common.worldstate.ancientworld.system.client.AncientLayer1Client;
+import com.artur114.thaumrota.client.gui.buttons.RotAButton;
+import com.artur114.thaumrota.client.gui.gif.GifWithTextureAtlas;
+import com.artur114.thaumrota.client.util.RenderHandler;
 import com.artur114.thaumrota.main.ThaumRotA;
-import com.artur114.thaumrota.common.config.RotAConfigs;
 import com.artur114.thaumrota.common.network.ServerPacketTpToHome;
+import com.artur114.thaumrota.common.util.EnumAsset;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Random;
 
-// TODO: Удалить!
-@Deprecated
+// TODO: Сделать картинку не изменяемой в зависимости от соотношения сторон
 public class LoadingGui extends GuiScreen {
     private GuiButton button;
-    private GifSTime gif;
+    protected final ResourceLocation background;
+    private final GifWithTextureAtlas gif_2_0 = new GifWithTextureAtlas("loading", 20, 8, 8 * 12, 8, 8);
+    protected static final ResourceLocation blur = EnumAsset.TEXTURES_GUI.png("v.png");
+    protected final AncientLayer1Client layer1Client;
     private final int Red = 16711680;
-    private final int Yellow = 16776960;
+    private final int Yellow = 0xffff40;
     private final int White = 16777215;
-    private final int WhiteD = 0xf5f5f5;
-    private final int Blue = 0xBFFF;
     private final int Aqua = 0x00ffff;
-    private static byte PHASE = -1;
-    private static byte percentages = 0;
-    private final boolean isTeam;
-    private boolean isDrawTeam = false;
-    private static String[] players = new String[0];
-    private static ResourceLocation location;
-    private byte h = 0;
-    private byte t = 0;
-    private byte iaDrawESCStringTime = 0;
-    private byte iaDrawESCStringTime1 = 0;
-    private String ts = "";
-    private static final String[] constantNamesTranslate = new String[] {"rota.l-gui.generate.stage.0", "rota.l-gui.generate.stage.1", "rota.l-gui.generate.stage.2", "rota.l-gui.generate.stage.3", "rota.l-gui.generate.stage.4"};
-    private final String[] names = new String[constantNamesTranslate.length];
-    public boolean isDrawESCString = false;
-    public boolean iaESCString = false;
-
-    public LoadingGui(boolean isTeam) {
-        this.isTeam = isTeam;
-        if (!RotAConfigs.ClientSettings.useStaticImageOnLoadingGui) {
-            gif = new GifSTime(ThaumRotA.MODID + ":textures/gui/gif/gen_gif/gen_gif_v2-", 18, 15, true);
-        }
-        location = new ResourceLocation( ThaumRotA.MODID + ":textures/gui/loading_gui_background.png");
-        for (int i = 0; i != constantNamesTranslate.length; i++) {
-            names[i] = I18n.format(constantNamesTranslate[i]);
-        }
-    }
+    protected ScaledResolution resolution;
+    protected Random rand = new Random();
+    protected boolean isTpToHome = false;
+    protected boolean isDrawTeam = false;
+    protected boolean isClosing = false;
+    protected float prevOpeningTime = 0;
+    protected float prevClosingTime = 0;
+    protected boolean isOpening = true;
+    protected boolean isDraw = false;
+    protected float closingTime = 5;
+    protected float openingTime = 0;
+    protected int buttonTime = 0;
+    protected boolean isTeam;
+    protected String lore;
 
 
-    public static void injectPhase(byte PHASE) {
-        LoadingGui.PHASE = PHASE;
-    }
-
-    public static void injectPercentages(byte percentages) {
-        LoadingGui.percentages = percentages;
-    }
-
-    public static void injectPlayers(String[] players) {
-        LoadingGui.players = players;
-    }
-
-    @Override
-    public void initGui() {
-        super.initGui();
-        if (isTeam) {
-            this.button = new GuiButton(0, 0, 0, fontRenderer.getStringWidth(I18n.format("rota.l-gui.button.team")) + 16, 20, "Team");
-            this.buttonList.add(this.button);
-        } else {
-            isDrawTeam = false;
-        }
+    public LoadingGui(AncientLayer1Client layer1Client) {
+        this.layer1Client = layer1Client;
+        int id = rand.nextInt(3);
+        background = EnumAsset.TEXTURES_GUI.png("/loading_gui_backgrounds/background" + id);
+        int loreId = rand.nextInt(2);
+        lore = I18n.format("rota.l-gui.lore." + loreId);
+        this.isTeam = layer1Client.playersState().size() > 1;
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == 0) {
+            button.enabled = false;
             isDrawTeam = !isDrawTeam;
         }
     }
 
     @Override
     public void updateScreen() {
-        if (iaESCString) {
-            iaDrawESCStringTime++;
-            iaDrawESCStringTime1++;
-        }
-        if (iaDrawESCStringTime == 80) {
-            iaESCString = false;
-            iaDrawESCStringTime = 0;
-        }
-        if (iaDrawESCStringTime1 == 10) {
-            iaDrawESCStringTime1 = 0;
-            isDrawESCString = !isDrawESCString;
-        }
-        if (h == 20) {
-            h = 0;
-        }
-        if (h % 10 == 0) {
-            t++;
-        }
-        switch (t) {
-            case 0:
-                ts = "";
-                break;
-            case 1:
-                ts = ".";
-                break;
-            case 2:
-                ts = "..";
-                break;
-            case 3:
-                ts = "...";
-                break;
-            case 4:
-                t = 0;
-                break;
-        }
-        h++;
         super.updateScreen();
+        if (isDraw) {
+            if (button != null) {
+                if (!button.enabled) {
+                    buttonTime++;
+                    if (buttonTime >= 2) {
+                        buttonTime = 0;
+                        button.enabled = true;
+                    }
+                }
+            }
+
+            prevOpeningTime = openingTime;
+            prevClosingTime = closingTime;
+
+            if (isOpening) {
+                openingTime += 0.5F;
+                if (openingTime >= 10) {
+                    isOpening = false;
+                }
+            }
+
+            if (isClosing) {
+                closingTime -= 0.5F;
+                if (closingTime <= 0) {
+                    mc.displayGuiScreen(null);
+                    if (isTpToHome) {
+                        ThaumRotA.NETWORK.sendToServer(new ServerPacketTpToHome());
+                    }
+                    isClosing = false;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void initGui() {
+        super.initGui();
+        resolution = new ScaledResolution(mc);
+        if (isTeam) {
+            this.button = new RotAButton(0, 0, 0, fontRenderer.getStringWidth(I18n.format("rota.l-gui.button.team")) + 16, 20, I18n.format("rota.l-gui.button.team"), new ResourceLocation(ThaumRotA.MODID + ":textures/gui/tra_button.png"));
+            this.buttonList.add(this.button);
+        }
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        this.drawDefaultBackground();
-        if (!RotAConfigs.ClientSettings.useStaticImageOnLoadingGui) {
-            gif.drawInFullScreen(mc, width, height);
-        } else {
-            mc.getTextureManager().bindTexture(location);
-            drawModalRectWithCustomSizedTexture(0, 0, 0, 0, width, height, width, height);
-        }
+        drawDefaultBackground();
+        drawBackground();
+        drawGif();
         super.drawScreen(mouseX, mouseY, partialTicks);
-
-        int hei = height / 3;
-        switch (PHASE) {
-            case 0: {
-                String text = names[0];
-                int wid = ((width / 2) - (fontRenderer.getStringWidth(text) / 2));
-                fontRenderer.drawStringWithShadow(text + ts, wid, hei, White);
-            }break;
-            case 1: {
-                String text = names[1] + " " + percentages + "%";
-                int wid = ((width / 2) - (fontRenderer.getStringWidth(text) / 2));
-                fontRenderer.drawStringWithShadow(text, wid, hei, White);
-            }break;
-            case 2: {
-                String text = names[2] + " " + percentages + "%";
-                int wid = ((width / 2) - (fontRenderer.getStringWidth(text) / 2));
-                fontRenderer.drawStringWithShadow(text, wid, hei, White);
-            }break;
-            case 3: {
-                String text = names[3];
-                int wid = ((width / 2) - (fontRenderer.getStringWidth(text) / 2));
-                fontRenderer.drawStringWithShadow(text + ts, wid, hei, White);
-            }break;
-            case 4: {
-                String text = names[4];
-                int wid = ((width / 2) - (fontRenderer.getStringWidth(text) / 2));
-                fontRenderer.drawStringWithShadow(text, wid, hei, White);
-            }break;
-            case -1:{
-                String nameDefault = "ERROR";
-                int wid = ((width / 2) - (fontRenderer.getStringWidth(nameDefault) / 2));
-                fontRenderer.drawStringWithShadow(nameDefault, wid, hei, Red);
-            }break;
-        }
-
-        if (isDrawESCString) {
-            String s = I18n.format(ThaumRotA.MODID + ".gui.esc");
-            int hieE = (int) (height / 1.25);
-            int widE = ((width / 2) - (fontRenderer.getStringWidth(s) / 2));
-            fontRenderer.drawStringWithShadow(s, widE, hieE, Red);
-        }
+        drawLore();
 
         if (isDrawTeam) {
             drawTeamList();
         }
-    }
-    
-    private void drawTeamList() {
-        for (byte i = 0; i != players.length ; i++) {
-            String text = (i + 1) + ": ";
-            int color0 = White;
-            if (players[i].isEmpty()) {
-                color0 = Red;
-            }
-            int x = 1;
-            int y = 28;
-            fontRenderer.drawStringWithShadow(text, x, y + (10 * i), color0);
-            int w = fontRenderer.getStringWidth(text);
-            fontRenderer.drawStringWithShadow(players[i], x + w, y + (10 * i), Aqua);
-        }
-    }
 
-    private void resetToDefault() {
-        players = new String[0];
-        percentages = 0;
-        PHASE = -1;
+        if (isOpening) {
+            drawDark(1.0F - RenderHandler.interpolate(prevOpeningTime, openingTime, partialTicks) / 10.0F);
+        } else if (isClosing) {
+            drawDark(1.0F - RenderHandler.interpolate(prevClosingTime, closingTime, partialTicks) / 5.0F);
+        }
+
+        isDraw = true;
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (keyCode == Keyboard.KEY_ESCAPE) {
-            if (!iaESCString) {
-                iaESCString = true;
-            } else {
-                iaESCString = false;
-                ThaumRotA.NETWORK.sendToServer(new ServerPacketTpToHome());
-                mc.displayGuiScreen(null);
-            }
+            isTpToHome = true;
+            close();
             return;
         }
         super.keyTyped(typedChar, keyCode);
     }
 
-    @Override
-    protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
-        super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
+    public void close() {
+        isClosing = true;
     }
 
-    @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+    protected void drawLore() {
+        int scale = resolution.getScaleFactor();
+        int y = (int) (height - ((height / 10) * 1.2F));
+        float scaleText = 1.0F;
+        float scaleMainText = 1.2F;
+        int x = width / 40;
+
+        if (scale == 3) {
+            scaleText = 0.6F;
+            scaleMainText = 1.0F;
+            y = (int) (height - ((height / 6) * 1.0F));
+        } else if (scale == 2) {
+
+        } else if (scale == 1) {
+            y = (int) (height - ((height / 20) * 1.6F));
+            scaleMainText = 1.6F;
+            scaleText = 1.2F;
+        }
+
+        drawScaledText("\u00A7n" + I18n.format("rota.l-gui.lore.title"), x, y, Yellow, scaleMainText);
+
+        y += (int) (5 * scaleMainText);
+        List<String> text = fontRenderer.listFormattedStringToWidth(lore, (int) (((width / 2) - (width / 40) * 2) * (2 - scaleText)));
+        for (int i = 0; i != text.size(); i++) {
+            drawScaledText(text.get(i), x, y + 10 * (i + 1), White, scaleText);
+        }
     }
 
-    @Override
-    public void onGuiClosed() {
-        isDrawTeam = false;
+    protected void drawScaledText(String text, int x, int y, int color, float scale) {
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, 0);
+        GlStateManager.scale(scale, scale, 1.0F);
+        fontRenderer.drawStringWithShadow(text, 0, 0, color);
+        GlStateManager.popMatrix();
+    }
+
+    private void drawTeamList() {
+        List<String> players = this.layer1Client.playersState();
+
+        for (byte i = 0; i != players.size() ; i++) {
+            String text = (i + 1) + ": ";
+            int color0 = White;
+            int color1 = Aqua;
+            int color2 = White;
+            String[] split = players.get(i).split("\\|");
+            if (players.get(i).isEmpty() || split.length > 1) {
+                color0 = Red;
+                color1 = Red;
+                color2 = Red;
+            }
+            int x = 1;
+            int y = 28;
+            String resText = split[0];
+            fontRenderer.drawStringWithShadow(text, x, y + (10 * i), color0);
+            int w = fontRenderer.getStringWidth(text);
+            fontRenderer.drawStringWithShadow(resText, x + w + fontRenderer.getStringWidth(" ") + 1, y + (10 * i), color1);
+            fontRenderer.drawStringWithShadow("[",x + w, y + (10 * i), color2);
+            fontRenderer.drawStringWithShadow("]",x + w + 2 + fontRenderer.getStringWidth(" " + resText), y + (10 * i), color2);
+            if (split.length == 2) {
+                fontRenderer.drawStringWithShadow(": " + I18n.format(split[1]), x + w + 2 + fontRenderer.getStringWidth("  " + resText), y + (10 * i), color0);
+            }
+        }
+    }
+
+
+    protected void drawDark(float alpha) {
+        GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.disableTexture2D();
+        GlStateManager.color(0, 0, 0, alpha);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+        bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+        bufferBuilder.pos(0, height, 0).color(0, 0, 0, alpha).endVertex();
+        bufferBuilder.pos(width, height, 0).color(0, 0, 0, alpha).endVertex();
+        bufferBuilder.pos(width, 0, 0).color(0, 0, 0, alpha).endVertex();
+        bufferBuilder.pos(0, 0, 0).color(0, 0, 0, alpha).endVertex();
+        tessellator.draw();
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlpha();
+    }
+
+    protected void drawBackground() {
+        mc.getTextureManager().bindTexture(background);
+        drawOnFullScreen(width, height);
+
+        GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
+        mc.getTextureManager().bindTexture(blur);
+        drawOnFullScreen(width, height);
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlpha();
+    }
+
+
+    protected void drawGif() {
+        int x = width - width / 30;
+        int y = height - height / 10;
+        final int baseSize = 8;
+        int size = 16;
+        if (resolution.getScaleFactor() == 3) {
+            size = 10;
+            y = height - height / 12;
+        } else if (resolution.getScaleFactor() == 1) {
+            y = height - height / 20;
+        }
+        float scale = (float) size / baseSize;
+
+        GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
+
+        gif_2_0.draw(mc, x, y, scale);
+
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlpha();
+    }
+
+    protected void drawOnFullScreen(int screenWidth, int screenHeight) {
+        drawModalRectWithCustomSizedTexture(0, 0, 0, 0, screenWidth, screenHeight, screenWidth, screenHeight);
     }
 
     @Override

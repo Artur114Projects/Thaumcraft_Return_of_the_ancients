@@ -7,6 +7,9 @@ import com.artur114.thaumrota.client.fx.shader.ShaderRenderEngine;
 import com.artur114.thaumrota.client.init.InitShaders;
 import com.artur114.thaumrota.client.light.EnumLightType;
 import com.artur114.thaumrota.client.light.ILightSource;
+import com.artur114.thaumrota.common.config.RotAConfUpdateEvent;
+import com.artur114.thaumrota.common.config.RotAConfig;
+import com.artur114.thaumrota.common.config.client.EnumFXQuality;
 import com.artur114.thaumrota.common.init.InitDimensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -33,16 +36,24 @@ public class HeatRenderer {
     public static final Frustum FRUSTUM = new Frustum();
     public static final Color HEAT_COLOR = new Color(214, 111, 29);
     private static final @SuppressWarnings("unchecked") ListHeap<List<ILightSource>> heap = new ListHeap<List<ILightSource>>(new List[4], ArrayList::new);
-    private static final ShaderRender render = ShaderRender.of(InitShaders.TEST_SHADER).withMainTex().withDepthTex();
+    private static final ShaderRender render = ShaderRender.of(InitShaders.HEAT).withMainTex().withDepthTex();
     private static final Map<String, EnumMap<EnumLightType, List<ILightSource>>> lights = new HashMap<>();
     private static final Map<EnumLightType, List<ILightSource>> prepared = new HashMap<>();
     private static FloatBuffer buffer = BufferUtils.createFloatBuffer(64 * 3);
     private static final Map<Integer, Float> dimensions = new HashMap<>();
-    private static int maxRenderDist = 48;
+    private static EnumFXQuality lastPreset = RotAConfig.client.graphicQuality;
+    private static int maxRenderDist = 64;
     private static int maxLights = 48;
 
     public static void registerDim(int id, float globalHeat) {
         dimensions.put(id, globalHeat);
+    }
+
+    public static void setupPreset(EnumFXQuality quality) {
+        if (lastPreset == quality) return;
+        lastPreset = quality;
+        setMaxRenderDist(quality.renderDistance());
+        setMaxLights(quality.maxLight());
     }
 
     public static void setMaxRenderDist(int maxRenderDist) {
@@ -123,13 +134,19 @@ public class HeatRenderer {
 
     private static int sendToShader(EnumLightType type, ShaderProgram program) {
         List<ILightSource> sources = prepared.getOrDefault(type, Collections.emptyList());
+        if (sources.isEmpty()) return 0;
+        FloatBuffer buf = buffer;
         for (int i = 0; i != type.passCount(); i++) {
-            buffer.clear();
+            buf.clear();
             for (ILightSource source : sources) {
-                source.writeToBuff(i, buffer);
+                source.writeToBuff(i, buf);
             }
-            buffer.flip();
-            program.uniform3(type.nameForPass(i), buffer);
+            buf.flip();
+            if (i == 6) {
+                program.uniform1(type.nameForPass(i), buf);
+            } else {
+                program.uniform3(type.nameForPass(i), buf);
+            }
         }
         return sources.size();
     }
@@ -160,9 +177,16 @@ public class HeatRenderer {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void renderShaders(RenderWorldLastEvent evt) {
-        if (!dimensions.containsKey(Minecraft.getMinecraft().world.provider.getDimension())) {
+        int dim = Minecraft.getMinecraft().world.provider.getDimension();
+        if (!dimensions.containsKey(dim)) {
             prepared.clear();
             lights.clear();
+            return;
+        }
+        if ((maxLights == 0 || maxRenderDist == 0) && dimensions.get(dim) == 0) {
+            return;
+        }
+        if (RotAConfig.client.graphicQuality == EnumFXQuality.POTATO) {
             return;
         }
         ClippingHelperImpl.getInstance();
@@ -174,13 +198,19 @@ public class HeatRenderer {
             program.uniform("pointLightCount", point);
             program.uniform("lineLightCount", line);
             program.uniformInvMVPMatrix("invMVPMatrix");
-            program.uniform("globalHeat", dimensions.get(Minecraft.getMinecraft().world.provider.getDimension()));
+            program.uniform("globalHeat", dimensions.get(dim));
             program.uniform("time", (float) (ClientEventsHandler.GLOBAL_TICK_MANAGER.interpolatedGameTickCounter(evt.getPartialTicks()) / 8));
         });
     }
 
     @SubscribeEvent
     public static void clientTick(TickEvent.ClientTickEvent e) {
+        if (RotAConfig.client.graphicQuality.toInt() < 3) {
+            prepared.clear();
+            lights.clear();
+            return;
+        }
+
         EntityPlayer player = Minecraft.getMinecraft().player;
         World world = Minecraft.getMinecraft().world;
 
@@ -211,6 +241,11 @@ public class HeatRenderer {
             out.addAll(light);
             heap.release(light);
         }
+    }
+
+    @SubscribeEvent
+    public static void configChanged(RotAConfUpdateEvent e) {
+        setupPreset(RotAConfig.client.graphicQuality);
     }
 
     static {

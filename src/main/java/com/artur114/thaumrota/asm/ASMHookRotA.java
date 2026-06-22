@@ -2,8 +2,10 @@ package com.artur114.thaumrota.asm;
 
 import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.thaumrota.client.event.ClientEventsHandler;
-import com.artur114.thaumrota.common.config.RotAConfigs;
+import com.artur114.thaumrota.common.config.RotAConfig;
 import com.artur114.thaumrota.common.init.InitBiomes;
+import com.artur114.thaumrota.common.init.InitDimensions;
+import com.artur114.thaumrota.common.util.DevScriptsShell;
 import com.chaosthedude.naturescompass.util.BiomeSearchWorker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -13,6 +15,18 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 import thaumcraft.client.lib.events.RenderEventHandler;
 
 public class ASMHookRotA {
+    public static float hookGammaSetting() {
+        Minecraft mc = Minecraft.getMinecraft();
+        if (!RotAConfig.client.doInterceptGammaSetting) {
+            return mc.gameSettings.gammaSetting;
+        }
+        if (mc.player != null && (mc.player.dimension == InitDimensions.ANCIENT_WORLD_ID || BananaMC.biomeHasType(ClientEventsHandler.PLAYER_IN_BIOME_MANAGER.currentBiome, InitBiomes.TAINT_TYPE_L))) {
+            return 0;
+        } else {
+            return mc.gameSettings.gammaSetting;
+        }
+    }
+
     public static boolean isTaintLBiomeInPos(World world, BlockPos pos) {
         return BananaMC.biomeHasType(world.getChunkFromBlockCoords(pos).getBiomeArray()[(pos.getX() & 15) + (pos.getZ() & 15) * 16], InitBiomes.TAINT_TYPE_L);
     }
@@ -31,7 +45,7 @@ public class ASMHookRotA {
     }
 
     public static boolean isNotCanSearchBiome(BiomeSearchWorker bsw) {
-        return !RotAConfigs.Any.debugMode && BananaMC.biomeHasType(bsw.biome, InitBiomes.TAINT_TYPE);
+        return !DevScriptsShell.isDev() && BananaMC.biomeHasType(bsw.biome, InitBiomes.TAINT_TYPE);
     }
 
     public static void fixedFogDensityEvent(EntityViewRenderEvent.RenderFogEvent event) {

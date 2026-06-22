@@ -32,7 +32,7 @@ List debug = [
 AncientLayer1 sector = AncientLayer1StaticManager.sectorForPlayer(player)
 AncientLayer1 server = null
 try {
-    server = AncientLayer1StaticManager.sectorForPlayer(FMLCommonHandler.instance().minecraftServerInstance.getWorld(InitDimensions.ANCIENT_WORLD_ID).playerEntities[0])
+    server = AncientLayer1StaticManager.sectorForPlayer(FMLCommonHandler.instance().minecraftServerInstance.getWorld(player.dimension).playerEntities[0])
 } catch (Exception ignored) {}
 
 if (sector != null) {

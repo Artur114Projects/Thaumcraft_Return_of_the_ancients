@@ -14,13 +14,6 @@ public class TCRenderEventsTransformer extends AbstractASMTransformer {
     }
 
     @Override
-    public byte[] transform(IASMLogger logger, String className, byte[] bytecode) {
-        ClassNodeAdv clazz = BananaASM.createClassNode(bytecode);
-        this.transform(logger, className, clazz);
-        return BananaASM.bakeBytecode(clazz, ClassWriter.COMPUTE_MAXS);
-    }
-
-    @Override
     protected ClassNodeAdv transform(IASMLogger logger, String className, ClassNodeAdv clazz) {
         clazz.findMethods("fogDensityEvent").forEach(method -> {
             logger.debug("Injecting patches into method {}.{}{}", className, method.name, method.desc);

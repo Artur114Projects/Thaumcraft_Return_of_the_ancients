@@ -47,7 +47,6 @@ public class ItemDebugCarrot extends BItemBase {
 		super(name);
 		this.setMaxStackSize(1);
 		this.setContainerItem(this);
-		this.setMaxDamage(2);
 		this.setCreativeTab(ThaumRotA.CREATIVE_TAB);
 	}
 
@@ -107,7 +106,7 @@ public class ItemDebugCarrot extends BItemBase {
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		target.onKillCommand();
-		if (target.getHealth() > 0.0F) {
+		if (attacker.isSneaking() && target.getHealth() > 0.0F) {
 			target.setHealth(0.0F);
 			target.setDead();
 		}
@@ -116,7 +115,7 @@ public class ItemDebugCarrot extends BItemBase {
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		if (!player.world.isRemote && !entity.attackEntityFrom(DamageSource.causePlayerDamage(player), 1.0F)) {
+		if (!player.world.isRemote && player.isSneaking() && !entity.attackEntityFrom(DamageSource.causePlayerDamage(player), 1.0F)) {
 			entity.onKillCommand();
 			if (!entity.isDead && entity instanceof EntityLivingBase && ((EntityLivingBase) entity).getHealth() > 0.0F){
 				entity.setDead();

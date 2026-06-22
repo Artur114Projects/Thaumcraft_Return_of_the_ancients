@@ -109,6 +109,12 @@ public class LineLightSource implements ILightSource {
                 buffer.put((float) (Math.max(this.from.y(), this.to.y()) + 0.5F + (this.range * 1.8) - Particle.interpPosY));
                 buffer.put((float) (Math.max(this.from.z(), this.to.z()) + 0.5F + (this.range * 1.8) - Particle.interpPosZ));
                 break;
+            case 6:
+                Vec3DM vec = Vec3DM.obtain();
+                vec.set(this.to).subtract(this.from);
+                buffer.put((float) (1.0F / vec.lengthSq()));
+                Vec3DM.release(vec);
+                break;
         }
     }
 

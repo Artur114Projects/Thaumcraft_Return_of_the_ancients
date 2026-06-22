@@ -1,6 +1,9 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures;
 
+import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -18,12 +21,14 @@ public interface IStructureEntityManager extends IStructureInteractive {
             entity.setLocationAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
             entity.rotationYawHead = entity.rotationYaw;
             entity.renderYawOffset = entity.rotationYaw;
-            entity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entity)), null);
+            entity.onInitialSpawn(world.getDifficultyForLocation(pos), null);
             NBTTagCompound nbt = new NBTTagCompound();
             nbt.setLong("sessionId", this.sessionId());
             nbt.setLong("pos", this.pos().asLong());
             entity.getEntityData().setTag("AncientSystemData", nbt);
-            System.out.println(world.spawnEntity(entity));
+            IAttributeInstance attribute = entity.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
+            attribute.setBaseValue(attribute.getAttributeValue() * 3);
+            world.spawnEntity(entity);
             entity.playLivingSound();
         }
     }

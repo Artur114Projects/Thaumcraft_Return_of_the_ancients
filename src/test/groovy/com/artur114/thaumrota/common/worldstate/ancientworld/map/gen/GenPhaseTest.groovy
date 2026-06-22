@@ -9,6 +9,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GenPhaseTest {
 
+    static void main(String[] args) {
+        GenPhase.InstanceAllGenPhases().getMap(-2668877340229613512, 33)
+    }
+
     boolean equals(ImmutableMap map1, ImmutableMap map2) {
         for (i in 0..map1.area()) {
             if (map1.structureType(i) != map2.structureType(i)) {

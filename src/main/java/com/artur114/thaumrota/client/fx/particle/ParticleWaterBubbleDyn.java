@@ -1,17 +1,18 @@
 package com.artur114.thaumrota.client.fx.particle;
 
-import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
+import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.ParticleBubble;
 import net.minecraft.world.World;
 
 public class ParticleWaterBubbleDyn extends ParticleBubble {
-    private final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
-    private boolean axis;
+    private final PosMc3IM blockPos = new PosMc3IM();
+    private final boolean clockwise;
     private double angle;
-    public ParticleWaterBubbleDyn(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
-        super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
-        this.axis = this.rand.nextBoolean();
+
+    public ParticleWaterBubbleDyn(World worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+        super(worldIn, x, y, z, xSpeed, ySpeed, zSpeed);
+        this.clockwise = this.rand.nextBoolean();
     }
 
     @Override
@@ -21,7 +22,7 @@ public class ParticleWaterBubbleDyn extends ParticleBubble {
         this.prevPosZ = this.posZ;
         this.motionY += 0.06D;
         this.move(this.motionX, this.motionY, this.motionZ);
-        this.blockPos.setPos(this.posX, this.posY, this.posZ);
+        this.blockPos.set(this.posX, this.posY, this.posZ);
         this.motionX *= 0.85D;
         this.motionY *= 0.85D;
         this.motionZ *= 0.85D;
@@ -33,7 +34,7 @@ public class ParticleWaterBubbleDyn extends ParticleBubble {
         float rotateSpeed = 1.0F;
         float radius = 0.04F;
 
-        if (axis) {
+        if (this.clockwise) {
             this.motionX = radius * Math.sin(this.angle);
             this.motionZ = radius * Math.cos(this.angle);
         } else {

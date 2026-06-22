@@ -1,12 +1,14 @@
 package com.artur114.thaumrota.common.generation.portal.base;
 
+import com.artur114.thaumrota.common.event.ServerEventsHandler;
 import com.artur114.thaumrota.common.generation.portal.naturalgen.AncientPortalNaturalGen;
 import com.artur114.thaumrota.common.generation.portal.AncientPortalOpening;
 import com.artur114.thaumrota.common.generation.terraingen.GenLayersHandler;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
+import com.artur114.thaumrota.common.init.InitDimensions;
 import com.artur114.thaumrota.common.util.TeleportHandler;
 import com.artur114.thaumrota.main.ThaumRotA;
-import com.artur114.thaumrota.common.config.RotAConfigs;
+import com.artur114.thaumrota.common.config.RotAConfig;
 import com.artur114.thaumrota.common.worldstate.RotAWorldData;
 import com.artur114.thaumrota.common.network.ClientPacketSyncAncientPortals;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
@@ -314,8 +316,8 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
 
         worldData.saveData.setTag("PortalsPack", nbt);
         worldData.markDirty();
-        if (RotAConfigs.Any.debugMode) System.out.println("Is took:" + ((System.nanoTime() - time) / 1000000.0D) + "ms");
-        if (RotAConfigs.Any.debugMode) System.out.println("Save portals finish " + nbt);
+        if (RotAConfig.any.debugMode) System.out.println("Is took:" + ((System.nanoTime() - time) / 1000000.0D) + "ms");
+        if (RotAConfig.any.debugMode) System.out.println("Save portals finish " + nbt);
     }
 
     @SubscribeEvent
@@ -328,6 +330,13 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
     }
 
     public static void teleportToOverworld(EntityPlayerMP player) {
+        if (player.dimension == ANCIENT_WORLD_ID) {
+            player.connection.setPlayerLocation(8, 244, 8, player.rotationYaw, player.rotationPitch);
+            ServerEventsHandler.TIMER_TASKS_MANAGER.addTask(1, () -> teleportToOverworldPrivate(player));
+        }
+    }
+
+    public static void teleportToOverworldPrivate(EntityPlayerMP player) {
         AncientPortal portal = providePortal(player.getEntityData().getInteger(AncientPortal.portalID));
         if (portal != null) {
             portal.teleportToOverworld(player);

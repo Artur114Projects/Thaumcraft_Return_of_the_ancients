@@ -16,13 +16,6 @@ public class NetHandlerPlayServerTransformer extends AbstractASMTransformer {
     }
 
     @Override
-    public byte[] transform(IASMLogger logger, String className, byte[] bytecode) {
-        ClassNodeAdv clazz = BananaASM.createClassNode(bytecode);
-        this.transform(logger, className, clazz);
-        return BananaASM.bakeBytecode(clazz, ClassWriter.COMPUTE_MAXS);
-    }
-
-    @Override
     protected ClassNodeAdv transform(IASMLogger logger, String className, ClassNodeAdv clazz) {
         clazz.findMethod("processCustomPayload").ifPresent(method -> {
             InsnPatBuilder pat = InsnPattern.builder();
@@ -32,7 +25,7 @@ public class NetHandlerPlayServerTransformer extends AbstractASMTransformer {
             pat.then(METHOD_INSN.withOpcode(INVOKESPECIAL).withOwner("net/minecraft/util/math/BlockPos"));
             pat.then(METHOD_INSN.withOpcode(INVOKEVIRTUAL).withOwner("net/minecraft/tileentity/TileEntityStructure"));
 
-            pat.thenVarInsn(ALOAD, 2);
+            pat.thenVarInsn(ALOAD, 3);
             pat.then(METHOD_INSN.withOpcode(INVOKEVIRTUAL).withOwner("net/minecraft/network/PacketBuffer"));
 
             pat.thenInsn(ICONST_0);

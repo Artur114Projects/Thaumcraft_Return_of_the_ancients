@@ -3,16 +3,13 @@ package com.artur114.thaumrota.common.generation.portal.base;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1StaticManager;
 import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import com.artur114.thaumrota.common.blocks.BlockAncientWorldPortal;
-import com.artur114.thaumrota.common.worldstate.playertimer.IPlayerTimer;
-import com.artur114.thaumrota.common.init.InitCapabilities;
 import com.artur114.thaumrota.common.generation.portal.util.PortalOffsets;
 import com.artur114.thaumrota.common.util.TeleportHandler;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitBlocks;
-import com.artur114.thaumrota.common.config.RotAConfigs;
+import com.artur114.thaumrota.common.config.RotAConfig;
 import com.artur114.bananalib.mc.nbt.IWriteToNBT;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
-import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -21,19 +18,19 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.blocks.BlocksTC;
-import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025 Переписать!
-
-    public static final String portalID = "PortalID";
+    private static final Logger log = LogManager.getLogger("ThaumRotA/PortalsLegacy");
     public static final String tpToHomeNBT = "tpToHomeNBT";
     public static final String elevatingUp = "startUpNBT";
-
+    public static final String portalID = "PortalID";
 
     protected final UltraMutableBlockPos mPos = new UltraMutableBlockPos();
     private final List<Runnable> explosionList = new ArrayList<>();
@@ -41,26 +38,20 @@ public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025
     private boolean isExploded = false;
     public final ChunkPos portalPos;
     private int exploreIndex = 0;
-
     protected final World world;
     private boolean isGenerated;
     private boolean isExplodes;
-
     public final int dimension;
     public final int chunkX;
     public final int chunkZ;
-
     public final int posX;
-
     public final int posZ;
-
     protected int id;
-
     public int posY;
 
 
     public AncientPortal(MinecraftServer server, int dimension, int chunkX, int chunkZ, int posY, int id) {
-        if (RotAConfigs.Any.debugMode) System.out.println("New portal x:" + chunkX + "z:" + chunkZ + " id:" + id);
+        if (RotAConfig.any.debugMode) System.out.println("New portal x:" + chunkX + "z:" + chunkZ + " id:" + id);
         if (AncientPortalsProcessor.hasPortal(chunkX, chunkZ, dimension)) isExploded = true;
         this.portalPos = new ChunkPos(chunkX, chunkZ);
         this.world = server.getWorld(dimension);
@@ -78,7 +69,7 @@ public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025
         this.chunkZ = compound.getInteger("chunkZ");
         this.portalPos = new ChunkPos(chunkX, chunkZ);
         this.id = compound.getInteger("id");
-        if (RotAConfigs.Any.debugMode) System.out.println("Portal load x:" + chunkX + "z:" + chunkZ + " id:" + id);
+        log.info("Portal loaded [{}, {}] id {}", chunkX, chunkZ, id);
         this.isGenerated = compound.getBoolean("isGenerated");
         this.dimension = compound.getInteger("dimension");
         this.isExplodes = compound.getBoolean("isExplodes");
@@ -164,13 +155,7 @@ public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025
         }
     }
 
-    protected static void onPlayerTpToHome(EntityPlayerMP player) {
-        if (!ThaumcraftCapabilities.knowsResearchStrict(player, "DEAD")) {
-            MiscHandler.researchAndSendMessage(player, "DEAD", ThaumRotA.MODID + ".text.dead");
-            IPlayerTimer timer = InitCapabilities.getTimer(player);
-            timer.createTimer("recovery");
-        }
-    }
+    protected static void onPlayerTpToHome(EntityPlayerMP player) {}
 
     public static void setTpToHomeNBTData(EntityPlayerMP player) {
         player.getEntityData().setBoolean(BlockAncientWorldPortal.noCollisionNBT, true);
@@ -307,7 +292,7 @@ public abstract class AncientPortal implements IWriteToNBT { // TODO: 16.11.2025
         }
         explosionList.add(() -> world.createExplosion(null, eX, posY, eZ, 16, true));
         isExplodes = true;
-        if (RotAConfigs.Any.debugMode) System.out.println("Portal id:" + id + " is explosion!");
+        if (RotAConfig.any.debugMode) System.out.println("Portal id:" + id + " is explosion!");
     }
 
     public boolean isNeedUpdateOnClient() {

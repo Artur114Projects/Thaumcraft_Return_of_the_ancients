@@ -1,6 +1,5 @@
 package com.artur114.thaumrota.client.event.managers;
 
-import com.artur114.thaumrota.client.fx.particle.ParticleHeat;
 import com.artur114.thaumrota.common.init.InitBiomes;
 import com.artur114.thaumrota.common.init.InitDimensions;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
@@ -108,7 +107,7 @@ public class CustomRainManager {
                 blockPos.down(j);
 
                 if (world.getBlockState(blockPos).getMaterial().isSolid() && world.getBlockState(blockPos.up()).getMaterial() == Material.AIR) {
-                    mc.effectRenderer.addEffect(new ParticleHeat(world, blockPos.getX() + this.random.nextDouble(), blockPos.getY() + 0.1D, blockPos.getZ() + this.random.nextDouble()));
+//                    mc.effectRenderer.addEffect(new ParticleHeat(world, blockPos.getX() + this.random.nextDouble(), blockPos.getY() + 0.1D, blockPos.getZ() + this.random.nextDouble()));
                 }
 
                 blockPos.popPos();

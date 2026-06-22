@@ -3,6 +3,8 @@ package com.artur114.thaumrota.client.event.managers;
 import com.artur114.bananalib.math.BananaMath;
 import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.thaumrota.client.event.ClientEventsHandler;
+import com.artur114.thaumrota.common.config.RotAConfig;
+import com.artur114.thaumrota.common.config.client.RotAClientConfig;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitBiomes;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
@@ -61,7 +63,7 @@ public class ClientPlayerInBiomeManager {
         if (e.getEntity().getEntityWorld().provider.getDimension() == ANCIENT_WORLD_ID) {
             GlStateManager.setFog(GlStateManager.FogMode.LINEAR);
             GlStateManager.setFogStart(32);
-            GlStateManager.setFogEnd(64);
+            GlStateManager.setFogEnd(60);
 
             if (RenderEventHandler.fogTarget > 0) {
                 RenderEventHandler.fogTarget = 0;
@@ -81,7 +83,7 @@ public class ClientPlayerInBiomeManager {
 
         if (player.ticksExisted % 4 == 0) {
             byte lastId = currentBiomeId;
-            currentBiomeId = MiscHandler.getBiomeIdOnPos(player.world, ultraBlockPos.setPos(player));
+            currentBiomeId = BananaMC.biomeIdOnPos(player.world, ultraBlockPos.setPos(player));
             prevBiome = currentBiome;
             currentBiome = Biome.getBiome(currentBiomeId);
             isPrevBiomeTaint = isCurrentBiomeTaint;
@@ -132,6 +134,7 @@ public class ClientPlayerInBiomeManager {
     }
 
     public boolean isPlayerInTaintBiome() {
+        if (!RotAConfig.client.doDisableSunInTaintBiome) return false;
         return playerInTaintBiomeTime != 0;
     }
 

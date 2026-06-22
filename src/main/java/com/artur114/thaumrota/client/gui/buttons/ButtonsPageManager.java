@@ -7,7 +7,6 @@ import net.minecraft.util.ResourceLocation;
 import java.util.*;
 
 public class ButtonsPageManager {
-
     private final Map<Integer, int[]> buttonsOnPage = new HashMap<>();
     private final List<ButtonPage> buttonsPage = new ArrayList<>();
     private final List<GuiButton> buttons;
@@ -71,7 +70,6 @@ public class ButtonsPageManager {
             }
         }
     }
-
 
     public void changePage(int pageIn) {
         if (pageIn > pagesCount || currentPage == pageIn) {

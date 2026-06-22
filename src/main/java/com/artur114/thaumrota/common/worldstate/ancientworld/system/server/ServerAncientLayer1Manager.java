@@ -106,11 +106,8 @@ public class ServerAncientLayer1Manager implements IServerAncientLayer1Manager {
         }
 
         Tuple<List<EntityPlayerMP>, Map<UUID, String>> compiled = ItemSoulBinder.compileTeam(player);
-
         List<EntityPlayerMP> players = compiled.getFirst();
-
         for (EntityPlayerMP playerMP : players) this.teleportToPlatform(playerMP);
-
         AncientLayer1Server layer1Server = new AncientLayer1Server(players);
         layer1Server.setPlayersState(compiled.getSecond());
         layer1Server.setWorld(this.world);

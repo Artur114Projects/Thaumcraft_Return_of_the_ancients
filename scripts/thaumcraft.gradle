@@ -1,0 +1,31 @@
+tasks.register("downloadTC") {
+    def urls = [
+        "https://www.dropbox.com/s/jex9q8g1tril3uo/Thaumcraft-1.12.2-6.1.BETA26-deobf.jar?dl=1",
+        "https://www.dropbox.com/s/wvow0v6grevydcy/Baubles-1.12-1.5.2-deobf.jar?dl=1"
+    ].collect {it.toURL()}
+
+    urls.each {URL url ->
+        def out = file("build/tmp/tc${url.file.substring(url.file.lastIndexOf("/")).replace("?dl=1", "")}")
+
+        if (!out.exists()) {
+            out.parentFile.mkdirs()
+            out.createNewFile()
+            out.withOutputStream {it << url.openStream()}
+            println "Downloaded ${url.file} to: ${out}"
+        }
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'build/tmp/tc'
+    }
+}
+
+dependencies {
+    file("build/tmp/tc").eachFile {
+        implementation ":${it.name.replace(".jar", "")}:0"
+    }
+}
+
+compileJava.dependsOn(tasks.named("downloadTC"))

@@ -1,10 +1,13 @@
 package com.artur114.thaumrota.common.biomes.decorate;
 
+import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.BiomeDictionary;
 
 import java.util.Random;
 
@@ -42,14 +45,35 @@ public abstract class WorldGeneratorBiomeWhiteList extends WorldGenerator {
         public boolean check(World worldIn, BlockPos position, byte[] biomes) {
             switch (this) {
                 case BLOCK:
-                    return MiscHandler.arrayContains(biomes, MiscHandler.getBiomeIdOnPos(worldIn, position));
+                    return BananaMC.arrayContains(biomes, BananaMC.biomeIdOnPos(worldIn, position));
                 case FAST:
-                    return MiscHandler.fastCheckChunkContainsAnyOnBiomeArray(worldIn.getChunkFromBlockCoords(position), biomes);
+                    return fastCheckChunkContainsAnyOnBiomeArray(worldIn.getChunkFromBlockCoords(position), biomes);
                 case FULL:
-                    return MiscHandler.fullCheckChunkContainsAnyOnBiomeArray(worldIn.getChunkFromBlockCoords(position), biomes);
+                    return fullCheckChunkContainsAnyOnBiomeArray(worldIn.getChunkFromBlockCoords(position), biomes);
                 default:
                     throw new IllegalStateException("WTF!?");
             }
+        }
+
+        private static boolean fullCheckChunkContainsAnyOnBiomeArray(Chunk chunk, byte[] biomeArray) {
+            byte[] chunkBiomeArray = chunk.getBiomeArray();
+            return arrayContainsAny(chunkBiomeArray, biomeArray);
+        }
+
+        private static boolean fastCheckChunkContainsAnyOnBiomeArray(Chunk chunk, byte[] biomeArray) {
+            byte[] chunkBiomeArray = chunk.getBiomeArray();
+            return arrayContainsAny(biomeArray, chunkBiomeArray[0], chunkBiomeArray[15 * 16], chunkBiomeArray[15 + 15 * 16], chunkBiomeArray[15]);
+        }
+
+        private static boolean arrayContainsAny(byte[] array, byte... params) {
+            for (int i : array) {
+                for (int j : params) {
+                    if (i == j) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }

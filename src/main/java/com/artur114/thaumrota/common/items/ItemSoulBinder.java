@@ -4,7 +4,7 @@ import com.artur114.bananalib.mc.base.BItemBase;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitDimensions;
 import com.artur114.thaumrota.main.ThaumRotA;
-import com.artur114.thaumrota.common.config.RotAConfigs;
+import com.artur114.thaumrota.common.config.RotAConfig;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -132,15 +132,8 @@ public class ItemSoulBinder extends BItemBase {
                     if (entity.dimension != InitDimensions.ANCIENT_WORLD_ID) {
                         EntityPlayerMP playerMP = (EntityPlayerMP) entity;
                         if (player.dimension == playerMP.dimension) {
-                            List<String> uui = MiscHandler.isPlayerUseUnresolvedItems(playerMP);
-                            if (uui.isEmpty() || !RotAConfigs.PortalSettings.checkItems) {
-                                players.add(playerMP);
-                                names.put(id, key);
-                            } else {
-                                names.put(id, key + "|thaumrota.team_state.has_unresolved_items");
-                                playerMP.sendMessage(new TextComponentTranslation(ThaumRotA.MODID + ".portal.message"));
-                                playerMP.sendMessage(new TextComponentString(uui.toString()));
-                            }
+                            players.add(playerMP);
+                            names.put(id, key);
                         } else {
                             names.put(id, key + "|thaumrota.team_state.in_other_world");
                         }

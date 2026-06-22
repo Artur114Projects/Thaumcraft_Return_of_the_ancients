@@ -16,6 +16,8 @@ import com.artur114.bananalib.mc.base.tileabs.ITileBlockUseListener;
 import com.artur114.bananalib.mc.base.tileabs.ITileMultiBBProvider;
 import com.artur114.bananalib.mc.math.m3d.box.AbbMc3D;
 import com.artur114.thaumrota.client.event.ClientEventsHandler;
+import com.artur114.thaumrota.common.config.RotAConfig;
+import com.artur114.thaumrota.common.config.client.EnumFXQuality;
 import com.artur114.thaumrota.common.init.InitItems;
 import com.artur114.thaumrota.common.util.math.CoordinateMatrix;
 import net.minecraft.block.state.IBlockState;
@@ -70,7 +72,10 @@ public class TileEntityAncientPiston extends TileBase implements ITileMultiBBPro
     @Override
     public void update() {
         if (this.world.isRemote) {
-            if (!BananaMC.isInPlayerView(this.pos, 16)) {
+            if (RotAConfig.client.graphicQuality == EnumFXQuality.POTATO) {
+                return;
+            }
+            if (!BananaMC.isInPlayerView(this.pos, RotAConfig.client.graphicQuality.particleMaxDist())) {
                 return;
             }
             if (this.particlePos == null) {

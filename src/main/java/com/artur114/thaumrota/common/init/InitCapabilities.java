@@ -30,10 +30,6 @@ public class InitCapabilities implements ILoadStagePre {
     @CapabilityInject(IAncientLayer1Manager.class)
     public static final Capability<IAncientLayer1Manager> ANCIENT_LAYER_1_MANAGER = null;
 
-    public static IPlayerTimer getTimer(@Nonnull EntityPlayer player) {
-        return player.getCapability(TIMER, null);
-    }
-
     @Override
     public void onPreInit() {
         CapabilityManager.INSTANCE.register(

@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.common.generation.portal.generators;
 
 import com.artur114.thaumrota.common.worldstate.blockprotect.BlockProtectHandler;
-import com.artur114.thaumrota.common.config.RotAConfigs;
+import com.artur114.thaumrota.common.config.RotAConfig;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -43,7 +43,9 @@ public class GenAncientArch {
         }
         this.resetObjectData();
 
-        if (RotAConfigs.Any.debugMode) System.out.println("Generated ancient arch! start:" + start + " end:" + end);
+        if (RotAConfig.any.debugMode) {
+            System.out.println("Generated ancient arch! start:" + start + " end:" + end);
+        }
     }
 
     private void genArchAndInitSegments() {

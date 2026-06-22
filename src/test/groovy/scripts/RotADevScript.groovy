@@ -210,7 +210,7 @@ abstract class RotADevScript extends Script {
         this.drawBox(min, max, Color.WHITE)
     }
 
-    void drawLine(IVec3DC start, IVec3DC end, Color color) {
+    void drawLine(IVec3DC start, IVec3DC end, Color color = Color.WHITE) {
         this.drawLine(start, end, color.red / 255, color.green / 255, color.blue / 255, color.alpha / 255)
     }
 

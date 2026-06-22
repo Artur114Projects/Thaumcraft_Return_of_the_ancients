@@ -1,5 +1,6 @@
 package com.artur114.thaumrota.client.event.managers;
 
+import com.artur114.thaumrota.common.config.RotAConfig;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.network.ServerPacketGetWeather;
@@ -52,7 +53,7 @@ public class PlayerDistanceToPortalManager {
     }
 
     private void setRain(Minecraft mc, EntityPlayer player) { // TODO: 23.04.2025 Переделать!
-        if (distanceToPortal < 1024 && player.dimension == 0) {
+        if (distanceToPortal < 1024 && player.dimension == 0 && RotAConfig.client.doInfinityRainInTaintBiome) {
             if (!useCustomRain) {
                 isServerRainUpdated = false;
                 updateServerRain();

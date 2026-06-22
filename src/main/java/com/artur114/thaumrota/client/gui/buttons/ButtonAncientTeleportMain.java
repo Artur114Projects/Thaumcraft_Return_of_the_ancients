@@ -11,11 +11,9 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class ButtonAncientTeleportMain extends GuiButton {
-
     private final ResourceLocation textureButton = new ResourceLocation(ThaumRotA.MODID, "textures/gui/container/ancient_teleport_main_button_icon.png");
     private boolean press = true;
     private int buttonTime = 0;
-
 
     public ButtonAncientTeleportMain(int buttonId, int x, int y) {
         super(buttonId, x, y, 64, 64, "");

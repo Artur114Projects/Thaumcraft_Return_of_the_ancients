@@ -35,27 +35,27 @@ public class FBOTest {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-
-        InitShaders.TEST_SHADER.shader().enable();
-
-        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 0);
-        GlStateManager.enableTexture2D();
-        GlStateManager.bindTexture(mc.getFramebuffer().framebufferTexture);
-        InitShaders.TEST_SHADER.shader().uniform("screenTexture", 0);
-
-        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 1);
-        GlStateManager.enableTexture2D();
-        GlStateManager.bindTexture(framebuffer.framebufferTexture);
-        InitShaders.TEST_SHADER.shader().uniform("customTexture", 1);
-
-        framebufferSub.bindFramebuffer(false);
-        drawFrameBuff(mc.getFramebuffer().framebufferTexture);
-
-        InitShaders.TEST_SHADER.shader().disable();
-        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 1);
-        GlStateManager.bindTexture(0);
-        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 0);
-        GlStateManager.bindTexture(0);
+//
+//        InitShaders.TEST_SHADER.shader().enable();
+//
+//        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 0);
+//        GlStateManager.enableTexture2D();
+//        GlStateManager.bindTexture(mc.getFramebuffer().framebufferTexture);
+//        InitShaders.TEST_SHADER.shader().uniform("screenTexture", 0);
+//
+//        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 1);
+//        GlStateManager.enableTexture2D();
+//        GlStateManager.bindTexture(framebuffer.framebufferTexture);
+//        InitShaders.TEST_SHADER.shader().uniform("customTexture", 1);
+//
+//        framebufferSub.bindFramebuffer(false);
+//        drawFrameBuff(mc.getFramebuffer().framebufferTexture);
+//
+//        InitShaders.TEST_SHADER.shader().disable();
+//        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 1);
+//        GlStateManager.bindTexture(0);
+//        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + 0);
+//        GlStateManager.bindTexture(0);
 
 
 

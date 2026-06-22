@@ -28,7 +28,7 @@ public enum EnumRotate {
     }
 
 
-    public float lightDegrees() {
+    public float degrees() {
         switch (this) {
             case C90:
                 return -90.0F;

@@ -3,7 +3,7 @@ package com.artur114.thaumrota.common.blocks;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortal;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.common.event.ServerEventsHandler;
-import com.artur114.thaumrota.common.config.RotAConfigs;
+import com.artur114.thaumrota.common.config.RotAConfig;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.SoundType;
@@ -23,9 +23,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class BlockAncientWorldPortal extends BaseBlock {
-
+    protected static final AxisAlignedBB PORTAL_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D);
     public static final String noCollisionNBT = "noCollisionNBT";
-    protected static final AxisAlignedBB HOME_PORTAL_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D);
+
     public BlockAncientWorldPortal(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
 
@@ -33,9 +33,8 @@ public class BlockAncientWorldPortal extends BaseBlock {
         this.setForCreative();
     }
 
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
-        return HOME_PORTAL_AABB;
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return PORTAL_AABB;
     }
 
     @Nullable
@@ -59,23 +58,10 @@ public class BlockAncientWorldPortal extends BaseBlock {
         if (!entityIn.getEntityData().getBoolean(noCollisionNBT)) {
             if (entityIn instanceof EntityPlayerMP) {
                 EntityPlayerMP player = (EntityPlayerMP) entityIn;
-                List<String> ID = MiscHandler.isPlayerUseUnresolvedItems(player);
-                if ((ID.isEmpty() || !RotAConfigs.PortalSettings.checkItems) && (ServerEventsHandler.getDifficultyId() != 0 || !RotAConfigs.AncientWorldSettings.noPeaceful)) {
-                    player.fallDistance = 0;
-                    AncientPortalsProcessor.onPlayerCollidePortal(player);
-                } else {
-                    if (!ID.isEmpty()) {
-                        MiscHandler.sendMessageTranslate(player, ThaumRotA.MODID + ".portal.message");
-                        player.sendMessage(new TextComponentString(ID.toString()));
-                        ID.clear();
-                    } else {
-                        player.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + "TC RETURN OF THE ANCIENTS: " + TextFormatting.RESET + "PEACEFUL DIFFICULTY ???"));
-                    }
-                    AncientPortal portal = AncientPortalsProcessor.getPortalOnPos(pos);
-                    if (portal != null) {
-                        portal.teleportToOverworld(player, false);
-                    }
-                }
+                AncientPortalsProcessor.onPlayerCollidePortal(player);
+                player.fallDistance = 0;
+            } else {
+                entityIn.setDead();
             }
         }
     }

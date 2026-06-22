@@ -24,14 +24,11 @@ public class GuiAncientTeleport extends GuiContainer {
     };
     private final ResourceLocation aspectBottlesTexture = new ResourceLocation(ThaumRotA.MODID, "textures/gui/container/aspect_bottle_vertical.png");
     private final ResourceLocation ancientEnergyBarTexture = new ResourceLocation(ThaumRotA.MODID, "textures/gui/container/ancient_energy_bar.png");
-
     public final ContainerAncientTeleport container;
     private final TileEntityAncientTeleport tile;
     private ButtonAncientTeleportMain buttonMain;
     private final InventoryPlayer inventory;
     public ButtonsPageManager pageManager;
-
-
 
     public GuiAncientTeleport(TileEntityAncientTeleport tile, EntityPlayer player) {
         super(new ContainerAncientTeleport(player.inventory, tile));
@@ -45,7 +42,6 @@ public class GuiAncientTeleport extends GuiContainer {
     public void initGui() {
         super.initGui();
         buttonMain = new ButtonAncientTeleportMain(0, (width - xSize) / 2 + (xSize - 16 - 64), (height - ySize) / 2 + 12);
-        buttonList.add(buttonMain);
         ResourceLocation baseTexture = new ResourceLocation(ThaumRotA.MODID, "textures/gui/button/ancient_button_page1.png");
         pageManager = new ButtonsPageManager(buttonList, ((width - xSize) / 2 + 1 - 16), (height - ySize) / 2, 100, 2, 16, 1.0F, 'y', baseTexture, new ResourceLocation[] {new ResourceLocation(ThaumRotA.MODID, "textures/gui/button/ancient_button_page_icon0.png"), null}, new String[] {"Main page", "Activating"}) {
             @Override
@@ -70,7 +66,6 @@ public class GuiAncientTeleport extends GuiContainer {
         pageManager.processButtonActionPerformed(button);
         switch (button.id) {
             case 0:{
-                buttonMain.press();
                 ThaumRotA.NETWORK.sendToServer(new ServerPacketTileAncientTeleportData(tile, 0));
             } break;
         }
@@ -80,13 +75,11 @@ public class GuiAncientTeleport extends GuiContainer {
     public void updateScreen() {
         super.updateScreen();
         pageManager.update();
-        buttonMain.update();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-        buttonMain.enabled = tile.isActive != 1;
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         drawBottles(mouseX, mouseY);

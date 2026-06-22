@@ -100,17 +100,10 @@ public class GenPhaseBaseMap extends GenPhase {
         map.insetStructure(room.type.create(rotate, pos));
     }
 
-    protected int index(int x, int y, int size) {
-        return x + y * size;
-    }
-
-    protected int index(StrPos pos, int size) {
-        return index(pos.getX(), pos.getY(), size);
-    }
-
     private int[] compilePotencialPosFor(ImmutableMap map, Room room, EnumRotate rotate, int size) {
         StrPos.MutableStrPos pos = new StrPos.MutableStrPos();
         int[] ret = new int[size * size];
+        int range = 2;
         int cursor = 0;
 
         for (int i = 0; i != size * size; i++) {
@@ -125,9 +118,12 @@ public class GenPhaseBaseMap extends GenPhase {
                 if (map.structureType(pos.setPos(offset.globalPos())) != null) {
                     flag = false; break;
                 }
-                for (EnumFace face : offset.voidCollides()) {
-                    if (map.structureType(pos.setPos(offset.globalPos()).offset(face)) != null) {
-                        flag = false; break;
+                for (int j = 1; j != range + 1; j++) {
+                    for (EnumFace face : offset.voidCollides()) {
+                        if (map.structureType(pos.setPos(offset.globalPos()).offset(face, j)) != null) {
+                            flag = false;
+                            break;
+                        }
                     }
                 }
                 if (!flag) break;

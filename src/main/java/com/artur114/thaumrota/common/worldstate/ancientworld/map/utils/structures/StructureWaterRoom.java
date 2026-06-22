@@ -1,25 +1,109 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures;
 
+import com.artur114.bananalib.math.m3d.box.Box3IM;
+import com.artur114.bananalib.math.m3d.box.IBox3IM;
 import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import com.artur114.thaumrota.client.light.ILightSource;
 import com.artur114.thaumrota.client.light.LineLightSource;
 import com.artur114.thaumrota.client.light.PointLightSource;
 import com.artur114.thaumrota.client.render.fx.HeatRenderer;
-import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.EnumMultiChunkStrType;
-import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.EnumRotate;
-import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.MultiChunkStrForm;
-import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrPos;
+import com.artur114.thaumrota.common.tileentity.TileEntityAncientDoor8X6;
+import com.artur114.thaumrota.common.tileentity.TileEntityDoorBase;
+import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.*;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.NotNull;
+import thaumcraft.common.entities.monster.EntityEldritchCrab;
+import thaumcraft.common.entities.monster.EntityEldritchGuardian;
+import thaumcraft.common.entities.monster.EntityInhabitedZombie;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class StructureWaterRoom extends StructureMultiChunk {
+public class StructureWaterRoom extends StructureCombatRoom {
     public StructureWaterRoom(StrPos pos) {
         super(EnumRotate.NON, EnumMultiChunkStrType.WATER_ROOM, pos);
     }
 
     public StructureWaterRoom(StructureMultiChunk parent) {
         super(parent);
+    }
+
+    @Override
+    protected void onAllDead() {
+        this.openBigDoors(
+            new PosMc3IM(4, 2, -15),
+            new PosMc3IM(-15, 2, 4),
+            new PosMc3IM(4, 2, 30),
+            new PosMc3IM(30, 2, 4)
+        );
+    }
+
+    @Override
+    protected int onTriggered() {
+        this.closeBigDoors(
+            new PosMc3IM(4, 2, -15),
+            new PosMc3IM(-15, 2, 4),
+            new PosMc3IM(4, 2, 30),
+            new PosMc3IM(30, 2, 4)
+        );
+        return 24;
+    }
+
+    @Override
+    protected void loadWaves(List<CombatWave> list) {
+        list.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 1), CombatWave.computeList(list1 -> {
+            CombatWave.add(list1, EntityEldritchGuardian.class, 1);
+            CombatWave.add(list1, EntityInhabitedZombie.class, 6);
+        })));
+        list.add(new CombatWave(CombatWave.thenLeft(4), CombatWave.computeList(list1 -> {
+            CombatWave.add(list1, EntityEldritchGuardian.class, 2);
+        })));
+        list.add(new CombatWave(CombatWave.ALL_DEAD, CombatWave.computeList(list1 -> {
+            CombatWave.add(list1, EntityEldritchGuardian.class, 1);
+            CombatWave.add(list1, EntityInhabitedZombie.class, 4);
+        })));
+    }
+
+    @Override
+    protected void loadSpawnArea(List<IBox3IM> add, List<IBox3IM> subtract) {
+        // this is generated, don't scare
+        add.add(new Box3IM(-6, 2, -6, 22, 3, 22));
+        add.add(new Box3IM(-10, 7, -10, -3, 8, -3));
+        add.add(new Box3IM(-10, 7, -3, -7, 8, -2));
+        add.add(new Box3IM(-3, 7, -10, -2, 8, -7));
+        add.add(new Box3IM(-3, 7, 23, -2, 8, 26));
+        add.add(new Box3IM(-10, 7, 19, -3, 8, 26));
+        add.add(new Box3IM(-10, 7, 18, -7, 8, 19));
+        add.add(new Box3IM(19, 7, 19, 26, 8, 26));
+        add.add(new Box3IM(18, 7, 23, 19, 8, 26));
+        add.add(new Box3IM(23, 7, 18, 26, 8, 19));
+        add.add(new Box3IM(19, 7, -10, 26, 8, -3));
+        add.add(new Box3IM(23, 7, -3, 26, 8, -2));
+        add.add(new Box3IM(18, 7, -10, 19, 8, -7));
+
+        subtract.add(new Box3IM(2, 2, 2, 14, 3, 14));
+        subtract.add(new Box3IM(-10, 7, -10, -9, 8, -9));
+        subtract.add(new Box3IM(-6, 7, -6, -3, 8, -3));
+        subtract.add(new Box3IM(-10, 7, 25, -9, 8, 26));
+        subtract.add(new Box3IM(-6, 7, 19, -3, 8, 22));
+        subtract.add(new Box3IM(21, 2, 21, 22, 3, 22));
+        subtract.add(new Box3IM(25, 7, -10, 26, 8, -9));
+        subtract.add(new Box3IM(19, 7, -6, 22, 8, -3));
+        subtract.add(new Box3IM(19, 7, 19, 22, 8, 22));
+        subtract.add(new Box3IM(25, 7, 25, 26, 8, 26));
+    }
+
+    @Override
+    protected void loadTriggerBoxes(List<IBox3IM> list, AtomicBoolean isReversed) {
+        // this is generated, don't scare
+        list.add(new Box3IM(2, 2, -17, 14, 10, -4));
+        list.add(new Box3IM(-17, 2, 2, -4, 10, 14));
+        list.add(new Box3IM(2, 2, 20, 14, 10, 33));
+        list.add(new Box3IM(20, 2, 2, 33, 10, 14));
+        isReversed.set(true);
     }
 
     @Override
@@ -100,6 +184,12 @@ public class StructureWaterRoom extends StructureMultiChunk {
         list.add(new PointLightSource(new PosMc3IM(-16, 1, 10), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
         list.add(new PointLightSource(new PosMc3IM(-16, 1, 5), HeatRenderer.HEAT_COLOR, 0.2F, 1.0F, 0.5F));
     }
+
+    @Override
+    public void onPlayerEntered(EntityPlayer player) {}
+
+    @Override
+    public void onPlayerWentOut(EntityPlayer player) {}
 
     public static class Form extends MultiChunkStrForm {
         @Override

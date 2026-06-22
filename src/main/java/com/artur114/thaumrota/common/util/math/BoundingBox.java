@@ -21,6 +21,13 @@ public class BoundingBox implements IArea {
     private final BlockPos end;
     private final BlockPos size;
 
+    public BoundingBox(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+        this.end = new BlockPos(Math.max(minX, maxX), Math.max(minY, maxY), Math.max(minZ, maxZ));
+        this.start = new BlockPos(Math.min(minX, maxX), Math.min(minY, maxY), Math.min(minZ, maxZ));
+        this.size = this.end.add(-this.start.getX(), -this.start.getY(), -this.start.getZ()).add(1, 1, 1);
+    }
+
+
     public BoundingBox(BlockPos start, BlockPos end) {
         this.end = new BlockPos(Math.max(start.getX(), end.getX()), Math.max(start.getY(), end.getY()), Math.max(start.getZ(), end.getZ()));
         this.start = new BlockPos(Math.min(start.getX(), end.getX()), Math.min(start.getY(), end.getY()), Math.min(start.getZ(), end.getZ()));

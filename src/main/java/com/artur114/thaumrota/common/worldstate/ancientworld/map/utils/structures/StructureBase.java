@@ -123,7 +123,7 @@ public class StructureBase implements IStructure {
         this.addLights(list);
         Matrix3FM matrix = Matrix3FM.obtain();
         if (this.rotate != null) {
-            matrix.rotateYAround(7.5, 0, 7.5, this.rotate.lightDegrees());
+            matrix.rotateYAround(7.5, 0, 7.5, this.rotate.degrees());
         }
         for (ILightSource source : list) {
             if (source instanceof PointLightSource) {

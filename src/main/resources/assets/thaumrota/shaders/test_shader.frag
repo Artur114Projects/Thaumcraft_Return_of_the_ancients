@@ -14,6 +14,7 @@ uniform vec3 pointLightParams[MAX_POINT_LIGHTS];
 uniform int pointLightCount;
 
 #define MAX_LINE_LIGHTS 48
+uniform float lineInvLenSq[MAX_LINE_LIGHTS];
 uniform vec3 lineLightABBMax[MAX_LINE_LIGHTS];
 uniform vec3 lineLightABBMin[MAX_LINE_LIGHTS];
 uniform vec3 lineLightPosTo[MAX_LINE_LIGHTS];
@@ -66,10 +67,10 @@ vec3 worldPosFromDepth(vec2 uv) {
     return worldH.xyz / worldH.w;
 }
 
-float distToLineSq(vec3 p, vec3 a, vec3 b) {
+float distToLineSq(vec3 p, vec3 a, vec3 b, float invLenSq) {
     vec3 ab = b - a;
     vec3 ap = p - a;
-    float t = clamp(dot(ap, ab) / dot(ab, ab), 0.0, 1.0);
+    float t = clamp(dot(ap, ab) * invLenSq, 0.0, 1.0);
     vec3 closest = a + t * ab;
     vec3 diff = p - closest;
     return dot(diff, diff);
@@ -128,7 +129,7 @@ void main() {
         vec3 abbMax = lineLightABBMax[i];
         if (worldPos.x >= abbMin.x && worldPos.y >= abbMin.y && worldPos.z >= abbMin.z && worldPos.x <= abbMax.x && worldPos.y <= abbMax.y && worldPos.z <= abbMax.z) {
             vec3 par = lineLightParams[i];
-            float dist = distToLineSq(worldPos, lineLightPosFrom[i], lineLightPosTo[i]);
+            float dist = distToLineSq(worldPos, lineLightPosFrom[i], lineLightPosTo[i], lineInvLenSq[i]);
             if (dist > (par.x * 4)) continue;
             float att = computeAtt(dist, 1.0 / par.x);
             vec3 color = computeLight(dist, lineLightColor[i], par.y, att);
@@ -137,7 +138,7 @@ void main() {
         }
     }
 
-    lighting = lighting / (lighting + 1.0);
+//    lighting = lighting / (lighting + 1.0);
     heat = 1.0 - exp(-heat);
     heat *= 1.6;
     float dist = dot(worldPos, worldPos);

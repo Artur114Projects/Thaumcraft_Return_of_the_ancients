@@ -125,12 +125,13 @@ public class StructureBase implements IStructure {
         if (this.rotate != null) {
             matrix.rotateYAround(7.5, 0, 7.5, this.rotate.degrees());
         }
+        matrix.translate(pos.x << 4, this.y, pos.z << 4);
         for (ILightSource source : list) {
             if (source instanceof PointLightSource) {
-                matrix.transform(((PointLightSource) source).pos()).add(pos.x << 4, this.y, pos.z << 4);
+                matrix.transform(((PointLightSource) source).pos());
             } else if (source instanceof LineLightSource) {
-                matrix.transform(((LineLightSource) source).from()).add(pos.x << 4, this.y, pos.z << 4);
-                matrix.transform(((LineLightSource) source).to()).add(pos.x << 4, this.y, pos.z << 4);
+                matrix.transform(((LineLightSource) source).from());
+                matrix.transform(((LineLightSource) source).to());
             }
         }
         Matrix3FM.release(matrix);

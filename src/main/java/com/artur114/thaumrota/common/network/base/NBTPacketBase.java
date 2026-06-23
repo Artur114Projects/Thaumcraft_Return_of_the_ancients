@@ -6,7 +6,7 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public abstract class NBTPacketBase implements IMessage {
-    protected NBTTagCompound nbt;
+    protected NBTTagCompound nbt = null;
 
     public NBTPacketBase() {}
 
@@ -16,11 +16,12 @@ public abstract class NBTPacketBase implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        nbt = ByteBufUtils.readTag(buf);
+        if (buf.readBoolean()) this.nbt = ByteBufUtils.readTag(buf);
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        ByteBufUtils.writeTag(buf, nbt);
+        buf.writeBoolean(this.nbt != null);
+        if (this.nbt != null) ByteBufUtils.writeTag(buf, this.nbt);
     }
 }

@@ -1,6 +1,8 @@
 package com.artur114.thaumrota.common.generation.chunkgens;
 
+import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import com.artur114.thaumrota.common.init.InitBiomes;
+import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -9,6 +11,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.IChunkGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import thaumcraft.api.blocks.BlocksTC;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +29,21 @@ public class ChunkGenAncientWorld implements IChunkGenerator {
     public @NotNull Chunk generateChunk(int parChunkX, int parChunkZ) {
         Chunk chunk = new Chunk(this.world, parChunkX, parChunkZ);
         Arrays.fill(chunk.getBiomeArray(), (byte) Biome.getIdForBiome(this.biome));
+        if (parChunkX == 0 && parChunkZ == 0) {
+            PosMc3IM posMc = PosMc3IM.obtain();
+            for (BlockPos pos : BlockPos.getAllInBoxMutable(0, 240, 0, 15, 240, 15)) {
+                posMc.set(pos);
+                if (posMc.x() == 0 || posMc.x() == 15 || posMc.z() == 0 || posMc.z() == 15) {
+                    for (int i = 0; i != 4; i++) {
+                        chunk.setBlockState(posMc, BlocksTC.stoneAncient.getDefaultState());
+                        posMc.addY(1);
+                    }
+                } else {
+                    chunk.setBlockState(posMc, BlocksTC.stoneAncient.getDefaultState());
+                }
+            }
+            PosMc3IM.release(posMc);
+        }
         return chunk;
     }
 

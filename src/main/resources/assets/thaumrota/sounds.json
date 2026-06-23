@@ -178,5 +178,15 @@
         "volume": 1
       }
     ]
+  },
+  "magic_puff": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "thaumrota:magic_puff",
+        "stream": false,
+        "volume": 2.5
+      }
+    ]
   }
 }

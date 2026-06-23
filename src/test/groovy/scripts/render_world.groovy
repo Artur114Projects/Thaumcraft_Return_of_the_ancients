@@ -35,7 +35,7 @@ if (Minecraft.getMinecraft().player == null) {
     return
 }
 
-boolean enable = true
+boolean enable = false
 
 if (!enable) {
     return

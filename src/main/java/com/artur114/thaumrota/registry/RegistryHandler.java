@@ -89,6 +89,7 @@ public class RegistryHandler implements ILoadStagePre, ILoadStageInit, IHasNetwo
         l.apply(ClientPacketSyncProtectedChunk.HandlerSPC.class, ClientPacketSyncProtectedChunk.class, Side.CLIENT);
         l.apply(ClientPacketSyncEnergySystem.HandlerSES.class, ClientPacketSyncEnergySystem.class, Side.CLIENT);
         l.apply(ClientPacketSyncAncientLayer1s.HandlerSAL.class, ClientPacketSyncAncientLayer1s.class, Side.CLIENT);
+        l.apply(ClientPacketCreateFX.HandlerCFX.class, ClientPacketCreateFX.class, Side.CLIENT);
         return l.list();
     }
 

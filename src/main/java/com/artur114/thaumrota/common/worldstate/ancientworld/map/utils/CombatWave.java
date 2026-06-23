@@ -9,13 +9,19 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class CombatWave {
     private final Predicate<Collection<Class<? extends EntityLiving>>> doNextWave;
-    private final ArrayDeque<Class<? extends EntityLiving>> entities;
+    private final ArrayDeque<EntityEntry> entities;
     private int ticksToNextSpawn = 0;
 
-    public CombatWave(Predicate<Collection<Class<? extends EntityLiving>>> doNextWave, List<Class<? extends EntityLiving>> entities) {
+    public CombatWave(Predicate<Collection<Class<? extends EntityLiving>>> doNextWave, Collection<Class<? extends EntityLiving>> entities) {
+        this.entities = entities.stream().map(EntityEntry::of).collect(Collectors.toCollection(ArrayDeque::new));
+        this.doNextWave = doNextWave;
+    }
+
+    public CombatWave(Predicate<Collection<Class<? extends EntityLiving>>> doNextWave, List<EntityEntry> entities) {
         this.entities = new ArrayDeque<>(entities);
         this.doNextWave = doNextWave;
     }
@@ -33,15 +39,9 @@ public class CombatWave {
             return;
         }
         if (this.ticksToNextSpawn <= 0) {
-            Class<? extends EntityLiving> entity = this.entities.poll();
+            EntityEntry entity = this.entities.poll();
             if (entity == null) return;
-            try {
-                EntityLiving living = entity.getDeclaredConstructor(World.class).newInstance(world);
-                doSpawn.accept(area.fromIndex(rand.nextInt(area.areaSize())), living);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
+            doSpawn.accept(area.fromIndex(rand.nextInt(area.areaSize())), entity.create(world));
             this.ticksToNextSpawn = rand.nextInt(4) + 3;
             return;
         }
@@ -67,14 +67,26 @@ public class CombatWave {
         };
     }
 
+    public static void add(Collection<EntityEntry> list, Class<? extends EntityLiving> clazz, int n) {
+        for (int i = 0; i != n; i++) {
+            list.add(EntityEntry.of(clazz));
+        }
+    }
+
     public static void add(List<Class<? extends EntityLiving>> list, Class<? extends EntityLiving> clazz, int n) {
         for (int i = 0; i != n; i++) {
             list.add(clazz);
         }
     }
 
-    public static List<Class<? extends EntityLiving>> computeList(Consumer<List<Class<? extends EntityLiving>>> filler) {
+    public static List<Class<? extends EntityLiving>> computeCList(Consumer<List<Class<? extends EntityLiving>>> filler) {
         List<Class<? extends EntityLiving>> list = new ArrayList<>();
+        filler.accept(list);
+        return list;
+    }
+
+    public static List<EntityEntry> computeList(Consumer<List<EntityEntry>> filler) {
+        List<EntityEntry> list = new ArrayList<>();
         filler.accept(list);
         return list;
     }

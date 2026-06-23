@@ -9,7 +9,7 @@ import com.artur114.thaumrota.common.init.InitBlocks;
 import com.artur114.thaumrota.server.structurebuilder.BuildRequest;
 import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import com.artur114.thaumrota.common.generation.portal.util.PortalOffsets;
-import com.artur114.thaumrota.common.event.ServerEventsHandler;
+import com.artur114.thaumrota.common.event.CommonEventsHandler;
 import com.artur114.thaumrota.common.init.InitSounds;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientSanctuaryController;
 import com.artur114.thaumrota.common.util.TerrainAnalyzer;
@@ -143,10 +143,10 @@ public class AncientSanctuary implements IWriteToNBT, IReadFromNBT {
     }
 
     public void onTileStateChanged(boolean state) {
-        ServerEventsHandler.TIMER_TASKS_MANAGER.addTask(29, () -> {
-            ServerEventsHandler.SHORT_CHUNK_LOAD_MANAGER.loadArea(world, portal.portalPos, 1);
-            ServerEventsHandler.SHORT_CHUNK_LOAD_MANAGER.loadArea(world, pos, 1);
-            ServerEventsHandler.TIMER_TASKS_MANAGER.addTask(1, () -> {
+        CommonEventsHandler.TIMER_TASKS_MANAGER.addTask(29, () -> {
+            CommonEventsHandler.SHORT_CHUNK_LOAD_MANAGER.loadArea(world, portal.portalPos, 1);
+            CommonEventsHandler.SHORT_CHUNK_LOAD_MANAGER.loadArea(world, pos, 1);
+            CommonEventsHandler.TIMER_TASKS_MANAGER.addTask(1, () -> {
                 this.updateActiveState(state);
                 this.portal.updateActiveState(state);
 

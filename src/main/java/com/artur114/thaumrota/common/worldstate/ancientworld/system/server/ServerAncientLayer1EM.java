@@ -1,19 +1,28 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.system.server;
 
 import com.artur114.bananalib.mc.cap.BananaCapProv;
+import com.artur114.thaumrota.common.config.RotAConfig;
+import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.IAncientLayer1Manager;
 import com.artur114.thaumrota.common.init.InitCapabilities;
 import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ClassInheritanceMultiMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -110,4 +119,58 @@ public class ServerAncientLayer1EM {
             ((IServerAncientLayer1Manager) managerServer).onEntityDead((EntityLiving) e.getEntityLiving());
         }
     }
+
+    public void playerInteractEventRightClickBlock(PlayerInteractEvent.RightClickBlock e) {
+        if (e.getEntityPlayer().isCreative() && e.getEntityPlayer().isSneaking()) {
+            return;
+        }
+
+        if (e.getItemStack().getItem() instanceof ItemBlock) {
+            e.setUseItem(Event.Result.DENY);
+        }
+    }
+
+    public void playerInteractEventLeftClickBlock(PlayerInteractEvent.LeftClickBlock e) {
+        if (e.getEntityPlayer().isCreative() && e.getEntityPlayer().isSneaking()) {
+            return;
+        }
+
+        e.setCanceled(true);
+    }
+
+    public void blockEventBreakEvent(BlockEvent.BreakEvent e) {
+        if (e.getPlayer().isCreative() && e.getPlayer().isSneaking()) {
+            return;
+        }
+
+        e.setCanceled(true);
+    }
+
+    public void livingDropsEvent(LivingDropsEvent e) {
+        e.setCanceled(true);
+    }
+
+    public void livingDamageEvent(LivingDamageEvent e) {
+        if (e.getEntity() instanceof EntityPlayerMP) {
+            EntityPlayerMP player = (EntityPlayerMP) e.getEntity();
+            float mul = 1.25F;
+            if (!RotAConfig.server.canDeadInAncientWorld && player.getHealth() - (e.getAmount() * mul) <= 0) {
+                player.setFire(0);
+                player.clearActivePotions();
+                player.setHealth(3);
+                if (!this.playerLost(player)) {
+                    AncientPortalsProcessor.teleportToOverworld(player);
+                }
+                e.setCanceled(true);
+            } else {
+                e.setAmount(e.getAmount() * mul);
+            }
+        }
+    }
+
+    public void livingSpawnEventAllowDespawn(LivingSpawnEvent.AllowDespawn e) {
+        e.setResult(Event.Result.DENY);
+    }
 }
+
+

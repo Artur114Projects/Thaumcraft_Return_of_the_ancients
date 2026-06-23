@@ -1,4 +1,4 @@
-package com.artur114.thaumrota.common.event.eventmanagers;
+package com.artur114.thaumrota.common.event.managers;
 
 import com.artur114.bananalib.math.BananaMath;
 import com.artur114.bananalib.mc.BananaMC;
@@ -12,8 +12,12 @@ import thaumcraft.api.potions.PotionFluxTaint;
 
 public class PlayerInBiomeManager {
     public void tickEventPlayerTickEvent(TickEvent.PlayerTickEvent e) {
+        if (e.phase != TickEvent.Phase.START || e.player.world.isRemote) {
+            return;
+        }
+
         EntityPlayer player = e.player;
-        if (!player.world.isRemote && player.ticksExisted % 8 == 0) {
+        if (player.ticksExisted % 8 == 0) {
             CapUtils.capability(player, InitCapabilities.TIMER).ifPresent(timer -> {
                 if (player.isInWater()) {
                     byte k = BananaMC.biomeIdOnPos(player.world, BananaMath.floor(player.posX), BananaMath.floor(player.posZ));

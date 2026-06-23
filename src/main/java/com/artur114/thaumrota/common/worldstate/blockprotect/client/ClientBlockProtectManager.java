@@ -21,10 +21,6 @@ import java.util.Random;
 
 public class ClientBlockProtectManager {
     private final Minecraft mc = Minecraft.getMinecraft();
-    private ParticleBlockProtect lastParticle = null;
-    private final Random rand = new Random();
-    private Vec3d lastParticleVec = null;
-    private long lastParticleTime = 0;
 
     /*--------------------------------------EVENTS--------------------------------------*/
 
@@ -34,7 +30,7 @@ public class ClientBlockProtectManager {
         }
 
         if (BlockProtectHandler.hasProtect(e.getWorld(), e.getPos())) {
-            this.spawnParticle(e.getWorld(), e.getPos(), e.getHitVec(), e.getFace());
+            ParticleBlockProtect.spawnParticle(e.getWorld(), e.getPos(), e.getHitVec(), e.getFace());
             e.setCanceled(true);
         }
     }
@@ -51,24 +47,5 @@ public class ClientBlockProtectManager {
 
     public void attachCapabilitiesEventChunk(AttachCapabilitiesEvent<Chunk> e) {
         e.addCapability(new ResourceLocation(ThaumRotA.MODID, "protected_chunk"), new BananaCapProv<>(new ClientProtectedChunk(e.getObject().getPos(), e.getObject().getWorld().provider.getDimension()), InitCapabilities.PROTECTED_CHUNK));
-    }
-
-    /*--------------------------------------UTILS--------------------------------------*/
-
-    private void spawnParticle(World world, BlockPos pos, Vec3d vec3d, EnumFacing facing) {
-        if (lastParticleVec != null && lastParticle != null && lastParticle.isAlive() && lastParticleVec.distanceTo(vec3d) < 0.8 && (System.currentTimeMillis() - lastParticleTime) < 400) {
-            return;
-        }
-
-        double x = vec3d.x + ((facing != null) ? facing.getFrontOffsetX() / ((64.0D) + this.rand.nextDouble() * 32.0D) : 0);
-        double y = vec3d.y + ((facing != null) ? facing.getFrontOffsetY() / ((64.0D) + this.rand.nextDouble() * 32.0D) : 0);
-        double z = vec3d.z + ((facing != null) ? facing.getFrontOffsetZ() / ((64.0D) + this.rand.nextDouble() * 32.0D) : 0);
-
-        boolean flag = world.getBlockState(pos).getBlock() == BlocksTC.stoneEldritchTile;
-
-        this.lastParticleVec = vec3d;
-        this.lastParticle = new ParticleBlockProtect(world, x, y, z, facing, flag ? ParticleBlockProtect.TextureType.ELDRITCH : ParticleBlockProtect.TextureType.ANCIENT);
-        this.lastParticleTime = System.currentTimeMillis();
-        this.mc.effectRenderer.addEffect(lastParticle);
     }
 }

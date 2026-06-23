@@ -6,11 +6,20 @@ import com.artur114.bananalib.asm.tree.ClassNodeAdv;
 import com.artur114.bananalib.asm.util.IASMLogger;
 import com.artur114.bananalib.asm.util.InsnBuilder;
 import com.artur114.thaumrota.asm.ASMTransformerRotA;
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
 public class TCRenderEventsTransformer extends AbstractASMTransformer {
     public TCRenderEventsTransformer() {
         super("thaumcraft.client.lib.events.RenderEventHandler");
+    }
+
+    @Override
+    public byte[] transform(IASMLogger logger, String className, byte[] bytecode) {
+        ClassReader reader = new ClassReader(bytecode);
+        ClassNodeAdv clazz = BananaASM.createClassNode(reader);
+        this.transform(logger, className, clazz);
+        return BananaASM.bakeBytecode(clazz, reader, ClassWriter.COMPUTE_MAXS);
     }
 
     @Override

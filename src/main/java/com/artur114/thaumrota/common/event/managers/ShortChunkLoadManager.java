@@ -1,6 +1,6 @@
-package com.artur114.thaumrota.common.event.eventmanagers;
+package com.artur114.thaumrota.common.event.managers;
 
-import com.artur114.thaumrota.common.event.ServerEventsHandler;
+import com.artur114.thaumrota.common.event.CommonEventsHandler;
 import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.config.RotAConfig;
 import com.artur114.bananalib.mc.nbt.IWriteToNBT;
@@ -183,8 +183,8 @@ public class ShortChunkLoadManager {
 
     public static void loadingCallback(ForgeChunkManager.Ticket ticket, World world) {
         if (ticket.getModData().hasKey("chunks")) {
-            ServerEventsHandler.SHORT_CHUNK_LOAD_MANAGER.TICKETS.put(world, ticket);
-            ServerEventsHandler.SHORT_CHUNK_LOAD_MANAGER.LOADED_CHUNKS.put(ticket, TickingChunk.getChunksAsNBT(ticket));
+            CommonEventsHandler.SHORT_CHUNK_LOAD_MANAGER.TICKETS.put(world, ticket);
+            CommonEventsHandler.SHORT_CHUNK_LOAD_MANAGER.LOADED_CHUNKS.put(ticket, TickingChunk.getChunksAsNBT(ticket));
         } else {
             ForgeChunkManager.releaseTicket(ticket);
         }

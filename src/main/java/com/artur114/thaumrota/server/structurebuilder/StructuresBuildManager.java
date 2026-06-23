@@ -59,7 +59,6 @@ public class StructuresBuildManager implements ILoadStagePost {
         register("ancient_exit");
         register("ancient_boss");
 
-        register("ancient_area");
         register("ancient_portal");
         register("ancient_sanctuary");
         register("ancient_entry_way");

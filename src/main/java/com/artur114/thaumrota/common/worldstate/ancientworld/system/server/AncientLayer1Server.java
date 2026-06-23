@@ -7,7 +7,7 @@ import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structure
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructureEntityManager;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.utils.AncientWorldPlayer;
-import com.artur114.thaumrota.common.event.ServerEventsHandler;
+import com.artur114.thaumrota.common.event.CommonEventsHandler;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.common.network.ClientPacketSyncAncientLayer1s;
 import net.minecraft.entity.EntityLiving;
@@ -49,7 +49,7 @@ public class AncientLayer1Server extends AncientLayer1 {
     @Override
     protected void onRequestToDelete() {
         if (this.builder != null) {
-            ServerEventsHandler.SLOW_BUILD_MANAGER.finishBuilder(this.builder);
+            CommonEventsHandler.SLOW_BUILD_MANAGER.finishBuilder(this.builder);
         }
     }
 
@@ -248,7 +248,7 @@ public class AncientLayer1Server extends AncientLayer1 {
 
     protected void build() {
         this.builder = (AncientLayer1Builder) new AncientLayer1Builder(this.map, this.world, new Random(this.seed), this.pos).addCallBack(this::onBuildFinish);
-        ServerEventsHandler.SLOW_BUILD_MANAGER.newBuilder(this.builder);
+        CommonEventsHandler.SLOW_BUILD_MANAGER.newBuilder(this.builder);
         this.onBuildStart();
     }
 

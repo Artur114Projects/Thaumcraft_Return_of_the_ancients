@@ -4,15 +4,20 @@ import com.artur114.bananalib.mc.base.client.BParticleBase;
 import com.artur114.bananalib.mc.base.client.RegAtlasSprite;
 import com.artur114.thaumrota.client.util.RenderHandler;
 import com.artur114.thaumrota.client.init.InitAtlasSprites;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
+import thaumcraft.api.blocks.BlocksTC;
+
+import java.util.Random;
 
 public class ParticleBlockProtect extends BParticleBase {
     private final Vec3d[] renderFacingOffsets;
@@ -100,5 +105,28 @@ public class ParticleBlockProtect extends BParticleBase {
         public RegAtlasSprite[] getSprite() {
             return sprite;
         }
+    }
+
+    private static ParticleBlockProtect lastParticle = null;
+    private static final Random rand = new Random();
+    private static Vec3d lastParticleVec = null;
+    private static long lastParticleTime = 0;
+
+
+    public static void spawnParticle(World world, BlockPos pos, Vec3d vec3d, EnumFacing facing) {
+        if (lastParticleVec != null && lastParticle != null && lastParticle.isAlive() && lastParticleVec.distanceTo(vec3d) < 0.8 && (System.currentTimeMillis() - lastParticleTime) < 400) {
+            return;
+        }
+
+        double x = vec3d.x + ((facing != null) ? facing.getFrontOffsetX() / ((64.0D) + rand.nextDouble() * 32.0D) : 0);
+        double y = vec3d.y + ((facing != null) ? facing.getFrontOffsetY() / ((64.0D) + rand.nextDouble() * 32.0D) : 0);
+        double z = vec3d.z + ((facing != null) ? facing.getFrontOffsetZ() / ((64.0D) + rand.nextDouble() * 32.0D) : 0);
+
+        boolean flag = world.getBlockState(pos).getBlock() == BlocksTC.stoneEldritchTile;
+
+        lastParticleVec = vec3d;
+        lastParticle = new ParticleBlockProtect(world, x, y, z, facing, flag ? ParticleBlockProtect.TextureType.ELDRITCH : ParticleBlockProtect.TextureType.ANCIENT);
+        lastParticleTime = System.currentTimeMillis();
+        Minecraft.getMinecraft().effectRenderer.addEffect(lastParticle);
     }
 }

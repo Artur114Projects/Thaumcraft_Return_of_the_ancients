@@ -6,6 +6,7 @@ import com.artur114.bananalib.asm.patterns.InsnPatBuilder;
 import com.artur114.bananalib.asm.patterns.InsnPattern;
 import com.artur114.bananalib.asm.tree.ClassNodeAdv;
 import com.artur114.bananalib.asm.util.IASMLogger;
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.InsnList;
 
@@ -13,6 +14,14 @@ public class NetHandlerPlayServerTransformer extends AbstractASMTransformer {
 
     public NetHandlerPlayServerTransformer() {
         super("net.minecraft.network.NetHandlerPlayServer");
+    }
+
+    @Override
+    public byte[] transform(IASMLogger logger, String className, byte[] bytecode) {
+        ClassReader reader = new ClassReader(bytecode);
+        ClassNodeAdv clazz = BananaASM.createClassNode(reader);
+        this.transform(logger, className, clazz);
+        return BananaASM.bakeBytecode(clazz, reader, ClassWriter.COMPUTE_MAXS);
     }
 
     @Override

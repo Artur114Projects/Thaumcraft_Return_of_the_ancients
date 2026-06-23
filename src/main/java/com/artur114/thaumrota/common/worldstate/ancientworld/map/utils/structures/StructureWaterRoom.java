@@ -7,18 +7,13 @@ import com.artur114.thaumrota.client.light.ILightSource;
 import com.artur114.thaumrota.client.light.LineLightSource;
 import com.artur114.thaumrota.client.light.PointLightSource;
 import com.artur114.thaumrota.client.render.fx.HeatRenderer;
-import com.artur114.thaumrota.common.tileentity.TileEntityAncientDoor8X6;
-import com.artur114.thaumrota.common.tileentity.TileEntityDoorBase;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.*;
-import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.init.MobEffects;
 import org.jetbrains.annotations.NotNull;
-import thaumcraft.common.entities.monster.EntityEldritchCrab;
 import thaumcraft.common.entities.monster.EntityEldritchGuardian;
 import thaumcraft.common.entities.monster.EntityInhabitedZombie;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -53,17 +48,22 @@ public class StructureWaterRoom extends StructureCombatRoom {
     }
 
     @Override
-    protected void loadWaves(List<CombatWave> list) {
-        list.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 1), CombatWave.computeList(list1 -> {
-            CombatWave.add(list1, EntityEldritchGuardian.class, 1);
-            CombatWave.add(list1, EntityInhabitedZombie.class, 6);
-        })));
-        list.add(new CombatWave(CombatWave.thenLeft(4), CombatWave.computeList(list1 -> {
+    protected void loadWaves(List<CombatWave> waves) {
+        waves.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 1), CombatWave.computeCList(list1 -> {
             CombatWave.add(list1, EntityEldritchGuardian.class, 2);
+            CombatWave.add(list1, EntityInhabitedZombie.class, 8);
         })));
-        list.add(new CombatWave(CombatWave.ALL_DEAD, CombatWave.computeList(list1 -> {
-            CombatWave.add(list1, EntityEldritchGuardian.class, 1);
-            CombatWave.add(list1, EntityInhabitedZombie.class, 4);
+        waves.add(new CombatWave(CombatWave.thenLeft(4), CombatWave.computeList(list1 -> {
+            CombatWave.add(list1, EntityEldritchGuardian.class, 2);
+            list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.STRENGTH));
+        })));
+        waves.add(new CombatWave(CombatWave.thenLeft(2), CombatWave.computeList(list1 -> {
+            CombatWave.add(list1, EntityEldritchGuardian.class, 3);
+            CombatWave.add(list1, EntityInhabitedZombie.class, 6);
+            list1.add(EntityEntry.of(EntityEldritchGuardian.class, MobEffects.RESISTANCE));
+            list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.STRENGTH));
+            list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.STRENGTH));
+            list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.STRENGTH));
         })));
     }
 

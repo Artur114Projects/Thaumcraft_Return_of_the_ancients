@@ -1,4 +1,4 @@
-package com.artur114.thaumrota.common.event.eventmanagers;
+package com.artur114.thaumrota.common.event.managers;
 
 import com.artur114.thaumrota.server.structurebuilder.slowbuild.SlowBuildResult;
 import com.artur114.thaumrota.server.structurebuilder.slowbuild.SlowBuilder;

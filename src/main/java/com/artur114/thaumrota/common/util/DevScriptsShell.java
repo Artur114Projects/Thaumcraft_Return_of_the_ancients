@@ -65,7 +65,7 @@ public class DevScriptsShell {
                 Class<? extends IGroovyEngine> engine = (Class<? extends IGroovyEngine>) Class.forName("com.artur114.thaumrota.common.util.GroovyScriptsImpl");
                 return engine.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
-                log.warn("Failed to load engine, using dummy engine...");
+                log.warn("Failed to load groovy engine, using dummy engine...");
                 return dummy;
             }
         } else {

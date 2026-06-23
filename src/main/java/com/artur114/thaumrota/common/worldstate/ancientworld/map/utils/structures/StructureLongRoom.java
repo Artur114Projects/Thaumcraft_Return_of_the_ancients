@@ -2,13 +2,11 @@ package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structur
 
 import com.artur114.bananalib.math.m3d.box.Box3IM;
 import com.artur114.bananalib.math.m3d.box.IBox3IM;
-import com.artur114.bananalib.mc.math.EnumRot;
 import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import com.artur114.thaumrota.client.light.ILightSource;
 import com.artur114.thaumrota.client.light.LineLightSource;
 import com.artur114.thaumrota.client.light.PointLightSource;
 import com.artur114.thaumrota.client.render.fx.HeatRenderer;
-import com.artur114.thaumrota.common.tileentity.TileEntityAncientDoor8X6;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.*;
 import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 import thaumcraft.common.entities.monster.EntityEldritchGuardian;
 import thaumcraft.common.entities.monster.EntityInhabitedZombie;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -52,44 +49,54 @@ public class StructureLongRoom extends StructureCombatRoom {
 
     @Override
     protected void onAllDead() {
-        this.openBigDoors(new PosMc3IM(-31, 2, 4), new PosMc3IM(30, 2, 4));
+        this.openBigDoors(new PosMc3IM(-15, 2, 4), new PosMc3IM(46, 2, 4));
     }
 
     @Override
     protected int onTriggered() {
-        this.closeBigDoors(new PosMc3IM(-31, 2, 4), new PosMc3IM(30, 2, 4));
+        this.closeBigDoors(new PosMc3IM(-15, 2, 4), new PosMc3IM(46, 2, 4));
         return 24;
     }
 
     @Override
-    protected void loadWaves(List<CombatWave> list) {
-        list.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 1), CombatWave.computeList(list1 -> {
-            CombatWave.add(list1, EntityEldritchGuardian.class, 1);
-            CombatWave.add(list1, EntityInhabitedZombie.class, 6);
+    protected void loadWaves(List<CombatWave> waves) {
+        waves.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 1), CombatWave.computeCList(list -> {
+            CombatWave.add(list, EntityEldritchGuardian.class, 2);
+            CombatWave.add(list, EntityInhabitedZombie.class, 6);
         })));
-        list.add(new CombatWave(CombatWave.ALL_DEAD, CombatWave.computeList(list1 -> {
-            CombatWave.add(list1, EntityEldritchGuardian.class, 4);
+        waves.add(new CombatWave(CombatWave.ALL_DEAD, CombatWave.computeCList(list -> {
+            CombatWave.add(list, EntityInhabitedZombie.class, 4);
+            CombatWave.add(list, EntityEldritchGuardian.class, 1);
         })));
     }
 
     @Override
     protected void loadSpawnArea(List<IBox3IM> add, List<IBox3IM> subtract) {
         // this is generated, don't scare
-        add.add(new Box3IM(15, 2, 4, 29, 3, 12));
-        add.add(new Box3IM(-29, 2, 3, -15, 3, 12));
-        add.add(new Box3IM(-13, 4, 3, -11, 5, 13));
-        add.add(new Box3IM(11, 4, 3, 13, 5, 13));
-        add.add(new Box3IM(-9, 6, 4, 9, 7, 12));
+        add.add(new Box3IM(31, 2, 4, 45, 3, 12));
+        add.add(new Box3IM(-13, 2, 3, 1, 3, 12));
+        add.add(new Box3IM(3, 4, 3, 5, 5, 13));
+        add.add(new Box3IM(27, 4, 3, 29, 5, 13));
+        add.add(new Box3IM(7, 6, 4, 25, 7, 12));
 
-        subtract.add(new Box3IM(-26, 2, 4, -15, 3, 5));
-        subtract.add(new Box3IM(-26, 2, 11, -15, 3, 12));
-        subtract.add(new Box3IM(15, 2, 4, 26, 3, 5));
-        subtract.add(new Box3IM(15, 2, 11, 26, 3, 12));
+        subtract.add(new Box3IM(-10, 2, 4, 1, 3, 5));
+        subtract.add(new Box3IM(-10, 2, 11, 1, 3, 12));
+        subtract.add(new Box3IM(31, 2, 4, 42, 3, 5));
+        subtract.add(new Box3IM(31, 2, 11, 42, 3, 12));
+
+        if (this.rotate != EnumRotate.NON) {
+            subtract.forEach(box -> box.offset(0, 0, -1));
+            add.forEach(box -> box.offset(0, 0, -1));
+        }
     }
 
     @Override
     protected void loadTriggerBoxes(List<IBox3IM> list, AtomicBoolean isReversed) {
-        list.add(new Box3IM(-11, 5, 1, 11, 17, 15));
+        list.add(new Box3IM(5, 5, 1, 27, 17, 15));
+
+        if (this.rotate != EnumRotate.NON) {
+            list.forEach(box -> box.offset(0, 0, -1));
+        }
     }
 
     @Override

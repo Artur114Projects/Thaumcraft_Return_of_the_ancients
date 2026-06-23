@@ -8,13 +8,17 @@ import com.artur114.thaumrota.common.tileentity.interf.ITileBurner;
 import com.artur114.thaumrota.common.util.DevScriptsShell;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import com.artur114.thaumrota.main.ThaumRotA;
+import com.google.common.collect.Multimap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -105,9 +109,9 @@ public class ItemDebugCarrot extends BItemBase {
 
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-		target.onKillCommand();
 		if (attacker.isSneaking() && target.getHealth() > 0.0F) {
-			target.setHealth(0.0F);
+            target.onKillCommand();
+            target.setHealth(0.0F);
 			target.setDead();
 		}
 		return true;
@@ -129,15 +133,18 @@ public class ItemDebugCarrot extends BItemBase {
 		return super.onLeftClickEntity(stack, player, entity);
 	}
 
-	@Override
-	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add("");
-		tooltip.add(I18n.format("item.modifiers.mainhand"));
-		tooltip.add(" " + net.minecraft.util.text.translation.I18n.translateToLocalFormatted("attribute.modifier.equals.0", DECIMALFORMAT.format(3.0D), net.minecraft.util.text.translation.I18n.translateToLocal("attribute.name.generic.attackSpeed")));
-		tooltip.add(" " + I18n.format("item.debug_carrot.info.i") + " " + I18n.format("attribute.name.generic.attackDamage"));
-	}
+    @Override
+    public @NotNull Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+        Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
+        if (slot == EntityEquipmentSlot.MAINHAND) {
+            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", ((double) Integer.MAX_VALUE) * 32.0D, 0));
+            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -1.0F, 0));
+        }
 
-	private void loadLightMapToFile(TileEntityStructure tile, EntityPlayerMP player, World world) {
+        return multimap;
+    }
+
+    private void loadLightMapToFile(TileEntityStructure tile, EntityPlayerMP player, World world) {
 		MinecraftServer server = player.mcServer;
 		File structuresPath = server.getActiveAnvilConverter().getFile(server.getFolderName(), "structures");
 		if (!structuresPath.exists()) return;

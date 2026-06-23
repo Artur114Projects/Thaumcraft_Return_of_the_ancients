@@ -49,6 +49,9 @@ public class ASMHookRotA {
     }
 
     public static void fixedFogDensityEvent(EntityViewRenderEvent.RenderFogEvent event) {
+        if (Minecraft.getMinecraft().player.dimension == InitDimensions.ANCIENT_WORLD_ID) {
+            return;
+        }
         if (RenderEventHandler.fogFiddled && RenderEventHandler.fogTarget > 0.0F) {
             GlStateManager.setFog(GlStateManager.FogMode.EXP);
             GlStateManager.setFogDensity(RenderEventHandler.fogTarget);

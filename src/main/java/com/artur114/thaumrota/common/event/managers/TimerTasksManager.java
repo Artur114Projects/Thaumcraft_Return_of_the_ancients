@@ -1,4 +1,4 @@
-package com.artur114.thaumrota.common.event.eventmanagers;
+package com.artur114.thaumrota.common.event.managers;
 
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 

@@ -1,11 +1,13 @@
 package com.artur114.thaumrota.common.generation.portal.base;
 
-import com.artur114.thaumrota.common.event.ServerEventsHandler;
+import com.artur114.thaumrota.common.blocks.BlockAncientWorldPortal;
+import com.artur114.thaumrota.common.event.CommonEventsHandler;
 import com.artur114.thaumrota.common.generation.portal.naturalgen.AncientPortalNaturalGen;
 import com.artur114.thaumrota.common.generation.portal.AncientPortalOpening;
 import com.artur114.thaumrota.common.generation.terraingen.GenLayersHandler;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
-import com.artur114.thaumrota.common.init.InitDimensions;
+import com.artur114.thaumrota.common.init.InitCapabilities;
+import com.artur114.thaumrota.common.util.CapUtils;
 import com.artur114.thaumrota.common.util.TeleportHandler;
 import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.config.RotAConfig;
@@ -57,6 +59,28 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
             save(false);
         }
     }
+
+    @SubscribeEvent
+    public static void playerTickEvent(TickEvent.PlayerTickEvent e) {
+        if (e.phase != TickEvent.Phase.START || e.player.world.isRemote) {
+            return;
+        }
+
+        if (e.player.ticksExisted % 20 == 0) {
+            if (e.player.dimension != ANCIENT_WORLD_ID) {
+                if (e.player.getEntityData().getBoolean(BlockAncientWorldPortal.noCollisionNBT)) {
+                    CapUtils.capability(e.player, InitCapabilities.TIMER).ifPresent(timer -> {
+                        if (timer.getTime("notCollisionTime") >= 8 * 20) {
+                            e.player.getEntityData().setBoolean(BlockAncientWorldPortal.noCollisionNBT, false);
+                            timer.delete("notCollisionTime");
+                        }
+                        timer.addTime(20, "notCollisionTime");
+                    });
+                }
+            }
+        }
+    }
+
 
     @SubscribeEvent
     public static void playerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent e) {
@@ -332,11 +356,11 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
     public static void teleportToOverworld(EntityPlayerMP player) {
         if (player.dimension == ANCIENT_WORLD_ID) {
             player.connection.setPlayerLocation(8, 244, 8, player.rotationYaw, player.rotationPitch);
-            ServerEventsHandler.TIMER_TASKS_MANAGER.addTask(1, () -> teleportToOverworldPrivate(player));
+            CommonEventsHandler.TIMER_TASKS_MANAGER.addTask(1, () -> teleportToOverworldPrivate(player));
         }
     }
 
-    public static void teleportToOverworldPrivate(EntityPlayerMP player) {
+    private static void teleportToOverworldPrivate(EntityPlayerMP player) {
         AncientPortal portal = providePortal(player.getEntityData().getInteger(AncientPortal.portalID));
         if (portal != null) {
             portal.teleportToOverworld(player);
@@ -345,7 +369,7 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
             if (portal != null) {
                 portal.teleportToOverworld(player);
             } else {
-                TeleportHandler.teleportToDimension(player, 0, player.getBedLocation(0));
+                TeleportHandler.teleportToSpawnPoint(player);
             }
         }
     }

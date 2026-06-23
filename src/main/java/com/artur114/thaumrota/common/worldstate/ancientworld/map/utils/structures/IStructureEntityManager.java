@@ -29,7 +29,6 @@ public interface IStructureEntityManager extends IStructureInteractive {
             IAttributeInstance attribute = entity.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
             attribute.setBaseValue(attribute.getAttributeValue() * 3);
             world.spawnEntity(entity);
-            entity.playLivingSound();
         }
     }
 }

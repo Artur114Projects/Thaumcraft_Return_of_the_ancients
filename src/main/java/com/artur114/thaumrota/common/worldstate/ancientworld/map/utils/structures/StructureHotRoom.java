@@ -9,7 +9,6 @@ import com.artur114.thaumrota.client.light.PointLightSource;
 import com.artur114.thaumrota.client.render.fx.HeatRenderer;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.ChunkPos;
 import org.jetbrains.annotations.NotNull;
 import thaumcraft.common.entities.monster.EntityEldritchGuardian;
 import thaumcraft.common.entities.monster.EntityInhabitedZombie;
@@ -48,16 +47,18 @@ public class StructureHotRoom extends StructureCombatRoom {
     }
 
     @Override
-    protected void loadWaves(List<CombatWave> list) {
-        list.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 1), CombatWave.computeList(list1 -> {
-            CombatWave.add(list1, EntityEldritchGuardian.class, 1);
+    protected void loadWaves(List<CombatWave> waves) {
+        waves.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 1), CombatWave.computeCList(list1 -> {
+            CombatWave.add(list1, EntityEldritchGuardian.class, 2);
             CombatWave.add(list1, EntityInhabitedZombie.class, 6);
         })));
-        list.add(new CombatWave(CombatWave.thenLeft(4), CombatWave.computeList(list1 -> {
+        waves.add(new CombatWave(CombatWave.thenLeft(4), CombatWave.computeCList(list1 -> {
             CombatWave.add(list1, EntityEldritchGuardian.class, 1);
+            CombatWave.add(list1, EntityInhabitedZombie.class, 3);
         })));
-        list.add(new CombatWave(CombatWave.ALL_DEAD, CombatWave.computeList(list1 -> {
-            CombatWave.add(list1, EntityInhabitedZombie.class, 4);
+        waves.add(new CombatWave(CombatWave.ALL_DEAD, CombatWave.computeCList(list1 -> {
+            CombatWave.add(list1, EntityEldritchGuardian.class, 1);
+            CombatWave.add(list1, EntityInhabitedZombie.class, 8);
         })));
 
     }

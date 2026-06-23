@@ -3,8 +3,9 @@ package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structur
 import com.artur114.bananalib.math.m3d.box.IBox3IM;
 import com.artur114.bananalib.math.m3d.matrix.Matrix3FM;
 import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
+import com.artur114.thaumrota.common.network.ClientPacketCreateFX;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientDoor8X6;
-import com.artur114.thaumrota.common.tileentity.TileEntityDoorBase;
+import com.artur114.thaumrota.common.tileentity.TileEntityDummy;
 import com.artur114.thaumrota.common.util.math.AreasCombiner;
 import com.artur114.thaumrota.common.util.math.BoundingBox;
 import com.artur114.thaumrota.common.util.math.IArea;
@@ -18,6 +19,7 @@ import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -53,19 +55,35 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
 
     protected void closeBigDoors(PosMc3IM... poses) {
         this.transform(Arrays.asList(poses)).forEach(pos -> {
-            this.tile(pos, TileEntityAncientDoor8X6.class).ifPresent(tile -> {
-                tile.close();
-                tile.syncTile(false);
-            });
+            TileEntity tileRaw = this.world.getTileEntity(pos);
+
+            if (tileRaw instanceof TileEntityDummy) {
+                tileRaw = this.world.getTileEntity(((TileEntityDummy) tileRaw).parentPos());
+            }
+
+            if (tileRaw instanceof TileEntityAncientDoor8X6) {
+                ((TileEntityAncientDoor8X6) tileRaw).close();
+                ((TileEntityAncientDoor8X6) tileRaw).syncTile(false);
+            } else {
+                this.world.setBlockState(pos, Blocks.DIRT.getDefaultState());
+            }
         });
     }
 
     protected void openBigDoors(PosMc3IM... poses) {
         this.transform(Arrays.asList(poses)).forEach(pos -> {
-            this.tile(pos, TileEntityAncientDoor8X6.class).ifPresent(tile -> {
-                tile.open();
-                tile.syncTile(false);
-            });
+            TileEntity tileRaw = this.world.getTileEntity(pos);
+
+            if (tileRaw instanceof TileEntityDummy) {
+                tileRaw = this.world.getTileEntity(((TileEntityDummy) tileRaw).parentPos());
+            }
+
+            if (tileRaw instanceof TileEntityAncientDoor8X6) {
+                ((TileEntityAncientDoor8X6) tileRaw).open();
+                ((TileEntityAncientDoor8X6) tileRaw).syncTile(false);
+            } else {
+                this.world.setBlockState(pos, Blocks.DIRT.getDefaultState());
+            }
         });
     }
 
@@ -89,7 +107,7 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
 
     protected List<PosMc3IM> transform(List<PosMc3IM> list) {
         Matrix3FM matrix = Matrix3FM.obtain();
-        matrix.rotateYAround(7.5, 7.5, 7.5, this.rotate.degrees());
+        matrix.rotateYAround(7.5, 0, 7.5, this.rotate.degrees());
         matrix.translate(this.chunkPos.x << 4, this.y, this.chunkPos.z << 4);
         for (PosMc3IM pos : list) matrix.transform(pos);
         Matrix3FM.release(matrix);
@@ -158,6 +176,7 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
             if (!wave.isSpawned()) {
                 wave.spawn(this.rand, this.world, this.spawnArea, (pos, entity) -> {
                     this.aliveEntities.put(entity.getUniqueID(), entity.getClass());
+                    ClientPacketCreateFX.send(this.world, pos, ClientPacketCreateFX.FXType.ENTITY_SPAWN);
                     this.spawnEntity(this.world, pos, entity);
                 });
             } else if (wave.shouldNextWave(this.aliveEntities.values())){
@@ -242,7 +261,7 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
 
     private void rotateAndTranslate(List<IBox3IM> list) {
         Matrix3FM matrix = Matrix3FM.obtain();
-        matrix.rotateYAround(7.5, 7.5, 7.5, this.rotate.degrees());
+        matrix.rotateYAround(7.5, 0, 7.5, this.rotate.degrees());
         matrix.translate(this.chunkPos.x << 4, this.y, this.chunkPos.z << 4);
         for (IBox3IM pos : list) matrix.transform(pos);
         Matrix3FM.release(matrix);
@@ -268,7 +287,7 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
 
     protected abstract void onAllDead();
     protected abstract int onTriggered();
-    protected abstract void loadWaves(List<CombatWave> list);
+    protected abstract void loadWaves(List<CombatWave> waves);
     protected abstract void loadSpawnArea(List<IBox3IM> add, List<IBox3IM> subtract);
     protected abstract void loadTriggerBoxes(List<IBox3IM> list, AtomicBoolean isReversed);
 }

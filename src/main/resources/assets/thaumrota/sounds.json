@@ -188,5 +188,15 @@
         "volume": 2.5
       }
     ]
+  },
+  "ancient_world_ambient": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "thaumrota:ancient_world_ambient",
+        "stream": false,
+        "volume": 1.0
+      }
+    ]
   }
 }

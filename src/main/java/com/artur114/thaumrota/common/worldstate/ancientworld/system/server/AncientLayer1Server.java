@@ -55,9 +55,9 @@ public class AncientLayer1Server extends AncientLayer1 {
 
     @Override
     public void constructFinish() {
-        if (!this.isSleep()) {
-            this.createMap();
+        this.createMap();
 
+        if (!this.isSleep()) {
             for (AncientWorldPlayer player : this.players) {
                 if (!player.isSleep()) {
                     ClientPacketSyncAncientLayer1s.sendCreateLayer((EntityPlayerMP) player.player, this);
@@ -207,7 +207,6 @@ public class AncientLayer1Server extends AncientLayer1 {
     }
 
     protected void onWakeUp() {
-        this.createMap();
         this.loadCount = 0;
         if (!this.isBuild && !this.isBuilding) {
             this.build();

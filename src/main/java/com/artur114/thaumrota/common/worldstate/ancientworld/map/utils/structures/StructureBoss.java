@@ -84,7 +84,7 @@ public class StructureBoss extends StructureMultiChunk implements IStructureInte
             if (flag) {
                 this.closeDoor();
                 this.updateProjectorState(false);
-                this.spawnBoss();
+                this.spawnBoss(players);
 
                 this.removePhantomTablet(players);
             }
@@ -106,9 +106,9 @@ public class StructureBoss extends StructureMultiChunk implements IStructureInte
         this.sendToClient(data);
     }
 
-    private void spawnBoss() {
+    private void spawnBoss(List<AncientWorldPlayer> players) {
         BlockPos pos = this.chunkPos.getBlock(9, this.y + 3, 7);
-        this.spawnEntity(this.world, pos, new EntityEldritchWarden(this.world));
+        this.spawnEntity(players, this.world, pos, new EntityEldritchWarden(this.world));
     }
 
     private void closeDoor() {
@@ -185,11 +185,13 @@ public class StructureBoss extends StructureMultiChunk implements IStructureInte
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         this.isBossDead = nbt.getBoolean("isBossDead");
+        this.isBossSpawn = nbt.getBoolean("isBossSpawn");
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         nbt.setBoolean("isBossDead", this.isBossDead);
+        nbt.setBoolean("isBossSpawn", this.isBossSpawn);
         return nbt;
     }
 

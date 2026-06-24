@@ -1,5 +1,6 @@
 package com.artur114.thaumrota.client.fx;
 
+import com.artur114.bananalib.math.BananaMath;
 import com.artur114.bananalib.math.core.m3d.vec.IVec3DC;
 import com.artur114.bananalib.math.core.m3d.vec.IVec3IC;
 import com.artur114.bananalib.math.m3d.vec.IVec3D;
@@ -40,6 +41,6 @@ public class FXEntitySpawn {
                 }
             }
         }
-        world.playSound(pos, InitSounds.MAGIC_PUFF, SoundCategory.AMBIENT, 200.0F /* с: */, 1, true);
+        world.playSound(pos, InitSounds.MAGIC_PUFF, SoundCategory.AMBIENT, 4.0F, 1.0F + (BananaMath.snap((rand.nextFloat() * 0.4F) - 0.2F, 0.1F)), true);
     }
 }

@@ -177,7 +177,7 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
                 wave.spawn(this.rand, this.world, this.spawnArea, (pos, entity) -> {
                     this.aliveEntities.put(entity.getUniqueID(), entity.getClass());
                     ClientPacketCreateFX.send(this.world, pos, ClientPacketCreateFX.FXType.ENTITY_SPAWN);
-                    this.spawnEntity(this.world, pos, entity);
+                    this.spawnEntity(players, this.world, pos, entity);
                 });
             } else if (wave.shouldNextWave(this.aliveEntities.values())){
                 this.waves.removeFirst();
@@ -213,7 +213,7 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
     public void bindRealPos(ChunkPos pos) {
         this.rand = new Random();
         this.chunkPos = pos;
-        this.computeBoxes();
+        this.computeData();
     }
 
     @Override
@@ -231,7 +231,7 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
         this.timeToStartSpawn = this.onTriggered();
     }
 
-    private void computeBoxes() {
+    private void computeData() {
         List<IBox3IM> trigger = new ArrayList<>();
         AtomicBoolean reversed = new AtomicBoolean();
         this.loadTriggerBoxes(trigger, reversed);

@@ -6,7 +6,7 @@ import thaumcraft.common.items.armor.ItemBootsTraveller;
 
 public class TCFixEventsManager {
     public void livingFallEvent(LivingFallEvent e) {
-        if (e.getDistance() > 5) {
+        if (e.getDistance() > 6) {
             return;
         }
         boolean flag = false;

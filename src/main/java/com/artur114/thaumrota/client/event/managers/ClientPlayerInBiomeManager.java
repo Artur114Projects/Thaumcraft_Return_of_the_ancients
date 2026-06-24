@@ -64,6 +64,10 @@ public class ClientPlayerInBiomeManager {
             GlStateManager.setFog(GlStateManager.FogMode.LINEAR);
             GlStateManager.setFogStart(32);
             GlStateManager.setFogEnd(60);
+
+            if (RenderEventHandler.fogDuration > 0) {
+                RenderEventHandler.fogDuration = 0;
+            }
         }
     }
 

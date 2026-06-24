@@ -158,7 +158,7 @@ public class ServerAncientLayer1Manager implements IServerAncientLayer1Manager {
     }
 
     private void teleportToPlatform(EntityPlayerMP player) {
-        TeleportHandler.teleportToDimension(player, InitDimensions.ANCIENT_WORLD_ID, 0, 244, 0);
+        TeleportHandler.teleportToDimension(player, InitDimensions.ANCIENT_WORLD_ID, 8, 242, 8);
     }
 
     private void setFreePos(AncientLayer1Server layer1Server) {

@@ -24,6 +24,7 @@ public class InitSounds {
     public static final SoundEvent PEDESTAL_ACTIVATED = create("pedestal_activated");
     public static final SoundEvent PNEUMATIC_PUFF_LONG = create("pneumatic_puff_long");
     public static final SoundEvent FIRE_TRAP_START_SOUND = create("fire_trap_sound_start");
+    public static final SoundEvent ANCIENT_WORLD_AMBIENT = create("ancient_world_ambient");
     public static final SoundEvent ANCIENT_CONTROLLER_ACTIVATE = create("ancient_controller_activate");
     public static final SoundEvent ANCIENT_CONTROLLER_DEACTIVATE = create("ancient_controller_deactivate");
 

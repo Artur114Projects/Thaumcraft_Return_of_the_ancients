@@ -8,13 +8,14 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityAncientDoor4X3Render extends TileEntitySpecialRendererBase<TileEntityAncientDoor4X3> implements IItemStackRenderer {
     private static final ResourceLocation TEXTURE_BASE = EnumAsset.TEXTURES_BLOCKS.png("ancient_door_4x3");
     private final ModelAncientDoor4X3 modelBase = new ModelAncientDoor4X3();
 
     @Override
-    public void render(TileEntityAncientDoor4X3 te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+    public void render(@NotNull TileEntityAncientDoor4X3 te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GlStateManager.pushMatrix();
         GlStateManager.pushAttrib();
         GlStateManager.translate(x + 0.5, y + 1.5, z + 0.5);

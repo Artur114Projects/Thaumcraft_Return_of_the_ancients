@@ -3,6 +3,7 @@ package com.artur114.thaumrota.client.model;// Made with Blockbench 4.12.4
 // Paste this class into your mod and generate all required imports
 
 
+import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import net.minecraft.client.model.*;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -134,7 +135,7 @@ public class ModelEnergyLine extends ModelBase {
 			int[] arr = new int[] {2, 3};
 			int i = 0;
 			for (TexturedQuad texturedquad : this.quadList) {
-				if (MiscHandler.arrayContains(arr, i)) {
+				if (BananaMC.arrayContains(arr, i)) {
 					i++; continue;
 				}
 				texturedquad.draw(renderer, scale);

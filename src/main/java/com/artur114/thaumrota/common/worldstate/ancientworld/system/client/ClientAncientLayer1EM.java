@@ -51,6 +51,9 @@ public class ClientAncientLayer1EM {
         if (e.getEntityPlayer().isCreative() && e.getEntityPlayer().isSneaking()) {
             return;
         }
+        if (e.getEntityPlayer().world.getBlockState(e.getPos()).getBlock() == BlocksTC.lootCrateRare) {
+            return;
+        }
 
         ParticleBlockProtect.spawnParticle(e.getWorld(), e.getPos(), e.getHitVec(), e.getFace());
         e.setCanceled(true);
@@ -58,6 +61,9 @@ public class ClientAncientLayer1EM {
 
     public void blockEventBreakEvent(BlockEvent.BreakEvent e) {
         if (e.getPlayer().isCreative() && e.getPlayer().isSneaking()) {
+            return;
+        }
+        if (e.getPlayer().world.getBlockState(e.getPos()).getBlock() == BlocksTC.lootCrateRare) {
             return;
         }
 

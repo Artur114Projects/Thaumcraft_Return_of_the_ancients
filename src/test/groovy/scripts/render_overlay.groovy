@@ -58,7 +58,7 @@ if (sector != null) {
 
 RayTraceResult res = player.rayTrace(8, partialTicksIn)
 
-if (res.typeOfHit == RayTraceResult.Type.BLOCK) {
+if (res?.typeOfHit == RayTraceResult.Type.BLOCK) {
     debug << "Look at [${res.blockPos.x}, ${res.blockPos.y}, ${res.blockPos.z}]"
 }
 

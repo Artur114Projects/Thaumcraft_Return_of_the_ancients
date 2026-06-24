@@ -2,6 +2,7 @@ package com.artur114.thaumrota.common.worldstate.ancientworld.system.client;
 
 import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.bananalib.util.graphs.BananaGraphs;
+import com.artur114.thaumrota.client.audio.SoundAncientWorld;
 import com.artur114.thaumrota.client.light.ILightSource;
 import com.artur114.thaumrota.client.render.fx.HeatRenderer;
 import com.artur114.thaumrota.client.util.LightCompressor;
@@ -41,6 +42,7 @@ public class AncientLayer1Client extends AncientLayer1 {
     @Override
     public void constructFinish() {
         this.createMap();
+        SoundAncientWorld.play();
     }
 
     @Override

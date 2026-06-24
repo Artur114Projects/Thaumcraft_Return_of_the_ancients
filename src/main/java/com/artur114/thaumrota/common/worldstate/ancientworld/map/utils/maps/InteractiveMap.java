@@ -125,6 +125,8 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
             this.insetStructure(structure);
         }
 
+        this.foundAndBindInteractiveS();
+
         for (int i = 0; i != list.tagCount(); i++) {
             NBTTagCompound data = list.getCompoundTagAt(i);
             IStructure str = this.structure(pos.fromLong(data.getLong("pos")));
@@ -133,8 +135,6 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
                 ((IStructureSerializable) str).readFromNBT(data.getCompoundTag("data"));
             }
         }
-
-        foundAndBindInteractiveS();
     }
 
     @Override

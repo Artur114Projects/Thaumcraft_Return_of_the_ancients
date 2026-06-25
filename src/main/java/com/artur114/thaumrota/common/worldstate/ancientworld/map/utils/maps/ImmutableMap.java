@@ -138,8 +138,8 @@ public class ImmutableMap extends AbstractMap {
         this.createBaseStructure(new StrPos(x, y), type, rotate);
     }
 
-    public InteractiveMap toInteractive(World world, ChunkPos center) {
-        return new InteractiveMap(this, world, center);
+    public InteractiveMap toInteractive(World world, long seed, ChunkPos center) {
+        return new InteractiveMap(this, world, seed, center);
     }
 
     public void freezeChanges() {

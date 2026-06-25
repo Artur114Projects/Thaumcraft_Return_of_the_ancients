@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface IStructureInteractive extends IStructure {
     InteractiveMap map();
-    void bindWorld(World world);
+    void bindWorld(World world, long seed);
     void bindRealPos(ChunkPos pos);
     void onPlayerEntered(EntityPlayer player);
     void onPlayerWentOut(EntityPlayer player);

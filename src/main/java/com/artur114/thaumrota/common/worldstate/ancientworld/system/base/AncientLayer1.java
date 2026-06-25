@@ -122,11 +122,11 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
 
     protected void createMap() {
         if (this.mapData != null) {
-            this.map = new InteractiveMap(this.size, this.world, this.pos);
+            this.map = new InteractiveMap(this.size, this.world, this.seed, this.pos);
             this.map.readFromNBT(this.mapData);
             this.mapData = null;
         } else {
-            this.map = GenPhase.InstanceAllGenPhases().getMap(this.seed, this.size).toInteractive(this.world, this.pos);
+            this.map = GenPhase.InstanceAllGenPhases().getMap(this.seed, this.size).toInteractive(this.world, this.seed, this.pos);
         }
     }
 

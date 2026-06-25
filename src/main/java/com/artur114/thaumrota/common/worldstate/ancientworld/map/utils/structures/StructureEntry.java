@@ -82,7 +82,7 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
     }
 
     @Override
-    public void bindWorld(World world) {
+    public void bindWorld(World world, long seed) {
         this.rand = new Random();
         this.world = world;
     }

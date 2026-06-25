@@ -2,6 +2,8 @@ package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structur
 
 import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import com.artur114.bananalib.mc.math.m3d.vec.VecMc3D;
+import com.artur114.bananalib.mc.nbt.IAutoNBTSerializable;
+import com.artur114.bananalib.mc.nbt.auto.AutoNBTEntry;
 import com.artur114.thaumrota.client.light.ILightSource;
 import com.artur114.thaumrota.client.light.LineLightSource;
 import com.artur114.thaumrota.client.light.PointLightSource;
@@ -30,13 +32,16 @@ import thaumcraft.common.entities.monster.boss.EntityEldritchWarden;
 
 import java.util.List;
 
-public class StructureBoss extends StructureMultiChunk implements IStructureInteractive, IStructureEntityManager, IStructureSerializable {
+public class StructureBoss extends StructureMultiChunk implements IStructureInteractive, IStructureEntityManager, IStructureSerializable, IAutoNBTSerializable {
     private BoundingBox boundingBox = null;
-    private boolean isBossSpawn = false;
-    private boolean isBossDead = false;
     private ChunkPos chunkPos = null;
     private World world = null;
     private long sessionId;
+
+    @AutoNBTEntry
+    private boolean isBossSpawn = false;
+    @AutoNBTEntry
+    private boolean isBossDead = false;
 
     public StructureBoss(StrPos pos) {
         super(EnumRotate.NON, EnumMultiChunkStrType.BOSS, pos);
@@ -57,7 +62,7 @@ public class StructureBoss extends StructureMultiChunk implements IStructureInte
     }
 
     @Override
-    public void bindWorld(World world) {
+    public void bindWorld(World world, long seed) {
         this.world = world;
     }
 
@@ -138,7 +143,7 @@ public class StructureBoss extends StructureMultiChunk implements IStructureInte
         if (!this.world.isRemote) {
             this.updateProjectorState(true);
         }
-        this.isBossSpawn = true;
+        this.isBossDead = true;
     }
 
     @Override
@@ -181,19 +186,6 @@ public class StructureBoss extends StructureMultiChunk implements IStructureInte
 
     @Override
     public void onPlayerWentOut(EntityPlayer player) {}
-
-    @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        this.isBossDead = nbt.getBoolean("isBossDead");
-        this.isBossSpawn = nbt.getBoolean("isBossSpawn");
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        nbt.setBoolean("isBossDead", this.isBossDead);
-        nbt.setBoolean("isBossSpawn", this.isBossSpawn);
-        return nbt;
-    }
 
     @Override
     protected void addLights(List<ILightSource> list) {

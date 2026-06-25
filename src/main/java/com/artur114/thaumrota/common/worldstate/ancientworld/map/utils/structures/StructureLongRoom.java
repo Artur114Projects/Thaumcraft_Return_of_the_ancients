@@ -10,6 +10,7 @@ import com.artur114.thaumrota.client.render.fx.HeatRenderer;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.*;
 import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -60,14 +61,32 @@ public class StructureLongRoom extends StructureCombatRoom {
 
     @Override
     protected void loadWaves(List<CombatWave> waves) {
-        waves.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 1), CombatWave.computeCList(list -> {
-            CombatWave.add(list, EntityEldritchGuardian.class, 2);
-            CombatWave.add(list, EntityInhabitedZombie.class, 6);
-        })));
-        waves.add(new CombatWave(CombatWave.ALL_DEAD, CombatWave.computeCList(list -> {
-            CombatWave.add(list, EntityInhabitedZombie.class, 4);
-            CombatWave.add(list, EntityEldritchGuardian.class, 1);
-        })));
+        switch (this.rand.nextInt(2)) {
+            case 0:
+                waves.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 1), CombatWave.computeList(list -> {
+                    CombatWave.add(list, EntityEldritchGuardian.class, 2);
+                    CombatWave.add(list, EntityInhabitedZombie.class, 6);
+                })));
+                waves.add(new CombatWave(CombatWave.computeList(list -> {
+                    CombatWave.add(list, EntityInhabitedZombie.class, 4);
+                    CombatWave.add(list, EntityEldritchGuardian.class, 1);
+                })));
+                break;
+            case 1:
+                waves.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 1), CombatWave.computeList(list -> {
+                    CombatWave.add(list, EntityEldritchGuardian.class, 2);
+                    CombatWave.add(list, EntityInhabitedZombie.class, 2);
+                })));
+                waves.add(new CombatWave(CombatWave.ALL_DEAD, CombatWave.computeList(list -> {
+                    CombatWave.add(list, EntityInhabitedZombie.class, 4);
+                    CombatWave.add(list, EntityEldritchGuardian.class, 1);
+                })));
+                waves.add(new CombatWave(CombatWave.computeList(list -> {
+                    CombatWave.add(list, EntityEldritchGuardian.class, 2);
+                    list.add(EntityEntry.of(EntityEldritchGuardian.class, MobEffects.SPEED, MobEffects.STRENGTH, MobEffects.REGENERATION));
+                })));
+                break;
+        }
     }
 
     @Override
@@ -172,9 +191,7 @@ public class StructureLongRoom extends StructureCombatRoom {
         public char[][] form() {
             return new char[][] {
                 {' ',' ',' ',' ',' ',' '},
-                {' ',' ',' ',' ',' ',' '},
                 {'p','s','s','c','s','p'},
-                {' ',' ',' ',' ',' ',' '},
                 {' ',' ',' ',' ',' ',' '}
             };
         }

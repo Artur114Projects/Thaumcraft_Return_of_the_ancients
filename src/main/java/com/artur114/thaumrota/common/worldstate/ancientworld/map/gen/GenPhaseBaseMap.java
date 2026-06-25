@@ -1,5 +1,9 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.gen;
 
+import com.artur114.bananalib.math.m2d.box.Box2IM;
+import com.artur114.bananalib.math.m2d.box.IBox2I;
+import com.artur114.bananalib.math.m2d.box.IBox2IM;
+import com.artur114.bananalib.math.m2d.vec.IVec2I;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.*;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.maps.ImmutableMap;
 import org.jetbrains.annotations.NotNull;
@@ -102,7 +106,10 @@ public class GenPhaseBaseMap extends GenPhase {
 
     private int[] compilePotencialPosFor(ImmutableMap map, Room room, EnumRotate rotate, int size) {
         StrPos.MutableStrPos pos = new StrPos.MutableStrPos();
+        IBox2IM box2IM = new Box2IM();
         int[] ret = new int[size * size];
+        IVec2I c = room.type.form().center();
+        IBox2I box = room.type.form().box();
         int range = 2;
         int cursor = 0;
 
@@ -111,19 +118,13 @@ public class GenPhaseBaseMap extends GenPhase {
             int y = i / size;
             pos.setPos(x, y);
 
-            IMultiChunkStrForm.IOffset[] offsets = room.type.form().offsets(pos, rotate);
-
+            box2IM.set(box).offset(x, y).offset(-c.x(), -c.y());
             boolean flag = true;
-            for (IMultiChunkStrForm.IOffset offset : offsets) {
-                if (map.structureType(pos.setPos(offset.globalPos())) != null) {
-                    flag = false; break;
-                }
-                for (int j = 1; j != range + 1; j++) {
-                    for (EnumFace face : offset.voidCollides()) {
-                        if (map.structureType(pos.setPos(offset.globalPos()).offset(face, j)) != null) {
-                            flag = false;
-                            break;
-                        }
+            for (int j = box2IM.minX(); j != box2IM.maxX(); j++) {
+                for (int k = box2IM.minY(); k != box2IM.maxY(); k++) {
+                    if (map.structureType(pos.setPos(j, k)) != null) {
+                        flag = false;
+                        break;
                     }
                 }
                 if (!flag) break;
@@ -135,26 +136,6 @@ public class GenPhaseBaseMap extends GenPhase {
         }
 
         return Arrays.copyOf(ret, cursor);
-    }
-
-    private void updateIndexes(ImmutableMap map, Set<Integer> indexes, int size) {
-        final int checkDistance = 1;
-        for (int i = 0; i != size * size; i++) {
-            int x = i % size;
-            int y = i / size;
-
-            if (x == 0 || y == 0 || x == size - 1 || y == size - 1) {
-                indexes.remove(i); continue;
-            }
-
-            if (map.structureType(x, y) != null) {
-                for (int x1 = x - checkDistance; x1 != x + checkDistance + 1; x1++) {
-                    for (int y1 = y - checkDistance; y1 != y + checkDistance + 1; y1++) {
-                        indexes.remove(x1 + y1 * size);
-                    }
-                }
-            }
-        }
     }
 
     private List<Integer> createIndexesForBoss(int size) {

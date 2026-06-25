@@ -51,11 +51,19 @@ public class EntityEntry {
     public static EntityEntry of(Class<? extends EntityLiving> clazz, final Potion... potions) {
         return new EntityEntry(clazz, () -> {
             List<PotionEffect> ret = new ArrayList<>();
-            ret.add(potion(MobEffects.FIRE_RESISTANCE, 0));
-            ret.add(potion(MobEffects.SPEED, 0));
+            int fireRestAmp = 0;
+            int speedAmp = 0;
             for (Potion potion : potions) {
-                ret.add(potion(potion, 0));
+                if (potion == MobEffects.SPEED) {
+                    speedAmp++;
+                } else if (potion == MobEffects.FIRE_RESISTANCE) {
+                    fireRestAmp++;
+                } else {
+                    ret.add(potion(potion, 0));
+                }
             }
+            ret.add(potion(MobEffects.FIRE_RESISTANCE, fireRestAmp));
+            ret.add(potion(MobEffects.SPEED, speedAmp));
             return ret;
         });
     }

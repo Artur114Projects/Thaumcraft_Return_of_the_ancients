@@ -1,12 +1,11 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.maps;
 
+import com.artur114.bananalib.mc.nbt.INBTSerializable;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.EnumRotate;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.IStructureType;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrPos;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrTypesRegistry;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.*;
-import com.artur114.bananalib.mc.nbt.IReadFromNBT;
-import com.artur114.bananalib.mc.nbt.IWriteToNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.ChunkPos;
@@ -15,30 +14,33 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFromNBT {
+public class InteractiveMap extends AbstractMap implements INBTSerializable {
     private static final Logger log = LogManager.getLogger("ThaumRotA/AncientMap");
     private final Map<Class<IStructure>, List<IStructure>> structuresDictionary = new HashMap<>();
     private NBTTagCompound syncData = null;
     private final ChunkPos center;
     private final World world;
+    private final long seed;
 
-    public InteractiveMap(AbstractMap map, World world, ChunkPos center) {
-        this(map.size, world, center);
+    public InteractiveMap(AbstractMap map, World world, long seed, ChunkPos center) {
+        this(map.size, world, seed, center);
 
         this.copyFromMap(map);
 
         this.foundAndBindInteractiveS();
     }
 
-    public InteractiveMap(int size, World world, ChunkPos center) {
+    public InteractiveMap(int size, World world, long seed, ChunkPos center) {
         super(size);
 
         this.center = center;
         this.world = world;
+        this.seed = seed;
     }
 
     @Override
@@ -138,7 +140,7 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+    public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         StrPos.MutableStrPos pos = new StrPos.MutableStrPos();
         NBTTagList list = new NBTTagList();
         for (IStructureSerializable serializable : this.foundStructures(IStructureSerializable.class)) {
@@ -245,7 +247,7 @@ public class InteractiveMap extends AbstractMap implements IWriteToNBT, IReadFro
 
     private void foundAndBindInteractiveS() {
         for (IStructureInteractive interactive : this.foundStructures(IStructureInteractive.class)) {
-            interactive.bindWorld(this.world);
+            interactive.bindWorld(this.world, this.seed);
             this.bindRealPos(interactive);
         }
     }

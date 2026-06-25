@@ -1,19 +1,37 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils;
 
+import com.artur114.bananalib.math.m2d.box.Box2I;
+import com.artur114.bananalib.math.m2d.box.IBox2D;
+import com.artur114.bananalib.math.m2d.box.IBox2I;
+import com.artur114.bananalib.math.m2d.vec.IVec2I;
+import com.artur114.bananalib.math.m2d.vec.Vec2I;
+
 import java.util.*;
 
 public abstract class MultiChunkStrForm implements IMultiChunkStrForm {
     private final Map<StrPos, Map<EnumRotate, IOffset[]>> offsets = new HashMap<>();
     private final Map<EnumRotate, IOffset[]> zeroOffsets;
     private final char[][] rawForm;
+    private final IBox2I box;
+    private IVec2I center;
 
     public MultiChunkStrForm() {
         this.rawForm = this.form();
-
+        this.box = new Box2I(0, 0, this.rawForm.length, this.rawForm[0].length);
         this.zeroOffsets = this.initZeroOffsets();
     }
 
     public abstract char[][] form();
+
+    @Override
+    public IBox2I box() {
+        return this.box;
+    }
+
+    @Override
+    public IVec2I center() {
+        return this.center;
+    }
 
     @Override
     public IOffset[] offsets() {
@@ -108,6 +126,8 @@ public abstract class MultiChunkStrForm implements IMultiChunkStrForm {
         if (centerY == -1) {
             throw new IllegalArgumentException();
         }
+
+        this.center = new Vec2I(centerX, centerY);
 
         List<IOffset> offsets = new ArrayList<>(form.length * form[0].length);
         StrPos c = new StrPos(0, 0);

@@ -9,6 +9,7 @@ import com.artur114.thaumrota.client.light.PointLightSource;
 import com.artur114.thaumrota.client.render.fx.HeatRenderer;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import org.jetbrains.annotations.NotNull;
 import thaumcraft.common.entities.monster.EntityEldritchGuardian;
 import thaumcraft.common.entities.monster.EntityInhabitedZombie;
@@ -48,18 +49,39 @@ public class StructureHotRoom extends StructureCombatRoom {
 
     @Override
     protected void loadWaves(List<CombatWave> waves) {
-        waves.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 1), CombatWave.computeCList(list1 -> {
-            CombatWave.add(list1, EntityEldritchGuardian.class, 2);
-            CombatWave.add(list1, EntityInhabitedZombie.class, 6);
-        })));
-        waves.add(new CombatWave(CombatWave.thenLeft(4), CombatWave.computeCList(list1 -> {
-            CombatWave.add(list1, EntityEldritchGuardian.class, 1);
-            CombatWave.add(list1, EntityInhabitedZombie.class, 3);
-        })));
-        waves.add(new CombatWave(CombatWave.ALL_DEAD, CombatWave.computeCList(list1 -> {
-            CombatWave.add(list1, EntityEldritchGuardian.class, 1);
-            CombatWave.add(list1, EntityInhabitedZombie.class, 8);
-        })));
+        switch (this.rand.nextInt(2)) {
+            case 0:
+                waves.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 1), CombatWave.computeList(list1 -> {
+                    CombatWave.add(list1, EntityEldritchGuardian.class, 2);
+                    CombatWave.add(list1, EntityInhabitedZombie.class, 6);
+                })));
+                waves.add(new CombatWave(CombatWave.thenLeft(4), CombatWave.computeList(list1 -> {
+                    CombatWave.add(list1, EntityEldritchGuardian.class, 1);
+                    CombatWave.add(list1, EntityInhabitedZombie.class, 3);
+                })));
+                waves.add(new CombatWave(CombatWave.computeList(list1 -> {
+                    CombatWave.add(list1, EntityEldritchGuardian.class, 1);
+                    CombatWave.add(list1, EntityInhabitedZombie.class, 8);
+                })));
+                break;
+            case 1:
+                waves.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 1), CombatWave.computeList(list1 -> {
+                    CombatWave.add(list1, EntityEldritchGuardian.class, 2);
+                    CombatWave.add(list1, EntityInhabitedZombie.class, 6);
+                    list1.add(EntityEntry.of(EntityEldritchGuardian.class, MobEffects.SPEED));
+                })));
+                waves.add(new CombatWave(CombatWave.thenLeft(4), CombatWave.computeList(list1 -> {
+                    list1.add(EntityEntry.of(EntityEldritchGuardian.class, MobEffects.SPEED));
+                    CombatWave.add(list1, EntityEldritchGuardian.class, 1);
+                    CombatWave.add(list1, EntityInhabitedZombie.class, 3);
+                })));
+                waves.add(new CombatWave(CombatWave.computeList(list1 -> {
+                    CombatWave.add(list1, EntityEldritchGuardian.class, 1);
+                    CombatWave.add(list1, EntityInhabitedZombie.class, 2);
+                    list1.add(EntityEntry.of(EntityEldritchGuardian.class, MobEffects.SPEED));
+                })));
+                break;
+        }
 
     }
 

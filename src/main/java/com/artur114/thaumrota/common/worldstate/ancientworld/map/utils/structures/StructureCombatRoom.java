@@ -15,12 +15,12 @@ import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.EnumRotat
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrPos;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.maps.InteractiveMap;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.utils.AncientWorldPlayer;
-import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -28,14 +28,12 @@ import net.minecraft.world.World;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.BiFunction;
 
-public abstract class StructureCombatRoom extends StructureMultiChunk implements IStructureInteractive, IStructureEntityManager {
-    private final Map<Class<? extends TileEntity>, List<BlockPos>> tilesMap = new HashMap<>();
+public abstract class StructureCombatRoom extends StructureMultiChunk implements IStructureInteractive, IStructureEntityManager, IStructureSerializable {
     private final Map<UUID, Class<? extends EntityLiving>> aliveEntities = new HashMap<>();
     private List<IBox3IM> triggerBoxes = null;
     private boolean isTriggerReversed = false;
-    private ArrayDeque<CombatWave> waves = null;
+    private CombatWave[] waves = null;
     private int timeToStartSpawn = 0;
     private boolean triggered = false;
     private boolean allDead = false;
@@ -44,6 +42,7 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
     private long sessionId = -1;
     protected Random rand = null;
     protected World world = null;
+    private int waveIndex = 0;
 
     public StructureCombatRoom(EnumRotate rotate, EnumMultiChunkStrType type, StrPos pos) {
         super(rotate, type, pos);
@@ -87,10 +86,6 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
         });
     }
 
-    protected List<BlockPos> tiles(Class<? extends TileEntity> clazz) {
-        return this.tilesMap.getOrDefault(clazz, Collections.emptyList());
-    }
-
     protected <T extends TileEntity> Optional<T> tile(BlockPos pos, Class<T> clazz) {
         TileEntity tile = this.world.getTileEntity(pos);
 
@@ -115,21 +110,9 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
     }
 
     @Override
-    public void build(World world, ChunkPos pos, Random rand) {
-        PosMc3IM blockPos = PosMc3IM.obtain();
-        blockPos.setChunk(pos).add(8, 0, 8).setY(this.y);
-        BiFunction<TileEntity, NBTTagCompound, TileEntity> hook = (tile, data) -> {
-            List<BlockPos> list = this.tilesMap.computeIfAbsent(tile.getClass(), k -> new ArrayList<>());
-            list.add(tile.getPos());
-            return tile;
-        };
-        StructuresBuildManager.createBuildRequest(world, blockPos, this.type.stringId(this.rotate)).setIgnoreAir().setPosAsXZCenter().addTileEntityHook(hook).build();
-        PosMc3IM.release(blockPos);
-    }
-
-    @Override
     public boolean loadEntity(EntityLiving entity) {
-        return this.aliveEntities.containsKey(entity.getUniqueID());
+        this.aliveEntities.put(entity.getUniqueID(), entity.getClass());
+        return true;
     }
 
     @Override
@@ -148,7 +131,7 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
         if (this.allDead) {
             return;
         }
-        if (this.aliveEntities.isEmpty() && this.waves.isEmpty()) {
+        if (this.aliveEntities.isEmpty() && this.waveIndex >= this.waves.length) {
             this.allDead = true;
             this.onAllDead();
             return;
@@ -169,18 +152,17 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
                 return;
             }
 
-            CombatWave wave = this.waves.peekFirst();
-            if (wave == null) {
-                return;
-            }
+            if (this.waveIndex >= this.waves.length) return;
+            CombatWave wave = this.waves[this.waveIndex];
+            if (wave == null) return;
+
             if (!wave.isSpawned()) {
                 wave.spawn(this.rand, this.world, this.spawnArea, (pos, entity) -> {
-                    this.aliveEntities.put(entity.getUniqueID(), entity.getClass());
                     ClientPacketCreateFX.send(this.world, pos, ClientPacketCreateFX.FXType.ENTITY_SPAWN);
                     this.spawnEntity(players, this.world, pos, entity);
                 });
             } else if (wave.shouldNextWave(this.aliveEntities.values())){
-                this.waves.removeFirst();
+                this.waveIndex++;
             }
         } else {
             for (AncientWorldPlayer player : players) {
@@ -205,13 +187,13 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
     }
 
     @Override
-    public void bindWorld(World world) {
+    public void bindWorld(World world, long seed) {
+        this.rand = new Random(seed + this.pos.asLong());
         this.world = world;
     }
 
     @Override
     public void bindRealPos(ChunkPos pos) {
-        this.rand = new Random();
         this.chunkPos = pos;
         this.computeData();
     }
@@ -224,6 +206,34 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
     @Override
     public long sessionId() {
         return this.sessionId;
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+        nbt.setInteger("waveIndex", this.waveIndex);
+        nbt.setBoolean("triggered", this.triggered);
+        nbt.setBoolean("allDead", this.allDead);
+        if (this.waves != null) {
+            NBTTagList list = new NBTTagList();
+            for (CombatWave wave : this.waves) {
+                list.appendTag(wave.writeToNBT(new NBTTagCompound()));
+            }
+            nbt.setTag("waves", list);
+        }
+        return nbt;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        this.waveIndex = nbt.getInteger("waveIndex");
+        this.triggered = nbt.getBoolean("triggered");
+        this.allDead = nbt.getBoolean("allDead");
+        if (nbt.hasKey("waves")) {
+            NBTTagList list = nbt.getTagList("waves", 10);
+            for (int i = 0; i < list.tagCount(); i++) {
+                if (i < this.waves.length) this.waves[i].readFromNBT(list.getCompoundTagAt(i));
+            }
+        }
     }
 
     private void trigger() {
@@ -256,7 +266,7 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
 
         List<CombatWave> list = new ArrayList<>();
         this.loadWaves(list);
-        this.waves = new ArrayDeque<>(list);
+        this.waves = list.toArray(new CombatWave[0]);
     }
 
     private void rotateAndTranslate(List<IBox3IM> list) {

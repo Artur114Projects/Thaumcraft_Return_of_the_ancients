@@ -1,7 +1,10 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils;
 
+import com.artur114.bananalib.mc.nbt.IReadFromNBT;
+import com.artur114.bananalib.mc.nbt.IWriteToNBT;
 import com.artur114.thaumrota.common.util.math.IArea;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -9,29 +12,38 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
-public class CombatWave {
+public class CombatWave implements IWriteToNBT, IReadFromNBT {
+    public static final int MIN_SPAWN_DELAY = 3;
+    public static final int MAX_SPAWN_DELAY = 6;
+
     private final Predicate<Collection<Class<? extends EntityLiving>>> doNextWave;
-    private final ArrayDeque<EntityEntry> entities;
+    private final EntityEntry[] entities;
     private int ticksToNextSpawn = 0;
+    private int entryId = 0;
 
     public CombatWave(Predicate<Collection<Class<? extends EntityLiving>>> doNextWave, Collection<Class<? extends EntityLiving>> entities) {
-        this.entities = entities.stream().map(EntityEntry::of).collect(Collectors.toCollection(ArrayDeque::new));
+        this.entities = entities.stream().map(EntityEntry::of).toArray(EntityEntry[]::new);
         this.doNextWave = doNextWave;
     }
 
     public CombatWave(Predicate<Collection<Class<? extends EntityLiving>>> doNextWave, List<EntityEntry> entities) {
-        this.entities = new ArrayDeque<>(entities);
+        this.entities = entities.toArray(new EntityEntry[0]);
         this.doNextWave = doNextWave;
     }
+
+    public CombatWave(List<EntityEntry> entities) {
+        this.entities = entities.toArray(new EntityEntry[0]);
+        this.doNextWave = ALL_DEAD;
+    }
+
 
     public boolean shouldNextWave(Collection<Class<? extends EntityLiving>> alive) {
         return this.doNextWave.test(alive);
     }
 
     public boolean isSpawned() {
-        return this.entities.isEmpty();
+        return this.entryId > this.entities.length - 1;
     }
 
     public void spawn(Random rand, World world, IArea area, BiConsumer<BlockPos, EntityLiving> doSpawn) {
@@ -39,19 +51,30 @@ public class CombatWave {
             return;
         }
         if (this.ticksToNextSpawn <= 0) {
-            EntityEntry entity = this.entities.poll();
+            EntityEntry entity = this.entities[this.entryId++];
             if (entity == null) return;
             doSpawn.accept(area.fromIndex(rand.nextInt(area.areaSize())), entity.create(world));
-            this.ticksToNextSpawn = rand.nextInt(4) + 3;
+            this.ticksToNextSpawn = rand.nextInt(MAX_SPAWN_DELAY - MIN_SPAWN_DELAY + 1) + MIN_SPAWN_DELAY;
             return;
         }
         this.ticksToNextSpawn--;
     }
 
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        this.entryId = nbt.getInteger("entryId");
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+        nbt.setInteger("entryId", this.entryId);
+        return nbt;
+    }
+
     public static final Predicate<Collection<Class<? extends EntityLiving>>> ALL_DEAD = (Collection::isEmpty);
 
     public static Predicate<Collection<Class<? extends EntityLiving>>> thenLeft(int count) {
-        return classes -> classes.size() <= count;
+        return classes -> classes.size() < count;
     }
 
     public static Predicate<Collection<Class<? extends EntityLiving>>> thenLeft(Class<? extends EntityLiving> type, int count) {
@@ -63,7 +86,7 @@ public class CombatWave {
             for (Class<? extends EntityLiving> clazz : classes) {
                 if (clazz == type) find++;
             }
-            return find <= count;
+            return find < count;
         };
     }
 
@@ -79,6 +102,7 @@ public class CombatWave {
         }
     }
 
+    @Deprecated
     public static List<Class<? extends EntityLiving>> computeCList(Consumer<List<Class<? extends EntityLiving>>> filler) {
         List<Class<? extends EntityLiving>> list = new ArrayList<>();
         filler.accept(list);

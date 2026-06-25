@@ -49,22 +49,50 @@ public class StructureWaterRoom extends StructureCombatRoom {
 
     @Override
     protected void loadWaves(List<CombatWave> waves) {
-        waves.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 1), CombatWave.computeCList(list1 -> {
-            CombatWave.add(list1, EntityEldritchGuardian.class, 2);
-            CombatWave.add(list1, EntityInhabitedZombie.class, 8);
-        })));
-        waves.add(new CombatWave(CombatWave.thenLeft(4), CombatWave.computeList(list1 -> {
-            CombatWave.add(list1, EntityEldritchGuardian.class, 2);
-            list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.STRENGTH));
-        })));
-        waves.add(new CombatWave(CombatWave.thenLeft(2), CombatWave.computeList(list1 -> {
-            CombatWave.add(list1, EntityEldritchGuardian.class, 3);
-            CombatWave.add(list1, EntityInhabitedZombie.class, 6);
-            list1.add(EntityEntry.of(EntityEldritchGuardian.class, MobEffects.RESISTANCE));
-            list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.STRENGTH));
-            list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.STRENGTH));
-            list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.STRENGTH));
-        })));
+        switch (this.rand.nextInt(2)) {
+            case 0:
+                waves.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 1), CombatWave.computeList(list1 -> {
+                    CombatWave.add(list1, EntityEldritchGuardian.class, 2);
+                    CombatWave.add(list1, EntityInhabitedZombie.class, 8);
+                })));
+                waves.add(new CombatWave(CombatWave.thenLeft(4), CombatWave.computeList(list1 -> {
+                    CombatWave.add(list1, EntityEldritchGuardian.class, 2);
+                    list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.STRENGTH));
+                })));
+                waves.add(new CombatWave(CombatWave.thenLeft(2), CombatWave.computeList(list1 -> {
+                    CombatWave.add(list1, EntityEldritchGuardian.class, 3);
+                    CombatWave.add(list1, EntityInhabitedZombie.class, 6);
+                    list1.add(EntityEntry.of(EntityEldritchGuardian.class, MobEffects.SPEED));
+                    list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.SPEED, MobEffects.SPEED, MobEffects.STRENGTH, MobEffects.REGENERATION));
+                    list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.SPEED, MobEffects.SPEED, MobEffects.STRENGTH, MobEffects.REGENERATION));
+                    list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.SPEED, MobEffects.SPEED, MobEffects.STRENGTH, MobEffects.REGENERATION));
+                })));
+                break;
+            case 1:
+                waves.add(new CombatWave(CombatWave.thenLeft(EntityEldritchGuardian.class, 2), CombatWave.computeList(list1 -> {
+                    CombatWave.add(list1, EntityEldritchGuardian.class, 2);
+                    CombatWave.add(list1, EntityInhabitedZombie.class, 6);
+                })));
+                waves.add(new CombatWave(CombatWave.thenLeft(4), CombatWave.computeList(list1 -> {
+                    CombatWave.add(list1, EntityEldritchGuardian.class, 1);
+                    list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.STRENGTH, MobEffects.REGENERATION));
+                    list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.STRENGTH, MobEffects.REGENERATION));
+                    list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.STRENGTH));
+                    list1.add(EntityEntry.of(EntityInhabitedZombie.class, MobEffects.STRENGTH));
+                })));
+                waves.add(new CombatWave(CombatWave.thenLeft(3), CombatWave.computeList(list1 -> {
+                    CombatWave.add(list1, EntityEldritchGuardian.class, 1);
+                    CombatWave.add(list1, EntityInhabitedZombie.class, 6);
+                    list1.add(EntityEntry.of(EntityEldritchGuardian.class, MobEffects.RESISTANCE));
+                    list1.add(EntityEntry.of(EntityEldritchGuardian.class, MobEffects.STRENGTH));
+                })));
+                waves.add(new CombatWave(CombatWave.ALL_DEAD, CombatWave.computeList(list1 -> {
+                    CombatWave.add(list1, EntityInhabitedZombie.class, 4);
+                    list1.add(EntityEntry.of(EntityEldritchGuardian.class, MobEffects.STRENGTH));
+                    list1.add(EntityEntry.of(EntityEldritchGuardian.class, MobEffects.RESISTANCE));
+                })));
+                break;
+        }
     }
 
     @Override

@@ -4,8 +4,8 @@ import com.artur114.bananalib.math.m2d.box.IBox2I;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;
 
 public interface IMultiChunkStrForm {
-    IBox2I box();
     IVec2I center();
+    IBox2I box(EnumRotate rot);
     IOffset[] offsets();
     IOffset[] offsets(StrPos center);
     IOffset[] offsets(EnumRotate rotate);

@@ -1,5 +1,6 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures;
 
+import com.artur114.bananalib.math.m2d.box.IBox2I;
 import com.artur114.bananalib.math.m3d.box.Box3IM;
 import com.artur114.bananalib.math.m3d.box.IBox3IM;
 import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
@@ -22,12 +23,19 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class StructureLongRoom extends StructureCombatRoom {
+    private boolean isSecret = false;
+
     public StructureLongRoom(EnumRotate rotate, StrPos pos) {
         super(rotate.wrap(EnumRotate.C90), EnumMultiChunkStrType.LONG_ROOM, pos);
     }
 
-    protected StructureLongRoom(StructureMultiChunk parent) {
+    protected StructureLongRoom(StructureLongRoom parent) {
         super(parent);
+        this.isSecret = parent.isSecret;
+    }
+
+    public void setSecret() {
+        this.isSecret = true;
     }
 
     @Override
@@ -44,7 +52,7 @@ public class StructureLongRoom extends StructureCombatRoom {
         } else {
             blockPos.addZ(8);
         }
-        StructuresBuildManager.createBuildRequest(world, blockPos, this.type.stringId(this.rotate)).setIgnoreAir().setPosAsXZCenter().build();
+        StructuresBuildManager.createBuildRequest(world, blockPos, this.type.stringId(this.rotate) + (this.isSecret ? "_secret" : "")).setIgnoreAir().setPosAsXZCenter().build();
         PosMc3IM.release(blockPos);
     }
 
@@ -188,10 +196,17 @@ public class StructureLongRoom extends StructureCombatRoom {
     public static class Form extends MultiChunkStrForm {
 
         @Override
+        public IBox2I box(EnumRotate rot) {
+            return super.box(rot.wrap(EnumRotate.C90));
+        }
+
+        @Override
         public char[][] form() {
             return new char[][] {
                 {' ',' ',' ',' ',' ',' '},
+                {' ',' ',' ',' ',' ',' '},
                 {'p','s','s','c','s','p'},
+                {' ',' ',' ',' ',' ',' '},
                 {' ',' ',' ',' ',' ',' '}
             };
         }

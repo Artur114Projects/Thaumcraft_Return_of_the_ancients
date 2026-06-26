@@ -50,6 +50,7 @@ public class StructuresBuildManager implements ILoadStagePost {
         register("ancient_fork_rotate-", 1, 4);
         register("ancient_end_rotate-", 1,  4);
         register("ancient_way_rotate-", 1, 2);
+        register("ancient_long_room_rotate-2_secret");
 
         register("ancient_big_hot_room");
         register("ancient_crossroads");
@@ -58,6 +59,7 @@ public class StructuresBuildManager implements ILoadStagePost {
         register("ancient_entry");
         register("ancient_exit");
         register("ancient_boss");
+
 
         register("ancient_portal");
         register("ancient_sanctuary");

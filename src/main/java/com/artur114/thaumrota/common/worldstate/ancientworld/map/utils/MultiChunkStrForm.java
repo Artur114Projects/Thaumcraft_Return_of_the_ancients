@@ -1,8 +1,9 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils;
 
-import com.artur114.bananalib.math.m2d.box.Box2I;
-import com.artur114.bananalib.math.m2d.box.IBox2D;
+import com.artur114.bananalib.math.BananaMath;
+import com.artur114.bananalib.math.m2d.box.Box2IM;
 import com.artur114.bananalib.math.m2d.box.IBox2I;
+import com.artur114.bananalib.math.m2d.box.IBox2IM;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;
 import com.artur114.bananalib.math.m2d.vec.Vec2I;
 
@@ -10,22 +11,21 @@ import java.util.*;
 
 public abstract class MultiChunkStrForm implements IMultiChunkStrForm {
     private final Map<StrPos, Map<EnumRotate, IOffset[]>> offsets = new HashMap<>();
+    private final Map<EnumRotate, IBox2I> boxes = new HashMap<>();
     private final Map<EnumRotate, IOffset[]> zeroOffsets;
     private final char[][] rawForm;
-    private final IBox2I box;
     private IVec2I center;
 
     public MultiChunkStrForm() {
         this.rawForm = this.form();
-        this.box = new Box2I(0, 0, this.rawForm.length, this.rawForm[0].length);
         this.zeroOffsets = this.initZeroOffsets();
     }
 
     public abstract char[][] form();
 
     @Override
-    public IBox2I box() {
-        return this.box;
+    public IBox2I box(EnumRotate rot) {
+        return this.boxes.get(rot);
     }
 
     @Override
@@ -145,11 +145,20 @@ public abstract class MultiChunkStrForm implements IMultiChunkStrForm {
 
         Map<EnumRotate, IOffset[]> ret = new HashMap<>();
 
+        IBox2IM box = new Box2IM();
         for (EnumRotate rotate : EnumRotate.values()) {
             List<IOffset> off = new ArrayList<>();
             for (IOffset offset : offsets) {
                 off.add(new Offset(offset.centerPos(), offset.localPos().rotate(rotate), EnumFace.rotateAll(rotate, offset.ports()), EnumFace.rotateAll(rotate, offset.voidCollides())));
             }
+            for (IOffset offset : off) {
+                int x = offset.localPos().getX(), y = offset.localPos().getY();
+                box.set(
+                    BananaMath.floor(Math.min(box.minX(), x)), BananaMath.floor(Math.min(box.minY(), y)),
+                    BananaMath.ceil(Math.max(box.maxX(), x)), BananaMath.ceil(Math.max(box.maxY(), y))
+                );
+            }
+            this.boxes.put(rotate, box.toImmutable());
             ret.put(rotate, off.toArray(off.toArray(new IOffset[0])));
         }
 

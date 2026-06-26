@@ -1,10 +1,13 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils;
 
+import com.artur114.bananalib.math.m2d.vec.IVec2I;
+import com.artur114.bananalib.math.m2d.vec.Vec2I;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.Objects;
 
 public class StrPos {
+    private IVec2I vec = null;
     private final int x;
     private final int y;
 
@@ -15,6 +18,13 @@ public class StrPos {
 
     public StrPos(long data) {
         this((int) (data), (int) (data >> 32));
+    }
+
+    public IVec2I vec() {
+        if (this.vec == null) {
+            this.vec = new Vec2I(this.x, this.y);
+        }
+        return this.vec;
     }
 
     public StrPos multiply(float scale) {

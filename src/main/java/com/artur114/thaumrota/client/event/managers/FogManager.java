@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thaumcraft.client.lib.events.RenderEventHandler;
 
 @SideOnly(Side.CLIENT)
-public class FogManager { // TODO: 22.08.2025 Починить наличие тумана при заходе в мир
+public class FogManager {
     public final DefaultFog defaultFog = new DefaultFog();
     public FogParams oldFogParams = this.defaultFog;
     public FogParams newFogParams = this.defaultFog;
@@ -43,6 +43,10 @@ public class FogManager { // TODO: 22.08.2025 Починить наличие т
     public void tickEventClientTickEvent(TickEvent.ClientTickEvent e) {
         EntityPlayer player = Minecraft.getMinecraft().player;
         Minecraft mc = Minecraft.getMinecraft();
+
+        if (this.oldFogParams == this.defaultFog && this.newFogParams == this.defaultFog) {
+            return;
+        }
 
         if (e.phase != TickEvent.Phase.START || player == null || mc.isGamePaused()) {
             return;

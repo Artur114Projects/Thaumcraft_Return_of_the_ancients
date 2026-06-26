@@ -3,6 +3,7 @@ package com.artur114.thaumrota.common.worldstate.ancientworld.map.gen;
 import com.artur114.bananalib.math.m2d.box.Box2IM;
 import com.artur114.bananalib.math.m2d.box.IBox2I;
 import com.artur114.bananalib.math.m2d.box.IBox2IM;
+import com.artur114.bananalib.math.m2d.matrix.Matrix2FM;
 import com.artur114.bananalib.math.m2d.vec.IVec2I;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.*;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.maps.ImmutableMap;
@@ -108,21 +109,19 @@ public class GenPhaseBaseMap extends GenPhase {
         StrPos.MutableStrPos pos = new StrPos.MutableStrPos();
         IBox2IM box2IM = new Box2IM();
         int[] ret = new int[size * size];
-        IVec2I c = room.type.form().center();
-        IBox2I box = room.type.form().box();
-        int range = 2;
+        IBox2I box = room.type.form().box(rotate);
+        final int range = 1;
         int cursor = 0;
 
         for (int i = 0; i != size * size; i++) {
             int x = i % size;
             int y = i / size;
-            pos.setPos(x, y);
 
-            box2IM.set(box).offset(x, y).offset(-c.x(), -c.y());
+            box2IM.set(box).grow(range).offset(x, y);
             boolean flag = true;
-            for (int j = box2IM.minX(); j != box2IM.maxX(); j++) {
-                for (int k = box2IM.minY(); k != box2IM.maxY(); k++) {
-                    if (map.structureType(pos.setPos(j, k)) != null) {
+            for (int j = box2IM.minX(); j != box2IM.maxX() + 1; j++) {
+                for (int k = box2IM.minY(); k != box2IM.maxY() + 1; k++) {
+                    if (map.structureType(j, k) != null) {
                         flag = false;
                         break;
                     }

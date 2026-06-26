@@ -10,7 +10,8 @@ public abstract class GenPhase {
         GenPhase baseMap = new GenPhaseBaseMap();
         GenPhase build = new GenPhaseBuildWays(baseMap);
         GenPhase polished = new GenPhasePolishing(build);
-        return polished;
+        GenPhase rooms = new GenPhaseLongRooms(polished);
+        return rooms;
     }
 
     public static GenPhase InstanceAllGenPhases() {

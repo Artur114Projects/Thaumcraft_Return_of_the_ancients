@@ -1,22 +1,30 @@
 buildscript {
     repositories {
-        maven { url = 'https://maven.minecraftforge.net/' }
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "https://maven.minecraftforge.net"
+        }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+        classpath("com.anatawa12.forge:ForgeGradle:2.3-1.0.+") {
+            changing = true
+        }
     }
 }
-        
-apply plugin: 'net.minecraftforge.gradle'
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'groovy'
 apply plugin: 'java'
 
+archivesBaseName = 'YReturnOfTheAncients'
+group = 'com.artur114.thaumrota'
 version = mod_version
-group = 'com.artur.returnoftheancients'
-archivesBaseName = 'Y_Return of the ancients'
 
 repositories {
-    mavenCentral()
+    maven { url = 'https://maven.minecraftforge.net/' }
     mavenLocal()
+    mavenCentral()
 }
 
 configurations {
@@ -24,19 +32,33 @@ configurations {
 }
 
 dependencies {
-    include 'com.artur114.bananalib:asm:1.0.0'
-    include 'com.artur114.bananalib:mc:0.0.0-SNAPSHOT'
+    include('com.artur114.bananalib:asm:1.1.0') {transitive=false}
+    include('com.artur114.bananalib:math:1.1.0') {transitive=false}
+    include('com.artur114.bananalib:util:0.0.0-SNAPSHOT') {transitive=false}
+    include('com.artur114.bananalib:mc:0.1.0-SNAPSHOT') {transitive=false}
 
+    implementation 'com.artur114.bananalib:math-groovy:1.0.0'
     implementation 'org.jetbrains:annotations:24.0.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2859'
-    compileOnly fileTree(dir: "libs", includes: ['*.jar'])
+    implementation fileTree(dir: "libs", includes: ['*.jar'])
+    implementation localGroovy()
 }
 
 test {
     useJUnitPlatform()
+}
+
+processResources {
+    Map replaceProperties = [mod_version: mod_version, build_id: new Date().format("dd'.'MM'.'yyy'-'HH:mm:ss")]
+    List includeFiles = ["mcmod.info"]
+
+    inputs.properties replaceProperties
+
+    filesMatching(includeFiles) {
+        it.expand(replaceProperties)
+    }
 }
 
 jar {
@@ -50,10 +72,10 @@ jar {
             "Implementation-Vendor": mod_author,
             "Implementation-Version": mod_version,
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "FMLCorePlugin": "com.artur.returnoftheancients.main.FMLLoadingPluginTRA",
-            "FMLCorePluginContainsFMLMod": "true"
+            "Included-Libs": "[${configurations.include.collect{it.name.substring(0, it.name.lastIndexOf('.'))}.join(", ")}]"
         ])
     }
 }
 
 apply from: file("scripts/minecraft.gradle")
+apply from: file("scripts/thaumcraft.gradle")

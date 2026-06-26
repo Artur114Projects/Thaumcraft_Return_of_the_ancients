@@ -1,0 +1,20 @@
+{
+  "multipart": [
+    {
+      "when": { "down": false, "up": false },
+      "apply": { "model": "thaumrota:ancient_lamp_1_non" }
+    },
+    {
+      "when": { "down": true, "up": false },
+      "apply": { "model": "thaumrota:ancient_lamp_1_down" }
+    },
+    {
+      "when": { "down": false, "up": true },
+      "apply": { "model": "thaumrota:ancient_lamp_1_up" }
+    },
+    {
+      "when": { "down": true, "up": true },
+      "apply": { "model": "thaumrota:ancient_lamp_1_all" }
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+################################################################################
+# Items
+################################################################################
+item.imitation_ancient_fuse.name=Имитация древнего предохранителя
+item.phantom_tablet.name=Фантомная скрижаль
+item.debug_carrot.name=Отладочная морковка
+item.portal_compass.name=Пустотный компас
+item.soul_binder.name=Камень связи душ
+################################################################################
+# Blocks
+################################################################################
+tile.ancient_sanctuary_controller_broken.name=Сломанный древний контроллер святилища
+tile.incandescent_taint_void_stone.name=Раскалённый заражённый пустотный камень
+tile.stone_eldritch_tile_lightning.name=Светящийся потусторонний камень
+tile.ancient_sanctuary_controller.name=Древний контроллер святилища
+tile.ancient_door_h_4x4.name=Древняя горизонтальная дверь 4 на 4
+tile.taint_void_cobblestone.name=Заражённый пустотный булыжник
+tile.stone_ancient_lightning.name=Светящийся древний камень
+tile.eldritch_stairs.name=Ступеньки из потустороннего камня
+tile.tp_to_ancient_world_block.name=Портал в древний мир
+tile.pedestal_active.name=Активируемый древний пьедестал
+tile.cleaned_void_stone.name=Очищенный пустотный камень
+tile.taint_void_stone.name=Заражённый пустотный камень
+tile.ancient_stairs.name=Ступеньки из древнего камня
+tile.ancient_door_4x3.name=Древняя дверь 4 на 3
+tile.ancient_door_8x6.name=Древняя дверь 8 на 6
+tile.tp_to_home_block.name=Портал в верхний мир
+tile.pedestal_phantom.name=Фантомный пьедестал
+tile.dummy_ancient_stone.name=Структурный блок
+tile.ancient_lamp_1.name=Древнее устройство
+tile.ancient_lamp_0.name=Древнее устройство
+tile.incinerator.name=Испепелитель
+tile.energy_line.name=Энерго трасса [WIP]
+tile.energy_source.name=Источник энергии [WIP]
+###################################################################################
+# Any
+###################################################################################
+itemGroup.thaumrota_tab=Thaumcraft: Return of the Ancients
+#
+thaumrota.info.p1=Нажмите
+thaumrota.info.p2=для дополнительной информации.
+item.soul_binder.info.s.1=ПКМ - привязать.
+item.soul_binder.info.s.2=Shift + ПКМ - отвязать.
+item.soul_binder.info.s.3=Положить в сетку крафта - очистить.
+item.soul_binder.info.d.3=Игроки:
+item.debug_carrot.info.i=Бесконечный
+item.phantom_tablet.info.1=Распадается за пределами древнего мира
+item.phantom_tablet.info.2=Если вы не в креативе
+#
+thaumrota.for_creative_only=Только для креатива
+#
+item.portal_compass.info=Показывает на ближайший древний портал
+thaumrota.kJ.prefixes=Дж/кДж/МДж/ГДж/ТДж
+thaumrota.kW.prefixes=Вт/кВт/МВт/ГВт/ТВт
+thaumrota.energy.local.0=Энергия:
+thaumrota.energy.local.1=Вход:
+thaumrota.energy.local.2=Выход:
+#
+thaumrota.team_state.interrupt=Игрок прервал ожидание.
+thaumrota.team_state.in_other_world=Игрок находится в другом изменении.
+thaumrota.team_state.in_ancient_world=Игрок находится в древнем мире.
+thaumrota.team_state.out_of_game=Игрок не в игре.
+thaumrota.team_state.not_player=Игрок не является игроком... Так стоп. Что!?
+###################################################################################
+# Loading gui
+###################################################################################
+rota.l-gui.button.team=Команда
+rota.l-gui.lore.0=Нет, это не микроволновка! наверное...
+rota.l-gui.lore.1=Ни кто не знает назначения этого слоя, даже разработчик...
+rota.l-gui.lore.title=Лор?
+##################################################################################
+# Config any
+##################################################################################
+
+##################################################################################
+# Config Difficulty settings
+##################################################################################
+
+################################################################################
+# Config Client settings
+################################################################################
+thaumrota.cfg.client=Клиентские настройки
+thaumrota.cfg.client.fxq=Качество графики
+thaumrota.cfg.client.irt=Бесконечный дождь в заражённом биоме
+thaumrota.cfg.client.dst=Отключить солнце в заражённом биоме
+thaumrota.cfg.client.igs=Перехватывать настройки яркости

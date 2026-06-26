@@ -1,0 +1,88 @@
+################################################################################
+# Items
+################################################################################
+item.imitation_ancient_fuse.name=Imitation of ancient fuse
+item.soul_binder.name=Soul connection stone
+item.debug_carrot.name=Debugging carrot
+item.phantom_tablet.name=Phantom tablet
+item.portal_compass.name=Void compass
+################################################################################
+# Blocks
+################################################################################
+tile.ancient_sanctuary_controller_broken.name=Broken ancient controller of sanctuary
+tile.ancient_sanctuary_controller.name=Ancient controller of sanctuary
+tile.incandescent_taint_void_stone.name=Hot infected void stone
+tile.stone_eldritch_tile_lightning.name=Glowing eldritch stone
+tile.ancient_door_h_4x4.name=Ancient horizontal door 4 to 4
+tile.tp_to_ancient_world_block.name=Portal to Ancient World
+tile.taint_void_cobblestone.name=Infected void cobblestone
+tile.stone_ancient_lightning.name=Glowing ancient stone
+tile.eldritch_stairs.name=Eldritch stone stairs
+tile.cleaned_void_stone.name=Cleaned void stone
+tile.ancient_door_4x3.name=Ancient door 4 to 3
+tile.ancient_door_8x6.name=Ancient door 8 to 6
+tile.taint_void_stone.name=Infected void stone
+tile.dummy_ancient_stone.name=Structural block
+tile.tp_to_home_block.name=Portal to overworld
+tile.ancient_stairs.name=Ancient stone stairs
+tile.pedestal_phantom.name=Phantom pedestal
+tile.pedestal_active.name=Ancient pedestal
+tile.ancient_lamp_1.name=Ancient device
+tile.ancient_lamp_0.name=Ancient device
+tile.incinerator.name=Incinerator
+tile.energy_line.name=Energy line [WIP]
+tile.energy_source.name=Energy source [WIP]
+################################################################################
+# Any
+################################################################################
+itemGroup.thaumrota_tab=Thaumcraft: Return of the Ancients
+#
+thaumrota.info.p1=Hold
+thaumrota.info.p2=to see info.
+item.soul_binder.info.s.1=RMB - bind.
+item.soul_binder.info.s.2=Shift + RMB - unbind.
+item.soul_binder.info.s.3=Put in crafting grid - clear.
+item.soul_binder.info.d.3=Players:
+item.debug_carrot.info.i=Infinity
+item.portal_compass.info=Points to the nearest ancient portal
+item.phantom_tablet.info.1=Decaying outside the ancient world
+item.phantom_tablet.info.2=If you are not in creative
+#
+thaumrota.for_creative_only=For creativity only
+#
+thaumrota.command.main.usage=/thaumrota <seed|help|tptoportal>
+#
+thaumrota.kJ.prefixes=J/kJ/MJ/GJ/TJ
+thaumrota.kW.prefixes=W/kW/MW/GW/TW
+thaumrota.energy.local.0=Energy:
+thaumrota.energy.local.1=Input:
+thaumrota.energy.local.2=Output:
+#
+thaumrota.team_state.interrupt=The player interrupted the wait.
+thaumrota.team_state.in_other_world=The player is in another dimension.
+thaumrota.team_state.in_ancient_world=The player is in the ancient world.
+thaumrota.team_state.out_of_game=Player not in the game.
+thaumrota.team_state.not_player=The player is not a player... Wtf!?
+###################################################################################
+# Loading gui
+###################################################################################
+rota.l-gui.button.team=Team
+rota.l-gui.lore.0=No, this is not a microwave! maybe...
+rota.l-gui.lore.1=Nobody knows the purpose of this layer, even the developer...
+rota.l-gui.lore.title=Lore?
+################################################################################
+# Config Any
+################################################################################
+
+################################################################################
+# Config Difficulty
+################################################################################
+
+################################################################################
+# Config Client
+################################################################################
+thaumrota.cfg.client=Client settings
+thaumrota.cfg.client.fxq=Graphics quality
+thaumrota.cfg.client.irt=Infinity rain in taint biome
+thaumrota.cfg.client.dst=Turn off the sun in taint biome
+thaumrota.cfg.client.igs=Intercept brightness settings

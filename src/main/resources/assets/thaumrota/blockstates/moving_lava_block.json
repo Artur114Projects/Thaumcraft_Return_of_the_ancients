@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thaumrota:moving_lava_block",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "normal": [{ "model": "thaumrota:moving_lava_block" }],
+    "dir=north": [{ "model": "thaumrota:moving_lava_block" }],
+    "dir=west": [{ "model": "thaumrota:moving_lava_block", "y": 270 }],
+    "dir=east": [{ "model": "thaumrota:moving_lava_block", "y": 90 }],
+    "dir=south": [{ "model": "thaumrota:moving_lava_block", "y": 180 }],
+    "inventory": [{"model": "thaumrota:moving_lava_block"}]
+  }
+}

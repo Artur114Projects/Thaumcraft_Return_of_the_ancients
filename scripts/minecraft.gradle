@@ -1,34 +1,18 @@
-def core_mod_class = "com.artur.returnoftheancients.main.FMLLoadingPluginTRA"
-def at_file = "src/main/resources/META-INF/tc_at.cfg"
+def core_mod_class = "com.artur114.thaumrota.main.ThaumRotACore"
 
 minecraft {
-    mappings channel: 'snapshot', version: '20171003-1.12'
-    accessTransformer = file(at_file)
-    runs {
-        client {
-            workingDirectory file('run')
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-            jvmArg "-Dfml.coreMods.load=${core_mod_class}"
-        }
-
-        server {
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-            jvmArg "-Dfml.coreMods.load=${core_mod_class}"
-        }
-
-        test {
-            workingDirectory file('run')
-            taskName 'runTest'
-            environment 'MCP_TEST', 'true'
-            args '--launchTarget', 'fmluserdevclient'
-        }
-    }
+    runDir = 'run'
+    version = "1.12.2-14.23.5.2847"
+    mappings = "snapshot_20171003"
+    coreMod = core_mod_class
+    clientRunArgs += ["--uuid", "11111111-1111-1111-1111-111111111111"]
 }
 
-jar.finalizedBy('reobfJar')
-
-sourceSets {
-    main { output.resourcesDir = output.classesDir }
+jar {
+    manifest {
+        attributes([
+            "FMLCorePlugin": core_mod_class,
+            "FMLCorePluginContainsFMLMod": "true"
+        ])
+    }
 }

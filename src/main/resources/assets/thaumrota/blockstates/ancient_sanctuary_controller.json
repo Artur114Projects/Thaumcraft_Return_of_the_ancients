@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "normal": { "model": "thaumrota:ancient_sanctuary_controller" }
+  }
+}

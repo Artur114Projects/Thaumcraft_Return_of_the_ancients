@@ -1,0 +1,26 @@
+package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures;
+
+import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.EnumRotate;
+import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.EnumStructureType;
+import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrPos;
+import org.jetbrains.annotations.NotNull;
+
+public class StructureLadder extends StructureBase {
+    public StructureLadder(EnumRotate rotate, StrPos pos, EnumStructureType type) {
+        super(rotate, EnumStructureType.LADDER, pos);
+    }
+
+    public StructureLadder(StructureBase parent) {
+        super(parent);
+    }
+
+    @Override
+    public @NotNull IStructure copy() {
+        return new StructureLadder(this);
+    }
+
+    @Override
+    public boolean canReplace() {
+        return false;
+    }
+}

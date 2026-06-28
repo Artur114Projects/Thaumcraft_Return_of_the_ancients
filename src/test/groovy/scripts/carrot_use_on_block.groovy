@@ -5,6 +5,7 @@ import com.artur114.bananalib.math.m3d.box.Box3IM
 import com.artur114.bananalib.math.m3d.vec.IVec3D
 import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM
 import com.artur114.bananalib.mc.math.m3d.vec.VecMc3D
+import com.artur114.thaumrota.client.audio.SoundAncientWorld
 import com.artur114.thaumrota.client.fx.particle.ParticlePhantom
 import com.artur114.thaumrota.client.fx.particle.ParticleVentStatic
 import com.artur114.thaumrota.client.init.InitShaders
@@ -47,6 +48,9 @@ onServer {
     }
 }
 
+onClient {
+    SoundAncientWorld.play()
+}
 
 
 

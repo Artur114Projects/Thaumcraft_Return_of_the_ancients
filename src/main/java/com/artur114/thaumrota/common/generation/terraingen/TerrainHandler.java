@@ -3,6 +3,7 @@ package com.artur114.thaumrota.common.generation.terraingen;
 
 import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.thaumrota.common.biomes.BiomeTaint;
+import com.artur114.thaumrota.common.config.RotAConfig;
 import com.artur114.thaumrota.common.init.InitBiomes;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
@@ -22,6 +23,9 @@ public class TerrainHandler {
 
     @SubscribeEvent
     public void initializeAllBiomeGenerators(InitBiomeGens e) {
+        if (!RotAConfig.server.compat.doInterceptBiomeGen) {
+            return;
+        }
         if (e.getWorldType() == WorldType.DEFAULT || e.getWorldType() == WorldType.LARGE_BIOMES) {
             GenLayer[] genlayer = GenLayerRotA.initializeBiomeGenerators(e.getSeed(), e.getWorldType());
             e.setNewBiomeGens(genlayer);

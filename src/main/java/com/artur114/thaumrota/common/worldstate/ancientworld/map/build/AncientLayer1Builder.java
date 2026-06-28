@@ -51,7 +51,7 @@ public class AncientLayer1Builder extends SlowBuilder {
         this.finishBuildChunk(this.world, x, z);
 
         if (this.currentIndex % (this.map.area() / 4) == 0) {
-            log.info("Sector {} Build phase 2/2 :: [placement], process {}.0%", this.center, BananaMath.round(100.0F * ((float) this.currentIndex / this.map.area())));
+            log.info("Sector {} Build phase 2/2 :: [placement] - process {}.0%", this.center, BananaMath.round(100.0F * ((float) this.currentIndex / this.map.area())));
         }
 
         if (this.currentIndex >= this.map.area()) {

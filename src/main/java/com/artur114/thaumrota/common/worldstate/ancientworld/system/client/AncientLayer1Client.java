@@ -35,18 +35,20 @@ public class AncientLayer1Client extends AncientLayer1 {
 
     public AncientLayer1Client(EntityPlayerSP player) {
         this.addPlayer(new AncientWorldPlayer(player));
-
         this.player = this.players.get(0);
     }
 
     @Override
     public void constructFinish() {
         this.createMap();
-        SoundAncientWorld.play();
     }
 
     @Override
     public void update() {
+        if (SoundAncientWorld.isNoPlay()) {
+            SoundAncientWorld.play();
+        }
+
         super.update();
 
         if (this.player.player.posY > 140) {

@@ -45,6 +45,7 @@ public class ServerAncientLayer1Manager implements IServerAncientLayer1Manager {
             layer1Server.update();
 
             if (layer1Server.isRequestToDelete()) {
+                layer1Server.onDeleting();
                 iterator.remove();
             }
         }

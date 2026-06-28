@@ -429,6 +429,15 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
         return world.provider.getDimension() == 0 || PORTALS_GENERATION_POS.containsKey(world.provider.getDimension());
     }
 
+    public static ChunkPos getNearestPortalPos(World world, BlockPos pos) {
+        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(pos);
+        try {
+            return getNearestPortalPos(world, blockPos);
+        } finally {
+            UltraMutableBlockPos.release(blockPos);
+        }
+    }
+
     public static ChunkPos getNearestPortalPos(World world, UltraMutableBlockPos pos) {
         ChunkPos[] poss = world.provider.getDimension() == 0 ? portalsGenerationPosOverWorld : PORTALS_GENERATION_POS.get(world.provider.getDimension());
         if (poss == null) {

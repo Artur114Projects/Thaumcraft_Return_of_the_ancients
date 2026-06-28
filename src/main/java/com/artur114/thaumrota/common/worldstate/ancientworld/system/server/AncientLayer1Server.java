@@ -51,7 +51,7 @@ public class AncientLayer1Server extends AncientLayer1 {
     }
 
     @Override
-    protected void onRequestToDelete() {
+    protected void onDeleting() {
         if (this.builder != null) {
             CommonEventsHandler.SLOW_BUILD_MANAGER.finishBuilder(this.builder);
         }
@@ -216,7 +216,9 @@ public class AncientLayer1Server extends AncientLayer1 {
             this.build();
         }
 
-        for (Runnable run : this.delayedTasks) run.run();
+        for (Runnable run : this.delayedTasks) {
+            run.run();
+        }
     }
 
     protected void onBuildFinish() {

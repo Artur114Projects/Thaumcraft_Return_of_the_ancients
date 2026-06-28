@@ -8,7 +8,7 @@ public class RotAServerConfig {
     
     @Config.LangKey("thaumrota.cfg.server.diff")
     public RotADifficultyConfig difficulty = new RotADifficultyConfig();
-    
-    @Config.LangKey("thaumrota.cfg.server.daw")
-    public boolean canDeadInAncientWorld = false;
+
+    @Config.LangKey("thaumrota.cfg.server.slb")
+    public boolean doSpawnLightningBolts = true;
 }

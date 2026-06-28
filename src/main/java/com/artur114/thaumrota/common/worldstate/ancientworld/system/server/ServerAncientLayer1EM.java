@@ -163,15 +163,8 @@ public class ServerAncientLayer1EM {
     public void livingDamageEvent(LivingDamageEvent e) {
         if (e.getEntity() instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) e.getEntity();
-            float minDamage = 0;
-            if (e.getSource().damageType.equals("mob")) {
-                minDamage = 2.0F;
-            } else if (e.getSource() == DamageSource.IN_FIRE || e.getSource() == DamageSource.ON_FIRE) {
-                minDamage = 0.5F;
-            }
-            float mul = 1.25F;
-            float damage = Math.max(e.getAmount() * mul, minDamage);
-            if (!RotAConfig.server.canDeadInAncientWorld && player.getHealth() - damage <= 0) {
+            final float damage = calculateDamage(e);
+            if (!RotAConfig.server.difficulty.canDeadInAncientWorld && player.getHealth() - damage <= 0) {
                 player.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
                 player.setFire(0);
                 player.setHealth(3);
@@ -187,6 +180,17 @@ public class ServerAncientLayer1EM {
 
     public void livingSpawnEventAllowDespawn(LivingSpawnEvent.AllowDespawn e) {
         e.setResult(Event.Result.DENY);
+    }
+
+    private static float calculateDamage(LivingDamageEvent e) {
+        float minDamage = 0;
+        if (e.getSource().damageType.equals("mob")) {
+            minDamage = (float) RotAConfig.server.difficulty.minimalMobDamage;
+        } else if (e.getSource() == DamageSource.IN_FIRE || e.getSource() == DamageSource.ON_FIRE || e.getSource() == DamageSource.LAVA) {
+            minDamage = (float) RotAConfig.server.difficulty.minimalFireDamage;
+        }
+        float mul = (float) RotAConfig.server.difficulty.damageMultiplier / 100.0F;
+        return Math.max(e.getAmount() * mul, minDamage);
     }
 }
 

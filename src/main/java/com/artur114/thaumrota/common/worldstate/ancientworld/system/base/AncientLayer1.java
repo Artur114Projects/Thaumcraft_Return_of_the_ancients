@@ -50,7 +50,6 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
 
     public void requestToDelete() {
         this.requestToDelete = true;
-        this.onRequestToDelete();
     }
 
     public boolean isRequestToDelete() {
@@ -71,6 +70,10 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
         this.posIndex = index;
         this.pos = pos;
         return this;
+    }
+
+    public long seed() {
+        return this.seed;
     }
 
     public int posIndex() {
@@ -143,7 +146,7 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
     }
 
     protected void onPlayersListChanged() {}
-    protected void onRequestToDelete() {}
+    protected void onDeleting() {}
 
     @Override
     public void update() {

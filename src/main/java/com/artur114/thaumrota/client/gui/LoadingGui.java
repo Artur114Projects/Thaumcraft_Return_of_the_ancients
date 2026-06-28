@@ -5,7 +5,7 @@ import com.artur114.thaumrota.client.gui.buttons.RotAButton;
 import com.artur114.thaumrota.client.gui.gif.GifWithTextureAtlas;
 import com.artur114.thaumrota.client.util.RenderHandler;
 import com.artur114.thaumrota.main.ThaumRotA;
-import com.artur114.thaumrota.common.network.ServerPacketTpToHome;
+import com.artur114.thaumrota.common.network.ServerPacketInterruptBuild;
 import com.artur114.thaumrota.common.util.EnumAsset;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -52,9 +52,9 @@ public class LoadingGui extends GuiScreen {
 
     public LoadingGui(AncientLayer1Client layer1Client) {
         this.layer1Client = layer1Client;
-        int id = rand.nextInt(3);
+        int id = rand.nextInt(7);
         background = EnumAsset.TEXTURES_GUI.png("/loading_gui_backgrounds/background" + id);
-        int loreId = rand.nextInt(2);
+        int loreId = rand.nextInt(4);
         lore = I18n.format("rota.l-gui.lore." + loreId);
         this.isTeam = layer1Client.playersState().size() > 1;
     }
@@ -96,7 +96,7 @@ public class LoadingGui extends GuiScreen {
                 if (closingTime <= 0) {
                     mc.displayGuiScreen(null);
                     if (isTpToHome) {
-                        ThaumRotA.NETWORK.sendToServer(new ServerPacketTpToHome());
+                        ThaumRotA.NETWORK.sendToServer(new ServerPacketInterruptBuild());
                     }
                     isClosing = false;
                 }

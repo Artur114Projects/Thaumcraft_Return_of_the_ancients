@@ -8,8 +8,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 
-public class ServerPacketTpToHome implements IMessage {
-    public ServerPacketTpToHome() {}
+public class ServerPacketInterruptBuild implements IMessage {
+    public ServerPacketInterruptBuild() {}
 
     @Override
     public void fromBytes(ByteBuf buf) {}
@@ -17,9 +17,9 @@ public class ServerPacketTpToHome implements IMessage {
     @Override
     public void toBytes(ByteBuf buf) {}
 
-    public static class HandlerTTH implements IMessageHandler<ServerPacketTpToHome, IMessage> {
+    public static class HandlerTTH implements IMessageHandler<ServerPacketInterruptBuild, IMessage> {
         @Override
-        public IMessage onMessage(ServerPacketTpToHome message, MessageContext ctx) {
+        public IMessage onMessage(ServerPacketInterruptBuild message, MessageContext ctx) {
             if (!AncientLayer1EventsHandler.SERVER_MANAGER.playerInterruptBuild(ctx.getServerHandler().player)) AncientPortalsProcessor.teleportToOverworld(ctx.getServerHandler().player);
             return null;
         }

@@ -1,7 +1,10 @@
 package com.artur114.thaumrota.server.commads;
 
+import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
+import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1;
+import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1StaticManager;
 import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.command.*;
@@ -14,10 +17,12 @@ import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.util.Collections;
 import java.util.List;
 
-public class TRACommand extends CommandBase {
+public class ThaumRotACommand extends CommandBase {
 
     String NAME = ThaumRotA.MODID, USAGE = "thaumrota.command.main.usage";
 
@@ -33,7 +38,7 @@ public class TRACommand extends CommandBase {
     }
 
     @Override
-    public void execute(@NotNull MinecraftServer server, @NotNull ICommandSender sender, String @NotNull [] args) throws CommandException {
+    public void execute(@NotNull MinecraftServer server, @NotNull ICommandSender sender, String[] args) throws CommandException {
         EntityPlayerMP player = getCommandSenderAsPlayer(sender);
         if (args.length == 0) {
             player.sendMessage(new TextComponentString(TextFormatting.RED + "Usage: " + USAGE));
@@ -41,20 +46,21 @@ public class TRACommand extends CommandBase {
         }
         switch (args[0]) {
             case "seed":
-//                long seed = AncientWorld.getSeed(player);
-//                if (seed == 0) {
-//                    player.sendMessage(new TextComponentString("you don't belong to any labyrinth").setStyle(new Style().setColor(TextFormatting.RED)));
-//                } else {
-//                    player.sendMessage(new TextComponentString(seed + "").setStyle(new Style().setColor(TextFormatting.GREEN)));
-//                }
+                AncientLayer1 sector = AncientLayer1StaticManager.sectorForPlayer(player);
+                if (sector == null) {
+                    player.sendMessage(new TextComponentString("you don't belong to any sector").setStyle(new Style().setColor(TextFormatting.RED)));
+                } else {
+                    player.sendMessage(new TextComponentString("seed " + sector.seed() + " copped to clipboard").setStyle(new Style().setColor(TextFormatting.GREEN)));
+                    Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(sector.seed() + ""), null);
+                }
                 break;
             case "tptoportal":
-                UltraMutableBlockPos pos;
+                PosMc3IM pos;
                 if (args.length >= 2) {
-                    pos = new UltraMutableBlockPos(AncientPortalsProcessor.getPortalPos(player.world, Integer.parseInt(args[1])));
+                    pos = new PosMc3IM().setChunk(AncientPortalsProcessor.getPortalPos(player.world, parseInt(args[1])));
                 } else {
-                    pos = new UltraMutableBlockPos(player.getPosition());
-                    pos.setPos(AncientPortalsProcessor.getNearestPortalPos(player.world, pos));
+                    pos = new PosMc3IM(player.getPosition());
+                    pos.setChunk(AncientPortalsProcessor.getNearestPortalPos(player.world, pos));
                 }
                 player.sendMessage(new TextComponentString("Teleport complete!").setStyle(new Style().setColor(TextFormatting.GREEN)));
                 player.connection.setPlayerLocation(pos.getX(), 100, pos.getZ(), player.rotationYaw, player.rotationPitch);
@@ -65,8 +71,7 @@ public class TRACommand extends CommandBase {
         }
     }
 
-    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
-    {
-        return args.length == 1 ? getListOfStringsMatchingLastWord(args, "tptoportal", "seed", "help", "updatedropprimalblade") : Collections.emptyList();
+    public @NotNull List<String> getTabCompletions(@NotNull MinecraftServer server, @NotNull ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        return args.length == 1 ? getListOfStringsMatchingLastWord(args, "tptoportal", "seed", "help") : Collections.emptyList();
     }
 }

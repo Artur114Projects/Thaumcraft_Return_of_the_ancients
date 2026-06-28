@@ -194,7 +194,7 @@
     "sounds": [
       {
         "name": "thaumrota:ancient_world_ambient",
-        "stream": false,
+        "stream": true,
         "volume": 1.0
       }
     ]

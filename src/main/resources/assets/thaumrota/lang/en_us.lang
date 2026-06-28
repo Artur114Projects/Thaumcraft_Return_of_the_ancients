@@ -74,15 +74,33 @@ thaumrota.team_state.not_player=The player is not a player... Wtf!?
 rota.l-gui.button.team=Team
 rota.l-gui.lore.0=No, this is not a microwave! maybe...
 rota.l-gui.lore.1=Nobody knows the purpose of this layer, even the developer...
+rota.l-gui.lore.2=Why do we need another dungeon from ThaumicAugmentation? right?...
+rota.l-gui.lore.3=I love industrial!
 rota.l-gui.lore.title=Lore?
 ################################################################################
 # Config Any
 ################################################################################
-
+thaumrota.cfg.any.debug=Debug mode
+thaumrota.cfg.any=Any
 ################################################################################
 # Config Difficulty
 ################################################################################
-
+thaumrota.cfg.server.diff=Difficulty settings
+thaumrota.cfg.server.diff.daw=Allow death in the Ancient World
+thaumrota.cfg.server.diff.dm=Damage multiplier in AncientWorld
+thaumrota.cfg.server.diff.mmd=Minimal mob damage in AncientWorld
+thaumrota.cfg.server.diff.mfd=Minimal fire damage in AncientWorld
+################################################################################
+# Config Compatibility
+################################################################################
+thaumrota.cfg.server.compat=Compatibility settings
+thaumrota.cfg.server.compat.awi=Ancient world dim id
+thaumrota.cfg.server.compat.ibg=Do intercept biome generation
+################################################################################
+# Config Server
+################################################################################
+thaumrota.cfg.server=Server settings
+thaumrota.cfg.server.slb=Do spawn lightning bolts in taint biome
 ################################################################################
 # Config Client
 ################################################################################

@@ -5,6 +5,8 @@ import com.artur114.bananalib.mc.registry.interf.ILoadStagePost;
 import com.artur114.thaumrota.server.structurebuilder.interf.IStructureBuilder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import java.util.Map;
 
 @AutoInstantiate
 public class StructuresBuildManager implements ILoadStagePost {
+    private static final Logger log = LogManager.getLogger("ThaumRotA/Structures");
     private static final Map<String, IStructureBuilder> BUILDERS = new HashMap<>();
 
     protected static void register(IStructureBuilder builder) {
@@ -70,5 +73,7 @@ public class StructuresBuildManager implements ILoadStagePost {
         register("ancient_portal_air_cube");
         register("ancient_sanctuary_broken");
         register("ancient_sanctuary_cultist");
+
+        log.info("Loaded {} structures!", BUILDERS.size());
     }
 }

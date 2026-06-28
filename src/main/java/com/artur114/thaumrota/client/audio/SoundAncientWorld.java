@@ -4,12 +4,13 @@ import com.artur114.thaumrota.common.init.InitDimensions;
 import com.artur114.thaumrota.common.init.InitSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ITickableSound;
+import net.minecraft.client.audio.MovingSound;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 
-public class SoundAncientWorld extends PositionedSound implements ITickableSound {
+public class SoundAncientWorld extends MovingSound {
     private final Minecraft mc = Minecraft.getMinecraft();
     private boolean stop = false;
 
@@ -36,8 +37,12 @@ public class SoundAncientWorld extends PositionedSound implements ITickableSound
     private static SoundAncientWorld sound = null;
 
     public static void play() {
+        if (sound != null) sound.stop = true;
         SoundHandler soundHandler = Minecraft.getMinecraft().getSoundHandler();
         soundHandler.playSound(sound = new SoundAncientWorld());
-        if (sound != null) sound.stop = true;
+    }
+
+    public static boolean isNoPlay() {
+        return sound == null || !Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(sound);
     }
 }

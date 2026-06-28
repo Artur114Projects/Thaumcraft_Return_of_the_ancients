@@ -25,8 +25,8 @@ public class RotAConfig {
 
 
     public static class Any {
-        @Config.LangKey("thaumrota.cfg.any.debug")
         @Config.RequiresMcRestart
+        @Config.LangKey("thaumrota.cfg.any.debug")
         public boolean debugMode = false;
     }
 

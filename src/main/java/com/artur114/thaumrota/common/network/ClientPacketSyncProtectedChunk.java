@@ -50,7 +50,6 @@ public class ClientPacketSyncProtectedChunk implements IMessage {
         ByteBufUtils.writeTag(buf, this.data);
     }
 
-    @SideOnly(Side.CLIENT)
     public static class HandlerSPC implements IMessageHandler<ClientPacketSyncProtectedChunk, IMessage> {
 
         @Override

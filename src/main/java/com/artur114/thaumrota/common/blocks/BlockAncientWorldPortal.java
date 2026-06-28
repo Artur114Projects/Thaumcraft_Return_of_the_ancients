@@ -21,7 +21,6 @@ public class BlockAncientWorldPortal extends BaseBlock {
     public BlockAncientWorldPortal(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
 
-        this.setCreativeTab(ThaumRotA.CREATIVE_TAB);
         this.setForCreative();
     }
 

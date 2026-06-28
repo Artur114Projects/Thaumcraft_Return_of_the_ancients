@@ -6,19 +6,27 @@ import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockPhantomPedestal extends BaseBlockTileEntity<TileEntityPhantomPedestal> {
+public class BlockPhantomPedestal extends BaseBlockTile<TileEntityPhantomPedestal> {
     public BlockPhantomPedestal(String name) {
         super(name, Material.GLASS, 2.0F, 10.0F, SoundType.GLASS);
 
-        this.setTileRender(new TileEntityPhantomPedestalRender());
         this.setCreativeTab(ThaumRotA.CREATIVE_TAB);
         this.setNotFillAndOpaqueCube();
         this.setForCreative();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected @Nullable TileEntitySpecialRenderer<TileEntityPhantomPedestal> createTileRender() {
+        return new TileEntityPhantomPedestalRender();
     }
 
     @Override

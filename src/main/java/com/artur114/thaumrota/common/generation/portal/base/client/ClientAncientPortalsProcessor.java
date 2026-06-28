@@ -16,8 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.HashMap;
 import java.util.Map;
 
-@SideOnly(Side.CLIENT)
-@Mod.EventBusSubscriber(modid = ThaumRotA.MODID)
+@Mod.EventBusSubscriber(Side.CLIENT)
 public class ClientAncientPortalsProcessor {
     private static final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
 

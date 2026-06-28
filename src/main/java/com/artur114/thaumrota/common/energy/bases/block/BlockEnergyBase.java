@@ -4,7 +4,7 @@ package com.artur114.thaumrota.common.energy.bases.block;
 import com.artur114.thaumrota.common.init.InitCapabilities;
 import com.artur114.thaumrota.common.energy.bases.tile.ITileEnergy;
 import com.artur114.thaumrota.common.energy.system.EnergySystemsManager;
-import com.artur114.thaumrota.common.blocks.BaseBlockTileEntity;
+import com.artur114.thaumrota.common.blocks.BaseBlockTile;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,7 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public abstract class BlockEnergyBase<T extends TileEntity> extends BaseBlockTileEntity<T> {
+public abstract class BlockEnergyBase<T extends TileEntity> extends BaseBlockTile<T> {
     protected BlockEnergyBase(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
     }

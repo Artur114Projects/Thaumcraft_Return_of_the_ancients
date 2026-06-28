@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.artur114.thaumrota.common.init.InitDimensions.ANCIENT_WORLD_ID;
 
 @Mod.EventBusSubscriber(modid = ThaumRotA.MODID)
-public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать под capability!!!
+public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать под capability!!!!!!
     private static final Logger log = LogManager.getLogger("ThaumRotA/PortalsLegacy");
     private static final Map<Integer, ChunkPos[]> PORTALS_GENERATION_POS = new HashMap<>();
     private static ChunkPos[] portalsGenerationPosOverWorld = null;
@@ -52,6 +52,9 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
     private static final Set<Integer> LOADED_DIMENSIONS = new HashSet<>();
     private static final List<Integer> TO_DELETE = new ArrayList<>();
 
+    static {
+        ThaumRotA.INTERNAL_EVENT_BUS.register(AncientPortalsProcessor.class);
+    }
 
     @SubscribeEvent
     public static void eventSave(WorldEvent.Save e) {
@@ -90,7 +93,7 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
     }
 
     @SubscribeEvent
-    public static void WorldEventLoad(WorldEvent.Load e) {
+    public static void worldEventLoad(WorldEvent.Load e) {
         if (!LOADED_DIMENSIONS.contains(e.getWorld().provider.getDimension())) {
             int dimension = e.getWorld().provider.getDimension();
 
@@ -133,7 +136,7 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
     }
 
     @SubscribeEvent
-    public static void BreakEvent(BlockEvent.BreakEvent e) {
+    public static void breakEvent(BlockEvent.BreakEvent e) {
         for (AncientPortal portal : LOADED_PORTALS.values()) {
             if (portal.isGenerated() && portal.isOnPortalRange(e.getPos()) && portal.isLoaded()) {
                 portal.onBlockDestroyedInPortalArea(e);
@@ -142,7 +145,7 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
     }
 
     @SubscribeEvent
-    public static void Tick(TickEvent.ServerTickEvent e) {
+    public static void tick(TickEvent.ServerTickEvent e) {
         if (e.phase == TickEvent.Phase.START) {
             return;
         }
@@ -187,7 +190,7 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
     }
 
     @SubscribeEvent
-    public static void PlayerTick(TickEvent.PlayerTickEvent e) {
+    public static void playerTick(TickEvent.PlayerTickEvent e) {
         if (e.player.world.isRemote) {
             return;
         }
@@ -224,6 +227,18 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
         }
     }
 
+    @SubscribeEvent
+    public static void unload(PublicSStoppingEvent e) {
+        portalsGenerationPosOverWorld = null;
+        PORTALS_GENERATION_POS.clear();
+        LOADED_DIMENSIONS.clear();
+        LOADED_PORTALS.clear();
+        TO_DELETE.clear();
+        PORTALS.clear();
+
+        log.info("unloaded!");
+    }
+
     public static void updateLoadedPortalsMap() {
         LOADED_PORTALS.clear();
         PORTALS.forEach((key, value) -> {
@@ -240,7 +255,7 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
                 updateLoadedPortalsMap();
                 updatePortalDataOnClient();
             } else {
-                System.out.println("An attempt to add a portal to the position of an existing portal!");
+                log.warn("An attempt to add a portal to the position of an existing portal!");
             }
         } else {
             portal.id = getFreeId();
@@ -277,13 +292,10 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
         return hasPortal(pos.x, pos.z, dimension);
     }
 
-
     public static boolean hasPortal(BlockPos pos, int dimension) {
         return hasPortal(pos.getX() >> 4, pos.getZ() >> 4, dimension);
     }
 
-    // TODO: Оптимизировать, возможно убрать систему с сортировкой по измерениям
-    // TODO: 26.03.2025 Сделать по адекватному, чтобы сохранялся только тот мир который сохраняется.
     public static void save(boolean needSaveForcibly) {
         long time = System.nanoTime();
         RotAWorldData worldData = RotAWorldData.get();
@@ -340,17 +352,7 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
 
         worldData.saveData.setTag("PortalsPack", nbt);
         worldData.markDirty();
-        if (RotAConfig.any.debugMode) System.out.println("Is took:" + ((System.nanoTime() - time) / 1000000.0D) + "ms");
-        if (RotAConfig.any.debugMode) System.out.println("Save portals finish " + nbt);
-    }
-
-    @SubscribeEvent
-    public static void unload(PublicSStoppingEvent e) {
-        PORTALS_GENERATION_POS.clear();
-        LOADED_DIMENSIONS.clear();
-        LOADED_PORTALS.clear();
-        TO_DELETE.clear();
-        PORTALS.clear();
+        log.debug("Save is took {}ms", (System.nanoTime() - time) / 1000000.0D);
     }
 
     public static void teleportToOverworld(EntityPlayerMP player) {
@@ -430,7 +432,7 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
     public static ChunkPos getNearestPortalPos(World world, UltraMutableBlockPos pos) {
         ChunkPos[] poss = world.provider.getDimension() == 0 ? portalsGenerationPosOverWorld : PORTALS_GENERATION_POS.get(world.provider.getDimension());
         if (poss == null) {
-            System.out.println("[Warning] (AncientPortalsProcessor::getNearestPortalPos) Request portal pos array == null");
+            log.warn("AncientPortalsProcessor::getNearestPortalPos Request portal pos array for world {} is null", world.provider.getDimension());
             return new ChunkPos(0, 0);
         }
         Optional<ChunkPos> nearestPosOptional = Arrays.stream(poss).min(Comparator.comparingInt(pos::distanceSq));

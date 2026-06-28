@@ -17,8 +17,5 @@ public class MiscEventsManager {
                 if (timer.hasTimer("poisoning")) timer.addTime(40, "poisoning");
             });
         }
-        if (e.player.dimension == ANCIENT_WORLD_ID) {
-            e.player.fallDistance = 0;
-        }
     }
 }

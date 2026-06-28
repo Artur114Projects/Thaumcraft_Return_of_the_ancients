@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thaumcraft.api.blocks.BlocksTC;
 
 import static com.artur114.thaumrota.common.init.InitDimensions.ANCIENT_WORLD_ID;
@@ -32,6 +33,7 @@ public class AncientLayer1EventsHandler {
     }
 
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public static void clientTick(TickEvent.ClientTickEvent e) {
         World world = Minecraft.getMinecraft().world; if (world != null && world.provider.getDimension() == InitDimensions.ANCIENT_WORLD_ID) CLIENT_MANAGER.tickEventClientTickEvent(e);
     }

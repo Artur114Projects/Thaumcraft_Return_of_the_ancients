@@ -15,11 +15,15 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.List;
 
 public class AncientLayer1Server extends AncientLayer1 {
+    private static final Logger log = LogManager.getLogger("ThaumRotA/AncientWorld");
     protected Map<UUID, String> playersState = new HashMap<>();
     protected List<Runnable> delayedTasks = new ArrayList<>();
     protected long sessionId = System.nanoTime();
@@ -230,7 +234,7 @@ public class AncientLayer1Server extends AncientLayer1 {
             player.teleportToChunk(this.pos, 250);
         }
 
-        System.out.println("AncientLayer1 finish build on pos:" + this.pos);
+        log.info("Finished sector build on pos {}", this.pos);
     }
 
     protected void onBuildStart() {
@@ -242,7 +246,7 @@ public class AncientLayer1Server extends AncientLayer1 {
             }
         }
 
-        System.out.println("AncientLayer1 started build on pos:" + this.pos);
+        log.info("Runed sector build on pos {}", this.pos);
     }
 
     protected void build() {
@@ -274,7 +278,7 @@ public class AncientLayer1Server extends AncientLayer1 {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+    public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         nbt.setLong("sessionId", this.sessionId);
         nbt.setBoolean("isBuild", this.isBuild);
         return super.writeToNBT(nbt);

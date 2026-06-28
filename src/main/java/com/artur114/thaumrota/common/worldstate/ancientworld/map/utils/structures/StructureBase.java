@@ -101,6 +101,7 @@ public class StructureBase implements IStructure {
     public void build(World world, ChunkPos pos, Random rand) {
         PosMc3IM blockPos = PosMc3IM.obtain();
         blockPos.setChunk(pos).setY(this.y);
+        this.mutateBuildPos(blockPos);
         StructuresBuildManager.createBuildRequest(world, blockPos, this.type.stringId(this.rotate)).setIgnoreAir().build();
         PosMc3IM.release(blockPos);
     }
@@ -137,6 +138,8 @@ public class StructureBase implements IStructure {
         Matrix3FM.release(matrix);
         return list;
     }
+
+    protected void mutateBuildPos(PosMc3IM pos) {}
 
     protected void addLights(List<ILightSource> list) {
         if (this.type != null && this.type.light() != null){

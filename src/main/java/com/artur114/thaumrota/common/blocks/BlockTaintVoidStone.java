@@ -19,5 +19,4 @@ public class BlockTaintVoidStone extends BaseBlock {
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(InitBlocks.TAINT_VOID_COBBLESTONE);
     }
-
 }

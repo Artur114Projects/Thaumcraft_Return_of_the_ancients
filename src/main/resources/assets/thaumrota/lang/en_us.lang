@@ -1,7 +1,7 @@
 ################################################################################
 # Items
 ################################################################################
-item.imitation_ancient_fuse.name=Imitation of ancient fuse
+item.imitation_ancient_fuse.name=Ancient fuse
 item.soul_binder.name=Soul connection stone
 item.debug_carrot.name=Debugging carrot
 item.phantom_tablet.name=Phantom tablet
@@ -16,6 +16,7 @@ tile.stone_eldritch_tile_lightning.name=Glowing eldritch stone
 tile.ancient_door_h_4x4.name=Ancient horizontal door 4 to 4
 tile.tp_to_ancient_world_block.name=Portal to Ancient World
 tile.taint_void_cobblestone.name=Infected void cobblestone
+tile.imitation_ancient_fuse_block.name=Ancient fuse block
 tile.stone_ancient_lightning.name=Glowing ancient stone
 tile.eldritch_stairs.name=Eldritch stone stairs
 tile.cleaned_void_stone.name=Cleaned void stone
@@ -27,8 +28,12 @@ tile.tp_to_home_block.name=Portal to overworld
 tile.ancient_stairs.name=Ancient stone stairs
 tile.pedestal_phantom.name=Phantom pedestal
 tile.pedestal_active.name=Ancient pedestal
+tile.ancient_fan.name=Ancient ventilation
+tile.ancient_piston.name=Ancient machine
 tile.ancient_lamp_1.name=Ancient device
 tile.ancient_lamp_0.name=Ancient device
+tile.ancient_glass.name=Ancient glass
+tile.ancient_grid.name=Ancient grid
 tile.incinerator.name=Incinerator
 tile.energy_line.name=Energy line [WIP]
 tile.energy_source.name=Energy source [WIP]

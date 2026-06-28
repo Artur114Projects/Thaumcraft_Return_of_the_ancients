@@ -17,11 +17,15 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITickable {
+    private static final Logger log = LogManager.getLogger("ThaumRotA/AncientWorld");
     protected final List<AncientWorldPlayer> players = new ArrayList<>();
     protected long seed = ThreadLocalRandom.current().nextLong();
     protected NBTTagCompound mapData = null;
@@ -189,10 +193,14 @@ public abstract class AncientLayer1 implements IWriteToNBT, IReadFromNBT, ITicka
         this.posIndex = nbt.getInteger("posIndex");
         this.size = nbt.getInteger("size");
         this.seed = nbt.getLong("seed");
+
+        if (this.loadCount >= 4) {
+            log.info("Sector {} did not load {} times in a row, deleting...", this.pos, this.loadCount);
+        }
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+    public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         nbt.setTag("players", IWriteToNBT.writeToNBTList(this.players));
         nbt.setLong("pos", BananaMC.chunkPosAsLong(this.pos));
         nbt.setInteger("posIndex", this.posIndex);

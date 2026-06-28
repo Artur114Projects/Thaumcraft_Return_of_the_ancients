@@ -11,11 +11,6 @@ import org.objectweb.asm.Type
 
 class TestGroovy {
     static void main(String[] args) {
-        Random rand = new Random()
-        println "run"
-        for (i in 0..10000) {
-            println "attempt $i"
-            GenPhase.InstanceAllGenPhases().getMap(rand.nextLong(), 33)
-        }
+        CheckHasLight.newInstance().run()
     }
 }

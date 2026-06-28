@@ -6,6 +6,7 @@ import com.artur114.bananalib.asm.patterns.InsnPatBuilder;
 import com.artur114.bananalib.asm.patterns.InsnPattern;
 import com.artur114.bananalib.asm.tree.ClassNodeAdv;
 import com.artur114.bananalib.asm.util.IASMLogger;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.InsnList;
@@ -26,7 +27,7 @@ public class NetHandlerPlayServerTransformer extends AbstractASMTransformer {
 
     @Override
     protected ClassNodeAdv transform(IASMLogger logger, String className, ClassNodeAdv clazz) {
-        clazz.findMethod("processCustomPayload").ifPresent(method -> {
+        clazz.findMethod(FMLLaunchHandler.isDeobfuscatedEnvironment() ? "processCustomPayload" : "func_147349_a").ifPresent(method -> {
             InsnPatBuilder pat = InsnPattern.builder();
             pat.thenVarInsn(ILOAD, 10);
             pat.thenVarInsn(ILOAD, 11);

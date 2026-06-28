@@ -1,16 +1,18 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils;
 
-import net.minecraft.util.math.Vec2f;
+
+import com.artur114.bananalib.math.m2d.vec.IVec2D;
+import com.artur114.bananalib.math.m2d.vec.Vec2D;
 
 public enum EnumFace {
-    UP(new Vec2f(0, -1)),
-    RIGHT(new Vec2f(1, 0)),
-    DOWN(new Vec2f(0, 1)),
-    LEFT(new Vec2f(-1, 0));
+    UP(new Vec2D(0, -1)),
+    RIGHT(new Vec2D(1, 0)),
+    DOWN(new Vec2D(0, 1)),
+    LEFT(new Vec2D(-1, 0));
 
-    private final Vec2f directionVec;
+    private final IVec2D directionVec;
 
-    EnumFace(Vec2f directionVec) {
+    EnumFace(IVec2D directionVec) {
         this.directionVec = directionVec;
     }
 
@@ -105,16 +107,16 @@ public enum EnumFace {
         }
     }
 
-    public static EnumFace fromVector(Vec2f vec2d) {
-        return fromVector(vec2d.x, vec2d.y);
+    public static EnumFace fromVector(IVec2D vec2d) {
+        return fromVector(vec2d.x(), vec2d.y());
     }
 
-    public static EnumFace fromVector(float x, float y) {
+    public static EnumFace fromVector(double x, double y) {
         EnumFace face = RIGHT;
-        float f = Float.MIN_VALUE;
+        double f = Double.MIN_VALUE;
 
         for (EnumFace face1 : values()) {
-            float f1 = x * face1.directionVec.x + y * face1.directionVec.y;
+            double f1 = x * face1.directionVec.x() + y * face1.directionVec.y();
             if (f1 > f) {
                 f = f1;
                 face = face1;

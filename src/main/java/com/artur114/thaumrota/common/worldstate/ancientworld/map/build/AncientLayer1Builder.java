@@ -1,17 +1,21 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.map.build;
 
+import com.artur114.bananalib.math.BananaMath;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.maps.InteractiveMap;
 import com.artur114.thaumrota.server.structurebuilder.slowbuild.SlowBuildResult;
 import com.artur114.thaumrota.server.structurebuilder.slowbuild.SlowBuilder;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Random;
 
 public class AncientLayer1Builder extends SlowBuilder {
+    private static final Logger log = LogManager.getLogger("ThaumRotA/AncientWorld");
     private static int buildersCount = 0;
 
     private final InteractiveMap map;
@@ -45,6 +49,10 @@ public class AncientLayer1Builder extends SlowBuilder {
         this.map.build(this.currentIndex++, this.world, pos, this.buildRand);
 
         this.finishBuildChunk(this.world, x, z);
+
+        if (this.currentIndex % (this.map.area() / 4) == 0) {
+            log.info("Sector {} Build phase 2/2 :: [placement], process {}.0%", this.center, BananaMath.round(100.0F * ((float) this.currentIndex / this.map.area())));
+        }
 
         if (this.currentIndex >= this.map.area()) {
             return SlowBuildResult.FINISH;
@@ -82,6 +90,7 @@ public class AncientLayer1Builder extends SlowBuilder {
     }
 
     private void clearAll(World world) {
+        log.info("Sector {} Build phase 1/2 :: [cleanup]", this.center);
         for (int i = 0; i != this.map.area(); i++) {
             int x = this.center.x + (this.map.size() / 2) - (i % this.map.size());
             int z = this.center.z + (this.map.size() / 2) - (i / this.map.size());

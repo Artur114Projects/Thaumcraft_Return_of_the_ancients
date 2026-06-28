@@ -20,13 +20,11 @@ import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
 import net.minecraft.world.gen.layer.GenLayerZoom;
 
 public abstract class GenLayerRotA extends GenLayer {
-
-
     public GenLayerRotA(long seed) {
         super(seed);
     }
 
-    public static GenLayer[] initializeAllBiomeGenerators(long seed, WorldType worldType) {
+    public static GenLayer[] initializeBiomeGenerators(long seed, WorldType worldType) {
         GenLayer genlayer = new GenLayerIsland(1L);
         genlayer = new GenLayerFuzzyZoom(2000L, genlayer);
         GenLayer genlayeraddisland = new GenLayerAddIsland(1L, genlayer);

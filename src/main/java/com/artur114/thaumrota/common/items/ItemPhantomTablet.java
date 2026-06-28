@@ -42,11 +42,7 @@ public class ItemPhantomTablet extends BItemBase {
             entityIn.replaceItemInInventory(itemSlot, ItemStack.EMPTY);
 
             if (worldIn.isRemote) {
-                for (int i = 0; i != 80; i++) {
-                    Pos3d vec = new Pos3d((worldIn.rand.nextFloat() - 0.5F) * 0.2, 0, (worldIn.rand.nextFloat() - 0.5F) * 0.2);
-                    Minecraft.getMinecraft().effectRenderer.addEffect(new ParticlePhantom(worldIn, entityIn.posX + ((worldIn.rand.nextFloat() * 2.0F) - 1.0F), entityIn.posY + (worldIn.rand.nextFloat() * 0.5), entityIn.posZ + ((worldIn.rand.nextFloat() * 2.0F) - 1.0F), vec, 20));
-                    entityIn.playSound(SoundsTC.crabclaw, 0.01F, 1.0F);
-                }
+                this.spawnParticles(entityIn);
             } else if (entityIn instanceof EntityLivingBase) {
                 ((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 20, 0));
             }
@@ -60,10 +56,7 @@ public class ItemPhantomTablet extends BItemBase {
             entityItem.setDead();
 
             if (entityItem.world.isRemote) {
-                for (int i = 0; i != 80; i++) {
-                    Pos3d vec = new Pos3d((entityItem.world.rand.nextFloat() - 0.5F) * 0.2, 0, (entityItem.world.rand.nextFloat() - 0.5F) * 0.2);
-                    Minecraft.getMinecraft().effectRenderer.addEffect(new ParticlePhantom(entityItem.world, entityItem.posX + ((entityItem.world.rand.nextFloat() * 1.0F) - 0.5F), entityItem.posY + (entityItem.world.rand.nextFloat() * 0.5), entityItem.posZ + ((entityItem.world.rand.nextFloat() * 1.0F) - 0.5F), vec, 20));
-                }
+                this.spawnParticles(entityItem);
             } else {
                 entityItem.world.playSound(null, entityItem.getPosition(), SoundsTC.crabclaw, SoundCategory.AMBIENT, 1, 1);
             }
@@ -85,5 +78,14 @@ public class ItemPhantomTablet extends BItemBase {
     @Override
     public IRarity getForgeRarity(ItemStack stack) {
         return EnumRarity.EPIC;
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void spawnParticles(Entity entity) {
+        for (int i = 0; i != 80; i++) {
+            Pos3d vec = new Pos3d((entity.world.rand.nextFloat() - 0.5F) * 0.2, 0, (entity.world.rand.nextFloat() - 0.5F) * 0.2);
+            Minecraft.getMinecraft().effectRenderer.addEffect(new ParticlePhantom(entity.world, entity.posX + ((entity.world.rand.nextFloat() * 1.0F) - 0.5F), entity.posY + (entity.world.rand.nextFloat() * 0.5), entity.posZ + ((entity.world.rand.nextFloat() * 1.0F) - 0.5F), vec, 20));
+        }
+        entity.playSound(SoundsTC.crabclaw, 0.01F, 1.0F);
     }
 }

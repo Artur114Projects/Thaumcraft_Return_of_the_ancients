@@ -13,6 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
@@ -49,8 +50,13 @@ public class BlockEnergyLine extends BlockEnergyBase<TileEntityEnergyLine> {
     public BlockEnergyLine(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
 
-        this.setTileRender(new TileEntityEnergyLineRenderer());
-        this.setForCreative().setCreativeTab(ThaumRotA.CREATIVE_TAB);
+        this.setForCreative();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected @Nullable TileEntitySpecialRenderer<TileEntityEnergyLine> createTileRender() {
+        return new TileEntityEnergyLineRenderer();
     }
 
     @Override

@@ -102,7 +102,7 @@ public class PlayerDistanceToPortalManager {
     }
 
     private void updateServerRainTck(Minecraft mc, EntityPlayer player) {
-        if (useCustomRain && player.ticksExisted % 40 == 0) {
+        if (useCustomRain && player.ticksExisted % 80 == 0) {
             updateServerRain();
         }
     }

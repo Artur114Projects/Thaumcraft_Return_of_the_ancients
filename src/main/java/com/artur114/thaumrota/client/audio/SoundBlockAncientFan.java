@@ -11,7 +11,7 @@ public class SoundBlockAncientFan extends SoundTile<TileEntityAncientFan> {
         super(InitSounds.FAN, SoundCategory.BLOCKS, tile);
 
         this.repeat = true;
-        this.baseVolume = 0.3F;
+        this.baseVolume = 0.15F;
         this.repeatDelay = 0;
         this.volume = this.baseVolume;
     }

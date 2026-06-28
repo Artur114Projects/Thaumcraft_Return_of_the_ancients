@@ -6,6 +6,8 @@ import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
 
@@ -176,6 +178,7 @@ public class AreasCombiner {
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void renderArea(float alpha) {
             Random rand = new Random(this.hashCode());
             for (Box box : this.area) {
@@ -216,6 +219,7 @@ public class AreasCombiner {
             return x >= this.start.getX() && y >= this.start.getY() && z >= this.start.getZ() && x < this.end.getX() + 1 && y < this.end.getY() + 1 && z < this.end.getZ() + 1;
         }
 
+        @SideOnly(Side.CLIENT)
         public void renderBox(float r, float g, float b, float a) {
             Minecraft mc = Minecraft.getMinecraft();
             EntityPlayer player = mc.player;
@@ -272,6 +276,7 @@ public class AreasCombiner {
         }
 
         @Override
+        @SideOnly(Side.CLIENT)
         public void renderArea(float alpha) {
             Minecraft mc = Minecraft.getMinecraft();
             EntityPlayer player = mc.player;

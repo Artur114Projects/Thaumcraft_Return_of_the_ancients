@@ -5,6 +5,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ClientPacketSendWeather implements IMessage {
 
@@ -35,6 +37,7 @@ public class ClientPacketSendWeather implements IMessage {
     public static class HandlerSW implements IMessageHandler<ClientPacketSendWeather, IMessage> {
 
         @Override
+        @SideOnly(Side.CLIENT)
         public IMessage onMessage(ClientPacketSendWeather message, MessageContext ctx) {
             ClientEventsHandler.PLAYER_DISTANCE_TO_PORTAL_MANAGER.setServerRain(message.rain, message.thunder);
             return null;

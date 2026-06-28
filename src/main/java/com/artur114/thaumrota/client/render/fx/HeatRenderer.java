@@ -23,6 +23,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.BufferUtils;
 
 import java.awt.*;
@@ -31,7 +33,7 @@ import java.util.*;
 import java.util.List;
 import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(Side.CLIENT)
 public class HeatRenderer {
     public static final Frustum FRUSTUM = new Frustum();
     public static final Color HEAT_COLOR = new Color(214, 111, 29);

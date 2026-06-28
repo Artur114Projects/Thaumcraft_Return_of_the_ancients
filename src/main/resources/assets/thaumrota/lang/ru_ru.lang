@@ -1,7 +1,7 @@
 ################################################################################
 # Items
 ################################################################################
-item.imitation_ancient_fuse.name=Имитация древнего предохранителя
+item.imitation_ancient_fuse.name=Древний предохранитель
 item.phantom_tablet.name=Фантомная скрижаль
 item.debug_carrot.name=Отладочная морковка
 item.portal_compass.name=Пустотный компас
@@ -9,6 +9,7 @@ item.soul_binder.name=Камень связи душ
 ################################################################################
 # Blocks
 ################################################################################
+tile.imitation_ancient_fuse_block.name=Древний предохранитель
 tile.ancient_sanctuary_controller_broken.name=Сломанный древний контроллер святилища
 tile.incandescent_taint_void_stone.name=Раскалённый заражённый пустотный камень
 tile.stone_eldritch_tile_lightning.name=Светящийся потусторонний камень
@@ -29,6 +30,10 @@ tile.pedestal_phantom.name=Фантомный пьедестал
 tile.dummy_ancient_stone.name=Структурный блок
 tile.ancient_lamp_1.name=Древнее устройство
 tile.ancient_lamp_0.name=Древнее устройство
+tile.ancient_piston.name=Древний механизм
+tile.ancient_fan.name=Древняя вентиляция
+tile.ancient_glass.name=Древнее стекло
+tile.ancient_grid.name=Древняя сетка
 tile.incinerator.name=Испепелитель
 tile.energy_line.name=Энерго трасса [WIP]
 tile.energy_source.name=Источник энергии [WIP]

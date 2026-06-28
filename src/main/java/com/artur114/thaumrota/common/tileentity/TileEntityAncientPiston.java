@@ -35,6 +35,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import thaumcraft.client.fx.FXDispatcher;
 
@@ -72,36 +74,7 @@ public class TileEntityAncientPiston extends TileBase implements ITileMultiBBPro
     @Override
     public void update() {
         if (this.world.isRemote) {
-            if (RotAConfig.client.graphicQuality == EnumFXQuality.POTATO) {
-                return;
-            }
-            if (!BananaMC.isInPlayerView(this.pos, RotAConfig.client.graphicQuality.particleMaxDist())) {
-                return;
-            }
-            if (this.particlePos == null) {
-                this.compileMatrix();
-            }
-
-            float move = this.moveProcess(1, 40.0F);
-            float bound = 0.2F;
-            if (move > 1 - bound) {
-                float norm = Math.min((move - (1 - bound)) * (1 / bound) + 0.4F, 1);
-                int maxParticles = (int) (10 * norm);
-
-                Vec3DM axis = Vec3DM.obtain();
-                axis.set(this.face.getDirectionVec().getX(), this.face.getDirectionVec().getY(), this.face.getDirectionVec().getZ());
-                Matrix3FM rotMatrix = Matrix3FM.obtain();
-
-                for (int i = 0; i != maxParticles; i++) {
-                    rotMatrix.setIdentity().rotate(360.0F * ((float) i / maxParticles) + this.rand.nextFloat() * 45.0F, axis.x(), axis.y(), axis.z());
-                    IVec3D rot = rotMatrix.transform(this.particleVec.pushPos());
-                    FXDispatcher.INSTANCE.drawVentParticles(this.particlePos.x(), this.particlePos.y(), this.particlePos.z(), rot.x(), rot.y(), rot.z(), 0xa3a3a3, 0.7F);
-                    this.particleVec.popPos();
-                }
-
-                Matrix3FM.release(rotMatrix);
-                Vec3DM.release(axis);
-            }
+            this.clientUpdate();
         }
     }
 
@@ -123,6 +96,40 @@ public class TileEntityAncientPiston extends TileBase implements ITileMultiBBPro
         this.moveBoxes[1].popBox();
 
         return Arrays.asList(ret);
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void clientUpdate() {
+        if (RotAConfig.client.graphicQuality == EnumFXQuality.POTATO) {
+            return;
+        }
+        if (!BananaMC.isInPlayerView(this.pos, RotAConfig.client.graphicQuality.particleMaxDist())) {
+            return;
+        }
+        if (this.particlePos == null) {
+            this.compileMatrix();
+        }
+
+        float move = this.moveProcess(1, 40.0F);
+        float bound = 0.2F;
+        if (move > 1 - bound) {
+            float norm = Math.min((move - (1 - bound)) * (1 / bound) + 0.4F, 1);
+            int maxParticles = (int) (10 * norm);
+
+            Vec3DM axis = Vec3DM.obtain();
+            axis.set(this.face.getDirectionVec().getX(), this.face.getDirectionVec().getY(), this.face.getDirectionVec().getZ());
+            Matrix3FM rotMatrix = Matrix3FM.obtain();
+
+            for (int i = 0; i != maxParticles; i++) {
+                rotMatrix.setIdentity().rotate(360.0F * ((float) i / maxParticles) + this.rand.nextFloat() * 45.0F, axis.x(), axis.y(), axis.z());
+                IVec3D rot = rotMatrix.transform(this.particleVec.pushPos());
+                FXDispatcher.INSTANCE.drawVentParticles(this.particlePos.x(), this.particlePos.y(), this.particlePos.z(), rot.x(), rot.y(), rot.z(), 0xa3a3a3, 0.7F);
+                this.particleVec.popPos();
+            }
+
+            Matrix3FM.release(rotMatrix);
+            Vec3DM.release(axis);
+        }
     }
 
     private void moveBoxes() {

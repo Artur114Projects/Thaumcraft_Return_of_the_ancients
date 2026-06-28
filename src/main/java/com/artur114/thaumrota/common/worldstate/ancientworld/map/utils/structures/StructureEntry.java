@@ -17,7 +17,6 @@ import com.artur114.thaumrota.common.generation.portal.base.client.ClientAncient
 import com.artur114.thaumrota.common.generation.portal.util.PortalOffsets;
 import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import com.artur114.thaumrota.common.tileentity.interf.ITileDoor;
-import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -33,7 +32,7 @@ import java.util.List;
 import java.util.Random;
 
 public class StructureEntry extends StructureMultiChunk implements IStructureInteractive {
-    @SideOnly(Side.CLIENT) private boolean isPlayerCollideToWay = false;
+    private boolean isPlayerCollideToWay = false;
     private ChunkPos chunkPos = null;
     private Random rand = null;
     private World world = null;
@@ -55,8 +54,8 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
     public void build(World world, ChunkPos pos, Random rand) {
         super.build(world, pos, rand);
 
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
-        blockPos.setPos(pos).add(8, 0, 8);
+        PosMc3IM blockPos = PosMc3IM.obtain();
+        blockPos.setChunk(pos).add(8, 0, 8);
 
         for (int y = this.y + 32; y < world.getHeight(); y += 11) {
             blockPos.setY(y);
@@ -73,7 +72,7 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
         blockPos.setY(0);
         StructuresBuildManager.createBuildRequest(world, blockPos, "ancient_exit").setIgnoreAir().setPosAsXZCenter().build();
 
-        UltraMutableBlockPos.release(blockPos);
+        PosMc3IM.release(blockPos);
     }
 
     @Override
@@ -113,28 +112,28 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
 
     @SideOnly(Side.CLIENT)
     protected void updateClient(AncientWorldPlayer player) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
+        PosMc3IM blockPos = PosMc3IM.obtain();
         this.addParticles(player.player, this.world, blockPos);
         this.manageMovement(player.player, this.world, blockPos);
-        UltraMutableBlockPos.release(blockPos);
+        PosMc3IM.release(blockPos);
     }
 
     protected void updateServer(List<AncientWorldPlayer> players) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
+        PosMc3IM blockPos = PosMc3IM.obtain();
         for (AncientWorldPlayer player : players) {
-            if (this.isCollideToWay(blockPos.setPos(player.player))) {
+            if (this.isCollideToWay(blockPos.set(player.player))) {
                 player.player.fallDistance = 0;
             }
         }
-        UltraMutableBlockPos.release(blockPos);
+        PosMc3IM.release(blockPos);
     }
 
     @SideOnly(Side.CLIENT)
-    protected void addParticles(EntityPlayer player, World world, UltraMutableBlockPos util) {
+    protected void addParticles(EntityPlayer player, World world, PosMc3IM util) {
         Minecraft mc = Minecraft.getMinecraft();
-        util.setPos(chunkPos).setY(y);
+        util.setChunk(chunkPos).setY(y);
         for (int i = 0; i != 32; i++) {
-            util.setPos(chunkPos).setY(MathHelper.floor(player.posY - (i + 1) + 16));
+            util.setChunk(chunkPos).setY(MathHelper.floor(player.posY - (i + 1) + 16));
             if (util.getY() > world.getHeight() || util.getY() < 0 || (util.getY() < y + 3 && !this.isDoorOpen())) {
                 continue;
             }
@@ -143,16 +142,16 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
             }
             for (BlockPos offset : PortalOffsets.portalCollideOffsetsArray) {
                 if (rand.nextInt(16) == 0) {
-                    util.offsetAndCallRunnable(offset, offsetPos -> {
-                        mc.effectRenderer.addEffect(new ParticleAncientPortal(world, offsetPos.getX() + rand.nextDouble(), offsetPos.getY() + rand.nextDouble(), offsetPos.getZ() + rand.nextDouble(), 0.2));
-                    });
+                    util.pushPos().add(offset);
+                    mc.effectRenderer.addEffect(new ParticleAncientPortal(world, util.getX() + rand.nextDouble(), util.getY() + rand.nextDouble(), util.getZ() + rand.nextDouble(), 0.2));
+                    util.popPos();
                 }
             }
         }
     }
 
-    protected void manageMovement(EntityPlayer player, World world, UltraMutableBlockPos util) {
-        if (this.isCollideToWay(util.setPos(player))) {
+    protected void manageMovement(EntityPlayer player, World world, PosMc3IM util) {
+        if (this.isCollideToWay(util.set(player))) {
             boolean hasElevator = ClientEventsHandler.PLAYER_MOVEMENT_MANAGER.hasTask("ELEVATOR_" + this.chunkPos);
 
             if (player.posY > this.y + 16 && !hasElevator) {
@@ -176,33 +175,33 @@ public class StructureEntry extends StructureMultiChunk implements IStructureInt
     }
 
     protected boolean isDoorOpen() {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(this.chunkPos).add(6, this.y + 2, 6);
+        PosMc3IM blockPos = PosMc3IM.obtain().setChunk(this.chunkPos).add(6, this.y + 2, 6);
 
         TileEntity tile = this.world.getTileEntity(blockPos);
 
         boolean ret = (tile instanceof ITileDoor) && ((ITileDoor) tile).isOpenOrOpening();
 
-        UltraMutableBlockPos.release(blockPos);
+        PosMc3IM.release(blockPos);
 
         return ret;
     }
 
     public boolean isCollideToWay(BlockPos pos) {
-        UltraMutableBlockPos lBlockPos = UltraMutableBlockPos.obtain();
-        lBlockPos.setPos(pos);
-        if (lBlockPos.getChunkX() == this.chunkPos.x && lBlockPos.getChunkZ() == this.chunkPos.z) {
-            lBlockPos.setPos(this.chunkPos).setY(0);
+        PosMc3IM lBlockPos = PosMc3IM.obtain();
+        lBlockPos.set(pos);
+        if (lBlockPos.chunkX() == this.chunkPos.x && lBlockPos.chunkZ() == this.chunkPos.z) {
+            lBlockPos.setChunk(this.chunkPos).setY(0);
             for (BlockPos offset : PortalOffsets.portalCollideOffsetsArray) {
-                lBlockPos.pushPos();
-                if (lBlockPos.add(offset).equalsXZ(pos)) {
+                lBlockPos.pushPos().add(offset);
+                if (lBlockPos.getX() == pos.getX() && lBlockPos.getZ() == pos.getZ()) {
                     lBlockPos.popPos();
-                    UltraMutableBlockPos.release(lBlockPos);
+                    PosMc3IM.release(lBlockPos);
                     return true;
                 }
                 lBlockPos.popPos();
             }
         }
-        UltraMutableBlockPos.release(lBlockPos);
+        PosMc3IM.release(lBlockPos);
         return false;
     }
 

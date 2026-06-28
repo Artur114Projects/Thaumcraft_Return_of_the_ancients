@@ -115,7 +115,7 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
     @Override
     public void onLoad() {
         if (this.world.isRemote) {
-            ClientEventsHandler.SOUNDS_MANAGER.playTileSound(this, SoundBlockAncientFan::new);
+            this.playSound();
         }
         super.onLoad();
     }
@@ -123,7 +123,7 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
     @Override
     public void validate() {
         if (this.world.isRemote && this.isInvalid()) {
-            ClientEventsHandler.SOUNDS_MANAGER.playTileSound(this, SoundBlockAncientFan::new);
+            this.playSound();
         }
         super.validate();
     }
@@ -149,6 +149,10 @@ public class TileEntityAncientFan extends TileBase implements ITileBlockPlaceLis
             if (this.redStoneLevel < r) this.redStoneLevel = r;
         }
         UltraMutableBlockPos.release(blockPos);
+    }
+
+    private void playSound() {
+        ClientEventsHandler.SOUNDS_MANAGER.playTileSound(this, SoundBlockAncientFan::new);
     }
 
     @SideOnly(Side.CLIENT)

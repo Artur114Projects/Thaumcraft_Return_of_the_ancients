@@ -76,6 +76,8 @@ public class GenPhaseLongRooms extends GenPhase {
             }
         }
 
-        rooms.get(rand.nextInt(rooms.size())).setSecret();
+        if (!rooms.isEmpty()) {
+            rooms.get(rand.nextInt(rooms.size())).setSecret();
+        }
     }
 }

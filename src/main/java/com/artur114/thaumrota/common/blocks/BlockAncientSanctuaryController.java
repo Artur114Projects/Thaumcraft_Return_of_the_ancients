@@ -7,6 +7,7 @@ import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -17,17 +18,24 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockAncientSanctuaryController extends BaseBlockTileEntity<TileEntityAncientSanctuaryController> {
+public class BlockAncientSanctuaryController extends BaseBlockTile<TileEntityAncientSanctuaryController> {
     protected static final AxisAlignedBB BASE_ABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 1.0D, 0.9375D);
 
     public BlockAncientSanctuaryController(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
 
-        this.setTileRender(new TileEntityAncientSanctuaryControllerRenderer());
         this.setForCreative().setCreativeTab(ThaumRotA.CREATIVE_TAB);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected @Nullable TileEntitySpecialRenderer<TileEntityAncientSanctuaryController> createTileRender() {
+        return new TileEntityAncientSanctuaryControllerRenderer();
     }
 
     @Override

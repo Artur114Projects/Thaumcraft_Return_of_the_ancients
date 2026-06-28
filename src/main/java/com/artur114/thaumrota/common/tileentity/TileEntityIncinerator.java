@@ -1,8 +1,8 @@
 package com.artur114.thaumrota.common.tileentity;
 
+import com.artur114.bananalib.math.BananaMath;
 import com.artur114.bananalib.mc.base.tileabs.ITileBlockPlaceListener;
 import com.artur114.bananalib.mc.base.tileabs.ITileMultiBBProvider;
-import com.artur114.thaumrota.client.util.RenderHandler;
 import com.artur114.thaumrota.common.util.math.CoordinateMatrix;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -36,7 +36,7 @@ public class TileEntityIncinerator extends TileBase implements ITickable, ITileB
             this.compileMatrix();
         }
         float partialTicks = 1.0F;
-        if (this.world.isRemote) partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
+        if (this.world.isRemote) partialTicks = this.pct();
         CoordinateMatrix move = this.matrix.child("move");
         move.clearTransforms(false);
         move.translate(((12.0F / 16.0F) * this.moveProcess(partialTicks)) * -this.face.getFrontOffsetX(), ((12.0F / 16.0F) * this.moveProcess(partialTicks)) * -this.face.getFrontOffsetY(), ((12.0F / 16.0F) * this.moveProcess(partialTicks)) * -this.face.getFrontOffsetZ());
@@ -63,7 +63,11 @@ public class TileEntityIncinerator extends TileBase implements ITickable, ITileB
     }
 
     public float moveProcess(float partialTicks) {
-        return MathHelper.cos((float) ((Math.PI / 2.0F) * (RenderHandler.interpolate(this.prevMoveProcess, this.moveProcess, partialTicks) / this.maxMoveProcess)));
+        return MathHelper.cos((float) ((Math.PI / 2.0F) * (BananaMath.lerp(this.prevMoveProcess, this.moveProcess, partialTicks) / this.maxMoveProcess)));
+    }
+
+    private float pct() {
+        return Minecraft.getMinecraft().getRenderPartialTicks();
     }
 
     private void compileMatrix() {

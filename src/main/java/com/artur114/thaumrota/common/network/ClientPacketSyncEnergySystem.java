@@ -14,6 +14,8 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ClientPacketSyncEnergySystem extends NBTPacketBase {
     public ClientPacketSyncEnergySystem() {}
@@ -25,6 +27,7 @@ public class ClientPacketSyncEnergySystem extends NBTPacketBase {
     public static class HandlerSES implements IMessageHandler<ClientPacketSyncEnergySystem, IMessage> {
 
         @Override
+        @SideOnly(Side.CLIENT)
         public IMessage onMessage(ClientPacketSyncEnergySystem message, MessageContext ctx) {
             Minecraft.getMinecraft().addScheduledTask(() -> {
                 World world = Minecraft.getMinecraft().world;

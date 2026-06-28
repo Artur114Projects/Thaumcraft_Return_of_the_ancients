@@ -49,6 +49,7 @@ public abstract class StructureMultiChunk extends StructureBase implements IStru
     public void build(World world, ChunkPos pos, Random rand) {
         PosMc3IM blockPos = PosMc3IM.obtain();
         blockPos.setChunk(pos).add(8, 0, 8).setY(this.y);
+        this.mutateBuildPos(blockPos);
         StructuresBuildManager.createBuildRequest(world, blockPos, this.type.stringId(this.rotate)).setIgnoreAir().setPosAsXZCenter().build();
         PosMc3IM.release(blockPos);
     }

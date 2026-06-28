@@ -1,7 +1,10 @@
 package com.artur114.thaumrota.common.tileentity;
 
 import com.artur114.bananalib.mc.base.tileabs.ITileBlockPlaceListener;
+import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
+import com.artur114.thaumrota.client.audio.SoundBlockAncientFan;
 import com.artur114.thaumrota.client.audio.SoundBlockProjector;
+import com.artur114.thaumrota.client.event.ClientEventsHandler;
 import com.artur114.thaumrota.common.init.InitBlocks;
 import com.artur114.thaumrota.common.init.InitSounds;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
@@ -15,6 +18,9 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityAncientProjector extends TileBase implements ITileBlockPlaceListener {
     private boolean enabled = true;
@@ -43,32 +49,40 @@ public class TileEntityAncientProjector extends TileBase implements ITileBlockPl
     @Override
     public void onLoad() {
         if (this.world.isRemote) {
-            Minecraft.getMinecraft().getSoundHandler().playSound(new SoundBlockProjector(this));
+            this.playSound();
         }
+        super.onLoad();
     }
 
     @Override
-    public AxisAlignedBB getRenderBoundingBox() {
+    public void validate() {
+        if (this.world.isRemote && this.isInvalid()) {
+            this.playSound();
+        }
+        super.validate();
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void playSound() {
+        ClientEventsHandler.SOUNDS_MANAGER.playTileSound(this, SoundBlockProjector::new);
+    }
+
+    @Override
+    public @NotNull AxisAlignedBB getRenderBoundingBox() {
         return INFINITE_EXTENT_AABB;
     }
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(pos).down();
-
-        while (worldIn.isAirBlock(blockPos)) {
-            blockPos.down();
-        }
-
-        blockPos.up();
-
-        this.distanceToPedestal = pos.getY() - blockPos.getY();
-
+        PosMc3IM blockPos = PosMc3IM.obtain().set(pos).down();
+        while (worldIn.isAirBlock(blockPos)) blockPos.down();
+        this.distanceToPedestal = pos.getY() - (blockPos.getY() + 1);
+        PosMc3IM.release(blockPos);
         this.updatePedestal(this.enabled);
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public @NotNull NBTTagCompound writeToNBT(@NotNull NBTTagCompound compound) {
         compound = super.writeToNBT(compound);
 
         compound.setInteger("distanceToPedestal", this.distanceToPedestal);
@@ -78,7 +92,7 @@ public class TileEntityAncientProjector extends TileBase implements ITileBlockPl
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(@NotNull NBTTagCompound compound) {
         super.readFromNBT(compound);
 
         this.distanceToPedestal = compound.getInteger("distanceToPedestal");

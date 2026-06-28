@@ -15,6 +15,8 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Map;
 import java.util.UUID;
@@ -31,6 +33,7 @@ public class ClientPacketSyncAncientLayer1s extends NBTPacketBase {
     public static class HandlerSAL implements IMessageHandler<ClientPacketSyncAncientLayer1s, IMessage> {
 
         @Override
+        @SideOnly(Side.CLIENT)
         public IMessage onMessage(ClientPacketSyncAncientLayer1s message, MessageContext ctx) {
             Minecraft.getMinecraft().addScheduledTask(() -> {
                 Minecraft mc = Minecraft.getMinecraft();

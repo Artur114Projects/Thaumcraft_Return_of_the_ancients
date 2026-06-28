@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-public class BlockDummy extends BaseBlockTileEntity<TileEntityDummy> {
+public class BlockDummy extends BaseBlockTile<TileEntityDummy> {
     public static boolean SAFE_BREAK = false;
 
     public BlockDummy(String name, Material material, float hardness, float resistance, SoundType soundType) {

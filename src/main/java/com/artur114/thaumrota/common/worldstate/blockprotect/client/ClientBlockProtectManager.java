@@ -20,8 +20,6 @@ import thaumcraft.api.blocks.BlocksTC;
 import java.util.Random;
 
 public class ClientBlockProtectManager {
-    private final Minecraft mc = Minecraft.getMinecraft();
-
     /*--------------------------------------EVENTS--------------------------------------*/
 
     public void playerInteractEventLeftClickBlock(PlayerInteractEvent.LeftClickBlock e) {

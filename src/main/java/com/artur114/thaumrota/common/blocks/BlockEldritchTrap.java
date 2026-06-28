@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-public class BlockEldritchTrap extends BaseBlockTileEntity<TileEntityEldritchTrap> {
+public class BlockEldritchTrap extends BaseBlockTile<TileEntityEldritchTrap> {
 
 
     public BlockEldritchTrap(String name, Material material, float hardness, float resistance, SoundType soundType) {

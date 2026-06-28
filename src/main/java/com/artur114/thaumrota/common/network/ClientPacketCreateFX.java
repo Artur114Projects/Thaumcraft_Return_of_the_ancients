@@ -12,6 +12,8 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -59,6 +61,7 @@ public class ClientPacketCreateFX extends NBTPacketBase {
     public static class HandlerCFX implements IMessageHandler<ClientPacketCreateFX, IMessage> {
 
         @Override
+        @SideOnly(Side.CLIENT)
         public IMessage onMessage(ClientPacketCreateFX message, MessageContext ctx) {
             Minecraft.getMinecraft().addScheduledTask(() -> {
                 switch (message.type) {

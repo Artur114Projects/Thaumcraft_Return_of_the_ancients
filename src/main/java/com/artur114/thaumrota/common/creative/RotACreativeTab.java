@@ -2,6 +2,8 @@ package com.artur114.thaumrota.common.creative;
 
 import com.artur114.thaumrota.common.init.InitBlocks;
 
+import com.artur114.thaumrota.common.items.IHasTabPriority;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -19,11 +21,9 @@ public class RotACreativeTab extends CreativeTabs {
 
     @Override
     public void displayAllRelevantItems(@NotNull NonNullList<ItemStack> list) {
-        for (Item item : Item.REGISTRY) {
+        for (Item item : ThaumRotA.REGISTER_BUS.items()) {
             item.getSubItems(this, list);
         }
-
-        list.sort(Comparator.comparingInt(((stack) -> stack.getItem() instanceof ItemBlock ? 1 : 0)));
     }
 
     @Override

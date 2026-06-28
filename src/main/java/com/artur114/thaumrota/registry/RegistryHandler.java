@@ -17,6 +17,7 @@ import com.artur114.thaumrota.server.commads.TRACommand;
 import com.artur114.thaumrota.server.event.PublicSStartingEvent;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -33,6 +34,7 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.AspectRegistryEvent;
 import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.api.crafting.InfusionRecipe;
+import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ScanItem;
 import thaumcraft.api.research.ScanningManager;
@@ -41,9 +43,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static net.minecraft.init.Items.COMPASS;
-import static thaumcraft.api.items.ItemsTC.*;
-import static thaumcraft.api.items.ItemsTC.plate;
 
 @AutoInstantiate
 public class RegistryHandler implements ILoadStagePre, ILoadStageInit, IHasNetworkPacket, IHasCraftRecipe {
@@ -94,20 +93,35 @@ public class RegistryHandler implements ILoadStagePre, ILoadStageInit, IHasNetwo
     }
 
     public void registerTCRecipes() {
-        ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation(ThaumRotA.MODID + ":portal_compass"), new InfusionRecipe(
+        ThaumcraftApi.addInfusionCraftingRecipe(ThaumRotA.loc("portal_compass"), new InfusionRecipe(
             "UNLOCKELDRITCH",
             new ItemStack(InitItems.COMPASS),
-            3,
+            4,
             new AspectList().add(Aspect.ELDRITCH, 125).add(Aspect.DARKNESS, 75).add(Aspect.SENSES, 100),
-            COMPASS, mechanismComplex, new ItemStack(plate, 1, 3), morphicResonator, new ItemStack(plate, 1, 3))
+            Items.COMPASS, ItemsTC.mechanismComplex, new ItemStack(ItemsTC.plate, 1, 3), ItemsTC.morphicResonator, new ItemStack(ItemsTC.plate, 1, 3))
         );
-        ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation(ThaumRotA.MODID + ":soul_binder"), new InfusionRecipe(
+        ThaumcraftApi.addInfusionCraftingRecipe(ThaumRotA.loc("soul_binder"), new InfusionRecipe(
             "UNLOCKELDRITCH",
             new ItemStack(InitItems.SOUL_BINDER),
-            1,
+            2,
             new AspectList().add(Aspect.TRAP, 75).add(Aspect.SOUL, 100),
-            Blocks.SOUL_SAND, new ItemStack(plate, 1, 3), new ItemStack(plate, 1, 3), new ItemStack(plate, 1, 3), new ItemStack(plate, 1, 3))
+            Blocks.SOUL_SAND, new ItemStack(ItemsTC.plate, 1, 3), new ItemStack(ItemsTC.plate, 1, 3), new ItemStack(ItemsTC.plate, 1, 3), new ItemStack(ItemsTC.plate, 1, 3))
         );
+        ThaumcraftApi.addInfusionCraftingRecipe(ThaumRotA.loc("ancient_fuse"), new InfusionRecipe(
+            "UNLOCKELDRITCH",
+            new ItemStack(InitItems.IMITATION_ANCIENT_FUSE),
+            4,
+            new AspectList().add(Aspect.ORDER, 200).add(Aspect.CRYSTAL, 100).add(Aspect.ELDRITCH, 75).add(Aspect.MECHANISM, 50),
+            BlocksTC.crystalOrder,
+            BlocksTC.stoneArcane,
+            new ItemStack(ItemsTC.plate, 1, 3),
+            BlocksTC.stoneArcane,
+            new ItemStack(ItemsTC.plate, 1, 3),
+            BlocksTC.stoneArcane,
+            new ItemStack(ItemsTC.plate, 1, 3),
+            BlocksTC.stoneArcane,
+            new ItemStack(ItemsTC.plate, 1, 3)
+        ));
     }
 
     @SubscribeEvent

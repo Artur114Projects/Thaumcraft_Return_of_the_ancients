@@ -5,6 +5,7 @@ import com.artur114.thaumrota.common.tileentity.TileEntityAncientDoorH4x4;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -14,14 +15,20 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockAncientDoorH4x4 extends BaseBlockTileEntity<TileEntityAncientDoorH4x4> {
+public class BlockAncientDoorH4x4 extends BaseBlockTile<TileEntityAncientDoorH4x4> {
     public BlockAncientDoorH4x4(String name) {
         super(name, Material.ROCK, 2.0F, 10.0F, SoundType.STONE);
+    }
 
-        this.setTileRender(new TileEntityAncientDoorH4x4Render());
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected @Nullable TileEntitySpecialRenderer<TileEntityAncientDoorH4x4> createTileRender() {
+        return new TileEntityAncientDoorH4x4Render();
     }
 
     @Override

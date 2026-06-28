@@ -11,6 +11,7 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -23,12 +24,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class BlockPedestalActive extends BaseBlockTileEntity<TileEntityPedestalActive> {
+public class BlockPedestalActive extends BaseBlockTile<TileEntityPedestalActive> {
     public static final AxisAlignedBB BB_BASE = new AxisAlignedBB(1.0F / 16.0F, 0, 1.0F / 16.0F, 15.0F / 16.0F, 20.4F / 16.0F, 15.0F / 16.0F);
     public final static PropertyDirection DIRECTION = PropertyDirection.create("facing", (f) -> f.getAxis().isHorizontal());
     public final static PropertyBool ROTATE = PropertyBool.create("rotate");
@@ -37,9 +40,14 @@ public class BlockPedestalActive extends BaseBlockTileEntity<TileEntityPedestalA
         super(name, Material.ROCK, 2.0F, 10.0F, SoundType.STONE);
 
         this.setDefaultState(this.getDefaultState().withProperty(DIRECTION, EnumFacing.EAST).withProperty(ROTATE, false));
-        this.setTileRender(new TileEntityPedestalActiveRender());
         this.setCreativeTab(ThaumRotA.CREATIVE_TAB);
         this.setForCreative();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected @Nullable TileEntitySpecialRenderer<TileEntityPedestalActive> createTileRender() {
+        return new TileEntityPedestalActiveRender();
     }
 
     @Override

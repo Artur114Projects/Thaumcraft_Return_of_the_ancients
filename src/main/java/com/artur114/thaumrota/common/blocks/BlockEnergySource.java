@@ -22,7 +22,7 @@ public class BlockEnergySource extends BlockEnergyBase<TileEnergySource> {
     public BlockEnergySource(String name, Material material, float hardness, float resistance, SoundType soundType) {
         super(name, material, hardness, resistance, soundType);
 
-        this.setForCreative().setCreativeTab(ThaumRotA.CREATIVE_TAB);
+        this.setForCreative();
     }
 
     @Override

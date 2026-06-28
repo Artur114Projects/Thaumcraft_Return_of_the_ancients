@@ -27,6 +27,11 @@ public class StructureWaterRoom extends StructureCombatRoom {
     }
 
     @Override
+    protected void mutateBuildPos(PosMc3IM pos) {
+        pos.down();
+    }
+
+    @Override
     protected void onAllDead() {
         this.openBigDoors(
             new PosMc3IM(4, 2, -15),

@@ -17,7 +17,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'groovy'
 apply plugin: 'java'
 
-archivesBaseName = 'YReturnOfTheAncients'
+archivesBaseName = 'ThaumRotA'
 group = 'com.artur114.thaumrota'
 version = mod_version
 

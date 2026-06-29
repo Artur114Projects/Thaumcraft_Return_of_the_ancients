@@ -77,12 +77,12 @@ public class BlockImitationAncientFuse extends BaseBlockTile<TileImitationAncien
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     protected @Nullable TileEntitySpecialRenderer<TileImitationAncientFuse> createTileRender() {
         return new TileImitationAncientFuseRenderer();
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public @NotNull Class<TileImitationAncientFuse> tileClass() {
         return TileImitationAncientFuse.class;
     }

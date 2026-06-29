@@ -28,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+// TODO: Переписать!
 public class ItemPortalCompass extends BItemBase {
     private final UltraMutableBlockPos mutableBlockPos = new UltraMutableBlockPos();
 
@@ -35,8 +36,7 @@ public class ItemPortalCompass extends BItemBase {
     {
         super(name);
         this.setMaxStackSize(1);
-        this.addPropertyOverride(new ResourceLocation("angle"), new IItemPropertyGetter()
-        {
+        this.addPropertyOverride(new ResourceLocation("angle"), new IItemPropertyGetter() {
             @SideOnly(Side.CLIENT)
             double rotation;
             @SideOnly(Side.CLIENT)

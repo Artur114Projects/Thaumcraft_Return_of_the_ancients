@@ -377,27 +377,10 @@ public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать 
     }
 
     public static void onPlayerCollidePortal(EntityPlayerMP player) {
-        boolean flag = false;
         for (AncientPortal portal : PORTALS.values()) {
             if (portal.isCollide(player.getPosition())) {
                 portal.onCollide(player);
-                flag = true;
                 break;
-            }
-        }
-        if (!flag) {
-            for (int i = -1; i != 2; i++) {
-                player.world.setBlockToAir(player.getPosition().add(0, i, 0));
-
-                player.world.setBlockToAir(player.getPosition().add(0, i, -1));
-                player.world.setBlockToAir(player.getPosition().add(0, i, 1));
-                player.world.setBlockToAir(player.getPosition().add(-1, i, 0));
-                player.world.setBlockToAir(player.getPosition().add(1, i, 0));
-
-                player.world.setBlockToAir(player.getPosition().add(-1, i, -1));
-                player.world.setBlockToAir(player.getPosition().add(1, i, 1));
-                player.world.setBlockToAir(player.getPosition().add(1, i, -1));
-                player.world.setBlockToAir(player.getPosition().add(-1, i, 1));
             }
         }
     }

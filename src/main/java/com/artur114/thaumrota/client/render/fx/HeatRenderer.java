@@ -177,9 +177,12 @@ public class HeatRenderer {
         return ret;
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent
     public static void renderShaders(RenderWorldLastEvent evt) {
         int dim = Minecraft.getMinecraft().world.provider.getDimension();
+        if (dim == 0) {
+            return;
+        }
         if (!dimensions.containsKey(dim)) {
             prepared.clear();
             lights.clear();
@@ -230,11 +233,16 @@ public class HeatRenderer {
             return;
         }
 
+        if (world.provider.getDimension() == 0) {
+            return;
+        }
+
         if (!dimensions.containsKey(world.provider.getDimension())) {
             prepared.clear();
             lights.clear();
             return;
         }
+
 
         for (EnumLightType type : EnumLightType.values()) {
             List<ILightSource> light = prepareLights(type);

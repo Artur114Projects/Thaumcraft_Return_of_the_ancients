@@ -1,5 +1,6 @@
 package com.artur114.thaumrota.common.items;
 
+import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.bananalib.mc.base.BItemBase;
 import com.artur114.thaumrota.client.event.ClientEventsHandler;
 import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
@@ -29,7 +30,6 @@ import java.util.List;
 
 public class ItemPortalCompass extends BItemBase {
     private final UltraMutableBlockPos mutableBlockPos = new UltraMutableBlockPos();
-    private final ItemStack compassStack = new ItemStack(InitItems.COMPASS);
 
     public ItemPortalCompass(String name)
     {
@@ -40,11 +40,11 @@ public class ItemPortalCompass extends BItemBase {
             @SideOnly(Side.CLIENT)
             double rotation;
             @SideOnly(Side.CLIENT)
-            double rota;
+            double rot;
             @SideOnly(Side.CLIENT)
             long lastUpdateTick;
             @SideOnly(Side.CLIENT)
-            public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn)
+            public float apply(@NotNull ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn)
             {
                 if (entityIn == null && !stack.isOnItemFrame()) {
                     return 0.0F;
@@ -62,9 +62,9 @@ public class ItemPortalCompass extends BItemBase {
                         EntityPlayer player = (EntityPlayer) entityIn;
                         boolean hasPortal = AncientPortalsProcessor.hasPortalOnWorld(worldIn);
                         if (hasPortal) {
-                            setNearestPortalPos(entityIn);
+                            this.setNearestPortalPos(entityIn);
                         }
-                        if (player.inventory.hasItemStack(compassStack) && hasPortal && !MiscHandler.isWithinRadius(player.posX, player.posZ, mutableBlockPos.getX(), mutableBlockPos.getZ(), 8)) {
+                        if (BananaMC.inventoryContains(player.inventory, InitItems.COMPASS) && hasPortal && !MiscHandler.isWithinRadius(player.posX, player.posZ, mutableBlockPos.getX(), mutableBlockPos.getZ(), 8)) {
                             double d1 = entity.rotationYaw;
                             d1 = MathHelper.positiveModulo(d1 / 360.0D, 1.0D);
                             double d2 = this.getPortalToAngle(entity) / (Math.PI * 2D);
@@ -91,9 +91,9 @@ public class ItemPortalCompass extends BItemBase {
                     this.lastUpdateTick = worldIn.getTotalWorldTime();
                     double d0 = p_185093_2_ - this.rotation;
                     d0 = MathHelper.positiveModulo(d0 + 0.5D, 1.0D) - 0.5D;
-                    this.rota += d0 * 0.1D;
-                    this.rota *= 0.8D;
-                    this.rotation = MathHelper.positiveModulo(this.rotation + this.rota, 1.0D);
+                    this.rot += d0 * 0.1D;
+                    this.rot *= 0.8D;
+                    this.rotation = MathHelper.positiveModulo(this.rotation + this.rot, 1.0D);
                 }
 
                 return this.rotation;
@@ -110,7 +110,7 @@ public class ItemPortalCompass extends BItemBase {
 
             @SideOnly(Side.CLIENT)
             private void setNearestPortalPos(Entity entity) {
-                mutableBlockPos.setPos(ClientEventsHandler.PLAYER_DISTANCE_TO_PORTAL_MANAGER.nearestPortalPos).add(8 ,0, 8);
+                mutableBlockPos.setPos(ClientEventsHandler.PLAYER_DISTANCE_TO_PORTAL_MANAGER.nearestPortalPos);
             }
         });
         setCreativeTab(ThaumRotA.CREATIVE_TAB);

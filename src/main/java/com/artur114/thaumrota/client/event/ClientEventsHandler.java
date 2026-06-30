@@ -27,11 +27,13 @@ public class ClientEventsHandler {
     public static final FogManager FOG_MANAGER = new FogManager();
 
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public static void fogSetColor(EntityViewRenderEvent.FogColors e) {
         PLAYER_IN_BIOME_MANAGER.entityViewRenderEventFogColors(e);
         FOG_MANAGER.entityViewRenderEventFogColors(e);
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void fogRender(EntityViewRenderEvent.RenderFogEvent e) {
         PLAYER_IN_BIOME_MANAGER.entityViewRenderEventRenderFogEvent(e);

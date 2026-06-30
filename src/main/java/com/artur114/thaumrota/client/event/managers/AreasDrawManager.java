@@ -48,6 +48,10 @@ public class AreasDrawManager {
             return;
         }
 
+        if (this.renderEntries.isEmpty()) {
+            this.shouldRender = false; return;
+        }
+
         Iterator<IRenderEntry> iterator = this.renderEntries.iterator();
 
         while (iterator.hasNext()) {

@@ -77,5 +77,6 @@ jar {
     }
 }
 
+apply from: file("scripts/misc.gradle")
 apply from: file("scripts/minecraft.gradle")
 apply from: file("scripts/thaumcraft.gradle")

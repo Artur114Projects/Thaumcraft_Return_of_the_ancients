@@ -62,6 +62,12 @@ public class BlockImitationAncientFuse extends BaseBlockTile<TileImitationAncien
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
+    protected @Nullable TileEntitySpecialRenderer<TileImitationAncientFuse> createTileRender() {
+        return new TileImitationAncientFuseRenderer();
+    }
+
+    @Override
     public int quantityDropped(@NotNull Random random) {
         return 1;
     }
@@ -74,12 +80,6 @@ public class BlockImitationAncientFuse extends BaseBlockTile<TileImitationAncien
     @Override
     public @NotNull EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    protected @Nullable TileEntitySpecialRenderer<TileImitationAncientFuse> createTileRender() {
-        return new TileImitationAncientFuseRenderer();
     }
 
     @Override

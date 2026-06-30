@@ -1,0 +1,16 @@
+tasks.register("openOut") {
+    doLast {
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            try {
+                new ProcessBuilder(
+                        "explorer", "/select,",
+                        file("build/libs/${archivesBaseName}-${version}.jar").absolutePath
+                ).start()
+            } catch (IOException e) {
+                e.printStackTrace()
+            }
+        }
+    }
+}
+
+build.finalizedBy(tasks.named("openOut"))

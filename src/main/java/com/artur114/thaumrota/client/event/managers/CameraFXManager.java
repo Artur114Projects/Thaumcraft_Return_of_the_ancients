@@ -36,6 +36,10 @@ public class CameraFXManager {
     }
 
     private void addCameraShake(EntityViewRenderEvent.CameraSetup e) {
+        if (SHAKES.isEmpty()) {
+            return;
+        }
+
         int shakesCount = SHAKES.size();
         float retRoll = 0;
 
@@ -49,6 +53,10 @@ public class CameraFXManager {
     }
 
     private void updateCameraShake() {
+        if (SHAKES.isEmpty()) {
+            return;
+        }
+
         Iterator<CameraShake> iterator = SHAKES.iterator();
 
         while (iterator.hasNext()) {

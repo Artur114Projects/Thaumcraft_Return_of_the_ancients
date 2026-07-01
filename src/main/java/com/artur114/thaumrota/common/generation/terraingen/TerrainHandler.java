@@ -52,7 +52,7 @@ public class TerrainHandler {
     }
 
     private void notPopulateInTaintBiome(PopulateChunkEvent.Populate e, Chunk chunk) {
-        if (e.getType() != PopulateChunkEvent.Populate.EventType.LAKE && e.getType() != PopulateChunkEvent.Populate.EventType.LAVA && e.getType() != PopulateChunkEvent.Populate.EventType.ANIMALS) {
+        if (e.getType() != PopulateChunkEvent.Populate.EventType.LAKE && e.getType() != PopulateChunkEvent.Populate.EventType.LAVA && e.getType() != PopulateChunkEvent.Populate.EventType.ANIMALS && e.getType() != PopulateChunkEvent.Populate.EventType.DUNGEON) {
             return;
         }
         if (e.getWorld().provider.getDimension() != 0) {

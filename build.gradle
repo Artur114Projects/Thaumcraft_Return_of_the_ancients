@@ -51,7 +51,7 @@ test {
 }
 
 processResources {
-    Map replaceProperties = [mod_version: mod_version, build_id: new Date().format("dd'.'MM'.'yyy'-'HH:mm:ss")]
+    Map replaceProperties = [mod_version: mod_version, build_id: new Date().format("dd'.'MM'.'yyy'-'HH:mm:ss") + "-UTC+3"]
     List includeFiles = ["mcmod.info"]
 
     inputs.properties replaceProperties

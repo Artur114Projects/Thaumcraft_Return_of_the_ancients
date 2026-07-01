@@ -1,51 +1,68 @@
 
 package scripts
 
-import com.artur114.bananalib.math.core.m3d.vec.IVec3IC
-import com.artur114.bananalib.math.m3d.box.Box3I
-import com.artur114.bananalib.math.m3d.box.Box3IM
-import com.artur114.bananalib.math.m3d.box.IBox3I
-import com.artur114.bananalib.math.m3d.vec.IVec3D
-import com.artur114.bananalib.math.m3d.vec.Vec3D
-import com.artur114.bananalib.math.m3d.vec.Vec3DM
-import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM
-import com.artur114.bananalib.util.graphs.BananaGraphs
-import com.artur114.thaumrota.client.fx.particle.ParticleVentStatic
-import com.artur114.thaumrota.client.light.ILightSource
-import com.artur114.thaumrota.client.light.LineLightSource
-import com.artur114.thaumrota.client.light.LineLightSourceD
-import com.artur114.thaumrota.client.util.LightCompressor
-import com.artur114.thaumrota.common.init.InitSounds
-import groovy.transform.BaseScript
-import net.minecraft.client.multiplayer.WorldClient
-import net.minecraft.util.SoundCategory
-import net.minecraft.util.math.BlockPos
-import org.jetbrains.annotations.Contract
-import thaumcraft.client.fx.ParticleEngine
+import com.artur114.thaumrota.client.render.tile.TileEntityAncientPistonRender
+import com.artur114.thaumrota.common.init.InitBlocks
+import com.artur114.thaumrota.common.init.InitItems
+import com.artur114.thaumrota.common.tileentity.TileEntityAncientPiston
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.ScaledResolution
+import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.client.renderer.ItemRenderer
+import net.minecraft.client.renderer.OpenGlHelper
+import net.minecraft.client.renderer.RenderHelper
+import net.minecraft.client.renderer.RenderItem
+import net.minecraft.client.renderer.entity.RenderManager
+import net.minecraft.client.renderer.texture.TextureAtlasSprite
+import net.minecraft.entity.EntityLivingBase
+import net.minecraft.entity.item.EntityItem
+import net.minecraft.item.ItemStack
+import thaumcraft.api.blocks.BlocksTC
 
-@BaseScript
-RotADevScript script
 
-BlockPos pos = posIn.down()
-Random rand = new Random()
-for (i in 1..4) {
-    for (j in 0..6) {
-        def vec = vec3d(pos.x + 0.5, pos.y + 1.0, pos.z + 0.5)
-        def move = vec3d(1, 0, 0).rotateY(360 * (j / 6) + rand.nextDouble() * 45);
-        def p = vec + move * 0.8
-        double y = 1.5 * (i / 4)
-        def fb = new ParticleVentStatic(p.x, p.y + y, p.z, (move * 0.000005), 0)
-        fb.setAlphaF(0.4F);
-        fb.setScale(8);
-        ParticleEngine.addEffect(world, fb);
+Minecraft mc = Minecraft.minecraft
+ScaledResolution resolution = new ScaledResolution(mc);
+int width = widthIn, height = heightIn
 
-        if (rand.nextBoolean()) {
-            p = vec + move * 2.8
-            fb = new ParticleVentStatic(p.x, p.y + y, p.z, (move * 0.000005), 0)
-            fb.setAlphaF(0.4F);
-            fb.setScale(8);
-            ParticleEngine.addEffect(world, fb);
-        }
-    }
+
+
+int x = (int) (width - width / 30);
+int y = (int) (height - height / 32);
+int scale = 50;
+if (resolution.getScaleFactor() == 3) {
+    scale = 30; y = (int) (height - height / 12);
+} else if (resolution.getScaleFactor() == 1) {
+    y = (int) (height - height / 20);
 }
-((WorldClient) world).playSound(pos, InitSounds.MAGIC_PUFF, SoundCategory.AMBIENT, 1111.5, 1, false);
+
+GlStateManager.pushMatrix();
+GlStateManager.enableBlend();
+GlStateManager.enableAlpha();
+
+EntityItem item = new EntityItem(Minecraft.getMinecraft().world, 0.0, 0.0, 0.0, new ItemStack(BlocksTC.stoneAncient));
+item.hoverStart = 0
+GlStateManager.translate(x, y, 50);
+GlStateManager.rotate(-22.0F, 1.0F, 0.0F, 0.0F);
+float angle = (float) (-360.0F * ((System.currentTimeMillis() % 2000L) / 2000.0F));
+GlStateManager.rotate(angle, 0.0F, 1.0F, 0.0F);
+GlStateManager.translate(-x, -y, -50);
+this.drawEntityItem(x, y, scale, item)
+
+GlStateManager.disableBlend();
+GlStateManager.disableAlpha();
+GlStateManager.popMatrix();
+
+
+
+void drawEntityItem(int posX, int posY, int scale, EntityItem ent) {
+    GlStateManager.pushMatrix();
+    GlStateManager.translate(posX, posY, 50.0F);
+    GlStateManager.scale(-scale, scale, scale);
+    GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
+    RenderManager renderer = Minecraft.getMinecraft().getRenderManager();
+    renderer.setPlayerViewY(180.0F);
+    renderer.setRenderShadow(false);
+    renderer.renderEntity(ent, 0.0F, 0.0F, 0.0F, ent.rotationYaw, 1.0F, false);
+    renderer.setRenderShadow(true);
+    GlStateManager.popMatrix();
+}

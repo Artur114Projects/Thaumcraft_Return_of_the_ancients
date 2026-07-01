@@ -1,23 +1,29 @@
 package com.artur114.thaumrota.client.gui;
 
+import com.artur114.bananalib.math.BananaMath;
+import com.artur114.thaumrota.common.init.InitBlocks;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.client.AncientLayer1Client;
 import com.artur114.thaumrota.client.gui.buttons.RotAButton;
-import com.artur114.thaumrota.client.gui.gif.GifWithTextureAtlas;
-import com.artur114.thaumrota.client.util.RenderHandler;
 import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.network.ServerPacketInterruptBuild;
 import com.artur114.thaumrota.common.util.EnumAsset;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+import thaumcraft.api.blocks.BlocksTC;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,80 +31,91 @@ import java.util.Random;
 
 // TODO: Сделать картинку не изменяемой в зависимости от соотношения сторон
 public class LoadingGui extends GuiScreen {
+    private static final ItemStack[] loadingStacks = new ItemStack[] {
+            new ItemStack(BlocksTC.stoneAncient),
+            new ItemStack(BlocksTC.stoneAncient),
+            new ItemStack(BlocksTC.stoneAncient),
+            new ItemStack(BlocksTC.stoneEldritchTile),
+            new ItemStack(InitBlocks.ANCIENT_LAMP_0),
+            new ItemStack(InitBlocks.ANCIENT_LAMP_1),
+            new ItemStack(InitBlocks.PEDESTAL_ACTIVE)
+    };
+    private static final ResourceLocation blur = EnumAsset.TEXTURES_GUI.png("blur.png");
+    private static final int YELLOW = 0xffff40;
+    private static final int WHITE = 16777215;
+    private static final int AQUA = 0x00ffff;
+    private static final int RED = 16711680;
+
+    private final AncientLayer1Client layer1Client;
+    private final ResourceLocation background;
+    private final EntityItem loadingItem;
+    private final boolean isTeam;
+    private final String lore;
+    private ScaledResolution resolution;
+    private boolean isInterrupt = false;
+    private boolean isDrawTeam = false;
+    private boolean isClosing = false;
+    private float prevOpeningTime = 0;
+    private float prevClosingTime = 0;
+    private boolean isOpening = true;
+    private boolean isDraw = false;
+    private float closingTime = 5;
+    private float openingTime = 0;
+    private int buttonTime = 0;
     private GuiButton button;
-    protected final ResourceLocation background;
-    private final GifWithTextureAtlas gif_2_0 = new GifWithTextureAtlas("loading", 20, 8, 8 * 12, 8, 8);
-    protected static final ResourceLocation blur = EnumAsset.TEXTURES_GUI.png("v.png");
-    protected final AncientLayer1Client layer1Client;
-    private final int Red = 16711680;
-    private final int Yellow = 0xffff40;
-    private final int White = 16777215;
-    private final int Aqua = 0x00ffff;
-    protected ScaledResolution resolution;
-    protected Random rand = new Random();
-    protected boolean isTpToHome = false;
-    protected boolean isDrawTeam = false;
-    protected boolean isClosing = false;
-    protected float prevOpeningTime = 0;
-    protected float prevClosingTime = 0;
-    protected boolean isOpening = true;
-    protected boolean isDraw = false;
-    protected float closingTime = 5;
-    protected float openingTime = 0;
-    protected int buttonTime = 0;
-    protected boolean isTeam;
-    protected String lore;
 
 
     public LoadingGui(AncientLayer1Client layer1Client) {
+        Random rand = new Random();
         this.layer1Client = layer1Client;
-        int id = rand.nextInt(7);
-        background = EnumAsset.TEXTURES_GUI.png("/loading_gui_backgrounds/background" + id);
-        int loreId = rand.nextInt(4);
-        lore = I18n.format("rota.l-gui.lore." + loreId);
+        this.loadingItem = new EntityItem(Minecraft.getMinecraft().world, 0.0, 0.0, 0.0, loadingStacks[rand.nextInt(loadingStacks.length)].copy());
+        this.background = EnumAsset.TEXTURES_GUI.png("/lgbacks/background" + rand.nextInt(7));
+        this.lore = I18n.format("rota.l-gui.lore." + rand.nextInt(4));
         this.isTeam = layer1Client.playersState().size() > 1;
+
+        this.loadingItem.hoverStart = 0;
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == 0) {
             button.enabled = false;
-            isDrawTeam = !isDrawTeam;
+            this.isDrawTeam = !this.isDrawTeam;
         }
     }
 
     @Override
     public void updateScreen() {
         super.updateScreen();
-        if (isDraw) {
-            if (button != null) {
-                if (!button.enabled) {
-                    buttonTime++;
-                    if (buttonTime >= 2) {
-                        buttonTime = 0;
-                        button.enabled = true;
+        if (this.isDraw) {
+            if (this.button != null) {
+                if (!this.button.enabled) {
+                    this.buttonTime++;
+                    if (this.buttonTime >= 2) {
+                        this.buttonTime = 0;
+                        this.button.enabled = true;
                     }
                 }
             }
 
-            prevOpeningTime = openingTime;
-            prevClosingTime = closingTime;
+            this.prevOpeningTime = this.openingTime;
+            this.prevClosingTime = this.closingTime;
 
-            if (isOpening) {
-                openingTime += 0.5F;
-                if (openingTime >= 10) {
-                    isOpening = false;
+            if (this.isOpening) {
+                this.openingTime += 0.5F;
+                if (this.openingTime >= 10) {
+                    this.isOpening = false;
                 }
             }
 
-            if (isClosing) {
-                closingTime -= 0.5F;
-                if (closingTime <= 0) {
-                    mc.displayGuiScreen(null);
-                    if (isTpToHome) {
+            if (this.isClosing) {
+                this.closingTime -= 0.5F;
+                if (this.closingTime <= 0) {
+                    this.mc.displayGuiScreen(null);
+                    if (this.isInterrupt) {
                         ThaumRotA.NETWORK.sendToServer(new ServerPacketInterruptBuild());
                     }
-                    isClosing = false;
+                    this.isClosing = false;
                 }
             }
         }
@@ -106,82 +123,81 @@ public class LoadingGui extends GuiScreen {
 
     @Override
     public void initGui() {
-        super.initGui();
-        resolution = new ScaledResolution(mc);
-        if (isTeam) {
-            this.button = new RotAButton(0, 0, 0, fontRenderer.getStringWidth(I18n.format("rota.l-gui.button.team")) + 16, 20, I18n.format("rota.l-gui.button.team"), new ResourceLocation(ThaumRotA.MODID + ":textures/gui/tra_button.png"));
+        if (this.isTeam) {
+            this.button = new RotAButton(0, 0, 0, this.fontRenderer.getStringWidth(I18n.format("rota.l-gui.button.team")) + 16, 20, I18n.format("rota.l-gui.button.team"), EnumAsset.TEXTURES_GUI_BUTTON.png("ancient_button"));
             this.buttonList.add(this.button);
         }
+        this.resolution = new ScaledResolution(this.mc);
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawDefaultBackground();
-        drawBackground();
-        drawGif();
+        this.drawDefaultBackground();
+        this.drawBackground();
+        this.drawLoading();
         super.drawScreen(mouseX, mouseY, partialTicks);
-        drawLore();
+        this.drawLore();
 
-        if (isDrawTeam) {
-            drawTeamList();
+        if (this.isDrawTeam) {
+            this.drawTeamList();
         }
 
-        if (isOpening) {
-            drawDark(1.0F - RenderHandler.interpolate(prevOpeningTime, openingTime, partialTicks) / 10.0F);
-        } else if (isClosing) {
-            drawDark(1.0F - RenderHandler.interpolate(prevClosingTime, closingTime, partialTicks) / 5.0F);
+        if (this.isOpening) {
+            this.drawDark(1.0F - BananaMath.lerp(this.prevOpeningTime, this.openingTime, partialTicks) / 10.0F);
+        } else if (this.isClosing) {
+            this.drawDark(1.0F - BananaMath.lerp(this.prevClosingTime, this.closingTime, partialTicks) / 5.0F);
         }
 
-        isDraw = true;
+        this.isDraw = true;
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (keyCode == Keyboard.KEY_ESCAPE) {
-            isTpToHome = true;
-            close();
+            this.isInterrupt = true;
+            this.close();
             return;
         }
         super.keyTyped(typedChar, keyCode);
     }
 
     public void close() {
-        isClosing = true;
+        this.isClosing = true;
     }
 
-    protected void drawLore() {
-        int scale = resolution.getScaleFactor();
-        int y = (int) (height - ((height / 10) * 1.2F));
+    private void drawLore() {
+        int y = (int) (this.height - (((float) this.height / 10) * 1.2F));
         float scaleText = 1.0F;
         float scaleMainText = 1.2F;
-        int x = width / 40;
+        int x = this.width / 40;
 
-        if (scale == 3) {
-            scaleText = 0.6F;
-            scaleMainText = 1.0F;
-            y = (int) (height - ((height / 6) * 1.0F));
-        } else if (scale == 2) {
-
-        } else if (scale == 1) {
-            y = (int) (height - ((height / 20) * 1.6F));
-            scaleMainText = 1.6F;
-            scaleText = 1.2F;
+        switch (this.resolution.getScaleFactor()) {
+            case 3:
+                y = (int) (this.height - (((float) this.height / 6) * 1.0F));
+                scaleMainText = 1.0F;
+                scaleText = 0.6F;
+                break;
+            case 1:
+                y = (int) (this.height - (((float) this.height / 20) * 1.6F));
+                scaleMainText = 1.6F;
+                scaleText = 1.2F;
+                break;
         }
 
-        drawScaledText("\u00A7n" + I18n.format("rota.l-gui.lore.title"), x, y, Yellow, scaleMainText);
+        this.drawScaledText(TextFormatting.UNDERLINE + I18n.format("rota.l-gui.lore.title"), x, y, YELLOW, scaleMainText);
 
         y += (int) (5 * scaleMainText);
-        List<String> text = fontRenderer.listFormattedStringToWidth(lore, (int) (((width / 2) - (width / 40) * 2) * (2 - scaleText)));
+        List<String> text = this.fontRenderer.listFormattedStringToWidth(this.lore, (int) ((((float) this.width / 2) - ((float) this.width / 40) * 2) * (2 - scaleText)));
         for (int i = 0; i != text.size(); i++) {
-            drawScaledText(text.get(i), x, y + 10 * (i + 1), White, scaleText);
+            this.drawScaledText(text.get(i), x, y + 10 * (i + 1), WHITE, scaleText);
         }
     }
 
-    protected void drawScaledText(String text, int x, int y, int color, float scale) {
+    private void drawScaledText(String text, int x, int y, int color, float scale) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, 0);
         GlStateManager.scale(scale, scale, 1.0F);
-        fontRenderer.drawStringWithShadow(text, 0, 0, color);
+        this.fontRenderer.drawStringWithShadow(text, 0, 0, color);
         GlStateManager.popMatrix();
     }
 
@@ -190,31 +206,31 @@ public class LoadingGui extends GuiScreen {
 
         for (byte i = 0; i != players.size() ; i++) {
             String text = (i + 1) + ": ";
-            int color0 = White;
-            int color1 = Aqua;
-            int color2 = White;
+            int color0 = WHITE;
+            int color1 = AQUA;
+            int color2 = WHITE;
             String[] split = players.get(i).split("\\|");
             if (players.get(i).isEmpty() || split.length > 1) {
-                color0 = Red;
-                color1 = Red;
-                color2 = Red;
+                color0 = RED;
+                color1 = RED;
+                color2 = RED;
             }
             int x = 1;
             int y = 28;
             String resText = split[0];
-            fontRenderer.drawStringWithShadow(text, x, y + (10 * i), color0);
-            int w = fontRenderer.getStringWidth(text);
-            fontRenderer.drawStringWithShadow(resText, x + w + fontRenderer.getStringWidth(" ") + 1, y + (10 * i), color1);
-            fontRenderer.drawStringWithShadow("[",x + w, y + (10 * i), color2);
-            fontRenderer.drawStringWithShadow("]",x + w + 2 + fontRenderer.getStringWidth(" " + resText), y + (10 * i), color2);
+            this.fontRenderer.drawStringWithShadow(text, x, y + (10 * i), color0);
+            int w = this.fontRenderer.getStringWidth(text);
+            this.fontRenderer.drawStringWithShadow(resText, x + w + this.fontRenderer.getStringWidth(" ") + 1, y + (10 * i), color1);
+            this.fontRenderer.drawStringWithShadow("[",x + w, y + (10 * i), color2);
+            this.fontRenderer.drawStringWithShadow("]",x + w + 2 + this.fontRenderer.getStringWidth(" " + resText), y + (10 * i), color2);
             if (split.length == 2) {
-                fontRenderer.drawStringWithShadow(": " + I18n.format(split[1]), x + w + 2 + fontRenderer.getStringWidth("  " + resText), y + (10 * i), color0);
+                this.fontRenderer.drawStringWithShadow(": " + I18n.format(split[1]), x + w + 2 + this.fontRenderer.getStringWidth("  " + resText), y + (10 * i), color0);
             }
         }
     }
 
 
-    protected void drawDark(float alpha) {
+    private void drawDark(float alpha) {
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.disableTexture2D();
@@ -223,10 +239,10 @@ public class LoadingGui extends GuiScreen {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
         bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        bufferBuilder.pos(0, height, 0).color(0, 0, 0, alpha).endVertex();
-        bufferBuilder.pos(width, height, 0).color(0, 0, 0, alpha).endVertex();
-        bufferBuilder.pos(width, 0, 0).color(0, 0, 0, alpha).endVertex();
-        bufferBuilder.pos(0, 0, 0).color(0, 0, 0, alpha).endVertex();
+        bufferBuilder.pos(0, this.height, 100).color(0, 0, 0, alpha).endVertex();
+        bufferBuilder.pos(this.width, this.height, 100).color(0, 0, 0, alpha).endVertex();
+        bufferBuilder.pos(this.width, 0, 100).color(0, 0, 0, alpha).endVertex();
+        bufferBuilder.pos(0, 0, 100).color(0, 0, 0, alpha).endVertex();
         tessellator.draw();
 
         GlStateManager.enableTexture2D();
@@ -234,42 +250,62 @@ public class LoadingGui extends GuiScreen {
         GlStateManager.disableAlpha();
     }
 
-    protected void drawBackground() {
-        mc.getTextureManager().bindTexture(background);
-        drawOnFullScreen(width, height);
+    private void drawBackground() {
+        this.mc.getTextureManager().bindTexture(this.background);
+        this.drawOnFullScreen(this.width, this.height);
 
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
-        mc.getTextureManager().bindTexture(blur);
-        drawOnFullScreen(width, height);
+        this.mc.getTextureManager().bindTexture(blur);
+        this.drawOnFullScreen(this.width, this.height);
         GlStateManager.disableBlend();
         GlStateManager.disableAlpha();
     }
 
 
-    protected void drawGif() {
-        int x = width - width / 30;
-        int y = height - height / 10;
-        final int baseSize = 8;
-        int size = 16;
-        if (resolution.getScaleFactor() == 3) {
-            size = 10;
-            y = height - height / 12;
-        } else if (resolution.getScaleFactor() == 1) {
-            y = height - height / 20;
+    private void drawLoading() {
+        int x = this.width - this.width / 30;
+        int y = this.height - this.height / 32;
+        int scale = 50;
+        switch (this.resolution.getScaleFactor()) {
+            case 3:
+                scale = 30; y = this.height - this.height / 12;
+                break;
+            case 1:
+                y = this.height - this.height / 20;
+                break;
         }
-        float scale = (float) size / baseSize;
 
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
 
-        gif_2_0.draw(mc, x, y, scale);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, 50);
+        GlStateManager.rotate(-22.0F, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(-360.0F * ((System.currentTimeMillis() % 2000L) / 2000.0F), 0.0F, 1.0F, 0.0F);
+        GlStateManager.translate(-x, -y, -50);
+        this.drawEntityItem(x, y, scale, this.loadingItem);
+        GlStateManager.popMatrix();
 
-        GlStateManager.disableBlend();
         GlStateManager.disableAlpha();
+        GlStateManager.disableBlend();
     }
 
-    protected void drawOnFullScreen(int screenWidth, int screenHeight) {
+    private void drawEntityItem(int posX, int posY, int scale, EntityItem ent) {
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(posX, posY, 50.0F);
+        GlStateManager.scale(-scale, scale, scale);
+        GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
+        RenderManager renderer = Minecraft.getMinecraft().getRenderManager();
+        renderer.setPlayerViewY(180.0F);
+        boolean rs = renderer.isRenderShadow();
+        renderer.setRenderShadow(false);
+        renderer.renderEntity(ent, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, false);
+        renderer.setRenderShadow(rs);
+        GlStateManager.popMatrix();
+    }
+
+    private void drawOnFullScreen(int screenWidth, int screenHeight) {
         drawModalRectWithCustomSizedTexture(0, 0, 0, 0, screenWidth, screenHeight, screenWidth, screenHeight);
     }
 

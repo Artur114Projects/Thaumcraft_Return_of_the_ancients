@@ -126,10 +126,10 @@ public class StructureBigHotRoom extends StructureCombatRoom {
     @Override
     protected void addLights(List<ILightSource> list) {
         // this is generated, don't scare
-        list.add(new LineLightSource(new PosMc3IM(-1, 35, 16), new PosMc3IM(-1, 3, 16), HeatRenderer.HEAT_COLOR, 0.2F, 3.0F, 1.0F));
-        list.add(new LineLightSource(new PosMc3IM(16, 3, 16), new PosMc3IM(16, 35, 16), HeatRenderer.HEAT_COLOR, 0.2F, 3.0F, 1.0F));
-        list.add(new LineLightSource(new PosMc3IM(16, 35, -1), new PosMc3IM(16, 3, -1), HeatRenderer.HEAT_COLOR, 0.2F, 3.0F, 1.0F));
-        list.add(new LineLightSource(new PosMc3IM(-1, 3, -1), new PosMc3IM(-1, 35, -1), HeatRenderer.HEAT_COLOR, 0.2F, 3.0F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(-1, 35, 16), new PosMc3IM(-1, 3, 16), HeatRenderer.HEAT_COLOR, 0.25F, 4.0F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(16, 3, 16), new PosMc3IM(16, 35, 16), HeatRenderer.HEAT_COLOR, 0.25F, 4.0F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(16, 35, -1), new PosMc3IM(16, 3, -1), HeatRenderer.HEAT_COLOR, 0.25F, 4.0F, 1.0F));
+        list.add(new LineLightSource(new PosMc3IM(-1, 3, -1), new PosMc3IM(-1, 35, -1), HeatRenderer.HEAT_COLOR, 0.25F, 4.0F, 1.0F));
         list.add(new LineLightSource(new PosMc3IM(7, 34, -10), new PosMc3IM(7, 27, -10), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));
         list.add(new LineLightSource(new PosMc3IM(8, 27, -10), new PosMc3IM(8, 34, -10), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));
         list.add(new LineLightSource(new PosMc3IM(-10, 34, 7), new PosMc3IM(-10, 27, 7), HeatRenderer.HEAT_COLOR, 0.2F, 2.5F, 1.0F));

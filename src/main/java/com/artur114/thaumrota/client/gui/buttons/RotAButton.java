@@ -5,9 +5,9 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class RotAButton extends GuiButton {
-
     protected final ResourceLocation texture;
 
     public RotAButton(int buttonId, int x, int y, String buttonText, ResourceLocation texture) {
@@ -21,12 +21,10 @@ public class RotAButton extends GuiButton {
     }
 
     @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks)
-    {
-        if (this.visible)
-        {
+    public void drawButton(@NotNull Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+        if (this.visible) {
             FontRenderer fontrenderer = mc.fontRenderer;
-            mc.getTextureManager().bindTexture(texture);
+            mc.getTextureManager().bindTexture(this.texture);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             int i = this.getHoverState(this.hovered);
@@ -38,17 +36,11 @@ public class RotAButton extends GuiButton {
             this.mouseDragged(mc, mouseX, mouseY);
             int j = 14737632;
 
-            if (packedFGColour != 0)
-            {
-                j = packedFGColour;
-            }
-            else
-            if (!this.enabled)
-            {
+            if (this.packedFGColour != 0) {
+                j = this.packedFGColour;
+            } else if (!this.enabled) {
                 j = 10526880;
-            }
-            else if (this.hovered)
-            {
+            } else if (this.hovered) {
                 j = 16777120;
             }
 

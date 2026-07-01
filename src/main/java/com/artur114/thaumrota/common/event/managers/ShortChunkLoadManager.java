@@ -2,7 +2,6 @@ package com.artur114.thaumrota.common.event.managers;
 
 import com.artur114.thaumrota.common.event.CommonEventsHandler;
 import com.artur114.thaumrota.main.ThaumRotA;
-import com.artur114.thaumrota.common.config.RotAConfig;
 import com.artur114.bananalib.mc.nbt.IWriteToNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -12,10 +11,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 public class ShortChunkLoadManager {
+    private static final Logger log = LogManager.getLogger("ThaumRotA/ChunkLoad");
     private final HashMap<ForgeChunkManager.Ticket, HashMap<ChunkPos, TickingChunk>> LOADED_CHUNKS = new HashMap<>();
     private final HashMap<World, ForgeChunkManager.Ticket> TICKETS = new HashMap<>();
 
@@ -33,7 +36,8 @@ public class ShortChunkLoadManager {
 
             if (chunks.isEmpty()) {
                 ForgeChunkManager.releaseTicket(ticket);
-                if (RotAConfig.any.debugMode) System.out.println("Released ticked " + ticket);
+                log.debug("Released ticked {}", ticket);
+
                 ticketIterator.remove();
                 continue;
             }
@@ -47,7 +51,7 @@ public class ShortChunkLoadManager {
                 if (chunk.isDone()) {
                     chunk.unForce();
                     iterator.remove();
-                    if (RotAConfig.any.debugMode) System.out.println("Un forced chunk " + chunk.pos);
+                    log.debug("Un forced chunk {}", chunk.pos);
                     flag = true;
                     continue;
                 }
@@ -118,10 +122,10 @@ public class ShortChunkLoadManager {
             if (!chunks.containsKey(pos)) {
                 ForgeChunkManager.forceChunk(ticket, pos);
                 chunks.put(pos, new TickingChunk(ticket, pos, time));
-                if (RotAConfig.any.debugMode) System.out.println("Forced chunk " + pos);
+                log.debug("Forced chunk {}", pos);
             }
         } else {
-            System.out.println("It was not possible to load the chunk!");
+            log.warn("It was not possible to load the chunk!");
         }
     }
 
@@ -168,7 +172,7 @@ public class ShortChunkLoadManager {
             if (ticket != null) {
                 ticket.getModData().setString("userClassName", this.getClass().getName());
                 TICKETS.put(world, ticket);
-                if (RotAConfig.any.debugMode) System.out.println("Created ticked " + ticket);
+                log.debug("Created ticked {}", ticket);
             }
         }
 
@@ -232,7 +236,7 @@ public class ShortChunkLoadManager {
         }
 
         @Override
-        public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+        public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
             nbt.setInteger("maxTime", maxTime);
             nbt.setInteger("time", time);
             nbt.setInteger("x", pos.x);

@@ -10,7 +10,6 @@ public class InitSounds {
     public static final SoundEvent FAN = create("fan");
     public static final SoundEvent BUM = create("bum");
     public static final SoundEvent WHISPER = create("whisper");
-    public static final SoundEvent RUI_DEAD = create("rui_dead");
     public static final SoundEvent HEARTBEAT = create("heartbeat");
     public static final SoundEvent SPOTLIGHT = create("spotlight");
     public static final SoundEvent PROJECTOR = create("projector");

@@ -16,7 +16,7 @@ public class BlockCleanedVoidStone extends BaseBlock {
 
     @Override
     protected ItemStack getSilkTouchDrop(IBlockState state) {
-        return new ItemStack(ItemsTC.voidSeed, 2);
+        return new ItemStack(ItemsTC.voidSeed, 3);
     }
 
     @Override

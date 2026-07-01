@@ -1,5 +1,6 @@
 package com.artur114.thaumrota.common.blocks;
 
+import com.artur114.thaumrota.common.init.InitBlocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -7,6 +8,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -17,6 +19,11 @@ public class BlockIncandescentTaintVoidStone extends BlockTaintVoidStone {
         super(name, material, hardness, resistance, soundType);
         this.setLightOpacity(1);
         this.setLightLevel(0.8F);
+    }
+
+    @Override
+    protected ItemStack getSilkTouchDrop(IBlockState state) {
+        return new ItemStack(InitBlocks.TAINT_VOID_STONE);
     }
 
     @Override

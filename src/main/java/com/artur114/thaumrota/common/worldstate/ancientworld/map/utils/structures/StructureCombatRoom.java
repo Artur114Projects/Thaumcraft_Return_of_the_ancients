@@ -3,45 +3,57 @@ package com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structur
 import com.artur114.bananalib.math.m3d.box.IBox3IM;
 import com.artur114.bananalib.math.m3d.matrix.Matrix3FM;
 import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
+import com.artur114.bananalib.mc.nbt.BananaAutoNBT;
+import com.artur114.bananalib.mc.nbt.auto.AutoNBTEntry;
 import com.artur114.thaumrota.common.network.ClientPacketCreateFX;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientDoor8X6;
 import com.artur114.thaumrota.common.tileentity.TileEntityDummy;
 import com.artur114.thaumrota.common.util.math.AreasCombiner;
 import com.artur114.thaumrota.common.util.math.BoundingBox;
 import com.artur114.thaumrota.common.util.math.IArea;
-import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.CombatWave;
-import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.EnumMultiChunkStrType;
-import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.EnumRotate;
-import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrPos;
+import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.*;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.maps.InteractiveMap;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.utils.AncientWorldPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 public abstract class StructureCombatRoom extends StructureMultiChunk implements IStructureInteractive, IStructureEntityManager, IStructureSerializable {
     private final Map<UUID, Class<? extends EntityLiving>> aliveEntities = new HashMap<>();
     private List<IBox3IM> triggerBoxes = null;
     private boolean isTriggerReversed = false;
     private CombatWave[] waves = null;
-    private int timeToStartSpawn = 0;
-    private boolean triggered = false;
-    private boolean allDead = false;
     protected ChunkPos chunkPos = null;
     private IArea spawnArea = null;
     private long sessionId = -1;
     protected Random rand = null;
     protected World world = null;
+
+    @AutoNBTEntry
+    private int timeToStartSpawn = 0;
+    @AutoNBTEntry
+    private boolean triggered = false;
+    @AutoNBTEntry
+    private boolean allDead = false;
+    @AutoNBTEntry
+    private int timeToKillAll = 0;
+    @AutoNBTEntry
+    private int timeToGlow = 0;
+    @AutoNBTEntry
     private int waveIndex = 0;
 
     public StructureCombatRoom(EnumRotate rotate, EnumMultiChunkStrType type, StrPos pos) {
@@ -133,6 +145,7 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
         }
         if (this.aliveEntities.isEmpty() && this.waveIndex >= this.waves.length) {
             this.allDead = true;
+            this.timeToGlow = 0;
             this.onAllDead();
             return;
         }
@@ -145,6 +158,24 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
                 }
             });
             list.forEach(this.aliveEntities::remove);
+
+            if (this.timeToKillAll >= 120 * 20) {
+                this.eachAlive(Entity::setDead);
+                this.aliveEntities.clear();
+                this.timeToKillAll = 0;
+            }
+
+            this.timeToKillAll += 40;
+        }
+        if (this.timeToGlow == 16 * 20 && this.world.getMinecraftServer() != null) {
+            this.eachAlive(entityLiving -> {
+                entityLiving.addPotionEffect(EntityEntry.potion(MobEffects.GLOWING, 0));
+            });
+        }
+        if (this.aliveEntities.size() <= 3) {
+            this.timeToGlow++;
+        } else {
+            this.timeToGlow = 0;
         }
         if (this.triggered) {
             if (this.timeToStartSpawn > 0) {
@@ -157,6 +188,7 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
             if (wave == null) return;
 
             if (!wave.isSpawned()) {
+                this.timeToKillAll = 0;
                 wave.spawn(this.rand, this.world, this.spawnArea, (pos, entity) -> {
                     ClientPacketCreateFX.send(this.world, pos, ClientPacketCreateFX.FXType.ENTITY_SPAWN);
                     this.spawnEntity(players, this.world, pos, entity);
@@ -209,10 +241,8 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        nbt.setInteger("waveIndex", this.waveIndex);
-        nbt.setBoolean("triggered", this.triggered);
-        nbt.setBoolean("allDead", this.allDead);
+    public @NotNull NBTTagCompound writeToNBT(@NotNull NBTTagCompound nbt) {
+        BananaAutoNBT.writeToNBT(this, nbt);
         if (this.waves != null) {
             NBTTagList list = new NBTTagList();
             for (CombatWave wave : this.waves) {
@@ -224,10 +254,8 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        this.waveIndex = nbt.getInteger("waveIndex");
-        this.triggered = nbt.getBoolean("triggered");
-        this.allDead = nbt.getBoolean("allDead");
+    public void readFromNBT(@NotNull NBTTagCompound nbt) {
+        BananaAutoNBT.readFromNBT(this, nbt);
         if (nbt.hasKey("waves")) {
             NBTTagList list = nbt.getTagList("waves", 10);
             for (int i = 0; i < list.tagCount(); i++) {
@@ -275,6 +303,15 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
         matrix.translate(this.chunkPos.x << 4, this.y, this.chunkPos.z << 4);
         for (IBox3IM pos : list) matrix.transform(pos);
         Matrix3FM.release(matrix);
+    }
+
+    private void eachAlive(Consumer<EntityLiving> each) {
+        MinecraftServer server = this.world.getMinecraftServer();
+        if (server == null) return;
+        this.aliveEntities.keySet().forEach(uuid -> {
+            Entity entity = server.getEntityFromUuid(uuid);
+            if (entity instanceof EntityLiving) each.accept((EntityLiving) entity);
+        });
     }
 
     private boolean noContainsInAll(List<IBox3IM> list, EntityPlayer player) {

@@ -10,7 +10,6 @@ public enum EnumAsset {
     TEXTURES_GUI(ThaumRotA.MODID, "textures/gui"),
     TEXTURES_GUI_BUTTON(ThaumRotA.MODID, "textures/gui/button"),
     TEXTURES_GUI_CONTAINER(ThaumRotA.MODID, "textures/gui/container"),
-    TEXTURES_GUI_GIF(ThaumRotA.MODID, "textures/gui/gif"),
     TEXTURES_PARTICLE(ThaumRotA.MODID, "textures/particle"),
     TEXTURES_TC_MODELS(Thaumcraft.MODID, "textures/models"),
     TEXTURES_MISC(ThaumRotA.MODID, "textures/misc"),

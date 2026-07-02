@@ -31,16 +31,21 @@ import java.util.Random;
 
 // TODO: Сделать картинку не изменяемой в зависимости от соотношения сторон
 public class LoadingGui extends GuiScreen {
-    private static final ItemStack[] loadingStacks = new ItemStack[] {
+    private static final ItemStack[] LOADING_STACKS = new ItemStack[] {
+            new ItemStack(BlocksTC.stoneAncient),
             new ItemStack(BlocksTC.stoneAncient),
             new ItemStack(BlocksTC.stoneAncient),
             new ItemStack(BlocksTC.stoneAncient),
             new ItemStack(BlocksTC.stoneEldritchTile),
             new ItemStack(InitBlocks.ANCIENT_LAMP_0),
             new ItemStack(InitBlocks.ANCIENT_LAMP_1),
+            new ItemStack(InitBlocks.ANCIENT_LAMP_1),
+            new ItemStack(InitBlocks.ANCIENT_LAMP_1),
             new ItemStack(InitBlocks.PEDESTAL_ACTIVE)
     };
-    private static final ResourceLocation blur = EnumAsset.TEXTURES_GUI.png("blur.png");
+    private static final ResourceLocation BLUR_TEXTURE = EnumAsset.TEXTURES_GUI.png("blur.png");
+    private static final int BACKGROUNDS_COUNT = 7;
+    private static final int LORE_COUNT = 4;
     private static final int YELLOW = 0xffff40;
     private static final int WHITE = 16777215;
     private static final int AQUA = 0x00ffff;
@@ -68,9 +73,9 @@ public class LoadingGui extends GuiScreen {
     public LoadingGui(AncientLayer1Client layer1Client) {
         Random rand = new Random();
         this.layer1Client = layer1Client;
-        this.loadingItem = new EntityItem(Minecraft.getMinecraft().world, 0.0, 0.0, 0.0, loadingStacks[rand.nextInt(loadingStacks.length)].copy());
-        this.background = EnumAsset.TEXTURES_GUI.png("/lgbacks/background" + rand.nextInt(7));
-        this.lore = I18n.format("rota.l-gui.lore." + rand.nextInt(4));
+        this.loadingItem = new EntityItem(Minecraft.getMinecraft().world, 0.0, 0.0, 0.0, LOADING_STACKS[rand.nextInt(LOADING_STACKS.length)].copy());
+        this.background = EnumAsset.TEXTURES_GUI.png("/lgbacks/background" + rand.nextInt(BACKGROUNDS_COUNT));
+        this.lore = I18n.format("rota.l-gui.lore." + rand.nextInt(LORE_COUNT));
         this.isTeam = layer1Client.playersState().size() > 1;
 
         this.loadingItem.hoverStart = 0;
@@ -256,7 +261,7 @@ public class LoadingGui extends GuiScreen {
 
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
-        this.mc.getTextureManager().bindTexture(blur);
+        this.mc.getTextureManager().bindTexture(BLUR_TEXTURE);
         this.drawOnFullScreen(this.width, this.height);
         GlStateManager.disableBlend();
         GlStateManager.disableAlpha();

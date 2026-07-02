@@ -5,7 +5,7 @@ import com.artur114.bananalib.mc.base.MaterialArray;
 import com.artur114.bananalib.mc.registry.IRegisterBus;
 import com.artur114.thaumrota.client.render.tile.TileEntityForDevRenderer;
 import com.artur114.thaumrota.common.tileentity.TileEntityForDev;
-import com.artur114.thaumrota.common.util.DevScriptsShell;
+import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -56,7 +56,7 @@ public class BlockForDev extends BaseBlockTile<TileEntityForDev> {
 
     @Override
     public boolean shouldRegister(Class<?> registerSource) {
-        if (!DevScriptsShell.isDev()) {
+        if (!ThaumRotA.isDevEnv()) {
             return false;
         }
         return super.shouldRegister(registerSource);
@@ -64,7 +64,7 @@ public class BlockForDev extends BaseBlockTile<TileEntityForDev> {
 
     @Override
     public void registerOther(IRegisterBus bus) {
-        if (DevScriptsShell.isDev()) {
+        if (ThaumRotA.isDevEnv()) {
             super.registerOther(bus);
         }
     }

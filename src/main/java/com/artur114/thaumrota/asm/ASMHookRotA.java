@@ -5,7 +5,7 @@ import com.artur114.thaumrota.client.event.ClientEventsHandler;
 import com.artur114.thaumrota.common.config.RotAConfig;
 import com.artur114.thaumrota.common.init.InitBiomes;
 import com.artur114.thaumrota.common.init.InitDimensions;
-import com.artur114.thaumrota.common.util.DevScriptsShell;
+import com.artur114.thaumrota.main.ThaumRotA;
 import com.chaosthedude.naturescompass.util.BiomeSearchWorker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -45,7 +45,7 @@ public class ASMHookRotA {
     }
 
     public static boolean isNotCanSearchBiome(BiomeSearchWorker bsw) {
-        return !DevScriptsShell.isDev() && BananaMC.biomeHasType(bsw.biome, InitBiomes.TAINT_TYPE);
+        return !ThaumRotA.isDevEnv() && BananaMC.biomeHasType(bsw.biome, InitBiomes.TAINT_TYPE);
     }
 
     public static void fixedFogDensityEvent(EntityViewRenderEvent.RenderFogEvent event) {

@@ -18,6 +18,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 
 import java.nio.file.Paths;
 
@@ -67,6 +68,10 @@ public class ThaumRotA {
 
     public static ResourceLocation loc(String id) {
         return new ResourceLocation(MODID, id);
+    }
+
+    public static boolean isDevEnv() {
+        return FMLLaunchHandler.isDeobfuscatedEnvironment();
     }
 }
 

@@ -79,6 +79,8 @@ public class AncientLayer1Server extends AncientLayer1 {
         super.update();
 
         this.checkNeedSyncMap();
+
+        this.players.forEach(AncientWorldPlayer::checkOutOfBounds);
     }
 
     @Override

@@ -21,6 +21,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import org.jetbrains.annotations.NotNull;
 import thaumcraft.api.ThaumcraftMaterials;
 import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.common.blocks.BlockTC;
@@ -41,7 +42,7 @@ public class WorldGensMisc {
     public static class WorldGenReplaceVisibleBlocks extends WorldGenerator {
 
         @Override
-        public boolean generate(World worldIn, Random rand, BlockPos position) {
+        public boolean generate(@NotNull World worldIn, @NotNull Random rand, @NotNull BlockPos position) {
             UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
             Biome biome = worldIn.getBiome(position);
             int h = this.replaceHFromBiome(biome, rand);
@@ -79,7 +80,7 @@ public class WorldGensMisc {
     public static class WorldGenAddTaintFeature extends WorldGenerator {
 
         @Override
-        public boolean generate(World worldIn, Random rand, BlockPos position) {
+        public boolean generate(@NotNull World worldIn, @NotNull Random rand, @NotNull BlockPos position) {
             UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain();
             if (rand.nextInt(33) == 0) {
                 blockPos.setPos(position);
@@ -101,7 +102,7 @@ public class WorldGensMisc {
     public static class WorldGenAddSnow extends WorldGenerator {
 
         @Override
-        public boolean generate(World worldIn, Random rand, BlockPos position) {
+        public boolean generate(@NotNull World worldIn, @NotNull Random rand, @NotNull BlockPos position) {
             UltraMutableBlockPos blockPos = UltraMutableBlockPos.obtain().setPos(position);
             if (blockPos.getY() >= 100 && worldIn.getBiome(position) != InitBiomes.TAINT_WASTELAND) {
                 if (blockPos.getY() > 110) {
@@ -128,7 +129,7 @@ public class WorldGensMisc {
     public static class WorldGenInfernalCircle extends WorldGenerator {
 
         @Override
-        public boolean generate(World worldIn, Random rand, BlockPos position) {
+        public boolean generate(@NotNull World worldIn, @NotNull Random rand, @NotNull BlockPos position) {
             if (rand.nextFloat() > 0.1) {
                 return false;
             }

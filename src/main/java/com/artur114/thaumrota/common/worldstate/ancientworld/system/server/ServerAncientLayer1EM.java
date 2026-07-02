@@ -166,7 +166,7 @@ public class ServerAncientLayer1EM {
             final float damage = calculateDamage(e);
             if (!RotAConfig.server.difficulty.canDeadInAncientWorld && player.getHealth() - damage <= 0) {
                 player.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
-                player.setFire(0);
+                player.extinguish();
                 player.setHealth(3);
                 if (!this.playerLost(player)) {
                     AncientPortalsProcessor.teleportToOverworld(player);

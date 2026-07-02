@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.common.util;
 
-import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import com.artur114.thaumrota.main.ThaumRotA;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,10 +15,6 @@ public class DevScriptsShell {
     public DevScriptsShell(Path scriptsPath) {
         this.engine = this.createEngine();
         this.scriptsPath = scriptsPath;
-    }
-
-    public static boolean isDev() {
-        return FMLLaunchHandler.isDeobfuscatedEnvironment();
     }
 
     public DevScriptsShell loadClass(File file) {
@@ -60,7 +56,7 @@ public class DevScriptsShell {
             public void evaluate(Path script, String[] argsIds, Object[] args) {}
         };
 
-        if (isDev()) {
+        if (ThaumRotA.isDevEnv()) {
             try {
                 Class<? extends IGroovyEngine> engine = (Class<? extends IGroovyEngine>) Class.forName("com.artur114.thaumrota.common.util.GroovyScriptsImpl");
                 return engine.getDeclaredConstructor().newInstance();

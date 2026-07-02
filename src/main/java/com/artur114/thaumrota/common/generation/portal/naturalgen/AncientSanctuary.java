@@ -31,13 +31,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import thaumcraft.api.blocks.BlocksTC;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class AncientSanctuary implements IWriteToNBT, IReadFromNBT {
-    private static final Logger log = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger("ThaumRotA/PortalsLegacy");
     private final Block nitorBlock = BlocksTC.nitor.get(EnumDyeColor.BLACK);
     private AncientPortalNaturalGen portal = null;
     private TileEntityAncientSanctuaryController tile;
@@ -252,7 +253,7 @@ public class AncientSanctuary implements IWriteToNBT, IReadFromNBT {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+    public @NotNull NBTTagCompound writeToNBT(@NotNull NBTTagCompound nbt) {
         this.type.writeToNBT(nbt);
         if (!this.type.isBroken() && tilePos != null) {
             nbt.setLong("tilePos", tilePos.toLong());
@@ -316,7 +317,7 @@ public class AncientSanctuary implements IWriteToNBT, IReadFromNBT {
         }
 
         @Override
-        public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+        public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
             nbt.setInteger("AncientSanctuaryType", this.ordinal());
             return nbt;
         }

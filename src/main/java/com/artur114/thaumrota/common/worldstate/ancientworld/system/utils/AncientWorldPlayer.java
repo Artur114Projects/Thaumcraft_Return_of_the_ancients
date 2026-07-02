@@ -8,11 +8,13 @@ import com.artur114.bananalib.mc.nbt.IWriteToNBT;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 
 import java.util.UUID;
 
 public class AncientWorldPlayer implements IWriteToNBT {
+    private BlockPos prevPos = null;
     public EntityPlayer player = null;
     public final UUID playerID;
     private IStructure currentRoom;
@@ -26,8 +28,32 @@ public class AncientWorldPlayer implements IWriteToNBT {
         this.playerID = playerID;
     }
 
+    public void checkOutOfBounds() {
+        if (this.isSleep()) {
+            return;
+        }
+        if (this.player.world.isRemote) {
+            return;
+        }
+        if (this.currentRoom == null) {
+            return;
+        }
+
+        BlockPos pos = this.player.getPosition();
+
+        if (this.player.world.canSeeSky(pos)) {
+            if (!this.player.isCreative()) {
+                ((EntityPlayerMP) this.player).connection.setPlayerLocation(this.prevPos.getX() + 0.5, this.prevPos.getY(), this.prevPos.getZ(), this.player.rotationYawHead, this.player.rotationPitch);
+            }
+        } else {
+            if (this.player.onGround) {
+                this.prevPos = pos;
+            }
+        }
+    }
+
     public boolean isSleep() {
-        return player == null;
+        return this.player == null;
     }
 
     public IStructure currentRoom() {

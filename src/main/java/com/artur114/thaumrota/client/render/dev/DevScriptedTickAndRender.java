@@ -2,7 +2,6 @@ package com.artur114.thaumrota.client.render.dev;
 
 import com.artur114.bananalib.mc.registry.ann.AutoInstantiate;
 import com.artur114.bananalib.mc.registry.interf.ILoadStagePost;
-import com.artur114.thaumrota.common.util.DevScriptsShell;
 import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -46,7 +45,7 @@ public class DevScriptedTickAndRender implements ILoadStagePost {
 
     @Override
     public void onPostInit() {
-        if (DevScriptsShell.isDev()) {
+        if (ThaumRotA.isDevEnv()) {
             MinecraftForge.EVENT_BUS.register(this);
         }
     }

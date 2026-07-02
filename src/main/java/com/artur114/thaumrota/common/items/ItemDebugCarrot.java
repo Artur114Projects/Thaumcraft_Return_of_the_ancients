@@ -5,13 +5,9 @@ import com.artur114.bananalib.mc.base.BItemBase;
 import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
 import com.artur114.thaumrota.common.blocks.BlockLightningStoneTC;
 import com.artur114.thaumrota.common.tileentity.interf.ITileBurner;
-import com.artur114.thaumrota.common.util.DevScriptsShell;
-import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import com.artur114.thaumrota.main.ThaumRotA;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -36,13 +32,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IRarity;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
-import java.util.List;
 import java.util.Random;
-
-import static net.minecraft.item.ItemStack.DECIMALFORMAT;
 
 public class ItemDebugCarrot extends BItemBase {
 	private final Random rand = new Random();
@@ -54,7 +46,19 @@ public class ItemDebugCarrot extends BItemBase {
 		this.setCreativeTab(ThaumRotA.CREATIVE_TAB);
 	}
 
-	@Override
+    @Override
+    public boolean onBlockStartBreak(@NotNull ItemStack itemstack, @NotNull BlockPos pos, @NotNull EntityPlayer player) {
+        if (player.isSneaking()) {
+            if (!player.world.isRemote) {
+                player.world.destroyBlock(pos, true);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
 	public @NotNull EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		IBlockState state = worldIn.getBlockState(pos);
 		if (player.isSneaking()) {
@@ -79,7 +83,7 @@ public class ItemDebugCarrot extends BItemBase {
 			return EnumActionResult.SUCCESS;
 		}
 
-        if (DevScriptsShell.isDev()) {
+        if (ThaumRotA.isDevEnv()) {
             ThaumRotA.DEV_SHELL.evaluate(
                 "carrot_use_on_block.groovy",
                 new String[]{"player", "world", "pos", "hand", "facing", "hitX", "hitY", "hitZ"},
@@ -92,7 +96,7 @@ public class ItemDebugCarrot extends BItemBase {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        if (DevScriptsShell.isDev()) {
+        if (ThaumRotA.isDevEnv()) {
             ThaumRotA.DEV_SHELL.evaluate(
                 "carrot_use.groovy",
                 new String[]{"world", "player", "hand"},

@@ -136,6 +136,12 @@ public class RegistryHandler implements ILoadStagePre, ILoadStageInit, IHasNetwo
             aspects.add(Aspect.EARTH, 5);
             aspects.add(Aspect.FLUX, 4);
         });
+        injectAspects(e, InitItems.PHANTOM_TABLET, aspects -> {
+            aspects.add(Aspect.DARKNESS, 40);
+            aspects.add(Aspect.ELDRITCH, 40);
+            aspects.add(Aspect.ENERGY, 20);
+            aspects.add(Aspect.SOUL, 20);
+        });
     }
 
     private void injectAspects(AspectRegistryEvent e, Block block, Consumer<AspectList> loader) {

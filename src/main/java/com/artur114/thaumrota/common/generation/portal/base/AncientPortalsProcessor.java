@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.artur114.thaumrota.common.init.InitDimensions.ANCIENT_WORLD_ID;
 
 @Mod.EventBusSubscriber(modid = ThaumRotA.MODID)
-public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать под capability!!!!!!
+public class AncientPortalsProcessor { // TODO: 10.11.2025 Переписать под capability!!!!!!!!!!!
     private static final Logger log = LogManager.getLogger("ThaumRotA/PortalsLegacy");
     private static final Map<Integer, ChunkPos[]> PORTALS_GENERATION_POS = new HashMap<>();
     private static ChunkPos[] portalsGenerationPosOverWorld = null;

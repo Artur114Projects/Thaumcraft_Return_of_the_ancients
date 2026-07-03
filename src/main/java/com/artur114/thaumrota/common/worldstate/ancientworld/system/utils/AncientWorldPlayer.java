@@ -42,8 +42,8 @@ public class AncientWorldPlayer implements IWriteToNBT {
         BlockPos pos = this.player.getPosition();
 
         if (this.player.world.canSeeSky(pos)) {
-            if (!this.player.isCreative()) {
-                ((EntityPlayerMP) this.player).connection.setPlayerLocation(this.prevPos.getX() + 0.5, this.prevPos.getY(), this.prevPos.getZ(), this.player.rotationYawHead, this.player.rotationPitch);
+            if (!this.player.isCreative() && this.prevPos != null) {
+                ((EntityPlayerMP) this.player).connection.setPlayerLocation(this.prevPos .getX() + 0.5, this.prevPos.getY(), this.prevPos.getZ(), this.player.rotationYawHead, this.player.rotationPitch);
             }
         } else {
             if (this.player.onGround) {

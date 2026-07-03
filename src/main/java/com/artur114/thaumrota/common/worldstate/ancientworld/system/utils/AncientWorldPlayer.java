@@ -1,5 +1,6 @@
 package com.artur114.thaumrota.common.worldstate.ancientworld.system.utils;
 
+import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrPos;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructure;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructureInteractive;
@@ -41,7 +42,7 @@ public class AncientWorldPlayer implements IWriteToNBT {
 
         BlockPos pos = this.player.getPosition();
 
-        if (this.player.world.canSeeSky(pos)) {
+        if (this.player.posY >= BananaMC.findHighestBlock(this.player.world, pos)) {
             if (!this.player.isCreative() && this.prevPos != null) {
                 ((EntityPlayerMP) this.player).connection.setPlayerLocation(this.prevPos .getX() + 0.5, this.prevPos.getY(), this.prevPos.getZ(), this.player.rotationYawHead, this.player.rotationPitch);
             }

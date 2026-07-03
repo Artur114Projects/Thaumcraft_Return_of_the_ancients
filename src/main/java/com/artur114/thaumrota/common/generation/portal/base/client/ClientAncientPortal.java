@@ -22,27 +22,19 @@ import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class ClientAncientPortal {
-
     protected final UltraMutableBlockPos blockPos = new UltraMutableBlockPos();
-
     public final Random random = new Random(System.currentTimeMillis());
     private boolean isPlayerCollideToPortal = false;
     private double particlesSpeed = 0.2D;
     public final String[] movementIds;
     public final ChunkPos portalPos;
-
     protected final Minecraft mc;
-
     public final int dimension;
     public final int chunkX;
     public final int chunkZ;
-
     public final int posX;
-
     public final int posY;
-
     public final int posZ;
-
     public final int id;
 
     public ClientAncientPortal(NBTTagCompound data) {

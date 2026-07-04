@@ -21,7 +21,6 @@ public interface IStructureEntityManager extends IStructureInteractive {
 
     default void spawnEntity(List<AncientWorldPlayer> players, World world, BlockPos pos, EntityLiving entity) {
         if (!world.isRemote) {
-
             entity.setLocationAndAngles(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
             entity.rotationYawHead = entity.rotationYaw;
             entity.renderYawOffset = entity.rotationYaw;

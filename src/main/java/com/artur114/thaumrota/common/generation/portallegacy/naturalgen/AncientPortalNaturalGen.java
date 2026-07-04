@@ -1,4 +1,4 @@
-package com.artur114.thaumrota.common.generation.portal.naturalgen;
+package com.artur114.thaumrota.common.generation.portallegacy.naturalgen;
 
 import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
@@ -7,17 +7,16 @@ import com.artur114.bananalib.mc.nbt.IWriteToNBT;
 import com.artur114.thaumrota.common.worldstate.blockprotect.BlockProtectHandler;
 import com.artur114.thaumrota.common.util.TeleportHandler;
 import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
-import com.artur114.thaumrota.common.generation.portal.base.AncientPortal;
-import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
-import com.artur114.thaumrota.common.generation.portal.generators.GenAncientArch;
-import com.artur114.thaumrota.common.generation.portal.generators.GenAncientSpire;
-import com.artur114.thaumrota.common.generation.portal.util.PortalOffsets;
+import com.artur114.thaumrota.common.generation.portallegacy.base.AncientPortal;
+import com.artur114.thaumrota.common.generation.portallegacy.base.AncientPortalsProcessor;
+import com.artur114.thaumrota.common.generation.portallegacy.generators.GenAncientArch;
+import com.artur114.thaumrota.common.generation.portallegacy.generators.GenAncientSpire;
+import com.artur114.thaumrota.common.generation.portallegacy.util.PortalOffsets;
 import com.artur114.thaumrota.common.util.TerrainAnalyzer;
 
 import java.util.*;
 import java.util.function.Consumer;
-import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
-import javafx.geometry.Pos;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;

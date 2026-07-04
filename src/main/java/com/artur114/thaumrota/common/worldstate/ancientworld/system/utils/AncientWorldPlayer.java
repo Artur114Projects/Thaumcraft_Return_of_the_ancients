@@ -4,7 +4,7 @@ import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.StrPos;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructure;
 import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structures.IStructureInteractive;
-import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
+import com.artur114.thaumrota.common.generation.portallegacy.base.AncientPortalsProcessor;
 import com.artur114.bananalib.mc.nbt.IWriteToNBT;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

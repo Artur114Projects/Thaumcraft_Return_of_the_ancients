@@ -29,56 +29,6 @@
       }
     ]
   },
-  "rui_dead": {
-    "category": "ambient",
-    "sounds": [
-      {
-        "name": "thaumrota:rui_dead",
-        "stream": true,
-        "volume": 2
-      }
-    ]
-  },
-  "fire_trap_sound": {
-    "category": "block",
-    "sounds": [
-      {
-        "name": "thaumrota:fire_trap_sound",
-        "stream": true,
-        "volume": 16
-      }
-    ]
-  },
-  "fire_trap_sound_start": {
-    "category": "block",
-    "sounds": [
-      {
-        "name": "thaumrota:fire_trap_sound_start",
-        "stream": true,
-        "volume": 4
-      }
-    ]
-  },
-  "portal_impact": {
-    "category": "ambient",
-    "sounds": [
-      {
-        "name": "thaumrota:portal_impact",
-        "stream": true,
-        "volume": 2
-      }
-    ]
-  },
-  "portal_heart_beat": {
-    "category": "ambient",
-    "sounds": [
-      {
-        "name": "thaumrota:portal_heart_beat",
-        "stream": true,
-        "volume": 2
-      }
-    ]
-  },
   "ancient_controller_activate": {
     "category": "blocks",
     "sounds": [

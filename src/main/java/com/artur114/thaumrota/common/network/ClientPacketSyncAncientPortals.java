@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.common.network;
 
-import com.artur114.thaumrota.common.generation.portal.base.client.ClientAncientPortalsProcessor;
+import com.artur114.thaumrota.common.generation.portallegacy.base.client.ClientAncientPortalsProcessor;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;

@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.common.generation.terraingen;
 
-import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
+import com.artur114.thaumrota.common.generation.portallegacy.base.AncientPortalsProcessor;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.gen.layer.GenLayer;
 

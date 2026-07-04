@@ -1,7 +1,6 @@
-package com.artur114.thaumrota.common.generation.portal.base.client;
+package com.artur114.thaumrota.common.generation.portallegacy.base.client;
 
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
-import com.artur114.thaumrota.main.ThaumRotA;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;

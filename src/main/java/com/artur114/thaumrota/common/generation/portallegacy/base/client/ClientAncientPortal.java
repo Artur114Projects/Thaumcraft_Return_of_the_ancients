@@ -1,11 +1,11 @@
-package com.artur114.thaumrota.common.generation.portal.base.client;
+package com.artur114.thaumrota.common.generation.portallegacy.base.client;
 
 import com.artur114.bananalib.math.BananaMath;
 import com.artur114.thaumrota.client.audio.SoundMovementElevator;
 import com.artur114.thaumrota.client.event.ClientEventsHandler;
 import com.artur114.thaumrota.client.event.managers.movement.IMovementTask;
 import com.artur114.thaumrota.client.fx.particle.ParticleAncientPortal;
-import com.artur114.thaumrota.common.generation.portal.util.PortalOffsets;
+import com.artur114.thaumrota.common.generation.portallegacy.util.PortalOffsets;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;

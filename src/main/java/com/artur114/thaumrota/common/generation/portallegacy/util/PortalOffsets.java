@@ -1,4 +1,4 @@
-package com.artur114.thaumrota.common.generation.portal.util;
+package com.artur114.thaumrota.common.generation.portallegacy.util;
 
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
 import net.minecraft.util.EnumFacing;

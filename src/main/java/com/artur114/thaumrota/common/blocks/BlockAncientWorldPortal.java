@@ -1,7 +1,6 @@
 package com.artur114.thaumrota.common.blocks;
 
-import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
-import com.artur114.thaumrota.main.ThaumRotA;
+import com.artur114.thaumrota.common.generation.portallegacy.base.AncientPortalsProcessor;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

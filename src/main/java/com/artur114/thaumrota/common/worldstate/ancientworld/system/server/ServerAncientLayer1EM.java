@@ -2,7 +2,7 @@ package com.artur114.thaumrota.common.worldstate.ancientworld.system.server;
 
 import com.artur114.bananalib.mc.cap.BananaCapProv;
 import com.artur114.thaumrota.common.config.RotAConfig;
-import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
+import com.artur114.thaumrota.common.generation.portallegacy.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.IAncientLayer1Manager;
 import com.artur114.thaumrota.common.init.InitCapabilities;
 import com.artur114.thaumrota.main.ThaumRotA;

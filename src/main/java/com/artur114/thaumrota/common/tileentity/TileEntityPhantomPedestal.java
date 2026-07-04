@@ -39,14 +39,12 @@ public class TileEntityPhantomPedestal extends TileBase implements ITileMultiBBP
         if (hand == EnumHand.MAIN_HAND && playerIn.getHeldItem(hand).isEmpty()) {
             if (this.world.isRemote) {
                 if (!BananaMC.inventoryContains(playerIn.inventory, InitItems.PHANTOM_TABLET)) {
-                    Random rand = new Random();
                     this.spawnParticles();
-                    playerIn.playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F, (rand.nextFloat() - rand.nextFloat()) * 1.4F + 2.0F);
                     return true;
                 }
             } else {
                 if (!BananaMC.inventoryContains(playerIn.inventory, InitItems.PHANTOM_TABLET)) {
-                    playerIn.setHeldItem(hand, new ItemStack(InitItems.PHANTOM_TABLET));
+                    playerIn.addItemStackToInventory(new ItemStack(InitItems.PHANTOM_TABLET));
                     return true;
                 }
             }

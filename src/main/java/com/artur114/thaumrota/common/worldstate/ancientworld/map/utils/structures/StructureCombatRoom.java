@@ -16,6 +16,7 @@ import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.maps.Inte
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.utils.AncientWorldPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
@@ -27,6 +28,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
+import thaumcraft.common.entities.monster.EntityInhabitedZombie;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -190,6 +192,7 @@ public abstract class StructureCombatRoom extends StructureMultiChunk implements
             if (!wave.isSpawned()) {
                 this.timeToKillAll = 0;
                 wave.spawn(this.rand, this.world, this.spawnArea, (pos, entity) -> {
+                    if (entity instanceof EntityInhabitedZombie) entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(15);
                     ClientPacketCreateFX.send(this.world, pos, ClientPacketCreateFX.FXType.ENTITY_SPAWN);
                     this.spawnEntity(players, this.world, pos, entity);
                 });

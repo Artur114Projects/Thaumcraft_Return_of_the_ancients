@@ -1,8 +1,7 @@
 package com.artur114.thaumrota.server.commads;
 
 import com.artur114.bananalib.mc.math.m3d.vec.PosMc3IM;
-import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
-import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;
+import com.artur114.thaumrota.common.generation.portallegacy.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1StaticManager;
 import com.artur114.thaumrota.main.ThaumRotA;

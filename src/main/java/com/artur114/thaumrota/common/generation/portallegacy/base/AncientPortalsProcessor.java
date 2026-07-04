@@ -1,16 +1,15 @@
-package com.artur114.thaumrota.common.generation.portal.base;
+package com.artur114.thaumrota.common.generation.portallegacy.base;
 
 import com.artur114.thaumrota.common.blocks.BlockAncientWorldPortal;
 import com.artur114.thaumrota.common.event.CommonEventsHandler;
-import com.artur114.thaumrota.common.generation.portal.naturalgen.AncientPortalNaturalGen;
-import com.artur114.thaumrota.common.generation.portal.AncientPortalOpening;
+import com.artur114.thaumrota.common.generation.portallegacy.naturalgen.AncientPortalNaturalGen;
+import com.artur114.thaumrota.common.generation.portallegacy.AncientPortalOpening;
 import com.artur114.thaumrota.common.generation.terraingen.GenLayersHandler;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitCapabilities;
 import com.artur114.thaumrota.common.util.CapUtils;
 import com.artur114.thaumrota.common.util.TeleportHandler;
 import com.artur114.thaumrota.main.ThaumRotA;
-import com.artur114.thaumrota.common.config.RotAConfig;
 import com.artur114.thaumrota.common.worldstate.RotAWorldData;
 import com.artur114.thaumrota.common.network.ClientPacketSyncAncientPortals;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;

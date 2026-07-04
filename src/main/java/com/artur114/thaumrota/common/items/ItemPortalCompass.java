@@ -3,7 +3,7 @@ package com.artur114.thaumrota.common.items;
 import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.bananalib.mc.base.BItemBase;
 import com.artur114.thaumrota.client.event.ClientEventsHandler;
-import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
+import com.artur114.thaumrota.common.generation.portallegacy.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitItems;
 import com.artur114.thaumrota.main.ThaumRotA;

@@ -1,9 +1,9 @@
-package com.artur114.thaumrota.common.generation.portal.base;
+package com.artur114.thaumrota.common.generation.portallegacy.base;
 
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1StaticManager;
 import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import com.artur114.thaumrota.common.blocks.BlockAncientWorldPortal;
-import com.artur114.thaumrota.common.generation.portal.util.PortalOffsets;
+import com.artur114.thaumrota.common.generation.portallegacy.util.PortalOffsets;
 import com.artur114.thaumrota.common.util.TeleportHandler;
 import com.artur114.thaumrota.common.handlers.MiscHandler;
 import com.artur114.thaumrota.common.init.InitBlocks;

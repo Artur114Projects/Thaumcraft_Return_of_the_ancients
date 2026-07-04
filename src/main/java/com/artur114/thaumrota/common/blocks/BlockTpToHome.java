@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.common.blocks;
 
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1EventsHandler;
-import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
+import com.artur114.thaumrota.common.generation.portallegacy.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.common.init.InitDimensions;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;

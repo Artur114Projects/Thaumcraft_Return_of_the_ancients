@@ -1,6 +1,6 @@
 package com.artur114.thaumrota.client.audio;
 
-import com.artur114.thaumrota.common.generation.portal.base.client.ClientAncientPortal;
+import com.artur114.thaumrota.common.generation.portallegacy.base.client.ClientAncientPortal;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.init.SoundEvents;

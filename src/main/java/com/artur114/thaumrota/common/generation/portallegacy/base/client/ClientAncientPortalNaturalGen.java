@@ -1,4 +1,4 @@
-package com.artur114.thaumrota.common.generation.portal.base.client;
+package com.artur114.thaumrota.common.generation.portallegacy.base.client;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;

@@ -1,7 +1,7 @@
 package com.artur114.thaumrota.client.event.managers;
 
 import com.artur114.thaumrota.common.config.RotAConfig;
-import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
+import com.artur114.thaumrota.common.generation.portallegacy.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.main.ThaumRotA;
 import com.artur114.thaumrota.common.network.ServerPacketGetWeather;
 import com.artur114.thaumrota.common.util.math.UltraMutableBlockPos;

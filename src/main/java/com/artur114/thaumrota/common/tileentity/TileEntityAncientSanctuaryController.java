@@ -2,10 +2,10 @@ package com.artur114.thaumrota.common.tileentity;
 
 import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.bananalib.mc.base.tileabs.ITileMultiBBProvider;
-import com.artur114.thaumrota.common.generation.portal.naturalgen.AncientPortalNaturalGen;
-import com.artur114.thaumrota.common.generation.portal.base.AncientPortal;
-import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
-import com.artur114.thaumrota.common.generation.portal.naturalgen.AncientSanctuary;
+import com.artur114.thaumrota.common.generation.portallegacy.naturalgen.AncientPortalNaturalGen;
+import com.artur114.thaumrota.common.generation.portallegacy.base.AncientPortal;
+import com.artur114.thaumrota.common.generation.portallegacy.base.AncientPortalsProcessor;
+import com.artur114.thaumrota.common.generation.portallegacy.naturalgen.AncientSanctuary;
 import com.artur114.thaumrota.common.init.InitSounds;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 // TODO: 25.02.2025 Сделать звук процесса закрытия
-public class TileEntityAncientSanctuaryController extends TileEntity implements ITickable, ITileMultiBBProvider {
+public class TileEntityAncientSanctuaryController extends TileBase implements ITickable, ITileMultiBBProvider {
     private static final List<AxisAlignedBB> boundingBox = Arrays.asList(
         BananaMC.createAABBFromPixels(1, 0, 1, 15, 1, 15),
         BananaMC.createAABBFromPixels(2, 1, 2, 14, 2, 14),
@@ -36,6 +36,7 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
     private int doorMovingOrientation = -1;
     private int doorMovingProgress = 0;
     private boolean hasItem = false;
+    private boolean canOpen = true;
     private int openTimer = 0;
 
 
@@ -79,6 +80,7 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
             this.doorMovingOrientation = 1;
         }
     }
+
     public boolean isOpen() {
         return doorMovingProgress == 0;
     }
@@ -91,6 +93,14 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
         return doorMovingProgress == maxDoorMovingProgress && openTimer == 0;
     }
 
+    public boolean canOpen() {
+        return this.canOpen;
+    }
+
+    public void setCanOpen(boolean canOpen) {
+        this.canOpen = canOpen;
+    }
+
     @SideOnly(Side.CLIENT)
     public float doorMovingProgress(boolean prev) {
         float localDoorMovingProgress = prev ? prevDoorMovingProgress : doorMovingProgress;
@@ -100,24 +110,27 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
 
     @Override
     public void update() {
-        if (openTimer > 0) {
-            openTimer--;
-            if (openTimer == 0) {
-                this.doorMovingOrientation = -1;
-            } else {
-                return;
-            }
-        }
-
-        prevDoorMovingProgress = doorMovingProgress;
-
-        doorMovingProgress += doorMovingOrientation;
-        doorMovingProgress = MathHelper.clamp(doorMovingProgress, 0, maxDoorMovingProgress);
-
         if (!world.isRemote) {
+            if (openTimer > 0) {
+                openTimer--;
+                if (openTimer == 0) {
+                    this.doorMovingOrientation = -1;
+                } else {
+                    return;
+                }
+            }
+
+            prevDoorMovingProgress = doorMovingProgress;
+
+            doorMovingProgress += doorMovingOrientation;
+            doorMovingProgress = MathHelper.clamp(doorMovingProgress, 0, maxDoorMovingProgress);
             if (isDone() && !isPrevClose()) {
                 this.onSateChanged(true);
             }
+
+            this.syncTile(false);
+        } else {
+            prevDoorMovingProgress = doorMovingProgress;
         }
     }
 
@@ -155,13 +168,19 @@ public class TileEntityAncientSanctuaryController extends TileEntity implements 
         hasItem = compound.getBoolean("hasItem");
     }
 
-    @Override
-    public @NotNull NBTTagCompound getUpdateTag() {
-        return this.writeToNBT(new NBTTagCompound());
-    }
 
     @Override
     public List<AxisAlignedBB> boundingBoxes() {
         return boundingBox;
+    }
+
+    @Override
+    protected void readSyncNBT(NBTTagCompound nbt) {
+        this.readFromNBT(nbt);
+    }
+
+    @Override
+    protected NBTTagCompound writeSyncNBT(NBTTagCompound nbt) {
+        return this.writeToNBT(nbt);
     }
 }

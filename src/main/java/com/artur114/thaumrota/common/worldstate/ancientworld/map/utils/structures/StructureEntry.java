@@ -13,8 +13,8 @@ import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.maps.Inte
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.utils.AncientWorldPlayer;
 import com.artur114.thaumrota.client.event.ClientEventsHandler;
 import com.artur114.thaumrota.client.fx.particle.ParticleAncientPortal;
-import com.artur114.thaumrota.common.generation.portal.base.client.ClientAncientPortal;
-import com.artur114.thaumrota.common.generation.portal.util.PortalOffsets;
+import com.artur114.thaumrota.common.generation.portallegacy.base.client.ClientAncientPortal;
+import com.artur114.thaumrota.common.generation.portallegacy.util.PortalOffsets;
 import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
 import com.artur114.thaumrota.common.tileentity.interf.ITileDoor;
 import net.minecraft.client.Minecraft;

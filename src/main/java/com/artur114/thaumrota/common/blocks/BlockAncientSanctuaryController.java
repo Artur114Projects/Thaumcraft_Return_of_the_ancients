@@ -53,27 +53,33 @@ public class BlockAncientSanctuaryController extends BaseBlockTile<TileEntityAnc
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         TileEntity tileRaw = worldIn.getTileEntity(pos);
 
+
         if (tileRaw instanceof TileEntityAncientSanctuaryController) {
             TileEntityAncientSanctuaryController tile = (TileEntityAncientSanctuaryController) tileRaw;
+            ItemStack stack = playerIn.getHeldItem(hand);
             if (!tile.hasItem()) {
-                ItemStack stack = playerIn.getHeldItem(hand);
                 if (stack.getItem() == InitItems.IMITATION_ANCIENT_FUSE) {
                     if (tile.isOpen()) {
-                        tile.setHasItem(true);
-                        tile.close();
-                        stack.shrink(1);
+                        if (!worldIn.isRemote) {
+                            tile.setHasItem(true);
+                            tile.close();
+                            stack.shrink(1);
+                        }
                         return true;
                     }
                 }
             } else {
-                ItemStack stack = playerIn.getHeldItem(hand);
                 if (stack.isEmpty()) {
-                    if (tile.isClose()) {
-                        tile.open();
+                    if (tile.isClose() && tile.canOpen()) {
+                        if (!worldIn.isRemote) {
+                            tile.open();
+                        }
                         return true;
-                    } else if (tile.isOpen()){
-                        tile.setHasItem(false);
-                        playerIn.addItemStackToInventory(new ItemStack(InitItems.IMITATION_ANCIENT_FUSE));
+                    } else if (tile.isOpen()) {
+                        if (!worldIn.isRemote) {
+                            tile.setHasItem(false);
+                            playerIn.addItemStackToInventory(new ItemStack(InitItems.IMITATION_ANCIENT_FUSE));
+                        }
                         return true;
                     }
                 }

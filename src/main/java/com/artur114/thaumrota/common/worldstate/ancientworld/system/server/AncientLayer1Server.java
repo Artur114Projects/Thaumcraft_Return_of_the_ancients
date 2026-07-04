@@ -8,7 +8,7 @@ import com.artur114.thaumrota.common.worldstate.ancientworld.map.utils.structure
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.base.AncientLayer1;
 import com.artur114.thaumrota.common.worldstate.ancientworld.system.utils.AncientWorldPlayer;
 import com.artur114.thaumrota.common.event.CommonEventsHandler;
-import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
+import com.artur114.thaumrota.common.generation.portallegacy.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.common.network.ClientPacketSyncAncientLayer1s;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayerMP;

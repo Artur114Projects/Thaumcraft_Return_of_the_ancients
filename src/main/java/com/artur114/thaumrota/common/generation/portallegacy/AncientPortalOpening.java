@@ -1,7 +1,7 @@
-package com.artur114.thaumrota.common.generation.portal;
+package com.artur114.thaumrota.common.generation.portallegacy;
 
-import com.artur114.thaumrota.common.generation.portal.base.AncientPortal;
-import com.artur114.thaumrota.common.generation.portal.base.AncientPortalsProcessor;
+import com.artur114.thaumrota.common.generation.portallegacy.base.AncientPortal;
+import com.artur114.thaumrota.common.generation.portallegacy.base.AncientPortalsProcessor;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientTeleport;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;

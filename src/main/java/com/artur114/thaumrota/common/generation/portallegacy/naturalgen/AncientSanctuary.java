@@ -1,4 +1,4 @@
-package com.artur114.thaumrota.common.generation.portal.naturalgen;
+package com.artur114.thaumrota.common.generation.portallegacy.naturalgen;
 
 import com.artur114.bananalib.mc.BananaMC;
 import com.artur114.bananalib.mc.math.m2d.vec.PosMc2I;
@@ -8,7 +8,7 @@ import com.artur114.thaumrota.common.worldstate.blockprotect.BlockProtectHandler
 import com.artur114.thaumrota.common.init.InitBlocks;
 import com.artur114.thaumrota.server.structurebuilder.BuildRequest;
 import com.artur114.thaumrota.server.structurebuilder.StructuresBuildManager;
-import com.artur114.thaumrota.common.generation.portal.util.PortalOffsets;
+import com.artur114.thaumrota.common.generation.portallegacy.util.PortalOffsets;
 import com.artur114.thaumrota.common.event.CommonEventsHandler;
 import com.artur114.thaumrota.common.init.InitSounds;
 import com.artur114.thaumrota.common.tileentity.TileEntityAncientSanctuaryController;
@@ -144,6 +144,7 @@ public class AncientSanctuary implements IWriteToNBT, IReadFromNBT {
     }
 
     public void onTileStateChanged(boolean state) {
+        this.tile.setCanOpen(false);
         CommonEventsHandler.TIMER_TASKS_MANAGER.addTask(29, () -> {
             CommonEventsHandler.SHORT_CHUNK_LOAD_MANAGER.loadArea(world, portal.portalPos, 1);
             CommonEventsHandler.SHORT_CHUNK_LOAD_MANAGER.loadArea(world, pos, 1);
@@ -164,6 +165,8 @@ public class AncientSanctuary implements IWriteToNBT, IReadFromNBT {
                 }
 
                 PosMc3IM.release(blockPos);
+
+                this.tile.setCanOpen(true);
             });
         });
     }

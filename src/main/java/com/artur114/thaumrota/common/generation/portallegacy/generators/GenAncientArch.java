@@ -1,4 +1,4 @@
-package com.artur114.thaumrota.common.generation.portal.generators;
+package com.artur114.thaumrota.common.generation.portallegacy.generators;
 
 import com.artur114.thaumrota.common.worldstate.blockprotect.BlockProtectHandler;
 import com.artur114.thaumrota.common.config.RotAConfig;

@@ -1,42 +1,42 @@
 ################################################################################
 # Items
 ################################################################################
-item.imitation_ancient_fuse.name=Ancient fuse
-item.soul_binder.name=Soul connection stone
-item.debug_carrot.name=Debugging carrot
-item.phantom_tablet.name=Phantom tablet
-item.portal_compass.name=Void compass
+item.imitation_ancient_fuse.name=Ancient Fuse
+item.soul_binder.name=Soul Connection Stone
+item.debug_carrot.name=Debugging Carrot
+item.phantom_tablet.name=Phantom Tablet
+item.portal_compass.name=Void Compass
 ################################################################################
 # Blocks
 ################################################################################
-tile.ancient_sanctuary_controller_broken.name=Broken ancient controller of sanctuary
-tile.ancient_sanctuary_controller.name=Ancient controller of sanctuary
-tile.incandescent_taint_void_stone.name=Hot taint void stone
-tile.stone_eldritch_tile_lightning.name=Glowing eldritch stone
-tile.ancient_door_h_4x4.name=Ancient horizontal door 4 to 4
-tile.tp_to_ancient_world_block.name=Portal to Ancient World
-tile.taint_void_cobblestone.name=Taint void cobblestone
-tile.imitation_ancient_fuse_block.name=Ancient fuse block
-tile.stone_ancient_lightning.name=Glowing ancient stone
-tile.eldritch_stairs.name=Eldritch stone stairs
-tile.cleaned_void_stone.name=Cleaned void stone
-tile.ancient_door_4x3.name=Ancient door 4 to 3
-tile.ancient_door_8x6.name=Ancient door 8 to 6
-tile.taint_void_stone.name=Taint void stone
-tile.dummy_ancient_stone.name=Structural block
-tile.tp_to_home_block.name=Portal to overworld
-tile.ancient_stairs.name=Ancient stone stairs
-tile.pedestal_phantom.name=Phantom pedestal
-tile.pedestal_active.name=Ancient pedestal
-tile.ancient_fan.name=Ancient ventilation
-tile.ancient_piston.name=Ancient machine
-tile.ancient_lamp_1.name=Ancient device
-tile.ancient_lamp_0.name=Ancient device
-tile.ancient_glass.name=Ancient glass
-tile.ancient_grid.name=Ancient grid
+tile.ancient_sanctuary_controller_broken.name=Broken Ancient Sanctuary Controller
+tile.ancient_sanctuary_controller.name=Ancient Sanctuary Controller
+tile.incandescent_taint_void_stone.name=Hot Taint Void Stone
+tile.stone_eldritch_tile_lightning.name=Glowing Eldritch Stone
+tile.ancient_door_h_4x4.name=Ancient Horizontal Door (4x4)
+tile.tp_to_ancient_world_block.name=Portal to the Ancient World
+tile.taint_void_cobblestone.name=Taint Void Cobblestone
+tile.imitation_ancient_fuse_block.name=Ancient Fuse Block
+tile.stone_ancient_lightning.name=Glowing Ancient Stone
+tile.eldritch_stairs.name=Eldritch Stone Stairs
+tile.cleaned_void_stone.name=Cleaned Void Stone
+tile.ancient_door_4x3.name=Ancient Door (4x3)
+tile.ancient_door_8x6.name=Ancient Door (8x6)
+tile.taint_void_stone.name=Taint Void Stone
+tile.dummy_ancient_stone.name=Structural Block
+tile.tp_to_home_block.name=Portal to the Overworld
+tile.ancient_stairs.name=Ancient Stone Stairs
+tile.pedestal_phantom.name=Phantom Pedestal
+tile.pedestal_active.name=Ancient Pedestal
+tile.ancient_fan.name=Ancient Ventilation
+tile.ancient_piston.name=Ancient Machine
+tile.ancient_lamp_1.name=Ancient Device
+tile.ancient_lamp_0.name=Ancient Device
+tile.ancient_glass.name=Ancient Glass
+tile.ancient_grid.name=Ancient Grid
 tile.incinerator.name=Incinerator
-tile.energy_line.name=Energy line [WIP]
-tile.energy_source.name=Energy source [WIP]
+tile.energy_line.name=Energy Line [WIP]
+tile.energy_source.name=Energy Source [WIP]
 ################################################################################
 # Any
 ################################################################################
@@ -49,8 +49,8 @@ item.soul_binder.info.s.2=Shift + RMB - unbind.
 item.soul_binder.info.s.3=Put in crafting grid - clear.
 item.soul_binder.info.d.3=Players:
 item.debug_carrot.info.i=Infinity
-item.portal_compass.info=Points to the nearest ancient portal
-item.phantom_tablet.info.1=Decaying outside the ancient world
+item.portal_compass.info=Points to the nearest Ancient Portal.
+item.phantom_tablet.info.1=Decaying outside of the ancient world
 item.phantom_tablet.info.2=If you are not in creative
 #
 thaumrota.for_creative_only=For creativity only

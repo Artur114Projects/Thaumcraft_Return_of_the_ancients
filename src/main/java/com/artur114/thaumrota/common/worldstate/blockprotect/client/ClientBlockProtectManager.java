@@ -1,6 +1,7 @@
 package com.artur114.thaumrota.common.worldstate.blockprotect.client;
 
 import com.artur114.bananalib.mc.cap.BananaCapProv;
+import com.artur114.bananalib.mc.cap.BananaCapProvNoSave;
 import com.artur114.thaumrota.common.worldstate.blockprotect.BlockProtectHandler;
 import com.artur114.thaumrota.common.init.InitCapabilities;
 import com.artur114.thaumrota.client.fx.particle.ParticleBlockProtect;
@@ -44,6 +45,6 @@ public class ClientBlockProtectManager {
     }
 
     public void attachCapabilitiesEventChunk(AttachCapabilitiesEvent<Chunk> e) {
-        e.addCapability(new ResourceLocation(ThaumRotA.MODID, "protected_chunk"), new BananaCapProv<>(new ClientProtectedChunk(e.getObject().getPos(), e.getObject().getWorld().provider.getDimension()), InitCapabilities.PROTECTED_CHUNK));
+        e.addCapability(new ResourceLocation(ThaumRotA.MODID, "protected_chunk"), new BananaCapProvNoSave<>(new ClientProtectedChunk(e.getObject().getPos(), e.getObject().getWorld().provider.getDimension()), InitCapabilities.PROTECTED_CHUNK));
     }
 }
